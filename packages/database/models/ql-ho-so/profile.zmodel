@@ -35,6 +35,12 @@ abstract model BaseUuid {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt @default(now())
   createdBy   String?   @db.Uuid @default(auth().id)
+  sNguoiTao   String?
+  sNguoiSua   String?
+  dNgayTao    DateTime? @db.Timestamp(6)
+  dNgaySua    DateTime? @db.Timestamp(6)
+  sThietBiTao String?
+  sThietBiSua String?
   // TODO: change this
   @@allow('all', auth() != null)
 
@@ -58,10 +64,6 @@ model UserProfile extends BaseUuid {
   sQuanlyTrucTiepId                    String?                             @db.Uuid
   iDictionaryKey                       Int?
   bSystem                              Boolean?
-  sNguoiTao                            String?
-  sNguoiSua                            String?
-  sThietBiTao                          String?
-  sThietBiSua                          String?  
 
   // general information
   avatar                               String? // đường dẫn ảnh đại diện
@@ -716,4 +718,3 @@ model QuaTrinhLuong extends Base {
 
   @@schema("ql-ho-so")
 }
-

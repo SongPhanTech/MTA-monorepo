@@ -327,7 +327,7 @@ export function useSuspenseCountTrainingFieldOnTrainingObjectType<TArgs extends 
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('TrainingFieldOnTrainingObjectType', `${endpoint}/trainingFieldOnTrainingObjectType/count`, args, options, fetch);
 }
 
-export function useCheckTrainingFieldOnTrainingObjectType<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; trainingFieldId?: string; trainingObjectTypeId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckTrainingFieldOnTrainingObjectType<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; trainingFieldId?: string; trainingObjectTypeId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('TrainingFieldOnTrainingObjectType', `${endpoint}/trainingFieldOnTrainingObjectType/check`, args, options, fetch);
 }

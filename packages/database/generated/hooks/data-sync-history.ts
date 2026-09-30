@@ -328,7 +328,7 @@ export function useSuspenseCountDataSyncHistory<TArgs extends Prisma.DataSyncHis
 }
 import type { DataSyncType, DataSyncStatus } from '../zenstack/models';
 
-export function useCheckDataSyncHistory<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; type?: DataSyncType; status?: DataSyncStatus; sessionName?: string; classRegisterSessionId?: string; fileName?: string; fileVersion?: string; errorMessage?: string; performedById?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckDataSyncHistory<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; type?: DataSyncType; status?: DataSyncStatus; sessionName?: string; classRegisterSessionId?: string; fileName?: string; fileVersion?: string; errorMessage?: string; performedById?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('DataSyncHistory', `${endpoint}/dataSyncHistory/check`, args, options, fetch);
 }

@@ -328,7 +328,7 @@ export function useSuspenseCountDocument<TArgs extends Prisma.DocumentCountArgs,
 }
 import type { DocumentStatus } from '../zenstack/models';
 
-export function useCheckDocument<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; title?: string; body?: string; status?: DocumentStatus; classificationId?: string; uri?: string; fileType?: string; fileSize?: number; reason?: string; uploadedById?: string; approvedById?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckDocument<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; title?: string; body?: string; status?: DocumentStatus; classificationId?: string; uri?: string; fileType?: string; fileSize?: number; reason?: string; uploadedById?: string; approvedById?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Document', `${endpoint}/document/check`, args, options, fetch);
 }

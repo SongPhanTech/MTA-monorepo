@@ -1,6 +1,8 @@
 import '../base'
 import './student'
+import './plan-training'
 import '../ql-danh-muc/document.zmodel'
+import '../ql-danh-muc/notification.zmodel'
 
 /// Ghi chú cá nhân của sinh viên
 model Note extends Base {
@@ -78,5 +80,26 @@ enum ReminderRepeatType {
   MONTHLY // Hàng tháng
   YEARLY  // Hàng năm
 
+  @@schema("ql-dao-tao")
+}
+
+/// Lịch / việc cá nhân của sinh viên (mobile TKB). Khác IndividualSchedule (lecturer-only).
+model StudentPersonalEvent extends Base {
+  student         Student            @relation(fields: [studentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  studentId       String
+  userProfileId   String             @db.Uuid() // token UserProfile.id
+  title           String
+  startTime       DateTime           @db.Timestamp(6)
+  endTime         DateTime           @db.Timestamp(6)
+  allDay          Boolean            @default(false)
+  location        String?
+  content         String?
+  isCompleted     Boolean            @default(false)
+  reminderMinutes Int?
+  repeatType      ScheduleRepeatType @default(NONE)
+  subjectClass    SubjectClass?      @relation(fields: [subjectClassId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  subjectClassId  String?            // optional pin to a subject class
+
+  @@index([userProfileId, startTime], map: "StudentPersonalEvent_owner_time_idx")
   @@schema("ql-dao-tao")
 }

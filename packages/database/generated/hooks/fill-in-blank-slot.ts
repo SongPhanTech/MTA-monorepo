@@ -327,7 +327,7 @@ export function useSuspenseCountFillInBlankSlot<TArgs extends Prisma.FillInBlank
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('FillInBlankSlot', `${endpoint}/fillInBlankSlot/count`, args, options, fetch);
 }
 
-export function useCheckFillInBlankSlot<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; questionId?: string; order?: number; correctAnswer?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckFillInBlankSlot<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; questionId?: string; order?: number; correctAnswer?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('FillInBlankSlot', `${endpoint}/fillInBlankSlot/check`, args, options, fetch);
 }

@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const ChangeLogOrderByRelevanceFieldEnumSchema = z.enum(["id", "tableName", "recordId", "operation", "transactionId", "source", "userProfileId"])
+export const ChangeLogOrderByRelevanceFieldEnumSchema = z.enum(["id", "tableName", "recordId", "operation", "transactionId", "source", "userProfileId", "sNguoiTao", "sNguoiSua", "sThietBiTao", "sThietBiSua"])

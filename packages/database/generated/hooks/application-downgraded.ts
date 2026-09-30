@@ -327,7 +327,7 @@ export function useSuspenseCountApplicationDowngraded<TArgs extends Prisma.Appli
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ApplicationDowngraded', `${endpoint}/applicationDowngraded/count`, args, options, fetch);
 }
 
-export function useCheckApplicationDowngraded<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; studentGraduationApplicationId?: string; fromId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckApplicationDowngraded<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; studentGraduationApplicationId?: string; fromId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ApplicationDowngraded', `${endpoint}/applicationDowngraded/check`, args, options, fetch);
 }

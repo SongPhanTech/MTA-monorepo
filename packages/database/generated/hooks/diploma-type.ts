@@ -328,7 +328,7 @@ export function useSuspenseCountDiplomaType<TArgs extends Prisma.DiplomaTypeCoun
 }
 import type { DiplomaTypeEnum } from '../zenstack/models';
 
-export function useCheckDiplomaType<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; englishName?: string; type?: DiplomaTypeEnum }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckDiplomaType<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; name?: string; englishName?: string; type?: DiplomaTypeEnum }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('DiplomaType', `${endpoint}/diplomaType/check`, args, options, fetch);
 }

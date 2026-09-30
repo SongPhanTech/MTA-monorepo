@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const AccessRoleGrantScalarFieldEnumSchema = z.enum(["id", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "granterId", "recipientId", "sRoleId", "sRoleName", "sCodeName"])
+export const AccessRoleGrantScalarFieldEnumSchema = z.enum(["id", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "granterId", "recipientId", "sRoleId", "sRoleName", "sCodeName"])

@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const CitationMessageOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "content", "documentId", "documentType", "messageId"])
+export const CitationMessageOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "sNguoiTao", "sNguoiSua", "sThietBiTao", "sThietBiSua", "content", "documentId", "documentType", "messageId"])

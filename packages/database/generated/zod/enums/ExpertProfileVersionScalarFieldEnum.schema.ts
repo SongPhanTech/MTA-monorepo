@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const ExpertProfileVersionScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "expertId", "name", "academicDegreeTypeId", "academicRankTypeId", "organization", "position", "specialization", "workplace", "inAcademy", "phone", "email", "bankAccountNumber", "bankName", "projectExpert", "thesisExpert", "eligiblePresident", "eligibleSecretary", "validFrom", "validTo"])
+export const ExpertProfileVersionScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "expertId", "name", "academicDegreeTypeId", "academicRankTypeId", "organization", "position", "specialization", "workplace", "inAcademy", "phone", "email", "bankAccountNumber", "bankName", "projectExpert", "thesisExpert", "eligiblePresident", "eligibleSecretary", "validFrom", "validTo"])

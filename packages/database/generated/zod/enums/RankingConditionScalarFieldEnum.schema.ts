@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const RankingConditionScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "rankingId", "field", "operator", "invert", "value", "tuple"])
+export const RankingConditionScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "rankingId", "field", "operator", "invert", "value", "tuple"])

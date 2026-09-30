@@ -328,7 +328,7 @@ export function useSuspenseCountFeedback<TArgs extends Prisma.FeedbackCountArgs,
 }
 import type { FeedbackStatus, Satisfaction } from '../zenstack/models';
 
-export function useCheckFeedback<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; content?: string; status?: FeedbackStatus; satisfaction?: Satisfaction; userId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckFeedback<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; content?: string; status?: FeedbackStatus; satisfaction?: Satisfaction; userId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Feedback', `${endpoint}/feedback/check`, args, options, fetch);
 }

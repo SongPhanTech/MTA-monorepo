@@ -327,7 +327,7 @@ export function useSuspenseCountEvidenceFile<TArgs extends Prisma.EvidenceFileCo
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('EvidenceFile', `${endpoint}/evidenceFile/count`, args, options, fetch);
 }
 
-export function useCheckEvidenceFile<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; path?: string; mimeType?: string; size?: number; evidenceId?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckEvidenceFile<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; name?: string; path?: string; mimeType?: string; size?: number; evidenceId?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('EvidenceFile', `${endpoint}/evidenceFile/check`, args, options, fetch);
 }

@@ -327,7 +327,7 @@ export function useSuspenseCountArchivedCertificateOnStudentSubjectScore<TArgs e
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ArchivedCertificateOnStudentSubjectScore', `${endpoint}/archivedCertificateOnStudentSubjectScore/count`, args, options, fetch);
 }
 
-export function useCheckArchivedCertificateOnStudentSubjectScore<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; studentSubjectScoreId?: string; archivedCertificateId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckArchivedCertificateOnStudentSubjectScore<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; studentSubjectScoreId?: string; archivedCertificateId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ArchivedCertificateOnStudentSubjectScore', `${endpoint}/archivedCertificateOnStudentSubjectScore/check`, args, options, fetch);
 }

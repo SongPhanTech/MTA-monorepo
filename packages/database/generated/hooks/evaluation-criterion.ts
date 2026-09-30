@@ -328,7 +328,7 @@ export function useSuspenseCountEvaluationCriterion<TArgs extends Prisma.Evaluat
 }
 import type { EvaluationStatus } from '../zenstack/models';
 
-export function useCheckEvaluationCriterion<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; criterionPeriodId?: string; lecturerId?: string; status?: EvaluationStatus; reviewerId?: string; currentSituation?: string; strengths?: string; weakness?: string; actionPlan?: string; score?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckEvaluationCriterion<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; criterionPeriodId?: string; lecturerId?: string; status?: EvaluationStatus; reviewerId?: string; currentSituation?: string; strengths?: string; weakness?: string; actionPlan?: string; score?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('EvaluationCriterion', `${endpoint}/evaluationCriterion/check`, args, options, fetch);
 }

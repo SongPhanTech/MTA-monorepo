@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const IndividualScheduleScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "title", "startTime", "endTime", "allDay", "location", "content", "isCompleted", "reminderMinutes", "repeatType", "lecturerId"])
+export const IndividualScheduleScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "title", "startTime", "endTime", "allDay", "location", "content", "isCompleted", "reminderMinutes", "repeatType", "lecturerId"])

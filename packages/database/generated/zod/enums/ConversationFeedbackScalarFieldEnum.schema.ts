@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const ConversationFeedbackScalarFieldEnumSchema = z.enum(["id", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "rating", "comment", "conversationId", "conversationNameSnapshot", "topicIdSnapshot", "topicNameSnapshot", "messagesSnapshot", "sessionId"])
+export const ConversationFeedbackScalarFieldEnumSchema = z.enum(["id", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "rating", "comment", "conversationId", "conversationNameSnapshot", "topicIdSnapshot", "topicNameSnapshot", "messagesSnapshot", "sessionId"])

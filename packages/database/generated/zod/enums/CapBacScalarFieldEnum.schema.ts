@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const CapBacScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "noiRaQuyetDinh", "capRaQuyetDinh", "ngayNhanQuyetDinh", "capBacId", "userProfileId"])
+export const CapBacScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "noiRaQuyetDinh", "capRaQuyetDinh", "ngayNhanQuyetDinh", "capBacId", "userProfileId"])

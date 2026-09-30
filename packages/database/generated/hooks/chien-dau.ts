@@ -327,7 +327,7 @@ export function useSuspenseCountChienDau<TArgs extends Prisma.ChienDauCountArgs,
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ChienDau', `${endpoint}/chienDau/count`, args, options, fetch);
 }
 
-export function useCheckChienDau<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; cuongVi?: string; donVi?: string; diaDiem?: string; vaiTro?: string; doiTuong?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckChienDau<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; cuongVi?: string; donVi?: string; diaDiem?: string; vaiTro?: string; doiTuong?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ChienDau', `${endpoint}/chienDau/check`, args, options, fetch);
 }

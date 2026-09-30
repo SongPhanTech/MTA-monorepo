@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const DataSyncHistoryScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "type", "status", "sessionName", "classRegisterSessionId", "fileName", "fileVersion", "sourceExportedAt", "errorMessage", "recordCounts", "performedById"])
+export const DataSyncHistoryScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "type", "status", "sessionName", "classRegisterSessionId", "fileName", "fileVersion", "sourceExportedAt", "errorMessage", "recordCounts", "performedById"])

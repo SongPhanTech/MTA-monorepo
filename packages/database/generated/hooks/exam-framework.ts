@@ -327,7 +327,7 @@ export function useSuspenseCountExamFramework<TArgs extends Prisma.ExamFramework
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ExamFramework', `${endpoint}/examFramework/count`, args, options, fetch);
 }
 
-export function useCheckExamFramework<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; time?: number; subjectVersionId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckExamFramework<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; name?: string; time?: number; subjectVersionId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ExamFramework', `${endpoint}/examFramework/check`, args, options, fetch);
 }

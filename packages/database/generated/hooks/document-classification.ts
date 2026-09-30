@@ -327,7 +327,7 @@ export function useSuspenseCountDocumentClassification<TArgs extends Prisma.Docu
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('DocumentClassification', `${endpoint}/documentClassification/count`, args, options, fetch);
 }
 
-export function useCheckDocumentClassification<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckDocumentClassification<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('DocumentClassification', `${endpoint}/documentClassification/check`, args, options, fetch);
 }

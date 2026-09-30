@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const BlockedIpOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "ipAddress", "reason"])
+export const BlockedIpOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "sNguoiTao", "sNguoiSua", "sThietBiTao", "sThietBiSua", "ipAddress", "reason"])

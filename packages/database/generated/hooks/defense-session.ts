@@ -327,7 +327,7 @@ export function useSuspenseCountDefenseSession<TArgs extends Prisma.DefenseSessi
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('DefenseSession', `${endpoint}/defenseSession/count`, args, options, fetch);
 }
 
-export function useCheckDefenseSession<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckDefenseSession<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('DefenseSession', `${endpoint}/defenseSession/check`, args, options, fetch);
 }

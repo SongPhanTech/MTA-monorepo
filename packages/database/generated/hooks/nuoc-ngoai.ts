@@ -327,7 +327,7 @@ export function useSuspenseCountNuocNgoai<TArgs extends Prisma.NuocNgoaiCountArg
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('NuocNgoai', `${endpoint}/nuocNgoai/count`, args, options, fetch);
 }
 
-export function useCheckNuocNgoai<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; tenNuocId?: string; lyDo?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckNuocNgoai<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; tenNuocId?: string; lyDo?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('NuocNgoai', `${endpoint}/nuocNgoai/check`, args, options, fetch);
 }

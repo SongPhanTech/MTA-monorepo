@@ -327,7 +327,7 @@ export function useSuspenseCountSpecificChoice<TArgs extends Prisma.SpecificChoi
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('SpecificChoice', `${endpoint}/specificChoice/count`, args, options, fetch);
 }
 
-export function useCheckSpecificChoice<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; answer?: string; surveyQuestionId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckSpecificChoice<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; answer?: string; surveyQuestionId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('SpecificChoice', `${endpoint}/specificChoice/check`, args, options, fetch);
 }

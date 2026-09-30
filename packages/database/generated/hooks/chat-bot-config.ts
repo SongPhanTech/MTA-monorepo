@@ -327,7 +327,7 @@ export function useSuspenseCountChatBotConfig<TArgs extends Prisma.ChatBotConfig
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ChatBotConfig', `${endpoint}/chatBotConfig/count`, args, options, fetch);
 }
 
-export function useCheckChatBotConfig<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; value?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckChatBotConfig<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; name?: string; value?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ChatBotConfig', `${endpoint}/chatBotConfig/check`, args, options, fetch);
 }

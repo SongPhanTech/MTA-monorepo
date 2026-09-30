@@ -327,7 +327,7 @@ export function useSuspenseCountChangeLog<TArgs extends Prisma.ChangeLogCountArg
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ChangeLog', `${endpoint}/changeLog/count`, args, options, fetch);
 }
 
-export function useCheckChangeLog<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; tableName?: string; recordId?: string; operation?: string; transactionId?: string; source?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckChangeLog<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; tableName?: string; recordId?: string; operation?: string; transactionId?: string; source?: string; userProfileId?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ChangeLog', `${endpoint}/changeLog/check`, args, options, fetch);
 }

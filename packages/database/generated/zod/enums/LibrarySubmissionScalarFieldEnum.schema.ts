@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const LibrarySubmissionScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "submissionDate", "isHardcopy", "isSoftcopy", "librarianNote", "thesisId", "confirmedById"])
+export const LibrarySubmissionScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "submissionDate", "isHardcopy", "isSoftcopy", "librarianNote", "thesisId", "confirmedById"])

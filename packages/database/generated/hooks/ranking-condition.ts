@@ -328,7 +328,7 @@ export function useSuspenseCountRankingCondition<TArgs extends Prisma.RankingCon
 }
 import type { CriteriaField, CriteriaOperator } from '../zenstack/models';
 
-export function useCheckRankingCondition<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; rankingId?: string; field?: CriteriaField; operator?: CriteriaOperator; invert?: boolean; tuple?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckRankingCondition<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; rankingId?: string; field?: CriteriaField; operator?: CriteriaOperator; invert?: boolean; tuple?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('RankingCondition', `${endpoint}/rankingCondition/check`, args, options, fetch);
 }

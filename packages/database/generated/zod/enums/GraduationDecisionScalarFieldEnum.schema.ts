@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const GraduationDecisionScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "applicationId", "studentId", "decisionDate", "notes", "finalGpa", "trainingMajorId", "finalRankingId", "diplomaTypeId", "originalDiplomaNumber", "diplomaNumber", "diplomaIssueDate", "totalCopy"])
+export const GraduationDecisionScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "applicationId", "studentId", "decisionDate", "notes", "finalGpa", "trainingMajorId", "finalRankingId", "diplomaTypeId", "originalDiplomaNumber", "diplomaNumber", "diplomaIssueDate", "totalCopy"])

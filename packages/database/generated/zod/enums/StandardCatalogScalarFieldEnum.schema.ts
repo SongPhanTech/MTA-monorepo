@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const StandardCatalogScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "order", "name", "standardSetId", "objectType"])
+export const StandardCatalogScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "order", "name", "standardSetId", "objectType"])

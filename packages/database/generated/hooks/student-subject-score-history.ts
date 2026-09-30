@@ -327,7 +327,7 @@ export function useSuspenseCountStudentSubjectScoreHistory<TArgs extends Prisma.
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('StudentSubjectScoreHistory', `${endpoint}/studentSubjectScoreHistory/count`, args, options, fetch);
 }
 
-export function useCheckStudentSubjectScoreHistory<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; studentSubjectScoreId?: string; examPostponed?: boolean; examPostponedReason?: string; examBanned?: boolean; examBannedReason?: string; suspended?: boolean; suspendedReason?: string; updatedById?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckStudentSubjectScoreHistory<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; studentSubjectScoreId?: string; examPostponed?: boolean; examPostponedReason?: string; examBanned?: boolean; examBannedReason?: string; suspended?: boolean; suspendedReason?: string; updatedById?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('StudentSubjectScoreHistory', `${endpoint}/studentSubjectScoreHistory/check`, args, options, fetch);
 }

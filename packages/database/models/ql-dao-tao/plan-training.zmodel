@@ -1,4 +1,5 @@
 import '../base'
+import './note'
 import './categories'
 import '../ql-danh-muc/common'
 import '../ql-danh-muc/document'
@@ -1140,6 +1141,7 @@ model SubjectClass extends BaseNoCode {
   subjectClassStudent         StudentSubjectScore[]
   fixedClasses                FixedClass[]
   classSchedules              ClassSchedule[]        // Thêm relation với thời khoá biểu
+  studentPersonalEvents       StudentPersonalEvent[]
 
   // Môn đồ án
   thesisProjects              ThesisProject[] // DS đồ án
@@ -1269,6 +1271,7 @@ model ClassSchedule extends Base {
 
   subjectClassAttendances SubjectClassAttendance[]
 
+  @@index([subjectClassId, classDate], map: "ClassSchedule_subjectClass_date_idx")
   @@schema("ql-dao-tao")
 }
 

@@ -328,7 +328,7 @@ export function useSuspenseCountSubjectInGroup<TArgs extends Prisma.SubjectInGro
 }
 import type { EquivalencySide } from '../zenstack/models';
 
-export function useCheckSubjectInGroup<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; subjectId?: string; equivalencyGroupId?: string; side?: EquivalencySide }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckSubjectInGroup<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; subjectId?: string; equivalencyGroupId?: string; side?: EquivalencySide }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('SubjectInGroup', `${endpoint}/subjectInGroup/check`, args, options, fetch);
 }

@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const QuaTrinhCongTacScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "tuThangNam", "denThangNam", "donVi", "diaChi", "chucDanh", "chucVuDangDoan", "soQuyetDinh", "ngayNhanQuyetDinh", "chucVuId", "loaiHinhCongTacId", "userProfileId"])
+export const QuaTrinhCongTacScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "tuThangNam", "denThangNam", "donVi", "diaChi", "chucDanh", "chucVuDangDoan", "soQuyetDinh", "ngayNhanQuyetDinh", "chucVuId", "loaiHinhCongTacId", "userProfileId"])

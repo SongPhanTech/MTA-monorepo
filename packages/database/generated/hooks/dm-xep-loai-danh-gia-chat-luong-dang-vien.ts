@@ -327,7 +327,7 @@ export function useSuspenseCountDM_XepLoaiDanhGiaChatLuongDangVien<TArgs extends
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('DM_XepLoaiDanhGiaChatLuongDangVien', `${endpoint}/dM_XepLoaiDanhGiaChatLuongDangVien/count`, args, options, fetch);
 }
 
-export function useCheckDM_XepLoaiDanhGiaChatLuongDangVien<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckDM_XepLoaiDanhGiaChatLuongDangVien<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('DM_XepLoaiDanhGiaChatLuongDangVien', `${endpoint}/dM_XepLoaiDanhGiaChatLuongDangVien/check`, args, options, fetch);
 }

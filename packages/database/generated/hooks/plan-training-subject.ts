@@ -328,7 +328,7 @@ export function useSuspenseCountPlanTrainingSubject<TArgs extends Prisma.PlanTra
 }
 import type { SubjectClassType } from '../zenstack/models';
 
-export function useCheckPlanTrainingSubject<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; active?: boolean; description?: string; createdBy?: string; planTrainingId?: string; trainingBlockSubjectId?: string; studentCount?: number; subjectClassType?: SubjectClassType }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckPlanTrainingSubject<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; planTrainingId?: string; trainingBlockSubjectId?: string; studentCount?: number; subjectClassType?: SubjectClassType }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('PlanTrainingSubject', `${endpoint}/planTrainingSubject/check`, args, options, fetch);
 }

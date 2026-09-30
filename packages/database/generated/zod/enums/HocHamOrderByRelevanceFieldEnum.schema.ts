@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const HocHamOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "academicRankTypeId", "noiCap", "soQuyetDinh", "userProfileId"])
+export const HocHamOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "sNguoiTao", "sNguoiSua", "sThietBiTao", "sThietBiSua", "academicRankTypeId", "noiCap", "soQuyetDinh", "userProfileId"])

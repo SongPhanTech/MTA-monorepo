@@ -327,7 +327,7 @@ export function useSuspenseCountQuaTrinhHocTap<TArgs extends Prisma.QuaTrinhHocT
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('QuaTrinhHocTap', `${endpoint}/quaTrinhHocTap/count`, args, options, fetch);
 }
 
-export function useCheckQuaTrinhHocTap<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; tenTruongId?: string; nganhHocId?: string; chuyenNganhId?: string; ketQua?: string; loaiHinhDaoTao?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckQuaTrinhHocTap<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; tenTruongId?: string; nganhHocId?: string; chuyenNganhId?: string; ketQua?: string; loaiHinhDaoTao?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('QuaTrinhHocTap', `${endpoint}/quaTrinhHocTap/check`, args, options, fetch);
 }

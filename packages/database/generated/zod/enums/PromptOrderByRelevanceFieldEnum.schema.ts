@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const PromptOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "prompt", "topicId", "reason"])
+export const PromptOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "sNguoiTao", "sNguoiSua", "sThietBiTao", "sThietBiSua", "prompt", "topicId", "reason"])

@@ -327,7 +327,7 @@ export function useSuspenseCountDM_LoaiTinhTrangCongTac<TArgs extends Prisma.DM_
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('DM_LoaiTinhTrangCongTac', `${endpoint}/dM_LoaiTinhTrangCongTac/count`, args, options, fetch);
 }
 
-export function useCheckDM_LoaiTinhTrangCongTac<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckDM_LoaiTinhTrangCongTac<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('DM_LoaiTinhTrangCongTac', `${endpoint}/dM_LoaiTinhTrangCongTac/check`, args, options, fetch);
 }

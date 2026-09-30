@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const ArchivedCertificateSubjectScoreScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "finalScore", "archivedCertificateId", "subjectVersionId"])
+export const ArchivedCertificateSubjectScoreScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "finalScore", "archivedCertificateId", "subjectVersionId"])

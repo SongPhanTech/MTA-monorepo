@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const ExpertScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "lecturerId", "currentVersionId"])
+export const ExpertScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "lecturerId", "currentVersionId"])

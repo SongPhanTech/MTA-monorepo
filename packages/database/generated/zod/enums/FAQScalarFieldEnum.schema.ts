@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const FAQScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "question", "answer", "status", "topicId", "reason", "uploadedById", "approvedById"])
+export const FAQScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "question", "answer", "status", "topicId", "reason", "uploadedById", "approvedById"])

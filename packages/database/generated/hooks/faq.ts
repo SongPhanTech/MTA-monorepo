@@ -328,7 +328,7 @@ export function useSuspenseCountFAQ<TArgs extends Prisma.FAQCountArgs, TQueryFnD
 }
 import type { DocumentStatus } from '../zenstack/models';
 
-export function useCheckFAQ<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; question?: string; answer?: string; status?: DocumentStatus; topicId?: string; reason?: string; uploadedById?: string; approvedById?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckFAQ<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; question?: string; answer?: string; status?: DocumentStatus; topicId?: string; reason?: string; uploadedById?: string; approvedById?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('FAQ', `${endpoint}/fAQ/check`, args, options, fetch);
 }

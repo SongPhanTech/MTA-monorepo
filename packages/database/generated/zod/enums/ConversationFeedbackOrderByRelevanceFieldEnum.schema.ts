@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const ConversationFeedbackOrderByRelevanceFieldEnumSchema = z.enum(["id", "description", "createdBy", "comment", "conversationId", "conversationNameSnapshot", "topicIdSnapshot", "topicNameSnapshot", "sessionId"])
+export const ConversationFeedbackOrderByRelevanceFieldEnumSchema = z.enum(["id", "description", "createdBy", "sNguoiTao", "sNguoiSua", "sThietBiTao", "sThietBiSua", "comment", "conversationId", "conversationNameSnapshot", "topicIdSnapshot", "topicNameSnapshot", "sessionId"])

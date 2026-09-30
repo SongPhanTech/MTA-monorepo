@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const TemplateFileOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "name", "path", "extensions"])
+export const TemplateFileOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "sNguoiTao", "sNguoiSua", "sThietBiTao", "sThietBiSua", "name", "path", "extensions"])

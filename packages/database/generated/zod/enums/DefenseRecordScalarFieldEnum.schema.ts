@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const DefenseRecordScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "finalScore", "comments", "isProfileComplete", "thesisId"])
+export const DefenseRecordScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "finalScore", "comments", "isProfileComplete", "thesisId"])

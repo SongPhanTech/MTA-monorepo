@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const SubjectVersionHistoryScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "subjectVersionId", "content", "action", "updatedById"])
+export const SubjectVersionHistoryScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "subjectVersionId", "content", "action", "updatedById"])

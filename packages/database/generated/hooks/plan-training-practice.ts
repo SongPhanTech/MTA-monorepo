@@ -327,7 +327,7 @@ export function useSuspenseCountPlanTrainingPractice<TArgs extends Prisma.PlanTr
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('PlanTrainingPractice', `${endpoint}/planTrainingPractice/count`, args, options, fetch);
 }
 
-export function useCheckPlanTrainingPractice<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; active?: boolean; description?: string; createdBy?: string; trainingObjectTypeId?: string; semesterId?: string; trainingCourseId?: string; name?: string; isDayOff?: boolean }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckPlanTrainingPractice<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; trainingObjectTypeId?: string; semesterId?: string; trainingCourseId?: string; name?: string; isDayOff?: boolean }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('PlanTrainingPractice', `${endpoint}/planTrainingPractice/check`, args, options, fetch);
 }

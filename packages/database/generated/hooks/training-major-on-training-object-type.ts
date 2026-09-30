@@ -327,7 +327,7 @@ export function useSuspenseCountTrainingMajorOnTrainingObjectType<TArgs extends 
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('TrainingMajorOnTrainingObjectType', `${endpoint}/trainingMajorOnTrainingObjectType/count`, args, options, fetch);
 }
 
-export function useCheckTrainingMajorOnTrainingObjectType<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; trainingMajorId?: string; trainingObjectTypeId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckTrainingMajorOnTrainingObjectType<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; trainingMajorId?: string; trainingObjectTypeId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('TrainingMajorOnTrainingObjectType', `${endpoint}/trainingMajorOnTrainingObjectType/check`, args, options, fetch);
 }

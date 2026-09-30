@@ -328,7 +328,7 @@ export function useSuspenseCountConversationFeedback<TArgs extends Prisma.Conver
 }
 import type { FeedbackRating } from '../zenstack/models';
 
-export function useCheckConversationFeedback<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; active?: boolean; description?: string; createdBy?: string; rating?: FeedbackRating; comment?: string; conversationId?: string; conversationNameSnapshot?: string; topicIdSnapshot?: string; topicNameSnapshot?: string; sessionId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckConversationFeedback<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; rating?: FeedbackRating; comment?: string; conversationId?: string; conversationNameSnapshot?: string; topicIdSnapshot?: string; topicNameSnapshot?: string; sessionId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ConversationFeedback', `${endpoint}/conversationFeedback/check`, args, options, fetch);
 }

@@ -327,7 +327,7 @@ export function useSuspenseCountCertificate<TArgs extends Prisma.CertificateCoun
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('Certificate', `${endpoint}/certificate/count`, args, options, fetch);
 }
 
-export function useCheckCertificate<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; englishName?: string; outputStandardId?: string; isUsingScore?: boolean }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckCertificate<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; name?: string; englishName?: string; outputStandardId?: string; isUsingScore?: boolean }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Certificate', `${endpoint}/certificate/check`, args, options, fetch);
 }

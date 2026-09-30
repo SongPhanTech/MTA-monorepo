@@ -328,7 +328,7 @@ export function useSuspenseCountAcademicActionCondition<TArgs extends Prisma.Aca
 }
 import type { CriteriaField, CriteriaOperator } from '../zenstack/models';
 
-export function useCheckAcademicActionCondition<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; ruleSetId?: string; field?: CriteriaField; operator?: CriteriaOperator; invert?: boolean; tuple?: string; yearCondition?: number; isPriorityStudent?: boolean }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckAcademicActionCondition<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; ruleSetId?: string; field?: CriteriaField; operator?: CriteriaOperator; invert?: boolean; tuple?: string; yearCondition?: number; isPriorityStudent?: boolean }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('AcademicActionCondition', `${endpoint}/academicActionCondition/check`, args, options, fetch);
 }

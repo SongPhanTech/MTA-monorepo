@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const AccessRoleGrantOrderByRelevanceFieldEnumSchema = z.enum(["id", "description", "createdBy", "granterId", "recipientId", "sRoleId", "sRoleName", "sCodeName"])
+export const AccessRoleGrantOrderByRelevanceFieldEnumSchema = z.enum(["id", "description", "createdBy", "sNguoiTao", "sNguoiSua", "sThietBiTao", "sThietBiSua", "granterId", "recipientId", "sRoleId", "sRoleName", "sCodeName"])

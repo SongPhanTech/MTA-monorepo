@@ -328,7 +328,7 @@ export function useSuspenseCountScoreCorrectionTicket<TArgs extends Prisma.Score
 }
 import type { ScoreCorrectionStatus } from '../zenstack/models';
 
-export function useCheckScoreCorrectionTicket<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; trainingObjectTypeId?: string; number?: number; proposal?: string; decision?: string; status?: ScoreCorrectionStatus }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckScoreCorrectionTicket<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; trainingObjectTypeId?: string; number?: number; proposal?: string; decision?: string; status?: ScoreCorrectionStatus }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ScoreCorrectionTicket', `${endpoint}/scoreCorrectionTicket/check`, args, options, fetch);
 }

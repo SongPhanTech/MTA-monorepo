@@ -327,7 +327,7 @@ export function useSuspenseCountLoadCategory<TArgs extends Prisma.LoadCategoryCo
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('LoadCategory', `${endpoint}/loadCategory/count`, args, options, fetch);
 }
 
-export function useCheckLoadCategory<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; unit?: string; category?: string; note?: string; isOverageCalculated?: boolean }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckLoadCategory<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; name?: string; unit?: string; category?: string; note?: string; isOverageCalculated?: boolean }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('LoadCategory', `${endpoint}/loadCategory/check`, args, options, fetch);
 }

@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const FillInBlankSlotScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "questionId", "order", "correctAnswer"])
+export const FillInBlankSlotScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "questionId", "order", "correctAnswer"])

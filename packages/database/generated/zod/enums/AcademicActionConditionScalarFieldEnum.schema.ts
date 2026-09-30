@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const AcademicActionConditionScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "ruleSetId", "field", "operator", "invert", "value", "tuple", "yearCondition", "isPriorityStudent"])
+export const AcademicActionConditionScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "ruleSetId", "field", "operator", "invert", "value", "tuple", "yearCondition", "isPriorityStudent"])

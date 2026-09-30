@@ -327,7 +327,7 @@ export function useSuspenseCountTrainingType<TArgs extends Prisma.TrainingTypeCo
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('TrainingType', `${endpoint}/trainingType/count`, args, options, fetch);
 }
 
-export function useCheckTrainingType<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckTrainingType<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('TrainingType', `${endpoint}/trainingType/check`, args, options, fetch);
 }

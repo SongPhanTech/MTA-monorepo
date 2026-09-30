@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const RelativeScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "name", "birthYear", "queQuan", "noiOHienTai", "job", "information", "quanHeThanNhanId", "userProfileId"])
+export const RelativeScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "name", "birthYear", "queQuan", "noiOHienTai", "job", "information", "quanHeThanNhanId", "userProfileId"])

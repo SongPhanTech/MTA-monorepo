@@ -327,7 +327,7 @@ export function useSuspenseCountExpert<TArgs extends Prisma.ExpertCountArgs, TQu
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('Expert', `${endpoint}/expert/count`, args, options, fetch);
 }
 
-export function useCheckExpert<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; lecturerId?: string; currentVersionId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckExpert<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; lecturerId?: string; currentVersionId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Expert', `${endpoint}/expert/check`, args, options, fetch);
 }

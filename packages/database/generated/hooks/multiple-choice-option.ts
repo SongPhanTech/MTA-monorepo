@@ -327,7 +327,7 @@ export function useSuspenseCountMultipleChoiceOption<TArgs extends Prisma.Multip
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('MultipleChoiceOption', `${endpoint}/multipleChoiceOption/count`, args, options, fetch);
 }
 
-export function useCheckMultipleChoiceOption<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; questionId?: string; content?: string; isCorrect?: boolean; order?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckMultipleChoiceOption<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; questionId?: string; content?: string; isCorrect?: boolean; order?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('MultipleChoiceOption', `${endpoint}/multipleChoiceOption/check`, args, options, fetch);
 }

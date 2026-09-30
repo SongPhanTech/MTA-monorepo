@@ -327,7 +327,7 @@ export function useSuspenseCountGuestTeachingRate<TArgs extends Prisma.GuestTeac
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('GuestTeachingRate', `${endpoint}/guestTeachingRate/count`, args, options, fetch);
 }
 
-export function useCheckGuestTeachingRate<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; active?: boolean; description?: string; createdBy?: string; configId?: string; academicRankTypeId?: string; academicDegreeTypeId?: string; isForeign?: boolean }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckGuestTeachingRate<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; configId?: string; academicRankTypeId?: string; academicDegreeTypeId?: string; isForeign?: boolean }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('GuestTeachingRate', `${endpoint}/guestTeachingRate/check`, args, options, fetch);
 }

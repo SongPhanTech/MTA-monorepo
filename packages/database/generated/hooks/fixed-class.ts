@@ -328,7 +328,7 @@ export function useSuspenseCountFixedClass<TArgs extends Prisma.FixedClassCountA
 }
 import type { FixedClassType } from '../zenstack/models';
 
-export function useCheckFixedClass<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; summary?: string; startYear?: number; graduated?: boolean; classMonitorId?: string; unionLeaderId?: string; deputyUnionSecretaryId?: string; unionSecretaryId?: string; trainingCourseId?: string; managementOrganizationId?: string; lecturerManagementId?: string; staffManagementId?: string; curriculumVersionId?: string; classType?: FixedClassType; planTrainingSubjectId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckFixedClass<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; name?: string; summary?: string; startYear?: number; graduated?: boolean; classMonitorId?: string; unionLeaderId?: string; deputyUnionSecretaryId?: string; unionSecretaryId?: string; trainingCourseId?: string; managementOrganizationId?: string; lecturerManagementId?: string; staffManagementId?: string; curriculumVersionId?: string; classType?: FixedClassType; planTrainingSubjectId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('FixedClass', `${endpoint}/fixedClass/check`, args, options, fetch);
 }

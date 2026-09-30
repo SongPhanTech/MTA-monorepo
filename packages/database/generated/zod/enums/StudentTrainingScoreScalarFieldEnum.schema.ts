@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const StudentTrainingScoreScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "trainingScoreSessionId", "studentId", "score", "studentTrainingType", "status"])
+export const StudentTrainingScoreScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "trainingScoreSessionId", "studentId", "score", "studentTrainingType", "status"])

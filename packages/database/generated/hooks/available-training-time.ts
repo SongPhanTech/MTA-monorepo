@@ -327,7 +327,7 @@ export function useSuspenseCountAvailableTrainingTime<TArgs extends Prisma.Avail
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('AvailableTrainingTime', `${endpoint}/availableTrainingTime/count`, args, options, fetch);
 }
 
-export function useCheckAvailableTrainingTime<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; trainingObjectTypeId?: string; semesterId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckAvailableTrainingTime<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; trainingObjectTypeId?: string; semesterId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('AvailableTrainingTime', `${endpoint}/availableTrainingTime/check`, args, options, fetch);
 }

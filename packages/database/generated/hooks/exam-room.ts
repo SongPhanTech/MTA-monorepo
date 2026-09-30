@@ -327,7 +327,7 @@ export function useSuspenseCountExamRoom<TArgs extends Prisma.ExamRoomCountArgs,
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ExamRoom', `${endpoint}/examRoom/count`, args, options, fetch);
 }
 
-export function useCheckExamRoom<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; examId?: string; roomId?: string; capacity?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckExamRoom<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; examId?: string; roomId?: string; capacity?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ExamRoom', `${endpoint}/examRoom/check`, args, options, fetch);
 }

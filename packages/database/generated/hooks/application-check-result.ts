@@ -327,7 +327,7 @@ export function useSuspenseCountApplicationCheckResult<TArgs extends Prisma.Appl
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ApplicationCheckResult', `${endpoint}/applicationCheckResult/count`, args, options, fetch);
 }
 
-export function useCheckApplicationCheckResult<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; studentGraduationApplicationId?: string; rankingConditionId?: string; passed?: boolean }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckApplicationCheckResult<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; studentGraduationApplicationId?: string; rankingConditionId?: string; passed?: boolean }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ApplicationCheckResult', `${endpoint}/applicationCheckResult/check`, args, options, fetch);
 }

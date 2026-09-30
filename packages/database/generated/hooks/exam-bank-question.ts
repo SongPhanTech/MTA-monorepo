@@ -327,7 +327,7 @@ export function useSuspenseCountExamBankQuestion<TArgs extends Prisma.ExamBankQu
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ExamBankQuestion', `${endpoint}/examBankQuestion/count`, args, options, fetch);
 }
 
-export function useCheckExamBankQuestion<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; examBankId?: string; questionId?: string; order?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckExamBankQuestion<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; examBankId?: string; questionId?: string; order?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ExamBankQuestion', `${endpoint}/examBankQuestion/check`, args, options, fetch);
 }

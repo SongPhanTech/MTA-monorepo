@@ -328,7 +328,7 @@ export function useSuspenseCountOfficerBonusScore<TArgs extends Prisma.OfficerBo
 }
 import type { OfficerPosition } from '../zenstack/models';
 
-export function useCheckOfficerBonusScore<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; position?: OfficerPosition }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckOfficerBonusScore<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; position?: OfficerPosition }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('OfficerBonusScore', `${endpoint}/officerBonusScore/check`, args, options, fetch);
 }

@@ -328,7 +328,7 @@ export function useSuspenseCountSubjectScoreConvert<TArgs extends Prisma.Subject
 }
 import type { ScoreConvertStatus } from '../zenstack/models';
 
-export function useCheckSubjectScoreConvert<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; studentScoreConvertId?: string; subjectVersionId?: string; status?: ScoreConvertStatus }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckSubjectScoreConvert<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; studentScoreConvertId?: string; subjectVersionId?: string; status?: ScoreConvertStatus }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('SubjectScoreConvert', `${endpoint}/subjectScoreConvert/check`, args, options, fetch);
 }

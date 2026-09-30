@@ -327,7 +327,7 @@ export function useSuspenseCountChucVuDang<TArgs extends Prisma.ChucVuDangCountA
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ChucVuDang', `${endpoint}/chucVuDang/count`, args, options, fetch);
 }
 
-export function useCheckChucVuDang<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; chucVuDangId?: string; userProfileId?: string; address?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckChucVuDang<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; chucVuDangId?: string; userProfileId?: string; address?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ChucVuDang', `${endpoint}/chucVuDang/check`, args, options, fetch);
 }

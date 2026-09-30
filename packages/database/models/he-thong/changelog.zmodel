@@ -14,6 +14,13 @@ model ChangeLog {
   userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
   userProfileId String      @db.Uuid
 
+  sNguoiTao     String?
+  sNguoiSua     String?
+  dNgayTao      DateTime? @db.Timestamp(6)
+  dNgaySua      DateTime? @db.Timestamp(6)
+  sThietBiTao   String?
+  sThietBiSua   String?
+
   @@index([tableName, recordId])
   @@index([userProfileId])
   @@index([changedAt])

@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const AcademicActionConfigOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "name", "trainingCourseId"])
+export const AcademicActionConfigOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "sNguoiTao", "sNguoiSua", "sThietBiTao", "sThietBiSua", "name", "trainingCourseId"])

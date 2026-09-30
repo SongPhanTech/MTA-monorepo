@@ -327,7 +327,7 @@ export function useSuspenseCountEvaluationCriterionComment<TArgs extends Prisma.
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('EvaluationCriterionComment', `${endpoint}/evaluationCriterionComment/count`, args, options, fetch);
 }
 
-export function useCheckEvaluationCriterionComment<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; reviewerId?: string; requirementCriterionId?: string; content?: string; analysisCriterionId?: string; evaluationCriterionId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckEvaluationCriterionComment<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; reviewerId?: string; requirementCriterionId?: string; content?: string; analysisCriterionId?: string; evaluationCriterionId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('EvaluationCriterionComment', `${endpoint}/evaluationCriterionComment/check`, args, options, fetch);
 }

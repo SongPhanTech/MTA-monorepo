@@ -328,7 +328,7 @@ export function useSuspenseCountSubjectClassAttendanceStudent<TArgs extends Pris
 }
 import type { AttendanceStatus } from '../zenstack/models';
 
-export function useCheckSubjectClassAttendanceStudent<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; subjectClassAttendanceId?: string; studentId?: string; attendanceStatus?: AttendanceStatus; note?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckSubjectClassAttendanceStudent<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; subjectClassAttendanceId?: string; studentId?: string; attendanceStatus?: AttendanceStatus; note?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('SubjectClassAttendanceStudent', `${endpoint}/subjectClassAttendanceStudent/check`, args, options, fetch);
 }

@@ -129,6 +129,12 @@ exports.Prisma.ConfigScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   key: 'key',
   value: 'value'
 };
@@ -142,6 +148,12 @@ exports.Prisma.SuggestionScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   key: 'key',
   value: 'value'
 };
@@ -156,7 +168,13 @@ exports.Prisma.ChangeLogScalarFieldEnum = {
   newData: 'newData',
   transactionId: 'transactionId',
   source: 'source',
-  userProfileId: 'userProfileId'
+  userProfileId: 'userProfileId',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua'
 };
 
 exports.Prisma.UserProfileScalarFieldEnum = {
@@ -168,6 +186,12 @@ exports.Prisma.UserProfileScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   bLaNguoiDung: 'bLaNguoiDung',
   bLaGiangVien: 'bLaGiangVien',
   bLaCanBoNhanVien: 'bLaCanBoNhanVien',
@@ -178,10 +202,6 @@ exports.Prisma.UserProfileScalarFieldEnum = {
   sQuanlyTrucTiepId: 'sQuanlyTrucTiepId',
   iDictionaryKey: 'iDictionaryKey',
   bSystem: 'bSystem',
-  sNguoiTao: 'sNguoiTao',
-  sNguoiSua: 'sNguoiSua',
-  sThietBiTao: 'sThietBiTao',
-  sThietBiSua: 'sThietBiSua',
   avatar: 'avatar',
   firstName: 'firstName',
   lastName: 'lastName',
@@ -300,6 +320,12 @@ exports.Prisma.HocHamScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   academicRankTypeId: 'academicRankTypeId',
   noiCap: 'noiCap',
   soQuyetDinh: 'soQuyetDinh',
@@ -318,6 +344,12 @@ exports.Prisma.ChucVuChinhQuyenScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   chucVuChinhQuyenId: 'chucVuChinhQuyenId',
   userProfileId: 'userProfileId',
   address: 'address'
@@ -332,6 +364,12 @@ exports.Prisma.ChucVuDangScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   chucVuDangId: 'chucVuDangId',
   userProfileId: 'userProfileId',
   address: 'address'
@@ -346,6 +384,12 @@ exports.Prisma.HocViScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   academicDegreeTypeId: 'academicDegreeTypeId',
   nationalityId: 'nationalityId',
   linhVuc: 'linhVuc',
@@ -364,6 +408,12 @@ exports.Prisma.RelativeScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   birthYear: 'birthYear',
   queQuan: 'queQuan',
@@ -383,6 +433,12 @@ exports.Prisma.TrinhDoLyLuanChinhTriScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   hinhThucDaoTao: 'hinhThucDaoTao',
   noiDaoTao: 'noiDaoTao',
   thoiGianBatDau: 'thoiGianBatDau',
@@ -400,6 +456,12 @@ exports.Prisma.TrinhDoQuanLyNhaNuocScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   hinhThucDaoTao: 'hinhThucDaoTao',
   noiDaoTao: 'noiDaoTao',
   thoiGianBatDau: 'thoiGianBatDau',
@@ -417,6 +479,12 @@ exports.Prisma.NgoaiNguScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   ngonNguId: 'ngonNguId',
   hinhThucDaoTao: 'hinhThucDaoTao',
   noiDaoTao: 'noiDaoTao',
@@ -435,6 +503,12 @@ exports.Prisma.TinHocScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   hinhThucDaoTao: 'hinhThucDaoTao',
   noiDaoTao: 'noiDaoTao',
   thoiGianBatDau: 'thoiGianBatDau',
@@ -452,6 +526,12 @@ exports.Prisma.BoiDuongQuocPhongAnNinhScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   thoiGianBatDau: 'thoiGianBatDau',
   thoiGianKetThuc: 'thoiGianKetThuc',
@@ -467,6 +547,12 @@ exports.Prisma.CapBacScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   noiRaQuyetDinh: 'noiRaQuyetDinh',
   capRaQuyetDinh: 'capRaQuyetDinh',
   ngayNhanQuyetDinh: 'ngayNhanQuyetDinh',
@@ -483,6 +569,12 @@ exports.Prisma.QuaTrinhCongTacScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   tuThangNam: 'tuThangNam',
   denThangNam: 'denThangNam',
   donVi: 'donVi',
@@ -505,6 +597,12 @@ exports.Prisma.QuaTrinhCuDiCongTacScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   tuThangNam: 'tuThangNam',
   denThangNam: 'denThangNam',
   donVi: 'donVi',
@@ -524,6 +622,12 @@ exports.Prisma.QuaTrinhCuDiDaoTaoScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   ten: 'ten',
   donViToChuc: 'donViToChuc',
   tuNgay: 'tuNgay',
@@ -543,6 +647,12 @@ exports.Prisma.KhenThuongScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   hinhThucKhenThuongId: 'hinhThucKhenThuongId',
   capKhenThuong: 'capKhenThuong',
   soQuyetDinh: 'soQuyetDinh',
@@ -561,6 +671,12 @@ exports.Prisma.KyLuatScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   hinhThucKyLuat: 'hinhThucKyLuat',
   capKyLuat: 'capKyLuat',
   soQuyetDinh: 'soQuyetDinh',
@@ -579,6 +695,12 @@ exports.Prisma.DoiTuongChinhSachScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   tenDoiTuong: 'tenDoiTuong',
   ngayBatDau: 'ngayBatDau',
   ngayKetThuc: 'ngayKetThuc',
@@ -595,6 +717,12 @@ exports.Prisma.KeKhaiTaiSanScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   loai: 'loai',
   tenDot: 'tenDot',
   thoiGianKeKhai: 'thoiGianKeKhai',
@@ -610,6 +738,12 @@ exports.Prisma.TiengDanTocScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   danTocId: 'danTocId',
   nghe: 'nghe',
   noi: 'noi',
@@ -626,6 +760,12 @@ exports.Prisma.ChienDauScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   cuongVi: 'cuongVi',
   donVi: 'donVi',
   diaDiem: 'diaDiem',
@@ -645,6 +785,12 @@ exports.Prisma.NuocNgoaiScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   tenNuocId: 'tenNuocId',
   tuNgay: 'tuNgay',
   denNgay: 'denNgay',
@@ -661,6 +807,12 @@ exports.Prisma.ThuongTatScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   loaiId: 'loaiId',
   tiLe: 'tiLe',
   nguyenNhan: 'nguyenNhan',
@@ -679,6 +831,12 @@ exports.Prisma.DanhHieuScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   ten: 'ten',
   thoiGian: 'thoiGian',
   userProfileId: 'userProfileId'
@@ -693,6 +851,12 @@ exports.Prisma.QuaTrinhHocTapScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   tenTruongId: 'tenTruongId',
   nganhHocId: 'nganhHocId',
   chuyenNganhId: 'chuyenNganhId',
@@ -712,6 +876,12 @@ exports.Prisma.ToChucXaHoiScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   tenId: 'tenId',
   tuNgay: 'tuNgay',
   denNgay: 'denNgay',
@@ -728,6 +898,12 @@ exports.Prisma.QuaTrinhLuongScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   tuNgay: 'tuNgay',
   denNgay: 'denNgay',
   ngachId: 'ngachId',
@@ -748,6 +924,12 @@ exports.Prisma.GroupScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -760,6 +942,12 @@ exports.Prisma.RoleScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -772,6 +960,12 @@ exports.Prisma.PermissionScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   permissionType: 'permissionType',
   disabled: 'disabled'
@@ -786,6 +980,12 @@ exports.Prisma.ChatBotConfigScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   value: 'value'
 };
@@ -799,6 +999,12 @@ exports.Prisma.UserSessionScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   email: 'email',
   phoneNumber: 'phoneNumber'
@@ -813,6 +1019,12 @@ exports.Prisma.DocumentScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   title: 'title',
   body: 'body',
   status: 'status',
@@ -834,6 +1046,12 @@ exports.Prisma.DocumentTopicScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   documentId: 'documentId',
   topicId: 'topicId'
 };
@@ -847,6 +1065,12 @@ exports.Prisma.FAQScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   question: 'question',
   answer: 'answer',
   status: 'status',
@@ -865,6 +1089,12 @@ exports.Prisma.PromptScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   prompt: 'prompt',
   status: 'status',
   topicId: 'topicId',
@@ -880,6 +1110,12 @@ exports.Prisma.ConversationScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   userId: 'userId',
   sessionId: 'sessionId',
@@ -894,6 +1130,12 @@ exports.Prisma.ConversationFeedbackScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   rating: 'rating',
   comment: 'comment',
   conversationId: 'conversationId',
@@ -913,6 +1155,12 @@ exports.Prisma.MessageScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   conversationId: 'conversationId',
   content: 'content',
   sender: 'sender'
@@ -927,6 +1175,12 @@ exports.Prisma.CitationMessageScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   content: 'content',
   index: 'index',
   documentId: 'documentId',
@@ -943,6 +1197,12 @@ exports.Prisma.TopicScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   type: 'type',
   isPinned: 'isPinned'
@@ -957,6 +1217,12 @@ exports.Prisma.DocumentClassificationScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -1515,6 +1781,12 @@ exports.Prisma.PlanTrainingScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   trainingObjectTypeId: 'trainingObjectTypeId',
   semesterId: 'semesterId',
   trainingCourseId: 'trainingCourseId'
@@ -1528,6 +1800,12 @@ exports.Prisma.PlanTrainingPracticeScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   trainingObjectTypeId: 'trainingObjectTypeId',
   semesterId: 'semesterId',
   trainingCourseId: 'trainingCourseId',
@@ -1545,6 +1823,12 @@ exports.Prisma.PlanTrainingSubjectScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   planTrainingId: 'planTrainingId',
   trainingBlockSubjectId: 'trainingBlockSubjectId',
   studentCount: 'studentCount',
@@ -1560,6 +1844,12 @@ exports.Prisma.StudentScoreConvertScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   studentId: 'studentId'
 };
 
@@ -1572,6 +1862,12 @@ exports.Prisma.SubjectScoreConvertScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   studentScoreConvertId: 'studentScoreConvertId',
   subjectVersionId: 'subjectVersionId',
   status: 'status',
@@ -1587,6 +1883,12 @@ exports.Prisma.StudentSubjectScoreScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   subjectClassId: 'subjectClassId',
   subjectVersionId: 'subjectVersionId',
   studentId: 'studentId',
@@ -1618,6 +1920,12 @@ exports.Prisma.StudentSubjectScoreHistoryScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   studentSubjectScoreId: 'studentSubjectScoreId',
   attendanceScore: 'attendanceScore',
   midtermScore: 'midtermScore',
@@ -1642,6 +1950,12 @@ exports.Prisma.StudentResearchTopicScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   studentSubjectScoreId: 'studentSubjectScoreId',
   deadline: 'deadline',
   name: 'name',
@@ -1661,6 +1975,12 @@ exports.Prisma.StudentInternshipScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   studentSubjectScoreId: 'studentSubjectScoreId',
   deadline: 'deadline',
   internshipContent: 'internshipContent',
@@ -1683,6 +2003,12 @@ exports.Prisma.ArchivedCertificateOnStudentSubjectScoreScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   studentSubjectScoreId: 'studentSubjectScoreId',
   archivedCertificateId: 'archivedCertificateId'
 };
@@ -1696,6 +2022,12 @@ exports.Prisma.ArchivedCertificateScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   certificateId: 'certificateId',
   studentId: 'studentId',
   finalScore: 'finalScore',
@@ -1720,6 +2052,12 @@ exports.Prisma.ArchivedCertificateSubjectScoreScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   finalScore: 'finalScore',
   archivedCertificateId: 'archivedCertificateId',
   subjectVersionId: 'subjectVersionId'
@@ -1734,6 +2072,12 @@ exports.Prisma.ArchivedAwardOnStudentSubjectScoreScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   studentSubjectScoreId: 'studentSubjectScoreId',
   archivedAwardId: 'archivedAwardId',
   status: 'status'
@@ -1748,6 +2092,12 @@ exports.Prisma.ArchivedAwardScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   awardId: 'awardId',
   studentId: 'studentId',
   bonusScore: 'bonusScore',
@@ -1764,6 +2114,12 @@ exports.Prisma.SchoolYearScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   startDate: 'startDate',
   endDate: 'endDate'
@@ -1778,6 +2134,12 @@ exports.Prisma.SemesterScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   shortName: 'shortName',
   semesterType: 'semesterType',
@@ -1795,6 +2157,12 @@ exports.Prisma.MilestoneScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   startPeriod: 'startPeriod',
   period: 'period',
@@ -1812,6 +2180,12 @@ exports.Prisma.TrainingLanguageScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -1824,6 +2198,12 @@ exports.Prisma.TrainingCourseScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   semesterStartId: 'semesterStartId',
   startYear: 'startYear',
@@ -1868,6 +2248,12 @@ exports.Prisma.TrainingCourseRegulationScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   trainingCourseId: 'trainingCourseId',
   code: 'code',
   name: 'name',
@@ -1883,6 +2269,12 @@ exports.Prisma.FixedClassScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   summary: 'summary',
   startYear: 'startYear',
@@ -1908,6 +2300,12 @@ exports.Prisma.CurriculumScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   code: 'code',
   name: 'name',
   englishName: 'englishName',
@@ -1927,6 +2325,12 @@ exports.Prisma.CurriculumVersionScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   code: 'code',
   name: 'name',
   shortName: 'shortName',
@@ -1968,6 +2372,12 @@ exports.Prisma.SubjectScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   englishName: 'englishName',
   managementOrganizationId: 'managementOrganizationId',
@@ -1983,6 +2393,12 @@ exports.Prisma.SubjectVersionCategoryScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -1994,6 +2410,12 @@ exports.Prisma.SubjectVersionScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   code: 'code',
   isLocked: 'isLocked',
   name: 'name',
@@ -2034,6 +2456,12 @@ exports.Prisma.SubjectVersionHistoryScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   subjectVersionId: 'subjectVersionId',
   content: 'content',
   action: 'action',
@@ -2048,7 +2476,13 @@ exports.Prisma.EquivalencyGroupScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  createdBy: 'createdBy'
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua'
 };
 
 exports.Prisma.SubjectInGroupScalarFieldEnum = {
@@ -2060,6 +2494,12 @@ exports.Prisma.SubjectInGroupScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   subjectId: 'subjectId',
   equivalencyGroupId: 'equivalencyGroupId',
   side: 'side'
@@ -2074,6 +2514,12 @@ exports.Prisma.TrainingBlockSubjectScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   subjectId: 'subjectId',
   trainingBlockOnCurriculumVersionId: 'trainingBlockOnCurriculumVersionId',
   semester: 'semester',
@@ -2091,6 +2537,12 @@ exports.Prisma.ClassRegisterSessionCreditScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   classRegisterSessionId: 'classRegisterSessionId',
   minCredit: 'minCredit',
   maxCredit: 'maxCredit',
@@ -2110,6 +2562,12 @@ exports.Prisma.ClassRegisterSessionScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   startDate: 'startDate',
   endDate: 'endDate',
@@ -2126,6 +2584,12 @@ exports.Prisma.ClassRegisterLogsScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   classRegisterSessionId: 'classRegisterSessionId',
   subjectClassId: 'subjectClassId',
   studentId: 'studentId',
@@ -2142,6 +2606,12 @@ exports.Prisma.ClassRegisterAttemptScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   classRegisterSessionId: 'classRegisterSessionId',
   studentId: 'studentId',
   userProfileId: 'userProfileId',
@@ -2162,6 +2632,12 @@ exports.Prisma.SubjectClassScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   code: 'code',
   name: 'name',
   startDate: 'startDate',
@@ -2211,6 +2687,12 @@ exports.Prisma.SubjectClassAttendanceScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   time: 'time',
   subjectClassId: 'subjectClassId',
   profileId: 'profileId',
@@ -2227,6 +2709,12 @@ exports.Prisma.SubjectClassAttendanceStudentScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   subjectClassAttendanceId: 'subjectClassAttendanceId',
   studentId: 'studentId',
   attendanceStatus: 'attendanceStatus',
@@ -2242,6 +2730,12 @@ exports.Prisma.SubjectClassHistoryScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   subjectClassId: 'subjectClassId',
   scoreDeadLineStart: 'scoreDeadLineStart',
   scoreDeadline: 'scoreDeadline',
@@ -2263,6 +2757,12 @@ exports.Prisma.SubjectClassTimeScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   subjectClassId: 'subjectClassId',
   dayOfWeek: 'dayOfWeek',
   startPeriod: 'startPeriod',
@@ -2278,6 +2778,12 @@ exports.Prisma.ClassScheduleScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   subjectClassId: 'subjectClassId',
   periodType: 'periodType',
   startPeriod: 'startPeriod',
@@ -2304,6 +2810,12 @@ exports.Prisma.ScoreCorrectionTicketScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   trainingObjectTypeId: 'trainingObjectTypeId',
   number: 'number',
   proposal: 'proposal',
@@ -2322,6 +2834,12 @@ exports.Prisma.ScoreCorrectionItemScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   ticketId: 'ticketId',
   studentSubjectScoreId: 'studentSubjectScoreId',
   newAttendanceScore: 'newAttendanceScore',
@@ -2341,6 +2859,12 @@ exports.Prisma.DataSyncHistoryScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   type: 'type',
   status: 'status',
   sessionName: 'sessionName',
@@ -2353,7 +2877,7 @@ exports.Prisma.DataSyncHistoryScalarFieldEnum = {
   performedById: 'performedById'
 };
 
-exports.Prisma.TrainingObjectTypeScalarFieldEnum = {
+exports.Prisma.NoteScalarFieldEnum = {
   id: 'id',
   code: 'code',
   active: 'active',
@@ -2362,189 +2886,41 @@ exports.Prisma.TrainingObjectTypeScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  content: 'content',
+  isPinned: 'isPinned',
+  studentId: 'studentId',
+  folderId: 'folderId'
+};
+
+exports.Prisma.NoteFolderScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
-  type: 'type',
-  trainingFormId: 'trainingFormId',
-  trainingLevelId: 'trainingLevelId',
-  vaiTro: 'vaiTro'
-};
-
-exports.Prisma.PriorityObjectScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name'
-};
-
-exports.Prisma.TrainingTypeScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name'
-};
-
-exports.Prisma.TrainingLevelScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name'
-};
-
-exports.Prisma.TrainingFormScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name'
-};
-
-exports.Prisma.TrainingLocationScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name',
-  dM_TinhId: 'dM_TinhId',
-  dM_Tinh_NewId: 'dM_Tinh_NewId'
-};
-
-exports.Prisma.BuildingScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name',
-  floor: 'floor',
-  trainingLocationId: 'trainingLocationId'
-};
-
-exports.Prisma.RoomScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name',
-  trainingRoom: 'trainingRoom',
-  computerRoom: 'computerRoom',
-  laboratoryRoom: 'laboratoryRoom',
-  examRoom: 'examRoom',
-  capacity: 'capacity',
-  examCapacity: 'examCapacity',
-  buildingId: 'buildingId'
-};
-
-exports.Prisma.TrainingFieldScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name',
-  englishName: 'englishName',
-  publishDate: 'publishDate',
-  decisionNo: 'decisionNo',
-  organizationId: 'organizationId'
-};
-
-exports.Prisma.TrainingFieldOnTrainingObjectTypeScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  trainingFieldId: 'trainingFieldId',
-  trainingObjectTypeId: 'trainingObjectTypeId'
-};
-
-exports.Prisma.TrainingMajorScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name',
-  englishName: 'englishName',
-  shortName: 'shortName',
-  summary: 'summary',
-  numberCreditsMajor: 'numberCreditsMajor',
-  numberCreditsRequired: 'numberCreditsRequired',
-  numberCreditsElective: 'numberCreditsElective',
-  organizationId: 'organizationId',
-  secondOrganizationId: 'secondOrganizationId',
-  thirdOrganizationId: 'thirdOrganizationId',
-  trainingFieldId: 'trainingFieldId'
-};
-
-exports.Prisma.TrainingMajorOnTrainingObjectTypeScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  trainingMajorId: 'trainingMajorId',
-  trainingObjectTypeId: 'trainingObjectTypeId'
-};
-
-exports.Prisma.TrainingBlockScalarFieldEnum = {
-  id: 'id',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  code: 'code',
-  name: 'name',
-  trainingObjectTypeId: 'trainingObjectTypeId',
-  isNationalDefense: 'isNationalDefense',
-  priority: 'priority',
+  icon: 'icon',
+  sortOrder: 'sortOrder',
+  studentId: 'studentId',
   parentId: 'parentId'
 };
 
-exports.Prisma.TrainingBlockOnCurriculumVersionScalarFieldEnum = {
+exports.Prisma.NoteTagScalarFieldEnum = {
   id: 'id',
   code: 'code',
   active: 'active',
@@ -2553,55 +2929,17 @@ exports.Prisma.TrainingBlockOnCurriculumVersionScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  trainingBlockId: 'trainingBlockId',
-  curriculumVersionId: 'curriculumVersionId',
-  priority: 'priority',
-  electiveCreditsRequired: 'electiveCreditsRequired'
-};
-
-exports.Prisma.TrainingTimeScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name'
-};
-
-exports.Prisma.AvailableTrainingTimeScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  duration: 'duration',
-  trainingObjectTypeId: 'trainingObjectTypeId',
-  semesterId: 'semesterId'
-};
-
-exports.Prisma.CertificateScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
-  englishName: 'englishName',
-  outputStandardId: 'outputStandardId',
-  scoreThreshold: 'scoreThreshold',
-  isUsingScore: 'isUsingScore'
+  color: 'color'
 };
 
-exports.Prisma.CertificateOnSubjectScalarFieldEnum = {
+exports.Prisma.NoteReminderScalarFieldEnum = {
   id: 'id',
   code: 'code',
   active: 'active',
@@ -2610,12 +2948,22 @@ exports.Prisma.CertificateOnSubjectScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  finalScore: 'finalScore',
-  certificateId: 'certificateId',
-  subjectId: 'subjectId'
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  title: 'title',
+  reminderTime: 'reminderTime',
+  isCompleted: 'isCompleted',
+  completedAt: 'completedAt',
+  repeatType: 'repeatType',
+  isNotified: 'isNotified',
+  noteId: 'noteId'
 };
 
-exports.Prisma.AwardScalarFieldEnum = {
+exports.Prisma.StudentPersonalEventScalarFieldEnum = {
   id: 'id',
   code: 'code',
   active: 'active',
@@ -2624,99 +2972,24 @@ exports.Prisma.AwardScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  name: 'name',
-  englishName: 'englishName',
-  bonusScore: 'bonusScore'
-};
-
-exports.Prisma.OfficerBonusScoreScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  position: 'position',
-  bonusScore: 'bonusScore'
-};
-
-exports.Prisma.DiplomaTypeScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name',
-  englishName: 'englishName',
-  type: 'type'
-};
-
-exports.Prisma.ScoreConvertScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  classification: 'classification',
-  base10Min: 'base10Min',
-  base10Max: 'base10Max',
-  letter: 'letter',
-  base4: 'base4',
-  pass: 'pass',
-  improvementRegister: 'improvementRegister',
-  trainingCourseId: 'trainingCourseId'
-};
-
-exports.Prisma.LoadCategoryScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name',
-  unit: 'unit',
-  standardHours: 'standardHours',
-  category: 'category',
-  note: 'note',
-  isOverageCalculated: 'isOverageCalculated'
-};
-
-exports.Prisma.OutputStandardScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name'
-};
-
-exports.Prisma.OutputStandardOnCurriculumScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  outputStandardId: 'outputStandardId',
-  curriculumVersionId: 'curriculumVersionId',
-  isRequired: 'isRequired',
-  semesterIndex: 'semesterIndex'
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  studentId: 'studentId',
+  userProfileId: 'userProfileId',
+  title: 'title',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  allDay: 'allDay',
+  location: 'location',
+  content: 'content',
+  isCompleted: 'isCompleted',
+  reminderMinutes: 'reminderMinutes',
+  repeatType: 'repeatType',
+  subjectClassId: 'subjectClassId'
 };
 
 exports.Prisma.StudentScalarFieldEnum = {
@@ -2727,6 +3000,12 @@ exports.Prisma.StudentScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   note: 'note',
   from: 'from',
   to: 'to',
@@ -2775,6 +3054,12 @@ exports.Prisma.TrainingActivityScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   studentId: 'studentId',
   category: 'category',
   score: 'score',
@@ -2790,6 +3075,12 @@ exports.Prisma.StudentSemesterResultScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   studentId: 'studentId',
   semesterId: 'semesterId',
   studyYear: 'studyYear',
@@ -2840,6 +3131,12 @@ exports.Prisma.StudentYearResultScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   studentId: 'studentId',
   schoolYearId: 'schoolYearId',
   studyYear: 'studyYear',
@@ -2882,6 +3179,12 @@ exports.Prisma.NotificationScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   title: 'title',
   content: 'content',
   type: 'type',
@@ -2901,6 +3204,12 @@ exports.Prisma.PersonalWorkTagScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   color: 'color',
   sortOrder: 'sortOrder',
@@ -2916,6 +3225,12 @@ exports.Prisma.IndividualScheduleScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   title: 'title',
   startTime: 'startTime',
   endTime: 'endTime',
@@ -2936,6 +3251,12 @@ exports.Prisma.LecturerScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   from: 'from',
   lectureID: 'lectureID',
   serviceDate: 'serviceDate',
@@ -2952,6 +3273,12 @@ exports.Prisma.LecturerHistoryScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   from: 'from',
   to: 'to',
   lectureID: 'lectureID',
@@ -2971,6 +3298,12 @@ exports.Prisma.GuestTeachingRateConfigScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   schoolYearId: 'schoolYearId'
 };
@@ -2983,6 +3316,12 @@ exports.Prisma.GuestTeachingRateScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   configId: 'configId',
   academicRankTypeId: 'academicRankTypeId',
   academicDegreeTypeId: 'academicDegreeTypeId',
@@ -2999,6 +3338,12 @@ exports.Prisma.GuestTeachingPaymentScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   lecturerId: 'lecturerId',
   semesterId: 'semesterId',
   hiringOrgId: 'hiringOrgId',
@@ -3020,6 +3365,12 @@ exports.Prisma.LecturerTypeScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   isExternal: 'isExternal'
 };
@@ -3033,6 +3384,12 @@ exports.Prisma.StaffTypeScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -3045,25 +3402,16 @@ exports.Prisma.StaffPositionScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
-exports.Prisma.StaffScalarFieldEnum = {
-  id: 'id',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  from: 'from',
-  userProfileId: 'userProfileId',
-  organizationId: 'organizationId',
-  staffTypeId: 'staffTypeId',
-  staffPositionId: 'staffPositionId'
-};
-
-exports.Prisma.StaffHistoryScalarFieldEnum = {
+exports.Prisma.TrainingObjectTypeScalarFieldEnum = {
   id: 'id',
   code: 'code',
   active: 'active',
@@ -3072,15 +3420,20 @@ exports.Prisma.StaffHistoryScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  from: 'from',
-  to: 'to',
-  userProfileId: 'userProfileId',
-  organizationId: 'organizationId',
-  staffTypeId: 'staffTypeId',
-  staffPositionId: 'staffPositionId'
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  type: 'type',
+  trainingFormId: 'trainingFormId',
+  trainingLevelId: 'trainingLevelId',
+  vaiTro: 'vaiTro'
 };
 
-exports.Prisma.ResearchProjectScalarFieldEnum = {
+exports.Prisma.PriorityObjectScalarFieldEnum = {
   id: 'id',
   code: 'code',
   active: 'active',
@@ -3089,24 +3442,817 @@ exports.Prisma.ResearchProjectScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  title: 'title',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name'
+};
+
+exports.Prisma.TrainingTypeScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name'
+};
+
+exports.Prisma.TrainingLevelScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name'
+};
+
+exports.Prisma.TrainingFormScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name'
+};
+
+exports.Prisma.TrainingLocationScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  dM_TinhId: 'dM_TinhId',
+  dM_Tinh_NewId: 'dM_Tinh_NewId'
+};
+
+exports.Prisma.BuildingScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  floor: 'floor',
+  trainingLocationId: 'trainingLocationId'
+};
+
+exports.Prisma.RoomScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  trainingRoom: 'trainingRoom',
+  computerRoom: 'computerRoom',
+  laboratoryRoom: 'laboratoryRoom',
+  examRoom: 'examRoom',
+  capacity: 'capacity',
+  examCapacity: 'examCapacity',
+  buildingId: 'buildingId'
+};
+
+exports.Prisma.TrainingFieldScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  englishName: 'englishName',
+  publishDate: 'publishDate',
+  decisionNo: 'decisionNo',
+  organizationId: 'organizationId'
+};
+
+exports.Prisma.TrainingFieldOnTrainingObjectTypeScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  trainingFieldId: 'trainingFieldId',
+  trainingObjectTypeId: 'trainingObjectTypeId'
+};
+
+exports.Prisma.TrainingMajorScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  englishName: 'englishName',
+  shortName: 'shortName',
   summary: 'summary',
-  objectives: 'objectives',
-  methodology: 'methodology',
-  expectedResults: 'expectedResults',
-  requirements: 'requirements',
-  supervisorId: 'supervisorId',
+  numberCreditsMajor: 'numberCreditsMajor',
+  numberCreditsRequired: 'numberCreditsRequired',
+  numberCreditsElective: 'numberCreditsElective',
   organizationId: 'organizationId',
-  maxStudents: 'maxStudents',
-  currentStudents: 'currentStudents',
-  registrationStart: 'registrationStart',
-  registrationEnd: 'registrationEnd',
-  projectStart: 'projectStart',
-  projectEnd: 'projectEnd',
+  secondOrganizationId: 'secondOrganizationId',
+  thirdOrganizationId: 'thirdOrganizationId',
+  trainingFieldId: 'trainingFieldId'
+};
+
+exports.Prisma.TrainingMajorOnTrainingObjectTypeScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  trainingMajorId: 'trainingMajorId',
+  trainingObjectTypeId: 'trainingObjectTypeId'
+};
+
+exports.Prisma.TrainingBlockScalarFieldEnum = {
+  id: 'id',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  code: 'code',
+  name: 'name',
+  trainingObjectTypeId: 'trainingObjectTypeId',
+  isNationalDefense: 'isNationalDefense',
+  priority: 'priority',
+  parentId: 'parentId'
+};
+
+exports.Prisma.TrainingBlockOnCurriculumVersionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  trainingBlockId: 'trainingBlockId',
+  curriculumVersionId: 'curriculumVersionId',
+  priority: 'priority',
+  electiveCreditsRequired: 'electiveCreditsRequired'
+};
+
+exports.Prisma.TrainingTimeScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name'
+};
+
+exports.Prisma.AvailableTrainingTimeScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  duration: 'duration',
+  trainingObjectTypeId: 'trainingObjectTypeId',
+  semesterId: 'semesterId'
+};
+
+exports.Prisma.CertificateScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  englishName: 'englishName',
+  outputStandardId: 'outputStandardId',
+  scoreThreshold: 'scoreThreshold',
+  isUsingScore: 'isUsingScore'
+};
+
+exports.Prisma.CertificateOnSubjectScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  finalScore: 'finalScore',
+  certificateId: 'certificateId',
+  subjectId: 'subjectId'
+};
+
+exports.Prisma.AwardScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  englishName: 'englishName',
+  bonusScore: 'bonusScore'
+};
+
+exports.Prisma.OfficerBonusScoreScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  position: 'position',
+  bonusScore: 'bonusScore'
+};
+
+exports.Prisma.DiplomaTypeScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  englishName: 'englishName',
+  type: 'type'
+};
+
+exports.Prisma.ScoreConvertScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  classification: 'classification',
+  base10Min: 'base10Min',
+  base10Max: 'base10Max',
+  letter: 'letter',
+  base4: 'base4',
+  pass: 'pass',
+  improvementRegister: 'improvementRegister',
+  trainingCourseId: 'trainingCourseId'
+};
+
+exports.Prisma.LoadCategoryScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  unit: 'unit',
+  standardHours: 'standardHours',
+  category: 'category',
+  note: 'note',
+  isOverageCalculated: 'isOverageCalculated'
+};
+
+exports.Prisma.OutputStandardScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name'
+};
+
+exports.Prisma.OutputStandardOnCurriculumScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  outputStandardId: 'outputStandardId',
+  curriculumVersionId: 'curriculumVersionId',
+  isRequired: 'isRequired',
+  semesterIndex: 'semesterIndex'
+};
+
+exports.Prisma.GraduationSessionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  sessionDate: 'sessionDate',
+  applicationStart: 'applicationStart',
+  applicationEnd: 'applicationEnd',
+  trainingObjectTypeId: 'trainingObjectTypeId',
+  status: 'status',
+  trainingCourseId: 'trainingCourseId',
+  eligibleCount: 'eligibleCount',
+  excellentCount: 'excellentCount',
+  topicDecisionNumber: 'topicDecisionNumber',
+  topicDecisionDate: 'topicDecisionDate',
+  topicDecisionSigner: 'topicDecisionSigner',
+  defenseDecisionNumber: 'defenseDecisionNumber',
+  defenseDecisionDate: 'defenseDecisionDate',
+  defenseDecisionSigner: 'defenseDecisionSigner',
+  graduationDecisionNumber: 'graduationDecisionNumber',
+  graduationDecisionDate: 'graduationDecisionDate',
+  graduationDecisionSigner: 'graduationDecisionSigner',
+  councilMeetingDate: 'councilMeetingDate',
+  councilMeetingBasis: 'councilMeetingBasis',
+  proposalTopic: 'proposalTopic',
+  proposalCouncil: 'proposalCouncil',
+  proposalGraduation: 'proposalGraduation',
+  skipCertificateCheck: 'skipCertificateCheck'
+};
+
+exports.Prisma.StudentGraduationApplicationScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  studentId: 'studentId',
+  sessionId: 'sessionId',
+  applicationDate: 'applicationDate',
+  status: 'status',
+  graduation: 'graduation',
+  gpa: 'gpa',
+  reason: 'reason',
+  rankId: 'rankId',
+  trainingMajorId: 'trainingMajorId',
+  diplomaTypeId: 'diplomaTypeId',
+  thesisScore: 'thesisScore',
+  thesisReExam: 'thesisReExam',
+  politicalScore: 'politicalScore',
+  politicalReExam: 'politicalReExam',
+  foreignLanguageScore: 'foreignLanguageScore',
+  foreignLanguageReExam: 'foreignLanguageReExam',
+  defenseEduCert: 'defenseEduCert',
+  physicalEduCert: 'physicalEduCert',
+  foreignLangCert: 'foreignLangCert',
+  itCert: 'itCert',
+  accumulatedCredits: 'accumulatedCredits',
+  gpa10: 'gpa10',
+  reExamCredits: 'reExamCredits',
+  totalSubjects: 'totalSubjects',
+  failedSubjects: 'failedSubjects',
+  failedCredits: 'failedCredits',
+  mandatoryFailedSubjects: 'mandatoryFailedSubjects',
+  mandatoryFailedCredits: 'mandatoryFailedCredits',
+  rankDowngraded: 'rankDowngraded'
+};
+
+exports.Prisma.ApplicationDowngradedScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  studentGraduationApplicationId: 'studentGraduationApplicationId',
+  fromId: 'fromId'
+};
+
+exports.Prisma.ApplicationCheckResultScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  studentGraduationApplicationId: 'studentGraduationApplicationId',
+  rankingConditionId: 'rankingConditionId',
+  passed: 'passed',
+  actualValue: 'actualValue'
+};
+
+exports.Prisma.GraduationDecisionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  applicationId: 'applicationId',
+  studentId: 'studentId',
+  decisionDate: 'decisionDate',
+  notes: 'notes',
+  finalGpa: 'finalGpa',
+  trainingMajorId: 'trainingMajorId',
+  finalRankingId: 'finalRankingId',
+  diplomaTypeId: 'diplomaTypeId',
+  originalDiplomaNumber: 'originalDiplomaNumber',
+  diplomaNumber: 'diplomaNumber',
+  diplomaIssueDate: 'diplomaIssueDate',
+  totalCopy: 'totalCopy'
+};
+
+exports.Prisma.AcademicRankingConvertScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  classification: 'classification',
+  classificationEnglish: 'classificationEnglish',
+  context: 'context',
+  rankOrder: 'rankOrder',
+  baseScore: 'baseScore',
+  base10Min: 'base10Min',
+  base10Max: 'base10Max',
+  base4Min: 'base4Min',
+  base4Max: 'base4Max',
+  graduated: 'graduated',
+  trainingCourseId: 'trainingCourseId'
+};
+
+exports.Prisma.GraduationRankDowngradeRuleScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  initialRankId: 'initialRankId'
+};
+
+exports.Prisma.GraduationRankDowngradeConditionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  downgradeRuleId: 'downgradeRuleId',
+  field: 'field',
+  operator: 'operator',
+  invert: 'invert',
+  value: 'value',
+  tuple: 'tuple'
+};
+
+exports.Prisma.RankingConditionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  rankingId: 'rankingId',
+  field: 'field',
+  operator: 'operator',
+  invert: 'invert',
+  value: 'value',
+  tuple: 'tuple'
+};
+
+exports.Prisma.DiplomaVerificationApplicationScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  fullname: 'fullname',
+  idCardNumber: 'idCardNumber',
+  dateOfBirth: 'dateOfBirth',
+  phoneNumber: 'phoneNumber',
+  email: 'email',
+  reason: 'reason',
+  originalDiplomaNumber: 'originalDiplomaNumber',
+  diplomaNumber: 'diplomaNumber',
+  trainingMajor: 'trainingMajor',
+  trainingLevel: 'trainingLevel',
+  trainingForm: 'trainingForm',
+  trainingCourseStartYear: 'trainingCourseStartYear',
+  trainingCourseEndYear: 'trainingCourseEndYear',
+  diplomaIssueDate: 'diplomaIssueDate',
+  classification: 'classification',
+  status: 'status',
+  studentId: 'studentId'
+};
+
+exports.Prisma.TrainingScoreSessionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  time: 'time',
+  semesterId: 'semesterId',
+  trainingObjectTypeId: 'trainingObjectTypeId'
+};
+
+exports.Prisma.StudentTrainingScoreScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  trainingScoreSessionId: 'trainingScoreSessionId',
+  studentId: 'studentId',
+  score: 'score',
+  studentTrainingType: 'studentTrainingType',
   status: 'status'
 };
 
-exports.Prisma.StudentResearchRegistrationScalarFieldEnum = {
+exports.Prisma.SemesterTrainingScoreScalarFieldEnum = {
   id: 'id',
   code: 'code',
   active: 'active',
@@ -3115,15 +4261,242 @@ exports.Prisma.StudentResearchRegistrationScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  semesterId: 'semesterId',
   studentId: 'studentId',
-  researchProjectId: 'researchProjectId',
-  registeredAt: 'registeredAt',
-  motivation: 'motivation',
-  experience: 'experience',
+  score: 'score',
+  status: 'status'
+};
+
+exports.Prisma.SchoolYearTrainingScoreScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  schoolYearId: 'schoolYearId',
+  studentId: 'studentId',
+  score: 'score',
+  status: 'status'
+};
+
+exports.Prisma.DocumentFileScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  path: 'path',
+  size: 'size',
+  mimeType: 'mimeType',
+  archivedCertificateId: 'archivedCertificateId',
+  trainingCourseId: 'trainingCourseId',
+  archivedAwardId: 'archivedAwardId',
+  curriculumId: 'curriculumId',
+  curriculumVersionId: 'curriculumVersionId',
+  subjectVersionId: 'subjectVersionId',
+  studentAcademicDecisionId: 'studentAcademicDecisionId',
+  notificationId: 'notificationId',
+  decisionId: 'decisionId',
+  defenseRecordId: 'defenseRecordId',
+  librarySubmissionId: 'librarySubmissionId',
+  diplomaFrontId: 'diplomaFrontId',
+  diplomaBackId: 'diplomaBackId',
+  diplomaVerificationId: 'diplomaVerificationId',
+  diplomaVerificationFrontId: 'diplomaVerificationFrontId',
+  diplomaVerificationBackId: 'diplomaVerificationBackId',
+  trainingFieldId: 'trainingFieldId',
+  studentScoreConvertId: 'studentScoreConvertId',
+  scoreLinkSheetId: 'scoreLinkSheetId',
+  examFrameworkId: 'examFrameworkId',
+  noteId: 'noteId',
+  evaluationPeriodId: 'evaluationPeriodId',
+  knowledgeBlockId: 'knowledgeBlockId'
+};
+
+exports.Prisma.AcademicActionConfigScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  actionType: 'actionType',
+  trainingCourseId: 'trainingCourseId'
+};
+
+exports.Prisma.AcademicActionRuleSetScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  configId: 'configId'
+};
+
+exports.Prisma.AcademicActionConditionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  ruleSetId: 'ruleSetId',
+  field: 'field',
+  operator: 'operator',
+  invert: 'invert',
+  value: 'value',
+  tuple: 'tuple',
+  yearCondition: 'yearCondition',
+  isPriorityStudent: 'isPriorityStudent'
+};
+
+exports.Prisma.StudentAcademicDecisionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  studentId: 'studentId',
+  semesterId: 'semesterId',
+  schoolYearId: 'schoolYearId',
+  appliedConfigId: 'appliedConfigId',
+  actionTaken: 'actionTaken',
+  decisionDate: 'decisionDate',
+  validUntil: 'validUntil',
+  reason: 'reason',
   status: 'status',
-  reviewedAt: 'reviewedAt',
-  reviewedById: 'reviewedById',
-  reviewNote: 'reviewNote'
+  updatedResult: 'updatedResult'
+};
+
+exports.Prisma.ScholarshipScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  rankOrder: 'rankOrder',
+  baseAmount: 'baseAmount',
+  multiplier: 'multiplier',
+  effectiveFrom: 'effectiveFrom',
+  effectiveTo: 'effectiveTo',
+  trainingCourseId: 'trainingCourseId'
+};
+
+exports.Prisma.ScholarshipCriteriaScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  scholarshipId: 'scholarshipId',
+  field: 'field',
+  invert: 'invert',
+  operator: 'operator',
+  value: 'value',
+  tuple: 'tuple',
+  bonusValue: 'bonusValue'
+};
+
+exports.Prisma.ScholarshipAwardScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  studentId: 'studentId',
+  semesterId: 'semesterId',
+  scholarshipId: 'scholarshipId',
+  amount: 'amount',
+  gpaAtAward: 'gpaAtAward',
+  priorityRank: 'priorityRank'
 };
 
 exports.Prisma.ThesisSessionScalarFieldEnum = {
@@ -3135,6 +4508,12 @@ exports.Prisma.ThesisSessionScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   startDate: 'startDate',
   endDate: 'endDate',
@@ -3167,6 +4546,12 @@ exports.Prisma.ThesisProjectScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   title: 'title',
   titleEN: 'titleEN',
   summary: 'summary',
@@ -3229,6 +4614,12 @@ exports.Prisma.DefenseSessionScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   startTime: 'startTime'
 };
 
@@ -3241,6 +4632,12 @@ exports.Prisma.StudentThesisRegistrationScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   studentId: 'studentId',
   studentSubjectScoreId: 'studentSubjectScoreId',
   thesisProjectId: 'thesisProjectId',
@@ -3263,6 +4660,12 @@ exports.Prisma.ExpertScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   lecturerId: 'lecturerId',
   currentVersionId: 'currentVersionId'
 };
@@ -3276,6 +4679,12 @@ exports.Prisma.ExpertProfileVersionScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   expertId: 'expertId',
   name: 'name',
   academicDegreeTypeId: 'academicDegreeTypeId',
@@ -3306,6 +4715,12 @@ exports.Prisma.DecisionScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   issueDate: 'issueDate',
   type: 'type',
   thesisProjectId: 'thesisProjectId'
@@ -3320,6 +4735,12 @@ exports.Prisma.InvitationScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   sentDate: 'sentDate',
   isConfirmed: 'isConfirmed',
   councilMemberId: 'councilMemberId'
@@ -3334,6 +4755,12 @@ exports.Prisma.CouncilScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   proposedDate: 'proposedDate',
   status: 'status',
   studentThesisRegistrationId: 'studentThesisRegistrationId'
@@ -3348,6 +4775,12 @@ exports.Prisma.CouncilMemberScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   role: 'role',
   councilId: 'councilId',
   expertProfileVersionId: 'expertProfileVersionId',
@@ -3363,6 +4796,12 @@ exports.Prisma.DefenseRecordScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   finalScore: 'finalScore',
   comments: 'comments',
   isProfileComplete: 'isProfileComplete',
@@ -3378,6 +4817,12 @@ exports.Prisma.LibrarySubmissionScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   submissionDate: 'submissionDate',
   isHardcopy: 'isHardcopy',
   isSoftcopy: 'isSoftcopy',
@@ -3395,6 +4840,12 @@ exports.Prisma.ConfigPaymentSessionScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -3407,6 +4858,12 @@ exports.Prisma.DefaultCouncilRolePayAmountScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   role: 'role',
   amount: 'amount',
   inAcademy: 'inAcademy',
@@ -3422,6 +4879,12 @@ exports.Prisma.DefaultSupervisorPayAmountScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   role: 'role',
   amount: 'amount',
   inAcademy: 'inAcademy',
@@ -3437,6 +4900,12 @@ exports.Prisma.PaymentRecordScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   amount: 'amount',
   status: 'status',
   paymentDate: 'paymentDate',
@@ -3453,450 +4922,16 @@ exports.Prisma.SupervisorPaymentRecordScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   amount: 'amount',
   status: 'status',
   paymentDate: 'paymentDate',
   transactionCode: 'transactionCode'
-};
-
-exports.Prisma.DocumentFileScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name',
-  path: 'path',
-  size: 'size',
-  mimeType: 'mimeType',
-  archivedCertificateId: 'archivedCertificateId',
-  trainingCourseId: 'trainingCourseId',
-  archivedAwardId: 'archivedAwardId',
-  curriculumId: 'curriculumId',
-  curriculumVersionId: 'curriculumVersionId',
-  subjectVersionId: 'subjectVersionId',
-  studentAcademicDecisionId: 'studentAcademicDecisionId',
-  notificationId: 'notificationId',
-  decisionId: 'decisionId',
-  defenseRecordId: 'defenseRecordId',
-  librarySubmissionId: 'librarySubmissionId',
-  diplomaFrontId: 'diplomaFrontId',
-  diplomaBackId: 'diplomaBackId',
-  diplomaVerificationId: 'diplomaVerificationId',
-  diplomaVerificationFrontId: 'diplomaVerificationFrontId',
-  diplomaVerificationBackId: 'diplomaVerificationBackId',
-  trainingFieldId: 'trainingFieldId',
-  studentScoreConvertId: 'studentScoreConvertId',
-  scoreLinkSheetId: 'scoreLinkSheetId',
-  examFrameworkId: 'examFrameworkId',
-  noteId: 'noteId',
-  evaluationPeriodId: 'evaluationPeriodId',
-  knowledgeBlockId: 'knowledgeBlockId'
-};
-
-exports.Prisma.AcademicActionConfigScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name',
-  actionType: 'actionType',
-  trainingCourseId: 'trainingCourseId'
-};
-
-exports.Prisma.AcademicActionRuleSetScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  configId: 'configId'
-};
-
-exports.Prisma.AcademicActionConditionScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  ruleSetId: 'ruleSetId',
-  field: 'field',
-  operator: 'operator',
-  invert: 'invert',
-  value: 'value',
-  tuple: 'tuple',
-  yearCondition: 'yearCondition',
-  isPriorityStudent: 'isPriorityStudent'
-};
-
-exports.Prisma.StudentAcademicDecisionScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  studentId: 'studentId',
-  semesterId: 'semesterId',
-  schoolYearId: 'schoolYearId',
-  appliedConfigId: 'appliedConfigId',
-  actionTaken: 'actionTaken',
-  decisionDate: 'decisionDate',
-  validUntil: 'validUntil',
-  reason: 'reason',
-  status: 'status',
-  updatedResult: 'updatedResult'
-};
-
-exports.Prisma.TrainingScoreSessionScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name',
-  time: 'time',
-  semesterId: 'semesterId',
-  trainingObjectTypeId: 'trainingObjectTypeId'
-};
-
-exports.Prisma.StudentTrainingScoreScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  trainingScoreSessionId: 'trainingScoreSessionId',
-  studentId: 'studentId',
-  score: 'score',
-  studentTrainingType: 'studentTrainingType',
-  status: 'status'
-};
-
-exports.Prisma.SemesterTrainingScoreScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  semesterId: 'semesterId',
-  studentId: 'studentId',
-  score: 'score',
-  status: 'status'
-};
-
-exports.Prisma.SchoolYearTrainingScoreScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  schoolYearId: 'schoolYearId',
-  studentId: 'studentId',
-  score: 'score',
-  status: 'status'
-};
-
-exports.Prisma.ScholarshipScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name',
-  rankOrder: 'rankOrder',
-  baseAmount: 'baseAmount',
-  multiplier: 'multiplier',
-  effectiveFrom: 'effectiveFrom',
-  effectiveTo: 'effectiveTo',
-  trainingCourseId: 'trainingCourseId'
-};
-
-exports.Prisma.ScholarshipCriteriaScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  scholarshipId: 'scholarshipId',
-  field: 'field',
-  invert: 'invert',
-  operator: 'operator',
-  value: 'value',
-  tuple: 'tuple',
-  bonusValue: 'bonusValue'
-};
-
-exports.Prisma.ScholarshipAwardScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  studentId: 'studentId',
-  semesterId: 'semesterId',
-  scholarshipId: 'scholarshipId',
-  amount: 'amount',
-  gpaAtAward: 'gpaAtAward',
-  priorityRank: 'priorityRank'
-};
-
-exports.Prisma.GraduationSessionScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name',
-  sessionDate: 'sessionDate',
-  applicationStart: 'applicationStart',
-  applicationEnd: 'applicationEnd',
-  trainingObjectTypeId: 'trainingObjectTypeId',
-  status: 'status',
-  trainingCourseId: 'trainingCourseId',
-  eligibleCount: 'eligibleCount',
-  excellentCount: 'excellentCount',
-  topicDecisionNumber: 'topicDecisionNumber',
-  topicDecisionDate: 'topicDecisionDate',
-  topicDecisionSigner: 'topicDecisionSigner',
-  defenseDecisionNumber: 'defenseDecisionNumber',
-  defenseDecisionDate: 'defenseDecisionDate',
-  defenseDecisionSigner: 'defenseDecisionSigner',
-  graduationDecisionNumber: 'graduationDecisionNumber',
-  graduationDecisionDate: 'graduationDecisionDate',
-  graduationDecisionSigner: 'graduationDecisionSigner',
-  councilMeetingDate: 'councilMeetingDate',
-  councilMeetingBasis: 'councilMeetingBasis',
-  proposalTopic: 'proposalTopic',
-  proposalCouncil: 'proposalCouncil',
-  proposalGraduation: 'proposalGraduation',
-  skipCertificateCheck: 'skipCertificateCheck'
-};
-
-exports.Prisma.StudentGraduationApplicationScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  studentId: 'studentId',
-  sessionId: 'sessionId',
-  applicationDate: 'applicationDate',
-  status: 'status',
-  graduation: 'graduation',
-  gpa: 'gpa',
-  reason: 'reason',
-  rankId: 'rankId',
-  trainingMajorId: 'trainingMajorId',
-  diplomaTypeId: 'diplomaTypeId',
-  thesisScore: 'thesisScore',
-  thesisReExam: 'thesisReExam',
-  politicalScore: 'politicalScore',
-  politicalReExam: 'politicalReExam',
-  foreignLanguageScore: 'foreignLanguageScore',
-  foreignLanguageReExam: 'foreignLanguageReExam',
-  defenseEduCert: 'defenseEduCert',
-  physicalEduCert: 'physicalEduCert',
-  foreignLangCert: 'foreignLangCert',
-  itCert: 'itCert',
-  accumulatedCredits: 'accumulatedCredits',
-  gpa10: 'gpa10',
-  reExamCredits: 'reExamCredits',
-  totalSubjects: 'totalSubjects',
-  failedSubjects: 'failedSubjects',
-  failedCredits: 'failedCredits',
-  mandatoryFailedSubjects: 'mandatoryFailedSubjects',
-  mandatoryFailedCredits: 'mandatoryFailedCredits',
-  rankDowngraded: 'rankDowngraded'
-};
-
-exports.Prisma.ApplicationDowngradedScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  studentGraduationApplicationId: 'studentGraduationApplicationId',
-  fromId: 'fromId'
-};
-
-exports.Prisma.ApplicationCheckResultScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  studentGraduationApplicationId: 'studentGraduationApplicationId',
-  rankingConditionId: 'rankingConditionId',
-  passed: 'passed',
-  actualValue: 'actualValue'
-};
-
-exports.Prisma.GraduationDecisionScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  applicationId: 'applicationId',
-  studentId: 'studentId',
-  decisionDate: 'decisionDate',
-  notes: 'notes',
-  finalGpa: 'finalGpa',
-  trainingMajorId: 'trainingMajorId',
-  finalRankingId: 'finalRankingId',
-  diplomaTypeId: 'diplomaTypeId',
-  originalDiplomaNumber: 'originalDiplomaNumber',
-  diplomaNumber: 'diplomaNumber',
-  diplomaIssueDate: 'diplomaIssueDate',
-  totalCopy: 'totalCopy'
-};
-
-exports.Prisma.AcademicRankingConvertScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  classification: 'classification',
-  classificationEnglish: 'classificationEnglish',
-  context: 'context',
-  rankOrder: 'rankOrder',
-  baseScore: 'baseScore',
-  base10Min: 'base10Min',
-  base10Max: 'base10Max',
-  base4Min: 'base4Min',
-  base4Max: 'base4Max',
-  graduated: 'graduated',
-  trainingCourseId: 'trainingCourseId'
-};
-
-exports.Prisma.GraduationRankDowngradeRuleScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  initialRankId: 'initialRankId'
-};
-
-exports.Prisma.GraduationRankDowngradeConditionScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  downgradeRuleId: 'downgradeRuleId',
-  field: 'field',
-  operator: 'operator',
-  invert: 'invert',
-  value: 'value',
-  tuple: 'tuple'
-};
-
-exports.Prisma.RankingConditionScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  rankingId: 'rankingId',
-  field: 'field',
-  operator: 'operator',
-  invert: 'invert',
-  value: 'value',
-  tuple: 'tuple'
-};
-
-exports.Prisma.DiplomaVerificationApplicationScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  fullname: 'fullname',
-  idCardNumber: 'idCardNumber',
-  dateOfBirth: 'dateOfBirth',
-  phoneNumber: 'phoneNumber',
-  email: 'email',
-  reason: 'reason',
-  originalDiplomaNumber: 'originalDiplomaNumber',
-  diplomaNumber: 'diplomaNumber',
-  trainingMajor: 'trainingMajor',
-  trainingLevel: 'trainingLevel',
-  trainingForm: 'trainingForm',
-  trainingCourseStartYear: 'trainingCourseStartYear',
-  trainingCourseEndYear: 'trainingCourseEndYear',
-  diplomaIssueDate: 'diplomaIssueDate',
-  classification: 'classification',
-  status: 'status',
-  studentId: 'studentId'
 };
 
 exports.Prisma.ScoreLinkSheetScalarFieldEnum = {
@@ -3908,6 +4943,12 @@ exports.Prisma.ScoreLinkSheetScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   trainingObjectTypeId: 'trainingObjectTypeId',
   note: 'note',
   decision: 'decision',
@@ -3925,6 +4966,12 @@ exports.Prisma.ScoreLinkSubjectVersionScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   scoreLinkSheetId: 'scoreLinkSheetId',
   subjectVersionId: 'subjectVersionId'
 };
@@ -3938,71 +4985,15 @@ exports.Prisma.ScoreLinkStudentScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   scoreLinkSubjectVersionId: 'scoreLinkSubjectVersionId',
   studentId: 'studentId',
   score: 'score'
-};
-
-exports.Prisma.NoteScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  content: 'content',
-  isPinned: 'isPinned',
-  studentId: 'studentId',
-  folderId: 'folderId'
-};
-
-exports.Prisma.NoteFolderScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name',
-  icon: 'icon',
-  sortOrder: 'sortOrder',
-  studentId: 'studentId',
-  parentId: 'parentId'
-};
-
-exports.Prisma.NoteTagScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name',
-  color: 'color'
-};
-
-exports.Prisma.NoteReminderScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  title: 'title',
-  reminderTime: 'reminderTime',
-  isCompleted: 'isCompleted',
-  completedAt: 'completedAt',
-  repeatType: 'repeatType',
-  isNotified: 'isNotified',
-  noteId: 'noteId'
 };
 
 exports.Prisma.EvaluationPeriodScalarFieldEnum = {
@@ -4014,6 +5005,12 @@ exports.Prisma.EvaluationPeriodScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   startDate: 'startDate',
   endDate: 'endDate',
@@ -4034,6 +5031,12 @@ exports.Prisma.EvaluationStandardSetScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   objectType: 'objectType'
 };
@@ -4047,6 +5050,12 @@ exports.Prisma.StandardCatalogScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   order: 'order',
   name: 'name',
   standardSetId: 'standardSetId',
@@ -4062,6 +5071,12 @@ exports.Prisma.CriterionCatalogScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   standardId: 'standardId',
   order: 'order',
   name: 'name'
@@ -4076,6 +5091,12 @@ exports.Prisma.EvidenceCategoryScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   objectType: 'objectType'
 };
@@ -4089,6 +5110,12 @@ exports.Prisma.EvidenceScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   categoryId: 'categoryId',
   name: 'name',
   information: 'information',
@@ -4105,6 +5132,12 @@ exports.Prisma.EvaluationCriterionCommentScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   reviewerId: 'reviewerId',
   requirementCriterionId: 'requirementCriterionId',
   content: 'content',
@@ -4121,6 +5154,12 @@ exports.Prisma.RequirementCriterionCatalogScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   criterionCatalogId: 'criterionCatalogId',
   order: 'order',
   name: 'name',
@@ -4136,6 +5175,12 @@ exports.Prisma.StandardPeriodScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   periodId: 'periodId',
   name: 'name',
   order: 'order',
@@ -4152,6 +5197,12 @@ exports.Prisma.CriterionPeriodScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   order: 'order',
   evaluationStandardId: 'evaluationStandardId'
@@ -4166,6 +5217,12 @@ exports.Prisma.AnalysisCriterionScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   criterionPeriodId: 'criterionPeriodId',
   lecturerId: 'lecturerId',
   deadline: 'deadline',
@@ -4181,6 +5238,12 @@ exports.Prisma.EvaluationCriterionScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   criterionPeriodId: 'criterionPeriodId',
   lecturerId: 'lecturerId',
   deadline: 'deadline',
@@ -4204,6 +5267,12 @@ exports.Prisma.RequirementCriterionScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   analysisCriterionId: 'analysisCriterionId',
   order: 'order',
   name: 'name',
@@ -4221,6 +5290,12 @@ exports.Prisma.AnalysisFormEvidenceScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   requirementCriterionId: 'requirementCriterionId',
   evidenceId: 'evidenceId',
   order: 'order'
@@ -4235,6 +5310,12 @@ exports.Prisma.EvaluationCouncilScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   periodId: 'periodId',
   name: 'name'
 };
@@ -4248,6 +5329,12 @@ exports.Prisma.EvaluationCouncilMemberScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   evaluationCouncilId: 'evaluationCouncilId',
   lecturerId: 'lecturerId',
   groupName: 'groupName',
@@ -4263,6 +5350,12 @@ exports.Prisma.EvidenceFileScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   path: 'path',
   mimeType: 'mimeType',
@@ -4280,6 +5373,12 @@ exports.Prisma.QuestionBankScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   subjectVersionId: 'subjectVersionId'
 };
@@ -4293,6 +5392,12 @@ exports.Prisma.QuestionScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   content: 'content',
   type: 'type',
   point: 'point',
@@ -4314,6 +5419,12 @@ exports.Prisma.MultipleChoiceOptionScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   questionId: 'questionId',
   content: 'content',
   isCorrect: 'isCorrect',
@@ -4329,6 +5440,12 @@ exports.Prisma.FillInBlankSlotScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   questionId: 'questionId',
   order: 'order',
   correctAnswer: 'correctAnswer'
@@ -4343,6 +5460,12 @@ exports.Prisma.OrderingItemScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   questionId: 'questionId',
   content: 'content',
   correctOrder: 'correctOrder'
@@ -4357,6 +5480,12 @@ exports.Prisma.ExamScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   lockExamSessions: 'lockExamSessions',
   duration: 'duration',
   session: 'session',
@@ -4373,6 +5502,12 @@ exports.Prisma.ExamRoomScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   examId: 'examId',
   roomId: 'roomId',
   capacity: 'capacity'
@@ -4387,6 +5522,12 @@ exports.Prisma.ExamListScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   examRoomId: 'examRoomId',
   firstSupervisorId: 'firstSupervisorId',
   secondSupervisorId: 'secondSupervisorId',
@@ -4405,6 +5546,12 @@ exports.Prisma.ExamBankScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   examId: 'examId',
   examTime: 'examTime',
   examCode: 'examCode',
@@ -4427,6 +5574,12 @@ exports.Prisma.ExamBankQuestionScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   examBankId: 'examBankId',
   questionId: 'questionId',
   order: 'order'
@@ -4441,6 +5594,12 @@ exports.Prisma.ExamPaperScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   examListId: 'examListId',
   studentSubjectScoreId: 'studentSubjectScoreId',
   examCode: 'examCode'
@@ -4455,6 +5614,12 @@ exports.Prisma.ExamFrameworkScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   time: 'time',
   subjectVersionId: 'subjectVersionId'
@@ -4469,6 +5634,12 @@ exports.Prisma.ExamMatrixScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   isDefault: 'isDefault',
   examFrameworkId: 'examFrameworkId'
@@ -4483,6 +5654,12 @@ exports.Prisma.KnowledgeBlockScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   examMatrixId: 'examMatrixId',
   subjectVersionId: 'subjectVersionId'
@@ -4497,6 +5674,12 @@ exports.Prisma.ConfigExamScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   difficult: 'difficult',
   type: 'type',
   quantity: 'quantity',
@@ -4513,6 +5696,12 @@ exports.Prisma.SurveyObjectTypeScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   type: 'type',
   trainingObjectTypeId: 'trainingObjectTypeId'
@@ -4527,6 +5716,12 @@ exports.Prisma.SurveyTopicScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   type: 'type'
 };
@@ -4540,6 +5735,12 @@ exports.Prisma.SurveyQuestionGroupScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -4552,6 +5753,12 @@ exports.Prisma.ClusterSurveyScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   startDate: 'startDate',
   endDate: 'endDate',
@@ -4571,6 +5778,12 @@ exports.Prisma.SurveyScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   startDate: 'startDate',
   endDate: 'endDate',
@@ -4596,6 +5809,12 @@ exports.Prisma.SurveyQuestionScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   type: 'type',
   surveyQuestionGroupId: 'surveyQuestionGroupId'
@@ -4610,6 +5829,12 @@ exports.Prisma.SpecificChoiceScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   answer: 'answer',
   surveyQuestionId: 'surveyQuestionId'
 };
@@ -4623,6 +5848,12 @@ exports.Prisma.SurveyChoiceScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   answer: 'answer',
   requireExplanation: 'requireExplanation',
   clusterSurveyId: 'clusterSurveyId'
@@ -4637,6 +5868,12 @@ exports.Prisma.SurveySessionScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   surveyId: 'surveyId',
   profileId: 'profileId',
   studentId: 'studentId',
@@ -4655,12 +5892,120 @@ exports.Prisma.SurveyResponseScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   surveySessionId: 'surveySessionId',
   surveyQuestionId: 'surveyQuestionId',
   answerText: 'answerText',
   explanation: 'explanation',
   surveyChoiceId: 'surveyChoiceId',
   answeredAt: 'answeredAt'
+};
+
+exports.Prisma.StaffScalarFieldEnum = {
+  id: 'id',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  from: 'from',
+  userProfileId: 'userProfileId',
+  organizationId: 'organizationId',
+  staffTypeId: 'staffTypeId',
+  staffPositionId: 'staffPositionId'
+};
+
+exports.Prisma.StaffHistoryScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  from: 'from',
+  to: 'to',
+  userProfileId: 'userProfileId',
+  organizationId: 'organizationId',
+  staffTypeId: 'staffTypeId',
+  staffPositionId: 'staffPositionId'
+};
+
+exports.Prisma.ResearchProjectScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  title: 'title',
+  summary: 'summary',
+  objectives: 'objectives',
+  methodology: 'methodology',
+  expectedResults: 'expectedResults',
+  requirements: 'requirements',
+  supervisorId: 'supervisorId',
+  organizationId: 'organizationId',
+  maxStudents: 'maxStudents',
+  currentStudents: 'currentStudents',
+  registrationStart: 'registrationStart',
+  registrationEnd: 'registrationEnd',
+  projectStart: 'projectStart',
+  projectEnd: 'projectEnd',
+  status: 'status'
+};
+
+exports.Prisma.StudentResearchRegistrationScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  studentId: 'studentId',
+  researchProjectId: 'researchProjectId',
+  registeredAt: 'registeredAt',
+  motivation: 'motivation',
+  experience: 'experience',
+  status: 'status',
+  reviewedAt: 'reviewedAt',
+  reviewedById: 'reviewedById',
+  reviewNote: 'reviewNote'
 };
 
 exports.Prisma.AcademicWarningRuleScalarFieldEnum = {
@@ -4672,6 +6017,12 @@ exports.Prisma.AcademicWarningRuleScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   field: 'field',
   operator: 'operator',
   invert: 'invert',
@@ -4692,6 +6043,12 @@ exports.Prisma.AcademicWarningScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   studentId: 'studentId',
   semesterId: 'semesterId',
   level: 'level',
@@ -4708,6 +6065,12 @@ exports.Prisma.DisciplinaryWarningScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   studentId: 'studentId',
   semesterId: 'semesterId',
   level: 'level',
@@ -4723,6 +6086,12 @@ exports.Prisma.DisciplinaryWarningReasonScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   severityLevel: 'severityLevel'
 };
@@ -4736,6 +6105,12 @@ exports.Prisma.FeedbackScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   content: 'content',
   status: 'status',
   satisfaction: 'satisfaction',
@@ -4751,6 +6126,12 @@ exports.Prisma.DM_TrinhDoHocVanScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -4763,6 +6144,12 @@ exports.Prisma.DM_TrinhDoLyLuanChinhTriScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -4775,6 +6162,12 @@ exports.Prisma.DM_TrinhDoQuanLyNhaNuocScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -4787,6 +6180,12 @@ exports.Prisma.DM_TinhTrangHonNhanScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -4799,6 +6198,12 @@ exports.Prisma.DM_QuanHeThanNhanScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -4811,6 +6216,12 @@ exports.Prisma.DM_TrangThaiLamViecScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -4823,6 +6234,12 @@ exports.Prisma.DM_HinhThucKhenThuongChinhQuyenScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -4835,6 +6252,12 @@ exports.Prisma.DM_HinhThucKhenThuongDangScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -4847,6 +6270,12 @@ exports.Prisma.DM_XepLoaiDanhGiaCanBoScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -4859,6 +6288,12 @@ exports.Prisma.DM_XepLoaiDanhGiaChatLuongDangVienScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -4871,6 +6306,12 @@ exports.Prisma.DM_LoaiHinhCongTacScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -4883,6 +6324,12 @@ exports.Prisma.DM_TinhTrangCongTacScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -4895,6 +6342,12 @@ exports.Prisma.DM_LoaiTinhTrangCongTacScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -4907,6 +6360,12 @@ exports.Prisma.DM_LoaiHinhDiHocTapScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -4919,6 +6378,12 @@ exports.Prisma.DM_TinhTrangDiHocTapScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -4931,6 +6396,12 @@ exports.Prisma.DM_NuocCuDiHocTapScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -4943,6 +6414,12 @@ exports.Prisma.DM_ChucDanhCMNVGiangVienScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -4955,6 +6432,12 @@ exports.Prisma.DM_ChucDanhCMNVNghienCuuVienScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -4967,6 +6450,12 @@ exports.Prisma.DM_ChucDanhCMNVKySuScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -4979,6 +6468,12 @@ exports.Prisma.DM_TruongDaoTaoBacDHScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -4991,6 +6486,12 @@ exports.Prisma.DM_ChuyenNganhDaoTaoBacDHScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -5003,6 +6504,12 @@ exports.Prisma.DM_ChiHuyQuanLyScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -5015,6 +6522,12 @@ exports.Prisma.DM_ChuyenMonKyThuatScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -5027,6 +6540,12 @@ exports.Prisma.DM_SucKhoeScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -5039,6 +6558,12 @@ exports.Prisma.DM_NhomMauScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -5051,6 +6576,12 @@ exports.Prisma.DM_LoaiThuongTatScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -5063,6 +6594,12 @@ exports.Prisma.DM_NganhHocScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -5075,6 +6612,12 @@ exports.Prisma.DM_ToChucXaHoiScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -5087,6 +6630,12 @@ exports.Prisma.DM_NgachScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -5099,6 +6648,12 @@ exports.Prisma.DM_BacLuongScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -5111,6 +6666,12 @@ exports.Prisma.TemplateFileScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   path: 'path',
   fileType: 'fileType',
@@ -5126,6 +6687,12 @@ exports.Prisma.AccessRoleGrantScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   granterId: 'granterId',
   recipientId: 'recipientId',
   sRoleId: 'sRoleId',
@@ -5141,6 +6708,12 @@ exports.Prisma.AccessPermissionGrantScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   roleGrantId: 'roleGrantId',
   sFormName: 'sFormName',
   sTen: 'sTen',
@@ -5156,6 +6729,12 @@ exports.Prisma.BlockedIpScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   ipAddress: 'ipAddress',
   reason: 'reason',
   expiresAt: 'expiresAt'
@@ -5186,6 +6765,10 @@ exports.Prisma.ConfigOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   value: 'value'
 };
 
@@ -5194,6 +6777,10 @@ exports.Prisma.SuggestionOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   key: 'key',
   value: 'value'
 };
@@ -5211,7 +6798,11 @@ exports.Prisma.ChangeLogOrderByRelevanceFieldEnum = {
   operation: 'operation',
   transactionId: 'transactionId',
   source: 'source',
-  userProfileId: 'userProfileId'
+  userProfileId: 'userProfileId',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua'
 };
 
 exports.Prisma.UserProfileOrderByRelevanceFieldEnum = {
@@ -5219,14 +6810,14 @@ exports.Prisma.UserProfileOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
-  groupId: 'groupId',
-  sDM_DonViId: 'sDM_DonViId',
-  sDM_ViTriCongViecId: 'sDM_ViTriCongViecId',
-  sQuanlyTrucTiepId: 'sQuanlyTrucTiepId',
   sNguoiTao: 'sNguoiTao',
   sNguoiSua: 'sNguoiSua',
   sThietBiTao: 'sThietBiTao',
   sThietBiSua: 'sThietBiSua',
+  groupId: 'groupId',
+  sDM_DonViId: 'sDM_DonViId',
+  sDM_ViTriCongViecId: 'sDM_ViTriCongViecId',
+  sQuanlyTrucTiepId: 'sQuanlyTrucTiepId',
   avatar: 'avatar',
   firstName: 'firstName',
   lastName: 'lastName',
@@ -5323,6 +6914,10 @@ exports.Prisma.HocHamOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   academicRankTypeId: 'academicRankTypeId',
   noiCap: 'noiCap',
   soQuyetDinh: 'soQuyetDinh',
@@ -5334,6 +6929,10 @@ exports.Prisma.ChucVuChinhQuyenOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   chucVuChinhQuyenId: 'chucVuChinhQuyenId',
   userProfileId: 'userProfileId',
   address: 'address'
@@ -5344,6 +6943,10 @@ exports.Prisma.ChucVuDangOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   chucVuDangId: 'chucVuDangId',
   userProfileId: 'userProfileId',
   address: 'address'
@@ -5354,6 +6957,10 @@ exports.Prisma.HocViOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   academicDegreeTypeId: 'academicDegreeTypeId',
   nationalityId: 'nationalityId',
   linhVuc: 'linhVuc',
@@ -5367,6 +6974,10 @@ exports.Prisma.RelativeOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   queQuan: 'queQuan',
   noiOHienTai: 'noiOHienTai',
@@ -5381,6 +6992,10 @@ exports.Prisma.TrinhDoLyLuanChinhTriOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   hinhThucDaoTao: 'hinhThucDaoTao',
   noiDaoTao: 'noiDaoTao',
   userProfileId: 'userProfileId',
@@ -5392,6 +7007,10 @@ exports.Prisma.TrinhDoQuanLyNhaNuocOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   hinhThucDaoTao: 'hinhThucDaoTao',
   noiDaoTao: 'noiDaoTao',
   userProfileId: 'userProfileId',
@@ -5403,6 +7022,10 @@ exports.Prisma.NgoaiNguOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   ngonNguId: 'ngonNguId',
   hinhThucDaoTao: 'hinhThucDaoTao',
   noiDaoTao: 'noiDaoTao',
@@ -5415,6 +7038,10 @@ exports.Prisma.TinHocOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   hinhThucDaoTao: 'hinhThucDaoTao',
   noiDaoTao: 'noiDaoTao',
   dM_TrinhDoTinHocId: 'dM_TrinhDoTinHocId',
@@ -5426,6 +7053,10 @@ exports.Prisma.BoiDuongQuocPhongAnNinhOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   userProfileId: 'userProfileId'
 };
@@ -5435,6 +7066,10 @@ exports.Prisma.CapBacOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   noiRaQuyetDinh: 'noiRaQuyetDinh',
   capRaQuyetDinh: 'capRaQuyetDinh',
   capBacId: 'capBacId',
@@ -5446,6 +7081,10 @@ exports.Prisma.QuaTrinhCongTacOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   donVi: 'donVi',
   diaChi: 'diaChi',
   chucDanh: 'chucDanh',
@@ -5461,6 +7100,10 @@ exports.Prisma.QuaTrinhCuDiCongTacOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   donVi: 'donVi',
   chucVuId: 'chucVuId',
   dM_TinhTrangCongTacId: 'dM_TinhTrangCongTacId',
@@ -5474,6 +7117,10 @@ exports.Prisma.QuaTrinhCuDiDaoTaoOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   ten: 'ten',
   donViToChuc: 'donViToChuc',
   vanBang: 'vanBang',
@@ -5487,6 +7134,10 @@ exports.Prisma.KhenThuongOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   hinhThucKhenThuongId: 'hinhThucKhenThuongId',
   capKhenThuong: 'capKhenThuong',
   soQuyetDinh: 'soQuyetDinh',
@@ -5500,6 +7151,10 @@ exports.Prisma.KyLuatOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   hinhThucKyLuat: 'hinhThucKyLuat',
   capKyLuat: 'capKyLuat',
   soQuyetDinh: 'soQuyetDinh',
@@ -5513,6 +7168,10 @@ exports.Prisma.DoiTuongChinhSachOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   tenDoiTuong: 'tenDoiTuong',
   ghiChu: 'ghiChu',
   userProfileId: 'userProfileId'
@@ -5523,6 +7182,10 @@ exports.Prisma.KeKhaiTaiSanOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   loai: 'loai',
   tenDot: 'tenDot',
   userProfileId: 'userProfileId'
@@ -5533,6 +7196,10 @@ exports.Prisma.TiengDanTocOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   danTocId: 'danTocId',
   nghe: 'nghe',
   noi: 'noi',
@@ -5545,6 +7212,10 @@ exports.Prisma.ChienDauOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   cuongVi: 'cuongVi',
   donVi: 'donVi',
   diaDiem: 'diaDiem',
@@ -5558,6 +7229,10 @@ exports.Prisma.NuocNgoaiOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   tenNuocId: 'tenNuocId',
   lyDo: 'lyDo',
   userProfileId: 'userProfileId'
@@ -5568,6 +7243,10 @@ exports.Prisma.ThuongTatOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   loaiId: 'loaiId',
   nguyenNhan: 'nguyenNhan',
   noiBiThuong: 'noiBiThuong',
@@ -5579,6 +7258,10 @@ exports.Prisma.DanhHieuOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   ten: 'ten',
   userProfileId: 'userProfileId'
 };
@@ -5588,6 +7271,10 @@ exports.Prisma.QuaTrinhHocTapOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   tenTruongId: 'tenTruongId',
   nganhHocId: 'nganhHocId',
   chuyenNganhId: 'chuyenNganhId',
@@ -5601,6 +7288,10 @@ exports.Prisma.ToChucXaHoiOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   tenId: 'tenId',
   congViec: 'congViec',
   userProfileId: 'userProfileId'
@@ -5611,6 +7302,10 @@ exports.Prisma.QuaTrinhLuongOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   ngachId: 'ngachId',
   bacLuongId: 'bacLuongId',
   heSo: 'heSo',
@@ -5625,6 +7320,10 @@ exports.Prisma.GroupOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -5633,6 +7332,10 @@ exports.Prisma.RoleOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -5641,6 +7344,10 @@ exports.Prisma.PermissionOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -5649,6 +7356,10 @@ exports.Prisma.ChatBotConfigOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   value: 'value'
 };
@@ -5658,6 +7369,10 @@ exports.Prisma.UserSessionOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   email: 'email',
   phoneNumber: 'phoneNumber'
@@ -5668,6 +7383,10 @@ exports.Prisma.DocumentOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   title: 'title',
   body: 'body',
   classificationId: 'classificationId',
@@ -5683,6 +7402,10 @@ exports.Prisma.DocumentTopicOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   documentId: 'documentId',
   topicId: 'topicId'
 };
@@ -5692,6 +7415,10 @@ exports.Prisma.FAQOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   question: 'question',
   answer: 'answer',
   topicId: 'topicId',
@@ -5705,6 +7432,10 @@ exports.Prisma.PromptOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   prompt: 'prompt',
   topicId: 'topicId',
   reason: 'reason'
@@ -5715,6 +7446,10 @@ exports.Prisma.ConversationOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   userId: 'userId',
   sessionId: 'sessionId',
@@ -5725,6 +7460,10 @@ exports.Prisma.ConversationFeedbackOrderByRelevanceFieldEnum = {
   id: 'id',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   comment: 'comment',
   conversationId: 'conversationId',
   conversationNameSnapshot: 'conversationNameSnapshot',
@@ -5738,6 +7477,10 @@ exports.Prisma.MessageOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   conversationId: 'conversationId',
   content: 'content'
 };
@@ -5747,6 +7490,10 @@ exports.Prisma.CitationMessageOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   content: 'content',
   documentId: 'documentId',
   documentType: 'documentType',
@@ -5758,6 +7505,10 @@ exports.Prisma.TopicOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   type: 'type'
 };
@@ -5767,6 +7518,10 @@ exports.Prisma.DocumentClassificationOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -6114,6 +7869,10 @@ exports.Prisma.PlanTrainingOrderByRelevanceFieldEnum = {
   id: 'id',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   trainingObjectTypeId: 'trainingObjectTypeId',
   semesterId: 'semesterId',
   trainingCourseId: 'trainingCourseId'
@@ -6123,6 +7882,10 @@ exports.Prisma.PlanTrainingPracticeOrderByRelevanceFieldEnum = {
   id: 'id',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   trainingObjectTypeId: 'trainingObjectTypeId',
   semesterId: 'semesterId',
   trainingCourseId: 'trainingCourseId',
@@ -6133,6 +7896,10 @@ exports.Prisma.PlanTrainingSubjectOrderByRelevanceFieldEnum = {
   id: 'id',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   planTrainingId: 'planTrainingId',
   trainingBlockSubjectId: 'trainingBlockSubjectId'
 };
@@ -6142,6 +7909,10 @@ exports.Prisma.StudentScoreConvertOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   studentId: 'studentId'
 };
 
@@ -6150,6 +7921,10 @@ exports.Prisma.SubjectScoreConvertOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   studentScoreConvertId: 'studentScoreConvertId',
   subjectVersionId: 'subjectVersionId'
 };
@@ -6159,6 +7934,10 @@ exports.Prisma.StudentSubjectScoreOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   subjectClassId: 'subjectClassId',
   subjectVersionId: 'subjectVersionId',
   studentId: 'studentId',
@@ -6174,6 +7953,10 @@ exports.Prisma.StudentSubjectScoreHistoryOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   studentSubjectScoreId: 'studentSubjectScoreId',
   examPostponedReason: 'examPostponedReason',
   examBannedReason: 'examBannedReason',
@@ -6186,6 +7969,10 @@ exports.Prisma.StudentResearchTopicOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   studentSubjectScoreId: 'studentSubjectScoreId',
   name: 'name',
   mainContent: 'mainContent',
@@ -6199,6 +7986,10 @@ exports.Prisma.StudentInternshipOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   studentSubjectScoreId: 'studentSubjectScoreId',
   internshipContent: 'internshipContent',
   institution: 'institution',
@@ -6213,6 +8004,10 @@ exports.Prisma.ArchivedCertificateOnStudentSubjectScoreOrderByRelevanceFieldEnum
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   studentSubjectScoreId: 'studentSubjectScoreId',
   archivedCertificateId: 'archivedCertificateId'
 };
@@ -6222,6 +8017,10 @@ exports.Prisma.ArchivedCertificateOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   certificateId: 'certificateId',
   studentId: 'studentId',
   issuedBy: 'issuedBy',
@@ -6233,6 +8032,10 @@ exports.Prisma.ArchivedCertificateSubjectScoreOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   archivedCertificateId: 'archivedCertificateId',
   subjectVersionId: 'subjectVersionId'
 };
@@ -6242,6 +8045,10 @@ exports.Prisma.ArchivedAwardOnStudentSubjectScoreOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   studentSubjectScoreId: 'studentSubjectScoreId',
   archivedAwardId: 'archivedAwardId'
 };
@@ -6251,6 +8058,10 @@ exports.Prisma.ArchivedAwardOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   awardId: 'awardId',
   studentId: 'studentId'
 };
@@ -6260,6 +8071,10 @@ exports.Prisma.SchoolYearOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -6268,6 +8083,10 @@ exports.Prisma.SemesterOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   shortName: 'shortName',
   schoolYearId: 'schoolYearId'
@@ -6278,6 +8097,10 @@ exports.Prisma.MilestoneOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   period: 'period',
   schoolYearId: 'schoolYearId'
@@ -6288,6 +8111,10 @@ exports.Prisma.TrainingLanguageOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -6296,6 +8123,10 @@ exports.Prisma.TrainingCourseOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   semesterStartId: 'semesterStartId',
   academicYear: 'academicYear',
@@ -6311,6 +8142,10 @@ exports.Prisma.TrainingCourseRegulationOrderByRelevanceFieldEnum = {
   id: 'id',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   trainingCourseId: 'trainingCourseId',
   code: 'code',
   name: 'name'
@@ -6321,6 +8156,10 @@ exports.Prisma.FixedClassOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   summary: 'summary',
   classMonitorId: 'classMonitorId',
@@ -6339,6 +8178,10 @@ exports.Prisma.CurriculumOrderByRelevanceFieldEnum = {
   id: 'id',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   code: 'code',
   name: 'name',
   englishName: 'englishName',
@@ -6354,6 +8197,10 @@ exports.Prisma.CurriculumVersionOrderByRelevanceFieldEnum = {
   id: 'id',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   code: 'code',
   name: 'name',
   shortName: 'shortName',
@@ -6384,6 +8231,10 @@ exports.Prisma.SubjectOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   englishName: 'englishName',
   managementOrganizationId: 'managementOrganizationId',
@@ -6395,6 +8246,10 @@ exports.Prisma.SubjectVersionCategoryOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -6402,6 +8257,10 @@ exports.Prisma.SubjectVersionOrderByRelevanceFieldEnum = {
   id: 'id',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   code: 'code',
   name: 'name',
   codeTkb: 'codeTkb',
@@ -6423,6 +8282,10 @@ exports.Prisma.SubjectVersionHistoryOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   subjectVersionId: 'subjectVersionId',
   content: 'content',
   action: 'action',
@@ -6433,7 +8296,11 @@ exports.Prisma.EquivalencyGroupOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
-  createdBy: 'createdBy'
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua'
 };
 
 exports.Prisma.SubjectInGroupOrderByRelevanceFieldEnum = {
@@ -6441,6 +8308,10 @@ exports.Prisma.SubjectInGroupOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   subjectId: 'subjectId',
   equivalencyGroupId: 'equivalencyGroupId'
 };
@@ -6450,6 +8321,10 @@ exports.Prisma.TrainingBlockSubjectOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   subjectId: 'subjectId',
   trainingBlockOnCurriculumVersionId: 'trainingBlockOnCurriculumVersionId'
 };
@@ -6459,6 +8334,10 @@ exports.Prisma.ClassRegisterSessionCreditOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   classRegisterSessionId: 'classRegisterSessionId'
 };
 
@@ -6467,6 +8346,10 @@ exports.Prisma.ClassRegisterSessionOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   semesterId: 'semesterId'
 };
@@ -6476,6 +8359,10 @@ exports.Prisma.ClassRegisterLogsOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   classRegisterSessionId: 'classRegisterSessionId',
   subjectClassId: 'subjectClassId',
   studentId: 'studentId',
@@ -6487,6 +8374,10 @@ exports.Prisma.ClassRegisterAttemptOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   classRegisterSessionId: 'classRegisterSessionId',
   studentId: 'studentId',
   userProfileId: 'userProfileId',
@@ -6500,6 +8391,10 @@ exports.Prisma.SubjectClassOrderByRelevanceFieldEnum = {
   id: 'id',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   code: 'code',
   name: 'name',
   subjectId: 'subjectId',
@@ -6519,6 +8414,10 @@ exports.Prisma.SubjectClassAttendanceOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   subjectClassId: 'subjectClassId',
   profileId: 'profileId',
   classScheduleId: 'classScheduleId',
@@ -6530,6 +8429,10 @@ exports.Prisma.SubjectClassAttendanceStudentOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   subjectClassAttendanceId: 'subjectClassAttendanceId',
   studentId: 'studentId',
   note: 'note'
@@ -6540,6 +8443,10 @@ exports.Prisma.SubjectClassHistoryOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   subjectClassId: 'subjectClassId',
   updatedById: 'updatedById'
 };
@@ -6549,6 +8456,10 @@ exports.Prisma.SubjectClassTimeOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   subjectClassId: 'subjectClassId'
 };
 
@@ -6557,6 +8468,10 @@ exports.Prisma.ClassScheduleOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   subjectClassId: 'subjectClassId',
   roomId: 'roomId',
   lecturerId: 'lecturerId',
@@ -6572,6 +8487,10 @@ exports.Prisma.ScoreCorrectionTicketOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   trainingObjectTypeId: 'trainingObjectTypeId',
   proposal: 'proposal',
   decision: 'decision'
@@ -6582,6 +8501,10 @@ exports.Prisma.ScoreCorrectionItemOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   ticketId: 'ticketId',
   studentSubjectScoreId: 'studentSubjectScoreId'
 };
@@ -6591,6 +8514,10 @@ exports.Prisma.DataSyncHistoryOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   sessionName: 'sessionName',
   classRegisterSessionId: 'classRegisterSessionId',
   fileName: 'fileName',
@@ -6599,243 +8526,86 @@ exports.Prisma.DataSyncHistoryOrderByRelevanceFieldEnum = {
   performedById: 'performedById'
 };
 
-exports.Prisma.TrainingObjectTypeOrderByRelevanceFieldEnum = {
+exports.Prisma.NoteOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  content: 'content',
+  studentId: 'studentId',
+  folderId: 'folderId'
+};
+
+exports.Prisma.NoteFolderOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
-  trainingFormId: 'trainingFormId',
-  trainingLevelId: 'trainingLevelId',
-  vaiTro: 'vaiTro'
-};
-
-exports.Prisma.PriorityObjectOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name'
-};
-
-exports.Prisma.TrainingTypeOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name'
-};
-
-exports.Prisma.TrainingLevelOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name'
-};
-
-exports.Prisma.TrainingFormOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name'
-};
-
-exports.Prisma.TrainingLocationOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name',
-  dM_TinhId: 'dM_TinhId',
-  dM_Tinh_NewId: 'dM_Tinh_NewId'
-};
-
-exports.Prisma.BuildingOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name',
-  trainingLocationId: 'trainingLocationId'
-};
-
-exports.Prisma.RoomOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name',
-  buildingId: 'buildingId'
-};
-
-exports.Prisma.TrainingFieldOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name',
-  englishName: 'englishName',
-  decisionNo: 'decisionNo',
-  organizationId: 'organizationId'
-};
-
-exports.Prisma.TrainingFieldOnTrainingObjectTypeOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  trainingFieldId: 'trainingFieldId',
-  trainingObjectTypeId: 'trainingObjectTypeId'
-};
-
-exports.Prisma.TrainingMajorOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name',
-  englishName: 'englishName',
-  shortName: 'shortName',
-  summary: 'summary',
-  organizationId: 'organizationId',
-  secondOrganizationId: 'secondOrganizationId',
-  thirdOrganizationId: 'thirdOrganizationId',
-  trainingFieldId: 'trainingFieldId'
-};
-
-exports.Prisma.TrainingMajorOnTrainingObjectTypeOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  trainingMajorId: 'trainingMajorId',
-  trainingObjectTypeId: 'trainingObjectTypeId'
-};
-
-exports.Prisma.TrainingBlockOrderByRelevanceFieldEnum = {
-  id: 'id',
-  description: 'description',
-  createdBy: 'createdBy',
-  code: 'code',
-  name: 'name',
-  trainingObjectTypeId: 'trainingObjectTypeId',
+  icon: 'icon',
+  studentId: 'studentId',
   parentId: 'parentId'
 };
 
-exports.Prisma.TrainingBlockOnCurriculumVersionOrderByRelevanceFieldEnum = {
+exports.Prisma.NoteTagOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
-  trainingBlockId: 'trainingBlockId',
-  curriculumVersionId: 'curriculumVersionId'
-};
-
-exports.Prisma.TrainingTimeOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name'
-};
-
-exports.Prisma.AvailableTrainingTimeOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  trainingObjectTypeId: 'trainingObjectTypeId',
-  semesterId: 'semesterId'
-};
-
-exports.Prisma.CertificateOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
-  englishName: 'englishName',
-  outputStandardId: 'outputStandardId'
+  color: 'color'
 };
 
-exports.Prisma.CertificateOnSubjectOrderByRelevanceFieldEnum = {
+exports.Prisma.NoteReminderOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
-  certificateId: 'certificateId',
-  subjectId: 'subjectId'
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  title: 'title',
+  noteId: 'noteId'
 };
 
-exports.Prisma.AwardOrderByRelevanceFieldEnum = {
+exports.Prisma.StudentPersonalEventOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
-  name: 'name',
-  englishName: 'englishName'
-};
-
-exports.Prisma.OfficerBonusScoreOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy'
-};
-
-exports.Prisma.DiplomaTypeOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name',
-  englishName: 'englishName'
-};
-
-exports.Prisma.ScoreConvertOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  classification: 'classification',
-  letter: 'letter',
-  trainingCourseId: 'trainingCourseId'
-};
-
-exports.Prisma.LoadCategoryOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name',
-  unit: 'unit',
-  category: 'category',
-  note: 'note'
-};
-
-exports.Prisma.OutputStandardOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name'
-};
-
-exports.Prisma.OutputStandardOnCurriculumOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  outputStandardId: 'outputStandardId',
-  curriculumVersionId: 'curriculumVersionId'
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  studentId: 'studentId',
+  userProfileId: 'userProfileId',
+  title: 'title',
+  location: 'location',
+  content: 'content',
+  subjectClassId: 'subjectClassId'
 };
 
 exports.Prisma.StudentOrderByRelevanceFieldEnum = {
   id: 'id',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   note: 'note',
   trainingFieldId: 'trainingFieldId',
   registerNumber: 'registerNumber',
@@ -6863,6 +8633,10 @@ exports.Prisma.TrainingActivityOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   studentId: 'studentId',
   category: 'category'
 };
@@ -6872,6 +8646,10 @@ exports.Prisma.StudentSemesterResultOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   studentId: 'studentId',
   semesterId: 'semesterId',
   rankId: 'rankId'
@@ -6882,6 +8660,10 @@ exports.Prisma.StudentYearResultOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   studentId: 'studentId',
   schoolYearId: 'schoolYearId',
   rankId: 'rankId'
@@ -6892,6 +8674,10 @@ exports.Prisma.NotificationOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   title: 'title',
   content: 'content',
   lecturerId: 'lecturerId'
@@ -6902,6 +8688,10 @@ exports.Prisma.PersonalWorkTagOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   color: 'color',
   lecturerId: 'lecturerId'
@@ -6912,6 +8702,10 @@ exports.Prisma.IndividualScheduleOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   title: 'title',
   location: 'location',
   content: 'content',
@@ -6922,6 +8716,10 @@ exports.Prisma.LecturerOrderByRelevanceFieldEnum = {
   id: 'id',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   lectureID: 'lectureID',
   userProfileId: 'userProfileId',
   lecturerTypeId: 'lecturerTypeId'
@@ -6932,6 +8730,10 @@ exports.Prisma.LecturerHistoryOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   lectureID: 'lectureID',
   lectureCode: 'lectureCode',
   userProfileId: 'userProfileId',
@@ -6944,6 +8746,10 @@ exports.Prisma.GuestTeachingRateConfigOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   schoolYearId: 'schoolYearId'
 };
@@ -6952,6 +8758,10 @@ exports.Prisma.GuestTeachingRateOrderByRelevanceFieldEnum = {
   id: 'id',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   configId: 'configId',
   academicRankTypeId: 'academicRankTypeId',
   academicDegreeTypeId: 'academicDegreeTypeId'
@@ -6962,6 +8772,10 @@ exports.Prisma.GuestTeachingPaymentOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   lecturerId: 'lecturerId',
   semesterId: 'semesterId',
   hiringOrgId: 'hiringOrgId',
@@ -6974,6 +8788,10 @@ exports.Prisma.LecturerTypeOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -6982,6 +8800,10 @@ exports.Prisma.StaffTypeOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -6990,56 +8812,689 @@ exports.Prisma.StaffPositionOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
-exports.Prisma.StaffOrderByRelevanceFieldEnum = {
-  id: 'id',
-  description: 'description',
-  createdBy: 'createdBy',
-  userProfileId: 'userProfileId',
-  organizationId: 'organizationId',
-  staffTypeId: 'staffTypeId',
-  staffPositionId: 'staffPositionId'
-};
-
-exports.Prisma.StaffHistoryOrderByRelevanceFieldEnum = {
+exports.Prisma.TrainingObjectTypeOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
-  userProfileId: 'userProfileId',
-  organizationId: 'organizationId',
-  staffTypeId: 'staffTypeId',
-  staffPositionId: 'staffPositionId'
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  trainingFormId: 'trainingFormId',
+  trainingLevelId: 'trainingLevelId',
+  vaiTro: 'vaiTro'
 };
 
-exports.Prisma.ResearchProjectOrderByRelevanceFieldEnum = {
+exports.Prisma.PriorityObjectOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
-  title: 'title',
-  summary: 'summary',
-  objectives: 'objectives',
-  methodology: 'methodology',
-  expectedResults: 'expectedResults',
-  requirements: 'requirements',
-  supervisorId: 'supervisorId',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name'
+};
+
+exports.Prisma.TrainingTypeOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name'
+};
+
+exports.Prisma.TrainingLevelOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name'
+};
+
+exports.Prisma.TrainingFormOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name'
+};
+
+exports.Prisma.TrainingLocationOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  dM_TinhId: 'dM_TinhId',
+  dM_Tinh_NewId: 'dM_Tinh_NewId'
+};
+
+exports.Prisma.BuildingOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  trainingLocationId: 'trainingLocationId'
+};
+
+exports.Prisma.RoomOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  buildingId: 'buildingId'
+};
+
+exports.Prisma.TrainingFieldOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  englishName: 'englishName',
+  decisionNo: 'decisionNo',
   organizationId: 'organizationId'
 };
 
-exports.Prisma.StudentResearchRegistrationOrderByRelevanceFieldEnum = {
+exports.Prisma.TrainingFieldOnTrainingObjectTypeOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  trainingFieldId: 'trainingFieldId',
+  trainingObjectTypeId: 'trainingObjectTypeId'
+};
+
+exports.Prisma.TrainingMajorOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  englishName: 'englishName',
+  shortName: 'shortName',
+  summary: 'summary',
+  organizationId: 'organizationId',
+  secondOrganizationId: 'secondOrganizationId',
+  thirdOrganizationId: 'thirdOrganizationId',
+  trainingFieldId: 'trainingFieldId'
+};
+
+exports.Prisma.TrainingMajorOnTrainingObjectTypeOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  trainingMajorId: 'trainingMajorId',
+  trainingObjectTypeId: 'trainingObjectTypeId'
+};
+
+exports.Prisma.TrainingBlockOrderByRelevanceFieldEnum = {
+  id: 'id',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  code: 'code',
+  name: 'name',
+  trainingObjectTypeId: 'trainingObjectTypeId',
+  parentId: 'parentId'
+};
+
+exports.Prisma.TrainingBlockOnCurriculumVersionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  trainingBlockId: 'trainingBlockId',
+  curriculumVersionId: 'curriculumVersionId'
+};
+
+exports.Prisma.TrainingTimeOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name'
+};
+
+exports.Prisma.AvailableTrainingTimeOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  trainingObjectTypeId: 'trainingObjectTypeId',
+  semesterId: 'semesterId'
+};
+
+exports.Prisma.CertificateOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  englishName: 'englishName',
+  outputStandardId: 'outputStandardId'
+};
+
+exports.Prisma.CertificateOnSubjectOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  certificateId: 'certificateId',
+  subjectId: 'subjectId'
+};
+
+exports.Prisma.AwardOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  englishName: 'englishName'
+};
+
+exports.Prisma.OfficerBonusScoreOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua'
+};
+
+exports.Prisma.DiplomaTypeOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  englishName: 'englishName'
+};
+
+exports.Prisma.ScoreConvertOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  classification: 'classification',
+  letter: 'letter',
+  trainingCourseId: 'trainingCourseId'
+};
+
+exports.Prisma.LoadCategoryOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  unit: 'unit',
+  category: 'category',
+  note: 'note'
+};
+
+exports.Prisma.OutputStandardOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name'
+};
+
+exports.Prisma.OutputStandardOnCurriculumOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  outputStandardId: 'outputStandardId',
+  curriculumVersionId: 'curriculumVersionId'
+};
+
+exports.Prisma.GraduationSessionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  trainingObjectTypeId: 'trainingObjectTypeId',
+  trainingCourseId: 'trainingCourseId',
+  topicDecisionNumber: 'topicDecisionNumber',
+  topicDecisionSigner: 'topicDecisionSigner',
+  defenseDecisionNumber: 'defenseDecisionNumber',
+  defenseDecisionSigner: 'defenseDecisionSigner',
+  graduationDecisionNumber: 'graduationDecisionNumber',
+  graduationDecisionSigner: 'graduationDecisionSigner',
+  councilMeetingBasis: 'councilMeetingBasis',
+  proposalTopic: 'proposalTopic',
+  proposalCouncil: 'proposalCouncil',
+  proposalGraduation: 'proposalGraduation'
+};
+
+exports.Prisma.StudentGraduationApplicationOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   studentId: 'studentId',
-  researchProjectId: 'researchProjectId',
-  motivation: 'motivation',
-  experience: 'experience',
-  reviewedById: 'reviewedById',
-  reviewNote: 'reviewNote'
+  sessionId: 'sessionId',
+  reason: 'reason',
+  rankId: 'rankId',
+  trainingMajorId: 'trainingMajorId',
+  diplomaTypeId: 'diplomaTypeId'
+};
+
+exports.Prisma.ApplicationDowngradedOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  studentGraduationApplicationId: 'studentGraduationApplicationId',
+  fromId: 'fromId'
+};
+
+exports.Prisma.ApplicationCheckResultOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  studentGraduationApplicationId: 'studentGraduationApplicationId',
+  rankingConditionId: 'rankingConditionId'
+};
+
+exports.Prisma.GraduationDecisionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  applicationId: 'applicationId',
+  studentId: 'studentId',
+  notes: 'notes',
+  trainingMajorId: 'trainingMajorId',
+  finalRankingId: 'finalRankingId',
+  diplomaTypeId: 'diplomaTypeId',
+  originalDiplomaNumber: 'originalDiplomaNumber',
+  diplomaNumber: 'diplomaNumber'
+};
+
+exports.Prisma.AcademicRankingConvertOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  classification: 'classification',
+  classificationEnglish: 'classificationEnglish',
+  trainingCourseId: 'trainingCourseId'
+};
+
+exports.Prisma.GraduationRankDowngradeRuleOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  initialRankId: 'initialRankId'
+};
+
+exports.Prisma.GraduationRankDowngradeConditionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  downgradeRuleId: 'downgradeRuleId',
+  tuple: 'tuple'
+};
+
+exports.Prisma.RankingConditionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  rankingId: 'rankingId',
+  tuple: 'tuple'
+};
+
+exports.Prisma.DiplomaVerificationApplicationOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  fullname: 'fullname',
+  idCardNumber: 'idCardNumber',
+  phoneNumber: 'phoneNumber',
+  email: 'email',
+  reason: 'reason',
+  originalDiplomaNumber: 'originalDiplomaNumber',
+  diplomaNumber: 'diplomaNumber',
+  trainingMajor: 'trainingMajor',
+  trainingLevel: 'trainingLevel',
+  trainingForm: 'trainingForm',
+  classification: 'classification',
+  studentId: 'studentId'
+};
+
+exports.Prisma.TrainingScoreSessionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  semesterId: 'semesterId',
+  trainingObjectTypeId: 'trainingObjectTypeId'
+};
+
+exports.Prisma.StudentTrainingScoreOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  trainingScoreSessionId: 'trainingScoreSessionId',
+  studentId: 'studentId'
+};
+
+exports.Prisma.SemesterTrainingScoreOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  semesterId: 'semesterId',
+  studentId: 'studentId'
+};
+
+exports.Prisma.SchoolYearTrainingScoreOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  schoolYearId: 'schoolYearId',
+  studentId: 'studentId'
+};
+
+exports.Prisma.DocumentFileOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  path: 'path',
+  mimeType: 'mimeType',
+  archivedCertificateId: 'archivedCertificateId',
+  trainingCourseId: 'trainingCourseId',
+  archivedAwardId: 'archivedAwardId',
+  curriculumId: 'curriculumId',
+  curriculumVersionId: 'curriculumVersionId',
+  subjectVersionId: 'subjectVersionId',
+  studentAcademicDecisionId: 'studentAcademicDecisionId',
+  notificationId: 'notificationId',
+  decisionId: 'decisionId',
+  defenseRecordId: 'defenseRecordId',
+  librarySubmissionId: 'librarySubmissionId',
+  diplomaFrontId: 'diplomaFrontId',
+  diplomaBackId: 'diplomaBackId',
+  diplomaVerificationId: 'diplomaVerificationId',
+  diplomaVerificationFrontId: 'diplomaVerificationFrontId',
+  diplomaVerificationBackId: 'diplomaVerificationBackId',
+  trainingFieldId: 'trainingFieldId',
+  studentScoreConvertId: 'studentScoreConvertId',
+  scoreLinkSheetId: 'scoreLinkSheetId',
+  examFrameworkId: 'examFrameworkId',
+  noteId: 'noteId',
+  evaluationPeriodId: 'evaluationPeriodId',
+  knowledgeBlockId: 'knowledgeBlockId'
+};
+
+exports.Prisma.AcademicActionConfigOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  trainingCourseId: 'trainingCourseId'
+};
+
+exports.Prisma.AcademicActionRuleSetOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  configId: 'configId'
+};
+
+exports.Prisma.AcademicActionConditionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  ruleSetId: 'ruleSetId',
+  tuple: 'tuple'
+};
+
+exports.Prisma.StudentAcademicDecisionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  studentId: 'studentId',
+  semesterId: 'semesterId',
+  schoolYearId: 'schoolYearId',
+  appliedConfigId: 'appliedConfigId',
+  reason: 'reason'
+};
+
+exports.Prisma.ScholarshipOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  trainingCourseId: 'trainingCourseId'
+};
+
+exports.Prisma.ScholarshipCriteriaOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  scholarshipId: 'scholarshipId',
+  tuple: 'tuple'
+};
+
+exports.Prisma.ScholarshipAwardOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  studentId: 'studentId',
+  semesterId: 'semesterId',
+  scholarshipId: 'scholarshipId'
 };
 
 exports.Prisma.ThesisSessionOrderByRelevanceFieldEnum = {
@@ -7047,6 +9502,10 @@ exports.Prisma.ThesisSessionOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   trainingObjectTypeId: 'trainingObjectTypeId',
   proposalReport: 'proposalReport',
@@ -7068,6 +9527,10 @@ exports.Prisma.ThesisProjectOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   title: 'title',
   titleEN: 'titleEN',
   summary: 'summary',
@@ -7108,7 +9571,11 @@ exports.Prisma.DefenseSessionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
-  createdBy: 'createdBy'
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua'
 };
 
 exports.Prisma.StudentThesisRegistrationOrderByRelevanceFieldEnum = {
@@ -7116,6 +9583,10 @@ exports.Prisma.StudentThesisRegistrationOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   studentId: 'studentId',
   studentSubjectScoreId: 'studentSubjectScoreId',
   thesisProjectId: 'thesisProjectId',
@@ -7131,6 +9602,10 @@ exports.Prisma.ExpertOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   lecturerId: 'lecturerId',
   currentVersionId: 'currentVersionId'
 };
@@ -7140,6 +9615,10 @@ exports.Prisma.ExpertProfileVersionOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   expertId: 'expertId',
   name: 'name',
   academicDegreeTypeId: 'academicDegreeTypeId',
@@ -7159,6 +9638,10 @@ exports.Prisma.DecisionOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   thesisProjectId: 'thesisProjectId'
 };
 
@@ -7167,6 +9650,10 @@ exports.Prisma.InvitationOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   councilMemberId: 'councilMemberId'
 };
 
@@ -7175,6 +9662,10 @@ exports.Prisma.CouncilOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   studentThesisRegistrationId: 'studentThesisRegistrationId'
 };
 
@@ -7183,6 +9674,10 @@ exports.Prisma.CouncilMemberOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   councilId: 'councilId',
   expertProfileVersionId: 'expertProfileVersionId',
   expertId: 'expertId'
@@ -7193,6 +9688,10 @@ exports.Prisma.DefenseRecordOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   comments: 'comments',
   thesisId: 'thesisId'
 };
@@ -7202,6 +9701,10 @@ exports.Prisma.LibrarySubmissionOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   librarianNote: 'librarianNote',
   thesisId: 'thesisId',
   confirmedById: 'confirmedById'
@@ -7212,6 +9715,10 @@ exports.Prisma.ConfigPaymentSessionOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -7220,6 +9727,10 @@ exports.Prisma.DefaultCouncilRolePayAmountOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   configPaymentSessionId: 'configPaymentSessionId'
 };
 
@@ -7228,6 +9739,10 @@ exports.Prisma.DefaultSupervisorPayAmountOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   configPaymentSessionId: 'configPaymentSessionId'
 };
 
@@ -7236,6 +9751,10 @@ exports.Prisma.PaymentRecordOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   transactionCode: 'transactionCode',
   councilMemberId: 'councilMemberId'
 };
@@ -7245,264 +9764,11 @@ exports.Prisma.SupervisorPaymentRecordOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   transactionCode: 'transactionCode'
-};
-
-exports.Prisma.DocumentFileOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name',
-  path: 'path',
-  mimeType: 'mimeType',
-  archivedCertificateId: 'archivedCertificateId',
-  trainingCourseId: 'trainingCourseId',
-  archivedAwardId: 'archivedAwardId',
-  curriculumId: 'curriculumId',
-  curriculumVersionId: 'curriculumVersionId',
-  subjectVersionId: 'subjectVersionId',
-  studentAcademicDecisionId: 'studentAcademicDecisionId',
-  notificationId: 'notificationId',
-  decisionId: 'decisionId',
-  defenseRecordId: 'defenseRecordId',
-  librarySubmissionId: 'librarySubmissionId',
-  diplomaFrontId: 'diplomaFrontId',
-  diplomaBackId: 'diplomaBackId',
-  diplomaVerificationId: 'diplomaVerificationId',
-  diplomaVerificationFrontId: 'diplomaVerificationFrontId',
-  diplomaVerificationBackId: 'diplomaVerificationBackId',
-  trainingFieldId: 'trainingFieldId',
-  studentScoreConvertId: 'studentScoreConvertId',
-  scoreLinkSheetId: 'scoreLinkSheetId',
-  examFrameworkId: 'examFrameworkId',
-  noteId: 'noteId',
-  evaluationPeriodId: 'evaluationPeriodId',
-  knowledgeBlockId: 'knowledgeBlockId'
-};
-
-exports.Prisma.AcademicActionConfigOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name',
-  trainingCourseId: 'trainingCourseId'
-};
-
-exports.Prisma.AcademicActionRuleSetOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  configId: 'configId'
-};
-
-exports.Prisma.AcademicActionConditionOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  ruleSetId: 'ruleSetId',
-  tuple: 'tuple'
-};
-
-exports.Prisma.StudentAcademicDecisionOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  studentId: 'studentId',
-  semesterId: 'semesterId',
-  schoolYearId: 'schoolYearId',
-  appliedConfigId: 'appliedConfigId',
-  reason: 'reason'
-};
-
-exports.Prisma.TrainingScoreSessionOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name',
-  semesterId: 'semesterId',
-  trainingObjectTypeId: 'trainingObjectTypeId'
-};
-
-exports.Prisma.StudentTrainingScoreOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  trainingScoreSessionId: 'trainingScoreSessionId',
-  studentId: 'studentId'
-};
-
-exports.Prisma.SemesterTrainingScoreOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  semesterId: 'semesterId',
-  studentId: 'studentId'
-};
-
-exports.Prisma.SchoolYearTrainingScoreOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  schoolYearId: 'schoolYearId',
-  studentId: 'studentId'
-};
-
-exports.Prisma.ScholarshipOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name',
-  trainingCourseId: 'trainingCourseId'
-};
-
-exports.Prisma.ScholarshipCriteriaOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  scholarshipId: 'scholarshipId',
-  tuple: 'tuple'
-};
-
-exports.Prisma.ScholarshipAwardOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  studentId: 'studentId',
-  semesterId: 'semesterId',
-  scholarshipId: 'scholarshipId'
-};
-
-exports.Prisma.GraduationSessionOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name',
-  trainingObjectTypeId: 'trainingObjectTypeId',
-  trainingCourseId: 'trainingCourseId',
-  topicDecisionNumber: 'topicDecisionNumber',
-  topicDecisionSigner: 'topicDecisionSigner',
-  defenseDecisionNumber: 'defenseDecisionNumber',
-  defenseDecisionSigner: 'defenseDecisionSigner',
-  graduationDecisionNumber: 'graduationDecisionNumber',
-  graduationDecisionSigner: 'graduationDecisionSigner',
-  councilMeetingBasis: 'councilMeetingBasis',
-  proposalTopic: 'proposalTopic',
-  proposalCouncil: 'proposalCouncil',
-  proposalGraduation: 'proposalGraduation'
-};
-
-exports.Prisma.StudentGraduationApplicationOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  studentId: 'studentId',
-  sessionId: 'sessionId',
-  reason: 'reason',
-  rankId: 'rankId',
-  trainingMajorId: 'trainingMajorId',
-  diplomaTypeId: 'diplomaTypeId'
-};
-
-exports.Prisma.ApplicationDowngradedOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  studentGraduationApplicationId: 'studentGraduationApplicationId',
-  fromId: 'fromId'
-};
-
-exports.Prisma.ApplicationCheckResultOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  studentGraduationApplicationId: 'studentGraduationApplicationId',
-  rankingConditionId: 'rankingConditionId'
-};
-
-exports.Prisma.GraduationDecisionOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  applicationId: 'applicationId',
-  studentId: 'studentId',
-  notes: 'notes',
-  trainingMajorId: 'trainingMajorId',
-  finalRankingId: 'finalRankingId',
-  diplomaTypeId: 'diplomaTypeId',
-  originalDiplomaNumber: 'originalDiplomaNumber',
-  diplomaNumber: 'diplomaNumber'
-};
-
-exports.Prisma.AcademicRankingConvertOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  classification: 'classification',
-  classificationEnglish: 'classificationEnglish',
-  trainingCourseId: 'trainingCourseId'
-};
-
-exports.Prisma.GraduationRankDowngradeRuleOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  initialRankId: 'initialRankId'
-};
-
-exports.Prisma.GraduationRankDowngradeConditionOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  downgradeRuleId: 'downgradeRuleId',
-  tuple: 'tuple'
-};
-
-exports.Prisma.RankingConditionOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  rankingId: 'rankingId',
-  tuple: 'tuple'
-};
-
-exports.Prisma.DiplomaVerificationApplicationOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  fullname: 'fullname',
-  idCardNumber: 'idCardNumber',
-  phoneNumber: 'phoneNumber',
-  email: 'email',
-  reason: 'reason',
-  originalDiplomaNumber: 'originalDiplomaNumber',
-  diplomaNumber: 'diplomaNumber',
-  trainingMajor: 'trainingMajor',
-  trainingLevel: 'trainingLevel',
-  trainingForm: 'trainingForm',
-  classification: 'classification',
-  studentId: 'studentId'
 };
 
 exports.Prisma.ScoreLinkSheetOrderByRelevanceFieldEnum = {
@@ -7510,6 +9776,10 @@ exports.Prisma.ScoreLinkSheetOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   trainingObjectTypeId: 'trainingObjectTypeId',
   note: 'note',
   decision: 'decision',
@@ -7522,6 +9792,10 @@ exports.Prisma.ScoreLinkSubjectVersionOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   scoreLinkSheetId: 'scoreLinkSheetId',
   subjectVersionId: 'subjectVersionId'
 };
@@ -7531,47 +9805,12 @@ exports.Prisma.ScoreLinkStudentOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   scoreLinkSubjectVersionId: 'scoreLinkSubjectVersionId',
   studentId: 'studentId'
-};
-
-exports.Prisma.NoteOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  content: 'content',
-  studentId: 'studentId',
-  folderId: 'folderId'
-};
-
-exports.Prisma.NoteFolderOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name',
-  icon: 'icon',
-  studentId: 'studentId',
-  parentId: 'parentId'
-};
-
-exports.Prisma.NoteTagOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name',
-  color: 'color'
-};
-
-exports.Prisma.NoteReminderOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  title: 'title',
-  noteId: 'noteId'
 };
 
 exports.Prisma.EvaluationPeriodOrderByRelevanceFieldEnum = {
@@ -7579,6 +9818,10 @@ exports.Prisma.EvaluationPeriodOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   schoolYearId: 'schoolYearId',
   overviewProblem: 'overviewProblem',
@@ -7592,6 +9835,10 @@ exports.Prisma.EvaluationStandardSetOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -7600,6 +9847,10 @@ exports.Prisma.StandardCatalogOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   standardSetId: 'standardSetId'
 };
@@ -7609,6 +9860,10 @@ exports.Prisma.CriterionCatalogOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   standardId: 'standardId',
   name: 'name'
 };
@@ -7618,6 +9873,10 @@ exports.Prisma.EvidenceCategoryOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -7626,6 +9885,10 @@ exports.Prisma.EvidenceOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   categoryId: 'categoryId',
   name: 'name',
   information: 'information',
@@ -7638,6 +9901,10 @@ exports.Prisma.EvaluationCriterionCommentOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   reviewerId: 'reviewerId',
   requirementCriterionId: 'requirementCriterionId',
   content: 'content',
@@ -7650,6 +9917,10 @@ exports.Prisma.RequirementCriterionCatalogOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   criterionCatalogId: 'criterionCatalogId',
   name: 'name',
   questions: 'questions'
@@ -7660,6 +9931,10 @@ exports.Prisma.StandardPeriodOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   periodId: 'periodId',
   name: 'name',
   opening: 'opening',
@@ -7671,6 +9946,10 @@ exports.Prisma.CriterionPeriodOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   evaluationStandardId: 'evaluationStandardId'
 };
@@ -7680,6 +9959,10 @@ exports.Prisma.AnalysisCriterionOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   criterionPeriodId: 'criterionPeriodId',
   lecturerId: 'lecturerId'
 };
@@ -7689,6 +9972,10 @@ exports.Prisma.EvaluationCriterionOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   criterionPeriodId: 'criterionPeriodId',
   lecturerId: 'lecturerId',
   reviewerId: 'reviewerId',
@@ -7704,6 +9991,10 @@ exports.Prisma.RequirementCriterionOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   analysisCriterionId: 'analysisCriterionId',
   name: 'name',
   questions: 'questions',
@@ -7716,6 +10007,10 @@ exports.Prisma.AnalysisFormEvidenceOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   requirementCriterionId: 'requirementCriterionId',
   evidenceId: 'evidenceId'
 };
@@ -7725,6 +10020,10 @@ exports.Prisma.EvaluationCouncilOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   periodId: 'periodId',
   name: 'name'
 };
@@ -7734,6 +10033,10 @@ exports.Prisma.EvaluationCouncilMemberOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   evaluationCouncilId: 'evaluationCouncilId',
   lecturerId: 'lecturerId',
   groupName: 'groupName'
@@ -7744,6 +10047,10 @@ exports.Prisma.EvidenceFileOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   path: 'path',
   mimeType: 'mimeType',
@@ -7756,6 +10063,10 @@ exports.Prisma.QuestionBankOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   subjectVersionId: 'subjectVersionId'
 };
@@ -7765,6 +10076,10 @@ exports.Prisma.QuestionOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   content: 'content',
   explanation: 'explanation',
   questionBankId: 'questionBankId',
@@ -7777,6 +10092,10 @@ exports.Prisma.MultipleChoiceOptionOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   questionId: 'questionId',
   content: 'content'
 };
@@ -7786,6 +10105,10 @@ exports.Prisma.FillInBlankSlotOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   questionId: 'questionId',
   correctAnswer: 'correctAnswer'
 };
@@ -7795,6 +10118,10 @@ exports.Prisma.OrderingItemOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   questionId: 'questionId',
   content: 'content'
 };
@@ -7804,6 +10131,10 @@ exports.Prisma.ExamOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   subjectVersionId: 'subjectVersionId',
   semesterId: 'semesterId'
 };
@@ -7813,6 +10144,10 @@ exports.Prisma.ExamRoomOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   examId: 'examId',
   roomId: 'roomId'
 };
@@ -7822,6 +10157,10 @@ exports.Prisma.ExamListOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   examRoomId: 'examRoomId',
   firstSupervisorId: 'firstSupervisorId',
   secondSupervisorId: 'secondSupervisorId'
@@ -7832,6 +10171,10 @@ exports.Prisma.ExamBankOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   examId: 'examId',
   examCode: 'examCode',
   subjectClassId: 'subjectClassId',
@@ -7844,6 +10187,10 @@ exports.Prisma.ExamBankQuestionOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   examBankId: 'examBankId',
   questionId: 'questionId'
 };
@@ -7853,6 +10200,10 @@ exports.Prisma.ExamPaperOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   examListId: 'examListId',
   studentSubjectScoreId: 'studentSubjectScoreId',
   examCode: 'examCode'
@@ -7863,6 +10214,10 @@ exports.Prisma.ExamFrameworkOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   subjectVersionId: 'subjectVersionId'
 };
@@ -7872,6 +10227,10 @@ exports.Prisma.ExamMatrixOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   examFrameworkId: 'examFrameworkId'
 };
@@ -7881,6 +10240,10 @@ exports.Prisma.KnowledgeBlockOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   examMatrixId: 'examMatrixId',
   subjectVersionId: 'subjectVersionId'
@@ -7891,6 +10254,10 @@ exports.Prisma.ConfigExamOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   knowledgeBlockId: 'knowledgeBlockId'
 };
 
@@ -7899,6 +10266,10 @@ exports.Prisma.SurveyObjectTypeOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   trainingObjectTypeId: 'trainingObjectTypeId'
 };
@@ -7908,6 +10279,10 @@ exports.Prisma.SurveyTopicOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -7916,6 +10291,10 @@ exports.Prisma.SurveyQuestionGroupOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -7924,6 +10303,10 @@ exports.Prisma.ClusterSurveyOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   surveyTopicId: 'surveyTopicId'
 };
@@ -7933,6 +10316,10 @@ exports.Prisma.SurveyOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   lectureId: 'lectureId',
   subjectClassId: 'subjectClassId',
@@ -7947,6 +10334,10 @@ exports.Prisma.SurveyQuestionOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   surveyQuestionGroupId: 'surveyQuestionGroupId'
 };
@@ -7956,6 +10347,10 @@ exports.Prisma.SpecificChoiceOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   answer: 'answer',
   surveyQuestionId: 'surveyQuestionId'
 };
@@ -7965,6 +10360,10 @@ exports.Prisma.SurveyChoiceOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   answer: 'answer',
   clusterSurveyId: 'clusterSurveyId'
 };
@@ -7974,6 +10373,10 @@ exports.Prisma.SurveySessionOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   surveyId: 'surveyId',
   profileId: 'profileId',
   studentId: 'studentId',
@@ -7985,6 +10388,10 @@ exports.Prisma.SurveyResponseOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   surveySessionId: 'surveySessionId',
   surveyQuestionId: 'surveyQuestionId',
   answerText: 'answerText',
@@ -7992,11 +10399,80 @@ exports.Prisma.SurveyResponseOrderByRelevanceFieldEnum = {
   surveyChoiceId: 'surveyChoiceId'
 };
 
+exports.Prisma.StaffOrderByRelevanceFieldEnum = {
+  id: 'id',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  userProfileId: 'userProfileId',
+  organizationId: 'organizationId',
+  staffTypeId: 'staffTypeId',
+  staffPositionId: 'staffPositionId'
+};
+
+exports.Prisma.StaffHistoryOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  userProfileId: 'userProfileId',
+  organizationId: 'organizationId',
+  staffTypeId: 'staffTypeId',
+  staffPositionId: 'staffPositionId'
+};
+
+exports.Prisma.ResearchProjectOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  title: 'title',
+  summary: 'summary',
+  objectives: 'objectives',
+  methodology: 'methodology',
+  expectedResults: 'expectedResults',
+  requirements: 'requirements',
+  supervisorId: 'supervisorId',
+  organizationId: 'organizationId'
+};
+
+exports.Prisma.StudentResearchRegistrationOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  studentId: 'studentId',
+  researchProjectId: 'researchProjectId',
+  motivation: 'motivation',
+  experience: 'experience',
+  reviewedById: 'reviewedById',
+  reviewNote: 'reviewNote'
+};
+
 exports.Prisma.AcademicWarningRuleOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   tuple: 'tuple',
   trainingCourseId: 'trainingCourseId'
 };
@@ -8006,6 +10482,10 @@ exports.Prisma.AcademicWarningOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   studentId: 'studentId',
   semesterId: 'semesterId'
 };
@@ -8015,6 +10495,10 @@ exports.Prisma.DisciplinaryWarningOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   studentId: 'studentId',
   semesterId: 'semesterId'
 };
@@ -8024,6 +10508,10 @@ exports.Prisma.DisciplinaryWarningReasonOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8032,6 +10520,10 @@ exports.Prisma.FeedbackOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   content: 'content',
   userId: 'userId'
 };
@@ -8041,6 +10533,10 @@ exports.Prisma.DM_TrinhDoHocVanOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8049,6 +10545,10 @@ exports.Prisma.DM_TrinhDoLyLuanChinhTriOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8057,6 +10557,10 @@ exports.Prisma.DM_TrinhDoQuanLyNhaNuocOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8065,6 +10569,10 @@ exports.Prisma.DM_TinhTrangHonNhanOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8073,6 +10581,10 @@ exports.Prisma.DM_QuanHeThanNhanOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8081,6 +10593,10 @@ exports.Prisma.DM_TrangThaiLamViecOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8089,6 +10605,10 @@ exports.Prisma.DM_HinhThucKhenThuongChinhQuyenOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8097,6 +10617,10 @@ exports.Prisma.DM_HinhThucKhenThuongDangOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8105,6 +10629,10 @@ exports.Prisma.DM_XepLoaiDanhGiaCanBoOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8113,6 +10641,10 @@ exports.Prisma.DM_XepLoaiDanhGiaChatLuongDangVienOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8121,6 +10653,10 @@ exports.Prisma.DM_LoaiHinhCongTacOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8129,6 +10665,10 @@ exports.Prisma.DM_TinhTrangCongTacOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8137,6 +10677,10 @@ exports.Prisma.DM_LoaiTinhTrangCongTacOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8145,6 +10689,10 @@ exports.Prisma.DM_LoaiHinhDiHocTapOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8153,6 +10701,10 @@ exports.Prisma.DM_TinhTrangDiHocTapOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8161,6 +10713,10 @@ exports.Prisma.DM_NuocCuDiHocTapOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8169,6 +10725,10 @@ exports.Prisma.DM_ChucDanhCMNVGiangVienOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8177,6 +10737,10 @@ exports.Prisma.DM_ChucDanhCMNVNghienCuuVienOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8185,6 +10749,10 @@ exports.Prisma.DM_ChucDanhCMNVKySuOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8193,6 +10761,10 @@ exports.Prisma.DM_TruongDaoTaoBacDHOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8201,6 +10773,10 @@ exports.Prisma.DM_ChuyenNganhDaoTaoBacDHOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8209,6 +10785,10 @@ exports.Prisma.DM_ChiHuyQuanLyOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8217,6 +10797,10 @@ exports.Prisma.DM_ChuyenMonKyThuatOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8225,6 +10809,10 @@ exports.Prisma.DM_SucKhoeOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8233,6 +10821,10 @@ exports.Prisma.DM_NhomMauOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8241,6 +10833,10 @@ exports.Prisma.DM_LoaiThuongTatOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8249,6 +10845,10 @@ exports.Prisma.DM_NganhHocOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8257,6 +10857,10 @@ exports.Prisma.DM_ToChucXaHoiOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8265,6 +10869,10 @@ exports.Prisma.DM_NgachOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8273,6 +10881,10 @@ exports.Prisma.DM_BacLuongOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name'
 };
 
@@ -8281,6 +10893,10 @@ exports.Prisma.TemplateFileOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   name: 'name',
   path: 'path',
   extensions: 'extensions'
@@ -8290,6 +10906,10 @@ exports.Prisma.AccessRoleGrantOrderByRelevanceFieldEnum = {
   id: 'id',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   granterId: 'granterId',
   recipientId: 'recipientId',
   sRoleId: 'sRoleId',
@@ -8301,6 +10921,10 @@ exports.Prisma.AccessPermissionGrantOrderByRelevanceFieldEnum = {
   id: 'id',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   roleGrantId: 'roleGrantId',
   sFormName: 'sFormName',
   sTen: 'sTen'
@@ -8311,6 +10935,10 @@ exports.Prisma.BlockedIpOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
   ipAddress: 'ipAddress',
   reason: 'reason'
 };
@@ -8491,24 +11119,20 @@ exports.DataSyncStatus = exports.$Enums.DataSyncStatus = {
   FAILED: 'FAILED'
 };
 
-exports.TrainingObjectTypes = exports.$Enums.TrainingObjectTypes = {
-  MILITARY: 'MILITARY',
-  CIVILIAN: 'CIVILIAN',
-  INTERNATIONAL_MILITARY: 'INTERNATIONAL_MILITARY'
+exports.ReminderRepeatType = exports.$Enums.ReminderRepeatType = {
+  NONE: 'NONE',
+  DAILY: 'DAILY',
+  WEEKLY: 'WEEKLY',
+  MONTHLY: 'MONTHLY',
+  YEARLY: 'YEARLY'
 };
 
-exports.OfficerPosition = exports.$Enums.OfficerPosition = {
-  CLASS_MONITOR: 'CLASS_MONITOR',
-  UNION_SECRETARY: 'UNION_SECRETARY',
-  UNION_LEADER: 'UNION_LEADER',
-  DEPUTY_UNION_SECRETARY: 'DEPUTY_UNION_SECRETARY'
-};
-
-exports.DiplomaTypeEnum = exports.$Enums.DiplomaTypeEnum = {
-  MASTER: 'MASTER',
-  DOCTORATE: 'DOCTORATE',
-  ENGINEER: 'ENGINEER',
-  BACHELOR: 'BACHELOR'
+exports.ScheduleRepeatType = exports.$Enums.ScheduleRepeatType = {
+  NONE: 'NONE',
+  DAILY: 'DAILY',
+  WEEKLY: 'WEEKLY',
+  MONTHLY: 'MONTHLY',
+  YEARLY: 'YEARLY'
 };
 
 exports.StudentStatus = exports.$Enums.StudentStatus = {
@@ -8556,14 +11180,6 @@ exports.NotificationPriority = exports.$Enums.NotificationPriority = {
   URGENT: 'URGENT'
 };
 
-exports.ScheduleRepeatType = exports.$Enums.ScheduleRepeatType = {
-  NONE: 'NONE',
-  DAILY: 'DAILY',
-  WEEKLY: 'WEEKLY',
-  MONTHLY: 'MONTHLY',
-  YEARLY: 'YEARLY'
-};
-
 exports.PaymentStatus = exports.$Enums.PaymentStatus = {
   PENDING: 'PENDING',
   PROCESSING: 'PROCESSING',
@@ -8571,18 +11187,109 @@ exports.PaymentStatus = exports.$Enums.PaymentStatus = {
   FAILED: 'FAILED'
 };
 
-exports.ResearchProjectStatus = exports.$Enums.ResearchProjectStatus = {
-  OPEN: 'OPEN',
-  FULL: 'FULL',
-  CLOSED: 'CLOSED',
-  COMPLETED: 'COMPLETED'
+exports.TrainingObjectTypes = exports.$Enums.TrainingObjectTypes = {
+  MILITARY: 'MILITARY',
+  CIVILIAN: 'CIVILIAN',
+  INTERNATIONAL_MILITARY: 'INTERNATIONAL_MILITARY'
 };
 
-exports.RegistrationStatus = exports.$Enums.RegistrationStatus = {
+exports.OfficerPosition = exports.$Enums.OfficerPosition = {
+  CLASS_MONITOR: 'CLASS_MONITOR',
+  UNION_SECRETARY: 'UNION_SECRETARY',
+  UNION_LEADER: 'UNION_LEADER',
+  DEPUTY_UNION_SECRETARY: 'DEPUTY_UNION_SECRETARY'
+};
+
+exports.DiplomaTypeEnum = exports.$Enums.DiplomaTypeEnum = {
+  MASTER: 'MASTER',
+  DOCTORATE: 'DOCTORATE',
+  ENGINEER: 'ENGINEER',
+  BACHELOR: 'BACHELOR'
+};
+
+exports.GraduationSessionStatus = exports.$Enums.GraduationSessionStatus = {
+  PLANNING: 'PLANNING',
+  OPEN_FOR_APPLICATION: 'OPEN_FOR_APPLICATION',
+  IN_REVIEW: 'IN_REVIEW',
+  COMPLETED: 'COMPLETED',
+  CLOSED: 'CLOSED'
+};
+
+exports.ApplicationStatus = exports.$Enums.ApplicationStatus = {
+  SUBMITTED: 'SUBMITTED',
+  IN_REVIEW: 'IN_REVIEW',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+exports.RankingContext = exports.$Enums.RankingContext = {
+  STUDYING: 'STUDYING',
+  GRADUATION: 'GRADUATION'
+};
+
+exports.CriteriaField = exports.$Enums.CriteriaField = {
+  SEMESTER_GPA: 'SEMESTER_GPA',
+  YEARLY_GPA: 'YEARLY_GPA',
+  CUMULATIVE_GPA: 'CUMULATIVE_GPA',
+  ENTRY_SCORE: 'ENTRY_SCORE',
+  COURSE_GRADE_LOWEST: 'COURSE_GRADE_LOWEST',
+  GRADUATION_COURSE_GRADE_LOWEST: 'GRADUATION_COURSE_GRADE_LOWEST',
+  SEMESTER_REGISTERED_CREDITS: 'SEMESTER_REGISTERED_CREDITS',
+  SEMESTER_PASSED_CREDITS: 'SEMESTER_PASSED_CREDITS',
+  SEMESTER_FAILED_CREDITS: 'SEMESTER_FAILED_CREDITS',
+  YEAR_FAILED_CREDITS: 'YEAR_FAILED_CREDITS',
+  FAILED_CREDITS_PERCENT: 'FAILED_CREDITS_PERCENT',
+  CUMULATIVE_PASSED_CREDITS: 'CUMULATIVE_PASSED_CREDITS',
+  CUMULATIVE_DEBT_CREDITS: 'CUMULATIVE_DEBT_CREDITS',
+  CUMULATIVE_PROGRESS_PERCENT: 'CUMULATIVE_PROGRESS_PERCENT',
+  CUMULATIVE_RETAKE_PERCENT: 'CUMULATIVE_RETAKE_PERCENT',
+  ACADEMIC_WARNING_LEVEL: 'ACADEMIC_WARNING_LEVEL',
+  DISCIPLINARY_WARNING_LEVEL: 'DISCIPLINARY_WARNING_LEVEL',
+  REPEAT_YEAR_COUNT: 'REPEAT_YEAR_COUNT',
+  SUSPENSION_COUNT: 'SUSPENSION_COUNT',
+  CONDUCT_SCORE: 'CONDUCT_SCORE',
+  HAS_PASSED_FOREIGN_LANGUAGE: 'HAS_PASSED_FOREIGN_LANGUAGE',
+  HAS_REGISTERED_FOR_SEMESTER: 'HAS_REGISTERED_FOR_SEMESTER',
+  IS_PRIORITY_STUDENT: 'IS_PRIORITY_STUDENT',
+  IS_CLASS_MONITOR_OR_LEADER: 'IS_CLASS_MONITOR_OR_LEADER',
+  IS_STUDY_DURATION_EXCEEDED: 'IS_STUDY_DURATION_EXCEEDED',
+  IS_DEBT_SUBJECT_CONSECUTIVE: 'IS_DEBT_SUBJECT_CONSECUTIVE',
+  HAS_IMPROVEMENT_REGISTRATION: 'HAS_IMPROVEMENT_REGISTRATION'
+};
+
+exports.CriteriaOperator = exports.$Enums.CriteriaOperator = {
+  GT: 'GT',
+  GTE: 'GTE',
+  LT: 'LT',
+  LTE: 'LTE',
+  EQ: 'EQ',
+  IN: 'IN'
+};
+
+exports.DiplomaVerificationStatus = exports.$Enums.DiplomaVerificationStatus = {
+  PENDING: 'PENDING',
+  IN_PROGRESS: 'IN_PROGRESS',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+exports.TrainingScoreStatus = exports.$Enums.TrainingScoreStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+exports.AcademicActionType = exports.$Enums.AcademicActionType = {
+  REPEAT_YEAR: 'REPEAT_YEAR',
+  SUSPENSION: 'SUSPENSION',
+  EXPULSION: 'EXPULSION'
+};
+
+exports.DecisionStatus = exports.$Enums.DecisionStatus = {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
   REJECTED: 'REJECTED',
-  CANCELLED: 'CANCELLED'
+  APPEALED: 'APPEALED'
 };
 
 exports.ThesisType = exports.$Enums.ThesisType = {
@@ -8634,103 +11341,10 @@ exports.SupervisorRole = exports.$Enums.SupervisorRole = {
   SINGLE: 'SINGLE'
 };
 
-exports.AcademicActionType = exports.$Enums.AcademicActionType = {
-  REPEAT_YEAR: 'REPEAT_YEAR',
-  SUSPENSION: 'SUSPENSION',
-  EXPULSION: 'EXPULSION'
-};
-
-exports.CriteriaField = exports.$Enums.CriteriaField = {
-  SEMESTER_GPA: 'SEMESTER_GPA',
-  YEARLY_GPA: 'YEARLY_GPA',
-  CUMULATIVE_GPA: 'CUMULATIVE_GPA',
-  ENTRY_SCORE: 'ENTRY_SCORE',
-  COURSE_GRADE_LOWEST: 'COURSE_GRADE_LOWEST',
-  GRADUATION_COURSE_GRADE_LOWEST: 'GRADUATION_COURSE_GRADE_LOWEST',
-  SEMESTER_REGISTERED_CREDITS: 'SEMESTER_REGISTERED_CREDITS',
-  SEMESTER_PASSED_CREDITS: 'SEMESTER_PASSED_CREDITS',
-  SEMESTER_FAILED_CREDITS: 'SEMESTER_FAILED_CREDITS',
-  YEAR_FAILED_CREDITS: 'YEAR_FAILED_CREDITS',
-  FAILED_CREDITS_PERCENT: 'FAILED_CREDITS_PERCENT',
-  CUMULATIVE_PASSED_CREDITS: 'CUMULATIVE_PASSED_CREDITS',
-  CUMULATIVE_DEBT_CREDITS: 'CUMULATIVE_DEBT_CREDITS',
-  CUMULATIVE_PROGRESS_PERCENT: 'CUMULATIVE_PROGRESS_PERCENT',
-  CUMULATIVE_RETAKE_PERCENT: 'CUMULATIVE_RETAKE_PERCENT',
-  ACADEMIC_WARNING_LEVEL: 'ACADEMIC_WARNING_LEVEL',
-  DISCIPLINARY_WARNING_LEVEL: 'DISCIPLINARY_WARNING_LEVEL',
-  REPEAT_YEAR_COUNT: 'REPEAT_YEAR_COUNT',
-  SUSPENSION_COUNT: 'SUSPENSION_COUNT',
-  CONDUCT_SCORE: 'CONDUCT_SCORE',
-  HAS_PASSED_FOREIGN_LANGUAGE: 'HAS_PASSED_FOREIGN_LANGUAGE',
-  HAS_REGISTERED_FOR_SEMESTER: 'HAS_REGISTERED_FOR_SEMESTER',
-  IS_PRIORITY_STUDENT: 'IS_PRIORITY_STUDENT',
-  IS_CLASS_MONITOR_OR_LEADER: 'IS_CLASS_MONITOR_OR_LEADER',
-  IS_STUDY_DURATION_EXCEEDED: 'IS_STUDY_DURATION_EXCEEDED',
-  IS_DEBT_SUBJECT_CONSECUTIVE: 'IS_DEBT_SUBJECT_CONSECUTIVE',
-  HAS_IMPROVEMENT_REGISTRATION: 'HAS_IMPROVEMENT_REGISTRATION'
-};
-
-exports.CriteriaOperator = exports.$Enums.CriteriaOperator = {
-  GT: 'GT',
-  GTE: 'GTE',
-  LT: 'LT',
-  LTE: 'LTE',
-  EQ: 'EQ',
-  IN: 'IN'
-};
-
-exports.DecisionStatus = exports.$Enums.DecisionStatus = {
-  PENDING: 'PENDING',
-  APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED',
-  APPEALED: 'APPEALED'
-};
-
-exports.TrainingScoreStatus = exports.$Enums.TrainingScoreStatus = {
-  PENDING: 'PENDING',
-  APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED'
-};
-
-exports.GraduationSessionStatus = exports.$Enums.GraduationSessionStatus = {
-  PLANNING: 'PLANNING',
-  OPEN_FOR_APPLICATION: 'OPEN_FOR_APPLICATION',
-  IN_REVIEW: 'IN_REVIEW',
-  COMPLETED: 'COMPLETED',
-  CLOSED: 'CLOSED'
-};
-
-exports.ApplicationStatus = exports.$Enums.ApplicationStatus = {
-  SUBMITTED: 'SUBMITTED',
-  IN_REVIEW: 'IN_REVIEW',
-  APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED'
-};
-
-exports.RankingContext = exports.$Enums.RankingContext = {
-  STUDYING: 'STUDYING',
-  GRADUATION: 'GRADUATION'
-};
-
-exports.DiplomaVerificationStatus = exports.$Enums.DiplomaVerificationStatus = {
-  PENDING: 'PENDING',
-  IN_PROGRESS: 'IN_PROGRESS',
-  APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED'
-};
-
 exports.ScoreLinkStatus = exports.$Enums.ScoreLinkStatus = {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
   REJECTED: 'REJECTED'
-};
-
-exports.ReminderRepeatType = exports.$Enums.ReminderRepeatType = {
-  NONE: 'NONE',
-  DAILY: 'DAILY',
-  WEEKLY: 'WEEKLY',
-  MONTHLY: 'MONTHLY',
-  YEARLY: 'YEARLY'
 };
 
 exports.EvaluationPeriodStatus = exports.$Enums.EvaluationPeriodStatus = {
@@ -8815,6 +11429,20 @@ exports.SurveyType = exports.$Enums.SurveyType = {
 exports.SurveyQuestionType = exports.$Enums.SurveyQuestionType = {
   ESSAY: 'ESSAY',
   SINGLE_CHOICE: 'SINGLE_CHOICE'
+};
+
+exports.ResearchProjectStatus = exports.$Enums.ResearchProjectStatus = {
+  OPEN: 'OPEN',
+  FULL: 'FULL',
+  CLOSED: 'CLOSED',
+  COMPLETED: 'COMPLETED'
+};
+
+exports.RegistrationStatus = exports.$Enums.RegistrationStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  CANCELLED: 'CANCELLED'
 };
 
 exports.FeedbackStatus = exports.$Enums.FeedbackStatus = {
@@ -8954,6 +11582,26 @@ exports.Prisma.ModelName = {
   ScoreCorrectionTicket: 'ScoreCorrectionTicket',
   ScoreCorrectionItem: 'ScoreCorrectionItem',
   DataSyncHistory: 'DataSyncHistory',
+  Note: 'Note',
+  NoteFolder: 'NoteFolder',
+  NoteTag: 'NoteTag',
+  NoteReminder: 'NoteReminder',
+  StudentPersonalEvent: 'StudentPersonalEvent',
+  Student: 'Student',
+  TrainingActivity: 'TrainingActivity',
+  StudentSemesterResult: 'StudentSemesterResult',
+  StudentYearResult: 'StudentYearResult',
+  Notification: 'Notification',
+  PersonalWorkTag: 'PersonalWorkTag',
+  IndividualSchedule: 'IndividualSchedule',
+  Lecturer: 'Lecturer',
+  LecturerHistory: 'LecturerHistory',
+  GuestTeachingRateConfig: 'GuestTeachingRateConfig',
+  GuestTeachingRate: 'GuestTeachingRate',
+  GuestTeachingPayment: 'GuestTeachingPayment',
+  LecturerType: 'LecturerType',
+  StaffType: 'StaffType',
+  StaffPosition: 'StaffPosition',
   TrainingObjectType: 'TrainingObjectType',
   PriorityObject: 'PriorityObject',
   TrainingType: 'TrainingType',
@@ -8979,25 +11627,28 @@ exports.Prisma.ModelName = {
   LoadCategory: 'LoadCategory',
   OutputStandard: 'OutputStandard',
   OutputStandardOnCurriculum: 'OutputStandardOnCurriculum',
-  Student: 'Student',
-  TrainingActivity: 'TrainingActivity',
-  StudentSemesterResult: 'StudentSemesterResult',
-  StudentYearResult: 'StudentYearResult',
-  Notification: 'Notification',
-  PersonalWorkTag: 'PersonalWorkTag',
-  IndividualSchedule: 'IndividualSchedule',
-  Lecturer: 'Lecturer',
-  LecturerHistory: 'LecturerHistory',
-  GuestTeachingRateConfig: 'GuestTeachingRateConfig',
-  GuestTeachingRate: 'GuestTeachingRate',
-  GuestTeachingPayment: 'GuestTeachingPayment',
-  LecturerType: 'LecturerType',
-  StaffType: 'StaffType',
-  StaffPosition: 'StaffPosition',
-  Staff: 'Staff',
-  StaffHistory: 'StaffHistory',
-  ResearchProject: 'ResearchProject',
-  StudentResearchRegistration: 'StudentResearchRegistration',
+  GraduationSession: 'GraduationSession',
+  StudentGraduationApplication: 'StudentGraduationApplication',
+  ApplicationDowngraded: 'ApplicationDowngraded',
+  ApplicationCheckResult: 'ApplicationCheckResult',
+  GraduationDecision: 'GraduationDecision',
+  AcademicRankingConvert: 'AcademicRankingConvert',
+  GraduationRankDowngradeRule: 'GraduationRankDowngradeRule',
+  GraduationRankDowngradeCondition: 'GraduationRankDowngradeCondition',
+  RankingCondition: 'RankingCondition',
+  DiplomaVerificationApplication: 'DiplomaVerificationApplication',
+  TrainingScoreSession: 'TrainingScoreSession',
+  StudentTrainingScore: 'StudentTrainingScore',
+  SemesterTrainingScore: 'SemesterTrainingScore',
+  SchoolYearTrainingScore: 'SchoolYearTrainingScore',
+  DocumentFile: 'DocumentFile',
+  AcademicActionConfig: 'AcademicActionConfig',
+  AcademicActionRuleSet: 'AcademicActionRuleSet',
+  AcademicActionCondition: 'AcademicActionCondition',
+  StudentAcademicDecision: 'StudentAcademicDecision',
+  Scholarship: 'Scholarship',
+  ScholarshipCriteria: 'ScholarshipCriteria',
+  ScholarshipAward: 'ScholarshipAward',
   ThesisSession: 'ThesisSession',
   ThesisProject: 'ThesisProject',
   DefenseSession: 'DefenseSession',
@@ -9015,35 +11666,9 @@ exports.Prisma.ModelName = {
   DefaultSupervisorPayAmount: 'DefaultSupervisorPayAmount',
   PaymentRecord: 'PaymentRecord',
   SupervisorPaymentRecord: 'SupervisorPaymentRecord',
-  DocumentFile: 'DocumentFile',
-  AcademicActionConfig: 'AcademicActionConfig',
-  AcademicActionRuleSet: 'AcademicActionRuleSet',
-  AcademicActionCondition: 'AcademicActionCondition',
-  StudentAcademicDecision: 'StudentAcademicDecision',
-  TrainingScoreSession: 'TrainingScoreSession',
-  StudentTrainingScore: 'StudentTrainingScore',
-  SemesterTrainingScore: 'SemesterTrainingScore',
-  SchoolYearTrainingScore: 'SchoolYearTrainingScore',
-  Scholarship: 'Scholarship',
-  ScholarshipCriteria: 'ScholarshipCriteria',
-  ScholarshipAward: 'ScholarshipAward',
-  GraduationSession: 'GraduationSession',
-  StudentGraduationApplication: 'StudentGraduationApplication',
-  ApplicationDowngraded: 'ApplicationDowngraded',
-  ApplicationCheckResult: 'ApplicationCheckResult',
-  GraduationDecision: 'GraduationDecision',
-  AcademicRankingConvert: 'AcademicRankingConvert',
-  GraduationRankDowngradeRule: 'GraduationRankDowngradeRule',
-  GraduationRankDowngradeCondition: 'GraduationRankDowngradeCondition',
-  RankingCondition: 'RankingCondition',
-  DiplomaVerificationApplication: 'DiplomaVerificationApplication',
   ScoreLinkSheet: 'ScoreLinkSheet',
   ScoreLinkSubjectVersion: 'ScoreLinkSubjectVersion',
   ScoreLinkStudent: 'ScoreLinkStudent',
-  Note: 'Note',
-  NoteFolder: 'NoteFolder',
-  NoteTag: 'NoteTag',
-  NoteReminder: 'NoteReminder',
   EvaluationPeriod: 'EvaluationPeriod',
   EvaluationStandardSet: 'EvaluationStandardSet',
   StandardCatalog: 'StandardCatalog',
@@ -9086,6 +11711,10 @@ exports.Prisma.ModelName = {
   SurveyChoice: 'SurveyChoice',
   SurveySession: 'SurveySession',
   SurveyResponse: 'SurveyResponse',
+  Staff: 'Staff',
+  StaffHistory: 'StaffHistory',
+  ResearchProject: 'ResearchProject',
+  StudentResearchRegistration: 'StudentResearchRegistration',
   AcademicWarningRule: 'AcademicWarningRule',
   AcademicWarning: 'AcademicWarning',
   DisciplinaryWarning: 'DisciplinaryWarning',

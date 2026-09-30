@@ -44,6 +44,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Config$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, key: {
                     name: "key",
                     type: "ConfigKey",
@@ -105,6 +131,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Suggestion$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, key: {
                     name: "key",
                     type: "String",
@@ -173,6 +225,32 @@ const metadata = {
                     attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -221,6 +299,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$UserProfile$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, bLaNguoiDung: {
                     name: "bLaNguoiDung",
                     type: "Boolean",
@@ -285,22 +389,6 @@ const metadata = {
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
-                    isOptional: true,
-                }, sNguoiTao: {
-                    name: "sNguoiTao",
-                    type: "String",
-                    isOptional: true,
-                }, sNguoiSua: {
-                    name: "sNguoiSua",
-                    type: "String",
-                    isOptional: true,
-                }, sThietBiTao: {
-                    name: "sThietBiTao",
-                    type: "String",
-                    isOptional: true,
-                }, sThietBiSua: {
-                    name: "sThietBiSua",
-                    type: "String",
                     isOptional: true,
                 }, avatar: {
                     name: "avatar",
@@ -1590,6 +1678,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$HocHam$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, academicRankType: {
                     name: "academicRankType",
                     type: "DM_HocHam",
@@ -1691,6 +1805,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ChucVuChinhQuyen$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, chucVuChinhQuyen: {
                     name: "chucVuChinhQuyen",
                     type: "DM_ChucVu",
@@ -1776,6 +1916,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ChucVuDang$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, chucVuDang: {
                     name: "chucVuDang",
                     type: "DM_ChucVu",
@@ -1861,6 +2027,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$HocVi$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, academicDegreeType: {
                     name: "academicDegreeType",
                     type: "DM_HocVi",
@@ -1985,6 +2177,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Relative$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -2088,6 +2306,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$TrinhDoLyLuanChinhTri$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, hinhThucDaoTao: {
                     name: "hinhThucDaoTao",
                     type: "String",
@@ -2184,6 +2428,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$TrinhDoQuanLyNhaNuoc$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, hinhThucDaoTao: {
                     name: "hinhThucDaoTao",
                     type: "String",
@@ -2280,6 +2550,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$NgoaiNgu$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, ngonNgu: {
                     name: "ngonNgu",
                     type: "DM_NgoaiNgu",
@@ -2391,6 +2687,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$TinHoc$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, hinhThucDaoTao: {
                     name: "hinhThucDaoTao",
                     type: "String",
@@ -2486,6 +2808,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$BoiDuongQuocPhongAnNinh$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -2563,6 +2911,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$CapBac$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, noiRaQuyetDinh: {
                     name: "noiRaQuyetDinh",
                     type: "String",
@@ -2654,6 +3028,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$QuaTrinhCongTac$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, tuThangNam: {
                     name: "tuThangNam",
                     type: "DateTime",
@@ -2782,6 +3182,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$QuaTrinhCuDiCongTac$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, tuThangNam: {
                     name: "tuThangNam",
                     type: "DateTime",
@@ -2917,6 +3343,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$QuaTrinhCuDiDaoTao$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, ten: {
                     name: "ten",
                     type: "String",
@@ -3030,6 +3482,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$KhenThuong$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, hinhThucKhenThuongId: {
                     name: "hinhThucKhenThuongId",
                     type: "String",
@@ -3130,6 +3608,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$KyLuat$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, hinhThucKyLuat: {
                     name: "hinhThucKyLuat",
                     type: "String",
@@ -3219,6 +3723,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DoiTuongChinhSach$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, tenDoiTuong: {
                     name: "tenDoiTuong",
                     type: "String",
@@ -3300,6 +3830,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$KeKhaiTaiSan$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, loai: {
                     name: "loai",
                     type: "String",
@@ -3377,6 +3933,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$TiengDanToc$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, danToc: {
                     name: "danToc",
                     type: "DM_DanToc",
@@ -3470,6 +4052,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ChienDau$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, cuongVi: {
                     name: "cuongVi",
                     type: "String",
@@ -3563,6 +4171,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$NuocNgoai$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, tenNuoc: {
                     name: "tenNuoc",
                     type: "DM_QuocGia",
@@ -3654,6 +4288,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ThuongTat$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, loai: {
                     name: "loai",
                     type: "DM_LoaiThuongTat",
@@ -3752,6 +4412,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DanhHieu$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, ten: {
                     name: "ten",
                     type: "String",
@@ -3825,6 +4511,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$QuaTrinhHocTap$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, tenTruong: {
                     name: "tenTruong",
                     type: "DM_TruongDaoTaoBacDH",
@@ -3947,6 +4659,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ToChucXaHoi$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, ten: {
                     name: "ten",
                     type: "DM_ToChucXaHoi",
@@ -4037,6 +4775,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$QuaTrinhLuong$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, tuNgay: {
                     name: "tuNgay",
                     type: "DateTime",
@@ -4151,6 +4915,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Group$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -4224,6 +5014,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Role$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -4292,6 +5108,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Permission$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -4363,6 +5205,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ChatBotConfig$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -4425,6 +5293,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$UserSession$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -4494,6 +5388,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Document$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, title: {
                     name: "title",
                     type: "String",
@@ -4626,6 +5546,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DocumentTopic$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, document: {
                     name: "document",
                     type: "Document",
@@ -4706,6 +5652,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$FAQ$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, question: {
                     name: "question",
                     type: "String",
@@ -4819,6 +5791,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Prompt$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, prompt: {
                     name: "prompt",
                     type: "String",
@@ -4897,6 +5895,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Conversation$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -5005,6 +6029,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ConversationFeedback$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, rating: {
                     name: "rating",
                     type: "FeedbackRating",
@@ -5097,6 +6147,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Message$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, conversationId: {
                     name: "conversationId",
                     type: "String",
@@ -5176,6 +6252,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$CitationMessage$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, content: {
                     name: "content",
                     type: "String",
@@ -5258,6 +6360,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Topic$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -5343,6 +6471,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DocumentClassification$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -8191,6 +9345,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$PlanTraining$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, trainingObjectType: {
                     name: "trainingObjectType",
                     type: "TrainingObjectType",
@@ -8284,6 +9464,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$PlanTrainingPractice$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, trainingObjectType: {
                     name: "trainingObjectType",
                     type: "TrainingObjectType",
@@ -8382,6 +9588,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$PlanTrainingSubject$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, planTraining: {
                     name: "planTraining",
                     type: "PlanTraining",
@@ -8472,6 +9704,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$StudentScoreConvert$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -8548,6 +9806,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$SubjectScoreConvert$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, studentScoreConvert: {
                     name: "studentScoreConvert",
                     type: "StudentScoreConvert",
@@ -8632,6 +9916,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$StudentSubjectScore$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, subjectClass: {
                     name: "subjectClass",
                     type: "SubjectClass",
@@ -8874,6 +10184,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$StudentSubjectScoreHistory$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, studentSubjectScore: {
                     name: "studentSubjectScore",
                     type: "StudentSubjectScore",
@@ -9003,6 +10339,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$StudentResearchTopic$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, studentSubjectScore: {
                     name: "studentSubjectScore",
                     type: "StudentSubjectScore",
@@ -9132,6 +10494,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$StudentInternship$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, studentSubjectScore: {
                     name: "studentSubjectScore",
                     type: "StudentSubjectScore",
@@ -9262,6 +10650,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ArchivedCertificateOnStudentSubjectScore$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, studentSubjectScore: {
                     name: "studentSubjectScore",
                     type: "StudentSubjectScore",
@@ -9342,6 +10756,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ArchivedCertificate$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, certificate: {
                     name: "certificate",
                     type: "Certificate",
@@ -9481,6 +10921,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ArchivedCertificateSubjectScore$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, finalScore: {
                     name: "finalScore",
                     type: "Float",
@@ -9565,6 +11031,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ArchivedAwardOnStudentSubjectScore$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, studentSubjectScore: {
                     name: "studentSubjectScore",
                     type: "StudentSubjectScore",
@@ -9649,6 +11141,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ArchivedAward$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, award: {
                     name: "award",
                     type: "Award",
@@ -9749,6 +11267,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$SchoolYear$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -9852,6 +11396,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Semester$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -10041,6 +11611,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Milestone$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -10122,6 +11718,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$TrainingLanguage$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -10188,6 +11810,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$TrainingCourse$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -10497,6 +12145,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$TrainingCourseRegulation$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, trainingCourse: {
                     name: "trainingCourse",
                     type: "TrainingCourse",
@@ -10567,6 +12241,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$FixedClass$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -10817,6 +12517,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Curriculum$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, code: {
                     name: "code",
                     type: "String",
@@ -10948,6 +12674,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$CurriculumVersion$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, code: {
                     name: "code",
                     type: "String",
@@ -11237,6 +12989,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Subject$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -11338,6 +13116,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$SubjectVersionCategory$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -11393,6 +13197,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$SubjectVersion$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, code: {
                     name: "code",
                     type: "String",
@@ -11707,6 +13537,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$SubjectVersionHistory$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, subjectVersion: {
                     name: "subjectVersion",
                     type: "SubjectVersion",
@@ -11791,6 +13647,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$EquivalencyGroup$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, subjects: {
                     name: "subjects",
                     type: "SubjectInGroup",
@@ -11848,6 +13730,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$SubjectInGroup$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, subject: {
                     name: "subject",
                     type: "SubjectVersion",
@@ -11933,6 +13841,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$TrainingBlockSubject$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, subject: {
                     name: "subject",
                     type: "SubjectVersion",
@@ -12030,6 +13964,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ClassRegisterSessionCredit$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, classRegisterSession: {
                     name: "classRegisterSession",
                     type: "ClassRegisterSession",
@@ -12122,6 +14082,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ClassRegisterSession$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -12230,6 +14216,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ClassRegisterLogs$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, classRegisterSession: {
                     name: "classRegisterSession",
                     type: "ClassRegisterSession",
@@ -12331,6 +14343,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ClassRegisterAttempt$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, classRegisterSession: {
                     name: "classRegisterSession",
                     type: "ClassRegisterSession",
@@ -12440,6 +14478,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$SubjectClass$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, code: {
                     name: "code",
                     type: "String",
@@ -12712,6 +14776,12 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'subjectClass',
+                }, studentPersonalEvents: {
+                    name: "studentPersonalEvents",
+                    type: "StudentPersonalEvent",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subjectClass',
                 }, thesisProjects: {
                     name: "thesisProjects",
                     type: "ThesisProject",
@@ -12826,6 +14896,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$SubjectClassAttendance$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, time: {
                     name: "time",
                     type: "DateTime",
@@ -12934,6 +15030,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$SubjectClassAttendanceStudent$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, subjectClassAttendance: {
                     name: "subjectClassAttendance",
                     type: "SubjectClassAttendance",
@@ -13019,6 +15141,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$SubjectClassHistory$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, subjectClass: {
                     name: "subjectClass",
                     type: "SubjectClass",
@@ -13131,6 +15279,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$SubjectClassTime$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, subjectClass: {
                     name: "subjectClass",
                     type: "SubjectClass",
@@ -13204,6 +15378,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ClassSchedule$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, subjectClass: {
                     name: "subjectClass",
                     type: "SubjectClass",
@@ -13351,7 +15551,7 @@ const metadata = {
                     fields: ["originalScheduleId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null, null] }, { "name": "map", "value": "ClassSchedule_subjectClass_date_idx" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         scoreCorrectionTicket: {
             name: 'ScoreCorrectionTicket', fields: {
@@ -13392,6 +15592,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ScoreCorrectionTicket$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, trainingObjectType: {
                     name: "trainingObjectType",
                     type: "TrainingObjectType",
@@ -13486,6 +15712,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ScoreCorrectionItem$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, ticket: {
                     name: "ticket",
                     type: "ScoreCorrectionTicket",
@@ -13590,6 +15842,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DataSyncHistory$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, type: {
                     name: "type",
                     type: "DataSyncType",
@@ -13664,8 +15942,8 @@ const metadata = {
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
-        trainingObjectType: {
-            name: 'TrainingObjectType', fields: {
+        note: {
+            name: 'Note', fields: {
                 id: {
                     name: "id",
                     type: "String",
@@ -13702,1264 +15980,195 @@ const metadata = {
                     type: "String",
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$TrainingObjectType$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, type: {
-                    name: "type",
-                    type: "TrainingObjectTypes",
-                }, trainingForm: {
-                    name: "trainingForm",
-                    type: "TrainingForm",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'trainingObjectType',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingFormId" },
-                }, trainingFormId: {
-                    name: "trainingFormId",
+                    defaultValueProvider: $default$Note$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
                     type: "String",
                     isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'trainingForm',
-                }, trainingLevel: {
-                    name: "trainingLevel",
-                    type: "TrainingLevel",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'trainingObjectType',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingLevelId" },
-                }, trainingLevelId: {
-                    name: "trainingLevelId",
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
                     type: "String",
                     isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'trainingLevel',
-                }, trainingCourse: {
-                    name: "trainingCourse",
-                    type: "TrainingCourse",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingObjectType',
-                }, curriculum: {
-                    name: "curriculum",
-                    type: "Curriculum",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingObjectType',
-                }, curriculumVersion: {
-                    name: "curriculumVersion",
-                    type: "CurriculumVersion",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingObjectType',
-                }, trainingMajors: {
-                    name: "trainingMajors",
-                    type: "TrainingMajorOnTrainingObjectType",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingObjectType',
-                }, trainingFields: {
-                    name: "trainingFields",
-                    type: "TrainingFieldOnTrainingObjectType",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingObjectType',
-                }, trainingScoreSession: {
-                    name: "trainingScoreSession",
-                    type: "TrainingScoreSession",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingObjectType',
-                }, subjectClass: {
-                    name: "subjectClass",
-                    type: "SubjectClass",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingObjectType',
-                }, graduationSession: {
-                    name: "graduationSession",
-                    type: "GraduationSession",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingObjectType',
-                }, subjectVersion: {
-                    name: "subjectVersion",
-                    type: "SubjectVersion",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingObjectType',
-                }, planTraining: {
-                    name: "planTraining",
-                    type: "PlanTraining",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingObjectType',
-                }, thesisSession: {
-                    name: "thesisSession",
-                    type: "ThesisSession",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingObjectType',
-                }, trainingBlocks: {
-                    name: "trainingBlocks",
-                    type: "TrainingBlock",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingObjectType',
-                }, vaiTro: {
-                    name: "vaiTro",
-                    type: "String",
-                    isArray: true,
-                }, surveyObjectType: {
-                    name: "surveyObjectType",
-                    type: "SurveyObjectType",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingObjectType',
-                }, survey: {
-                    name: "survey",
-                    type: "Survey",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingObjectType',
-                }, scoreCorrectionTicket: {
-                    name: "scoreCorrectionTicket",
-                    type: "ScoreCorrectionTicket",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingObjectType',
-                }, scoreLinkSheet: {
-                    name: "scoreLinkSheet",
-                    type: "ScoreLinkSheet",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingObjectType',
-                }, availableTrainingTime: {
-                    name: "availableTrainingTime",
-                    type: "AvailableTrainingTime",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingObjectType',
-                }, planTrainingPractice: {
-                    name: "planTrainingPractice",
-                    type: "PlanTrainingPractice",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingObjectType',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, name: {
-                    name: "name",
-                    fields: ["name"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        priorityObject: {
-            name: 'PriorityObject', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
                     type: "String",
                     isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
                     type: "String",
                     isOptional: true,
+                }, content: {
+                    name: "content",
+                    type: "String",
                     attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$PriorityObject$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, students: {
-                    name: "students",
+                }, isPinned: {
+                    name: "isPinned",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, student: {
+                    name: "student",
                     type: "Student",
                     isDataModel: true,
-                    isArray: true,
-                    backLink: 'priorityObject',
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'notes',
                     isRelationOwner: true,
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, name: {
-                    name: "name",
-                    fields: ["name"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        trainingType: {
-            name: 'TrainingType', fields: {
-                id: {
-                    name: "id",
+                    foreignKeyMapping: { "id": "studentId" },
+                }, studentId: {
+                    name: "studentId",
                     type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$TrainingType$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, curriculumVersion: {
-                    name: "curriculumVersion",
-                    type: "CurriculumVersion",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingType',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, name: {
-                    name: "name",
-                    fields: ["name"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        trainingLevel: {
-            name: 'TrainingLevel', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$TrainingLevel$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, curriculumVersion: {
-                    name: "curriculumVersion",
-                    type: "CurriculumVersion",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingLevel',
-                }, trainingObjectType: {
-                    name: "trainingObjectType",
-                    type: "TrainingObjectType",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingLevel',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, name: {
-                    name: "name",
-                    fields: ["name"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        trainingForm: {
-            name: 'TrainingForm', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$TrainingForm$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, trainingObjectType: {
-                    name: "trainingObjectType",
-                    type: "TrainingObjectType",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingForm',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, name: {
-                    name: "name",
-                    fields: ["name"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        trainingLocation: {
-            name: 'TrainingLocation', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$TrainingLocation$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, dM_Tinh: {
-                    name: "dM_Tinh",
-                    type: "DM_Tinh",
+                    isForeignKey: true,
+                    relationField: 'student',
+                }, folder: {
+                    name: "folder",
+                    type: "NoteFolder",
                     isDataModel: true,
                     isOptional: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'trainingLocation',
+                    backLink: 'notes',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "Id": "dM_TinhId" },
-                }, dM_TinhId: {
-                    name: "dM_TinhId",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }],
-                    isForeignKey: true,
-                    relationField: 'dM_Tinh',
-                }, dM_Tinh_New: {
-                    name: "dM_Tinh_New",
-                    type: "DM_Tinh_New",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'trainingLocation',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "Id": "dM_Tinh_NewId" },
-                }, dM_Tinh_NewId: {
-                    name: "dM_Tinh_NewId",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }],
-                    isForeignKey: true,
-                    relationField: 'dM_Tinh_New',
-                }, students: {
-                    name: "students",
-                    type: "Student",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingLocation',
-                }, buildings: {
-                    name: "buildings",
-                    type: "Building",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingLocation',
-                }, subjectClasses: {
-                    name: "subjectClasses",
-                    type: "SubjectClass",
-                    isDataModel: true,
-                    isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ClassTrainingLocation" }] }],
-                    backLink: 'trainingLocation',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, name: {
-                    name: "name",
-                    fields: ["name"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        building: {
-            name: 'Building', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$Building$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, floor: {
-                    name: "floor",
-                    type: "Int",
-                    isOptional: true,
-                }, trainingLocation: {
-                    name: "trainingLocation",
-                    type: "TrainingLocation",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'buildings',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingLocationId" },
-                }, trainingLocationId: {
-                    name: "trainingLocationId",
+                    foreignKeyMapping: { "id": "folderId" },
+                }, folderId: {
+                    name: "folderId",
                     type: "String",
                     isOptional: true,
                     isForeignKey: true,
-                    relationField: 'trainingLocation',
-                }, rooms: {
-                    name: "rooms",
-                    type: "Room",
+                    relationField: 'folder',
+                }, tags: {
+                    name: "tags",
+                    type: "NoteTag",
                     isDataModel: true,
                     isArray: true,
-                    backLink: 'building',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        room: {
-            name: 'Room', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$Room$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, trainingRoom: {
-                    name: "trainingRoom",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, computerRoom: {
-                    name: "computerRoom",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                }, laboratoryRoom: {
-                    name: "laboratoryRoom",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                }, examRoom: {
-                    name: "examRoom",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                }, capacity: {
-                    name: "capacity",
-                    type: "Int",
-                }, examCapacity: {
-                    name: "examCapacity",
-                    type: "Int",
-                    isOptional: true,
-                }, building: {
-                    name: "building",
-                    type: "Building",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'rooms',
+                    backLink: 'notes',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "buildingId" },
-                }, buildingId: {
-                    name: "buildingId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'building',
-                }, subjectClasses: {
-                    name: "subjectClasses",
-                    type: "SubjectClass",
-                    isDataModel: true,
-                    isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ClassRoom" }] }],
-                    backLink: 'room',
-                }, defenseRooms: {
-                    name: "defenseRooms",
-                    type: "SubjectClass",
-                    isDataModel: true,
-                    isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DefenseRooms" }] }],
-                    backLink: 'defenseRooms',
-                }, thesisProject: {
-                    name: "thesisProject",
-                    type: "ThesisProject",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'room',
-                }, classSchedules: {
-                    name: "classSchedules",
-                    type: "ClassSchedule",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'room',
-                }, examRooms: {
-                    name: "examRooms",
-                    type: "ExamRoom",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'room',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        trainingField: {
-            name: 'TrainingField', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$TrainingField$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, englishName: {
-                    name: "englishName",
-                    type: "String",
-                }, publishDate: {
-                    name: "publishDate",
-                    type: "DateTime",
-                }, decisionNo: {
-                    name: "decisionNo",
-                    type: "String",
-                    isOptional: true,
-                }, organization: {
-                    name: "organization",
-                    type: "DM_DonVi",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'trainingFields',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "Id": "organizationId" },
-                }, organizationId: {
-                    name: "organizationId",
-                    type: "String",
-                    attributes: [{ "name": "@db.Uuid", "args": [] }],
-                    isForeignKey: true,
-                    relationField: 'organization',
-                }, trainingObjectTypes: {
-                    name: "trainingObjectTypes",
-                    type: "TrainingFieldOnTrainingObjectType",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingField',
-                }, trainingMajors: {
-                    name: "trainingMajors",
-                    type: "TrainingMajor",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingField',
-                }, curriculum: {
-                    name: "curriculum",
-                    type: "Curriculum",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingField',
-                }, surveyObjectTypes: {
-                    name: "surveyObjectTypes",
-                    type: "SurveyObjectType",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingFields',
-                    isRelationOwner: true,
-                }, documentFiles: {
-                    name: "documentFiles",
+                }, attachments: {
+                    name: "attachments",
                     type: "DocumentFile",
                     isDataModel: true,
                     isArray: true,
-                    backLink: 'trainingField',
-                }, students: {
-                    name: "students",
+                    backLink: 'note',
+                }, reminders: {
+                    name: "reminders",
+                    type: "NoteReminder",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'note',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        noteFolder: {
+            name: 'NoteFolder', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$NoteFolder$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, icon: {
+                    name: "icon",
+                    type: "String",
+                    isOptional: true,
+                }, sortOrder: {
+                    name: "sortOrder",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, student: {
+                    name: "student",
                     type: "Student",
                     isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingField',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        trainingFieldOnTrainingObjectType: {
-            name: 'TrainingFieldOnTrainingObjectType', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$TrainingFieldOnTrainingObjectType$createdBy,
-                }, trainingField: {
-                    name: "trainingField",
-                    type: "TrainingField",
-                    isDataModel: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'trainingObjectTypes',
+                    backLink: 'noteFolders',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingFieldId" },
-                }, trainingFieldId: {
-                    name: "trainingFieldId",
+                    foreignKeyMapping: { "id": "studentId" },
+                }, studentId: {
+                    name: "studentId",
                     type: "String",
                     isForeignKey: true,
-                    relationField: 'trainingField',
-                }, trainingObjectType: {
-                    name: "trainingObjectType",
-                    type: "TrainingObjectType",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'trainingFields',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
-                }, trainingObjectTypeId: {
-                    name: "trainingObjectTypeId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'trainingObjectType',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, trainingFieldId_trainingObjectTypeId: {
-                    name: "trainingFieldId_trainingObjectTypeId",
-                    fields: ["trainingFieldId", "trainingObjectTypeId"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        trainingMajor: {
-            name: 'TrainingMajor', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$TrainingMajor$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, englishName: {
-                    name: "englishName",
-                    type: "String",
-                    isOptional: true,
-                }, shortName: {
-                    name: "shortName",
-                    type: "String",
-                    isOptional: true,
-                }, summary: {
-                    name: "summary",
-                    type: "String",
-                    isOptional: true,
-                }, numberCreditsMajor: {
-                    name: "numberCreditsMajor",
-                    type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
-                }, numberCreditsRequired: {
-                    name: "numberCreditsRequired",
-                    type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
-                }, numberCreditsElective: {
-                    name: "numberCreditsElective",
-                    type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
-                }, organization: {
-                    name: "organization",
-                    type: "DM_DonVi",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "organization" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'trainingMajors',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "Id": "organizationId" },
-                }, organizationId: {
-                    name: "organizationId",
-                    type: "String",
-                    attributes: [{ "name": "@db.Uuid", "args": [] }],
-                    isForeignKey: true,
-                    relationField: 'organization',
-                }, secondOrganization: {
-                    name: "secondOrganization",
-                    type: "DM_DonVi",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "secondOrganization" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'secondTrainingMajors',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "Id": "secondOrganizationId" },
-                }, secondOrganizationId: {
-                    name: "secondOrganizationId",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }],
-                    isForeignKey: true,
-                    relationField: 'secondOrganization',
-                }, thirdOrganization: {
-                    name: "thirdOrganization",
-                    type: "DM_DonVi",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "thirdOrganization" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'thirdTrainingMajors',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "Id": "thirdOrganizationId" },
-                }, thirdOrganizationId: {
-                    name: "thirdOrganizationId",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }],
-                    isForeignKey: true,
-                    relationField: 'thirdOrganization',
-                }, trainingField: {
-                    name: "trainingField",
-                    type: "TrainingField",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'trainingMajors',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingFieldId" },
-                }, trainingFieldId: {
-                    name: "trainingFieldId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'trainingField',
-                }, trainingObjectTypes: {
-                    name: "trainingObjectTypes",
-                    type: "TrainingMajorOnTrainingObjectType",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingMajor',
-                }, curriculum: {
-                    name: "curriculum",
-                    type: "Curriculum",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingMajor',
-                }, graduationDecision: {
-                    name: "graduationDecision",
-                    type: "GraduationDecision",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingMajor',
-                }, expert: {
-                    name: "expert",
-                    type: "Expert",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'major',
-                    isRelationOwner: true,
-                }, studentGraduationApplication: {
-                    name: "studentGraduationApplication",
-                    type: "StudentGraduationApplication",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingMajor',
-                }, surveyObjectTypes: {
-                    name: "surveyObjectTypes",
-                    type: "SurveyObjectType",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingMajors',
-                    isRelationOwner: true,
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        trainingMajorOnTrainingObjectType: {
-            name: 'TrainingMajorOnTrainingObjectType', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$TrainingMajorOnTrainingObjectType$createdBy,
-                }, trainingMajor: {
-                    name: "trainingMajor",
-                    type: "TrainingMajor",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'trainingObjectTypes',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingMajorId" },
-                }, trainingMajorId: {
-                    name: "trainingMajorId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'trainingMajor',
-                }, trainingObjectType: {
-                    name: "trainingObjectType",
-                    type: "TrainingObjectType",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'trainingMajors',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
-                }, trainingObjectTypeId: {
-                    name: "trainingObjectTypeId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'trainingObjectType',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, trainingMajorId_trainingObjectTypeId: {
-                    name: "trainingMajorId_trainingObjectTypeId",
-                    fields: ["trainingMajorId", "trainingObjectTypeId"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        trainingBlock: {
-            name: 'TrainingBlock', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$TrainingBlock$createdBy,
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, trainingObjectType: {
-                    name: "trainingObjectType",
-                    type: "TrainingObjectType",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'trainingBlocks',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
-                }, trainingObjectTypeId: {
-                    name: "trainingObjectTypeId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'trainingObjectType',
-                }, isNationalDefense: {
-                    name: "isNationalDefense",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                }, priority: {
-                    name: "priority",
-                    type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    relationField: 'student',
                 }, parent: {
                     name: "parent",
-                    type: "TrainingBlock",
+                    type: "NoteFolder",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ParentChild" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "FolderHierarchy" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'children',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "parentId" },
@@ -14971,173 +16180,17 @@ const metadata = {
                     relationField: 'parent',
                 }, children: {
                     name: "children",
-                    type: "TrainingBlock",
+                    type: "NoteFolder",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ParentChild" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "FolderHierarchy" }] }],
                     backLink: 'parent',
-                }, curriculumVersions: {
-                    name: "curriculumVersions",
-                    type: "TrainingBlockOnCurriculumVersion",
+                }, notes: {
+                    name: "notes",
+                    type: "Note",
                     isDataModel: true,
                     isArray: true,
-                    backLink: 'trainingBlock',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, trainingObjectTypeId_name: {
-                    name: "trainingObjectTypeId_name",
-                    fields: ["trainingObjectTypeId", "name"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        trainingBlockOnCurriculumVersion: {
-            name: 'TrainingBlockOnCurriculumVersion', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$TrainingBlockOnCurriculumVersion$createdBy,
-                }, trainingBlock: {
-                    name: "trainingBlock",
-                    type: "TrainingBlock",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'curriculumVersions',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingBlockId" },
-                }, trainingBlockId: {
-                    name: "trainingBlockId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'trainingBlock',
-                }, curriculumVersion: {
-                    name: "curriculumVersion",
-                    type: "CurriculumVersion",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'trainingBlocks',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "curriculumVersionId" },
-                }, curriculumVersionId: {
-                    name: "curriculumVersionId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'curriculumVersion',
-                }, priority: {
-                    name: "priority",
-                    type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
-                }, electiveCreditsRequired: {
-                    name: "electiveCreditsRequired",
-                    type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
-                }, subjects: {
-                    name: "subjects",
-                    type: "TrainingBlockSubject",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingBlockOnCurriculumVersion',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, trainingBlockId_curriculumVersionId: {
-                    name: "trainingBlockId_curriculumVersionId",
-                    fields: ["trainingBlockId", "curriculumVersionId"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        trainingTime: {
-            name: 'TrainingTime', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$TrainingTime$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, curriculumVersion: {
-                    name: "curriculumVersion",
-                    type: "CurriculumVersion",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingTime',
+                    backLink: 'folder',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -15150,8 +16203,8 @@ const metadata = {
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
-        availableTrainingTime: {
-            name: 'AvailableTrainingTime', fields: {
+        noteTag: {
+            name: 'NoteTag', fields: {
                 id: {
                     name: "id",
                     type: "String",
@@ -15188,437 +16241,48 @@ const metadata = {
                     type: "String",
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$AvailableTrainingTime$createdBy,
-                }, duration: {
-                    name: "duration",
-                    type: "Float",
-                }, trainingObjectType: {
-                    name: "trainingObjectType",
-                    type: "TrainingObjectType",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'availableTrainingTime',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
-                }, trainingObjectTypeId: {
-                    name: "trainingObjectTypeId",
+                    defaultValueProvider: $default$NoteTag$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
                     type: "String",
                     isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'trainingObjectType',
-                }, semester: {
-                    name: "semester",
-                    type: "Semester",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'availableTrainingTime',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "semesterId" },
-                }, semesterId: {
-                    name: "semesterId",
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
                     type: "String",
                     isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'semester',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        certificate: {
-            name: 'Certificate', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
+                }, dNgayTao: {
+                    name: "dNgayTao",
                     type: "DateTime",
                     isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$Certificate$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, englishName: {
-                    name: "englishName",
-                    type: "String",
-                    isOptional: true,
-                }, outputStandard: {
-                    name: "outputStandard",
-                    type: "OutputStandard",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'certificates',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "outputStandardId" },
-                }, outputStandardId: {
-                    name: "outputStandardId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'outputStandard',
-                }, archivedCertificate: {
-                    name: "archivedCertificate",
-                    type: "ArchivedCertificate",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'certificate',
-                }, subjects: {
-                    name: "subjects",
-                    type: "CertificateOnSubject",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'certificate',
-                }, subjectVersions: {
-                    name: "subjectVersions",
-                    type: "SubjectVersion",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'certificate',
-                    isRelationOwner: true,
-                }, scoreThreshold: {
-                    name: "scoreThreshold",
-                    type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 5 }] }],
-                }, isUsingScore: {
-                    name: "isUsingScore",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        certificateOnSubject: {
-            name: 'CertificateOnSubject', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
                     type: "DateTime",
                     isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
                     type: "String",
                     isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$CertificateOnSubject$createdBy,
-                }, finalScore: {
-                    name: "finalScore",
-                    type: "Float",
-                    attributes: [{ "name": "@gte", "args": [{ "name": "value", "value": 0 }, { "name": "message", "value": "Điểm tối thiểu là 0" }] }, { "name": "@lte", "args": [{ "name": "value", "value": 10 }, { "name": "message", "value": "Điểm tối đa là 10" }] }],
-                }, certificate: {
-                    name: "certificate",
-                    type: "Certificate",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'subjects',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "certificateId" },
-                }, certificateId: {
-                    name: "certificateId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'certificate',
-                }, subject: {
-                    name: "subject",
-                    type: "Subject",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'certificateOnSubject',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "subjectId" },
-                }, subjectId: {
-                    name: "subjectId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'subject',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        award: {
-            name: 'Award', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
                     type: "String",
                     isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$Award$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, englishName: {
-                    name: "englishName",
-                    type: "String",
-                    isOptional: true,
-                }, bonusScore: {
-                    name: "bonusScore",
-                    type: "Float",
-                }, subjects: {
-                    name: "subjects",
-                    type: "Subject",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'awardOnSubject',
-                    isRelationOwner: true,
-                }, archivedAward: {
-                    name: "archivedAward",
-                    type: "ArchivedAward",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'award',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        officerBonusScore: {
-            name: 'OfficerBonusScore', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$OfficerBonusScore$createdBy,
-                }, position: {
-                    name: "position",
-                    type: "OfficerPosition",
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, bonusScore: {
-                    name: "bonusScore",
-                    type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }, { "name": "@gte", "args": [{ "name": "value", "value": 0 }, { "name": "message", "value": "Điểm tối thiểu là 0" }] }, { "name": "@lte", "args": [{ "name": "value", "value": 10 }, { "name": "message", "value": "Điểm tối đa là 10" }] }],
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, position: {
-                    name: "position",
-                    fields: ["position"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        diplomaType: {
-            name: 'DiplomaType', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$DiplomaType$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
                     attributes: [{ "name": "@unique", "args": [] }],
-                }, englishName: {
-                    name: "englishName",
+                }, color: {
+                    name: "color",
                     type: "String",
                     isOptional: true,
-                }, type: {
-                    name: "type",
-                    type: "DiplomaTypeEnum",
-                }, curriculumVersion: {
-                    name: "curriculumVersion",
-                    type: "CurriculumVersion",
+                }, notes: {
+                    name: "notes",
+                    type: "Note",
                     isDataModel: true,
                     isArray: true,
-                    backLink: 'diplomaType',
-                }, graduationDecision: {
-                    name: "graduationDecision",
-                    type: "GraduationDecision",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'diplomaType',
-                }, studentGraduationApplication: {
-                    name: "studentGraduationApplication",
-                    type: "StudentGraduationApplication",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'diplomaType',
+                    backLink: 'tags',
+                    isRelationOwner: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -15634,8 +16298,8 @@ const metadata = {
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
-        scoreConvert: {
-            name: 'ScoreConvert', fields: {
+        noteReminder: {
+            name: 'NoteReminder', fields: {
                 id: {
                     name: "id",
                     type: "String",
@@ -15672,112 +16336,69 @@ const metadata = {
                     type: "String",
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$ScoreConvert$createdBy,
-                }, classification: {
-                    name: "classification",
+                    defaultValueProvider: $default$NoteReminder$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
                     type: "String",
-                }, base10Min: {
-                    name: "base10Min",
-                    type: "Float",
-                }, base10Max: {
-                    name: "base10Max",
-                    type: "Float",
-                }, letter: {
-                    name: "letter",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
                     type: "String",
-                }, base4: {
-                    name: "base4",
-                    type: "Float",
-                }, pass: {
-                    name: "pass",
-                    type: "Boolean",
-                }, improvementRegister: {
-                    name: "improvementRegister",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, title: {
+                    name: "title",
+                    type: "String",
+                }, reminderTime: {
+                    name: "reminderTime",
+                    type: "DateTime",
+                }, isCompleted: {
+                    name: "isCompleted",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                }, trainingCourse: {
-                    name: "trainingCourse",
-                    type: "TrainingCourse",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'scoreConverts',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingCourseId" },
-                }, trainingCourseId: {
-                    name: "trainingCourseId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'trainingCourse',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        loadCategory: {
-            name: 'LoadCategory', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
+                }, completedAt: {
+                    name: "completedAt",
                     type: "DateTime",
                     isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
+                }, repeatType: {
+                    name: "repeatType",
+                    type: "ReminderRepeatType",
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$LoadCategory$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, unit: {
-                    name: "unit",
-                    type: "String",
-                }, standardHours: {
-                    name: "standardHours",
-                    type: "Float",
-                }, category: {
-                    name: "category",
-                    type: "String",
+                }, isNotified: {
+                    name: "isNotified",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, note: {
                     name: "note",
+                    type: "Note",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
+                    backLink: 'reminders',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "noteId" },
+                }, noteId: {
+                    name: "noteId",
                     type: "String",
-                    isOptional: true,
-                }, isOverageCalculated: {
-                    name: "isOverageCalculated",
-                    type: "Boolean",
+                    isForeignKey: true,
+                    relationField: 'note',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -15790,8 +16411,8 @@ const metadata = {
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
-        outputStandard: {
-            name: 'OutputStandard', fields: {
+        studentPersonalEvent: {
+            name: 'StudentPersonalEvent', fields: {
                 id: {
                     name: "id",
                     type: "String",
@@ -15828,114 +16449,104 @@ const metadata = {
                     type: "String",
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$OutputStandard$createdBy,
-                }, name: {
-                    name: "name",
+                    defaultValueProvider: $default$StudentPersonalEvent$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
                     type: "String",
-                }, certificates: {
-                    name: "certificates",
-                    type: "Certificate",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, student: {
+                    name: "student",
+                    type: "Student",
                     isDataModel: true,
-                    isArray: true,
-                    backLink: 'outputStandard',
-                }, outputStandardOnCurriculum: {
-                    name: "outputStandardOnCurriculum",
-                    type: "OutputStandardOnCurriculum",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'outputStandard',
-                }, graduationSessions: {
-                    name: "graduationSessions",
-                    type: "GraduationSession",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'outputStandard',
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }, { "name": "onUpdate" }] }],
+                    backLink: 'personalEvents',
                     isRelationOwner: true,
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        outputStandardOnCurriculum: {
-            name: 'OutputStandardOnCurriculum', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$OutputStandardOnCurriculum$createdBy,
-                }, outputStandardId: {
-                    name: "outputStandardId",
+                    onDeleteAction: 'NoAction',
+                    onUpdateAction: 'NoAction',
+                    foreignKeyMapping: { "id": "studentId" },
+                }, studentId: {
+                    name: "studentId",
                     type: "String",
                     isForeignKey: true,
-                    relationField: 'outputStandard',
-                }, outputStandard: {
-                    name: "outputStandard",
-                    type: "OutputStandard",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'outputStandardOnCurriculum',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "outputStandardId" },
-                }, curriculumVersionId: {
-                    name: "curriculumVersionId",
+                    relationField: 'student',
+                }, userProfileId: {
+                    name: "userProfileId",
                     type: "String",
-                    isForeignKey: true,
-                    relationField: 'curriculumVersion',
-                }, curriculumVersion: {
-                    name: "curriculumVersion",
-                    type: "CurriculumVersion",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'outputStandardOnCurriculum',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "curriculumVersionId" },
-                }, isRequired: {
-                    name: "isRequired",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                }, title: {
+                    name: "title",
+                    type: "String",
+                }, startTime: {
+                    name: "startTime",
+                    type: "DateTime",
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, endTime: {
+                    name: "endTime",
+                    type: "DateTime",
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, allDay: {
+                    name: "allDay",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, semesterIndex: {
-                    name: "semesterIndex",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, location: {
+                    name: "location",
+                    type: "String",
+                    isOptional: true,
+                }, content: {
+                    name: "content",
+                    type: "String",
+                    isOptional: true,
+                }, isCompleted: {
+                    name: "isCompleted",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, reminderMinutes: {
+                    name: "reminderMinutes",
                     type: "Int",
                     isOptional: true,
+                }, repeatType: {
+                    name: "repeatType",
+                    type: "ScheduleRepeatType",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, subjectClass: {
+                    name: "subjectClass",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }, { "name": "onUpdate" }] }],
+                    backLink: 'studentPersonalEvents',
+                    isRelationOwner: true,
+                    onDeleteAction: 'NoAction',
+                    onUpdateAction: 'NoAction',
+                    foreignKeyMapping: { "id": "subjectClassId" },
+                }, subjectClassId: {
+                    name: "subjectClassId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'subjectClass',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -15944,12 +16555,9 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, outputStandardId_curriculumVersionId: {
-                    name: "outputStandardId_curriculumVersionId",
-                    fields: ["outputStandardId", "curriculumVersionId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null, null] }, { "name": "map", "value": "StudentPersonalEvent_owner_time_idx" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         student: {
             name: 'Student', fields: {
@@ -15985,6 +16593,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Student$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, note: {
                     name: "note",
                     type: "String",
@@ -16384,6 +17018,12 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'student',
+                }, personalEvents: {
+                    name: "personalEvents",
+                    type: "StudentPersonalEvent",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'student',
                 }, semesterTrainingScore: {
                     name: "semesterTrainingScore",
                     type: "SemesterTrainingScore",
@@ -16456,6 +17096,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$TrainingActivity$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -16530,6 +17196,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$StudentSemesterResult$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -16755,6 +17447,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$StudentYearResult$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -16955,6 +17673,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Notification$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, title: {
                     name: "title",
                     type: "String",
@@ -17074,6 +17818,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$PersonalWorkTag$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -17159,6 +17929,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$IndividualSchedule$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, title: {
                     name: "title",
                     type: "String",
@@ -17266,6 +18062,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Lecturer$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, from: {
                     name: "from",
                     type: "DateTime",
@@ -17517,6 +18339,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$LecturerHistory$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, from: {
                     name: "from",
                     type: "DateTime",
@@ -17634,6 +18482,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$GuestTeachingRateConfig$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -17706,6 +18580,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$GuestTeachingRate$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, config: {
                     name: "config",
                     type: "GuestTeachingRateConfig",
@@ -17811,6 +18711,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$GuestTeachingPayment$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, lecturer: {
                     name: "lecturer",
                     type: "Lecturer",
@@ -17933,6 +18859,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$LecturerType$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18007,6 +18959,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$StaffType$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18077,6 +19055,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$StaffPosition$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18104,119 +19108,8 @@ const metadata = {
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-danh-muc" }] }],
         },
-        staff: {
-            name: 'Staff', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$Staff$createdBy,
-                }, from: {
-                    name: "from",
-                    type: "DateTime",
-                    isOptional: true,
-                }, userProfile: {
-                    name: "userProfile",
-                    type: "UserProfile",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'staffs',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "userProfileId" },
-                }, userProfileId: {
-                    name: "userProfileId",
-                    type: "String",
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@unique", "args": [] }],
-                    isForeignKey: true,
-                    relationField: 'userProfile',
-                }, organization: {
-                    name: "organization",
-                    type: "DM_DonVi",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'staffs',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "Id": "organizationId" },
-                }, organizationId: {
-                    name: "organizationId",
-                    type: "String",
-                    attributes: [{ "name": "@db.Uuid", "args": [] }],
-                    isForeignKey: true,
-                    relationField: 'organization',
-                }, staffType: {
-                    name: "staffType",
-                    type: "StaffType",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'staffs',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "staffTypeId" },
-                }, staffTypeId: {
-                    name: "staffTypeId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'staffType',
-                }, staffPosition: {
-                    name: "staffPosition",
-                    type: "StaffPosition",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'staffs',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "staffPositionId" },
-                }, staffPositionId: {
-                    name: "staffPositionId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'staffPosition',
-                }, fixedClass: {
-                    name: "fixedClass",
-                    type: "FixedClass",
-                    isDataModel: true,
-                    isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ManageStaff" }] }],
-                    backLink: 'staffManagement',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, userProfileId: {
-                    name: "userProfileId",
-                    fields: ["userProfileId"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        staffHistory: {
-            name: 'StaffHistory', fields: {
+        trainingObjectType: {
+            name: 'TrainingObjectType', fields: {
                 id: {
                     name: "id",
                     type: "String",
@@ -18253,69 +19146,182 @@ const metadata = {
                     type: "String",
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$StaffHistory$createdBy,
-                }, from: {
-                    name: "from",
+                    defaultValueProvider: $default$TrainingObjectType$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
                     type: "DateTime",
                     isOptional: true,
-                }, to: {
-                    name: "to",
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
                     type: "DateTime",
                     isOptional: true,
-                }, userProfile: {
-                    name: "userProfile",
-                    type: "UserProfile",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'staffHistory',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "userProfileId" },
-                }, userProfileId: {
-                    name: "userProfileId",
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
                     type: "String",
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@unique", "args": [] }],
-                    isForeignKey: true,
-                    relationField: 'userProfile',
-                }, organization: {
-                    name: "organization",
-                    type: "DM_DonVi",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'staffHistory',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "Id": "organizationId" },
-                }, organizationId: {
-                    name: "organizationId",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
                     type: "String",
-                    attributes: [{ "name": "@db.Uuid", "args": [] }],
-                    isForeignKey: true,
-                    relationField: 'organization',
-                }, staffType: {
-                    name: "staffType",
-                    type: "StaffType",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'staffHistory',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "staffTypeId" },
-                }, staffTypeId: {
-                    name: "staffTypeId",
+                    isOptional: true,
+                }, name: {
+                    name: "name",
                     type: "String",
-                    isForeignKey: true,
-                    relationField: 'staffType',
-                }, staffPosition: {
-                    name: "staffPosition",
-                    type: "StaffPosition",
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, type: {
+                    name: "type",
+                    type: "TrainingObjectTypes",
+                }, trainingForm: {
+                    name: "trainingForm",
+                    type: "TrainingForm",
                     isDataModel: true,
+                    isOptional: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'staffHistory',
+                    backLink: 'trainingObjectType',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "staffPositionId" },
-                }, staffPositionId: {
-                    name: "staffPositionId",
+                    foreignKeyMapping: { "id": "trainingFormId" },
+                }, trainingFormId: {
+                    name: "trainingFormId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
-                    relationField: 'staffPosition',
+                    relationField: 'trainingForm',
+                }, trainingLevel: {
+                    name: "trainingLevel",
+                    type: "TrainingLevel",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'trainingObjectType',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingLevelId" },
+                }, trainingLevelId: {
+                    name: "trainingLevelId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingLevel',
+                }, trainingCourse: {
+                    name: "trainingCourse",
+                    type: "TrainingCourse",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, curriculum: {
+                    name: "curriculum",
+                    type: "Curriculum",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, curriculumVersion: {
+                    name: "curriculumVersion",
+                    type: "CurriculumVersion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, trainingMajors: {
+                    name: "trainingMajors",
+                    type: "TrainingMajorOnTrainingObjectType",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, trainingFields: {
+                    name: "trainingFields",
+                    type: "TrainingFieldOnTrainingObjectType",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, trainingScoreSession: {
+                    name: "trainingScoreSession",
+                    type: "TrainingScoreSession",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, subjectClass: {
+                    name: "subjectClass",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, graduationSession: {
+                    name: "graduationSession",
+                    type: "GraduationSession",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, subjectVersion: {
+                    name: "subjectVersion",
+                    type: "SubjectVersion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, planTraining: {
+                    name: "planTraining",
+                    type: "PlanTraining",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, thesisSession: {
+                    name: "thesisSession",
+                    type: "ThesisSession",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, trainingBlocks: {
+                    name: "trainingBlocks",
+                    type: "TrainingBlock",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, vaiTro: {
+                    name: "vaiTro",
+                    type: "String",
+                    isArray: true,
+                }, surveyObjectType: {
+                    name: "surveyObjectType",
+                    type: "SurveyObjectType",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, survey: {
+                    name: "survey",
+                    type: "Survey",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, scoreCorrectionTicket: {
+                    name: "scoreCorrectionTicket",
+                    type: "ScoreCorrectionTicket",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, scoreLinkSheet: {
+                    name: "scoreLinkSheet",
+                    type: "ScoreLinkSheet",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, availableTrainingTime: {
+                    name: "availableTrainingTime",
+                    type: "AvailableTrainingTime",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, planTrainingPractice: {
+                    name: "planTrainingPractice",
+                    type: "PlanTrainingPractice",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -18324,15 +19330,15 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, userProfileId: {
-                    name: "userProfileId",
-                    fields: ["userProfileId"]
+                }, name: {
+                    name: "name",
+                    fields: ["name"]
                 },
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
-        researchProject: {
-            name: 'ResearchProject', fields: {
+        priorityObject: {
+            name: 'PriorityObject', fields: {
                 id: {
                     name: "id",
                     type: "String",
@@ -18369,53 +19375,1070 @@ const metadata = {
                     type: "String",
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$ResearchProject$createdBy,
-                }, title: {
-                    name: "title",
+                    defaultValueProvider: $default$PriorityObject$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
                     type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, students: {
+                    name: "students",
+                    type: "Student",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'priorityObject',
+                    isRelationOwner: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, name: {
+                    name: "name",
+                    fields: ["name"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        trainingType: {
+            name: 'TrainingType', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingType$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, curriculumVersion: {
+                    name: "curriculumVersion",
+                    type: "CurriculumVersion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingType',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, name: {
+                    name: "name",
+                    fields: ["name"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        trainingLevel: {
+            name: 'TrainingLevel', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingLevel$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, curriculumVersion: {
+                    name: "curriculumVersion",
+                    type: "CurriculumVersion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingLevel',
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingLevel',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, name: {
+                    name: "name",
+                    fields: ["name"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        trainingForm: {
+            name: 'TrainingForm', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingForm$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingForm',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, name: {
+                    name: "name",
+                    fields: ["name"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        trainingLocation: {
+            name: 'TrainingLocation', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingLocation$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, dM_Tinh: {
+                    name: "dM_Tinh",
+                    type: "DM_Tinh",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'trainingLocation',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "dM_TinhId" },
+                }, dM_TinhId: {
+                    name: "dM_TinhId",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'dM_Tinh',
+                }, dM_Tinh_New: {
+                    name: "dM_Tinh_New",
+                    type: "DM_Tinh_New",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'trainingLocation',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "dM_Tinh_NewId" },
+                }, dM_Tinh_NewId: {
+                    name: "dM_Tinh_NewId",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'dM_Tinh_New',
+                }, students: {
+                    name: "students",
+                    type: "Student",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingLocation',
+                }, buildings: {
+                    name: "buildings",
+                    type: "Building",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingLocation',
+                }, subjectClasses: {
+                    name: "subjectClasses",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ClassTrainingLocation" }] }],
+                    backLink: 'trainingLocation',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, name: {
+                    name: "name",
+                    fields: ["name"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        building: {
+            name: 'Building', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Building$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, floor: {
+                    name: "floor",
+                    type: "Int",
+                    isOptional: true,
+                }, trainingLocation: {
+                    name: "trainingLocation",
+                    type: "TrainingLocation",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'buildings',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingLocationId" },
+                }, trainingLocationId: {
+                    name: "trainingLocationId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingLocation',
+                }, rooms: {
+                    name: "rooms",
+                    type: "Room",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'building',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        room: {
+            name: 'Room', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Room$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, trainingRoom: {
+                    name: "trainingRoom",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, computerRoom: {
+                    name: "computerRoom",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, laboratoryRoom: {
+                    name: "laboratoryRoom",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, examRoom: {
+                    name: "examRoom",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, capacity: {
+                    name: "capacity",
+                    type: "Int",
+                }, examCapacity: {
+                    name: "examCapacity",
+                    type: "Int",
+                    isOptional: true,
+                }, building: {
+                    name: "building",
+                    type: "Building",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'rooms',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "buildingId" },
+                }, buildingId: {
+                    name: "buildingId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'building',
+                }, subjectClasses: {
+                    name: "subjectClasses",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ClassRoom" }] }],
+                    backLink: 'room',
+                }, defenseRooms: {
+                    name: "defenseRooms",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DefenseRooms" }] }],
+                    backLink: 'defenseRooms',
+                }, thesisProject: {
+                    name: "thesisProject",
+                    type: "ThesisProject",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'room',
+                }, classSchedules: {
+                    name: "classSchedules",
+                    type: "ClassSchedule",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'room',
+                }, examRooms: {
+                    name: "examRooms",
+                    type: "ExamRoom",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'room',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        trainingField: {
+            name: 'TrainingField', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingField$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, englishName: {
+                    name: "englishName",
+                    type: "String",
+                }, publishDate: {
+                    name: "publishDate",
+                    type: "DateTime",
+                }, decisionNo: {
+                    name: "decisionNo",
+                    type: "String",
+                    isOptional: true,
+                }, organization: {
+                    name: "organization",
+                    type: "DM_DonVi",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'trainingFields',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "organizationId" },
+                }, organizationId: {
+                    name: "organizationId",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'organization',
+                }, trainingObjectTypes: {
+                    name: "trainingObjectTypes",
+                    type: "TrainingFieldOnTrainingObjectType",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingField',
+                }, trainingMajors: {
+                    name: "trainingMajors",
+                    type: "TrainingMajor",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingField',
+                }, curriculum: {
+                    name: "curriculum",
+                    type: "Curriculum",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingField',
+                }, surveyObjectTypes: {
+                    name: "surveyObjectTypes",
+                    type: "SurveyObjectType",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingFields',
+                    isRelationOwner: true,
+                }, documentFiles: {
+                    name: "documentFiles",
+                    type: "DocumentFile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingField',
+                }, students: {
+                    name: "students",
+                    type: "Student",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingField',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        trainingFieldOnTrainingObjectType: {
+            name: 'TrainingFieldOnTrainingObjectType', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingFieldOnTrainingObjectType$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, trainingField: {
+                    name: "trainingField",
+                    type: "TrainingField",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'trainingObjectTypes',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingFieldId" },
+                }, trainingFieldId: {
+                    name: "trainingFieldId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingField',
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'trainingFields',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
+                }, trainingObjectTypeId: {
+                    name: "trainingObjectTypeId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingObjectType',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, trainingFieldId_trainingObjectTypeId: {
+                    name: "trainingFieldId_trainingObjectTypeId",
+                    fields: ["trainingFieldId", "trainingObjectTypeId"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        trainingMajor: {
+            name: 'TrainingMajor', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingMajor$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, englishName: {
+                    name: "englishName",
+                    type: "String",
+                    isOptional: true,
+                }, shortName: {
+                    name: "shortName",
+                    type: "String",
+                    isOptional: true,
                 }, summary: {
                     name: "summary",
                     type: "String",
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, objectives: {
-                    name: "objectives",
-                    type: "String",
                     isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, methodology: {
-                    name: "methodology",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, expectedResults: {
-                    name: "expectedResults",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, requirements: {
-                    name: "requirements",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, supervisor: {
-                    name: "supervisor",
-                    type: "Lecturer",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'researchProjects',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "supervisorId" },
-                }, supervisorId: {
-                    name: "supervisorId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'supervisor',
+                }, numberCreditsMajor: {
+                    name: "numberCreditsMajor",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, numberCreditsRequired: {
+                    name: "numberCreditsRequired",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, numberCreditsElective: {
+                    name: "numberCreditsElective",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, organization: {
                     name: "organization",
                     type: "DM_DonVi",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'researchProjects',
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "organization" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'trainingMajors',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "organizationId" },
                 }, organizationId: {
@@ -18424,37 +20447,89 @@ const metadata = {
                     attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'organization',
-                }, maxStudents: {
-                    name: "maxStudents",
-                    type: "Int",
-                }, currentStudents: {
-                    name: "currentStudents",
-                    type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
-                }, registrationStart: {
-                    name: "registrationStart",
-                    type: "DateTime",
-                }, registrationEnd: {
-                    name: "registrationEnd",
-                    type: "DateTime",
-                }, projectStart: {
-                    name: "projectStart",
-                    type: "DateTime",
+                }, secondOrganization: {
+                    name: "secondOrganization",
+                    type: "DM_DonVi",
+                    isDataModel: true,
                     isOptional: true,
-                }, projectEnd: {
-                    name: "projectEnd",
-                    type: "DateTime",
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "secondOrganization" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'secondTrainingMajors',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "secondOrganizationId" },
+                }, secondOrganizationId: {
+                    name: "secondOrganizationId",
+                    type: "String",
                     isOptional: true,
-                }, status: {
-                    name: "status",
-                    type: "ResearchProjectStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, registrations: {
-                    name: "registrations",
-                    type: "StudentResearchRegistration",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'secondOrganization',
+                }, thirdOrganization: {
+                    name: "thirdOrganization",
+                    type: "DM_DonVi",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "thirdOrganization" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'thirdTrainingMajors',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "thirdOrganizationId" },
+                }, thirdOrganizationId: {
+                    name: "thirdOrganizationId",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'thirdOrganization',
+                }, trainingField: {
+                    name: "trainingField",
+                    type: "TrainingField",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'trainingMajors',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingFieldId" },
+                }, trainingFieldId: {
+                    name: "trainingFieldId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingField',
+                }, trainingObjectTypes: {
+                    name: "trainingObjectTypes",
+                    type: "TrainingMajorOnTrainingObjectType",
                     isDataModel: true,
                     isArray: true,
-                    backLink: 'researchProject',
+                    backLink: 'trainingMajor',
+                }, curriculum: {
+                    name: "curriculum",
+                    type: "Curriculum",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingMajor',
+                }, graduationDecision: {
+                    name: "graduationDecision",
+                    type: "GraduationDecision",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingMajor',
+                }, expert: {
+                    name: "expert",
+                    type: "Expert",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'major',
+                    isRelationOwner: true,
+                }, studentGraduationApplication: {
+                    name: "studentGraduationApplication",
+                    type: "StudentGraduationApplication",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingMajor',
+                }, surveyObjectTypes: {
+                    name: "surveyObjectTypes",
+                    type: "SurveyObjectType",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingMajors',
+                    isRelationOwner: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -18467,8 +20542,8 @@ const metadata = {
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
-        studentResearchRegistration: {
-            name: 'StudentResearchRegistration', fields: {
+        trainingMajorOnTrainingObjectType: {
+            name: 'TrainingMajorOnTrainingObjectType', fields: {
                 id: {
                     name: "id",
                     type: "String",
@@ -18505,13 +20580,1744 @@ const metadata = {
                     type: "String",
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$StudentResearchRegistration$createdBy,
+                    defaultValueProvider: $default$TrainingMajorOnTrainingObjectType$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, trainingMajor: {
+                    name: "trainingMajor",
+                    type: "TrainingMajor",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'trainingObjectTypes',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingMajorId" },
+                }, trainingMajorId: {
+                    name: "trainingMajorId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingMajor',
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'trainingMajors',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
+                }, trainingObjectTypeId: {
+                    name: "trainingObjectTypeId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingObjectType',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, trainingMajorId_trainingObjectTypeId: {
+                    name: "trainingMajorId_trainingObjectTypeId",
+                    fields: ["trainingMajorId", "trainingObjectTypeId"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        trainingBlock: {
+            name: 'TrainingBlock', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingBlock$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'trainingBlocks',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
+                }, trainingObjectTypeId: {
+                    name: "trainingObjectTypeId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingObjectType',
+                }, isNationalDefense: {
+                    name: "isNationalDefense",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, priority: {
+                    name: "priority",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, parent: {
+                    name: "parent",
+                    type: "TrainingBlock",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ParentChild" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'children',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "parentId" },
+                }, parentId: {
+                    name: "parentId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'parent',
+                }, children: {
+                    name: "children",
+                    type: "TrainingBlock",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ParentChild" }] }],
+                    backLink: 'parent',
+                }, curriculumVersions: {
+                    name: "curriculumVersions",
+                    type: "TrainingBlockOnCurriculumVersion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingBlock',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, trainingObjectTypeId_name: {
+                    name: "trainingObjectTypeId_name",
+                    fields: ["trainingObjectTypeId", "name"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        trainingBlockOnCurriculumVersion: {
+            name: 'TrainingBlockOnCurriculumVersion', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingBlockOnCurriculumVersion$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, trainingBlock: {
+                    name: "trainingBlock",
+                    type: "TrainingBlock",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'curriculumVersions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingBlockId" },
+                }, trainingBlockId: {
+                    name: "trainingBlockId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingBlock',
+                }, curriculumVersion: {
+                    name: "curriculumVersion",
+                    type: "CurriculumVersion",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'trainingBlocks',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "curriculumVersionId" },
+                }, curriculumVersionId: {
+                    name: "curriculumVersionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'curriculumVersion',
+                }, priority: {
+                    name: "priority",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, electiveCreditsRequired: {
+                    name: "electiveCreditsRequired",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, subjects: {
+                    name: "subjects",
+                    type: "TrainingBlockSubject",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingBlockOnCurriculumVersion',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, trainingBlockId_curriculumVersionId: {
+                    name: "trainingBlockId_curriculumVersionId",
+                    fields: ["trainingBlockId", "curriculumVersionId"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        trainingTime: {
+            name: 'TrainingTime', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingTime$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, curriculumVersion: {
+                    name: "curriculumVersion",
+                    type: "CurriculumVersion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingTime',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        availableTrainingTime: {
+            name: 'AvailableTrainingTime', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$AvailableTrainingTime$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, duration: {
+                    name: "duration",
+                    type: "Float",
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'availableTrainingTime',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
+                }, trainingObjectTypeId: {
+                    name: "trainingObjectTypeId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingObjectType',
+                }, semester: {
+                    name: "semester",
+                    type: "Semester",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'availableTrainingTime',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "semesterId" },
+                }, semesterId: {
+                    name: "semesterId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'semester',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        certificate: {
+            name: 'Certificate', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Certificate$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, englishName: {
+                    name: "englishName",
+                    type: "String",
+                    isOptional: true,
+                }, outputStandard: {
+                    name: "outputStandard",
+                    type: "OutputStandard",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'certificates',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "outputStandardId" },
+                }, outputStandardId: {
+                    name: "outputStandardId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'outputStandard',
+                }, archivedCertificate: {
+                    name: "archivedCertificate",
+                    type: "ArchivedCertificate",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'certificate',
+                }, subjects: {
+                    name: "subjects",
+                    type: "CertificateOnSubject",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'certificate',
+                }, subjectVersions: {
+                    name: "subjectVersions",
+                    type: "SubjectVersion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'certificate',
+                    isRelationOwner: true,
+                }, scoreThreshold: {
+                    name: "scoreThreshold",
+                    type: "Float",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 5 }] }],
+                }, isUsingScore: {
+                    name: "isUsingScore",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        certificateOnSubject: {
+            name: 'CertificateOnSubject', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$CertificateOnSubject$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, finalScore: {
+                    name: "finalScore",
+                    type: "Float",
+                    attributes: [{ "name": "@gte", "args": [{ "name": "value", "value": 0 }, { "name": "message", "value": "Điểm tối thiểu là 0" }] }, { "name": "@lte", "args": [{ "name": "value", "value": 10 }, { "name": "message", "value": "Điểm tối đa là 10" }] }],
+                }, certificate: {
+                    name: "certificate",
+                    type: "Certificate",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'subjects',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "certificateId" },
+                }, certificateId: {
+                    name: "certificateId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'certificate',
+                }, subject: {
+                    name: "subject",
+                    type: "Subject",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'certificateOnSubject',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectId" },
+                }, subjectId: {
+                    name: "subjectId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'subject',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        award: {
+            name: 'Award', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Award$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, englishName: {
+                    name: "englishName",
+                    type: "String",
+                    isOptional: true,
+                }, bonusScore: {
+                    name: "bonusScore",
+                    type: "Float",
+                }, subjects: {
+                    name: "subjects",
+                    type: "Subject",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'awardOnSubject',
+                    isRelationOwner: true,
+                }, archivedAward: {
+                    name: "archivedAward",
+                    type: "ArchivedAward",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'award',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        officerBonusScore: {
+            name: 'OfficerBonusScore', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$OfficerBonusScore$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, position: {
+                    name: "position",
+                    type: "OfficerPosition",
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, bonusScore: {
+                    name: "bonusScore",
+                    type: "Float",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }, { "name": "@gte", "args": [{ "name": "value", "value": 0 }, { "name": "message", "value": "Điểm tối thiểu là 0" }] }, { "name": "@lte", "args": [{ "name": "value", "value": 10 }, { "name": "message", "value": "Điểm tối đa là 10" }] }],
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, position: {
+                    name: "position",
+                    fields: ["position"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        diplomaType: {
+            name: 'DiplomaType', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DiplomaType$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, englishName: {
+                    name: "englishName",
+                    type: "String",
+                    isOptional: true,
+                }, type: {
+                    name: "type",
+                    type: "DiplomaTypeEnum",
+                }, curriculumVersion: {
+                    name: "curriculumVersion",
+                    type: "CurriculumVersion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'diplomaType',
+                }, graduationDecision: {
+                    name: "graduationDecision",
+                    type: "GraduationDecision",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'diplomaType',
+                }, studentGraduationApplication: {
+                    name: "studentGraduationApplication",
+                    type: "StudentGraduationApplication",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'diplomaType',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, name: {
+                    name: "name",
+                    fields: ["name"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        scoreConvert: {
+            name: 'ScoreConvert', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ScoreConvert$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, classification: {
+                    name: "classification",
+                    type: "String",
+                }, base10Min: {
+                    name: "base10Min",
+                    type: "Float",
+                }, base10Max: {
+                    name: "base10Max",
+                    type: "Float",
+                }, letter: {
+                    name: "letter",
+                    type: "String",
+                }, base4: {
+                    name: "base4",
+                    type: "Float",
+                }, pass: {
+                    name: "pass",
+                    type: "Boolean",
+                }, improvementRegister: {
+                    name: "improvementRegister",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, trainingCourse: {
+                    name: "trainingCourse",
+                    type: "TrainingCourse",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'scoreConverts',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingCourseId" },
+                }, trainingCourseId: {
+                    name: "trainingCourseId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingCourse',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        loadCategory: {
+            name: 'LoadCategory', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$LoadCategory$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, unit: {
+                    name: "unit",
+                    type: "String",
+                }, standardHours: {
+                    name: "standardHours",
+                    type: "Float",
+                }, category: {
+                    name: "category",
+                    type: "String",
+                }, note: {
+                    name: "note",
+                    type: "String",
+                    isOptional: true,
+                }, isOverageCalculated: {
+                    name: "isOverageCalculated",
+                    type: "Boolean",
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        outputStandard: {
+            name: 'OutputStandard', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$OutputStandard$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, certificates: {
+                    name: "certificates",
+                    type: "Certificate",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'outputStandard',
+                }, outputStandardOnCurriculum: {
+                    name: "outputStandardOnCurriculum",
+                    type: "OutputStandardOnCurriculum",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'outputStandard',
+                }, graduationSessions: {
+                    name: "graduationSessions",
+                    type: "GraduationSession",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'outputStandard',
+                    isRelationOwner: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        outputStandardOnCurriculum: {
+            name: 'OutputStandardOnCurriculum', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$OutputStandardOnCurriculum$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, outputStandardId: {
+                    name: "outputStandardId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'outputStandard',
+                }, outputStandard: {
+                    name: "outputStandard",
+                    type: "OutputStandard",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'outputStandardOnCurriculum',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "outputStandardId" },
+                }, curriculumVersionId: {
+                    name: "curriculumVersionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'curriculumVersion',
+                }, curriculumVersion: {
+                    name: "curriculumVersion",
+                    type: "CurriculumVersion",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'outputStandardOnCurriculum',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "curriculumVersionId" },
+                }, isRequired: {
+                    name: "isRequired",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, semesterIndex: {
+                    name: "semesterIndex",
+                    type: "Int",
+                    isOptional: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, outputStandardId_curriculumVersionId: {
+                    name: "outputStandardId_curriculumVersionId",
+                    fields: ["outputStandardId", "curriculumVersionId"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        graduationSession: {
+            name: 'GraduationSession', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$GraduationSession$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, sessionDate: {
+                    name: "sessionDate",
+                    type: "DateTime",
+                }, applicationStart: {
+                    name: "applicationStart",
+                    type: "DateTime",
+                }, applicationEnd: {
+                    name: "applicationEnd",
+                    type: "DateTime",
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'graduationSession',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
+                }, trainingObjectTypeId: {
+                    name: "trainingObjectTypeId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingObjectType',
+                }, status: {
+                    name: "status",
+                    type: "GraduationSessionStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, applications: {
+                    name: "applications",
+                    type: "StudentGraduationApplication",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'session',
+                }, outputStandard: {
+                    name: "outputStandard",
+                    type: "OutputStandard",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'graduationSessions',
+                    isRelationOwner: true,
+                }, trainingCourse: {
+                    name: "trainingCourse",
+                    type: "TrainingCourse",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'graduationSessions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingCourseId" },
+                }, trainingCourseId: {
+                    name: "trainingCourseId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingCourse',
+                }, eligibleCount: {
+                    name: "eligibleCount",
+                    type: "Int",
+                    isOptional: true,
+                }, excellentCount: {
+                    name: "excellentCount",
+                    type: "Int",
+                    isOptional: true,
+                }, topicDecisionNumber: {
+                    name: "topicDecisionNumber",
+                    type: "String",
+                    isOptional: true,
+                }, topicDecisionDate: {
+                    name: "topicDecisionDate",
+                    type: "DateTime",
+                    isOptional: true,
+                }, topicDecisionSigner: {
+                    name: "topicDecisionSigner",
+                    type: "String",
+                    isOptional: true,
+                }, defenseDecisionNumber: {
+                    name: "defenseDecisionNumber",
+                    type: "String",
+                    isOptional: true,
+                }, defenseDecisionDate: {
+                    name: "defenseDecisionDate",
+                    type: "DateTime",
+                    isOptional: true,
+                }, defenseDecisionSigner: {
+                    name: "defenseDecisionSigner",
+                    type: "String",
+                    isOptional: true,
+                }, graduationDecisionNumber: {
+                    name: "graduationDecisionNumber",
+                    type: "String",
+                    isOptional: true,
+                }, graduationDecisionDate: {
+                    name: "graduationDecisionDate",
+                    type: "DateTime",
+                    isOptional: true,
+                }, graduationDecisionSigner: {
+                    name: "graduationDecisionSigner",
+                    type: "String",
+                    isOptional: true,
+                }, councilMeetingDate: {
+                    name: "councilMeetingDate",
+                    type: "DateTime",
+                    isOptional: true,
+                }, councilMeetingBasis: {
+                    name: "councilMeetingBasis",
+                    type: "String",
+                    isOptional: true,
+                }, proposalTopic: {
+                    name: "proposalTopic",
+                    type: "String",
+                    isOptional: true,
+                }, proposalCouncil: {
+                    name: "proposalCouncil",
+                    type: "String",
+                    isOptional: true,
+                }, proposalGraduation: {
+                    name: "proposalGraduation",
+                    type: "String",
+                    isOptional: true,
+                }, skipCertificateCheck: {
+                    name: "skipCertificateCheck",
+                    type: "Boolean",
+                    isOptional: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        studentGraduationApplication: {
+            name: 'StudentGraduationApplication', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$StudentGraduationApplication$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, student: {
                     name: "student",
                     type: "Student",
                     isDataModel: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'researchRegistrations',
+                    backLink: 'graduationApplications',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "studentId" },
                 }, studentId: {
@@ -18519,61 +22325,193 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'student',
-                }, researchProject: {
-                    name: "researchProject",
-                    type: "ResearchProject",
+                }, session: {
+                    name: "session",
+                    type: "GraduationSession",
                     isDataModel: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'registrations',
+                    backLink: 'applications',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "researchProjectId" },
-                }, researchProjectId: {
-                    name: "researchProjectId",
+                    foreignKeyMapping: { "id": "sessionId" },
+                }, sessionId: {
+                    name: "sessionId",
                     type: "String",
                     isForeignKey: true,
-                    relationField: 'researchProject',
-                }, registeredAt: {
-                    name: "registeredAt",
+                    relationField: 'session',
+                }, applicationDate: {
+                    name: "applicationDate",
                     type: "DateTime",
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, motivation: {
-                    name: "motivation",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, experience: {
-                    name: "experience",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
                 }, status: {
                     name: "status",
-                    type: "RegistrationStatus",
+                    type: "ApplicationStatus",
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, reviewedAt: {
-                    name: "reviewedAt",
-                    type: "DateTime",
+                }, graduation: {
+                    name: "graduation",
+                    type: "Boolean",
                     isOptional: true,
-                }, reviewedBy: {
-                    name: "reviewedBy",
-                    type: "Lecturer",
+                }, gpa: {
+                    name: "gpa",
+                    type: "Decimal",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Decimal", "args": [{ "name": "p", "value": 5 }, { "name": "s", "value": 2 }] }],
+                }, reason: {
+                    name: "reason",
+                    type: "String",
+                    isOptional: true,
+                }, downgraded: {
+                    name: "downgraded",
+                    type: "ApplicationDowngraded",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'studentGraduationApplication',
+                }, rank: {
+                    name: "rank",
+                    type: "AcademicRankingConvert",
                     isDataModel: true,
                     isOptional: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'reviewedRegistrations',
+                    backLink: 'studentGraduationApplication',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "reviewedById" },
-                }, reviewedById: {
-                    name: "reviewedById",
+                    foreignKeyMapping: { "id": "rankId" },
+                }, rankId: {
+                    name: "rankId",
                     type: "String",
                     isOptional: true,
                     isForeignKey: true,
-                    relationField: 'reviewedBy',
-                }, reviewNote: {
-                    name: "reviewNote",
+                    relationField: 'rank',
+                }, trainingMajor: {
+                    name: "trainingMajor",
+                    type: "TrainingMajor",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'studentGraduationApplication',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingMajorId" },
+                }, trainingMajorId: {
+                    name: "trainingMajorId",
                     type: "String",
                     isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'trainingMajor',
+                }, diplomaType: {
+                    name: "diplomaType",
+                    type: "DiplomaType",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'studentGraduationApplication',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "diplomaTypeId" },
+                }, diplomaTypeId: {
+                    name: "diplomaTypeId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'diplomaType',
+                }, thesisScore: {
+                    name: "thesisScore",
+                    type: "Float",
+                    isOptional: true,
+                }, thesisReExam: {
+                    name: "thesisReExam",
+                    type: "Boolean",
+                    isOptional: true,
+                }, politicalScore: {
+                    name: "politicalScore",
+                    type: "Float",
+                    isOptional: true,
+                }, politicalReExam: {
+                    name: "politicalReExam",
+                    type: "Boolean",
+                    isOptional: true,
+                }, foreignLanguageScore: {
+                    name: "foreignLanguageScore",
+                    type: "Float",
+                    isOptional: true,
+                }, foreignLanguageReExam: {
+                    name: "foreignLanguageReExam",
+                    type: "Boolean",
+                    isOptional: true,
+                }, defenseEduCert: {
+                    name: "defenseEduCert",
+                    type: "Boolean",
+                    isOptional: true,
+                }, physicalEduCert: {
+                    name: "physicalEduCert",
+                    type: "Boolean",
+                    isOptional: true,
+                }, foreignLangCert: {
+                    name: "foreignLangCert",
+                    type: "Boolean",
+                    isOptional: true,
+                }, itCert: {
+                    name: "itCert",
+                    type: "Boolean",
+                    isOptional: true,
+                }, accumulatedCredits: {
+                    name: "accumulatedCredits",
+                    type: "Int",
+                    isOptional: true,
+                }, gpa10: {
+                    name: "gpa10",
+                    type: "Float",
+                    isOptional: true,
+                }, reExamCredits: {
+                    name: "reExamCredits",
+                    type: "Int",
+                    isOptional: true,
+                }, totalSubjects: {
+                    name: "totalSubjects",
+                    type: "Int",
+                    isOptional: true,
+                }, failedSubjects: {
+                    name: "failedSubjects",
+                    type: "Int",
+                    isOptional: true,
+                }, failedCredits: {
+                    name: "failedCredits",
+                    type: "Int",
+                    isOptional: true,
+                }, mandatoryFailedSubjects: {
+                    name: "mandatoryFailedSubjects",
+                    type: "Int",
+                    isOptional: true,
+                }, mandatoryFailedCredits: {
+                    name: "mandatoryFailedCredits",
+                    type: "Int",
+                    isOptional: true,
+                }, rankDowngraded: {
+                    name: "rankDowngraded",
+                    type: "Boolean",
+                    isOptional: true,
+                }, applicationCheckResult: {
+                    name: "applicationCheckResult",
+                    type: "ApplicationCheckResult",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'studentGraduationApplication',
+                }, gpaScore: {
+                    name: "gpaScore",
+                    type: "StudentSubjectScore",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "gpaScore" }] }],
+                    backLink: 'graduationGpaScores',
+                }, supplementaryScore: {
+                    name: "supplementaryScore",
+                    type: "StudentSubjectScore",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "supplementaryScore" }] }],
+                    backLink: 'graduationSupplementaryScore',
+                }, decision: {
+                    name: "decision",
+                    type: "GraduationDecision",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'application',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -18582,12 +22520,2885 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, studentId_researchProjectId: {
-                    name: "studentId_researchProjectId",
-                    fields: ["studentId", "researchProjectId"]
+                }, studentId_sessionId: {
+                    name: "studentId_sessionId",
+                    fields: ["studentId", "sessionId"]
                 },
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        applicationDowngraded: {
+            name: 'ApplicationDowngraded', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ApplicationDowngraded$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, studentGraduationApplication: {
+                    name: "studentGraduationApplication",
+                    type: "StudentGraduationApplication",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'downgraded',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentGraduationApplicationId" },
+                }, studentGraduationApplicationId: {
+                    name: "studentGraduationApplicationId",
+                    type: "String",
+                    attributes: [{ "name": "@unique", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'studentGraduationApplication',
+                }, from: {
+                    name: "from",
+                    type: "AcademicRankingConvert",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'applicationDowngraded',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "fromId" },
+                }, fromId: {
+                    name: "fromId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'from',
+                }, conditions: {
+                    name: "conditions",
+                    type: "GraduationRankDowngradeCondition",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'applicationDowngraded',
+                    isRelationOwner: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, studentGraduationApplicationId: {
+                    name: "studentGraduationApplicationId",
+                    fields: ["studentGraduationApplicationId"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        applicationCheckResult: {
+            name: 'ApplicationCheckResult', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ApplicationCheckResult$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, studentGraduationApplication: {
+                    name: "studentGraduationApplication",
+                    type: "StudentGraduationApplication",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'applicationCheckResult',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentGraduationApplicationId" },
+                }, studentGraduationApplicationId: {
+                    name: "studentGraduationApplicationId",
+                    type: "String",
+                    attributes: [{ "name": "@unique", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'studentGraduationApplication',
+                }, rankingCondition: {
+                    name: "rankingCondition",
+                    type: "RankingCondition",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'applicationCheckResult',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "rankingConditionId" },
+                }, rankingConditionId: {
+                    name: "rankingConditionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'rankingCondition',
+                }, passed: {
+                    name: "passed",
+                    type: "Boolean",
+                }, actualValue: {
+                    name: "actualValue",
+                    type: "Float",
+                    isOptional: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, studentGraduationApplicationId: {
+                    name: "studentGraduationApplicationId",
+                    fields: ["studentGraduationApplicationId"]
+                }, studentGraduationApplicationId_rankingConditionId: {
+                    name: "studentGraduationApplicationId_rankingConditionId",
+                    fields: ["studentGraduationApplicationId", "rankingConditionId"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        graduationDecision: {
+            name: 'GraduationDecision', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$GraduationDecision$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, application: {
+                    name: "application",
+                    type: "StudentGraduationApplication",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'decision',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "applicationId" },
+                }, applicationId: {
+                    name: "applicationId",
+                    type: "String",
+                    attributes: [{ "name": "@unique", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'application',
+                }, student: {
+                    name: "student",
+                    type: "Student",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'graduationDecision',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentId" },
+                }, studentId: {
+                    name: "studentId",
+                    type: "String",
+                    attributes: [{ "name": "@unique", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'student',
+                }, decisionDate: {
+                    name: "decisionDate",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Date", "args": [] }],
+                }, notes: {
+                    name: "notes",
+                    type: "String",
+                    isOptional: true,
+                }, finalGpa: {
+                    name: "finalGpa",
+                    type: "Decimal",
+                    attributes: [{ "name": "@db.Decimal", "args": [{ "name": "p", "value": 5 }, { "name": "s", "value": 2 }] }],
+                }, trainingMajor: {
+                    name: "trainingMajor",
+                    type: "TrainingMajor",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'graduationDecision',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingMajorId" },
+                }, trainingMajorId: {
+                    name: "trainingMajorId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingMajor',
+                }, finalRanking: {
+                    name: "finalRanking",
+                    type: "AcademicRankingConvert",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'graduationDecision',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "finalRankingId" },
+                }, finalRankingId: {
+                    name: "finalRankingId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'finalRanking',
+                }, diplomaType: {
+                    name: "diplomaType",
+                    type: "DiplomaType",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'graduationDecision',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "diplomaTypeId" },
+                }, diplomaTypeId: {
+                    name: "diplomaTypeId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'diplomaType',
+                }, originalDiplomaNumber: {
+                    name: "originalDiplomaNumber",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, diplomaNumber: {
+                    name: "diplomaNumber",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, diplomaIssueDate: {
+                    name: "diplomaIssueDate",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Date", "args": [] }],
+                }, diplomaFront: {
+                    name: "diplomaFront",
+                    type: "DocumentFile",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaFront" }] }],
+                    backLink: 'diplomaFront',
+                }, diplomaBack: {
+                    name: "diplomaBack",
+                    type: "DocumentFile",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaBack" }] }],
+                    backLink: 'diplomaBack',
+                }, totalCopy: {
+                    name: "totalCopy",
+                    type: "Int",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, applicationId: {
+                    name: "applicationId",
+                    fields: ["applicationId"]
+                }, studentId: {
+                    name: "studentId",
+                    fields: ["studentId"]
+                }, originalDiplomaNumber: {
+                    name: "originalDiplomaNumber",
+                    fields: ["originalDiplomaNumber"]
+                }, diplomaNumber: {
+                    name: "diplomaNumber",
+                    fields: ["diplomaNumber"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        academicRankingConvert: {
+            name: 'AcademicRankingConvert', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$AcademicRankingConvert$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, classification: {
+                    name: "classification",
+                    type: "String",
+                }, classificationEnglish: {
+                    name: "classificationEnglish",
+                    type: "String",
+                    isOptional: true,
+                }, context: {
+                    name: "context",
+                    type: "RankingContext",
+                }, rankOrder: {
+                    name: "rankOrder",
+                    type: "Int",
+                }, baseScore: {
+                    name: "baseScore",
+                    type: "AcademicRankingBaseType",
+                }, base10Min: {
+                    name: "base10Min",
+                    type: "Float",
+                    isOptional: true,
+                }, base10Max: {
+                    name: "base10Max",
+                    type: "Float",
+                    isOptional: true,
+                }, base4Min: {
+                    name: "base4Min",
+                    type: "Float",
+                    isOptional: true,
+                }, base4Max: {
+                    name: "base4Max",
+                    type: "Float",
+                    isOptional: true,
+                }, graduated: {
+                    name: "graduated",
+                    type: "Boolean",
+                }, trainingCourse: {
+                    name: "trainingCourse",
+                    type: "TrainingCourse",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'academicRankingConvert',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingCourseId" },
+                }, trainingCourseId: {
+                    name: "trainingCourseId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingCourse',
+                }, rankingCondition: {
+                    name: "rankingCondition",
+                    type: "RankingCondition",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'ranking',
+                }, downgradeRules: {
+                    name: "downgradeRules",
+                    type: "GraduationRankDowngradeRule",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'initialRank',
+                }, graduationDecision: {
+                    name: "graduationDecision",
+                    type: "GraduationDecision",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'finalRanking',
+                }, studentGraduationApplication: {
+                    name: "studentGraduationApplication",
+                    type: "StudentGraduationApplication",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'rank',
+                }, applicationDowngraded: {
+                    name: "applicationDowngraded",
+                    type: "ApplicationDowngraded",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'from',
+                }, studentSemesterResult: {
+                    name: "studentSemesterResult",
+                    type: "StudentSemesterResult",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'rank',
+                }, studentYearResult: {
+                    name: "studentYearResult",
+                    type: "StudentYearResult",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'rank',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, trainingCourseId_context_rankOrder: {
+                    name: "trainingCourseId_context_rankOrder",
+                    fields: ["trainingCourseId", "context", "rankOrder"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@validate", "args": [{ "name": "value" }, { "name": "message", "value": "Xếp loại theo hệ 10 phải khai báo base10Min, base10Max" }] }, { "name": "@@validate", "args": [{ "name": "value" }, { "name": "message", "value": "Xếp loại theo hệ 4 phải khai báo base4Min, base4Max" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        graduationRankDowngradeRule: {
+            name: 'GraduationRankDowngradeRule', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$GraduationRankDowngradeRule$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, initialRank: {
+                    name: "initialRank",
+                    type: "AcademicRankingConvert",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'downgradeRules',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "initialRankId" },
+                }, initialRankId: {
+                    name: "initialRankId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'initialRank',
+                }, conditions: {
+                    name: "conditions",
+                    type: "GraduationRankDowngradeCondition",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'downgradeRule',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        graduationRankDowngradeCondition: {
+            name: 'GraduationRankDowngradeCondition', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$GraduationRankDowngradeCondition$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, downgradeRule: {
+                    name: "downgradeRule",
+                    type: "GraduationRankDowngradeRule",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'conditions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "downgradeRuleId" },
+                }, downgradeRuleId: {
+                    name: "downgradeRuleId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'downgradeRule',
+                }, field: {
+                    name: "field",
+                    type: "CriteriaField",
+                }, operator: {
+                    name: "operator",
+                    type: "CriteriaOperator",
+                }, invert: {
+                    name: "invert",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, value: {
+                    name: "value",
+                    type: "Float",
+                }, tuple: {
+                    name: "tuple",
+                    type: "String",
+                    isArray: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": [] }] }],
+                }, applicationDowngraded: {
+                    name: "applicationDowngraded",
+                    type: "ApplicationDowngraded",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'conditions',
+                    isRelationOwner: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        rankingCondition: {
+            name: 'RankingCondition', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$RankingCondition$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, ranking: {
+                    name: "ranking",
+                    type: "AcademicRankingConvert",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'rankingCondition',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "rankingId" },
+                }, rankingId: {
+                    name: "rankingId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'ranking',
+                }, field: {
+                    name: "field",
+                    type: "CriteriaField",
+                }, operator: {
+                    name: "operator",
+                    type: "CriteriaOperator",
+                }, invert: {
+                    name: "invert",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, value: {
+                    name: "value",
+                    type: "Float",
+                }, tuple: {
+                    name: "tuple",
+                    type: "String",
+                    isArray: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": [] }] }],
+                }, applicationCheckResult: {
+                    name: "applicationCheckResult",
+                    type: "ApplicationCheckResult",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'rankingCondition',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        diplomaVerificationApplication: {
+            name: 'DiplomaVerificationApplication', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DiplomaVerificationApplication$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, fullname: {
+                    name: "fullname",
+                    type: "String",
+                }, idCardNumber: {
+                    name: "idCardNumber",
+                    type: "String",
+                }, dateOfBirth: {
+                    name: "dateOfBirth",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Date", "args": [] }],
+                }, phoneNumber: {
+                    name: "phoneNumber",
+                    type: "String",
+                }, email: {
+                    name: "email",
+                    type: "String",
+                }, reason: {
+                    name: "reason",
+                    type: "String",
+                }, originalDiplomaNumber: {
+                    name: "originalDiplomaNumber",
+                    type: "String",
+                }, diplomaNumber: {
+                    name: "diplomaNumber",
+                    type: "String",
+                }, trainingMajor: {
+                    name: "trainingMajor",
+                    type: "String",
+                    isOptional: true,
+                }, trainingLevel: {
+                    name: "trainingLevel",
+                    type: "String",
+                    isOptional: true,
+                }, trainingForm: {
+                    name: "trainingForm",
+                    type: "String",
+                    isOptional: true,
+                }, trainingCourseStartYear: {
+                    name: "trainingCourseStartYear",
+                    type: "Int",
+                    isOptional: true,
+                }, trainingCourseEndYear: {
+                    name: "trainingCourseEndYear",
+                    type: "Int",
+                    isOptional: true,
+                }, diplomaIssueDate: {
+                    name: "diplomaIssueDate",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Date", "args": [] }],
+                }, classification: {
+                    name: "classification",
+                    type: "String",
+                    isOptional: true,
+                }, attachments: {
+                    name: "attachments",
+                    type: "DocumentFile",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaVerificationAttachments" }] }],
+                    backLink: 'diplomaVerification',
+                }, diplomaFront: {
+                    name: "diplomaFront",
+                    type: "DocumentFile",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaVerificationFront" }] }],
+                    backLink: 'diplomaVerificationFront',
+                }, diplomaBack: {
+                    name: "diplomaBack",
+                    type: "DocumentFile",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaVerificationBack" }] }],
+                    backLink: 'diplomaVerificationBack',
+                }, status: {
+                    name: "status",
+                    type: "DiplomaVerificationStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, studentId: {
+                    name: "studentId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'student',
+                }, student: {
+                    name: "student",
+                    type: "Student",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'diplomaVerificationApplication',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentId" },
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        trainingScoreSession: {
+            name: 'TrainingScoreSession', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingScoreSession$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, time: {
+                    name: "time",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, semester: {
+                    name: "semester",
+                    type: "Semester",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'trainingScoreSession',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "semesterId" },
+                }, semesterId: {
+                    name: "semesterId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'semester',
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'trainingScoreSession',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
+                }, trainingObjectTypeId: {
+                    name: "trainingObjectTypeId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingObjectType',
+                }, studentTrainingScore: {
+                    name: "studentTrainingScore",
+                    type: "StudentTrainingScore",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingScoreSession',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        studentTrainingScore: {
+            name: 'StudentTrainingScore', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$StudentTrainingScore$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, trainingScoreSession: {
+                    name: "trainingScoreSession",
+                    type: "TrainingScoreSession",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'studentTrainingScore',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingScoreSessionId" },
+                }, trainingScoreSessionId: {
+                    name: "trainingScoreSessionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingScoreSession',
+                }, student: {
+                    name: "student",
+                    type: "Student",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'studentTrainingScore',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentId" },
+                }, studentId: {
+                    name: "studentId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'student',
+                }, score: {
+                    name: "score",
+                    type: "Float",
+                    isOptional: true,
+                }, studentTrainingType: {
+                    name: "studentTrainingType",
+                    type: "StudentTrainingType",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, status: {
+                    name: "status",
+                    type: "TrainingScoreStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, trainingScoreSessionId_studentId: {
+                    name: "trainingScoreSessionId_studentId",
+                    fields: ["trainingScoreSessionId", "studentId"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        semesterTrainingScore: {
+            name: 'SemesterTrainingScore', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SemesterTrainingScore$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, semester: {
+                    name: "semester",
+                    type: "Semester",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'semesterTrainingScore',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "semesterId" },
+                }, semesterId: {
+                    name: "semesterId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'semester',
+                }, student: {
+                    name: "student",
+                    type: "Student",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'semesterTrainingScore',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentId" },
+                }, studentId: {
+                    name: "studentId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'student',
+                }, score: {
+                    name: "score",
+                    type: "Int",
+                    isOptional: true,
+                }, status: {
+                    name: "status",
+                    type: "TrainingScoreStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        schoolYearTrainingScore: {
+            name: 'SchoolYearTrainingScore', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SchoolYearTrainingScore$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, schoolYear: {
+                    name: "schoolYear",
+                    type: "SchoolYear",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'schoolYearTrainingScore',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "schoolYearId" },
+                }, schoolYearId: {
+                    name: "schoolYearId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'schoolYear',
+                }, student: {
+                    name: "student",
+                    type: "Student",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'schoolYearTrainingScore',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentId" },
+                }, studentId: {
+                    name: "studentId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'student',
+                }, score: {
+                    name: "score",
+                    type: "Int",
+                    isOptional: true,
+                }, status: {
+                    name: "status",
+                    type: "TrainingScoreStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        documentFile: {
+            name: 'DocumentFile', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DocumentFile$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, path: {
+                    name: "path",
+                    type: "String",
+                }, size: {
+                    name: "size",
+                    type: "BigInt",
+                }, mimeType: {
+                    name: "mimeType",
+                    type: "String",
+                    isOptional: true,
+                }, archivedCertificate: {
+                    name: "archivedCertificate",
+                    type: "ArchivedCertificate",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "archivedCertificateId" },
+                }, archivedCertificateId: {
+                    name: "archivedCertificateId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'archivedCertificate',
+                }, trainingCourse: {
+                    name: "trainingCourse",
+                    type: "TrainingCourse",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingCourseId" },
+                }, trainingCourseId: {
+                    name: "trainingCourseId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingCourse',
+                }, archivedAward: {
+                    name: "archivedAward",
+                    type: "ArchivedAward",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "archivedAwardId" },
+                }, archivedAwardId: {
+                    name: "archivedAwardId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'archivedAward',
+                }, curriculum: {
+                    name: "curriculum",
+                    type: "Curriculum",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "curriculumId" },
+                }, curriculumId: {
+                    name: "curriculumId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'curriculum',
+                }, curriculumVersion: {
+                    name: "curriculumVersion",
+                    type: "CurriculumVersion",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "curriculumVersionId" },
+                }, curriculumVersionId: {
+                    name: "curriculumVersionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'curriculumVersion',
+                }, subjectVersion: {
+                    name: "subjectVersion",
+                    type: "SubjectVersion",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectVersionId" },
+                }, subjectVersionId: {
+                    name: "subjectVersionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'subjectVersion',
+                }, studentAcademicDecision: {
+                    name: "studentAcademicDecision",
+                    type: "StudentAcademicDecision",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'documentEvidence',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentAcademicDecisionId" },
+                }, studentAcademicDecisionId: {
+                    name: "studentAcademicDecisionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'studentAcademicDecision',
+                }, notification: {
+                    name: "notification",
+                    type: "Notification",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'attachments',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "notificationId" },
+                }, notificationId: {
+                    name: "notificationId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'notification',
+                }, decision: {
+                    name: "decision",
+                    type: "Decision",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'documentFile',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "decisionId" },
+                }, decisionId: {
+                    name: "decisionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'decision',
+                }, defenseRecord: {
+                    name: "defenseRecord",
+                    type: "DefenseRecord",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'documents',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "defenseRecordId" },
+                }, defenseRecordId: {
+                    name: "defenseRecordId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'defenseRecord',
+                }, librarySubmission: {
+                    name: "librarySubmission",
+                    type: "LibrarySubmission",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'documentFile',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "librarySubmissionId" },
+                }, librarySubmissionId: {
+                    name: "librarySubmissionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'librarySubmission',
+                }, diplomaFront: {
+                    name: "diplomaFront",
+                    type: "GraduationDecision",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaFront" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'diplomaFront',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "diplomaFrontId" },
+                }, diplomaFrontId: {
+                    name: "diplomaFrontId",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'diplomaFront',
+                }, diplomaBack: {
+                    name: "diplomaBack",
+                    type: "GraduationDecision",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaBack" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'diplomaBack',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "diplomaBackId" },
+                }, diplomaBackId: {
+                    name: "diplomaBackId",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'diplomaBack',
+                }, diplomaVerification: {
+                    name: "diplomaVerification",
+                    type: "DiplomaVerificationApplication",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaVerificationAttachments" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'attachments',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "diplomaVerificationId" },
+                }, diplomaVerificationId: {
+                    name: "diplomaVerificationId",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'diplomaVerification',
+                }, diplomaVerificationFront: {
+                    name: "diplomaVerificationFront",
+                    type: "DiplomaVerificationApplication",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaVerificationFront" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'diplomaFront',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "diplomaVerificationFrontId" },
+                }, diplomaVerificationFrontId: {
+                    name: "diplomaVerificationFrontId",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'diplomaVerificationFront',
+                }, diplomaVerificationBack: {
+                    name: "diplomaVerificationBack",
+                    type: "DiplomaVerificationApplication",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaVerificationBack" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'diplomaBack',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "diplomaVerificationBackId" },
+                }, diplomaVerificationBackId: {
+                    name: "diplomaVerificationBackId",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'diplomaVerificationBack',
+                }, trainingField: {
+                    name: "trainingField",
+                    type: "TrainingField",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingFieldId" },
+                }, trainingFieldId: {
+                    name: "trainingFieldId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingField',
+                }, studentScoreConvert: {
+                    name: "studentScoreConvert",
+                    type: "StudentScoreConvert",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentScoreConvertId" },
+                }, studentScoreConvertId: {
+                    name: "studentScoreConvertId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'studentScoreConvert',
+                }, scoreLinkSheet: {
+                    name: "scoreLinkSheet",
+                    type: "ScoreLinkSheet",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'documents',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "scoreLinkSheetId" },
+                }, scoreLinkSheetId: {
+                    name: "scoreLinkSheetId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'scoreLinkSheet',
+                }, examFramework: {
+                    name: "examFramework",
+                    type: "ExamFramework",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "examFrameworkId" },
+                }, examFrameworkId: {
+                    name: "examFrameworkId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'examFramework',
+                }, note: {
+                    name: "note",
+                    type: "Note",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'attachments',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "noteId" },
+                }, noteId: {
+                    name: "noteId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'note',
+                }, evaluationPeriod: {
+                    name: "evaluationPeriod",
+                    type: "EvaluationPeriod",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "evaluationPeriodId" },
+                }, evaluationPeriodId: {
+                    name: "evaluationPeriodId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'evaluationPeriod',
+                }, knowledgeBlock: {
+                    name: "knowledgeBlock",
+                    type: "KnowledgeBlock",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "knowledgeBlockId" },
+                }, knowledgeBlockId: {
+                    name: "knowledgeBlockId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'knowledgeBlock',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, diplomaFrontId: {
+                    name: "diplomaFrontId",
+                    fields: ["diplomaFrontId"]
+                }, diplomaBackId: {
+                    name: "diplomaBackId",
+                    fields: ["diplomaBackId"]
+                }, diplomaVerificationId: {
+                    name: "diplomaVerificationId",
+                    fields: ["diplomaVerificationId"]
+                }, diplomaVerificationFrontId: {
+                    name: "diplomaVerificationFrontId",
+                    fields: ["diplomaVerificationFrontId"]
+                }, diplomaVerificationBackId: {
+                    name: "diplomaVerificationBackId",
+                    fields: ["diplomaVerificationBackId"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-danh-muc" }] }],
+        },
+        academicActionConfig: {
+            name: 'AcademicActionConfig', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$AcademicActionConfig$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, actionType: {
+                    name: "actionType",
+                    type: "AcademicActionType",
+                }, trainingCourse: {
+                    name: "trainingCourse",
+                    type: "TrainingCourse",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'academicActionConfig',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingCourseId" },
+                }, trainingCourseId: {
+                    name: "trainingCourseId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingCourse',
+                }, ruleSets: {
+                    name: "ruleSets",
+                    type: "AcademicActionRuleSet",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'config',
+                }, decisions: {
+                    name: "decisions",
+                    type: "StudentAcademicDecision",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'appliedConfig',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, trainingCourseId_name: {
+                    name: "trainingCourseId_name",
+                    fields: ["trainingCourseId", "name"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        academicActionRuleSet: {
+            name: 'AcademicActionRuleSet', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$AcademicActionRuleSet$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, config: {
+                    name: "config",
+                    type: "AcademicActionConfig",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'ruleSets',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "configId" },
+                }, configId: {
+                    name: "configId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'config',
+                }, conditions: {
+                    name: "conditions",
+                    type: "AcademicActionCondition",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'ruleSet',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        academicActionCondition: {
+            name: 'AcademicActionCondition', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$AcademicActionCondition$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, ruleSet: {
+                    name: "ruleSet",
+                    type: "AcademicActionRuleSet",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'conditions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "ruleSetId" },
+                }, ruleSetId: {
+                    name: "ruleSetId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'ruleSet',
+                }, field: {
+                    name: "field",
+                    type: "CriteriaField",
+                }, operator: {
+                    name: "operator",
+                    type: "CriteriaOperator",
+                }, invert: {
+                    name: "invert",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, value: {
+                    name: "value",
+                    type: "Float",
+                }, tuple: {
+                    name: "tuple",
+                    type: "String",
+                    isArray: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": [] }] }],
+                }, yearCondition: {
+                    name: "yearCondition",
+                    type: "Int",
+                    isOptional: true,
+                }, isPriorityStudent: {
+                    name: "isPriorityStudent",
+                    type: "Boolean",
+                    isOptional: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        studentAcademicDecision: {
+            name: 'StudentAcademicDecision', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$StudentAcademicDecision$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, student: {
+                    name: "student",
+                    type: "Student",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'studentAcademicDecision',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentId" },
+                }, studentId: {
+                    name: "studentId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'student',
+                }, semester: {
+                    name: "semester",
+                    type: "Semester",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'studentAcademicDecision',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "semesterId" },
+                }, semesterId: {
+                    name: "semesterId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'semester',
+                }, schoolYear: {
+                    name: "schoolYear",
+                    type: "SchoolYear",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'studentAcademicDecision',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "schoolYearId" },
+                }, schoolYearId: {
+                    name: "schoolYearId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'schoolYear',
+                }, appliedConfig: {
+                    name: "appliedConfig",
+                    type: "AcademicActionConfig",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'decisions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "appliedConfigId" },
+                }, appliedConfigId: {
+                    name: "appliedConfigId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'appliedConfig',
+                }, actionTaken: {
+                    name: "actionTaken",
+                    type: "AcademicActionType",
+                }, decisionDate: {
+                    name: "decisionDate",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, validUntil: {
+                    name: "validUntil",
+                    type: "DateTime",
+                    isOptional: true,
+                }, reason: {
+                    name: "reason",
+                    type: "String",
+                    isOptional: true,
+                }, documentEvidence: {
+                    name: "documentEvidence",
+                    type: "DocumentFile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'studentAcademicDecision',
+                }, status: {
+                    name: "status",
+                    type: "DecisionStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedResult: {
+                    name: "updatedResult",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, studentId_semesterId_schoolYearId_appliedConfigId: {
+                    name: "studentId_semesterId_schoolYearId_appliedConfigId",
+                    fields: ["studentId", "semesterId", "schoolYearId", "appliedConfigId"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null, null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        scholarship: {
+            name: 'Scholarship', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Scholarship$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, rankOrder: {
+                    name: "rankOrder",
+                    type: "Int",
+                }, baseAmount: {
+                    name: "baseAmount",
+                    type: "Decimal",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, multiplier: {
+                    name: "multiplier",
+                    type: "Float",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 1 }] }],
+                }, effectiveFrom: {
+                    name: "effectiveFrom",
+                    type: "DateTime",
+                    isOptional: true,
+                }, effectiveTo: {
+                    name: "effectiveTo",
+                    type: "DateTime",
+                    isOptional: true,
+                }, trainingCourse: {
+                    name: "trainingCourse",
+                    type: "TrainingCourse",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'scholarships',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingCourseId" },
+                }, trainingCourseId: {
+                    name: "trainingCourseId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingCourse',
+                }, criteria: {
+                    name: "criteria",
+                    type: "ScholarshipCriteria",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'scholarship',
+                }, awards: {
+                    name: "awards",
+                    type: "ScholarshipAward",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'scholarship',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, trainingCourseId_name: {
+                    name: "trainingCourseId_name",
+                    fields: ["trainingCourseId", "name"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        scholarshipCriteria: {
+            name: 'ScholarshipCriteria', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ScholarshipCriteria$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, scholarshipId: {
+                    name: "scholarshipId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'scholarship',
+                }, scholarship: {
+                    name: "scholarship",
+                    type: "Scholarship",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'criteria',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "scholarshipId" },
+                }, field: {
+                    name: "field",
+                    type: "CriteriaField",
+                }, invert: {
+                    name: "invert",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, operator: {
+                    name: "operator",
+                    type: "CriteriaOperator",
+                }, value: {
+                    name: "value",
+                    type: "Float",
+                }, tuple: {
+                    name: "tuple",
+                    type: "String",
+                    isArray: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": [] }] }],
+                }, bonusValue: {
+                    name: "bonusValue",
+                    type: "Float",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        scholarshipAward: {
+            name: 'ScholarshipAward', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ScholarshipAward$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, student: {
+                    name: "student",
+                    type: "Student",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'scholarshipAwards',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentId" },
+                }, studentId: {
+                    name: "studentId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'student',
+                }, semester: {
+                    name: "semester",
+                    type: "Semester",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'scholarshipAward',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "semesterId" },
+                }, semesterId: {
+                    name: "semesterId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'semester',
+                }, scholarship: {
+                    name: "scholarship",
+                    type: "Scholarship",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'awards',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "scholarshipId" },
+                }, scholarshipId: {
+                    name: "scholarshipId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'scholarship',
+                }, amount: {
+                    name: "amount",
+                    type: "Decimal",
+                }, gpaAtAward: {
+                    name: "gpaAtAward",
+                    type: "Float",
+                }, priorityRank: {
+                    name: "priorityRank",
+                    type: "Int",
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, studentId_scholarshipId_semesterId: {
+                    name: "studentId_scholarshipId_semesterId",
+                    fields: ["studentId", "scholarshipId", "semesterId"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         thesisSession: {
             name: 'ThesisSession', fields: {
@@ -18628,6 +25439,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ThesisSession$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18793,6 +25630,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ThesisProject$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, title: {
                     name: "title",
                     type: "String",
@@ -19237,6 +26100,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DefenseSession$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, startTime: {
                     name: "startTime",
                     type: "DateTime",
@@ -19298,6 +26187,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$StudentThesisRegistration$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -19446,6 +26361,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Expert$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, lecturer: {
                     name: "lecturer",
                     type: "Lecturer",
@@ -19562,6 +26503,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ExpertProfileVersion$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, expert: {
                     name: "expert",
                     type: "Expert",
@@ -19793,6 +26760,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Decision$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, issueDate: {
                     name: "issueDate",
                     type: "DateTime",
@@ -19869,6 +26862,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Invitation$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, sentDate: {
                     name: "sentDate",
                     type: "DateTime",
@@ -19945,6 +26964,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Council$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, proposedDate: {
                     name: "proposedDate",
                     type: "DateTime",
@@ -20035,6 +27080,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$CouncilMember$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, role: {
                     name: "role",
                     type: "CouncilRole",
@@ -20144,6 +27215,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DefenseRecord$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, finalScore: {
                     name: "finalScore",
                     type: "Decimal",
@@ -20232,6 +27329,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$LibrarySubmission$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, submissionDate: {
                     name: "submissionDate",
                     type: "DateTime",
@@ -20326,6 +27449,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ConfigPaymentSession$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -20400,6 +27549,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DefaultCouncilRolePayAmount$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, role: {
                     name: "role",
                     type: "CouncilRole",
@@ -20479,6 +27654,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DefaultSupervisorPayAmount$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, role: {
                     name: "role",
                     type: "SupervisorRole",
@@ -20558,6 +27759,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$PaymentRecord$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, amount: {
                     name: "amount",
                     type: "Decimal",
@@ -20643,6 +27870,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$SupervisorPaymentRecord$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, amount: {
                     name: "amount",
                     type: "Decimal",
@@ -20679,2789 +27932,6 @@ const metadata = {
                     isArray: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "SingleSupervisorPayment" }] }],
                     backLink: 'singleSupervisorPayment',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        documentFile: {
-            name: 'DocumentFile', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$DocumentFile$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, path: {
-                    name: "path",
-                    type: "String",
-                }, size: {
-                    name: "size",
-                    type: "BigInt",
-                }, mimeType: {
-                    name: "mimeType",
-                    type: "String",
-                    isOptional: true,
-                }, archivedCertificate: {
-                    name: "archivedCertificate",
-                    type: "ArchivedCertificate",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'documentFiles',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "archivedCertificateId" },
-                }, archivedCertificateId: {
-                    name: "archivedCertificateId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'archivedCertificate',
-                }, trainingCourse: {
-                    name: "trainingCourse",
-                    type: "TrainingCourse",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'documentFiles',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingCourseId" },
-                }, trainingCourseId: {
-                    name: "trainingCourseId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'trainingCourse',
-                }, archivedAward: {
-                    name: "archivedAward",
-                    type: "ArchivedAward",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'documentFiles',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "archivedAwardId" },
-                }, archivedAwardId: {
-                    name: "archivedAwardId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'archivedAward',
-                }, curriculum: {
-                    name: "curriculum",
-                    type: "Curriculum",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'documentFiles',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "curriculumId" },
-                }, curriculumId: {
-                    name: "curriculumId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'curriculum',
-                }, curriculumVersion: {
-                    name: "curriculumVersion",
-                    type: "CurriculumVersion",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'documentFiles',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "curriculumVersionId" },
-                }, curriculumVersionId: {
-                    name: "curriculumVersionId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'curriculumVersion',
-                }, subjectVersion: {
-                    name: "subjectVersion",
-                    type: "SubjectVersion",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'documentFiles',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "subjectVersionId" },
-                }, subjectVersionId: {
-                    name: "subjectVersionId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'subjectVersion',
-                }, studentAcademicDecision: {
-                    name: "studentAcademicDecision",
-                    type: "StudentAcademicDecision",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'documentEvidence',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "studentAcademicDecisionId" },
-                }, studentAcademicDecisionId: {
-                    name: "studentAcademicDecisionId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'studentAcademicDecision',
-                }, notification: {
-                    name: "notification",
-                    type: "Notification",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'attachments',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "notificationId" },
-                }, notificationId: {
-                    name: "notificationId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'notification',
-                }, decision: {
-                    name: "decision",
-                    type: "Decision",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'documentFile',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "decisionId" },
-                }, decisionId: {
-                    name: "decisionId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'decision',
-                }, defenseRecord: {
-                    name: "defenseRecord",
-                    type: "DefenseRecord",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'documents',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "defenseRecordId" },
-                }, defenseRecordId: {
-                    name: "defenseRecordId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'defenseRecord',
-                }, librarySubmission: {
-                    name: "librarySubmission",
-                    type: "LibrarySubmission",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'documentFile',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "librarySubmissionId" },
-                }, librarySubmissionId: {
-                    name: "librarySubmissionId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'librarySubmission',
-                }, diplomaFront: {
-                    name: "diplomaFront",
-                    type: "GraduationDecision",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaFront" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'diplomaFront',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "diplomaFrontId" },
-                }, diplomaFrontId: {
-                    name: "diplomaFrontId",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                    isForeignKey: true,
-                    relationField: 'diplomaFront',
-                }, diplomaBack: {
-                    name: "diplomaBack",
-                    type: "GraduationDecision",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaBack" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'diplomaBack',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "diplomaBackId" },
-                }, diplomaBackId: {
-                    name: "diplomaBackId",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                    isForeignKey: true,
-                    relationField: 'diplomaBack',
-                }, diplomaVerification: {
-                    name: "diplomaVerification",
-                    type: "DiplomaVerificationApplication",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaVerificationAttachments" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'attachments',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "diplomaVerificationId" },
-                }, diplomaVerificationId: {
-                    name: "diplomaVerificationId",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                    isForeignKey: true,
-                    relationField: 'diplomaVerification',
-                }, diplomaVerificationFront: {
-                    name: "diplomaVerificationFront",
-                    type: "DiplomaVerificationApplication",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaVerificationFront" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'diplomaFront',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "diplomaVerificationFrontId" },
-                }, diplomaVerificationFrontId: {
-                    name: "diplomaVerificationFrontId",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                    isForeignKey: true,
-                    relationField: 'diplomaVerificationFront',
-                }, diplomaVerificationBack: {
-                    name: "diplomaVerificationBack",
-                    type: "DiplomaVerificationApplication",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaVerificationBack" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'diplomaBack',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "diplomaVerificationBackId" },
-                }, diplomaVerificationBackId: {
-                    name: "diplomaVerificationBackId",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                    isForeignKey: true,
-                    relationField: 'diplomaVerificationBack',
-                }, trainingField: {
-                    name: "trainingField",
-                    type: "TrainingField",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'documentFiles',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingFieldId" },
-                }, trainingFieldId: {
-                    name: "trainingFieldId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'trainingField',
-                }, studentScoreConvert: {
-                    name: "studentScoreConvert",
-                    type: "StudentScoreConvert",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'documentFiles',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "studentScoreConvertId" },
-                }, studentScoreConvertId: {
-                    name: "studentScoreConvertId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'studentScoreConvert',
-                }, scoreLinkSheet: {
-                    name: "scoreLinkSheet",
-                    type: "ScoreLinkSheet",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'documents',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "scoreLinkSheetId" },
-                }, scoreLinkSheetId: {
-                    name: "scoreLinkSheetId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'scoreLinkSheet',
-                }, examFramework: {
-                    name: "examFramework",
-                    type: "ExamFramework",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'documentFiles',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "examFrameworkId" },
-                }, examFrameworkId: {
-                    name: "examFrameworkId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'examFramework',
-                }, note: {
-                    name: "note",
-                    type: "Note",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'attachments',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "noteId" },
-                }, noteId: {
-                    name: "noteId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'note',
-                }, evaluationPeriod: {
-                    name: "evaluationPeriod",
-                    type: "EvaluationPeriod",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'documentFiles',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "evaluationPeriodId" },
-                }, evaluationPeriodId: {
-                    name: "evaluationPeriodId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'evaluationPeriod',
-                }, knowledgeBlock: {
-                    name: "knowledgeBlock",
-                    type: "KnowledgeBlock",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'documentFiles',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "knowledgeBlockId" },
-                }, knowledgeBlockId: {
-                    name: "knowledgeBlockId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'knowledgeBlock',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, diplomaFrontId: {
-                    name: "diplomaFrontId",
-                    fields: ["diplomaFrontId"]
-                }, diplomaBackId: {
-                    name: "diplomaBackId",
-                    fields: ["diplomaBackId"]
-                }, diplomaVerificationId: {
-                    name: "diplomaVerificationId",
-                    fields: ["diplomaVerificationId"]
-                }, diplomaVerificationFrontId: {
-                    name: "diplomaVerificationFrontId",
-                    fields: ["diplomaVerificationFrontId"]
-                }, diplomaVerificationBackId: {
-                    name: "diplomaVerificationBackId",
-                    fields: ["diplomaVerificationBackId"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-danh-muc" }] }],
-        },
-        academicActionConfig: {
-            name: 'AcademicActionConfig', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$AcademicActionConfig$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, actionType: {
-                    name: "actionType",
-                    type: "AcademicActionType",
-                }, trainingCourse: {
-                    name: "trainingCourse",
-                    type: "TrainingCourse",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'academicActionConfig',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingCourseId" },
-                }, trainingCourseId: {
-                    name: "trainingCourseId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'trainingCourse',
-                }, ruleSets: {
-                    name: "ruleSets",
-                    type: "AcademicActionRuleSet",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'config',
-                }, decisions: {
-                    name: "decisions",
-                    type: "StudentAcademicDecision",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'appliedConfig',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, trainingCourseId_name: {
-                    name: "trainingCourseId_name",
-                    fields: ["trainingCourseId", "name"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        academicActionRuleSet: {
-            name: 'AcademicActionRuleSet', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$AcademicActionRuleSet$createdBy,
-                }, config: {
-                    name: "config",
-                    type: "AcademicActionConfig",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'ruleSets',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "configId" },
-                }, configId: {
-                    name: "configId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'config',
-                }, conditions: {
-                    name: "conditions",
-                    type: "AcademicActionCondition",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'ruleSet',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        academicActionCondition: {
-            name: 'AcademicActionCondition', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$AcademicActionCondition$createdBy,
-                }, ruleSet: {
-                    name: "ruleSet",
-                    type: "AcademicActionRuleSet",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'conditions',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "ruleSetId" },
-                }, ruleSetId: {
-                    name: "ruleSetId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'ruleSet',
-                }, field: {
-                    name: "field",
-                    type: "CriteriaField",
-                }, operator: {
-                    name: "operator",
-                    type: "CriteriaOperator",
-                }, invert: {
-                    name: "invert",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                }, value: {
-                    name: "value",
-                    type: "Float",
-                }, tuple: {
-                    name: "tuple",
-                    type: "String",
-                    isArray: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": [] }] }],
-                }, yearCondition: {
-                    name: "yearCondition",
-                    type: "Int",
-                    isOptional: true,
-                }, isPriorityStudent: {
-                    name: "isPriorityStudent",
-                    type: "Boolean",
-                    isOptional: true,
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        studentAcademicDecision: {
-            name: 'StudentAcademicDecision', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$StudentAcademicDecision$createdBy,
-                }, student: {
-                    name: "student",
-                    type: "Student",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'studentAcademicDecision',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "studentId" },
-                }, studentId: {
-                    name: "studentId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'student',
-                }, semester: {
-                    name: "semester",
-                    type: "Semester",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'studentAcademicDecision',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "semesterId" },
-                }, semesterId: {
-                    name: "semesterId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'semester',
-                }, schoolYear: {
-                    name: "schoolYear",
-                    type: "SchoolYear",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'studentAcademicDecision',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "schoolYearId" },
-                }, schoolYearId: {
-                    name: "schoolYearId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'schoolYear',
-                }, appliedConfig: {
-                    name: "appliedConfig",
-                    type: "AcademicActionConfig",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'decisions',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "appliedConfigId" },
-                }, appliedConfigId: {
-                    name: "appliedConfigId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'appliedConfig',
-                }, actionTaken: {
-                    name: "actionTaken",
-                    type: "AcademicActionType",
-                }, decisionDate: {
-                    name: "decisionDate",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, validUntil: {
-                    name: "validUntil",
-                    type: "DateTime",
-                    isOptional: true,
-                }, reason: {
-                    name: "reason",
-                    type: "String",
-                    isOptional: true,
-                }, documentEvidence: {
-                    name: "documentEvidence",
-                    type: "DocumentFile",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'studentAcademicDecision',
-                }, status: {
-                    name: "status",
-                    type: "DecisionStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedResult: {
-                    name: "updatedResult",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, studentId_semesterId_schoolYearId_appliedConfigId: {
-                    name: "studentId_semesterId_schoolYearId_appliedConfigId",
-                    fields: ["studentId", "semesterId", "schoolYearId", "appliedConfigId"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null, null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        trainingScoreSession: {
-            name: 'TrainingScoreSession', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$TrainingScoreSession$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, time: {
-                    name: "time",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, semester: {
-                    name: "semester",
-                    type: "Semester",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'trainingScoreSession',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "semesterId" },
-                }, semesterId: {
-                    name: "semesterId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'semester',
-                }, trainingObjectType: {
-                    name: "trainingObjectType",
-                    type: "TrainingObjectType",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'trainingScoreSession',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
-                }, trainingObjectTypeId: {
-                    name: "trainingObjectTypeId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'trainingObjectType',
-                }, studentTrainingScore: {
-                    name: "studentTrainingScore",
-                    type: "StudentTrainingScore",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingScoreSession',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        studentTrainingScore: {
-            name: 'StudentTrainingScore', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$StudentTrainingScore$createdBy,
-                }, trainingScoreSession: {
-                    name: "trainingScoreSession",
-                    type: "TrainingScoreSession",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'studentTrainingScore',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingScoreSessionId" },
-                }, trainingScoreSessionId: {
-                    name: "trainingScoreSessionId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'trainingScoreSession',
-                }, student: {
-                    name: "student",
-                    type: "Student",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'studentTrainingScore',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "studentId" },
-                }, studentId: {
-                    name: "studentId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'student',
-                }, score: {
-                    name: "score",
-                    type: "Float",
-                    isOptional: true,
-                }, studentTrainingType: {
-                    name: "studentTrainingType",
-                    type: "StudentTrainingType",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, status: {
-                    name: "status",
-                    type: "TrainingScoreStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, trainingScoreSessionId_studentId: {
-                    name: "trainingScoreSessionId_studentId",
-                    fields: ["trainingScoreSessionId", "studentId"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        semesterTrainingScore: {
-            name: 'SemesterTrainingScore', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$SemesterTrainingScore$createdBy,
-                }, semester: {
-                    name: "semester",
-                    type: "Semester",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'semesterTrainingScore',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "semesterId" },
-                }, semesterId: {
-                    name: "semesterId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'semester',
-                }, student: {
-                    name: "student",
-                    type: "Student",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'semesterTrainingScore',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "studentId" },
-                }, studentId: {
-                    name: "studentId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'student',
-                }, score: {
-                    name: "score",
-                    type: "Int",
-                    isOptional: true,
-                }, status: {
-                    name: "status",
-                    type: "TrainingScoreStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        schoolYearTrainingScore: {
-            name: 'SchoolYearTrainingScore', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$SchoolYearTrainingScore$createdBy,
-                }, schoolYear: {
-                    name: "schoolYear",
-                    type: "SchoolYear",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'schoolYearTrainingScore',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "schoolYearId" },
-                }, schoolYearId: {
-                    name: "schoolYearId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'schoolYear',
-                }, student: {
-                    name: "student",
-                    type: "Student",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'schoolYearTrainingScore',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "studentId" },
-                }, studentId: {
-                    name: "studentId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'student',
-                }, score: {
-                    name: "score",
-                    type: "Int",
-                    isOptional: true,
-                }, status: {
-                    name: "status",
-                    type: "TrainingScoreStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        scholarship: {
-            name: 'Scholarship', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$Scholarship$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, rankOrder: {
-                    name: "rankOrder",
-                    type: "Int",
-                }, baseAmount: {
-                    name: "baseAmount",
-                    type: "Decimal",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
-                }, multiplier: {
-                    name: "multiplier",
-                    type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 1 }] }],
-                }, effectiveFrom: {
-                    name: "effectiveFrom",
-                    type: "DateTime",
-                    isOptional: true,
-                }, effectiveTo: {
-                    name: "effectiveTo",
-                    type: "DateTime",
-                    isOptional: true,
-                }, trainingCourse: {
-                    name: "trainingCourse",
-                    type: "TrainingCourse",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'scholarships',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingCourseId" },
-                }, trainingCourseId: {
-                    name: "trainingCourseId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'trainingCourse',
-                }, criteria: {
-                    name: "criteria",
-                    type: "ScholarshipCriteria",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'scholarship',
-                }, awards: {
-                    name: "awards",
-                    type: "ScholarshipAward",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'scholarship',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, trainingCourseId_name: {
-                    name: "trainingCourseId_name",
-                    fields: ["trainingCourseId", "name"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        scholarshipCriteria: {
-            name: 'ScholarshipCriteria', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$ScholarshipCriteria$createdBy,
-                }, scholarshipId: {
-                    name: "scholarshipId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'scholarship',
-                }, scholarship: {
-                    name: "scholarship",
-                    type: "Scholarship",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'criteria',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "scholarshipId" },
-                }, field: {
-                    name: "field",
-                    type: "CriteriaField",
-                }, invert: {
-                    name: "invert",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                }, operator: {
-                    name: "operator",
-                    type: "CriteriaOperator",
-                }, value: {
-                    name: "value",
-                    type: "Float",
-                }, tuple: {
-                    name: "tuple",
-                    type: "String",
-                    isArray: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": [] }] }],
-                }, bonusValue: {
-                    name: "bonusValue",
-                    type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        scholarshipAward: {
-            name: 'ScholarshipAward', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$ScholarshipAward$createdBy,
-                }, student: {
-                    name: "student",
-                    type: "Student",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'scholarshipAwards',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "studentId" },
-                }, studentId: {
-                    name: "studentId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'student',
-                }, semester: {
-                    name: "semester",
-                    type: "Semester",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'scholarshipAward',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "semesterId" },
-                }, semesterId: {
-                    name: "semesterId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'semester',
-                }, scholarship: {
-                    name: "scholarship",
-                    type: "Scholarship",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'awards',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "scholarshipId" },
-                }, scholarshipId: {
-                    name: "scholarshipId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'scholarship',
-                }, amount: {
-                    name: "amount",
-                    type: "Decimal",
-                }, gpaAtAward: {
-                    name: "gpaAtAward",
-                    type: "Float",
-                }, priorityRank: {
-                    name: "priorityRank",
-                    type: "Int",
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, studentId_scholarshipId_semesterId: {
-                    name: "studentId_scholarshipId_semesterId",
-                    fields: ["studentId", "scholarshipId", "semesterId"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        graduationSession: {
-            name: 'GraduationSession', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$GraduationSession$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, sessionDate: {
-                    name: "sessionDate",
-                    type: "DateTime",
-                }, applicationStart: {
-                    name: "applicationStart",
-                    type: "DateTime",
-                }, applicationEnd: {
-                    name: "applicationEnd",
-                    type: "DateTime",
-                }, trainingObjectType: {
-                    name: "trainingObjectType",
-                    type: "TrainingObjectType",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'graduationSession',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
-                }, trainingObjectTypeId: {
-                    name: "trainingObjectTypeId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'trainingObjectType',
-                }, status: {
-                    name: "status",
-                    type: "GraduationSessionStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, applications: {
-                    name: "applications",
-                    type: "StudentGraduationApplication",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'session',
-                }, outputStandard: {
-                    name: "outputStandard",
-                    type: "OutputStandard",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'graduationSessions',
-                    isRelationOwner: true,
-                }, trainingCourse: {
-                    name: "trainingCourse",
-                    type: "TrainingCourse",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'graduationSessions',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingCourseId" },
-                }, trainingCourseId: {
-                    name: "trainingCourseId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'trainingCourse',
-                }, eligibleCount: {
-                    name: "eligibleCount",
-                    type: "Int",
-                    isOptional: true,
-                }, excellentCount: {
-                    name: "excellentCount",
-                    type: "Int",
-                    isOptional: true,
-                }, topicDecisionNumber: {
-                    name: "topicDecisionNumber",
-                    type: "String",
-                    isOptional: true,
-                }, topicDecisionDate: {
-                    name: "topicDecisionDate",
-                    type: "DateTime",
-                    isOptional: true,
-                }, topicDecisionSigner: {
-                    name: "topicDecisionSigner",
-                    type: "String",
-                    isOptional: true,
-                }, defenseDecisionNumber: {
-                    name: "defenseDecisionNumber",
-                    type: "String",
-                    isOptional: true,
-                }, defenseDecisionDate: {
-                    name: "defenseDecisionDate",
-                    type: "DateTime",
-                    isOptional: true,
-                }, defenseDecisionSigner: {
-                    name: "defenseDecisionSigner",
-                    type: "String",
-                    isOptional: true,
-                }, graduationDecisionNumber: {
-                    name: "graduationDecisionNumber",
-                    type: "String",
-                    isOptional: true,
-                }, graduationDecisionDate: {
-                    name: "graduationDecisionDate",
-                    type: "DateTime",
-                    isOptional: true,
-                }, graduationDecisionSigner: {
-                    name: "graduationDecisionSigner",
-                    type: "String",
-                    isOptional: true,
-                }, councilMeetingDate: {
-                    name: "councilMeetingDate",
-                    type: "DateTime",
-                    isOptional: true,
-                }, councilMeetingBasis: {
-                    name: "councilMeetingBasis",
-                    type: "String",
-                    isOptional: true,
-                }, proposalTopic: {
-                    name: "proposalTopic",
-                    type: "String",
-                    isOptional: true,
-                }, proposalCouncil: {
-                    name: "proposalCouncil",
-                    type: "String",
-                    isOptional: true,
-                }, proposalGraduation: {
-                    name: "proposalGraduation",
-                    type: "String",
-                    isOptional: true,
-                }, skipCertificateCheck: {
-                    name: "skipCertificateCheck",
-                    type: "Boolean",
-                    isOptional: true,
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        studentGraduationApplication: {
-            name: 'StudentGraduationApplication', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$StudentGraduationApplication$createdBy,
-                }, student: {
-                    name: "student",
-                    type: "Student",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'graduationApplications',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "studentId" },
-                }, studentId: {
-                    name: "studentId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'student',
-                }, session: {
-                    name: "session",
-                    type: "GraduationSession",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'applications',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "sessionId" },
-                }, sessionId: {
-                    name: "sessionId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'session',
-                }, applicationDate: {
-                    name: "applicationDate",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, status: {
-                    name: "status",
-                    type: "ApplicationStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, graduation: {
-                    name: "graduation",
-                    type: "Boolean",
-                    isOptional: true,
-                }, gpa: {
-                    name: "gpa",
-                    type: "Decimal",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Decimal", "args": [{ "name": "p", "value": 5 }, { "name": "s", "value": 2 }] }],
-                }, reason: {
-                    name: "reason",
-                    type: "String",
-                    isOptional: true,
-                }, downgraded: {
-                    name: "downgraded",
-                    type: "ApplicationDowngraded",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'studentGraduationApplication',
-                }, rank: {
-                    name: "rank",
-                    type: "AcademicRankingConvert",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'studentGraduationApplication',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "rankId" },
-                }, rankId: {
-                    name: "rankId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'rank',
-                }, trainingMajor: {
-                    name: "trainingMajor",
-                    type: "TrainingMajor",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'studentGraduationApplication',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingMajorId" },
-                }, trainingMajorId: {
-                    name: "trainingMajorId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'trainingMajor',
-                }, diplomaType: {
-                    name: "diplomaType",
-                    type: "DiplomaType",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'studentGraduationApplication',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "diplomaTypeId" },
-                }, diplomaTypeId: {
-                    name: "diplomaTypeId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'diplomaType',
-                }, thesisScore: {
-                    name: "thesisScore",
-                    type: "Float",
-                    isOptional: true,
-                }, thesisReExam: {
-                    name: "thesisReExam",
-                    type: "Boolean",
-                    isOptional: true,
-                }, politicalScore: {
-                    name: "politicalScore",
-                    type: "Float",
-                    isOptional: true,
-                }, politicalReExam: {
-                    name: "politicalReExam",
-                    type: "Boolean",
-                    isOptional: true,
-                }, foreignLanguageScore: {
-                    name: "foreignLanguageScore",
-                    type: "Float",
-                    isOptional: true,
-                }, foreignLanguageReExam: {
-                    name: "foreignLanguageReExam",
-                    type: "Boolean",
-                    isOptional: true,
-                }, defenseEduCert: {
-                    name: "defenseEduCert",
-                    type: "Boolean",
-                    isOptional: true,
-                }, physicalEduCert: {
-                    name: "physicalEduCert",
-                    type: "Boolean",
-                    isOptional: true,
-                }, foreignLangCert: {
-                    name: "foreignLangCert",
-                    type: "Boolean",
-                    isOptional: true,
-                }, itCert: {
-                    name: "itCert",
-                    type: "Boolean",
-                    isOptional: true,
-                }, accumulatedCredits: {
-                    name: "accumulatedCredits",
-                    type: "Int",
-                    isOptional: true,
-                }, gpa10: {
-                    name: "gpa10",
-                    type: "Float",
-                    isOptional: true,
-                }, reExamCredits: {
-                    name: "reExamCredits",
-                    type: "Int",
-                    isOptional: true,
-                }, totalSubjects: {
-                    name: "totalSubjects",
-                    type: "Int",
-                    isOptional: true,
-                }, failedSubjects: {
-                    name: "failedSubjects",
-                    type: "Int",
-                    isOptional: true,
-                }, failedCredits: {
-                    name: "failedCredits",
-                    type: "Int",
-                    isOptional: true,
-                }, mandatoryFailedSubjects: {
-                    name: "mandatoryFailedSubjects",
-                    type: "Int",
-                    isOptional: true,
-                }, mandatoryFailedCredits: {
-                    name: "mandatoryFailedCredits",
-                    type: "Int",
-                    isOptional: true,
-                }, rankDowngraded: {
-                    name: "rankDowngraded",
-                    type: "Boolean",
-                    isOptional: true,
-                }, applicationCheckResult: {
-                    name: "applicationCheckResult",
-                    type: "ApplicationCheckResult",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'studentGraduationApplication',
-                }, gpaScore: {
-                    name: "gpaScore",
-                    type: "StudentSubjectScore",
-                    isDataModel: true,
-                    isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "gpaScore" }] }],
-                    backLink: 'graduationGpaScores',
-                }, supplementaryScore: {
-                    name: "supplementaryScore",
-                    type: "StudentSubjectScore",
-                    isDataModel: true,
-                    isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "supplementaryScore" }] }],
-                    backLink: 'graduationSupplementaryScore',
-                }, decision: {
-                    name: "decision",
-                    type: "GraduationDecision",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'application',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, studentId_sessionId: {
-                    name: "studentId_sessionId",
-                    fields: ["studentId", "sessionId"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        applicationDowngraded: {
-            name: 'ApplicationDowngraded', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$ApplicationDowngraded$createdBy,
-                }, studentGraduationApplication: {
-                    name: "studentGraduationApplication",
-                    type: "StudentGraduationApplication",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'downgraded',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "studentGraduationApplicationId" },
-                }, studentGraduationApplicationId: {
-                    name: "studentGraduationApplicationId",
-                    type: "String",
-                    attributes: [{ "name": "@unique", "args": [] }],
-                    isForeignKey: true,
-                    relationField: 'studentGraduationApplication',
-                }, from: {
-                    name: "from",
-                    type: "AcademicRankingConvert",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'applicationDowngraded',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "fromId" },
-                }, fromId: {
-                    name: "fromId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'from',
-                }, conditions: {
-                    name: "conditions",
-                    type: "GraduationRankDowngradeCondition",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'applicationDowngraded',
-                    isRelationOwner: true,
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, studentGraduationApplicationId: {
-                    name: "studentGraduationApplicationId",
-                    fields: ["studentGraduationApplicationId"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        applicationCheckResult: {
-            name: 'ApplicationCheckResult', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$ApplicationCheckResult$createdBy,
-                }, studentGraduationApplication: {
-                    name: "studentGraduationApplication",
-                    type: "StudentGraduationApplication",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'applicationCheckResult',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "studentGraduationApplicationId" },
-                }, studentGraduationApplicationId: {
-                    name: "studentGraduationApplicationId",
-                    type: "String",
-                    attributes: [{ "name": "@unique", "args": [] }],
-                    isForeignKey: true,
-                    relationField: 'studentGraduationApplication',
-                }, rankingCondition: {
-                    name: "rankingCondition",
-                    type: "RankingCondition",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'applicationCheckResult',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "rankingConditionId" },
-                }, rankingConditionId: {
-                    name: "rankingConditionId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'rankingCondition',
-                }, passed: {
-                    name: "passed",
-                    type: "Boolean",
-                }, actualValue: {
-                    name: "actualValue",
-                    type: "Float",
-                    isOptional: true,
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, studentGraduationApplicationId: {
-                    name: "studentGraduationApplicationId",
-                    fields: ["studentGraduationApplicationId"]
-                }, studentGraduationApplicationId_rankingConditionId: {
-                    name: "studentGraduationApplicationId_rankingConditionId",
-                    fields: ["studentGraduationApplicationId", "rankingConditionId"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        graduationDecision: {
-            name: 'GraduationDecision', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$GraduationDecision$createdBy,
-                }, application: {
-                    name: "application",
-                    type: "StudentGraduationApplication",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'decision',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "applicationId" },
-                }, applicationId: {
-                    name: "applicationId",
-                    type: "String",
-                    attributes: [{ "name": "@unique", "args": [] }],
-                    isForeignKey: true,
-                    relationField: 'application',
-                }, student: {
-                    name: "student",
-                    type: "Student",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'graduationDecision',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "studentId" },
-                }, studentId: {
-                    name: "studentId",
-                    type: "String",
-                    attributes: [{ "name": "@unique", "args": [] }],
-                    isForeignKey: true,
-                    relationField: 'student',
-                }, decisionDate: {
-                    name: "decisionDate",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Date", "args": [] }],
-                }, notes: {
-                    name: "notes",
-                    type: "String",
-                    isOptional: true,
-                }, finalGpa: {
-                    name: "finalGpa",
-                    type: "Decimal",
-                    attributes: [{ "name": "@db.Decimal", "args": [{ "name": "p", "value": 5 }, { "name": "s", "value": 2 }] }],
-                }, trainingMajor: {
-                    name: "trainingMajor",
-                    type: "TrainingMajor",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'graduationDecision',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingMajorId" },
-                }, trainingMajorId: {
-                    name: "trainingMajorId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'trainingMajor',
-                }, finalRanking: {
-                    name: "finalRanking",
-                    type: "AcademicRankingConvert",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'graduationDecision',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "finalRankingId" },
-                }, finalRankingId: {
-                    name: "finalRankingId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'finalRanking',
-                }, diplomaType: {
-                    name: "diplomaType",
-                    type: "DiplomaType",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'graduationDecision',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "diplomaTypeId" },
-                }, diplomaTypeId: {
-                    name: "diplomaTypeId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'diplomaType',
-                }, originalDiplomaNumber: {
-                    name: "originalDiplomaNumber",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, diplomaNumber: {
-                    name: "diplomaNumber",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, diplomaIssueDate: {
-                    name: "diplomaIssueDate",
-                    type: "DateTime",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Date", "args": [] }],
-                }, diplomaFront: {
-                    name: "diplomaFront",
-                    type: "DocumentFile",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaFront" }] }],
-                    backLink: 'diplomaFront',
-                }, diplomaBack: {
-                    name: "diplomaBack",
-                    type: "DocumentFile",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaBack" }] }],
-                    backLink: 'diplomaBack',
-                }, totalCopy: {
-                    name: "totalCopy",
-                    type: "Int",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, applicationId: {
-                    name: "applicationId",
-                    fields: ["applicationId"]
-                }, studentId: {
-                    name: "studentId",
-                    fields: ["studentId"]
-                }, originalDiplomaNumber: {
-                    name: "originalDiplomaNumber",
-                    fields: ["originalDiplomaNumber"]
-                }, diplomaNumber: {
-                    name: "diplomaNumber",
-                    fields: ["diplomaNumber"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        academicRankingConvert: {
-            name: 'AcademicRankingConvert', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$AcademicRankingConvert$createdBy,
-                }, classification: {
-                    name: "classification",
-                    type: "String",
-                }, classificationEnglish: {
-                    name: "classificationEnglish",
-                    type: "String",
-                    isOptional: true,
-                }, context: {
-                    name: "context",
-                    type: "RankingContext",
-                }, rankOrder: {
-                    name: "rankOrder",
-                    type: "Int",
-                }, baseScore: {
-                    name: "baseScore",
-                    type: "AcademicRankingBaseType",
-                }, base10Min: {
-                    name: "base10Min",
-                    type: "Float",
-                    isOptional: true,
-                }, base10Max: {
-                    name: "base10Max",
-                    type: "Float",
-                    isOptional: true,
-                }, base4Min: {
-                    name: "base4Min",
-                    type: "Float",
-                    isOptional: true,
-                }, base4Max: {
-                    name: "base4Max",
-                    type: "Float",
-                    isOptional: true,
-                }, graduated: {
-                    name: "graduated",
-                    type: "Boolean",
-                }, trainingCourse: {
-                    name: "trainingCourse",
-                    type: "TrainingCourse",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'academicRankingConvert',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingCourseId" },
-                }, trainingCourseId: {
-                    name: "trainingCourseId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'trainingCourse',
-                }, rankingCondition: {
-                    name: "rankingCondition",
-                    type: "RankingCondition",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'ranking',
-                }, downgradeRules: {
-                    name: "downgradeRules",
-                    type: "GraduationRankDowngradeRule",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'initialRank',
-                }, graduationDecision: {
-                    name: "graduationDecision",
-                    type: "GraduationDecision",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'finalRanking',
-                }, studentGraduationApplication: {
-                    name: "studentGraduationApplication",
-                    type: "StudentGraduationApplication",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'rank',
-                }, applicationDowngraded: {
-                    name: "applicationDowngraded",
-                    type: "ApplicationDowngraded",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'from',
-                }, studentSemesterResult: {
-                    name: "studentSemesterResult",
-                    type: "StudentSemesterResult",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'rank',
-                }, studentYearResult: {
-                    name: "studentYearResult",
-                    type: "StudentYearResult",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'rank',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, trainingCourseId_context_rankOrder: {
-                    name: "trainingCourseId_context_rankOrder",
-                    fields: ["trainingCourseId", "context", "rankOrder"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@validate", "args": [{ "name": "value" }, { "name": "message", "value": "Xếp loại theo hệ 10 phải khai báo base10Min, base10Max" }] }, { "name": "@@validate", "args": [{ "name": "value" }, { "name": "message", "value": "Xếp loại theo hệ 4 phải khai báo base4Min, base4Max" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        graduationRankDowngradeRule: {
-            name: 'GraduationRankDowngradeRule', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$GraduationRankDowngradeRule$createdBy,
-                }, initialRank: {
-                    name: "initialRank",
-                    type: "AcademicRankingConvert",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'downgradeRules',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "initialRankId" },
-                }, initialRankId: {
-                    name: "initialRankId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'initialRank',
-                }, conditions: {
-                    name: "conditions",
-                    type: "GraduationRankDowngradeCondition",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'downgradeRule',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        graduationRankDowngradeCondition: {
-            name: 'GraduationRankDowngradeCondition', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$GraduationRankDowngradeCondition$createdBy,
-                }, downgradeRule: {
-                    name: "downgradeRule",
-                    type: "GraduationRankDowngradeRule",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'conditions',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "downgradeRuleId" },
-                }, downgradeRuleId: {
-                    name: "downgradeRuleId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'downgradeRule',
-                }, field: {
-                    name: "field",
-                    type: "CriteriaField",
-                }, operator: {
-                    name: "operator",
-                    type: "CriteriaOperator",
-                }, invert: {
-                    name: "invert",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                }, value: {
-                    name: "value",
-                    type: "Float",
-                }, tuple: {
-                    name: "tuple",
-                    type: "String",
-                    isArray: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": [] }] }],
-                }, applicationDowngraded: {
-                    name: "applicationDowngraded",
-                    type: "ApplicationDowngraded",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'conditions',
-                    isRelationOwner: true,
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        rankingCondition: {
-            name: 'RankingCondition', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$RankingCondition$createdBy,
-                }, ranking: {
-                    name: "ranking",
-                    type: "AcademicRankingConvert",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'rankingCondition',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "rankingId" },
-                }, rankingId: {
-                    name: "rankingId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'ranking',
-                }, field: {
-                    name: "field",
-                    type: "CriteriaField",
-                }, operator: {
-                    name: "operator",
-                    type: "CriteriaOperator",
-                }, invert: {
-                    name: "invert",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                }, value: {
-                    name: "value",
-                    type: "Float",
-                }, tuple: {
-                    name: "tuple",
-                    type: "String",
-                    isArray: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": [] }] }],
-                }, applicationCheckResult: {
-                    name: "applicationCheckResult",
-                    type: "ApplicationCheckResult",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'rankingCondition',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        diplomaVerificationApplication: {
-            name: 'DiplomaVerificationApplication', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$DiplomaVerificationApplication$createdBy,
-                }, fullname: {
-                    name: "fullname",
-                    type: "String",
-                }, idCardNumber: {
-                    name: "idCardNumber",
-                    type: "String",
-                }, dateOfBirth: {
-                    name: "dateOfBirth",
-                    type: "DateTime",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Date", "args": [] }],
-                }, phoneNumber: {
-                    name: "phoneNumber",
-                    type: "String",
-                }, email: {
-                    name: "email",
-                    type: "String",
-                }, reason: {
-                    name: "reason",
-                    type: "String",
-                }, originalDiplomaNumber: {
-                    name: "originalDiplomaNumber",
-                    type: "String",
-                }, diplomaNumber: {
-                    name: "diplomaNumber",
-                    type: "String",
-                }, trainingMajor: {
-                    name: "trainingMajor",
-                    type: "String",
-                    isOptional: true,
-                }, trainingLevel: {
-                    name: "trainingLevel",
-                    type: "String",
-                    isOptional: true,
-                }, trainingForm: {
-                    name: "trainingForm",
-                    type: "String",
-                    isOptional: true,
-                }, trainingCourseStartYear: {
-                    name: "trainingCourseStartYear",
-                    type: "Int",
-                    isOptional: true,
-                }, trainingCourseEndYear: {
-                    name: "trainingCourseEndYear",
-                    type: "Int",
-                    isOptional: true,
-                }, diplomaIssueDate: {
-                    name: "diplomaIssueDate",
-                    type: "DateTime",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Date", "args": [] }],
-                }, classification: {
-                    name: "classification",
-                    type: "String",
-                    isOptional: true,
-                }, attachments: {
-                    name: "attachments",
-                    type: "DocumentFile",
-                    isDataModel: true,
-                    isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaVerificationAttachments" }] }],
-                    backLink: 'diplomaVerification',
-                }, diplomaFront: {
-                    name: "diplomaFront",
-                    type: "DocumentFile",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaVerificationFront" }] }],
-                    backLink: 'diplomaVerificationFront',
-                }, diplomaBack: {
-                    name: "diplomaBack",
-                    type: "DocumentFile",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaVerificationBack" }] }],
-                    backLink: 'diplomaVerificationBack',
-                }, status: {
-                    name: "status",
-                    type: "DiplomaVerificationStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, studentId: {
-                    name: "studentId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'student',
-                }, student: {
-                    name: "student",
-                    type: "Student",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'diplomaVerificationApplication',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "studentId" },
                 },
             }, uniqueConstraints: {
                 id: {
@@ -23513,6 +27983,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ScoreLinkSheet$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, trainingObjectType: {
                     name: "trainingObjectType",
                     type: "TrainingObjectType",
@@ -23627,6 +28123,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ScoreLinkSubjectVersion$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, scoreLinkSheet: {
                     name: "scoreLinkSheet",
                     type: "ScoreLinkSheet",
@@ -23719,6 +28241,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ScoreLinkStudent$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, scoreLinkSubjectVersion: {
                     name: "scoreLinkSubjectVersion",
                     type: "ScoreLinkSubjectVersion",
@@ -23765,371 +28313,6 @@ const metadata = {
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
-        note: {
-            name: 'Note', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$Note$createdBy,
-                }, content: {
-                    name: "content",
-                    type: "String",
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, isPinned: {
-                    name: "isPinned",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                }, student: {
-                    name: "student",
-                    type: "Student",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'notes',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "studentId" },
-                }, studentId: {
-                    name: "studentId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'student',
-                }, folder: {
-                    name: "folder",
-                    type: "NoteFolder",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'notes',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "folderId" },
-                }, folderId: {
-                    name: "folderId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'folder',
-                }, tags: {
-                    name: "tags",
-                    type: "NoteTag",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'notes',
-                    isRelationOwner: true,
-                }, attachments: {
-                    name: "attachments",
-                    type: "DocumentFile",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'note',
-                }, reminders: {
-                    name: "reminders",
-                    type: "NoteReminder",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'note',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        noteFolder: {
-            name: 'NoteFolder', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$NoteFolder$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, icon: {
-                    name: "icon",
-                    type: "String",
-                    isOptional: true,
-                }, sortOrder: {
-                    name: "sortOrder",
-                    type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
-                }, student: {
-                    name: "student",
-                    type: "Student",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'noteFolders',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "studentId" },
-                }, studentId: {
-                    name: "studentId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'student',
-                }, parent: {
-                    name: "parent",
-                    type: "NoteFolder",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "FolderHierarchy" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'children',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "parentId" },
-                }, parentId: {
-                    name: "parentId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'parent',
-                }, children: {
-                    name: "children",
-                    type: "NoteFolder",
-                    isDataModel: true,
-                    isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "FolderHierarchy" }] }],
-                    backLink: 'parent',
-                }, notes: {
-                    name: "notes",
-                    type: "Note",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'folder',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        noteTag: {
-            name: 'NoteTag', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$NoteTag$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, color: {
-                    name: "color",
-                    type: "String",
-                    isOptional: true,
-                }, notes: {
-                    name: "notes",
-                    type: "Note",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'tags',
-                    isRelationOwner: true,
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, name: {
-                    name: "name",
-                    fields: ["name"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        noteReminder: {
-            name: 'NoteReminder', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$NoteReminder$createdBy,
-                }, title: {
-                    name: "title",
-                    type: "String",
-                }, reminderTime: {
-                    name: "reminderTime",
-                    type: "DateTime",
-                }, isCompleted: {
-                    name: "isCompleted",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                }, completedAt: {
-                    name: "completedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, repeatType: {
-                    name: "repeatType",
-                    type: "ReminderRepeatType",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, isNotified: {
-                    name: "isNotified",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                }, note: {
-                    name: "note",
-                    type: "Note",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
-                    backLink: 'reminders',
-                    isRelationOwner: true,
-                    onDeleteAction: 'Cascade',
-                    foreignKeyMapping: { "id": "noteId" },
-                }, noteId: {
-                    name: "noteId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'note',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
         evaluationPeriod: {
             name: 'EvaluationPeriod', fields: {
                 id: {
@@ -24169,6 +28352,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$EvaluationPeriod$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -24291,6 +28500,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$EvaluationStandardSet$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -24358,6 +28593,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$StandardCatalog$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, order: {
                     name: "order",
                     type: "Int",
@@ -24439,6 +28700,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$CriterionCatalog$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, standard: {
                     name: "standard",
                     type: "StandardCatalog",
@@ -24518,6 +28805,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$EvidenceCategory$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -24589,6 +28902,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Evidence$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, category: {
                     name: "category",
                     type: "EvidenceCategory",
@@ -24678,6 +29017,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$EvaluationCriterionComment$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, reviewer: {
                     name: "reviewer",
                     type: "UserProfile",
@@ -24794,6 +29159,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$RequirementCriterionCatalog$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, criterionCatalog: {
                     name: "criterionCatalog",
                     type: "CriterionCatalog",
@@ -24871,6 +29262,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$StandardPeriod$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, period: {
                     name: "period",
                     type: "EvaluationPeriod",
@@ -24959,6 +29376,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$CriterionPeriod$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -25041,6 +29484,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$AnalysisCriterion$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, criterionPeriod: {
                     name: "criterionPeriod",
                     type: "CriterionPeriod",
@@ -25144,6 +29613,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$EvaluationCriterion$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, criterionPeriod: {
                     name: "criterionPeriod",
                     type: "CriterionPeriod",
@@ -25292,6 +29787,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$RequirementCriterion$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, analysisCriterion: {
                     name: "analysisCriterion",
                     type: "AnalysisCriterion",
@@ -25386,6 +29907,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$AnalysisFormEvidence$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, requirementCriterion: {
                     name: "requirementCriterion",
                     type: "RequirementCriterion",
@@ -25470,6 +30017,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$EvaluationCouncil$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, period: {
                     name: "period",
                     type: "EvaluationPeriod",
@@ -25548,6 +30121,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$EvaluationCouncilMember$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, evaluationCouncil: {
                     name: "evaluationCouncil",
                     type: "EvaluationCouncil",
@@ -25640,6 +30239,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$EvidenceFile$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -25732,6 +30357,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$QuestionBank$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -25808,6 +30459,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Question$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, content: {
                     name: "content",
                     type: "String",
@@ -25964,6 +30641,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$MultipleChoiceOption$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, questionId: {
                     name: "questionId",
                     type: "String",
@@ -26039,6 +30742,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$FillInBlankSlot$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, questionId: {
                     name: "questionId",
                     type: "String",
@@ -26113,6 +30842,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$OrderingItem$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, questionId: {
                     name: "questionId",
                     type: "String",
@@ -26187,6 +30942,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Exam$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, lockExamSessions: {
                     name: "lockExamSessions",
                     type: "Boolean",
@@ -26294,6 +31075,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ExamRoom$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, exam: {
                     name: "exam",
                     type: "Exam",
@@ -26386,6 +31193,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ExamList$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, examRoom: {
                     name: "examRoom",
                     type: "ExamRoom",
@@ -26504,6 +31337,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ExamBank$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, exam: {
                     name: "exam",
                     type: "Exam",
@@ -26641,6 +31500,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ExamBankQuestion$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, examBankId: {
                     name: "examBankId",
                     type: "String",
@@ -26729,6 +31614,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ExamPaper$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, examList: {
                     name: "examList",
                     type: "ExamList",
@@ -26819,6 +31730,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ExamFramework$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -26901,6 +31838,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ExamMatrix$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -26984,6 +31947,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$KnowledgeBlock$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -27084,6 +32073,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ConfigExam$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, difficult: {
                     name: "difficult",
                     type: "Difficult",
@@ -27163,6 +32178,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$SurveyObjectType$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -27298,6 +32339,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$SurveyTopic$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -27375,6 +32442,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$SurveyQuestionGroup$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -27442,6 +32535,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$ClusterSurvey$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -27565,6 +32684,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Survey$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -27761,6 +32906,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$SurveyQuestion$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -27859,6 +33030,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$SpecificChoice$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, answer: {
                     name: "answer",
                     type: "String",
@@ -27926,6 +33123,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$SurveyChoice$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, answer: {
                     name: "answer",
                     type: "String",
@@ -28011,6 +33234,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$SurveySession$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, survey: {
                     name: "survey",
                     type: "Survey",
@@ -28145,6 +33394,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$SurveyResponse$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, surveySession: {
                     name: "surveySession",
                     type: "SurveySession",
@@ -28213,6 +33488,595 @@ const metadata = {
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
+        staff: {
+            name: 'Staff', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Staff$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, from: {
+                    name: "from",
+                    type: "DateTime",
+                    isOptional: true,
+                }, userProfile: {
+                    name: "userProfile",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'staffs',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "userProfileId" },
+                }, userProfileId: {
+                    name: "userProfileId",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@unique", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'userProfile',
+                }, organization: {
+                    name: "organization",
+                    type: "DM_DonVi",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'staffs',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "organizationId" },
+                }, organizationId: {
+                    name: "organizationId",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'organization',
+                }, staffType: {
+                    name: "staffType",
+                    type: "StaffType",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'staffs',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "staffTypeId" },
+                }, staffTypeId: {
+                    name: "staffTypeId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'staffType',
+                }, staffPosition: {
+                    name: "staffPosition",
+                    type: "StaffPosition",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'staffs',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "staffPositionId" },
+                }, staffPositionId: {
+                    name: "staffPositionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'staffPosition',
+                }, fixedClass: {
+                    name: "fixedClass",
+                    type: "FixedClass",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ManageStaff" }] }],
+                    backLink: 'staffManagement',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, userProfileId: {
+                    name: "userProfileId",
+                    fields: ["userProfileId"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        staffHistory: {
+            name: 'StaffHistory', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$StaffHistory$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, from: {
+                    name: "from",
+                    type: "DateTime",
+                    isOptional: true,
+                }, to: {
+                    name: "to",
+                    type: "DateTime",
+                    isOptional: true,
+                }, userProfile: {
+                    name: "userProfile",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'staffHistory',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "userProfileId" },
+                }, userProfileId: {
+                    name: "userProfileId",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@unique", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'userProfile',
+                }, organization: {
+                    name: "organization",
+                    type: "DM_DonVi",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'staffHistory',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "organizationId" },
+                }, organizationId: {
+                    name: "organizationId",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'organization',
+                }, staffType: {
+                    name: "staffType",
+                    type: "StaffType",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'staffHistory',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "staffTypeId" },
+                }, staffTypeId: {
+                    name: "staffTypeId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'staffType',
+                }, staffPosition: {
+                    name: "staffPosition",
+                    type: "StaffPosition",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'staffHistory',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "staffPositionId" },
+                }, staffPositionId: {
+                    name: "staffPositionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'staffPosition',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, userProfileId: {
+                    name: "userProfileId",
+                    fields: ["userProfileId"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        researchProject: {
+            name: 'ResearchProject', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ResearchProject$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, title: {
+                    name: "title",
+                    type: "String",
+                }, summary: {
+                    name: "summary",
+                    type: "String",
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, objectives: {
+                    name: "objectives",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, methodology: {
+                    name: "methodology",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, expectedResults: {
+                    name: "expectedResults",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, requirements: {
+                    name: "requirements",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, supervisor: {
+                    name: "supervisor",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'researchProjects',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "supervisorId" },
+                }, supervisorId: {
+                    name: "supervisorId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'supervisor',
+                }, organization: {
+                    name: "organization",
+                    type: "DM_DonVi",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'researchProjects',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "organizationId" },
+                }, organizationId: {
+                    name: "organizationId",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'organization',
+                }, maxStudents: {
+                    name: "maxStudents",
+                    type: "Int",
+                }, currentStudents: {
+                    name: "currentStudents",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, registrationStart: {
+                    name: "registrationStart",
+                    type: "DateTime",
+                }, registrationEnd: {
+                    name: "registrationEnd",
+                    type: "DateTime",
+                }, projectStart: {
+                    name: "projectStart",
+                    type: "DateTime",
+                    isOptional: true,
+                }, projectEnd: {
+                    name: "projectEnd",
+                    type: "DateTime",
+                    isOptional: true,
+                }, status: {
+                    name: "status",
+                    type: "ResearchProjectStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, registrations: {
+                    name: "registrations",
+                    type: "StudentResearchRegistration",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'researchProject',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        studentResearchRegistration: {
+            name: 'StudentResearchRegistration', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$StudentResearchRegistration$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, student: {
+                    name: "student",
+                    type: "Student",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'researchRegistrations',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentId" },
+                }, studentId: {
+                    name: "studentId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'student',
+                }, researchProject: {
+                    name: "researchProject",
+                    type: "ResearchProject",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'registrations',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "researchProjectId" },
+                }, researchProjectId: {
+                    name: "researchProjectId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'researchProject',
+                }, registeredAt: {
+                    name: "registeredAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, motivation: {
+                    name: "motivation",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, experience: {
+                    name: "experience",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, status: {
+                    name: "status",
+                    type: "RegistrationStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, reviewedAt: {
+                    name: "reviewedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, reviewedBy: {
+                    name: "reviewedBy",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'reviewedRegistrations',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "reviewedById" },
+                }, reviewedById: {
+                    name: "reviewedById",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'reviewedBy',
+                }, reviewNote: {
+                    name: "reviewNote",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, studentId_researchProjectId: {
+                    name: "studentId_researchProjectId",
+                    fields: ["studentId", "researchProjectId"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
         academicWarningRule: {
             name: 'AcademicWarningRule', fields: {
                 id: {
@@ -28252,6 +34116,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$AcademicWarningRule$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, field: {
                     name: "field",
                     type: "CriteriaField",
@@ -28352,6 +34242,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$AcademicWarning$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -28447,6 +34363,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DisciplinaryWarning$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -28540,6 +34482,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DisciplinaryWarningReason$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -28608,6 +34576,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Feedback$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, content: {
                     name: "content",
                     type: "String",
@@ -28682,6 +34676,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_TrinhDoHocVan$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -28746,6 +34766,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_TrinhDoLyLuanChinhTri$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -28810,6 +34856,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_TrinhDoQuanLyNhaNuoc$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -28874,6 +34946,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_TinhTrangHonNhan$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -28938,6 +35036,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_QuanHeThanNhan$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -29002,6 +35126,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_TrangThaiLamViec$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -29066,6 +35216,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_HinhThucKhenThuongChinhQuyen$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -29130,6 +35306,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_HinhThucKhenThuongDang$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -29194,6 +35396,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_XepLoaiDanhGiaCanBo$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -29258,6 +35486,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_XepLoaiDanhGiaChatLuongDangVien$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -29322,6 +35576,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_LoaiHinhCongTac$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -29386,6 +35666,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_TinhTrangCongTac$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -29450,6 +35756,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_LoaiTinhTrangCongTac$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -29514,6 +35846,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_LoaiHinhDiHocTap$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -29578,6 +35936,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_TinhTrangDiHocTap$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -29642,6 +36026,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_NuocCuDiHocTap$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -29706,6 +36116,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_ChucDanhCMNVGiangVien$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -29770,6 +36206,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_ChucDanhCMNVNghienCuuVien$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -29834,6 +36296,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_ChucDanhCMNVKySu$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -29898,6 +36386,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_TruongDaoTaoBacDH$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -29968,6 +36482,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_ChuyenNganhDaoTaoBacDH$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -30032,6 +36572,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_ChiHuyQuanLy$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -30096,6 +36662,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_ChuyenMonKyThuat$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -30160,6 +36752,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_SucKhoe$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -30224,6 +36842,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_NhomMau$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -30288,6 +36932,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_LoaiThuongTat$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -30352,6 +37022,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_NganhHoc$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -30416,6 +37112,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_ToChucXaHoi$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -30480,6 +37202,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_Ngach$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -30544,6 +37292,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DM_BacLuong$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -30608,6 +37382,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$TemplateFile$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -30677,6 +37477,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$AccessRoleGrant$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, granterId: {
                     name: "granterId",
                     type: "String",
@@ -30748,6 +37574,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$AccessPermissionGrant$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, roleGrant: {
                     name: "roleGrant",
                     type: "AccessRoleGrant",
@@ -30823,6 +37675,32 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$BlockedIp$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamp", "args": [{ "name": "x", "value": 6 }] }],
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
                 }, ipAddress: {
                     name: "ipAddress",
                     type: "String",
@@ -30855,9 +37733,9 @@ const metadata = {
     deleteCascade: {
         subjectVersion: ['SubjectInGroup'],
         equivalencyGroup: ['SubjectInGroup'],
+        note: ['NoteReminder'],
         guestTeachingRateConfig: ['GuestTeachingRate'],
         scoreLinkSubjectVersion: ['ScoreLinkStudent'],
-        note: ['NoteReminder'],
         evaluationPeriod: ['StandardPeriod', 'EvaluationCouncil'],
         evidence: ['AnalysisFormEvidence'],
         requirementCriterion: ['EvaluationCriterionComment'],
@@ -31136,6 +38014,66 @@ function $default$ScoreCorrectionItem$createdBy(user) {
 function $default$DataSyncHistory$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
+function $default$Note$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$NoteFolder$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$NoteTag$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$NoteReminder$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$StudentPersonalEvent$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$Student$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$TrainingActivity$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$StudentSemesterResult$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$StudentYearResult$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$Notification$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$PersonalWorkTag$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$IndividualSchedule$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$Lecturer$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$LecturerHistory$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$GuestTeachingRateConfig$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$GuestTeachingRate$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$GuestTeachingPayment$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$LecturerType$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$StaffType$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$StaffPosition$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
 function $default$TrainingObjectType$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
@@ -31211,61 +38149,70 @@ function $default$OutputStandard$createdBy(user) {
 function $default$OutputStandardOnCurriculum$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
-function $default$Student$createdBy(user) {
+function $default$GraduationSession$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
-function $default$TrainingActivity$createdBy(user) {
+function $default$StudentGraduationApplication$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
-function $default$StudentSemesterResult$createdBy(user) {
+function $default$ApplicationDowngraded$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
-function $default$StudentYearResult$createdBy(user) {
+function $default$ApplicationCheckResult$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
-function $default$Notification$createdBy(user) {
+function $default$GraduationDecision$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
-function $default$PersonalWorkTag$createdBy(user) {
+function $default$AcademicRankingConvert$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
-function $default$IndividualSchedule$createdBy(user) {
+function $default$GraduationRankDowngradeRule$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
-function $default$Lecturer$createdBy(user) {
+function $default$GraduationRankDowngradeCondition$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
-function $default$LecturerHistory$createdBy(user) {
+function $default$RankingCondition$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
-function $default$GuestTeachingRateConfig$createdBy(user) {
+function $default$DiplomaVerificationApplication$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
-function $default$GuestTeachingRate$createdBy(user) {
+function $default$TrainingScoreSession$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
-function $default$GuestTeachingPayment$createdBy(user) {
+function $default$StudentTrainingScore$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
-function $default$LecturerType$createdBy(user) {
+function $default$SemesterTrainingScore$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
-function $default$StaffType$createdBy(user) {
+function $default$SchoolYearTrainingScore$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
-function $default$StaffPosition$createdBy(user) {
+function $default$DocumentFile$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
-function $default$Staff$createdBy(user) {
+function $default$AcademicActionConfig$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
-function $default$StaffHistory$createdBy(user) {
+function $default$AcademicActionRuleSet$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
-function $default$ResearchProject$createdBy(user) {
+function $default$AcademicActionCondition$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
-function $default$StudentResearchRegistration$createdBy(user) {
+function $default$StudentAcademicDecision$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$Scholarship$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$ScholarshipCriteria$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$ScholarshipAward$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
 function $default$ThesisSession$createdBy(user) {
@@ -31319,72 +38266,6 @@ function $default$PaymentRecord$createdBy(user) {
 function $default$SupervisorPaymentRecord$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
-function $default$DocumentFile$createdBy(user) {
-    return user === null || user === void 0 ? void 0 : user.id;
-}
-function $default$AcademicActionConfig$createdBy(user) {
-    return user === null || user === void 0 ? void 0 : user.id;
-}
-function $default$AcademicActionRuleSet$createdBy(user) {
-    return user === null || user === void 0 ? void 0 : user.id;
-}
-function $default$AcademicActionCondition$createdBy(user) {
-    return user === null || user === void 0 ? void 0 : user.id;
-}
-function $default$StudentAcademicDecision$createdBy(user) {
-    return user === null || user === void 0 ? void 0 : user.id;
-}
-function $default$TrainingScoreSession$createdBy(user) {
-    return user === null || user === void 0 ? void 0 : user.id;
-}
-function $default$StudentTrainingScore$createdBy(user) {
-    return user === null || user === void 0 ? void 0 : user.id;
-}
-function $default$SemesterTrainingScore$createdBy(user) {
-    return user === null || user === void 0 ? void 0 : user.id;
-}
-function $default$SchoolYearTrainingScore$createdBy(user) {
-    return user === null || user === void 0 ? void 0 : user.id;
-}
-function $default$Scholarship$createdBy(user) {
-    return user === null || user === void 0 ? void 0 : user.id;
-}
-function $default$ScholarshipCriteria$createdBy(user) {
-    return user === null || user === void 0 ? void 0 : user.id;
-}
-function $default$ScholarshipAward$createdBy(user) {
-    return user === null || user === void 0 ? void 0 : user.id;
-}
-function $default$GraduationSession$createdBy(user) {
-    return user === null || user === void 0 ? void 0 : user.id;
-}
-function $default$StudentGraduationApplication$createdBy(user) {
-    return user === null || user === void 0 ? void 0 : user.id;
-}
-function $default$ApplicationDowngraded$createdBy(user) {
-    return user === null || user === void 0 ? void 0 : user.id;
-}
-function $default$ApplicationCheckResult$createdBy(user) {
-    return user === null || user === void 0 ? void 0 : user.id;
-}
-function $default$GraduationDecision$createdBy(user) {
-    return user === null || user === void 0 ? void 0 : user.id;
-}
-function $default$AcademicRankingConvert$createdBy(user) {
-    return user === null || user === void 0 ? void 0 : user.id;
-}
-function $default$GraduationRankDowngradeRule$createdBy(user) {
-    return user === null || user === void 0 ? void 0 : user.id;
-}
-function $default$GraduationRankDowngradeCondition$createdBy(user) {
-    return user === null || user === void 0 ? void 0 : user.id;
-}
-function $default$RankingCondition$createdBy(user) {
-    return user === null || user === void 0 ? void 0 : user.id;
-}
-function $default$DiplomaVerificationApplication$createdBy(user) {
-    return user === null || user === void 0 ? void 0 : user.id;
-}
 function $default$ScoreLinkSheet$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
@@ -31392,18 +38273,6 @@ function $default$ScoreLinkSubjectVersion$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
 function $default$ScoreLinkStudent$createdBy(user) {
-    return user === null || user === void 0 ? void 0 : user.id;
-}
-function $default$Note$createdBy(user) {
-    return user === null || user === void 0 ? void 0 : user.id;
-}
-function $default$NoteFolder$createdBy(user) {
-    return user === null || user === void 0 ? void 0 : user.id;
-}
-function $default$NoteTag$createdBy(user) {
-    return user === null || user === void 0 ? void 0 : user.id;
-}
-function $default$NoteReminder$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
 function $default$EvaluationPeriod$createdBy(user) {
@@ -31530,6 +38399,18 @@ function $default$SurveySession$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
 function $default$SurveyResponse$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$Staff$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$StaffHistory$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$ResearchProject$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$StudentResearchRegistration$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
 function $default$AcademicWarningRule$createdBy(user) {

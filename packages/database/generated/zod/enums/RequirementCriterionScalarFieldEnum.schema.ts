@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const RequirementCriterionScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "analysisCriterionId", "order", "name", "questions", "evidencePlaces", "collectionMethod"])
+export const RequirementCriterionScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "analysisCriterionId", "order", "name", "questions", "evidencePlaces", "collectionMethod"])

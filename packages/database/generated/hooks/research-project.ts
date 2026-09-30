@@ -328,7 +328,7 @@ export function useSuspenseCountResearchProject<TArgs extends Prisma.ResearchPro
 }
 import type { ResearchProjectStatus } from '../zenstack/models';
 
-export function useCheckResearchProject<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; title?: string; summary?: string; objectives?: string; methodology?: string; expectedResults?: string; requirements?: string; supervisorId?: string; organizationId?: string; maxStudents?: number; currentStudents?: number; status?: ResearchProjectStatus }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckResearchProject<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; title?: string; summary?: string; objectives?: string; methodology?: string; expectedResults?: string; requirements?: string; supervisorId?: string; organizationId?: string; maxStudents?: number; currentStudents?: number; status?: ResearchProjectStatus }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ResearchProject', `${endpoint}/researchProject/check`, args, options, fetch);
 }

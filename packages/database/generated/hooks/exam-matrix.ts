@@ -327,7 +327,7 @@ export function useSuspenseCountExamMatrix<TArgs extends Prisma.ExamMatrixCountA
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ExamMatrix', `${endpoint}/examMatrix/count`, args, options, fetch);
 }
 
-export function useCheckExamMatrix<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; isDefault?: boolean; examFrameworkId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckExamMatrix<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; name?: string; isDefault?: boolean; examFrameworkId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ExamMatrix', `${endpoint}/examMatrix/check`, args, options, fetch);
 }

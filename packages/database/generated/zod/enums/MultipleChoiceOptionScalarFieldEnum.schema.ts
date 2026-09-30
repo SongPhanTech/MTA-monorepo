@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const MultipleChoiceOptionScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "questionId", "content", "isCorrect", "order"])
+export const MultipleChoiceOptionScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "questionId", "content", "isCorrect", "order"])

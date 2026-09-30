@@ -327,7 +327,7 @@ export function useSuspenseCountStudentInternship<TArgs extends Prisma.StudentIn
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('StudentInternship', `${endpoint}/studentInternship/count`, args, options, fetch);
 }
 
-export function useCheckStudentInternship<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; studentSubjectScoreId?: string; internshipContent?: string; institution?: string; unit?: string; address?: string; supervisorVersionId?: string; coSupervisorVersionId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckStudentInternship<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; studentSubjectScoreId?: string; internshipContent?: string; institution?: string; unit?: string; address?: string; supervisorVersionId?: string; coSupervisorVersionId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('StudentInternship', `${endpoint}/studentInternship/check`, args, options, fetch);
 }

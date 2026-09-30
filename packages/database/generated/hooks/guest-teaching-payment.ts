@@ -328,7 +328,7 @@ export function useSuspenseCountGuestTeachingPayment<TArgs extends Prisma.GuestT
 }
 import type { PaymentStatus } from '../zenstack/models';
 
-export function useCheckGuestTeachingPayment<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; lecturerId?: string; semesterId?: string; hiringOrgId?: string; totalPeriods?: number; status?: PaymentStatus; transactionCode?: string; decisionRef?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckGuestTeachingPayment<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; lecturerId?: string; semesterId?: string; hiringOrgId?: string; totalPeriods?: number; status?: PaymentStatus; transactionCode?: string; decisionRef?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('GuestTeachingPayment', `${endpoint}/guestTeachingPayment/check`, args, options, fetch);
 }

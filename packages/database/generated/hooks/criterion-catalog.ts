@@ -327,7 +327,7 @@ export function useSuspenseCountCriterionCatalog<TArgs extends Prisma.CriterionC
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('CriterionCatalog', `${endpoint}/criterionCatalog/count`, args, options, fetch);
 }
 
-export function useCheckCriterionCatalog<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; standardId?: string; order?: number; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckCriterionCatalog<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; standardId?: string; order?: number; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('CriterionCatalog', `${endpoint}/criterionCatalog/check`, args, options, fetch);
 }

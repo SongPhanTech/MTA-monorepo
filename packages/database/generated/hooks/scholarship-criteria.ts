@@ -328,7 +328,7 @@ export function useSuspenseCountScholarshipCriteria<TArgs extends Prisma.Scholar
 }
 import type { CriteriaField, CriteriaOperator } from '../zenstack/models';
 
-export function useCheckScholarshipCriteria<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; scholarshipId?: string; field?: CriteriaField; invert?: boolean; operator?: CriteriaOperator; tuple?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckScholarshipCriteria<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; scholarshipId?: string; field?: CriteriaField; invert?: boolean; operator?: CriteriaOperator; tuple?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ScholarshipCriteria', `${endpoint}/scholarshipCriteria/check`, args, options, fetch);
 }

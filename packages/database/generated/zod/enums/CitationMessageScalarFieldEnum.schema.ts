@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const CitationMessageScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "content", "index", "documentId", "documentType", "messageId"])
+export const CitationMessageScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "content", "index", "documentId", "documentType", "messageId"])

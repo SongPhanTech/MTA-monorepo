@@ -327,7 +327,7 @@ export function useSuspenseCountExamList<TArgs extends Prisma.ExamListCountArgs,
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ExamList', `${endpoint}/examList/count`, args, options, fetch);
 }
 
-export function useCheckExamList<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; examRoomId?: string; firstSupervisorId?: string; secondSupervisorId?: string; createdExamCode?: boolean; lockExamCode?: boolean; start?: number; end?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckExamList<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; examRoomId?: string; firstSupervisorId?: string; secondSupervisorId?: string; createdExamCode?: boolean; lockExamCode?: boolean; start?: number; end?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ExamList', `${endpoint}/examList/check`, args, options, fetch);
 }
