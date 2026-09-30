@@ -1266,7 +1266,7 @@ app.openapi(exportSubjectClassScore, async (c) => {
     currentUser?.fullName ||
     currentUser?.userName ||
     ""
-  const THOI_GIAN_IN = formatDateTimeVn(printedAt, "HH:mm:ss DD/MM/YYYY")
+  const THOI_GIAN_IN = formatDateTimeVn(printedAt, "HH:mm:ss DD/M/YYYY")
   const data = {
     HOC_KY: subjectClass.semester?.name || "",
     MA_LMH: subjectClass.code,

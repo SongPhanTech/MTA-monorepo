@@ -222,7 +222,7 @@ export const exportStudentScholarship = async ({
   const semesterName = semester?.name || ""
   const schoolYear = semester?.schoolYear?.name || ""
 
-  const reportDate = formatDateVn(nowVn(), "D/M/YYYY")
+  const reportDate = formatDateVn(nowVn(), "DD/M/YYYY")
 
   const mapTrainingType = (type?: string | null) => {
     if (!type) return ""

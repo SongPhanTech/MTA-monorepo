@@ -847,7 +847,7 @@ export default function ClassSubject() {
                 width: 120,
                 align: "center",
                 type: "date",
-                render: (record: string) => (record ? formatDateVn(record) : ""),
+                render: (record: string) => (record ? formatDateVn(record, "DD/MM/YYYY") : ""),
               },
               {
                 title: "Hạn NĐQT",
@@ -859,7 +859,7 @@ export default function ClassSubject() {
                   <div
                   // className={`${dayjs().isBefore(record?.scoreDeadline) ? '' : 'text-red-500'}`}
                   >
-                    {record?.scoreDeadline ? formatDateVn(record.scoreDeadline) : ""}
+                    {record?.scoreDeadline ? formatDateVn(record.scoreDeadline, "DD/MM/YYYY") : ""}
                   </div>
                 ),
               },
@@ -903,7 +903,7 @@ export default function ClassSubject() {
                 // render: (record: string) => (record ? dayjs(record).format("DD/MM/YYYY") : ""),
                 render: (_, record) => {
                   if (!canReadAll) {
-                    return record.examDate ? formatDateVn(record.examDate) : ""
+                    return record.examDate ? formatDateVn(record.examDate, "DD/MM/YYYY") : ""
                   }
 
                   const isExpired =
@@ -948,7 +948,7 @@ export default function ClassSubject() {
                     // className={`${dayjs().isBefore(record?.examScoreDeadline) ? '' : 'text-red-500'}`}
                     >
                       {record?.examScoreDeadline
-                        ? formatDateVn(record.examScoreDeadline)
+                        ? formatDateVn(record.examScoreDeadline, "DD/MM/YYYY")
                         : ""}
                     </div>
                   )

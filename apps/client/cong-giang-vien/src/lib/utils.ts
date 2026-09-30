@@ -19,7 +19,7 @@ const formatDate = (date: string | Date | Dayjs, unit?: "Day" | "Month" | "Year"
   if (!date) return ""
   if (unit === "Year") return formatDateVnTz(date, "YYYY")
   if (unit === "Month") return formatDateVnTz(date, "MM/YYYY")
-  return formatDateVnTz(date)
+  return formatDateVnTz(date, "DD/MM/YYYY")
 }
 
 const formatDateReadable = (date: string | Date | Dayjs) => {
@@ -31,7 +31,7 @@ const formatDateReadable = (date: string | Date | Dayjs) => {
 const formatDateVN = (date: string | Date | Dayjs) => {
   const d = toVnDayjs(date)
   if (!d) return ""
-  return `Ngày ${d.date().toString().padStart(2, "0")} tháng ${(d.month() + 1).toString().padStart(2, "0")} năm ${d.year()}`
+  return `Ngày ${d.date().toString().padStart(2, "0")} tháng ${d.month() + 1} năm ${d.year()}`
 }
 
 const formatDateTime = (date?: string | Date | Dayjs) => {

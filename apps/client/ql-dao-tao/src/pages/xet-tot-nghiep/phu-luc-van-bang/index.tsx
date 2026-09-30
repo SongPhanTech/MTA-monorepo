@@ -1448,12 +1448,7 @@ export default function StudentGradeSystem() {
     const month = d.month() + 1
     const year = d.year()
 
-    let monthStr = String(month)
-    if (month === 1 || month === 2) {
-      monthStr = "0" + month
-    }
-
-    return `${day}/${monthStr}/${year}`
+    return `${day}/${month}/${year}`
   }
 
   const handleExportQuyetDinhCongNhan = async () => {

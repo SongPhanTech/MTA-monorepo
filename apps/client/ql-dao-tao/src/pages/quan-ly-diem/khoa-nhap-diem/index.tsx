@@ -323,7 +323,7 @@ export default function SubjectClassScore() {
                   align: "center",
                   type: "date",
                   render: (_, record) =>
-                    record.startDate ? formatDateVn(record.startDate) : "",
+                    record.startDate ? formatDateVn(record.startDate, "DD/MM/YYYY") : "",
                 },
                 {
                   title: "Ngày thi",
@@ -331,7 +331,7 @@ export default function SubjectClassScore() {
                   align: "center",
                   type: "date",
                   render: (_, record) =>
-                    record.examDate ? formatDateVn(record.examDate) : "",
+                    record.examDate ? formatDateVn(record.examDate, "DD/MM/YYYY") : "",
                 },
                 {
                   title: "Ngày kết thúc",
@@ -339,7 +339,7 @@ export default function SubjectClassScore() {
                   align: "center",
                   type: "date",
                   render: (_, record) =>
-                    record.endDate ? formatDateVn(record.endDate) : "",
+                    record.endDate ? formatDateVn(record.endDate, "DD/MM/YYYY") : "",
                 },
                 {
                   title: "Bộ môn",

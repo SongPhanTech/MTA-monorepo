@@ -137,7 +137,7 @@ export async function exportChuongTrinhDaoTao({
 
   const data = {
     d: today.format("DD"),
-    m: today.format("MM"),
+    m: today.format("M"),
     y: today.format("YYYY"),
     TEN_CTDT: (fixedClass.curriculumVersion?.name ?? "").toUpperCase(),
     KHOA_HOC: (fixedClass.trainingCourse?.name ?? "").toUpperCase(),

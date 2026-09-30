@@ -282,7 +282,7 @@ export default function StudentScoreClassPage() {
           data: {
             fullname: sampleStudentData.fullname ?? "",
             dateOfBirth: sampleStudentData.dateOfBirth
-              ? dayjs(sampleStudentData.dateOfBirth).format("DD/MM/YYYY")
+              ? dayjs(sampleStudentData.dateOfBirth).format("DD/M/YYYY")
               : "",
             htdt: sampleStudentData.htdt ?? "",
             maSV: sampleStudentData.maSV ?? "",

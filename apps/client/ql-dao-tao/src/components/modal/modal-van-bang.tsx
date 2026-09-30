@@ -9,7 +9,7 @@ import { useDisclosure } from "react-hook-disclosure-modal"
 import { useReactToPrint } from "react-to-print"
 
 export const ModalVanBang = () => {
-  const formattedDate = `Hà Nội, ngày ${dayjs().format("DD")} tháng ${dayjs().format("MM")} năm ${dayjs().format("YYYY")}`
+  const formattedDate = `Hà Nội, ngày ${dayjs().format("DD")} tháng ${dayjs().format("M")} năm ${dayjs().format("YYYY")}`
   const {
     isOpen,
     onClose,

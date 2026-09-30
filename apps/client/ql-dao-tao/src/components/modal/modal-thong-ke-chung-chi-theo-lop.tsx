@@ -42,7 +42,7 @@ const formatIssuedDate = (value?: string | Date | null) => {
   if (!value) return ""
   const date = new Date(value)
   if (Number.isNaN(date.getTime())) return ""
-  return date.toLocaleDateString("vi-VN")
+  return `${String(date.getDate()).padStart(2, "0")}/${date.getMonth() + 1}/${date.getFullYear()}`
 }
 
 const pickCertKind = (

@@ -235,7 +235,7 @@ const ExportStudentInSurvey = ({
               i?.student?.userProfile?.code || "",
               `${i?.student?.userProfile?.lastName || ""} ${i?.student?.userProfile?.firstName || ""}`,
               i?.student?.userProfile?.dateOfBirth
-                ? dayjs(i?.student?.userProfile?.dateOfBirth).format("DD/MM/YYYY")
+                ? dayjs(i?.student?.userProfile?.dateOfBirth).format("DD/M/YYYY")
                 : "",
               i?.student?.userProfile?.phoneNumber || "",
               i?.student ? `${i?.student?.fixedClass?.code || ""}` : "",

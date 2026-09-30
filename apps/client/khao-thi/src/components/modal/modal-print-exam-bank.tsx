@@ -12,7 +12,7 @@ import { useDisclosure } from "react-hook-disclosure-modal"
 import { useReactToPrint } from "react-to-print"
 
 export const ModalPrintExamBank = () => {
-  const formattedDate = `Ngày ${dayjs().format("DD")} tháng ${dayjs().format("MM")} năm ${dayjs().format("YYYY")}`
+  const formattedDate = `Ngày ${dayjs().format("DD")} tháng ${dayjs().format("M")} năm ${dayjs().format("YYYY")}`
   const { isOpen, onClose, input } = useDisclosure<{
     data?: (ExamBankQuestion & { question: Question })[]
     subjectVersionName: string

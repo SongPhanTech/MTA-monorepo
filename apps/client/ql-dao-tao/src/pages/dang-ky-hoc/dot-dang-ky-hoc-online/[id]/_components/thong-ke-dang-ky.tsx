@@ -435,7 +435,9 @@ export default function ThongKeDangKy({ sessionId }: Props) {
               idx + 1,
               s.code,
               s.name,
-              s.dateOfBirth ? new Date(s.dateOfBirth).toLocaleDateString("vi-VN") : "",
+              s.dateOfBirth
+                ? `${String(new Date(s.dateOfBirth).getDate()).padStart(2, "0")}/${new Date(s.dateOfBirth).getMonth() + 1}/${new Date(s.dateOfBirth).getFullYear()}`
+                : "",
               s.fixedClassCode,
               s.logCount,
               s.classes.length,

@@ -184,7 +184,7 @@ const ExportStudentInFixedClass = ({
           index + 1,
           i?.code,
           `${i?.userProfile?.lastName} ${i?.userProfile?.firstName}`,
-          dayjs(i.userProfile.dateOfBirth).format("DD/MM/YYYY") || "",
+          dayjs(i.userProfile.dateOfBirth).format("DD/M/YYYY") || "",
           i?.userProfile?.gender?.sTen || "",
           i.userProfile?.phoneNumber || "",
           i.userProfile?.rank?.sTen,

@@ -42,7 +42,7 @@ type ModalPrintToKQHTInput = {
 }
 
 const ModalPrintToKQHT = () => {
-  const formattedDate = `..., ngày ${dayjs().format("DD")} tháng ${dayjs().format("MM")} năm ${dayjs().format("YYYY")}`
+  const formattedDate = `..., ngày ${dayjs().format("DD")} tháng ${dayjs().format("M")} năm ${dayjs().format("YYYY")}`
   const printRef = useRef<HTMLDivElement>(null)
   const [signerName, setSignerName] = useState("Đại tá, TS Nguyễn Trọng Lưu")
   const [gpaScore, setGpaScore] = useState(0)
@@ -173,7 +173,7 @@ const ModalPrintToKQHT = () => {
       value: (
         <span>
           {input?.dataStudent?.userProfile?.dateOfBirth &&
-            dayjs(input?.dataStudent?.userProfile?.dateOfBirth).format("DD/MM/YYYY")}
+            dayjs(input?.dataStudent?.userProfile?.dateOfBirth).format("DD/M/YYYY")}
         </span>
       ),
     },

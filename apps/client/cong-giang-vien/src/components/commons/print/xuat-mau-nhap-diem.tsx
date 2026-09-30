@@ -1,4 +1,5 @@
 import { Button } from "antd"
+import dayjs from "dayjs"
 import ExcelJS from "exceljs"
 import { saveAs } from "file-saver"
 import { FileDown } from "lucide-react"
@@ -236,7 +237,7 @@ const ExportScoreTemplate = ({
         record.student?.userProfile?.code || "",
         record.student?.userProfile?.fullname || "",
         record.student?.userProfile?.dateOfBirth
-          ? new Date(record.student.userProfile.dateOfBirth).toLocaleDateString("vi-VN")
+          ? dayjs(record.student.userProfile.dateOfBirth).format("DD/M/YYYY")
           : "",
         record.student?.fixedClass?.name || "",
         record.attendanceScore ?? "",

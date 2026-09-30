@@ -22,7 +22,7 @@ const formatDateReadable = (date: string | Date | Dayjs) => {
 
 const formatDateVN = (date: string | Date | Dayjs) => {
   const d = dayjs(date)
-  return `Ngày ${d.date().toString().padStart(2, "0")} tháng ${(d.month() + 1).toString().padStart(2, "0")} năm ${d.year()}`
+  return `Ngày ${d.date().toString().padStart(2, "0")} tháng ${d.month() + 1} năm ${d.year()}`
 }
 
 const getColorByIndex = (index: number) => {

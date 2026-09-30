@@ -53,9 +53,9 @@ function formatDocDate(date?: Date | string | null) {
   if (!d.isValid()) return { day: "", month: "", year: "", full: "" }
   return {
     day: d.format("DD"),
-    month: d.format("MM"),
+    month: d.format("M"),
     year: d.format("YYYY"),
-    full: d.format("DD/MM/YYYY"),
+    full: d.format("DD/M/YYYY"),
   }
 }
 
@@ -501,7 +501,7 @@ function buildDanhSachBaoVeDanPhongSlots(
 
   for (const entry of entries) {
     const { project } = entry
-    const date = project?.defenseDate ? dayjs(project.defenseDate).format("DD/MM/YYYY") : ""
+    const date = project?.defenseDate ? dayjs(project.defenseDate).format("DD/M/YYYY") : ""
     const time = project?.defenseSession?.startTime ? dayjs(project.defenseSession.startTime).format("HH:mm") : ""
     if (!date || !time) continue
     const roomName = project?.room?.name || ""

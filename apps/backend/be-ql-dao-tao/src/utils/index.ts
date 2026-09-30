@@ -34,7 +34,7 @@ export function parseDate(input?: number | string | Date): Date | null {
 export const getCurrentDateForReport = () => {
   const currentDate = new Date()
   const date = String(currentDate.getDate()).padStart(2, "0")
-  const month = String(currentDate.getMonth() + 1).padStart(2, "0") // Tháng bắt đầu từ 0
+  const month = String(currentDate.getMonth() + 1)
   const year = currentDate.getFullYear()
   return { date, month, year }
 }
@@ -63,8 +63,7 @@ export const getReportDateParts = (date?: Date | dayjs.Dayjs | string | number |
   const vn = d.tz(APP_TIMEZONE)
   const day = vn.date().toString().padStart(2, "0")
   const monthRaw = vn.month() + 1
-  const monthVi =
-    monthRaw === 1 || monthRaw === 2 ? monthRaw.toString().padStart(2, "0") : monthRaw.toString()
+  const monthVi = monthRaw.toString()
   const monthEn = MONTH_EN[vn.month()]
   const year = vn.year().toString()
 

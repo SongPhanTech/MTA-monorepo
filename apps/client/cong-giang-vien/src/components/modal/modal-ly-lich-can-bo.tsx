@@ -27,7 +27,7 @@ type ModalLyLichCanBoInput = {
 }
 
 const ModalLyLichCanBo = () => {
-  const formattedDate = `..., Ngày ${dayjs().format("DD")} tháng ${dayjs().format("MM")} năm ${dayjs().format("YYYY")}`
+  const formattedDate = `..., Ngày ${dayjs().format("DD")} tháng ${dayjs().format("M")} năm ${dayjs().format("YYYY")}`
   const printRef = useRef<HTMLDivElement>(null)
 
   const { isOpen, onClose, input } = useDisclosure<ModalLyLichCanBoInput>({
@@ -221,7 +221,7 @@ const ModalLyLichCanBo = () => {
             <p className="flex w-full">
               3) Sinh ngày: {formatDateOrPlaceholder(initialData?.dateOfBirth, "DD")}
               <span className="inline-block w-14 flex-1" />
-              tháng: {formatDateOrPlaceholder(initialData?.dateOfBirth, "MM")}
+              tháng: {formatDateOrPlaceholder(initialData?.dateOfBirth, "M")}
               <span className="inline-block w-12 flex-1" />
               năm: {formatDateOrPlaceholder(initialData?.dateOfBirth, "YYYY")}
               <span className="inline-block w-16 flex-" />, Giới tính (nam, nữ):{" "}
@@ -290,7 +290,7 @@ const ModalLyLichCanBo = () => {
           <div className="w-[20%]">
             , Ngày hưởng:{" "}
             {initialData?.QuaTrinhLuong?.[0]?.tuNgay
-              ? dayjs(initialData.QuaTrinhLuong[0].tuNgay).format("DD/MM/YYYY")
+              ? dayjs(initialData.QuaTrinhLuong[0].tuNgay).format("DD/M/YYYY")
               : ""}
           </div>
           <div className="w-[20%]">
@@ -336,12 +336,12 @@ const ModalLyLichCanBo = () => {
         <div className="flex w-full">
           <div className="w-[60%]">
             16) Ngày vào Đảng Cộng sản Việt Nam:{" "}
-            {initialData?.CPVJoinDate ? dayjs(initialData?.CPVJoinDate).format("DD/MM/YYYY") : null}
+            {initialData?.CPVJoinDate ? dayjs(initialData?.CPVJoinDate).format("DD/M/YYYY") : null}
           </div>
           <div className="w-[40%]">
             , Ngày chính thức:{" "}
             {initialData?.officialCPVDate
-              ? dayjs(initialData?.officialCPVDate).format("DD/MM/YYYY")
+              ? dayjs(initialData?.officialCPVDate).format("DD/M/YYYY")
               : null}
           </div>
         </div>
@@ -353,8 +353,8 @@ const ModalLyLichCanBo = () => {
                 [
                   item.ten?.name,
                   item?.congViec,
-                  dayjs(item?.tuNgay).format("DD/MM/YYYY"),
-                  dayjs(item?.denNgay).format("DD/MM/YYYY"),
+                  dayjs(item?.tuNgay).format("DD/M/YYYY"),
+                  dayjs(item?.denNgay).format("DD/M/YYYY"),
                 ]
                   .filter(Boolean)
                   .join(", ")
@@ -373,13 +373,13 @@ const ModalLyLichCanBo = () => {
           <div className="w-[33.3%]">
             18) Ngày nhập ngũ:{" "}
             {initialData?.enlistmentDate
-              ? dayjs(initialData?.enlistmentDate).format("DD/MM/YYYY")
+              ? dayjs(initialData?.enlistmentDate).format("DD/M/YYYY")
               : null}
           </div>
           <div className="w-[33.3%]">
             Ngày xuất ngũ:{" "}
             {initialData?.dischargeDate
-              ? dayjs(initialData?.dischargeDate).format("DD/MM/YYYY")
+              ? dayjs(initialData?.dischargeDate).format("DD/M/YYYY")
               : null}
           </div>
           <div className="w-[33.3%]">
@@ -394,7 +394,7 @@ const ModalLyLichCanBo = () => {
             {initialData?.khenThuong?.[0]
               ? `${initialData.khenThuong[0].hinhThucKhenThuong?.name || ""} ${
                   initialData.khenThuong[0].ngayNhanQuyetDinh
-                    ? `(${dayjs(initialData.khenThuong[0].ngayNhanQuyetDinh).format("DD/MM/YYYY")})`
+                    ? `(${dayjs(initialData.khenThuong[0].ngayNhanQuyetDinh).format("DD/M/YYYY")})`
                     : ""
                 }`
               : ""}
@@ -404,7 +404,7 @@ const ModalLyLichCanBo = () => {
             {initialData?.kyLuat?.[0]
               ? `${initialData.kyLuat[0].hinhThucKyLuat || ""} ${
                   initialData.kyLuat[0].ngayNhanQuyetDinh
-                    ? `(${dayjs(initialData.kyLuat[0].ngayNhanQuyetDinh).format("DD/MM/YYYY")})`
+                    ? `(${dayjs(initialData.kyLuat[0].ngayNhanQuyetDinh).format("DD/M/YYYY")})`
                     : null
                 }`
               : ""}
@@ -432,7 +432,7 @@ const ModalLyLichCanBo = () => {
           <div className="w-[33.3%]">25) Số chứng minh nhân dân: {initialData?.idCardNumber} </div>
           <div className="w-[33.3%]">
             Ngày cấp:{" "}
-            {initialData?.idCardDate ? dayjs(initialData?.idCardNumber).format("DD/MM/YYYY") : null}
+            {initialData?.idCardDate ? dayjs(initialData?.idCardNumber).format("DD/M/YYYY") : null}
           </div>
           <div className="w-[33.3%]">26) Số sổ BHXH: {initialData?.healthInsuranceNumber}</div>
         </div>
@@ -514,7 +514,7 @@ const ModalLyLichCanBo = () => {
                     item.chucVuDangDoan,
                     item.soQuyetDinh,
                     item.ngayNhanQuyetDinh
-                      ? dayjs(item.ngayNhanQuyetDinh).format("DD/MM/YYYY")
+                      ? dayjs(item.ngayNhanQuyetDinh).format("DD/M/YYYY")
                       : null,
                     item.chucVu?.sTen,
                   ]

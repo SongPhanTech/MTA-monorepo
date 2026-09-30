@@ -42,8 +42,8 @@ export const formatDateTimeVn = (value: DateInput, format = "DD/MM/YYYY HH:mm") 
   return d ? d.format(format) : ""
 }
 
-/** Format chỉ ngày theo giờ Việt Nam (mặc định DD/MM/YYYY) */
-export const formatDateVn = (value: DateInput, format = "DD/MM/YYYY") => {
+/** Format chỉ ngày theo giờ Việt Nam. Ngày giữ số 0, tháng không có số 0. Dùng cho file xuất. */
+export const formatDateVn = (value: DateInput, format = "DD/M/YYYY") => {
   return formatDateTimeVn(value, format)
 }
 

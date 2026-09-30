@@ -1,5 +1,5 @@
 import { DownloadOutlined } from "@ant-design/icons"
-import { formatDate } from "@lib/utils"
+import dayjs from "dayjs"
 import type { Prisma } from "@workspace/db/client"
 import { Button, message } from "antd"
 import ExcelJS from "exceljs"
@@ -322,7 +322,9 @@ function createExamSheet(worksheet: ExcelJS.Worksheet, params: CreateExamSheetPa
       index + 1,
       student?.userProfile?.code || "",
       student?.userProfile?.fullname || "",
-      student?.userProfile?.dateOfBirth ? formatDate(student.userProfile.dateOfBirth) : "",
+      student?.userProfile?.dateOfBirth
+        ? dayjs(student.userProfile.dateOfBirth).format("DD/M/YYYY")
+        : "",
       student?.fixedClass?.code || "",
       sss?.attendanceScore ?? "",
       sss?.midtermScore ?? "",

@@ -875,7 +875,7 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
                                                                           e.studentSubjectScore
                                                                               .student?.userProfile
                                                                               ?.dateOfBirth
-                                                                      ).format('DD/MM/YYYY')
+                                                                      ).format('DD/M/YYYY')
                                                                     : ''
                                                             }`.trim(),
                                                             cbhd: `1.${getSupervisorName(versionToPersonLike(e.supervisor), false, true) || ''}\n2.${getSupervisorName(versionToPersonLike(e.coSupervisor), false, true) || ''}`.trim(),
@@ -1507,7 +1507,7 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
                                                                                   profile
                                                                                       ?.userProfile
                                                                                       ?.dateOfBirth
-                                                                              ).format('DD/MM/YYYY')
+                                                                              ).format('DD/M/YYYY')
                                                                             : '',
                                                                         nganh_chuyen_nganh: `${
                                                                             profile

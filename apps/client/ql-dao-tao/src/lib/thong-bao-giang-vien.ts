@@ -25,7 +25,7 @@ type TaoThongBaoInput = {
   expiresAt?: Date | string | null
 }
 
-const formatNgay = (value?: Date | string | null) => (value ? formatDateVn(value) : "")
+const formatNgay = (value?: Date | string | null) => (value ? formatDateVn(value, "DD/MM/YYYY") : "")
 
 const tenMonHoc = (lop: LopMonHocThongBao) => lop.monHoc || lop.name || ""
 

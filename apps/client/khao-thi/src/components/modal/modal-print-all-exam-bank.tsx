@@ -94,7 +94,7 @@ const ModalPrintAllExams = () => {
                 </table>
 
                 <span className="flex w-full justify-end italic">
-                  Ngày {dayjs().format("DD")} tháng {dayjs().format("MM")} năm{" "}
+                  Ngày {dayjs().format("DD")} tháng {dayjs().format("M")} năm{" "}
                   {dayjs().format("YYYY")}
                 </span>
 

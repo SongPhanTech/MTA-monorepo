@@ -336,7 +336,7 @@ const ExportTemplateExam = ({ dataTable, dataClass, disabled }: ExportTemplateEx
     worksheet.getCell("I6").value = "Ngày thi: "
     worksheet.getCell("I6").style = headerSubtitleStyleLeft
 
-    worksheet.getCell("J6").value = `${dayjs(dataClass?.examDate).format("DD/MM/YYYY") || ""}`
+    worksheet.getCell("J6").value = `${dayjs(dataClass?.examDate).format("DD/M/YYYY") || ""}`
     worksheet.getCell("J6").style = headerSubtitleStyleLeft
 
     worksheet.getCell("E7").value = "Khoa: "
@@ -414,7 +414,7 @@ const ExportTemplateExam = ({ dataTable, dataClass, disabled }: ExportTemplateEx
         record?.student?.userProfile?.code || "",
         `${record.student?.userProfile?.fullname || ""}`,
         record.student?.userProfile?.dateOfBirth
-          ? new Date(record.student.userProfile.dateOfBirth).toLocaleDateString("vi-VN")
+          ? dayjs(record.student.userProfile.dateOfBirth).format("DD/M/YYYY")
           : "",
         record.student?.fixedClass?.code || "",
         record.attendanceScore || "0",

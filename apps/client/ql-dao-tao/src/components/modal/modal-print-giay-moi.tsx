@@ -151,7 +151,7 @@ const ModalPrintInvitation = () => {
                     const trainingCourse = registration.student?.fixedClass?.trainingCourse
                     return `${fullname}${
                       dateOfBirth
-                        ? `, sinh ngày ${dayjs(dateOfBirth).format("DD/MM/YYYY")}
+                        ? `, sinh ngày ${dayjs(dateOfBirth).format("DD/M/YYYY")}
                                         ${trainingCourse ? `, ${trainingCourse.name}(${trainingCourse.startYear}-${trainingCourse.endYear})` : ""}`
                         : ""
                     }`

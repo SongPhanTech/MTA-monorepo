@@ -722,7 +722,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
                     label="Hạn nhập điểm:"
                     value={
                       lopMonHoc?.scoreDeadline
-                        ? formatDateVn(lopMonHoc.scoreDeadline)
+                        ? formatDateVn(lopMonHoc.scoreDeadline, "DD/MM/YYYY")
                         : "—"
                     }
                   />

@@ -255,7 +255,7 @@ const ModalPrintStudentSubjectScore = () => {
     },
     {
       title: "Ngày thi:",
-      value: <span>{data?.examDate ? dayjs(data?.examDate).format("DD/MM/YYYY") : "-"}</span>,
+      value: <span>{data?.examDate ? dayjs(data?.examDate).format("DD/M/YYYY") : "-"}</span>,
     },
     {
       title: "Quân số:",
@@ -427,7 +427,7 @@ const ModalPrintStudentSubjectScore = () => {
                   </td>
                   <td className="border border-black text-center">
                     {item?.student?.userProfile?.dateOfBirth
-                      ? dayjs(item?.student?.userProfile?.dateOfBirth).format("DD/MM/YYYY")
+                      ? dayjs(item?.student?.userProfile?.dateOfBirth).format("DD/M/YYYY")
                       : ""}
                   </td>
                   <td className="border border-black text-center">

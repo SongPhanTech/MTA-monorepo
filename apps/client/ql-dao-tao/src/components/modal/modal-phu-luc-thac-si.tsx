@@ -127,7 +127,7 @@ const SubjectTable: React.FC<{ data: Subject[]; startIndex: number }> = ({ data,
 )
 
 export const ModalPhuLucThacSi = () => {
-  const formattedDate = `Ngày ${dayjs().format("DD")} tháng ${dayjs().format("MM")} năm ${dayjs().format("YYYY")}`
+  const formattedDate = `Ngày ${dayjs().format("DD")} tháng ${dayjs().format("M")} năm ${dayjs().format("YYYY")}`
   const {
     isOpen,
     onClose,
@@ -484,7 +484,7 @@ export const ModalPhuLucThacSi = () => {
 
   const defenseDate = thesisProject?.defenseDate
   const defenseDateLabel = defenseDate
-    ? `Bảo vệ ngày ${dayjs(defenseDate).format("DD")} tháng ${dayjs(defenseDate).format("MM")} năm ${dayjs(defenseDate).format("YYYY")} tại Hội đồng đánh giá luận văn HVKTQS, danh sách`
+    ? `Bảo vệ ngày ${dayjs(defenseDate).format("DD")} tháng ${dayjs(defenseDate).format("M")} năm ${dayjs(defenseDate).format("YYYY")} tại Hội đồng đánh giá luận văn HVKTQS, danh sách`
     : "Bảo vệ ngày ... tháng ... năm ... tại Hội đồng đánh giá luận văn HVKTQS, danh sách"
 
   const certificateSubjects: Subject[] = courseRows.map((row) => ({
@@ -528,7 +528,7 @@ export const ModalPhuLucThacSi = () => {
       value: (
         <span>
           {data?.userProfile?.dateOfBirth &&
-            dayjs(data?.userProfile?.dateOfBirth).format("DD/MM/YYYY")}
+            dayjs(data?.userProfile?.dateOfBirth).format("DD/M/YYYY")}
         </span>
       ),
     },
@@ -549,7 +549,7 @@ export const ModalPhuLucThacSi = () => {
     },
     {
       title: "Ngày nhập học:",
-      value: <span>{data?.from && dayjs(data?.from).format("DD/MM/YYYY")}</span>,
+      value: <span>{data?.from && dayjs(data?.from).format("DD/M/YYYY")}</span>,
     },
   ]
 
@@ -1134,7 +1134,7 @@ export const ModalPhuLucThacSi = () => {
                     <>
                       Ngày sinh:{" "}
                       {data?.userProfile?.dateOfBirth &&
-                        dayjs(data?.userProfile?.dateOfBirth).format("DD/MM/YYYY")}
+                        dayjs(data?.userProfile?.dateOfBirth).format("DD/M/YYYY")}
                     </>
                   ),
                 },
@@ -1229,7 +1229,7 @@ export const ModalPhuLucThacSi = () => {
                     <>
                       Ngày vào Đảng:{" "}
                       {data?.userProfile?.CPVJoinDate &&
-                        dayjs(data?.userProfile?.CPVJoinDate).format("DD/MM/YYYY")}
+                        dayjs(data?.userProfile?.CPVJoinDate).format("DD/M/YYYY")}
                     </>
                   ),
                 },
@@ -1239,7 +1239,7 @@ export const ModalPhuLucThacSi = () => {
                     <>
                       Ngày chính thức:{" "}
                       {data?.userProfile?.officialCPVDate &&
-                        dayjs(data?.userProfile?.officialCPVDate).format("DD/MM/YYYY")}
+                        dayjs(data?.userProfile?.officialCPVDate).format("DD/M/YYYY")}
                     </>
                   ),
                 },

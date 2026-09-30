@@ -123,7 +123,7 @@ const ModalThongKeKhaoSatCum = () => {
         ...values,
         ngayBaoCao: undefined,
         date: ngayBaoCao ? String(ngayBaoCao.date()).padStart(2, "0") : undefined,
-        month: ngayBaoCao ? String(ngayBaoCao.month() + 1).padStart(2, "0") : undefined,
+        month: ngayBaoCao ? String(ngayBaoCao.month() + 1) : undefined,
         year: ngayBaoCao ? ngayBaoCao.year() : undefined,
       }
 

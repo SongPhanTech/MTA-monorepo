@@ -1987,9 +1987,11 @@ export const listStudentResultInfo = async (
           nganhId:
             student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.id ||
             "",
-          ngaySinh: userProfile?.dateOfBirth
-            ? new Date(userProfile.dateOfBirth).toLocaleDateString("vi-VN")
-            : "",
+          ngaySinh: (() => {
+            if (!userProfile?.dateOfBirth) return ""
+            const birthDate = new Date(userProfile.dateOfBirth)
+            return `${String(birthDate.getDate()).padStart(2, "0")}/${birthDate.getMonth() + 1}/${birthDate.getFullYear()}`
+          })(),
           heSoDiem: baseScore === AcademicRankingBaseType.Base10 ? 10 : 4, // Loại hệ số điểm, mặc định là 10
           fullDiemC: true,
           fullDiemD: true,

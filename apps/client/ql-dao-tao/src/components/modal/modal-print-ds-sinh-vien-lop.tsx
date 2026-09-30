@@ -18,7 +18,7 @@ type ModalPrintToDSHVInput = {
 }
 
 const ModalPrintToDSHV = () => {
-  const formattedDate = `..., ngày ${dayjs().format("DD")} tháng ${dayjs().format("MM")} năm ${dayjs().format("YYYY")}`
+  const formattedDate = `..., ngày ${dayjs().format("DD")} tháng ${dayjs().format("M")} năm ${dayjs().format("YYYY")}`
   const printRef = useRef<HTMLDivElement>(null)
 
   const { isOpen, onClose, input } = useDisclosure<ModalPrintToDSHVInput>({
@@ -159,7 +159,7 @@ const ModalPrintToDSHV = () => {
                   </td>
                   <td className="border border-black px-1 py-1 text-center">
                     {item?.userProfile?.dateOfBirth
-                      ? dayjs(item?.userProfile?.dateOfBirth).format("DD/MM/YYYY")
+                      ? dayjs(item?.userProfile?.dateOfBirth).format("DD/M/YYYY")
                       : ""}
                   </td>
                   <td className="border border-black px-1 py-1 text-center">

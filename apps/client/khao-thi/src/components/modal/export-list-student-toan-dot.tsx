@@ -205,7 +205,7 @@ const ExportStudentToanDot = ({
               i?.student?.userProfile?.code || "",
               `${i?.student?.userProfile?.lastName || ""} ${i?.student?.userProfile?.firstName || ""}`,
               i?.student?.userProfile?.dateOfBirth
-                ? dayjs(i?.student?.userProfile?.dateOfBirth).format("DD/MM/YYYY")
+                ? dayjs(i?.student?.userProfile?.dateOfBirth).format("DD/M/YYYY")
                 : "",
               i?.student?.userProfile?.idCardNumber || "",
               i?.student?.userProfile?.phoneNumber || "",

@@ -768,7 +768,7 @@ const NhapDiemThiGiangDayPage = () => {
                   label="Hạn nhập điểm:"
                   value={
                     lopMonHoc?.examScoreDeadline
-                      ? formatDateVn(lopMonHoc.examScoreDeadline)
+                      ? formatDateVn(lopMonHoc.examScoreDeadline, "DD/MM/YYYY")
                       : "—"
                   }
                 />

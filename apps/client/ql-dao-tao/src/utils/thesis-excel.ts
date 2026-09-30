@@ -456,7 +456,7 @@ interface HDDanhGiaLuanVanTemplateData {
 }
 
 const formatDay = (day: number) => day.toString().padStart(2, "0")
-const formatMonth = (month: number) => (month === 1 || month === 2 ? `0${month}` : month.toString())
+const formatMonth = (month: number) => month.toString()
 
 export const formatDocDate = (date?: Date | string | null) => {
   if (!date) return { day: "", month: "", year: "" }
@@ -518,7 +518,7 @@ export const exportPhuLucDsLuanVan = async ({
       ngayQD =
         ngayQD ||
         (thesisProject?.thesisSession?.decisionDate
-          ? dayjs(thesisProject.thesisSession.decisionDate).format("DD/MM/YYYY")
+          ? dayjs(thesisProject.thesisSession.decisionDate).format("DD/M/YYYY")
           : "")
       const majorName =
         student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name || ""
@@ -537,7 +537,7 @@ export const exportPhuLucDsLuanVan = async ({
         studentId: student.id || "",
         hovatenhocvien: student.userProfile?.fullname || "",
         ngaysinh: student.userProfile?.dateOfBirth
-          ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
+          ? dayjs(student.userProfile.dateOfBirth).format("DD/M/YYYY")
           : "",
         doituongdaotao:
           tenDoiTuong[
@@ -736,7 +736,7 @@ export const exportThongKeCbHdlv = async ({
 
   showSpinner()
   const dataMapping = getExpertSupervisionStats(project)
-  const ngayhientai = dayjs().format("DD/MM/YYYY")
+  const ngayhientai = dayjs().format("DD/M/YYYY")
   const ngay = ngayhientai.split("/")[0]
   const thang = ngayhientai.split("/")[1]
   const nam = ngayhientai.split("/")[2]
@@ -852,7 +852,7 @@ export const exportDanhSachBaoVe = async ({
           empty: student.userProfile?.phoneNumber || "",
           ngaybaove: student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
             ? dayjs(student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate).format(
-                "DD/MM/YYYY"
+                "DD/M/YYYY"
               )
             : "",
           giobaove: student?.thesisRegistrations?.[0]?.thesisProject?.defenseSession?.startTime
@@ -988,7 +988,7 @@ const buildSlotsFromEntries = (
 
   for (const entry of entries) {
     const { project } = entry
-    const date = project?.defenseDate ? dayjs(project.defenseDate).format("DD/MM/YYYY") : ""
+    const date = project?.defenseDate ? dayjs(project.defenseDate).format("DD/M/YYYY") : ""
     const time = project?.defenseSession?.startTime
       ? dayjs(project.defenseSession.startTime).format("HH:mm")
       : ""
@@ -1006,8 +1006,8 @@ const buildSlotsFromEntries = (
     .sort(([a], [b]) => {
       const [aDate, aTime] = a.split("__")
       const [bDate, bTime] = b.split("__")
-      const dateA = dayjs(`${aDate} ${aTime}`, "DD/MM/YYYY HH:mm")
-      const dateB = dayjs(`${bDate} ${bTime}`, "DD/MM/YYYY HH:mm")
+      const dateA = dayjs(`${aDate} ${aTime}`, "DD/M/YYYY HH:mm")
+      const dateB = dayjs(`${bDate} ${bTime}`, "DD/M/YYYY HH:mm")
       return dateA.valueOf() - dateB.valueOf()
     })
     .map(([key, slotEntries], slotIdx) => {
@@ -1510,7 +1510,7 @@ export const exportGiayMoiHdlv = async ({
     return
   }
   showSpinner()
-  const presentDay = resolveSigningDate(signingDate).format("DD/MM/YYYY")
+  const presentDay = resolveSigningDate(signingDate).format("DD/M/YYYY")
   const ngay = presentDay.split("/")[0]
   const thang = presentDay.split("/")[1]
   const nam = presentDay.split("/")[2]
@@ -1762,7 +1762,7 @@ export const exportKiemTraTienDo = async ({
         hovatenhocvien: student.userProfile?.fullname || "",
         khoa: student.fixedClass?.trainingCourse?.name || "",
         ngaysinh: student.userProfile?.dateOfBirth
-          ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
+          ? dayjs(student.userProfile.dateOfBirth).format("DD/M/YYYY")
           : "",
         doituongdaotao:
           tenDoiTuong[
@@ -1922,7 +1922,7 @@ export const convertToGmcLvPbData = (
 
   const now = resolveSigningDate(signingDate)
   const ngay = now.format("DD")
-  const thang = now.format("MM")
+  const thang = now.format("M")
   const nam = now.format("YYYY")
 
   allStudentsInClasses.forEach((student) => {
@@ -1930,7 +1930,7 @@ export const convertToGmcLvPbData = (
     if (!project) return
 
     const dotXet = project.thesisSession?.trainingCourses?.map((c: any) => c.name).join(", ") || ""
-    const ngaybaove = project.defenseDate ? dayjs(project.defenseDate).format("DD/MM/YYYY") : ""
+    const ngaybaove = project.defenseDate ? dayjs(project.defenseDate).format("DD/M/YYYY") : ""
     const giobaove = project.defenseSession?.startTime
       ? dayjs(project.defenseSession.startTime).format("HH:mm")
       : ""
@@ -2259,14 +2259,14 @@ const convertToTthdbvData = async (
     }
 
     const dob = student.userProfile?.dateOfBirth
-      ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
+      ? dayjs(student.userProfile.dateOfBirth).format("DD/M/YYYY")
       : ""
     const doiTuong = student?.fixedClass?.trainingCourse?.trainingObjectType?.type
     const loaiDoiTuong = tenDoiTuong[doiTuong as keyof typeof tenDoiTuong]?.fullname || ""
     const khoaHoc = student?.fixedClass?.trainingCourse?.name || ""
     const chuyenNganhCode =
       student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || ""
-    const ngayBV = project.defenseDate ? dayjs(project.defenseDate).format("DD/MM/YYYY") : ""
+    const ngayBV = project.defenseDate ? dayjs(project.defenseDate).format("DD/M/YYYY") : ""
 
     const thongTinBaoVe = `${student.userProfile?.fullname || ""}\nNgày sinh: ${dob}\nĐối tượng: ${loaiDoiTuong}, ${khoaHoc}\nChuyên ngành: ${chuyenNganhCode}\nNgày BV: ${ngayBV}`
 
@@ -2385,7 +2385,7 @@ const convertToTthdbvData = async (
     return {
       data: {
         ngay: now.format("DD"),
-        thang: now.format("MM"),
+        thang: now.format("M"),
         nam: now.format("YYYY"),
         khoa: firstItem?.fixedClass?.trainingCourse?.name || "",
         dotXet: dotXet,
@@ -2859,7 +2859,7 @@ const convertToThanhToanHuongDanTrongHvData = async (
       organizationMap.set(orgName, {
         data: {
           ngay: now.format("DD"),
-          thang: now.format("MM"),
+          thang: now.format("M"),
           nam: now.format("YYYY"),
           khoa: student.fixedClass?.trainingCourse?.name || "",
           dotXet: project.thesisSession?.name || "",
@@ -2878,7 +2878,7 @@ const convertToThanhToanHuongDanTrongHvData = async (
 
     const qdNum = project.thesisSession?.decisionNumber || "...."
     const qdDate = project.thesisSession?.decisionDate
-      ? dayjs(project.thesisSession.decisionDate).format("DD/MM/YYYY")
+      ? dayjs(project.thesisSession.decisionDate).format("DD/M/YYYY")
       : ".../.../...."
 
     const quyetDinh = `${qdNum} \n ngày ${qdDate}`
@@ -3176,7 +3176,7 @@ const convertToBanSaoHDDGLV = (
 
   const now = resolveSigningDate(signingDate)
   const currentDay = now.format("DD")
-  const currentMonth = now.format("MM")
+  const currentMonth = now.format("M")
   const currentYear = now.format("YYYY")
 
   return allStudentsInClasses
@@ -3425,7 +3425,7 @@ const convertToPhuLucQdhdTemplateData = (
       dotXet: session?.name || "",
       soQd: session?.defenseDecisionNumber || "",
       ngayQd: session?.defenseDecisionDate
-        ? dayjs(session.defenseDecisionDate).format("DD/MM/YYYY")
+        ? dayjs(session.defenseDecisionDate).format("DD/M/YYYY")
         : "",
     },
   }
@@ -3598,7 +3598,7 @@ const convertToDsChuyenGiaData = (
       (reg: any) => reg?.thesisProject?.thesisSession?.id === thesisSessionId
     )?.thesisProject
     if (!project) return
-    const defenseDate = project.defenseDate ? dayjs(project.defenseDate).format("DD/MM/YYYY") : ""
+    const defenseDate = project.defenseDate ? dayjs(project.defenseDate).format("DD/M/YYYY") : ""
     const defenseTime = formatDefenseSessionClock(project.defenseSession?.startTime)
     const defenseRoom = project.room?.name || project.room?.code || project.roomId || ""
     const slotKey = `${defenseDate}|${defenseTime}|${defenseRoom}`
@@ -3614,8 +3614,8 @@ const convertToDsChuyenGiaData = (
   })
 
   const sortedSlotGroups = Array.from(slotGroups.values()).sort((a, b) => {
-    const aDate = a.defenseDate ? dayjs(a.defenseDate, "DD/MM/YYYY") : null
-    const bDate = b.defenseDate ? dayjs(b.defenseDate, "DD/MM/YYYY") : null
+    const aDate = a.defenseDate ? dayjs(a.defenseDate, "DD/M/YYYY") : null
+    const bDate = b.defenseDate ? dayjs(b.defenseDate, "DD/M/YYYY") : null
     const nowStart = now.startOf("day")
 
     if (aDate && bDate) {
@@ -3703,7 +3703,7 @@ const convertToDsChuyenGiaData = (
         data: {
           nguoiki: nguoiki,
           ngay: now.format("DD"),
-          thang: now.format("MM"),
+          thang: now.format("M"),
           nam: now.format("YYYY"),
           diaDiem: defenseRoom,
           thoiGian: [defenseDate, defenseTime].filter(Boolean).join(" "),
@@ -3866,7 +3866,7 @@ const convertToHDDanhGiaLuanVanTemplateData = (
         gioBaoVe: project?.defenseSession?.startTime
           ? dayjs(project.defenseSession.startTime).format("HH:mm")
           : "",
-        ngayBaoVe: project?.defenseDate ? dayjs(project.defenseDate).format("DD/MM/YYYY") : "",
+        ngayBaoVe: project?.defenseDate ? dayjs(project.defenseDate).format("DD/M/YYYY") : "",
 
         diaDiem: project?.room?.name || "",
         tenChuTich: findMemberName(CouncilRole.CHAIRMAN),
@@ -3896,10 +3896,7 @@ const convertToHDDanhGiaLuanVanTemplateData = (
         (student) => student?.thesisRegistrations?.[0]?.thesisProject != null
       ).length,
       ngay: now.date().toString(),
-      thang:
-        now.month() + 1 === 1 || now.month() + 1 === 2
-          ? (now.month() + 1).toString().padStart(2, "0")
-          : (now.month() + 1).toString(),
+      thang: (now.month() + 1).toString(),
       nam: now.format("YYYY"),
     },
     data: groupedData,
@@ -4170,7 +4167,7 @@ export const exportPhuLucHuongDanDoAn = async ({
 
     const soQD = firstProj?.thesisSession?.decisionNumber || "......"
     const ngayQD = firstProj?.thesisSession?.decisionDate
-      ? dayjs(firstProj.thesisSession.decisionDate).format("DD/MM/YYYY")
+      ? dayjs(firstProj.thesisSession.decisionDate).format("DD/M/YYYY")
       : ".... / .... /...."
 
     const tableData: any[] = []

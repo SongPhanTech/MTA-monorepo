@@ -1607,7 +1607,7 @@ app.openapi(graduationSessionDecision, async (c) => {
       FULLNAME: graduationDecision.student.userProfile.fullname?.toUpperCase(),
       gender: graduationDecision.student.userProfile.gender?.sTen,
       dayOfBirth: dateOfBirth ? dateOfBirth.getDate().toString().padStart(2, "0") : null,
-      monthOfBirth: dateOfBirth ? (dateOfBirth.getMonth() + 1).toString().padStart(2, "0") : null,
+      monthOfBirth: dateOfBirth ? (dateOfBirth.getMonth() + 1).toString() : null,
       mmmOfBirth: dateOfBirth ? dateOfBirth.toLocaleString("en-US", { month: "short" }) : null,
       yearOfBirth: dateOfBirth ? dateOfBirth.getFullYear() : null,
       trainingMajor: graduationDecision.trainingMajor?.name,

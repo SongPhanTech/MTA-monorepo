@@ -12,9 +12,11 @@ import type { DocumentFile } from "@workspace/db"
 import {
   useCreateArchivedCertificate,
   useFindManyCertificate,
+  useFindManyCurriculumVersion,
   useFindManyFixedClass,
   useFindManyStudent,
   useFindManyTrainingCourse,
+  useFindUniqueFixedClass,
   useUpdateArchivedCertificate,
 } from "@workspace/db/hooks"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
@@ -48,7 +50,7 @@ type SelectedStudentRow = {
   fullname: string
   dateOfBirth: Date | string | null
   fixedClassId: string | null
-  curriculumSubjects: CurriculumSubject[]
+  curriculumVersionId: string | null
 }
 
 export type PutArchivedCertificate = {
@@ -225,20 +227,21 @@ const PutCertificateArchivedModal = () => {
   const trainingCoursesId = Form.useWatch("trainingCoursesId", form)
   const studentFormData = Form.useWatch("student", form) ?? {}
 
-  const { data: fixedClasses = [] } = useFindManyFixedClass({
-    where: {
-      trainingCourseId: trainingCoursesId ?? undefined,
-    },
-  })
-
-  const studentWhere = useMemo(() => {
-    return {
-      fixedClass: {
+  const { data: fixedClasses = [] } = useFindManyFixedClass(
+    {
+      where: {
+        deletedAt: null,
         ...(trainingCoursesId ? { trainingCourseId: trainingCoursesId } : {}),
-        ...(fixedClassId ? { id: fixedClassId } : {}),
       },
-    }
-  }, [trainingCoursesId, fixedClassId])
+      select: {
+        id: true,
+        code: true,
+        name: true,
+      },
+      orderBy: { name: "asc" },
+    },
+    { enabled: !!trainingObjectTypeId }
+  )
 
   const curriculumInclude = {
     trainingBlocks: {
@@ -260,25 +263,21 @@ const PutCertificateArchivedModal = () => {
     },
   }
 
-  const { data: studentData = [] } = useFindManyStudent(
+  const { data: studentData = [], isFetching: loadingStudents } = useFindManyStudent(
     {
-      where: studentWhere || {},
-      include: {
+      where: {
+        deletedAt: null,
+        fixedClassId: fixedClassId || undefined,
+      },
+      select: {
+        id: true,
+        fixedClassId: true,
+        curriculumVersionId: true,
         userProfile: {
           select: {
             code: true,
             dateOfBirth: true,
             fullname: true,
-          },
-        },
-        curriculumVersion: {
-          include: curriculumInclude,
-        },
-        fixedClass: {
-          include: {
-            curriculumVersion: {
-              include: curriculumInclude,
-            },
           },
         },
       },
@@ -288,12 +287,64 @@ const PutCertificateArchivedModal = () => {
         },
       },
     },
-    { enabled: !!trainingObjectTypeId }
+    { enabled: !!fixedClassId }
+  )
+
+  const { data: selectedFixedClass, isFetched: classCurriculumFetched } = useFindUniqueFixedClass(
+    {
+      where: { id: fixedClassId || "" },
+      select: {
+        curriculumVersion: {
+          include: curriculumInclude,
+        },
+      },
+    },
+    { enabled: !!fixedClassId }
+  )
+
+  const extraCurriculumIds = useMemo(() => {
+    if (!classCurriculumFetched) return []
+    const classCurriculumId = selectedFixedClass?.curriculumVersion?.id
+    const ids = new Set<string>()
+    for (const student of studentData) {
+      if (student.curriculumVersionId && student.curriculumVersionId !== classCurriculumId) {
+        ids.add(student.curriculumVersionId)
+      }
+    }
+    return [...ids]
+  }, [studentData, selectedFixedClass, classCurriculumFetched])
+
+  const { data: extraCurriculums = [] } = useFindManyCurriculumVersion(
+    {
+      where: { id: { in: extraCurriculumIds } },
+      include: curriculumInclude,
+    },
+    { enabled: extraCurriculumIds.length > 0 }
+  )
+
+  const curriculumById = useMemo(() => {
+    const map = new Map<string, { id: string; trainingBlocks?: unknown[] }>()
+    const classCurriculum = selectedFixedClass?.curriculumVersion
+    if (classCurriculum?.id) map.set(classCurriculum.id, classCurriculum)
+    for (const curriculum of extraCurriculums) {
+      if (curriculum?.id) map.set(curriculum.id, curriculum)
+    }
+    return map
+  }, [selectedFixedClass, extraCurriculums])
+
+  const getCurriculumSubjectsForStudent = useCallback(
+    (curriculumVersionId: string | null) => {
+      const own = curriculumVersionId ? curriculumById.get(curriculumVersionId) : undefined
+      const curriculum = own || selectedFixedClass?.curriculumVersion
+      if (!curriculum) return []
+      return getCurriculumSubjects({ curriculumVersion: curriculum })
+    },
+    [curriculumById, selectedFixedClass]
   )
 
   const handleAddStudent = useCallback(
     (studentId: string) => {
-      const student = studentData.find((s: any) => s.id === studentId)
+      const student = studentData.find((s) => s.id === studentId)
       if (!student) return
 
       const newRowId = `row_${rowCounter}`
@@ -306,8 +357,8 @@ const PutCertificateArchivedModal = () => {
           code: student.userProfile?.code || "",
           fullname: student.userProfile?.fullname || "",
           dateOfBirth: student.userProfile?.dateOfBirth || null,
-          fixedClassId: student.fixedClassId ?? student.fixedClass?.id ?? null,
-          curriculumSubjects: getCurriculumSubjects(student),
+          fixedClassId: student.fixedClassId ?? null,
+          curriculumVersionId: student.curriculumVersionId ?? null,
         },
       ])
     },
@@ -536,10 +587,16 @@ const PutCertificateArchivedModal = () => {
             <Select
               showSearch
               style={{ width: "100%" }}
-              placeholder="Tìm và chọn sinh viên để thêm vào danh sách..."
+              placeholder={
+                fixedClassId
+                  ? "Tìm và chọn sinh viên để thêm vào danh sách..."
+                  : "Chọn lớp quản lý để tải danh sách sinh viên"
+              }
+              disabled={!fixedClassId}
+              loading={loadingStudents}
               value={undefined}
               onSelect={(value: string) => handleAddStudent(value)}
-              options={studentData.map((item: any) => ({
+              options={studentData.map((item) => ({
                 label: `${item.userProfile?.code || ""} - ${item.userProfile?.fullname || ""}`,
                 value: item.id,
               }))}
@@ -613,7 +670,7 @@ const PutCertificateArchivedModal = () => {
                     const selectedCertificate = certificate.find((c) => c.id === selectedCertificateId)
                     const subjectOptions = getSelectableSubjects(
                       selectedCertificate,
-                      record.curriculumSubjects
+                      getCurriculumSubjectsForStudent(record.curriculumVersionId)
                     )
                     const scores = getSubjectScores(record.rowId)
                     const selectedIds = new Set(scores.map((s) => s.subjectVersionId))

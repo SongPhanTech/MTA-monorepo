@@ -167,7 +167,7 @@ const ModalPrintBaoCaoDonVi = () => {
 
         {/* ===== FOOTER ===== */}
         <div className="mt-6 text-right italic">
-          Hà Nội, ngày {dayjs().format("DD")} tháng {dayjs().format("MM")} năm{" "}
+          Hà Nội, ngày {dayjs().format("DD")} tháng {dayjs().format("M")} năm{" "}
           {dayjs().format("YYYY")}
         </div>
       </div>

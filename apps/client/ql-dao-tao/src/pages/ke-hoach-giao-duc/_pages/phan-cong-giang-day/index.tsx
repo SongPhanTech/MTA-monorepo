@@ -1061,8 +1061,8 @@ export default function PhanCongGiangDay({
             data: {
               khoa: khoa?.sTen || "",
               bo_mon: boMon?.sTen || "",
-              ngay_gui: `Ngày ${ngayGui.format("DD")} tháng ${ngayGui.format("MM")} năm ${ngayGui.format("YYYY")}`,
-              ngay_nhan: `Ngày ${ngayNhan.format("DD")} tháng ${ngayNhan.format("MM")} năm ${ngayNhan.format("YYYY")}`,
+              ngay_gui: `Ngày ${ngayGui.format("DD")} tháng ${ngayGui.format("M")} năm ${ngayGui.format("YYYY")}`,
+              ngay_nhan: `Ngày ${ngayNhan.format("DD")} tháng ${ngayNhan.format("M")} năm ${ngayNhan.format("YYYY")}`,
               hoc_ky: hocKy,
               nam_hoc: namHoc,
             },

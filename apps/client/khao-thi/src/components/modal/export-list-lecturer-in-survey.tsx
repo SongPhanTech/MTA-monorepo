@@ -191,8 +191,8 @@ const ExportLecturerInSurvey = ({
                   .join("\n")
               : "",
             i?.userProfile?.phoneNumber || "",
-            i?.survey[0]?.startDate ? dayjs(i?.survey[0]?.startDate).format("DD/MM/YYYY") : "",
-            i?.survey[0]?.endDate ? dayjs(i?.survey[0]?.endDate).format("DD/MM/YYYY") : "",
+            i?.survey[0]?.startDate ? dayjs(i?.survey[0]?.startDate).format("DD/M/YYYY") : "",
+            i?.survey[0]?.endDate ? dayjs(i?.survey[0]?.endDate).format("DD/M/YYYY") : "",
           ]
           dataRow.eachCell((cell: ExcelJS.Cell, colNumber: number) => {
             cell.font = { ...golbalFontStyle, size: 14 }
