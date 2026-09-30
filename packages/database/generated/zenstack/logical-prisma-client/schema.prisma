@@ -3224,6 +3224,7 @@ model StudentSubjectScore {
   @@unique([subjectClassId, studentId])
   @@index([subjectClassId])
   @@index([subjectVersionId])
+  @@index([studentId], map: "StudentSubjectScore_student_idx")
   @@schema("ql-dao-tao")
 }
 
@@ -4602,6 +4603,7 @@ model ClassSchedule {
   subjectClassAttendances SubjectClassAttendance[]
 
   @@index([subjectClassId, classDate], map: "ClassSchedule_subjectClass_date_idx")
+  @@index([classDate], map: "ClassSchedule_classDate_idx")
   @@schema("ql-dao-tao")
 }
 
