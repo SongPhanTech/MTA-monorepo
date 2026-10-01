@@ -349,5 +349,7 @@ export const SqlTransactionItemModel = {
   DM_Ngach: 'DM_Ngach',
   DM_BacLuong: 'DM_BacLuong',
   TemplateFile: 'TemplateFile',
+  AccessRoleGrant: 'AccessRoleGrant',
+  AccessPermissionGrant: 'AccessPermissionGrant',
   BlockedIp: 'BlockedIp',
 } as const;

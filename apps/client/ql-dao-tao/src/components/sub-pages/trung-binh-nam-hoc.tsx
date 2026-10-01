@@ -147,15 +147,30 @@ const DiemTrungBinhKyHoc = () => {
     { enabled: !!semesterId }
   )
 
-  const { data: fixedClassData = [] } = useFindManyFixedClass({
-    orderBy: { name: "asc" },
-    where: {
-      ...(filters.managementOrganizationId
-        ? { managementOrganizationId: filters.managementOrganizationId }
-        : {}),
-      ...(trainingCourseId ? { trainingCourseId } : {}),
+  const { data: fixedClassData = [] } = useFindManyFixedClass(
+    {
+      orderBy: { name: "asc" },
+      where: {
+        deletedAt: null,
+        ...(filters.managementOrganizationId
+          ? { managementOrganizationId: filters.managementOrganizationId }
+          : {}),
+        ...(trainingCourseId
+          ? { trainingCourseId }
+          : trainingObjectTypeId
+            ? { trainingCourse: { trainingObjectTypeId } }
+            : {}),
+      },
     },
-  })
+    { enabled: !!trainingCourseId || !!trainingObjectTypeId }
+  )
+
+  const prevCourseIdRef = useRef(trainingCourseId)
+  useEffect(() => {
+    if (prevCourseIdRef.current === trainingCourseId) return
+    prevCourseIdRef.current = trainingCourseId
+    setFilters((prev) => ({ ...prev, fixedClassId: undefined }))
+  }, [trainingCourseId])
 
   const handleFilterChange = (key: string, value: string) => {
     setFilters((prev) => {
@@ -244,6 +259,7 @@ const DiemTrungBinhKyHoc = () => {
       data: {
         semesterId,
         trainingObjectTypeId,
+        ...(trainingCourseId ? { trainingCourseId } : {}),
         ...(filters.fixedClassId ? { fixedClassId: filters.fixedClassId } : {}),
       },
     })
@@ -270,10 +286,16 @@ const DiemTrungBinhKyHoc = () => {
                   <Form.Item className="mb-0" name="fixedClassId">
                     <Select
                       placeholder="Lớp quản lý"
+                      notFoundContent={
+                        trainingCourseId || trainingObjectTypeId
+                          ? "Không có dữ liệu"
+                          : "Vui lòng chọn đối tượng đào tạo"
+                      }
                       options={fixedClassData.map((i: FixedClass) => ({
                         value: i.id,
                         label: `${i?.code} - ${i.name}`,
                       }))}
+                      value={filters.fixedClassId}
                       onChange={(val) => handleFilterChange("fixedClassId", val)}
                       allowClear
                     />

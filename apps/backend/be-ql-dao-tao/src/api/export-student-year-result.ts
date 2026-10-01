@@ -16,7 +16,7 @@ const exportStudentYearResultRoute = createRoute({
 
 **Bảng dữ liệu nguồn:** Student, StudentSubjectScore, SchoolYear, Semester.
 
-**Tham số:** semesterId (tùy chọn), schoolYearId (tùy chọn), trainingObjectTypeId, fixedClassId (tùy chọn).`,
+**Tham số:** semesterId (tùy chọn), schoolYearId (tùy chọn), trainingObjectTypeId, trainingCourseId (tùy chọn), fixedClassId (tùy chọn).`,
   request: {
     body: {
       content: {
@@ -26,7 +26,14 @@ const exportStudentYearResultRoute = createRoute({
               semesterId: z.string().optional().openapi(fieldDesc("ID học kỳ (nếu lọc theo HK).")),
               schoolYearId: z.string().optional().openapi(fieldDesc("ID năm học (SchoolYear).")),
               trainingObjectTypeId: z.string().openapi(fieldDesc("ID hệ đào tạo.")),
-              fixedClassId: z.string().optional().openapi(fieldDesc("ID lớp học (FixedClass).")),
+              trainingCourseId: z
+                .string()
+                .optional()
+                .openapi(fieldDesc("ID khoá đào tạo (TrainingCourse). Bỏ trống để xuất mọi khoá.")),
+              fixedClassId: z
+                .string()
+                .optional()
+                .openapi(fieldDesc("ID lớp quản lý (FixedClass). Bỏ trống để xuất mọi lớp.")),
             })
             .openapi("ExportStudentYearResultRequest"),
         },
@@ -55,13 +62,15 @@ const exportStudentYearResultRoute = createRoute({
 })
 
 app.openapi(exportStudentYearResultRoute, async (c) => {
-  const { semesterId, schoolYearId, trainingObjectTypeId, fixedClassId } = c.req.valid("json")
+  const { semesterId, schoolYearId, trainingObjectTypeId, trainingCourseId, fixedClassId } =
+    c.req.valid("json")
 
   try {
     const result = await exportStudentYearResult({
       semesterId,
       schoolYearId,
       trainingObjectTypeId,
+      trainingCourseId,
       fixedClassId,
     })
 

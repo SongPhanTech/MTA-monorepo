@@ -38,7 +38,14 @@ const exportStudentSemesterResultRoute = createRoute({
               trainingObjectTypeId: z
                 .string()
                 .openapi(fieldDesc("ID hệ đào tạo (TrainingObjectType).")),
-              fixedClassId: z.string().optional().openapi(fieldDesc("ID lớp học (FixedClass).")),
+              trainingCourseId: z
+                .string()
+                .optional()
+                .openapi(fieldDesc("ID khoá đào tạo (TrainingCourse). Bỏ trống để xuất mọi khoá.")),
+              fixedClassId: z
+                .string()
+                .optional()
+                .openapi(fieldDesc("ID lớp quản lý (FixedClass). Bỏ trống để xuất mọi lớp.")),
             })
             .openapi("ExportStudentSemesterResultRequest"),
         },
@@ -67,11 +74,12 @@ const exportStudentSemesterResultRoute = createRoute({
 })
 
 app.openapi(exportStudentSemesterResultRoute, async (c) => {
-  const { semesterId, trainingObjectTypeId, fixedClassId } = c.req.valid("json")
+  const { semesterId, trainingObjectTypeId, trainingCourseId, fixedClassId } = c.req.valid("json")
 
   const result = await exportStudentSemesterResult({
     semesterId,
     trainingObjectTypeId,
+    trainingCourseId,
     fixedClassId,
   })
 
@@ -105,7 +113,14 @@ const exportStudentSemesterResultV2Route = createRoute({
               trainingObjectTypeId: z
                 .string()
                 .openapi(fieldDesc("ID hệ đào tạo (TrainingObjectType).")),
-              fixedClassId: z.string().optional().openapi(fieldDesc("ID lớp học (FixedClass).")),
+              trainingCourseId: z
+                .string()
+                .optional()
+                .openapi(fieldDesc("ID khoá đào tạo (TrainingCourse). Bỏ trống để xuất mọi khoá.")),
+              fixedClassId: z
+                .string()
+                .optional()
+                .openapi(fieldDesc("ID lớp quản lý (FixedClass). Bỏ trống để xuất mọi lớp.")),
             })
             .openapi("ExportStudentSemesterResultV2Request"),
         },
@@ -134,11 +149,12 @@ const exportStudentSemesterResultV2Route = createRoute({
 })
 
 app.openapi(exportStudentSemesterResultV2Route, async (c) => {
-  const { semesterId, trainingObjectTypeId, fixedClassId } = c.req.valid("json")
+  const { semesterId, trainingObjectTypeId, trainingCourseId, fixedClassId } = c.req.valid("json")
 
   const result = await exportStudentSemesterResultV2({
     semesterId,
     trainingObjectTypeId,
+    trainingCourseId,
     fixedClassId,
   })
 

@@ -45,10 +45,12 @@ const formatGpa = (val: any) => {
 export async function exportStudentSemesterResult({
   semesterId,
   trainingObjectTypeId,
+  trainingCourseId,
   fixedClassId,
 }: {
   semesterId: string
   trainingObjectTypeId: string
+  trainingCourseId?: string
   fixedClassId?: string
 }) {
   const semester = await prisma.semester.findUniqueOrThrow({
@@ -65,6 +67,7 @@ export async function exportStudentSemesterResult({
       student: {
         ...(fixedClassId ? { fixedClassId } : {}),
         fixedClass: {
+          ...(trainingCourseId ? { trainingCourseId } : {}),
           trainingCourse: {
             trainingObjectTypeId,
           },
@@ -163,10 +166,12 @@ export async function exportStudentSemesterResult({
 export async function exportStudentSemesterResultV2({
   semesterId,
   trainingObjectTypeId,
+  trainingCourseId,
   fixedClassId,
 }: {
   semesterId: string
   trainingObjectTypeId: string
+  trainingCourseId?: string
   fixedClassId?: string
 }) {
   const ExcelJS = await import("exceljs")
@@ -179,6 +184,7 @@ export async function exportStudentSemesterResultV2({
   const fixedClasses = await prisma.fixedClass.findMany({
     where: {
       ...(fixedClassId ? { id: fixedClassId } : {}),
+      ...(trainingCourseId ? { trainingCourseId } : {}),
       trainingCourse: { trainingObjectTypeId },
       deletedAt: null,
     },
@@ -445,11 +451,13 @@ export async function exportStudentYearResult({
   semesterId,
   schoolYearId,
   trainingObjectTypeId,
+  trainingCourseId,
   fixedClassId,
 }: {
   semesterId?: string
   schoolYearId?: string
   trainingObjectTypeId: string
+  trainingCourseId?: string
   fixedClassId?: string
 }) {
   const schoolYear = await prisma.schoolYear.findFirst({
@@ -480,6 +488,13 @@ export async function exportStudentYearResult({
       schoolYearId: schoolYear.id,
       student: {
         ...(fixedClassId ? { fixedClassId } : {}),
+        ...(trainingCourseId
+          ? {
+              fixedClass: {
+                trainingCourseId,
+              },
+            }
+          : {}),
         curriculumVersion: {
           trainingObjectTypeId,
         },

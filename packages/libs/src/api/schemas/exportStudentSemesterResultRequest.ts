@@ -86,6 +86,8 @@ export interface ExportStudentSemesterResultRequest {
   semesterId: string;
   /** ID hệ đào tạo (TrainingObjectType). */
   trainingObjectTypeId: string;
-  /** ID lớp học (FixedClass). */
+  /** ID khoá đào tạo (TrainingCourse). Bỏ trống để xuất mọi khoá. */
+  trainingCourseId?: string;
+  /** ID lớp quản lý (FixedClass). Bỏ trống để xuất mọi lớp. */
   fixedClassId?: string;
 }

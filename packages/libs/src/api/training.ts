@@ -17935,7 +17935,7 @@ export const useExportBangDiemTheoLop = <TError = ErrorMessageResponse,
 
 **Bảng dữ liệu nguồn:** Student, StudentSubjectScore, SchoolYear, Semester.
 
-**Tham số:** semesterId (tùy chọn), schoolYearId (tùy chọn), trainingObjectTypeId, fixedClassId (tùy chọn).
+**Tham số:** semesterId (tùy chọn), schoolYearId (tùy chọn), trainingObjectTypeId, trainingCourseId (tùy chọn), fixedClassId (tùy chọn).
  * @summary Xuất KQHT theo năm học
  */
 export type exportStudentYearResultResponse200 = {

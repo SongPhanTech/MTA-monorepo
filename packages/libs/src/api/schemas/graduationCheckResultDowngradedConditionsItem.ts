@@ -98,6 +98,18 @@ export type GraduationCheckResultDowngradedConditionsItem = {
   updatedAt?: string | null;
   /** @nullable */
   createdBy?: string | null;
+  /** @nullable */
+  sNguoiTao?: string | null;
+  /** @nullable */
+  sNguoiSua?: string | null;
+  /** @nullable */
+  dNgayTao?: string | null;
+  /** @nullable */
+  dNgaySua?: string | null;
+  /** @nullable */
+  sThietBiTao?: string | null;
+  /** @nullable */
+  sThietBiSua?: string | null;
   field: GraduationCheckResultDowngradedConditionsItemField;
   operator: GraduationCheckResultDowngradedConditionsItemOperator;
   invert?: boolean;
