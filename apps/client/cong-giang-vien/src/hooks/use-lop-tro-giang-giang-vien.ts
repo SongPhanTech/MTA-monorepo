@@ -8,8 +8,9 @@ import {
 } from "@components/cong-giang-vien/lop-tro-giang/types"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import { useSession } from "@workspace/auth/react"
+import { $Enums } from "@workspace/db/client"
 import { useCountSubjectClass, useFindManySubjectClass } from "@workspace/db/hooks"
-import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
+import { useSemesterStore } from "@workspace/ui"
 import { useMemo, useState } from "react"
 
 // Điều kiện ngày ứng với trạng thái hiển thị (giảng viên 2 = trợ giảng).
@@ -33,7 +34,6 @@ const useLopTroGiangGiangVien = () => {
   const { data: me } = useSession()
   const profileId = me?.sDM_NhanVienId ?? ""
   const { id: semesterId } = useSemesterStore()
-  const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
   const [boLocNhap, setBoLocNhap] = useState<BoLocLopTroGiang>({
     tuKhoa: "",
@@ -49,9 +49,11 @@ const useLopTroGiangGiangVien = () => {
   const where = useMemo(
     () => ({
       cancelled: false,
+      deletedAt: null,
+      active: true,
+      status: $Enums.SubjectClassStatus.OFFICIAL,
       extraLecturer: { userProfileId: profileId },
       semesterId,
-      trainingObjectTypeId,
       ...dieuKienTrangThai(boLocApDung.trangThai),
       ...(boLocApDung.tuKhoa
         ? {
@@ -82,10 +84,10 @@ const useLopTroGiangGiangVien = () => {
           }
         : {}),
     }),
-    [profileId, semesterId, trainingObjectTypeId, boLocApDung]
+    [profileId, semesterId, boLocApDung]
   )
 
-  const queryEnabled = !!profileId && !!semesterId && !!trainingObjectTypeId
+  const queryEnabled = !!profileId && !!semesterId
 
   const { data = [], isLoading } = useFindManySubjectClass(
     {

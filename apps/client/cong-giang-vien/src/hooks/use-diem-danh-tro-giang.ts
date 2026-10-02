@@ -6,13 +6,14 @@ import type {
 import { tinhTongKet } from "@components/cong-giang-vien/lop-tro-giang/diem-danh/types"
 import { queryClient } from "@api/index"
 import { useSession } from "@workspace/auth/react"
+import { $Enums } from "@workspace/db/client"
 import {
   useCreateSubjectClassAttendance,
   useFindManySubjectClass,
   useFindUniqueSubjectClass,
 } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
-import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
+import { useSemesterStore } from "@workspace/ui"
 import { message } from "antd"
 import dayjs, { type Dayjs } from "dayjs"
 import { useEffect, useMemo, useState } from "react"
@@ -21,7 +22,6 @@ const useDiemDanhTroGiang = (lopIdMacDinh?: string) => {
   const { data: me } = useSession()
   const profileId = me?.sDM_NhanVienId ?? ""
   const { id: semesterId } = useSemesterStore()
-  const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
   // ----- Lựa chọn bộ lọc -----
   const [monHocId, setMonHocId] = useState<string | undefined>()
@@ -40,11 +40,13 @@ const useDiemDanhTroGiang = (lopIdMacDinh?: string) => {
   const whereLop = useMemo(
     () => ({
       cancelled: false,
+      deletedAt: null,
+      active: true,
+      status: $Enums.SubjectClassStatus.OFFICIAL,
       extraLecturer: { userProfileId: profileId },
       semesterId,
-      trainingObjectTypeId,
     }),
-    [profileId, semesterId, trainingObjectTypeId]
+    [profileId, semesterId]
   )
 
   const { data: dsLop = [], isLoading: dangTaiLop } = useFindManySubjectClass(
@@ -53,7 +55,7 @@ const useDiemDanhTroGiang = (lopIdMacDinh?: string) => {
       include: { subject: { select: { id: true, code: true, name: true } } },
       orderBy: [{ code: "asc" }],
     },
-    { enabled: !!profileId && !!semesterId && !!trainingObjectTypeId }
+    { enabled: !!profileId && !!semesterId }
   )
 
   const monHocOptions = useMemo(() => {

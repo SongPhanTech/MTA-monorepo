@@ -3628,9 +3628,9 @@ app.openapi(getPhuLucIXData, async (c) => {
     const u = app.student.userProfile
 
     // Điểm các môn tốt nghiệp lấy ĐÚNG nguồn như màn "Chi tiết kết quả học tập":
-    // môn trong CTĐT -> subject.studentSubjectScore.finalScore của chính SV này.
-    // KHÔNG lọc theo cờ `graduation` (NN/CTĐ-CTCT thường không bật cờ này),
-    // nhận diện theo tên đặc trưng đầy đủ "thi tốt nghiệp ...".
+    // môn trong CTĐT -> StudentSubjectScore (manualFinalScore, không có thì finalScore).
+    // KHÔNG lọc theo cờ `graduation`.
+    // ĐATN và CTĐ-CTCT khớp đúng tên môn (không lấy môn tên dài hơn, vd "… 1 - TL").
     const allSubjects = (app.student.fixedClass?.curriculumVersion?.trainingBlocks ?? []).flatMap(
       (b) => b.subjects
     )
@@ -3641,6 +3641,10 @@ app.openapi(getPhuLucIXData, async (c) => {
         .replace(/[̀-ͯ]/g, "")
         .replace(/[đĐ]/g, "d")
         .toLowerCase()
+    const canonName = (s?: string | null) =>
+      normalize(s)
+        .replace(/[^a-z0-9]+/g, " ")
+        .trim()
     const studentScores = scoreMap.get(app.studentId)
     const scoreOf = (kw: string[]) => {
       const sub = allSubjects.find((s) => {
@@ -3651,11 +3655,18 @@ app.openapi(getPhuLucIXData, async (c) => {
       const v = studentScores?.get(sub.subjectId)
       return v == null ? null : new Decimal(v)
     }
+    const scoreByExactName = (expected: string) => {
+      const target = canonName(expected)
+      const sub = allSubjects.find((s) => canonName(s.subject.name) === target)
+      if (!sub) return null
+      const v = studentScores?.get(sub.subjectId)
+      return v == null ? null : new Decimal(v)
+    }
 
     // Điểm các môn tốt nghiệp (giữ dạng thô để vừa format vừa so với ngưỡng hạ bậc)
-    const sDATN = scoreOf(["do an tot nghiep", "luan van"])
+    const sDATN = scoreByExactName("do an tot nghiep")
     const sNN = scoreOf(["tot nghiep ngoai ngu"])
-    const sCTDCTCT = scoreOf(["tot nghiep ctd", "tot nghiep ctct", "ctd-ctct"])
+    const sCTDCTCT = scoreByExactName("cong tac dang cong tac chinh tri")
 
     // Nếu HV bị hạ bậc bởi điều kiện "Điểm học phần tốt nghiệp thấp nhất" -> bôi đậm + gạch chân
     // các ô điểm học phần TN thoả ngưỡng. Marker \uE000…\uE001 được be-model nhận diện để định dạng.
