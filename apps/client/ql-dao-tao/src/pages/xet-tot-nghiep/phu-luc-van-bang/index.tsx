@@ -5,7 +5,7 @@ import TableCollapse from "@components/commons/tableCollapse"
 import { ExportDiplomaAppendix } from "@components/ui/export-button"
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
-import { formatDateVN } from "@lib/utils"
+import { formatDateDMY } from "@lib/utils"
 import type { Semester, Student } from "@workspace/db"
 import {
   ApplicationStatus,
@@ -22,6 +22,7 @@ import {
   type TrainingField,
   type TrainingTime,
   type TrainingLevel,
+  type DiplomaType,
   type UserProfile,
 } from "@workspace/db/client"
 import {
@@ -39,8 +40,8 @@ import {
   exportPhuLucVanBangCaoHoc,
   exportPhuLucVanBangNganHan,
 } from "@workspace/libs/api/training"
-import { exportFromTemplate, TableRow } from "@workspace/libs/template-excel"
-import { getMinioUrl } from "@workspace/libs/utils"
+import { exportFromTemplate, TableRow, type SheetExportOptions, type TableCell } from "@workspace/libs/template-excel"
+import { formatPlaceOfBirth, getMinioUrl } from "@workspace/libs/utils"
 import { docxTemplate } from "../../../utils/docx-template"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
 import { DownOutlined } from "@ant-design/icons"
@@ -153,6 +154,359 @@ function isGraduationSubjectType(type?: string | null) {
   )
 }
 
+type AppendixSubject = {
+  tenHocPhan?: string | null
+  soTinChi?: number | string | null
+  thangDiem10?: string | number | null
+  thangDiem4?: string | number | null
+  thangDiemChu?: string | null
+}
+
+function isGraduationSemesterGroup(id?: string | null) {
+  return String(id || "").startsWith("graduation-")
+}
+
+function toAppendixScore(value: unknown): number | "" {
+  if (value == null || value === "" || value === "-") return ""
+  const n = Number(value)
+  return Number.isFinite(n) ? n : ""
+}
+
+function estimateWrappedRowHeight(
+  texts: Array<string | null | undefined>,
+  colWidth: number,
+  fontSize: number
+): number {
+  const usablePx = Math.max(24, colWidth * 7 - 10)
+  const pxPerChar = Math.max(4, fontSize * 0.5)
+  const lines = Math.max(
+    1,
+    ...texts.map((text) =>
+      String(text || "")
+        .split("\n")
+        .reduce((sum, part) => {
+          const words = part.trim().replace(/\s+/g, " ").split(" ").filter(Boolean)
+          if (!words.length) return sum + 1
+          let count = 1
+          let current = 0
+          for (const word of words) {
+            const wordPx = word.length * pxPerChar
+            const next = current === 0 ? wordPx : current + pxPerChar + wordPx
+            if (next > usablePx && current > 0) {
+              count += 1
+              current = wordPx
+            } else {
+              current = next
+            }
+          }
+          return sum + count
+        }, 0)
+    )
+  )
+  return lines * Math.ceil(fontSize * 1.3) + 2
+}
+
+const PLVB_TABLE_BORDER = "thin" as const
+
+function appendixSubjectCells(
+  stt: number | "",
+  subject?: AppendixSubject | null,
+  fontSize = 11
+): TableCell[] {
+  const cell = (
+    value: TableCell["value"],
+    align: TableCell["align"] = "center"
+  ): TableCell => ({
+    value,
+    align,
+    fontSize,
+    wrapText: true,
+    borderStyle: PLVB_TABLE_BORDER,
+  })
+  const nameCell = (value: TableCell["value"]): TableCell => ({
+    ...cell(value, "left"),
+    colSpan: PLVB_NAME_SPAN,
+  })
+  if (!subject) {
+    return [cell(""), nameCell(""), cell(""), cell(""), cell(""), cell("")]
+  }
+  return [
+    cell(stt),
+    nameCell(subject.tenHocPhan ?? ""),
+    cell(subject.soTinChi ?? ""),
+    { ...cell(toAppendixScore(subject.thangDiem10)), numFmt: "0.0" },
+    { ...cell(toAppendixScore(subject.thangDiem4)), numFmt: "0.0" },
+    cell(subject.thangDiemChu ?? ""),
+  ]
+}
+
+/** Mẫu chính thức: điền hết cột trái rồi mới sang cột phải (không xen kẽ từng dòng). */
+function buildTwoColumnSubjectRows(
+  subjects: AppendixSubject[],
+  maxRows: number,
+  fontSize = 11,
+  nameColWidth = 24
+): TableRow[] {
+  if (!subjects.length) return []
+  const leftCount = Math.ceil(subjects.length / 2)
+  const left = subjects.slice(0, leftCount)
+  const right = subjects.slice(leftCount)
+  const rows: TableRow[] = []
+  for (let i = 0; i < leftCount; i++) {
+    const s2 = right[i]
+    rows.push({
+      height: estimateWrappedRowHeight(
+        [left[i]?.tenHocPhan, s2?.tenHocPhan],
+        nameColWidth,
+        fontSize
+      ),
+      cells: [
+        ...appendixSubjectCells(i + 1, left[i], fontSize),
+        ...appendixSubjectCells(s2 ? leftCount + i + 1 : "", s2, fontSize),
+      ],
+    })
+  }
+  return rows.slice(0, maxRows)
+}
+
+function noBorderCell(value: TableCell["value"], extra: Partial<TableCell> = {}): TableCell {
+  return {
+    value,
+    border: false,
+    wrapText: true,
+    ...extra,
+  }
+}
+
+function headerBoxCell(
+  value: TableCell["value"],
+  extra: Partial<TableCell> = {}
+): TableCell {
+  return {
+    value,
+    align: "center",
+    bold: true,
+    fontSize: 9,
+    wrapText: true,
+    borderStyle: "thin",
+    ...extra,
+  }
+}
+
+/** Mỗi nửa 12 ô = STT + tên 7 + tín chỉ + 3 cột điểm. */
+const PLVB_HALF = 12
+const PLVB_UNITS = PLVB_HALF * 2
+const PLVB_NAME_SPAN = 7
+const PLVB_STT_WIDTH = 4.8
+const PLVB_NAME_UNIT = 3.5
+const PLVB_CREDIT_WIDTH = 3.6
+const PLVB_SCORE_WIDTH = 6
+const PLVB_INFO_ROW_HEIGHT = 18
+const PLVB_TABLE_FONT = 10
+const PLVB_HALF_WIDTHS = [
+  PLVB_STT_WIDTH,
+  ...Array.from({ length: PLVB_NAME_SPAN }, () => PLVB_NAME_UNIT),
+  PLVB_CREDIT_WIDTH,
+  PLVB_SCORE_WIDTH,
+  PLVB_SCORE_WIDTH,
+  PLVB_SCORE_WIDTH,
+]
+const PLVB_COL_WIDTHS = [...PLVB_HALF_WIDTHS, ...PLVB_HALF_WIDTHS]
+const INFO_COL_WIDTH = PLVB_HALF_WIDTHS.reduce((sum, width) => sum + width, 0)
+const PLVB_NAME_COL_WIDTH = PLVB_NAME_UNIT * PLVB_NAME_SPAN
+
+function infoRichText(label: string, value: string, boldValue: boolean): TableCell["value"] {
+  return {
+    richText: [
+      { text: label, font: { bold: false, name: "Times New Roman", size: 12 } },
+      { text: value || "", font: { bold: boldValue, name: "Times New Roman", size: 12 } },
+    ],
+  }
+}
+
+function infoPairRow(
+  leftLabel: string,
+  leftValue: string,
+  rightLabel: string,
+  rightValue: string,
+  bold: { left?: boolean; right?: boolean } = {}
+): TableRow {
+  return {
+    height: PLVB_INFO_ROW_HEIGHT,
+    cells: [
+      noBorderCell(infoRichText(leftLabel, leftValue, !!bold.left), {
+        colSpan: PLVB_HALF,
+        fontSize: 12,
+        align: "left",
+        indent: 1,
+      }),
+      noBorderCell(infoRichText(rightLabel, rightValue, !!bold.right), {
+        colSpan: PLVB_HALF,
+        fontSize: 12,
+        align: "left",
+        indent: 1,
+      }),
+    ],
+  }
+}
+
+function buildPhuLuc2ColHeaderRows(header: ReturnType<typeof getDiplomaAppendixHeaderData>): TableRow[] {
+  return [
+    {
+      height: 18,
+      cells: [
+        noBorderCell("BỘ QUỐC PHÒNG", { colSpan: PLVB_HALF, align: "center", fontSize: 12 }),
+        noBorderCell("CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM", {
+          colSpan: PLVB_HALF,
+          align: "center",
+          fontSize: 12,
+          bold: true,
+        }),
+      ],
+    },
+    {
+      height: 18,
+      cells: [
+        noBorderCell("HỌC VIỆN KỸ THUẬT QUÂN SỰ", {
+          colSpan: PLVB_HALF,
+          align: "center",
+          fontSize: 13,
+          bold: true,
+        }),
+        noBorderCell("Độc lập - Tự do - Hạnh phúc", {
+          colSpan: PLVB_HALF,
+          align: "center",
+          fontSize: 12,
+          bold: true,
+          italic: true,
+        }),
+      ],
+    },
+    {
+      height: 10,
+      cells: [
+        noBorderCell("——————————————", {
+          colSpan: PLVB_HALF,
+          align: "center",
+          fontSize: 8,
+          bold: true,
+        }),
+        noBorderCell("————————————", {
+          colSpan: PLVB_HALF,
+          align: "center",
+          fontSize: 8,
+          bold: true,
+        }),
+      ],
+    },
+    { height: 10, cells: [noBorderCell("", { colSpan: PLVB_UNITS })] },
+    {
+      height: 24,
+      cells: [
+        noBorderCell("PHỤ LỤC VĂN BẰNG", {
+          colSpan: PLVB_UNITS,
+          align: "center",
+          bold: true,
+          fontSize: 16,
+        }),
+      ],
+    },
+    {
+      height: 18,
+      cells: [
+        noBorderCell(
+          `(Kèm theo bằng${header.loai_bang ? ` ${header.loai_bang}` : ""} số hiệu: ${header.so_ky_hieu || ""})`,
+          {
+            colSpan: PLVB_UNITS,
+            align: "center",
+            italic: true,
+            fontSize: 11,
+          }
+        ),
+      ],
+    },
+    infoPairRow(
+      "Họ và tên: ",
+      String(header.ho_ten || ""),
+      "Ngày sinh: ",
+      String(header.ngay_sinh || ""),
+      { left: true }
+    ),
+    infoPairRow(
+      "Mã học viên: ",
+      String(header.ma_hoc_vien || ""),
+      "Ngày nhập học: ",
+      String(header.ngay_nhap_hoc || "")
+    ),
+    infoPairRow(
+      "Ngôn ngữ đào tạo: ",
+      String(header.ngon_ngu || ""),
+      "Thời gian đào tạo: ",
+      String(header.thoi_gian_dao_tao || "")
+    ),
+    infoPairRow(
+      "Ngành: ",
+      String(header.nganh_hoc || ""),
+      "Trình độ đào tạo: ",
+      String(header.trinh_do_dao_tao || "")
+    ),
+    infoPairRow(
+      "Chuyên ngành: ",
+      String(header.chuyen_nganh || ""),
+      "Hình thức đào tạo: ",
+      String(header.hinh_thuc_dao_tao || ""),
+      { left: true }
+    ),
+    {
+      height: 16,
+      cells: [
+        headerBoxCell("STT", { rowSpan: 2, fontSize: PLVB_TABLE_FONT, wrapText: false }),
+        headerBoxCell("Tên học phần", { rowSpan: 2, colSpan: PLVB_NAME_SPAN, fontSize: PLVB_TABLE_FONT }),
+        headerBoxCell("Số\ntín\nchỉ", { rowSpan: 2, fontSize: 8 }),
+        headerBoxCell("Điểm học phần", { colSpan: 3, fontSize: PLVB_TABLE_FONT }),
+        headerBoxCell("STT", { rowSpan: 2, fontSize: PLVB_TABLE_FONT, wrapText: false }),
+        headerBoxCell("Tên học phần", { rowSpan: 2, colSpan: PLVB_NAME_SPAN, fontSize: PLVB_TABLE_FONT }),
+        headerBoxCell("Số\ntín\nchỉ", { rowSpan: 2, fontSize: 8 }),
+        headerBoxCell("Điểm học phần", { colSpan: 3, fontSize: PLVB_TABLE_FONT }),
+      ],
+    },
+    {
+      height: 16,
+      cells: [
+        { skip: true, colSpan: 1 },
+        { skip: true, colSpan: PLVB_NAME_SPAN },
+        { skip: true, colSpan: 1 },
+        headerBoxCell("10", { fontSize: PLVB_TABLE_FONT, wrapText: false }),
+        headerBoxCell("4", { fontSize: PLVB_TABLE_FONT, wrapText: false }),
+        headerBoxCell("Chữ", { fontSize: PLVB_TABLE_FONT, wrapText: false }),
+        { skip: true, colSpan: 1 },
+        { skip: true, colSpan: PLVB_NAME_SPAN },
+        { skip: true, colSpan: 1 },
+        headerBoxCell("10", { fontSize: PLVB_TABLE_FONT, wrapText: false }),
+        headerBoxCell("4", { fontSize: PLVB_TABLE_FONT, wrapText: false }),
+        headerBoxCell("Chữ", { fontSize: PLVB_TABLE_FONT, wrapText: false }),
+      ],
+    },
+  ]
+}
+
+function buildGraduationSectionHeaderRow(totalColumns: number, fontSize = 11): TableRow {
+  return {
+    height: fontSize + 8,
+    cells: [
+      {
+        value: "Học phần tốt nghiệp",
+        colSpan: totalColumns,
+        bold: true,
+        fontSize,
+        wrapText: true,
+        align: "left",
+        borderStyle: PLVB_TABLE_BORDER,
+      },
+    ],
+  }
+}
+
 type TTrainingCourse = TrainingCourse & {
   scoreConverts: ScoreConvert[]
   academicRankingConvert?: any[]
@@ -165,6 +519,10 @@ type TFixedClass = {
     trainingCourse: TTrainingCourse
     curriculumVersion: CurriculumVersion & {
       trainingType?: { name: string } | null
+      trainingTime?: TrainingTime | null
+      trainingLevel?: TrainingLevel | null
+      trainingLanguage?: TrainingLanguage | null
+      diplomaType?: Pick<DiplomaType, "name"> | null
       curriculum: {
         trainingMajor: {
           name: string
@@ -181,10 +539,15 @@ type TUserProfile = {
 
 type TGraduationDecision = {
   graduationDecision?:
-    | (Pick<GraduationDecision, "diplomaNumber" | "originalDiplomaNumber"> & {
+    | (Pick<GraduationDecision, "diplomaNumber" | "originalDiplomaNumber" | "finalGpa"> & {
         finalRanking?: {
           classification?: string
         }
+        diplomaType?: Pick<DiplomaType, "name"> | null
+        trainingMajor?: {
+          name: string
+          trainingField?: TrainingField | null
+        } | null
       })
     | null
 }
@@ -253,7 +616,10 @@ export type TStudentWithSubjects = Student &
       trainingTime?: TrainingTime | null
       trainingLevel?: TrainingLevel | null
       trainingType?: { name: string } | null
+      trainingLanguage?: TrainingLanguage | null
+      diplomaType?: Pick<DiplomaType, "name"> | null
     }
+    from?: Date | string | null
   }
 
 export type TStudentWithSemesters = TStudentWithSubjects & {
@@ -271,6 +637,40 @@ export type TStudentWithSemesters = TStudentWithSubjects & {
       thangDiemChu: string | null
     }>
   }>
+}
+
+function getDiplomaAppendixHeaderData(student: TStudentWithSemesters) {
+  const diplomaNumber =
+    student.graduationDecision?.diplomaNumber ||
+    student.graduationDecision?.originalDiplomaNumber ||
+    ""
+  const course = student.fixedClass?.trainingCourse
+  const classCurriculum = student.fixedClass?.curriculumVersion
+  const curriculum = student.curriculumVersion || classCurriculum
+  const major =
+    student.graduationDecision?.trainingMajor || classCurriculum?.curriculum?.trainingMajor
+  const language =
+    curriculum?.trainingLanguage?.name || course?.trainingLanguage?.name || ""
+  const loaiBang =
+    student.graduationDecision?.diplomaType?.name || curriculum?.diplomaType?.name || ""
+  return {
+    ho_ten: student.userProfile.fullname,
+    ma_hoc_vien: student.userProfile.code,
+    ngay_sinh: formatDateDMY(student.userProfile.dateOfBirth),
+    ngay_nhap_hoc: formatDateDMY(student.from || course?.admissionStartDate || null),
+    hinh_thuc_dao_tao: curriculum?.trainingType?.name || classCurriculum?.trainingType?.name || "",
+    nganh_hoc: major?.trainingField?.name || "",
+    chuyen_nganh: major?.name || "",
+    thoi_gian_dao_tao: curriculum?.trainingTime?.name || "",
+    trinh_do_dao_tao: curriculum?.trainingLevel?.name || "",
+    ngon_ngu: language,
+    ngon_ngu_dao_tao: language,
+    so_ky_hieu: diplomaNumber,
+    so_hieu_bang: diplomaNumber,
+    loai_bang: loaiBang,
+    khoa: course?.name || "",
+    noi_sinh: formatPlaceOfBirth(student.userProfile),
+  }
 }
 
 const formItemLayout = {
@@ -462,11 +862,19 @@ export default function StudentGradeSystem() {
             gender: true,
             ethnicity: true,
             nationality: true,
+            provinceOfBirth: true,
+            newProvinceOfBirth: true,
           },
         },
         graduationDecision: {
           include: {
             finalRanking: true,
+            diplomaType: true,
+            trainingMajor: {
+              include: {
+                trainingField: true,
+              },
+            },
           },
         },
         thesisRegistrations: {
@@ -492,6 +900,10 @@ export default function StudentGradeSystem() {
             curriculumVersion: {
               include: {
                 trainingType: true,
+                trainingTime: true,
+                trainingLevel: true,
+                trainingLanguage: true,
+                diplomaType: true,
                 curriculum: {
                   include: {
                     trainingMajor: {
@@ -543,6 +955,8 @@ export default function StudentGradeSystem() {
             trainingTime: true,
             trainingLevel: true,
             trainingType: true,
+            trainingLanguage: true,
+            diplomaType: true,
           },
         },
       },
@@ -728,66 +1142,87 @@ export default function StudentGradeSystem() {
     return matched?.classification ?? ""
   }
 
-  const buildScoreSystemNoteRows = (scoreConverts: ScoreConvert[] = [], totalColumns: number) => {
+  const buildScoreSystemNoteRows = (
+    scoreConverts: ScoreConvert[] = [],
+    totalColumns: number,
+    evenColumns = false
+  ) => {
     const sortedData = [...scoreConverts].sort((a, b) => b.base4 - a.base4)
-
-    const labelColSpan = 2
-    const valueColumnCount = Math.max(totalColumns - labelColSpan, 1)
-
+    const mark = (value: number | string | null | undefined) =>
+      value == null || value === "" ? "" : String(value).replace(".", ",")
     const toBase10Range = (item: ScoreConvert) =>
       item.base10Min === 0
-        ? `< ${Number(item.base10Max) + 0.1}`
-        : `${item.base10Min}${item.base10Max != null ? ` - ${item.base10Max}` : ""}`
+        ? `<${mark(Number(item.base10Max) + 0.1)}`
+        : `${mark(item.base10Min)}${item.base10Max != null ? `-${mark(item.base10Max)}` : ""}`
 
-    const buildGridRow = (label: string, values: string[]) => {
-      const normalizedValues = values.slice(0, valueColumnCount)
-      while (normalizedValues.length < valueColumnCount) {
-        normalizedValues.push("")
+    const letters = sortedData.map((item) => item.letter ?? "")
+    const base4Values = sortedData.map((item) => mark(item.base4))
+    const base10Values = sortedData.map(toBase10Range)
+    const valueSpan =
+      letters.length > 0 && letters.length * 2 <= totalColumns - 4 ? 2 : 1
+    const labelSpan = Math.max(totalColumns - letters.length * valueSpan, 1)
+
+    const noteLine = (label: string, values: string[]): TableRow => {
+      if (!evenColumns || !values.length) {
+        return {
+          height: 16,
+          cells: [
+            {
+              value: values.length ? `${label}    ${values.join("    ")}` : label,
+              colSpan: totalColumns,
+              fontSize: 10,
+              align: "left",
+              wrapText: false,
+              border: false,
+              indent: 1,
+            },
+          ],
+        }
       }
-
       return {
+        height: 16,
         cells: [
           {
             value: label,
-            colSpan: labelColSpan,
+            colSpan: labelSpan,
             fontSize: 10,
+            align: "left",
+            wrapText: false,
             border: false,
+            indent: 1,
           },
-          ...normalizedValues.map((value) => ({
-            value,
-            colSpan: 1,
-            align: "center" as const,
-            fontSize: 10,
-            border: false,
-          })),
+          ...values.map(
+            (value): TableCell => ({
+              value,
+              colSpan: valueSpan,
+              fontSize: 9,
+              align: "center",
+              wrapText: false,
+              border: false,
+            })
+          ),
         ],
-      } as TableRow
+      }
     }
-
-    const letters = sortedData.map((item) => item.letter ?? "")
-    const base4Values = sortedData.map((item) => String(item.base4 ?? ""))
-    const base10Values = sortedData.map(toBase10Range)
 
     return {
       noteRow1: {
+        height: 16,
         cells: [
           {
             value: "Ghi chú:  - Hệ thống điểm được quy định theo:",
             colSpan: totalColumns,
             fontSize: 10,
+            align: "left",
+            wrapText: false,
             border: false,
+            indent: 1,
           },
         ],
       } as TableRow,
-      noteRow2: {
-        ...buildGridRow("Thang điểm chữ", letters),
-      },
-      noteRow3: {
-        ...buildGridRow("Thang điểm 4", base4Values),
-      },
-      noteRow4: {
-        ...buildGridRow("Thang điểm 10", base10Values),
-      },
+      noteRow2: noteLine("Thang điểm chữ", letters),
+      noteRow3: noteLine("Thang điểm 4", base4Values),
+      noteRow4: noteLine("Thang điểm 10", base10Values),
     }
   }
 
@@ -800,12 +1235,9 @@ export default function StudentGradeSystem() {
       graduationRankingData.find((item) => item?.base4Min != null)?.baseScore ??
       graduationRankingData[0]?.baseScore
 
-    const formatNumber = (num: number | null | undefined) => {
+    const formatRangeBound = (num: number | null | undefined) => {
       if (num == null) return "-"
-      if (Number.isInteger(num)) return num.toFixed(1)
-      const decimalPart = (num.toString().split(".")[1] || "").length
-      if (decimalPart === 1) return num.toFixed(2)
-      return num.toString()
+      return Number(num).toFixed(2).replace(".", ",")
     }
 
     const sortedRankings = graduationRankingData.sort((a, b) =>
@@ -816,18 +1248,19 @@ export default function StudentGradeSystem() {
       .map((item) => {
         const range =
           graduationBaseScore === "Base4"
-            ? `${formatNumber(item.base4Min)} - ${formatNumber(item.base4Max)}`
-            : `${formatNumber(item.base10Min)} - ${formatNumber(item.base10Max)}`
+            ? `${formatRangeBound(item.base4Min)} - ${formatRangeBound(item.base4Max)}`
+            : `${formatRangeBound(item.base10Min)} - ${formatRangeBound(item.base10Max)}`
 
         return `${item.classification}: ${range}`
       })
       .join("; ")
 
+    const scaleLabel = graduationBaseScore === "Base4" ? "4" : "10"
     if (!rankingText) {
-      return " - Phân hạng tốt nghiệp theo thang điểm 10: -"
+      return ` - Phân loại tốt nghiệp theo thang điểm ${scaleLabel}: -`
     }
 
-    return ` - Phân hạng tốt nghiệp theo thang điểm ${graduationBaseScore === "Base4" ? "4" : "10"}: ${rankingText}. (Hạng tốt nghiệp có thể bị hạ mức theo quy chế đào tạo đại học của HVKTQS được áp dụng tại thời điểm xét tốt nghiệp).`
+    return ` - Phân loại tốt nghiệp theo thang điểm ${scaleLabel}: ${rankingText}`
   }
 
   const handleExportPLVB2Col = () => {
@@ -835,65 +1268,34 @@ export default function StudentGradeSystem() {
       notification.info({ message: "Không có dữ liệu để xuất!" })
       return
     }
-    const TOTAL_COLUMNS = 12
-    const SIGN_COL = 6
+    const TOTAL_COLUMNS = PLVB_UNITS
+    const SIGN_COL = PLVB_HALF
     const MAX_ROWS = 500
 
-    const allSheetOptions = studentsWithSemesters.map((student) => {
+    const allSheetOptions: SheetExportOptions[] = studentsWithSemesters.map((student) => {
       const scoreConverts = student.fixedClass?.trainingCourse?.scoreConverts || []
       const academicRankingConvert =
         student.fixedClass?.trainingCourse?.academicRankingConvert || []
-      let stt = 0
-      const tableRows = student.semesters
-        .flatMap((semester) => {
-          const subjectRows: TableRow[] = []
+      const header = getDiplomaAppendixHeaderData(student)
+      const headerRows = buildPhuLuc2ColHeaderRows(header)
+      const TABLE_HEADER_ROWS = 2
+      const tableTop = headerRows.length - TABLE_HEADER_ROWS + 1
 
-          const subjects = semester?.subjects ?? []
-          for (let i = 0; i < subjects.length; i += 2) {
-            const s1 = subjects[i]
-            const s2 = subjects[i + 1]
-            const hasSecondSubject = !!s2
-            const sttFirst = stt + 1
-            const sttSecond = hasSecondSubject ? stt + 2 : null
-            stt += hasSecondSubject ? 2 : 1
-
-            subjectRows.push({
-              cells: [
-                { value: sttFirst, align: "center" },
-
-                {
-                  value: s1?.tenHocPhan ?? "",
-                  colSpan: 1,
-                  border: true,
-                },
-                { value: s1?.soTinChi ?? 0, align: "center" },
-                { value: Number(s1?.thangDiem10 ?? 0), align: "right" },
-                { value: Number(s1?.thangDiem4 ?? 0), align: "right" },
-                { value: s1?.thangDiemChu ?? "", align: "center" },
-
-                { value: sttSecond, align: "center" },
-                {
-                  value: s2?.tenHocPhan ?? "",
-                  colSpan: 1,
-                  border: true,
-                },
-                { value: s2?.soTinChi ?? "", align: "center" },
-                {
-                  value: s2?.thangDiem10 ? Number(s2.thangDiem10) : "",
-                  align: "right",
-                },
-                {
-                  value: s2?.thangDiem4 ? Number(s2.thangDiem4) : "",
-                  align: "right",
-                },
-                { value: s2?.thangDiemChu ?? "", align: "center" },
-              ],
-            })
-          }
-
-          return subjectRows
-        })
-        .slice(0, MAX_ROWS)
+      const regularSubjects = student.semesters
+        .filter((semester) => !isGraduationSemesterGroup(semester.id))
+        .flatMap((semester) => semester?.subjects ?? [])
+      const graduationSubjects = student.semesters
+        .filter((semester) => isGraduationSemesterGroup(semester.id))
+        .flatMap((semester) => semester?.subjects ?? [])
+      const tableBodyRows: TableRow[] = [
+        ...buildTwoColumnSubjectRows(regularSubjects, MAX_ROWS, 10, PLVB_NAME_COL_WIDTH),
+      ]
+      if (graduationSubjects.length) {
+        tableBodyRows.push(buildGraduationSectionHeaderRow(TOTAL_COLUMNS, PLVB_TABLE_FONT))
+        tableBodyRows.push(
+          ...buildTwoColumnSubjectRows(graduationSubjects, MAX_ROWS, 10, PLVB_NAME_COL_WIDTH)
+        )
+      }
 
       const tongTinChi = student.semesters.reduce(
         (acc, semester) =>
@@ -921,8 +1323,13 @@ export default function StudentGradeSystem() {
         0
       )
 
-      const diemTBHe10 =
+      const computedGpa10 =
         tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe10 / tongTinChi).toFixed(2))
+      const officialGpa = student.graduationDecision?.finalGpa
+      const diemTBHe10 =
+        officialGpa != null && Number.isFinite(Number(officialGpa))
+          ? Number(Number(officialGpa).toFixed(2))
+          : computedGpa10
 
       const diemTBHe4 =
         tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe4 / tongTinChi).toFixed(2))
@@ -932,169 +1339,140 @@ export default function StudentGradeSystem() {
         getGraduationClassification(diemTBHe10, diemTBHe4, academicRankingConvert || [])
 
       const gapRow: TableRow = {
+        height: 10,
         cells: [{ value: null, colSpan: TOTAL_COLUMNS, border: false }],
       }
 
-      const tongTinChiRow: TableRow = {
+      const summaryCell = (value: TableCell["value"]): TableCell => ({
+        value,
+        colSpan: TOTAL_COLUMNS - SIGN_COL,
+        fontSize: 12,
+        align: "left",
+        border: false,
+        wrapText: true,
+        indent: 1,
+      })
+      const signCell = (value: TableCell["value"], extra: Partial<TableCell> = {}): TableCell => ({
+        value,
+        colSpan: SIGN_COL,
+        align: "center",
+        fontSize: 12,
+        border: false,
+        wrapText: true,
+        ...extra,
+      })
+      const emptyLeft: TableCell = { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL, border: false }
+      const emptyRight: TableCell = { value: null, colSpan: SIGN_COL, border: false }
+
+      const signDate = printDate ? dayjs(printDate) : dayjs()
+      const pad2 = (n: number) => String(n).padStart(2, "0")
+      const summaryCreditRow: TableRow = {
+        height: PLVB_INFO_ROW_HEIGHT,
         cells: [
-          {
-            value: {
-              richText: [
-                { text: "Tổng số tín chỉ: " },
-                { text: String(tongTinChi), font: { bold: true } },
-              ],
-            },
-            colSpan: TOTAL_COLUMNS,
-            fontSize: 12,
-            border: false,
-          },
+          summaryCell({
+            richText: [
+              { text: "Tổng số tín chỉ: ", font: { bold: false, name: "Times New Roman", size: 12 } },
+              { text: String(tongTinChi), font: { bold: true, name: "Times New Roman", size: 12 } },
+            ],
+          }),
+          emptyRight,
         ],
       }
-
-      const diemHe10Row: TableRow = {
+      const summaryGpaRow: TableRow = {
+        height: PLVB_INFO_ROW_HEIGHT,
         cells: [
           {
             value: {
               richText: [
                 {
                   text: "Điểm trung bình chung tích lũy toàn khoá (Thang điểm 10): ",
+                  font: { bold: false, name: "Times New Roman", size: 11 },
                 },
-                { text: String(diemTBHe10), font: { bold: true } },
+                {
+                  text: diemTBHe10.toFixed(2),
+                  font: { bold: true, name: "Times New Roman", size: 11 },
+                },
               ],
             },
             colSpan: TOTAL_COLUMNS,
-            fontSize: 12,
+            fontSize: 11,
+            align: "left",
             border: false,
+            wrapText: false,
+            indent: 1,
           },
         ],
       }
-
-      const xepLoaiRow: TableRow = {
+      const signDateText = `Hà Nội, ngày ${pad2(signDate.date())} tháng ${pad2(signDate.month() + 1)} năm ${signDate.year()}`
+      const summaryRankRow: TableRow = {
+        height: PLVB_INFO_ROW_HEIGHT,
         cells: [
-          {
-            value: {
-              richText: [
-                { text: "Xếp hạng tốt nghiệp: " },
-                { text: xepLoai, font: { bold: true } },
-              ],
-            },
-            colSpan: TOTAL_COLUMNS,
-            fontSize: 12,
-            border: false,
-          },
+          summaryCell({
+            richText: [
+              { text: "Xếp loại: ", font: { bold: false, name: "Times New Roman", size: 12 } },
+              { text: xepLoai, font: { bold: true, name: "Times New Roman", size: 12 } },
+            ],
+          }),
+          signCell(signDateText, { italic: true }),
         ],
       }
-
-      const today = new Date()
-
-      const dateSignatureRow: TableRow = {
-        cells: [
-          { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL, border: false },
-          {
-            value: `Hà Nội, ngày ${today.getDate()} tháng ${
-              today.getMonth() + 1
-            } năm ${today.getFullYear()}`,
-            colSpan: SIGN_COL,
-            align: "center",
-            fontSize: 12,
-            italic: true,
-            border: false,
-          },
-        ],
+      const signTitleRow1: TableRow = {
+        height: 16,
+        cells: [emptyLeft, signCell("TL. GIÁM ĐỐC", { bold: true })],
       }
-
-      const titleSignatureRow1: TableRow = {
-        cells: [
-          { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL, border: false },
-          {
-            value: "KT. TRƯỞNG PHÒNG",
-            colSpan: SIGN_COL,
-            align: "center",
-            bold: true,
-            fontSize: 13,
-            border: false,
-          },
-        ],
+      const signTitleRow2: TableRow = {
+        height: 16,
+        cells: [emptyLeft, signCell("TRƯỞNG PHÒNG ĐÀO TẠO", { bold: true })],
       }
-
-      const titleSignatureRow2: TableRow = {
-        cells: [
-          { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL, border: false },
-          {
-            value: "PHÓ TRƯỞNG PHÒNG",
-            colSpan: SIGN_COL,
-            align: "center",
-            bold: true,
-            fontSize: 13,
-            border: false,
-          },
-        ],
-      }
-
       const nameSignatureRow: TableRow = {
-        cells: [
-          { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL, border: false },
-          {
-            value: "Đại tá, TS Nguyễn Văn Bình",
-            colSpan: SIGN_COL,
-            align: "center",
-            bold: true,
-            fontSize: 13,
-            border: false,
-          },
-        ],
+        height: 16,
+        cells: [emptyLeft, signCell(signerName?.trim() || "", { bold: true, fontSize: 13 })],
       }
 
       const { noteRow1, noteRow2, noteRow3, noteRow4 } = buildScoreSystemNoteRows(
         scoreConverts || [],
-        TOTAL_COLUMNS
+        TOTAL_COLUMNS,
+        true
       )
 
+      const rankingNote = buildGraduationRankingNote(academicRankingConvert)
       const noteRow5: TableRow = {
         cells: [
           {
-            value: buildGraduationRankingNote(academicRankingConvert),
+            value: rankingNote,
             colSpan: TOTAL_COLUMNS,
             fontSize: 10,
-            rowSpan: 2,
+            wrapText: true,
+            align: "left",
+            indent: 1,
             border: false,
           },
         ],
+        height: estimateWrappedRowHeight([rankingNote], 80, 10),
       }
 
       return {
         sheet: `${student.userProfile.code} - ${student.userProfile.fullname}`,
-        data: {
-          ho_ten: student.userProfile.fullname,
-          ma_hoc_vien: student.userProfile.code,
-          ngay_sinh: formatDateVN(student.userProfile.dateOfBirth ?? ""),
-          ngay_nhap_hoc: formatDateVN(student.fixedClass.createdAt),
-          hinh_thuc_dao_tao:
-            student.curriculumVersion?.trainingType?.name ||
-            student.fixedClass?.curriculumVersion?.trainingType?.name ||
-            "",
-          nganh_hoc:
-            student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name ||
-            "",
-          chuyen_nganh:
-            student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
-          thoi_gian_dao_tao: student.curriculumVersion?.trainingTime?.name || "",
-          trinh_do_dao_tao: student.curriculumVersion?.trainingLevel?.name || "",
-          ngon_ngu: student.fixedClass?.trainingCourse?.trainingLanguage?.name || "",
-          so_ky_hieu: student.fixedClass?.trainingCourse?.code || "",
+        resetSheet: true,
+        tableStartCell: { row: 1, col: 1 },
+        columnWidths: PLVB_COL_WIDTHS,
+        tableBorderRange: {
+          top: tableTop,
+          left: 1,
+          bottom: tableTop + TABLE_HEADER_ROWS + tableBodyRows.length - 1,
+          right: TOTAL_COLUMNS,
         },
-        tableStartCell: { row: 14, col: 1 },
         rows: [
-          ...tableRows,
+          ...headerRows,
+          ...tableBodyRows,
           gapRow,
-          tongTinChiRow,
-          diemHe10Row,
-          xepLoaiRow,
-          gapRow,
-          dateSignatureRow,
-          titleSignatureRow1,
-          titleSignatureRow2,
-          ...Array.from({ length: 5 }, () => ({
+          summaryCreditRow,
+          summaryGpaRow,
+          summaryRankRow,
+          signTitleRow1,
+          signTitleRow2,
+          ...Array.from({ length: 3 }, () => ({
+            height: 12,
             cells: [{ value: null, colSpan: TOTAL_COLUMNS, border: false }],
           })),
           nameSignatureRow,
@@ -1113,9 +1491,27 @@ export default function StudentGradeSystem() {
       sheets: allSheetOptions,
       fileName: "PLVB2C.xlsx",
       fontFamily: "Times New Roman",
-      fontSize: 10,
+      fontSize: PLVB_TABLE_FONT,
       mergeSheetsToOne: true,
+      pageBreakBetweenSheets: true,
       sheetName: "PLVB",
+      pageSetup: {
+        paperSize: 9,
+        orientation: "portrait",
+        fitToPage: true,
+        fitToWidth: 1,
+        fitToHeight: 1,
+        horizontalCentered: true,
+        verticalCentered: false,
+        margins: {
+          left: 0.4,
+          right: 0.4,
+          top: 0.4,
+          bottom: 0.4,
+          header: 0.2,
+          footer: 0.2,
+        },
+      },
     })
   }
 
@@ -1128,49 +1524,79 @@ export default function StudentGradeSystem() {
     const SIGN_COL = 6
     const MAX_ROWS = 500
 
-    const allSheetOptions = studentsWithSemesters.map((student) => {
+    const allSheetOptions: SheetExportOptions[] = studentsWithSemesters.map((student) => {
       const scoreConverts = student.fixedClass?.trainingCourse?.scoreConverts || []
       const academicRankingConvert =
         student.fixedClass?.trainingCourse?.academicRankingConvert || []
       let stt = 0
-      const tableRows = student.semesters
-        .flatMap((semester) => {
-          const subjectRows: TableRow[] = []
+      const tableRows: TableRow[] = []
+      const pushSubjectRows = (subjects: AppendixSubject[], restartStt = false) => {
+        if (restartStt) stt = 0
+        for (const s1 of subjects) {
+          stt += 1
+          tableRows.push({
+            height: estimateWrappedRowHeight([s1?.tenHocPhan], 40, 12),
+            cells: [
+              {
+                value: stt,
+                align: "center",
+                fontSize: 12,
+                wrapText: true,
+                borderStyle: PLVB_TABLE_BORDER,
+              },
+              {
+                value: s1?.tenHocPhan ?? "",
+                wrapText: true,
+                fontSize: 12,
+                borderStyle: PLVB_TABLE_BORDER,
+              },
+              {
+                value: s1?.soTinChi ?? "",
+                colSpan: 2,
+                align: "center",
+                fontSize: 12,
+                borderStyle: PLVB_TABLE_BORDER,
+              },
+              {
+                value: toAppendixScore(s1?.thangDiem10),
+                colSpan: 2,
+                align: "center",
+                numFmt: "0.0",
+                fontSize: 12,
+                borderStyle: PLVB_TABLE_BORDER,
+              },
+              {
+                value: toAppendixScore(s1?.thangDiem4),
+                colSpan: 2,
+                align: "center",
+                numFmt: "0.0",
+                fontSize: 12,
+                borderStyle: PLVB_TABLE_BORDER,
+              },
+              {
+                value: s1?.thangDiemChu ?? "",
+                colSpan: 2,
+                align: "center",
+                fontSize: 12,
+                borderStyle: PLVB_TABLE_BORDER,
+              },
+            ],
+          })
+        }
+      }
 
-          const subjects = semester?.subjects ?? []
-          for (let i = 0; i < subjects.length; i++) {
-            const s1 = subjects[i]
-            stt += 1
-
-            subjectRows.push({
-              cells: [
-                { value: stt - 1, align: "center" },
-
-                {
-                  value: s1?.tenHocPhan ?? "",
-                  colSpan: 1,
-                  border: true,
-                  wrapText: true,
-                },
-                { value: s1?.soTinChi ?? "", colSpan: 2, align: "center" },
-                {
-                  value: s1?.thangDiem10 ? Number(s1.thangDiem10) : "",
-                  colSpan: 2,
-                  align: "right",
-                },
-                {
-                  value: s1?.thangDiem4 ? Number(s1.thangDiem4) : "",
-                  colSpan: 2,
-                  align: "right",
-                },
-                { value: s1?.thangDiemChu ?? "", colSpan: 2, align: "center" },
-              ],
-            })
-          }
-
-          return subjectRows
-        })
-        .slice(0, MAX_ROWS)
+      const regularSubjects = student.semesters
+        .filter((semester) => !isGraduationSemesterGroup(semester.id))
+        .flatMap((semester) => semester?.subjects ?? [])
+      const graduationSubjects = student.semesters
+        .filter((semester) => isGraduationSemesterGroup(semester.id))
+        .flatMap((semester) => semester?.subjects ?? [])
+      pushSubjectRows(regularSubjects)
+      if (graduationSubjects.length) {
+        tableRows.push(buildGraduationSectionHeaderRow(TOTAL_COLUMNS, 12))
+        pushSubjectRows(graduationSubjects, true)
+      }
+      tableRows.splice(MAX_ROWS)
 
       const tongTinChi = student.semesters.reduce(
         (acc, semester) =>
@@ -1237,7 +1663,7 @@ export default function StudentGradeSystem() {
                 {
                   text: "Điểm trung bình chung tích lũy toàn khoá (Thang điểm 10): ",
                 },
-                { text: String(diemTBHe10), font: { bold: true } },
+                { text: diemTBHe10.toFixed(2), font: { bold: true } },
               ],
             },
             colSpan: TOTAL_COLUMNS,
@@ -1252,7 +1678,7 @@ export default function StudentGradeSystem() {
           {
             value: {
               richText: [
-                { text: "Xếp hạng tốt nghiệp: " },
+                { text: "Xếp loại: " },
                 { text: xepLoai, font: { bold: true } },
               ],
             },
@@ -1263,15 +1689,13 @@ export default function StudentGradeSystem() {
         ],
       }
 
-      const today = new Date()
+      const signDate = printDate ? dayjs(printDate) : dayjs()
 
       const dateSignatureRow: TableRow = {
         cells: [
-          { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL, border: false }, // 7
+          { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL, border: false },
           {
-            value: `Hà Nội, ngày ${today.getDate()} tháng ${
-              today.getMonth() + 1
-            } năm ${today.getFullYear()}`,
+            value: `Hà Nội, ngày ${signDate.date()} tháng ${String(signDate.month() + 1).padStart(2, "0")} năm ${signDate.year()}`,
             colSpan: SIGN_COL,
             align: "center",
             italic: true,
@@ -1285,7 +1709,7 @@ export default function StudentGradeSystem() {
         cells: [
           { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL, border: false },
           {
-            value: "KT. TRƯỞNG PHÒNG",
+            value: "TL. GIÁM ĐỐC",
             colSpan: SIGN_COL,
             align: "center",
             bold: true,
@@ -1299,7 +1723,7 @@ export default function StudentGradeSystem() {
         cells: [
           { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL, border: false },
           {
-            value: "PHÓ TRƯỞNG PHÒNG",
+            value: "TRƯỞNG PHÒNG ĐÀO TẠO",
             colSpan: SIGN_COL,
             align: "center",
             bold: true,
@@ -1313,7 +1737,7 @@ export default function StudentGradeSystem() {
         cells: [
           { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL, border: false },
           {
-            value: "Đại tá, TS Nguyễn Văn Bình",
+            value: signerName?.trim() || "",
             colSpan: SIGN_COL,
             align: "center",
             bold: true,
@@ -1342,27 +1766,16 @@ export default function StudentGradeSystem() {
 
       return {
         sheet: `${student.userProfile.code} - ${student.userProfile.fullname}`,
-        data: {
-          ho_ten: student.userProfile.fullname,
-          ma_hoc_vien: student.userProfile.code,
-          ngay_sinh: formatDateVN(student.userProfile.dateOfBirth ?? ""),
-          ngay_nhap_hoc: formatDateVN(student.fixedClass.createdAt),
-          hinh_thuc_dao_tao:
-            student.curriculumVersion?.trainingType?.name ||
-            student.fixedClass?.curriculumVersion?.trainingType?.name ||
-            "",
-          ngon_ngu_dao_tao: student.fixedClass?.trainingCourse?.trainingLanguage?.name || "",
-          nganh_hoc:
-            student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name ||
-            "",
-          chuyen_nganh:
-            student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
-          thoi_gian_dao_tao: student.curriculumVersion?.trainingTime?.name || "",
-          trinh_do_dao_tao: student.curriculumVersion?.trainingLevel?.name || "",
-          ngon_ngu: student.fixedClass?.trainingCourse?.trainingLanguage?.name || "",
-          so_ky_hieu: student.fixedClass?.trainingCourse?.code || "",
-        },
+        data: getDiplomaAppendixHeaderData(student),
+        boldDataKeys: ["ho_ten", "chuyen_nganh", "nganh_hoc"],
         tableStartCell: { row: 14, col: 1 },
+        headerStylePreset: "phu-luc-van-bang" as const,
+        tableBorderRange: {
+          top: 12,
+          left: 1,
+          bottom: 13 + tableRows.length,
+          right: TOTAL_COLUMNS,
+        },
         rows: [
           ...tableRows,
           gapRow,

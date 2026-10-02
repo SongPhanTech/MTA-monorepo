@@ -50,6 +50,13 @@ export const formatDateVN = (date: string | Date | Dayjs) => {
   return `Ngày ${d.date().toString().padStart(2, "0")} tháng ${d.month() + 1} năm ${d.year()}`
 }
 
+export const formatDateDMY = (date?: string | Date | Dayjs | null) => {
+  if (!date) return ""
+  const d = toVnDayjs(date)
+  if (!d) return ""
+  return `${d.date()}/${d.month() + 1}/${d.year()}`
+}
+
 export const formatDateTime = (date?: string | Date | Dayjs) => {
   if (!date) return ""
   return formatDateTimeVn(date)

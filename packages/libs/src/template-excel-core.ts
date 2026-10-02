@@ -13,8 +13,16 @@ export interface TableCell {
   fontSize?: number
   wrapText?: boolean
   border?: boolean
+  /** Kiểu viền ô. Mặc định thin; bảng phụ lục dùng medium để khung in đậm. */
+  borderStyle?: ExcelJS.BorderStyle
+  /** Lùi dòng (Excel indent), dùng cho ghi chú. */
+  indent?: number
   color?: string
   numFmt?: string
+  /** Bỏ qua ô (dùng khi hàng dưới bị rowSpan chiếm). */
+  skip?: boolean
+  /** Chỉ vẽ một số cạnh; ưu tiên hơn `border`. */
+  borderEdges?: { top?: boolean; left?: boolean; bottom?: boolean; right?: boolean }
 }
 
 export interface TableRow {
@@ -33,6 +41,12 @@ export interface SheetExportOptions {
   /** Độ rộng cột theo index 0 = cột A. `undefined` giữ nguyên width template. */
   columnWidths?: Array<number | undefined>
   thinBorderRange?: { top: number; left: number; bottom: number; right: number }
+  /** Viền trong thin, khung ngoài medium — khớp mẫu phụ lục văn bằng. */
+  tableBorderRange?: { top: number; left: number; bottom: number; right: number }
+  /** Căn tiêu đề / header template theo mẫu phụ lục văn bằng. */
+  headerStylePreset?: "phu-luc-van-bang"
+  /** Xóa nội dung sheet trước khi ghi `rows` (không dùng layout template). */
+  resetSheet?: boolean
 }
 
 export interface BuildExcelFromTemplateOptions {
@@ -44,6 +58,9 @@ export interface BuildExcelFromTemplateOptions {
   fontSize?: number
   mergeSheetsToOne?: boolean
   sheetName?: string
+  /** Khi gộp nhiều sheet: ngắt trang in giữa từng khối (mỗi học viên một trang). */
+  pageBreakBetweenSheets?: boolean
+  pageSetup?: Partial<ExcelJS.PageSetup>
 }
 
 /** @deprecated Dùng BuildExcelFromTemplateOptions trên server */
@@ -118,6 +135,35 @@ function applyColumnWidths(worksheet: ExcelJS.Worksheet, widths?: Array<number |
   })
 }
 
+function toColumnLetter(col: number): string {
+  let letter = ""
+  let n = col
+  while (n > 0) {
+    const mod = (n - 1) % 26
+    letter = String.fromCharCode(65 + mod) + letter
+    n = Math.floor((n - 1) / 26)
+  }
+  return letter
+}
+
+function applyPageSetup(worksheet: ExcelJS.Worksheet, pageSetup?: Partial<ExcelJS.PageSetup>) {
+  if (!pageSetup) return
+  worksheet.pageSetup = {
+    ...worksheet.pageSetup,
+    ...pageSetup,
+    margins: pageSetup.margins
+      ? { ...worksheet.pageSetup.margins, ...pageSetup.margins }
+      : worksheet.pageSetup.margins,
+  }
+}
+
+function applyPrintArea(worksheet: ExcelJS.Worksheet, lastColOverride?: number) {
+  const lastRow = worksheet.lastRow?.number ?? 0
+  const lastCol = Math.max(lastColOverride ?? worksheet.columnCount, 1)
+  if (lastRow <= 0) return
+  worksheet.pageSetup.printArea = `A1:${toColumnLetter(lastCol)}${lastRow}`
+}
+
 function applyBoldToCell(cell: ExcelJS.Cell) {
   cell.font = {
     ...(cell.font ?? {}),
@@ -172,6 +218,13 @@ function cloneWorksheet(
     newSheet.mergeCells(mergeRange)
   })
 
+  if (sourceSheet.pageSetup) {
+    newSheet.pageSetup = JSON.parse(JSON.stringify(sourceSheet.pageSetup))
+  }
+  if (sourceSheet.headerFooter) {
+    newSheet.headerFooter = JSON.parse(JSON.stringify(sourceSheet.headerFooter))
+  }
+
   return newSheet
 }
 
@@ -225,7 +278,18 @@ function applyThinBorderRange(
   bottom: number,
   right: number
 ) {
-  const side = { style: "thin" as const }
+  applyBorderRange(worksheet, top, left, bottom, right, "thin")
+}
+
+function applyBorderRange(
+  worksheet: ExcelJS.Worksheet,
+  top: number,
+  left: number,
+  bottom: number,
+  right: number,
+  style: ExcelJS.BorderStyle
+) {
+  const side = { style, color: { argb: "FF000000" } }
   for (let row = top; row <= bottom; row++) {
     const excelRow = worksheet.getRow(row)
     for (let col = left; col <= right; col++) {
@@ -238,6 +302,327 @@ function applyThinBorderRange(
       }
     }
     excelRow.commit()
+  }
+}
+
+/** Lưới trong mỏng; khung ngoài đậm. Xóa viền ô phụ của vùng gộp để viền template không đè khung. */
+function applyTableFrameBorder(
+  worksheet: ExcelJS.Worksheet,
+  top: number,
+  left: number,
+  bottom: number,
+  right: number
+) {
+  const inner = { style: "thin" as const, color: { argb: "FF000000" } }
+  const outer = { style: "medium" as const, color: { argb: "FF000000" } }
+  const none = { style: undefined as ExcelJS.BorderStyle | undefined }
+
+  const mergeBounds = (row: number, col: number) => {
+    const merges = worksheet.model.merges || []
+    for (const range of merges) {
+      const [startRef, endRef] = range.split(":")
+      if (!startRef) continue
+      const start = worksheet.getCell(startRef)
+      const end = worksheet.getCell(endRef || startRef)
+      const mt = Number(start.row)
+      const ml = Number(start.col)
+      const mb = Number(end.row)
+      const mr = Number(end.col)
+      if (row >= mt && row <= mb && col >= ml && col <= mr) {
+        return { top: mt, left: ml, bottom: mb, right: mr }
+      }
+    }
+    return { top: row, left: col, bottom: row, right: col }
+  }
+
+  const seen = new Set<string>()
+  for (let row = top; row <= bottom; row++) {
+    for (let col = left; col <= right; col++) {
+      const box = mergeBounds(row, col)
+      const key = `${box.top}:${box.left}:${box.bottom}:${box.right}`
+      if (seen.has(key)) continue
+      seen.add(key)
+      const frame = {
+        top: box.top <= top ? outer : inner,
+        left: box.left <= left ? outer : inner,
+        bottom: box.bottom >= bottom ? outer : inner,
+        right: box.right >= right ? outer : inner,
+      }
+      for (let r = box.top; r <= box.bottom; r++) {
+        for (let c = box.left; c <= box.right; c++) {
+          if (r === box.top && c === box.left) continue
+          if (r < top || r > bottom || c < left || c > right) continue
+          worksheet.getCell(r, c).border = {
+            top: r === box.top && box.top <= top ? outer : none,
+            left: c === box.left && box.left <= left ? outer : none,
+            bottom: r === box.bottom && box.bottom >= bottom ? outer : none,
+            right: c === box.right && box.right >= right ? outer : none,
+          }
+        }
+      }
+      worksheet.getCell(box.top, box.left).border = frame
+    }
+  }
+}
+
+function cellPlainText(value: ExcelJS.CellValue): string {
+  if (typeof value === "string") return value
+  if (value && typeof value === "object" && "richText" in value && Array.isArray(value.richText)) {
+    return value.richText.map((part) => part.text).join("")
+  }
+  if (value && typeof value === "object" && "text" in value) {
+    return String((value as { text?: unknown }).text ?? "")
+  }
+  if (value == null) return ""
+  return String(value)
+}
+
+function applyDynamicCellStyle(
+  cell: ExcelJS.Cell,
+  cellData: TableCell,
+  options: BuildExcelFromTemplateOptions
+) {
+  cell.alignment = {
+    horizontal: cellData.align || "left",
+    vertical: "middle",
+    wrapText: cellData.wrapText ?? true,
+    indent: cellData.indent,
+  }
+  cell.font = {
+    name: options.fontFamily || "Times New Roman",
+    size: cellData.fontSize ?? options.fontSize ?? 14,
+    bold: !!cellData.bold,
+    italic: !!cellData.italic,
+  }
+  if (cellData.numFmt) {
+    cell.numFmt = cellData.numFmt
+  }
+  if (cellData.bgColor) {
+    cell.fill = {
+      type: "pattern",
+      pattern: "solid",
+      fgColor: { argb: cellData.bgColor },
+    }
+  }
+  const applyBorder = cellData.border ?? true
+  const edge = {
+    style: cellData.borderStyle || "thin",
+    color: { argb: "FF000000" },
+  }
+  if (cellData.borderEdges) {
+    const e = cellData.borderEdges
+    cell.border = {
+      top: e.top ? edge : { style: undefined },
+      left: e.left ? edge : { style: undefined },
+      bottom: e.bottom ? edge : { style: undefined },
+      right: e.right ? edge : { style: undefined },
+    }
+  } else if (applyBorder) {
+    cell.border = { top: edge, left: edge, bottom: edge, right: edge }
+  } else {
+    cell.border = {
+      top: { style: undefined },
+      left: { style: undefined },
+      bottom: { style: undefined },
+      right: { style: undefined },
+    }
+  }
+  if (cellData.color) {
+    cell.font = {
+      ...cell.font,
+      color: { argb: cellData.color },
+    }
+  }
+  if (cell.value && typeof cell.value === "object" && "richText" in cell.value && Array.isArray(cell.value.richText)) {
+    const baseFont = cell.font || {}
+    cell.value = {
+      richText: cell.value.richText.map((part) => ({
+        text: part.text,
+        font: {
+          name: part.font?.name || baseFont.name,
+          size: part.font?.size || baseFont.size,
+          italic: part.font?.italic ?? baseFont.italic,
+          bold: !!part.font?.bold,
+          color: part.font?.color || baseFont.color,
+        },
+      })),
+    }
+  }
+}
+
+function addCenteredTitleUnderline(worksheet: ExcelJS.Worksheet, titleCell: ExcelJS.Cell) {
+  const col = Number(titleCell.col)
+  const row = Number(titleCell.row)
+  let left = col
+  let right = col
+  for (const range of worksheet.model.merges || []) {
+    const [startRef, endRef] = range.split(":")
+    if (!startRef) continue
+    const start = worksheet.getCell(startRef)
+    const end = worksheet.getCell(endRef || startRef)
+    const mt = Number(start.row)
+    const ml = Number(start.col)
+    const mb = Number(end.row)
+    const mr = Number(end.col)
+    if (row >= mt && row <= mb && col >= ml && col <= mr) {
+      left = ml
+      right = mr
+      break
+    }
+  }
+  const lineLeft = left + 1
+  const lineRight = Math.max(lineLeft, right - 1)
+  const lineRow = worksheet.getRow(row + 1)
+  lineRow.height = Math.min(Number(lineRow.height) || 8, 8)
+  const line = { style: "medium" as const, color: { argb: "FF000000" } }
+  for (let c = lineLeft; c <= lineRight; c++) {
+    const cell = lineRow.getCell(c)
+    cell.border = {
+      ...(cell.border || {}),
+      top: { style: undefined },
+      left: { style: undefined },
+      right: { style: undefined },
+      bottom: line,
+    }
+  }
+}
+
+function applyPhuLucVanBangHeaderStyles(worksheet: ExcelJS.Worksheet, lastHeaderRow: number) {
+  const times = "Times New Roman"
+  for (let r = 1; r <= lastHeaderRow; r++) {
+    const excelRow = worksheet.getRow(r)
+    excelRow.eachCell({ includeEmpty: false }, (cell) => {
+      const text = cellPlainText(cell.value).replace(/\s+/g, " ").trim()
+      if (!text) return
+      const font = { name: times, color: cell.font?.color, family: cell.font?.family }
+      if (/BỘ QUỐC PHÒNG/i.test(text)) {
+        cell.alignment = { horizontal: "center", vertical: "middle", wrapText: true }
+        cell.font = { ...font, size: 12, bold: false }
+        return
+      }
+      if (/HỌC VIỆN KỸ THUẬT QUÂN SỰ/i.test(text)) {
+        cell.alignment = { horizontal: "center", vertical: "middle", wrapText: true }
+        cell.font = { ...font, size: 13, bold: true, underline: false }
+        addCenteredTitleUnderline(worksheet, cell)
+        return
+      }
+      if (/CỘNG HÒA XÃ HỘI/i.test(text)) {
+        cell.alignment = { horizontal: "center", vertical: "middle", wrapText: true }
+        cell.font = { ...font, size: 12, bold: true }
+        return
+      }
+      if (/Độc lập/i.test(text)) {
+        cell.alignment = { horizontal: "center", vertical: "middle", wrapText: true }
+        cell.font = { ...font, size: 12, bold: true, italic: true, underline: false }
+        addCenteredTitleUnderline(worksheet, cell)
+        return
+      }
+      if (/PHỤ LỤC VĂN BẰNG/i.test(text)) {
+        cell.alignment = { horizontal: "center", vertical: "middle", wrapText: true }
+        cell.font = { ...font, size: 16, bold: true }
+        return
+      }
+      if (/Kèm theo bằng/i.test(text)) {
+        cell.alignment = { horizontal: "center", vertical: "middle", wrapText: true }
+        cell.font = { ...font, size: 11, italic: true, bold: false }
+        return
+      }
+      if (
+        /STT|TT|Tên học phần|Số tín chỉ|Điểm học phần|Thang điểm/i.test(text) &&
+        text.length < 40
+      ) {
+        cell.alignment = { horizontal: "center", vertical: "middle", wrapText: true }
+        cell.font = { ...font, size: 9, bold: true }
+        if (/^Thang điểm\s+/i.test(text) && !text.includes("\n")) {
+          cell.value = text.replace(/^Thang điểm\s+/i, "Thang\nđiểm\n")
+        }
+        return
+      }
+      if (
+        /Họ và tên|Ngày sinh|Khóa|Ngành|Chuyên ngành|Ngôn ngữ|Mã học viên|Nơi sinh|Ngày nhập học|Thời gian đào tạo|Trình độ|Hình thức/i.test(
+          text
+        )
+      ) {
+        cell.alignment = { horizontal: "left", vertical: "middle", wrapText: true }
+        cell.font = { ...cell.font, name: times, size: 12 }
+      }
+    })
+  }
+
+  const subHeader = worksheet.getRow(lastHeaderRow)
+  subHeader.height = Math.max(Number(subHeader.height) || 0, 46)
+  if (lastHeaderRow > 1) {
+    const mainHeader = worksheet.getRow(lastHeaderRow - 1)
+    mainHeader.height = Math.max(Number(mainHeader.height) || 0, 22)
+  }
+}
+
+function applySheetTableBorders(worksheet: ExcelJS.Worksheet, sheetOption: SheetExportOptions) {
+  if (sheetOption.thinBorderRange) {
+    const r = sheetOption.thinBorderRange
+    applyThinBorderRange(worksheet, r.top, r.left, r.bottom, r.right)
+  }
+  if (sheetOption.tableBorderRange) {
+    const r = sheetOption.tableBorderRange
+    applyTableFrameBorder(worksheet, r.top, r.left, r.bottom, r.right)
+  }
+}
+
+function resetWorksheetContent(worksheet: ExcelJS.Worksheet) {
+  const merges = [...(worksheet.model.merges || [])]
+  for (const range of merges) {
+    try {
+      worksheet.unMergeCells(range)
+    } catch {
+      /* ignore */
+    }
+  }
+  // ExcelJS bỏ qua spliceRows(1, last) khi xóa hết sheet, nên template còn lại đè nội dung mới.
+  let guard = 0
+  while (worksheet.rowCount > 0 && guard < 1000) {
+    worksheet.spliceRows(worksheet.rowCount, 1)
+    guard++
+  }
+}
+
+function writeDynamicRows(
+  worksheet: ExcelJS.Worksheet,
+  rows: TableRow[],
+  tableStartCell: { row: number; col: number },
+  options: BuildExcelFromTemplateOptions,
+  insertSpace: boolean
+) {
+  if (insertSpace && rows.length > 1) {
+    worksheet.spliceRows(tableStartCell.row + 1, 0, ...Array(rows.length - 1).fill([]))
+  }
+  let currentRow = tableStartCell.row
+  for (const rowData of rows) {
+    let currentCol = tableStartCell.col
+    const excelRow = worksheet.getRow(currentRow)
+    for (const cellData of rowData.cells) {
+      const colSpan = cellData.colSpan ?? 1
+      const rowSpan = cellData.rowSpan ?? 1
+      if (cellData.skip) {
+        currentCol += colSpan
+        continue
+      }
+      const cell = excelRow.getCell(currentCol)
+      cell.value = sanitizeExcelCellValue(cellData.value) as ExcelJS.CellValue
+      applyDynamicCellStyle(cell, cellData, options)
+      if (colSpan > 1 || rowSpan > 1) {
+        mergeCellsSafe(
+          worksheet,
+          currentRow,
+          currentCol,
+          currentRow + rowSpan - 1,
+          currentCol + colSpan - 1
+        )
+      }
+      currentCol += colSpan
+    }
+    if (rowData.height != null) excelRow.height = rowData.height
+    excelRow.commit()
+    currentRow++
   }
 }
 
@@ -295,107 +680,30 @@ async function handleExcelJSDefault(
         worksheet.getColumn(colName).hidden = true
       })
     }
-    // 1️⃣ Replace placeholder {{...}}
-    const boldDataKeys = sheetOption.boldDataKeys ?? []
-    worksheet.eachRow((row) => {
-      row.eachCell((cell) => {
-        const shouldBold = boldDataKeys.some((key) => cellContainsPlaceholder(cell.value, key))
-        cell.value = replaceTemplatePlaceholders(cell.value, data)
-        if (shouldBold) applyBoldToCell(cell)
+    if (!sheetOption.resetSheet) {
+      const boldDataKeys = sheetOption.boldDataKeys ?? []
+      worksheet.eachRow((row) => {
+        row.eachCell((cell) => {
+          const shouldBold = boldDataKeys.some((key) => cellContainsPlaceholder(cell.value, key))
+          cell.value = replaceTemplatePlaceholders(cell.value, data)
+          if (shouldBold) applyBoldToCell(cell)
+        })
       })
-    })
+      if (sheetOption.headerStylePreset === "phu-luc-van-bang") {
+        applyPhuLucVanBangHeaderStyles(worksheet, (tableStartCell?.row ?? 14) - 1)
+      }
+    } else {
+      resetWorksheetContent(worksheet)
+    }
 
-    // 2️⃣ Render bảng động
     if (rows && tableStartCell) {
-      let currentRow = tableStartCell.row
-
-      if (rows.length > 1) {
-        worksheet.spliceRows(tableStartCell.row + 1, 0, ...Array(rows.length - 1).fill([]))
-      }
-
-      for (const rowData of rows) {
-        let currentCol = tableStartCell.col
-        const excelRow = worksheet.getRow(currentRow)
-
-        for (const cellData of rowData.cells) {
-          const cell = excelRow.getCell(currentCol)
-          cell.value = sanitizeExcelCellValue(cellData.value) as ExcelJS.CellValue
-          if (cellData.numFmt) {
-            cell.numFmt = cellData.numFmt
-          }
-
-          // Style
-          cell.alignment = {
-            horizontal: cellData.align || "left",
-            vertical: "middle",
-            wrapText: cellData.wrapText ?? true,
-          }
-          cell.font = {
-            name: options.fontFamily || "Times New Roman",
-            size: cellData.fontSize ?? options.fontSize ?? 14,
-            bold: !!cellData.bold,
-            italic: !!cellData.italic,
-          }
-          if (cellData.bgColor) {
-            cell.fill = {
-              type: "pattern",
-              pattern: "solid",
-              fgColor: { argb: cellData.bgColor },
-            }
-          }
-          const applyBorder = cellData.border ?? true
-
-          if (applyBorder) {
-            cell.border = {
-              top: { style: "thin" },
-              left: { style: "thin" },
-              bottom: { style: "thin" },
-              right: { style: "thin" },
-            }
-          } else {
-            cell.border = {
-              top: { style: undefined },
-              left: { style: undefined },
-              bottom: { style: undefined },
-              right: { style: undefined },
-            }
-          }
-          if (cellData.color) {
-            cell.font = {
-              ...cell.font,
-              color: { argb: cellData.color },
-            }
-          }
-          const colSpan = cellData.colSpan ?? 1
-          const rowSpan = cellData.rowSpan ?? 1
-          if (colSpan > 1 || rowSpan > 1) {
-            mergeCellsSafe(
-              worksheet,
-              currentRow,
-              currentCol,
-              currentRow + rowSpan - 1,
-              currentCol + colSpan - 1
-            )
-          }
-
-          currentCol += colSpan
-        }
-
-        if (rowData.height != null) {
-          excelRow.height = rowData.height
-        }
-
-        excelRow.commit()
-        currentRow++
-      }
+      writeDynamicRows(worksheet, rows, tableStartCell, options, !sheetOption.resetSheet)
     }
 
     applyColumnWidths(worksheet, sheetOption.columnWidths)
-
-    if (sheetOption.thinBorderRange) {
-      const r = sheetOption.thinBorderRange
-      applyThinBorderRange(worksheet, r.top, r.left, r.bottom, r.right)
-    }
+    applyPageSetup(worksheet, options.pageSetup)
+    applyPrintArea(worksheet, sheetOption.columnWidths?.length)
+    applySheetTableBorders(worksheet, sheetOption)
   }
 
   workbook.removeWorksheet(firstSheet.id)
@@ -618,91 +926,28 @@ async function handleExcelJSMergeSheets(
       })
     }
 
-    // 1b. Thay thế placeholder {{...}}
-    const boldDataKeys = sheetOption.boldDataKeys ?? []
-    worksheet.eachRow((row) => {
-      row.eachCell((cell) => {
-        const shouldBold = boldDataKeys.some((key) => cellContainsPlaceholder(cell.value, key))
-        cell.value = replaceTemplatePlaceholders(cell.value, data)
-        if (shouldBold) applyBoldToCell(cell)
+    if (!sheetOption.resetSheet) {
+      const boldDataKeys = sheetOption.boldDataKeys ?? []
+      worksheet.eachRow((row) => {
+        row.eachCell((cell) => {
+          const shouldBold = boldDataKeys.some((key) => cellContainsPlaceholder(cell.value, key))
+          cell.value = replaceTemplatePlaceholders(cell.value, data)
+          if (shouldBold) applyBoldToCell(cell)
+        })
       })
-    })
+      if (sheetOption.headerStylePreset === "phu-luc-van-bang") {
+        applyPhuLucVanBangHeaderStyles(worksheet, (tableStartCell?.row ?? 14) - 1)
+      }
+    } else {
+      resetWorksheetContent(worksheet)
+    }
 
-    // 1c. Render bảng động
     if (rows && tableStartCell) {
-      let currentRow = tableStartCell.row
-
-      if (rows.length > 1) {
-        worksheet.spliceRows(tableStartCell.row + 1, 0, ...Array(rows.length - 1).fill([]))
-      }
-
-      for (const rowData of rows) {
-        let currentCol = tableStartCell.col
-        const excelRow = worksheet.getRow(currentRow)
-
-        for (const cellData of rowData.cells) {
-          const cell = excelRow.getCell(currentCol)
-          cell.value = sanitizeExcelCellValue(cellData.value)
-
-          // Style (đã bao gồm logic border: false)
-          cell.alignment = {
-            horizontal: cellData.align || "left",
-            vertical: "middle",
-            wrapText: cellData.wrapText ?? true,
-          }
-          cell.font = {
-            name: options.fontFamily || "Times New Roman",
-            size: cellData.fontSize ?? options.fontSize ?? 14,
-            bold: !!cellData.bold,
-            italic: !!cellData.italic,
-          }
-          if (cellData.bgColor) {
-            cell.fill = {
-              type: "pattern",
-              pattern: "solid",
-              fgColor: { argb: cellData.bgColor },
-            }
-          }
-
-          const applyBorder = cellData.border ?? true
-          if (applyBorder) {
-            cell.border = {
-              top: { style: "thin" },
-              left: { style: "thin" },
-              bottom: { style: "thin" },
-              right: { style: "thin" },
-            }
-          } else {
-            cell.border = {
-              top: { style: undefined },
-              left: { style: undefined },
-              bottom: { style: undefined },
-              right: { style: undefined },
-            }
-          }
-
-          const colSpan = cellData.colSpan ?? 1
-          const rowSpan = cellData.rowSpan ?? 1
-          if (colSpan > 1 || rowSpan > 1) {
-            mergeCellsSafe(
-              worksheet,
-              currentRow,
-              currentCol,
-              currentRow + rowSpan - 1,
-              currentCol + colSpan - 1
-            )
-          }
-          currentCol += colSpan
-        }
-        if (rowData.height != null) {
-          excelRow.height = rowData.height
-        }
-        excelRow.commit()
-        currentRow++
-      }
+      writeDynamicRows(worksheet, rows, tableStartCell, options, !sheetOption.resetSheet)
     }
 
     applyColumnWidths(worksheet, sheetOption.columnWidths)
+    applySheetTableBorders(worksheet, sheetOption)
 
     // 1d. Thêm sheet đã xử lý vào danh sách tạm
     tempWorksheets.push(worksheet)
@@ -722,10 +967,14 @@ async function handleExcelJSMergeSheets(
     for (let i = 1; i < tempWorksheets.length; i++) {
       const sheetToCopy = tempWorksheets[i]
 
-      // Thêm 2 hàng trống để ngăn cách
-      masterSheet?.addRow({})
-      masterSheet?.addRow({})
-      currentRowOffset += 2
+      if (options.pageBreakBetweenSheets) {
+        masterSheet?.getRow(currentRowOffset).addPageBreak()
+      } else {
+        // Thêm 2 hàng trống để ngăn cách
+        masterSheet?.addRow({})
+        masterSheet?.addRow({})
+        currentRowOffset += 2
+      }
 
       // Copy nội dung
       appendSheet(
@@ -748,6 +997,8 @@ async function handleExcelJSMergeSheets(
   // Đổi tên sheet chính (nếu muốn)
   if (masterSheet) {
     masterSheet.name = options.sheetName || "TongHopDiem"
+    applyPageSetup(masterSheet, options.pageSetup)
+    applyPrintArea(masterSheet, sheets[0]?.columnWidths?.length)
   }
 
   const outBuffer = await workbook.xlsx.writeBuffer()
