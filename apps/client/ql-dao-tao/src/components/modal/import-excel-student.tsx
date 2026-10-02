@@ -50,6 +50,7 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
 
     setFile(file)
     setFileName(file.name)
+    setCurrentPage(1)
 
     const reader = new FileReader()
     reader.onload = (e) => {
@@ -95,6 +96,7 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
     setData({ trainingObjectType: "", trainingCourse: "" })
     setDisabledButton(true)
     setCreateCurriculumVersion(false)
+    setCurrentPage(1)
     // Reset input file để có thể chọn lại file cùng tên
     const fileInput = document.getElementById("file-upload") as HTMLInputElement
     if (fileInput) {
@@ -122,18 +124,35 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
         resetState()
         onCancel()
       } else {
-        const failedData = (res?.data as any)?.failed
-        if (failedData && Array.isArray(failedData)) {
-          const importErrors = failedData.map(
-            (item: { code: string; name: string; error: string }) => ({
-              cellRef: item.code,
-              message: `${item.name}: ${item.error}`,
-            })
-          )
+        const payload = (res?.data ?? {}) as {
+          message?: string
+          failed?: { code?: string; name?: string; error?: string }[]
+          errors?: Array<string | { cellRef?: string | null; code?: string; message?: string; error?: string }>
+        }
+        const importErrors = [
+          ...(Array.isArray(payload.failed)
+            ? payload.failed.map((item) => ({
+                cellRef: item.code ?? "",
+                message: [item.name, item.error].filter(Boolean).join(": "),
+              }))
+            : []),
+          ...(Array.isArray(payload.errors)
+            ? payload.errors.map((item) =>
+                typeof item === "string"
+                  ? { cellRef: "", message: item }
+                  : {
+                      cellRef: item.cellRef || item.code || "",
+                      message: item.message || item.error || "",
+                    }
+              )
+            : []),
+        ]
+        if (importErrors.length) {
           setErrorData(importErrors)
           setDisabledButton(true)
+          setCurrentPage(1)
         }
-        message.error(res?.data?.message || "Nhập dữ liệu sinh viên từ file thất bại")
+        message.error(payload.message || "Nhập dữ liệu sinh viên từ file thất bại")
       }
     } catch (error: any) {
       if (error?.info?.message) {
@@ -211,7 +230,7 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
                       width: 30,
                       align: "center",
                       fixed: "left",
-                      render: (_, __, index: number) => index + 1 + (currentPage - 1) * 10,
+                      render: (_, __, index: number) => index + 1,
                     },
                     {
                       title: "Vị trí lỗi",
@@ -292,7 +311,7 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
             width: 50,
             align: "center",
             fixed: "left",
-            render: (_, __, index: number) => index + 1 + (currentPage - 1) * 10,
+            render: (_, __, index: number) => index + 1 + (currentPage - 1) * numberOfPages,
           },
           {
             title: "Số BD",
@@ -306,7 +325,6 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
             width: 80,
             align: "center",
             fixed: "left",
-            render: (_, __, index: number) => index + 1 + (currentPage - 1) * 10,
             dataIndex: "doctoralCode",
           },
           {
@@ -577,7 +595,7 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
           },
         ]}
         dataSource={previewData}
-        rowKey="code"
+        rowKey={(record) => `${record.profileCode ?? "sv"}-${record.stt ?? ""}`}
         pagination={{
           position: ["bottomRight"],
           defaultPageSize: DEFAULT_PAGINATE_SIZE,

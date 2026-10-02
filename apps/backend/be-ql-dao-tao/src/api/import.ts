@@ -26,6 +26,7 @@ import { standardErrorResponses } from "../dto/openapi-route-helpers"
 import { formatLsbError, type ErrorExtra } from "../types/error-extra"
 import {
   buildCurriculumMapOrThrow,
+  curriculumVersionMapKey,
   buildDegreeRankTypeMapOrThrow,
   buildDegreeTypeMapOrThrow,
   buildDMChuyenNganhMap,
@@ -62,18 +63,34 @@ const isLsbDuplicate = (extra?: ErrorExtra, raw?: unknown) => {
   return /đã tồn tại|duplicate/i.test(text)
 }
 
-const extractLsbId = (data: unknown): string | undefined => {
-  if (!data) return undefined
-  if (typeof data === "string" && data) return data
-  if (Array.isArray(data)) return extractLsbId(data[0])
-  if (typeof data === "object") {
-    const obj = data as Record<string, unknown>
-    if (typeof obj.Id === "string" && obj.Id) return obj.Id
-    if (typeof obj.id === "string" && obj.id) return obj.id
-    if ("data" in obj) return extractLsbId(obj.data)
-    if (Array.isArray(obj.items)) return extractLsbId(obj.items[0])
-  }
+const lsbRowId = (row: Record<string, unknown>) => {
+  if (typeof row.Id === "string" && row.Id) return row.Id
+  if (typeof row.id === "string" && row.id) return row.id
   return undefined
+}
+
+const lsbRows = (data: unknown): Record<string, unknown>[] => {
+  if (!data) return []
+  if (Array.isArray(data)) return data.flatMap((item) => lsbRows(item))
+  if (typeof data !== "object") return []
+  const obj = data as Record<string, unknown>
+  const lists = [obj.Data, obj.Items, obj.items].filter(Array.isArray) as unknown[][]
+  if (Array.isArray(obj.data)) lists.push(obj.data)
+  if (lists.length) return lists.flatMap((list) => list.flatMap((item) => lsbRows(item)))
+  if ("data" in obj) {
+    const nested = lsbRows(obj.data)
+    if (nested.length) return nested
+  }
+  if (lsbRowId(obj)) return [obj]
+  return []
+}
+
+const extractLsbId = (data: unknown): string | undefined => {
+  if (typeof data === "string" && data) return data
+  if (data && typeof data === "object" && "data" in data && typeof data.data === "string" && data.data) {
+    return data.data
+  }
+  return lsbRowId(lsbRows(data)[0] ?? {})
 }
 
 const studentLsbEmail = (idCardNumber: string) => `${idCardNumber}@gmail.com`
@@ -90,26 +107,135 @@ const studentLsbPhone = (
   return `09${digits.slice(-8).padStart(8, "0")}`
 }
 
-const findLsbNhanVienId = async (values: string[]) => {
-  const uniqueValues = [...new Set(values.map((value) => value.trim()).filter(Boolean))]
-  if (uniqueValues.length === 0) return undefined
+const parseImportNumber = (value: string | undefined, integer = false): number | null => {
+  const text = value?.trim() ?? ""
+  if (!text) return null
+  const normalized = text.replace(",", ".")
+  const parsed = integer ? Number.parseInt(normalized, 10) : Number.parseFloat(normalized)
+  return Number.isFinite(parsed) ? parsed : Number.NaN
+}
 
-  const conditions = uniqueValues.flatMap((value) => [
-    { field: "sMa", operator: "=", value },
-    { field: "sCCCD", operator: "=", value },
-    { field: "sEmail", operator: "=", value },
-  ])
-  const filter =
-    conditions.length === 1
-      ? JSON.stringify(conditions)
-      : JSON.stringify([{ ors: conditions }])
+type StudentImportMatch = {
+  id: string
+  deletedAt: Date | null
+  fixedClass: { code: string | null; trainingCourseId: string } | null
+}
+
+const pickStudentForImport = (
+  rows: StudentImportMatch[],
+  classCode: string,
+  trainingCourseId: string
+) => {
+  const sameClass = rows.filter((row) => row.fixedClass?.code === classCode)
+  const sameCourse = rows.filter((row) => row.fixedClass?.trainingCourseId === trainingCourseId)
+  const chosen =
+    sameClass.find((row) => !row.deletedAt) ??
+    sameCourse.find((row) => !row.deletedAt) ??
+    sameClass[0] ??
+    sameCourse[0]
+  if (chosen) return { student: chosen, otherCourse: false }
+
+  const otherCourse = rows.some(
+    (row) =>
+      row.fixedClass && row.fixedClass.trainingCourseId !== trainingCourseId && !row.deletedAt
+  )
+  if (otherCourse) return { student: undefined, otherCourse: true }
+
+  const unassigned = rows.filter((row) => !row.fixedClass)
+  return {
+    student: unassigned.find((row) => !row.deletedAt) ?? unassigned[0],
+    otherCourse: false,
+  }
+}
+
+const syncStudentHistory = async (
+  tx: Prisma.TransactionClient,
+  userProfileId: string,
+  student: {
+    department?: string
+    departmentAddress?: string
+    position?: string
+    universitySchool?: string
+    universityMajor?: string
+  },
+  positionMap: Map<string, string>,
+  dmTruong: Map<string, string>,
+  dmNganh: Map<string, string>,
+  dmChuyenNganh: Map<string, string>
+) => {
+  if (student.department) {
+    const chucVuId = positionMap.get(normalizeCatalogName(student.position))
+    const existingWork = await tx.quaTrinhCongTac.findFirst({
+      where: { userProfileId, donVi: student.department, deletedAt: null },
+      select: { id: true },
+    })
+    if (existingWork) {
+      await tx.quaTrinhCongTac.update({
+        where: { id: existingWork.id },
+        data: { diaChi: student.departmentAddress, chucVuId },
+      })
+    } else {
+      await tx.quaTrinhCongTac.create({
+        data: {
+          userProfileId,
+          donVi: student.department,
+          diaChi: student.departmentAddress,
+          chucVuId,
+        },
+      })
+    }
+  }
+
+  if (student.universitySchool && student.universityMajor) {
+    const tenTruongId = dmTruong.get(student.universitySchool)
+    const nganhHocId = dmNganh.get(student.universityMajor)
+    if (!tenTruongId || !nganhHocId) {
+      throw new Error(
+        `Không tìm thấy trường hoặc ngành đại học: ${student.universitySchool} / ${student.universityMajor}`
+      )
+    }
+    const chuyenNganhId = dmChuyenNganh.get(student.universityMajor)
+    const existingStudy = await tx.quaTrinhHocTap.findFirst({
+      where: { userProfileId, tenTruongId, nganhHocId, deletedAt: null },
+      select: { id: true },
+    })
+    if (existingStudy) {
+      await tx.quaTrinhHocTap.update({
+        where: { id: existingStudy.id },
+        data: { chuyenNganhId },
+      })
+    } else {
+      await tx.quaTrinhHocTap.create({
+        data: { userProfileId, tenTruongId, nganhHocId, chuyenNganhId },
+      })
+    }
+  }
+}
+
+const findLsbNhanVienId = async (code: string, idCardNumber: string) => {
+  const conditions = [
+    { field: "sMa", operator: "=", value: code.trim() },
+    { field: "sCCCD", operator: "=", value: idCardNumber.trim() },
+  ].filter((item) => item.value)
+  if (conditions.length === 0) return undefined
 
   const res = await postDMNhanViensList(
-    { Filter: filter, Take: 10, Skip: 0, IsGetTotal: false },
+    {
+      Filter: JSON.stringify([{ ors: conditions }]),
+      Take: 10,
+      Skip: 0,
+      IsGetTotal: false,
+    },
     lsbRequestOptions()
   )
   if (res.status !== 200) return undefined
-  return extractLsbId(res.data)
+
+  const rows = lsbRows(res.data)
+  const matched =
+    rows.find((row) => String(row.sCCCD ?? "") === idCardNumber.trim()) ??
+    rows.find((row) => String(row.sMa ?? "") === code.trim()) ??
+    rows[0]
+  return matched ? lsbRowId(matched) : undefined
 }
 
 const importLecturer = createRoute({
@@ -1105,21 +1231,33 @@ app.openapi(importStudent, async (c) => {
     data.students.map((student) => student.managementOrganization)
   )
 
-  const classConsistencyMap = new Map<string, { className: string; curriculum: string }>()
+  const classConsistencyMap = new Map<
+    string,
+    { className: string; curriculum: string; trainingMajor: string; managementOrganization: string }
+  >()
   const inconsistentClassCodes = new Set<string>()
 
   for (const student of data.students) {
     if (!student.fixedClassCode) continue
 
+    const managementOrganization = student.managementOrganization?.trim() || ""
+    const trainingMajor = student.trainingMajor?.trim() || ""
     const existing = classConsistencyMap.get(student.fixedClassCode)
     if (existing) {
-      if (existing.className !== student.fixedClass || existing.curriculum !== student.curriculum) {
+      if (
+        existing.className !== student.fixedClass ||
+        existing.curriculum !== student.curriculum ||
+        existing.trainingMajor !== trainingMajor ||
+        existing.managementOrganization !== managementOrganization
+      ) {
         inconsistentClassCodes.add(student.fixedClassCode)
       }
     } else {
       classConsistencyMap.set(student.fixedClassCode, {
         className: student.fixedClass,
         curriculum: student.curriculum,
+        trainingMajor,
+        managementOrganization,
       })
     }
   }
@@ -1127,7 +1265,7 @@ app.openapi(importStudent, async (c) => {
   if (inconsistentClassCodes.size > 0) {
     return c.json(
       {
-        message: `Thông tin lớp không nhất quán (Tên lớp, CTĐT hoặc đơn vị quản lý khác nhau cho cùng mã lớp): ${Array.from(
+        message: `Thông tin lớp không nhất quán (tên lớp, chuyên ngành, CTĐT hoặc đơn vị quản lý khác nhau cho cùng mã lớp): ${Array.from(
           inconsistentClassCodes
         ).join(", ")}`,
       },
@@ -1137,16 +1275,19 @@ app.openapi(importStudent, async (c) => {
 
   const curriculumClassMap = new Map<string, Set<string>>()
   for (const student of data.students) {
-    if (!curriculumClassMap.has(student.curriculum)) {
-      curriculumClassMap.set(student.curriculum, new Set())
+    const curriculumKey = curriculumVersionMapKey(student.curriculum, student.trainingMajor)
+    if (!curriculumClassMap.has(curriculumKey)) {
+      curriculumClassMap.set(curriculumKey, new Set())
     }
-    curriculumClassMap.get(student.curriculum)?.add(student.fixedClass)
+    if (student.fixedClassCode) curriculumClassMap.get(curriculumKey)?.add(student.fixedClassCode)
   }
 
   const invalidCurriculums: string[] = []
-  for (const [curriculum, classes] of curriculumClassMap) {
+  for (const [curriculumKey, classes] of curriculumClassMap) {
     if (classes.size > 1) {
-      invalidCurriculums.push(`${curriculum} (Các lớp ${Array.from(classes).join(", ")})`)
+      const [curriculum, trainingMajor] = curriculumKey.split("\n")
+      const label = trainingMajor ? `${curriculum} - ${trainingMajor}` : curriculum
+      invalidCurriculums.push(`${label} (các mã lớp ${Array.from(classes).join(", ")})`)
     }
   }
 
@@ -1258,101 +1399,120 @@ app.openapi(importStudent, async (c) => {
     return c.json({ message: `Xung đột dữ liệu: ${dbConflictErrors.join("; ")}` }, 400)
   }
 
-  const curriculumVersionMap = await buildCurriculumMapOrThrow(
+  await buildCurriculumMapOrThrow(
     prisma,
     data.students,
     trainingObjectType.id,
     trainingCourse.id,
-    createCurriculumVersion
+    createCurriculumVersion,
+    { write: false }
   )
 
-  const dmTruong = await buildDMTruongMap(
-    prisma,
-    data.students.map((student) => student.universitySchool)
+  const classCodes = Array.from(
+    new Set(data.students.map((student) => student.fixedClassCode).filter(Boolean))
   )
-
-  const dmNganh = await buildDMNganhMap(
-    prisma,
-    data.students.map((student) => student.universityMajor)
+  const existingClasses = await prisma.fixedClass.findMany({
+    where: { code: { in: classCodes } },
+    select: { code: true, trainingCourseId: true, managementOrganizationId: true },
+  })
+  const existingClassByCode = new Map(
+    existingClasses.flatMap((row) => (row.code ? [[row.code, row] as const] : []))
   )
+  const foreignClassCodes = existingClasses
+    .filter(
+      (row): row is (typeof existingClasses)[number] & { code: string } =>
+        Boolean(row.code) && row.trainingCourseId !== trainingCourse.id
+    )
+    .map((row) => row.code)
+  if (foreignClassCodes.length) {
+    return c.json({ message: `Mã lớp đã thuộc khoá khác: ${foreignClassCodes.join(", ")}` }, 400)
+  }
 
-  const dmChuyenNganh = await buildDMChuyenNganhMap(
-    prisma,
-    data.students.map((student) => student.universityMajor)
-  )
-
-  const existingStudent = await prisma.student.findMany({
+  const existingStudentRows = await prisma.student.findMany({
     where: { userProfile: { code: { in: data.students.map((student) => student.profileCode) } } },
     select: {
       id: true,
-      userProfileId: true,
-      fixedClass: { select: { code: true } },
-      userProfile: {
-        select: { idCardNumber: true, code: true },
-      },
+      deletedAt: true,
+      fixedClass: { select: { code: true, trainingCourseId: true } },
+      userProfile: { select: { code: true, idCardNumber: true } },
     },
   })
-
-  const existingStudentMap = new Map(
-    existingStudent.map(({ id, userProfileId, userProfile }) => [
-      userProfile.code,
-      { id, userProfileId, idCardNumber: userProfile.idCardNumber },
-    ])
-  )
-  const existingStudentByClassMap = new Map(
-    existingStudent.map(({ id, userProfileId, userProfile, fixedClass }) => [
-      `${userProfile.code}::${fixedClass?.code ?? ""}`,
-      { id, userProfileId, idCardNumber: userProfile.idCardNumber },
-    ])
-  )
+  const studentsByCode = new Map<string, typeof existingStudentRows>()
+  for (const row of existingStudentRows) {
+    const code = row.userProfile.code
+    if (!code) continue
+    const list = studentsByCode.get(code) ?? []
+    list.push(row)
+    studentsByCode.set(code, list)
+  }
 
   const studentCodes = data.students.map((student) => student.profileCode)
-  const studentCCCDs = data.students.map((student) => student.idCardNumber)
-  const existingProfile = await prisma.userProfile.findMany({
+  const studentCCCDs = data.students.map((student) => student.idCardNumber).filter(Boolean)
+  const existingProfiles = await prisma.userProfile.findMany({
     where: {
-      OR: [
-        { idCardNumber: { in: studentCCCDs } },
-        { code: { in: [...studentCCCDs, ...studentCodes] } },
-      ],
+      OR: [{ idCardNumber: { in: studentCCCDs } }, { code: { in: studentCodes } }],
     },
-    select: { id: true, code: true, idCardNumber: true },
+    select: {
+      id: true,
+      code: true,
+      idCardNumber: true,
+      email: true,
+      phoneNumber: true,
+      bLaGiangVien: true,
+    },
   })
-
-  const existingProfileMap = new Map<string, { id: string; code: string | null }>()
-  for (const profile of existingProfile) {
-    existingProfileMap.set(profile.idCardNumber, {
-      id: profile.id,
-      code: profile.code,
-    })
-    if (profile.code) existingProfileMap.set(profile.code, { id: profile.id, code: profile.code })
+  const profileByCode = new Map<string, (typeof existingProfiles)[number]>()
+  const profileByCccd = new Map<string, (typeof existingProfiles)[number]>()
+  for (const profile of existingProfiles) {
+    if (profile.code) profileByCode.set(profile.code, profile)
+    if (profile.idCardNumber) profileByCccd.set(profile.idCardNumber, profile)
   }
 
-  // Trùng UserProfile.code nhưng khác CCCD
-  const duplicateCode: string[] = []
-  for (const l of data.students) {
-    const existingStudent = existingStudentMap.get(l.profileCode)
-    if (existingStudent && existingStudent.idCardNumber !== l.idCardNumber) {
-      duplicateCode.push(l.profileCode)
+  const identityErrors: { code: string; name: string; error: string }[] = []
+  const matchedStudentId = new Map<string, string | undefined>()
+  for (const student of data.students) {
+    const byCode = profileByCode.get(student.profileCode)
+    const byCccd = student.idCardNumber ? profileByCccd.get(student.idCardNumber) : undefined
+    if (byCode && byCode.idCardNumber !== student.idCardNumber) {
+      identityErrors.push({
+        code: student.profileCode,
+        name: student.fullname,
+        error: `Mã đã gắn với CCCD ${byCode.idCardNumber}`,
+      })
+    }
+    if (byCccd?.code && byCccd.code !== student.profileCode) {
+      identityErrors.push({
+        code: student.profileCode,
+        name: student.fullname,
+        error: `CCCD đã gắn với mã ${byCccd.code}`,
+      })
+    }
+    if (byCode && byCccd && byCode.id !== byCccd.id) {
+      identityErrors.push({
+        code: student.profileCode,
+        name: student.fullname,
+        error: "Mã và CCCD thuộc hai hồ sơ khác nhau",
+      })
+    }
+
+    const picked = pickStudentForImport(
+      studentsByCode.get(student.profileCode) ?? [],
+      student.fixedClassCode,
+      trainingCourse.id
+    )
+    if (picked.otherCourse) {
+      identityErrors.push({
+        code: student.profileCode,
+        name: student.fullname,
+        error: "Mã sinh viên đã thuộc khoá khác",
+      })
+    } else {
+      matchedStudentId.set(student.profileCode, picked.student?.id)
     }
   }
-
-  if (duplicateCode.length) {
-    return c.json({ message: "Mã sinh viên đã tồn tại", errors: duplicateCode }, 400)
-  }
-
-  const studentCCCDCount = new Map<string, string[]>()
-  for (const s of data.students) {
-    if (!s.idCardNumber) continue
-    const codes = studentCCCDCount.get(s.idCardNumber) ?? []
-    codes.push(s.profileCode)
-    studentCCCDCount.set(s.idCardNumber, codes)
-  }
-  const duplicateStudentCCCD = [...studentCCCDCount.entries()]
-    .filter(([, codes]) => codes.length > 1)
-    .map(([cccd, codes]) => `CCCD ${cccd} bị trùng ở Mã định danh: ${codes.join(", ")}`)
-  if (duplicateStudentCCCD.length) {
+  if (identityErrors.length) {
     return c.json(
-      { message: "Số CCCD bị trùng trong file Excel", errors: duplicateStudentCCCD },
+      { message: "Dữ liệu sinh viên xung đột với hồ sơ hiện có", failed: identityErrors },
       400
     )
   }
@@ -1364,21 +1524,203 @@ app.openapi(importStudent, async (c) => {
     new Map(data.students.map((s) => [s.fixedClassCode, s])).values()
   )
 
+  type PreparedStudent = {
+    student: (typeof data.students)[number]
+    lsbProfileId: string
+    profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput
+    existingStudentId?: string
+    entryScore: number | null
+    competencyScore: number | null
+    basic: number | null
+    facility: number | null
+    careerYear: number | null
+    universityGraduationYear: number | null
+  }
+  const prepared: PreparedStudent[] = []
+
+  for (const student of data.students) {
+    const entryScore = parseImportNumber(student.entryScore)
+    const competencyScore = parseImportNumber(student.competencyScore)
+    const basic = parseImportNumber(student.basic)
+    const facility = parseImportNumber(student.facility)
+    const careerYear = parseImportNumber(student.careerYear, true)
+    const universityGraduationYear = parseImportNumber(student.universityGraduationYear, true)
+    if (
+      [entryScore, competencyScore, basic, facility, careerYear, universityGraduationYear].some(
+        (value) => Number.isNaN(value)
+      )
+    ) {
+      importErrors.push({
+        code: student.profileCode,
+        name: student.fullname,
+        error: "Điểm hoặc năm không hợp lệ",
+      })
+      continue
+    }
+
+    const profileHit =
+      (student.idCardNumber ? profileByCccd.get(student.idCardNumber) : undefined) ||
+      profileByCode.get(student.profileCode)
+    const generatedEmail = studentLsbEmail(student.idCardNumber)
+    const filePhone = student.phoneNumber?.trim() || null
+    const email = profileHit?.email || generatedEmail
+    const phoneNumber = filePhone || profileHit?.phoneNumber || null
+    const classRow = existingClassByCode.get(student.fixedClassCode)
+    const fileOrgId = organizationMap.get(student.managementOrganization?.trim() || "") || null
+    const donViId = fileOrgId || classRow?.managementOrganizationId || null
+    const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput = {
+      ...splitFullName(student.fullname),
+      code: student.profileCode,
+      fullname: student.fullname,
+      email,
+      bLaGiangVien: profileHit?.bLaGiangVien ?? false,
+      bLaHocVien: true,
+      dateOfBirth: student.dateOfBirth,
+      idCardNumber: student.idCardNumber,
+      genderId: student.gender ? (genderMap.get(student.gender) ?? null) : null,
+      ethnicityId: ethnicityMap.get(student.ethnicity ?? "") || null,
+      nationalityId: nationalityMap.get(student.nationality ?? "") || null,
+      newProvinceOfBirthId: provinceMap.get(student.newProvinceOfBirth ?? "") || null,
+      phoneNumber,
+      officerNumber: student.officerNumber,
+      rankId: rankMap.get(student.rank ?? "") || null,
+      positionCPVId: positionMap.get(normalizeCatalogName(student.position)) || null,
+      sDM_DonViId: donViId,
+    }
+
+    try {
+      const lsbPayload = {
+        sMa: student.profileCode,
+        bLaHocVien: true,
+        bLaTaiKhoan: true,
+        dNgaySinh: student.dateOfBirth ? new Date(student.dateOfBirth).toISOString() : null,
+        sCCCD: student.idCardNumber,
+        sHoVaDem: profileData.lastName,
+        sTen: profileData.firstName,
+        sTenDayDu: student.fullname,
+        sSDTDiDong:
+          phoneNumber || studentLsbPhone(undefined, student.idCardNumber, student.profileCode),
+        sEmail: email,
+        sDM_GioiTinhId: student.gender ? (genderMap.get(student.gender) ?? null) : null,
+        sDM_DonViId: donViId,
+      }
+
+      let lsbProfileId =
+        profileHit?.id ?? (await findLsbNhanVienId(student.profileCode, student.idCardNumber))
+      let lsbRes = lsbProfileId
+        ? await putDMNhanViens({ Id: lsbProfileId, ...lsbPayload }, lsbRequestOptions())
+        : await postDMNhanViens(lsbPayload, lsbRequestOptions())
+
+      if (lsbRes.status !== 200) {
+        const extra = (lsbRes.data as { extra?: ErrorExtra } | undefined)?.extra
+        if (isLsbDuplicate(extra, lsbRes.data)) {
+          const foundId = await findLsbNhanVienId(student.profileCode, student.idCardNumber)
+          if (foundId && foundId !== lsbProfileId) {
+            lsbRes = await putDMNhanViens({ Id: foundId, ...lsbPayload }, lsbRequestOptions())
+            if (lsbRes.status === 200) lsbProfileId = foundId
+          }
+        }
+      } else if (!lsbProfileId) {
+        lsbProfileId = extractLsbId(lsbRes.data)
+      }
+
+      if (lsbRes.status !== 200 || !lsbProfileId) {
+        const extra = (lsbRes.data as { extra?: ErrorExtra } | undefined)?.extra
+        importErrors.push({
+          code: student.profileCode,
+          name: student.fullname,
+          error: formatLsbError(extra, `LSB API error: ${lsbRes.status}`),
+        })
+        continue
+      }
+
+      prepared.push({
+        student,
+        lsbProfileId,
+        profileData,
+        existingStudentId: matchedStudentId.get(student.profileCode),
+        entryScore,
+        competencyScore,
+        basic,
+        facility,
+        careerYear,
+        universityGraduationYear,
+      })
+    } catch (error) {
+      importErrors.push({
+        code: student.profileCode,
+        name: student.fullname,
+        error: error instanceof Error ? error.message : String(error),
+      })
+    }
+  }
+
+  if (importErrors.length) {
+    return c.json({ message: "Có lỗi xảy ra khi import sinh viên", failed: importErrors }, 400)
+  }
+
   try {
     await prisma.$transaction(
       async (tx) => {
+        const curriculumVersionMap = await buildCurriculumMapOrThrow(
+          tx,
+          data.students,
+          trainingObjectType.id,
+          trainingCourse.id,
+          createCurriculumVersion,
+          { joinTransaction: true }
+        )
+        const dmTruong = await buildDMTruongMap(
+          tx,
+          data.students.map((student) => student.universitySchool)
+        )
+        const dmNganh = await buildDMNganhMap(
+          tx,
+          data.students.map((student) => student.universityMajor)
+        )
+        const dmChuyenNganh = await buildDMChuyenNganhMap(
+          tx,
+          data.students.map((student) => student.universityMajor)
+        )
+
         for (const s of uniqueClasses) {
-          const curriculumName = s.curriculum?.trim()
-          const cvId = curriculumVersionMap.get(curriculumName)
+          const cvId = curriculumVersionMap.get(
+            curriculumVersionMapKey(s.curriculum, s.trainingMajor)
+          )
+          if (!cvId) {
+            throw new Error(`Không tìm thấy chương trình đào tạo: ${s.curriculum}`)
+          }
+
+          const currentClass = await tx.fixedClass.findUnique({
+            where: { code: s.fixedClassCode },
+            select: { trainingCourseId: true },
+          })
+          if (currentClass && currentClass.trainingCourseId !== trainingCourse.id) {
+            throw new Error(`Mã lớp ${s.fixedClassCode} đã thuộc khoá khác`)
+          }
+
+          const nameClash = await tx.fixedClass.findFirst({
+            where: {
+              trainingCourseId: trainingCourse.id,
+              name: s.fixedClass,
+              curriculumVersionId: cvId,
+              NOT: { code: s.fixedClassCode },
+            },
+            select: { code: true },
+          })
+          if (nameClash?.code) {
+            throw new Error(
+              `Tên lớp "${s.fixedClass}" đã dùng cho mã lớp ${nameClash.code} với cùng chương trình đào tạo`
+            )
+          }
+
           const managementOrganizationId = organizationMap.get(
             s.managementOrganization?.trim() || ""
           )
-
           await tx.fixedClass.upsert({
             where: { code: s.fixedClassCode },
             update: {
               name: s.fixedClass,
-              trainingCourseId: trainingCourse.id,
               curriculumVersionId: cvId,
               ...(managementOrganizationId ? { managementOrganizationId } : {}),
             },
@@ -1394,199 +1736,82 @@ app.openapi(importStudent, async (c) => {
         }
 
         const fixedClasses = await tx.fixedClass.findMany({
-          where: {
-            code: { in: Array.from(new Set(data.students.map((s) => s.fixedClassCode))) },
-          },
-          select: { id: true, code: true, managementOrganizationId: true },
+          where: { code: { in: classCodes } },
+          select: { id: true, code: true },
         })
-
-        const fixedClassMap = new Map(
-          fixedClasses.map(({ code, id, managementOrganizationId }) => [
-            code,
-            { id, managementOrganizationId },
-          ])
+        const fixedClassIdByCode = new Map(
+          fixedClasses.flatMap((row) => (row.code ? [[row.code, row.id] as const] : []))
         )
 
-        for (const student of data.students) {
-          const cvName = student.curriculum?.trim()
-          const cvId = curriculumVersionMap.get(cvName)
-          const fixedClass = fixedClassMap.get(student.fixedClassCode)
-          const donViId =
-            fixedClass?.managementOrganizationId ||
-            organizationMap.get(student.managementOrganization?.trim() || "") ||
-            null
+        for (const item of prepared) {
+          const { student } = item
+          const cvId = curriculumVersionMap.get(
+            curriculumVersionMapKey(student.curriculum, student.trainingMajor)
+          )
+          const fixedClassId = fixedClassIdByCode.get(student.fixedClassCode)
+          if (!cvId || !fixedClassId) {
+            throw new Error(
+              `Không xác định được lớp hoặc chương trình đào tạo cho ${student.profileCode}`
+            )
+          }
 
-          const studentData: Prisma.StudentCreateInput = {
-            entryScore: Number.parseFloat(student.entryScore ?? "") || null,
-            fixedClass: { connect: { id: fixedClass?.id } },
-            curriculumVersion: cvId ? { connect: { id: cvId } } : undefined,
-            userProfile: {},
+          const studentData: Omit<Prisma.StudentCreateInput, "userProfile"> = {
+            registerNumber: student.registerNumber || null,
+            doctoralCode: student.doctoralCode || null,
+            admissionCombination: student.admissionCombination || null,
+            entryScore: item.entryScore,
+            competencyScore: item.competencyScore,
+            fixedClass: { connect: { id: fixedClassId } },
+            curriculumVersion: { connect: { id: cvId } },
             department: student.department,
             departmentAddress: student.departmentAddress,
-            careerYear: Number.parseInt(student.careerYear ?? "0", 10),
+            careerYear: item.careerYear,
             universitySchool: student.universitySchool,
             universityTrainingType: student.universityTrainingType,
-            universityGraduationYear: Number.parseInt(student.universityGraduationYear ?? "0", 10),
+            universityGraduationYear: item.universityGraduationYear,
             universityMajor: student.universityMajor,
             universityRank: student.universityRank,
-            basic: student.basic ? Number.parseFloat(student.basic) : null,
-            facility: student.facility ? Number.parseFloat(student.facility) : null,
+            basic: item.basic,
+            facility: item.facility,
             foreignLanguage: student.foreignLanguage,
             priorityReason: student.priorityReason,
             description: student.description,
           }
 
-          const studentEmail = studentLsbEmail(student.idCardNumber)
-          const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput = {
-            ...splitFullName(student.fullname),
-            code: student.profileCode,
-            fullname: student.fullname,
-            email: studentEmail,
-            bLaGiangVien: false,
-            bLaHocVien: true,
-            dateOfBirth: student.dateOfBirth,
-            idCardNumber: student.idCardNumber,
-            genderId: student.gender ? genderMap.get(student.gender) : null,
-            ethnicityId: ethnicityMap.get(student.ethnicity ?? "") || null,
-            nationalityId: nationalityMap.get(student.nationality ?? "") || null,
-            newProvinceOfBirthId: provinceMap.get(student.newProvinceOfBirth ?? "") || null,
-            phoneNumber: student.phoneNumber,
-            officerNumber: student.officerNumber,
-            rankId: rankMap.get(student.rank ?? "") || null,
-            positionCPVId: positionMap.get(normalizeCatalogName(student.position)) || null,
-            sDM_DonViId: donViId,
-          }
+          await tx.userProfile.upsert({
+            where: { id: item.lsbProfileId },
+            update: { ...item.profileData, deletedAt: null, active: true },
+            create: { id: item.lsbProfileId, ...item.profileData },
+          })
 
-          const existingProfile =
-            existingProfileMap.get(student.idCardNumber) || existingProfileMap.get(student.profileCode)
-          const existing =
-            existingStudentByClassMap.get(`${student.profileCode}::${student.fixedClassCode}`) ||
-            existingStudentMap.get(student.profileCode)
-
-          const createStudentFn = async (tx: Prisma.TransactionClient, id?: string) => {
-            const st = await tx.student.create({
+          if (item.existingStudentId) {
+            await tx.student.update({
+              where: { id: item.existingStudentId },
               data: {
                 ...studentData,
-                userProfile: {
-                  connectOrCreate: {
-                    where: id ? { id } : { idCardNumber: student.idCardNumber },
-                    create: { id, ...profileData },
-                  },
-                },
+                userProfile: { connect: { id: item.lsbProfileId } },
+                deletedAt: null,
+                active: true,
               },
             })
-
-            if (student.department) {
-              await tx.quaTrinhCongTac.create({
-                data: {
-                  userProfileId: st.userProfileId,
-                  donVi: student.department,
-                  diaChi: student.departmentAddress,
-                  chucVuId: positionMap.get(normalizeCatalogName(student.position)),
-                },
-              })
-            }
-
-            if (student.universitySchool && student.universityMajor) {
-              await tx.quaTrinhHocTap.create({
-                data: {
-                  userProfileId: st.userProfileId,
-                  tenTruongId: dmTruong.get(student.universitySchool) as string,
-                  nganhHocId: dmNganh.get(student.universityMajor) as string,
-                  chuyenNganhId: dmChuyenNganh.get(student.universityMajor) as string,
-                },
-              })
-            }
-          }
-
-          try {
-            const lsbPayload = {
-              sMa: student.profileCode,
-              bLaHocVien: true,
-              bLaTaiKhoan: true,
-              dNgaySinh: student.dateOfBirth
-                ? new Date(student.dateOfBirth)?.toISOString()
-                : null,
-              sCCCD: student.idCardNumber,
-              sHoVaDem: profileData.lastName,
-              sTen: profileData.firstName,
-              sTenDayDu: student.fullname,
-              sSDTDiDong: studentLsbPhone(
-                student.phoneNumber,
-                student.idCardNumber,
-                student.profileCode
-              ),
-              sEmail: studentEmail,
-              sDM_GioiTinhId: student.gender ? genderMap.get(student.gender) : null,
-              sDM_DonViId: donViId,
-            }
-
-            let lsbProfileId = existingProfile?.id
-            let lsbRes = existingProfile
-              ? await putDMNhanViens({ Id: existingProfile.id, ...lsbPayload }, lsbRequestOptions())
-              : await postDMNhanViens(lsbPayload, lsbRequestOptions())
-
-            if (lsbRes.status !== 200) {
-              const extra = (lsbRes.data as { extra?: ErrorExtra } | undefined)?.extra
-              if (isLsbDuplicate(extra, lsbRes.data)) {
-                const foundId = await findLsbNhanVienId([
-                  student.profileCode,
-                  student.idCardNumber,
-                  studentEmail,
-                ])
-                if (foundId) {
-                  lsbRes = await putDMNhanViens(
-                    { Id: foundId, ...lsbPayload },
-                    lsbRequestOptions()
-                  )
-                  if (lsbRes.status === 200) lsbProfileId = foundId
-                }
-              }
-            } else {
-              lsbProfileId = extractLsbId(lsbRes.data) || lsbProfileId
-            }
-
-            if (lsbRes.status !== 200 || !lsbProfileId) {
-              const extra = (lsbRes.data as { extra?: ErrorExtra } | undefined)?.extra
-              importErrors.push({
-                code: student.profileCode,
-                name: student.fullname,
-                error: formatLsbError(extra, `LSB API error: ${lsbRes.status}`),
-              })
-              continue
-            }
-
-            await tx.userProfile.upsert({
-              where: { id: lsbProfileId },
-              update: profileData,
-              create: { id: lsbProfileId, ...profileData },
-            })
-
-            if (existing) {
-              await tx.student.update({
-                where: { id: existing.id },
-                data: {
-                  ...studentData,
-                  userProfile: { connect: { id: lsbProfileId } },
-                  deletedAt: null,
-                  active: true,
-                },
-              })
-            } else {
-              await createStudentFn(tx, lsbProfileId)
-            }
-          } catch (error) {
-            const errMsg = error instanceof Error ? error.message : String(error)
-            importErrors.push({
-              code: student.profileCode,
-              name: student.fullname,
-              error: errMsg,
+          } else {
+            await tx.student.create({
+              data: {
+                ...studentData,
+                userProfile: { connect: { id: item.lsbProfileId } },
+              },
             })
           }
-        }
 
-        if (importErrors.length > 0) {
-          throw new Error(JSON.stringify(importErrors))
+          await syncStudentHistory(
+            tx,
+            item.lsbProfileId,
+            student,
+            positionMap,
+            dmTruong,
+            dmNganh,
+            dmChuyenNganh
+          )
         }
       },
       { timeout: timeout * 1000 }

@@ -3,7 +3,6 @@ import PutFormModal from "@components/commons/put-modal"
 import Select from "@components/commons/select"
 import useSpinner from "@hooks/spinner"
 import type {
-  CurriculumVersion,
   FixedClass,
   TrainingCourse,
   TrainingMajor,
@@ -22,7 +21,7 @@ import {
 } from "@workspace/db/hooks"
 import { Col, Form, Input, message, Radio } from "antd"
 import dayjs from "dayjs"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import "dayjs/locale/vi"
 import { queryClient } from "@api/index"
@@ -31,6 +30,7 @@ import TreeSelectDepartment from "@components/commons/department-select/TreeSele
 import LectureTreeSelect from "@components/commons/lecture-select-multi/TreeSelectLecture"
 import { buildOrgTree } from "@lib/utils"
 import { whereOrganization } from "@workspace/libs/constants"
+import { normalizeVietnamese } from "@workspace/libs/utils"
 import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from "@workspace/ui"
 import TreeSelect from "@/components/commons/tree-select"
 import { useFixedClassTypeOptions } from "@hooks/fixedClassType"
@@ -269,19 +269,32 @@ const PutFixedClassModal = () => {
     }
   }
 
-  const curriculumTreeData = curriculumData.map((i) => {
-    return {
-      ...i,
-      children: i?.curriculumVersion.map((t: CurriculumVersion) => ({
-        ...t,
-        title: t?.code ? `${t?.code} - ${t?.name}` : t?.name,
-        value: t?.id,
-      })),
-      title: i?.code ? `${i?.code} - ${i?.name}` : i?.name,
-      value: i?.id,
-      selectable: false,
-    }
-  })
+  const curriculumTreeData = useMemo(() => {
+    const seenVersionIds = new Set<string>()
+    return curriculumData.flatMap((curriculum) => {
+      const children = (curriculum.curriculumVersion ?? []).flatMap((version) => {
+        if (!version.id || seenVersionIds.has(version.id)) return []
+        seenVersionIds.add(version.id)
+        return [
+          {
+            key: version.id,
+            value: version.id,
+            title: version.code ? `${version.code} - ${version.name}` : version.name,
+          },
+        ]
+      })
+      if (children.length === 0) return []
+      return [
+        {
+          key: `curriculum-${curriculum.id}`,
+          value: `curriculum-${curriculum.id}`,
+          title: curriculum.code ? `${curriculum.code} - ${curriculum.name}` : curriculum.name,
+          selectable: false,
+          children,
+        },
+      ]
+    })
+  }, [curriculumData])
   const treeData = buildOrgTree(manageOrgData)
 
   const { data: oldFixedClass } = useFindUniqueFixedClass(
@@ -386,9 +399,18 @@ const PutFixedClassModal = () => {
           <TreeSelect
             allowClear
             showSearch
+            virtual={false}
             placeholder="Chọn chương trình đào tạo"
             treeDefaultExpandAll
+            treeNodeFilterProp="title"
             treeData={curriculumTreeData}
+            filterTreeNode={(input, treeNode) => {
+              // Nhóm cha không được tính là khớp. Nếu cha khớp, antd giữ mọi phiên bản con
+              // kể cả phiên bản không chứa keyword, nên danh sách bị trùng và lọc sai.
+              if (treeNode?.selectable === false) return false
+              const title = typeof treeNode?.title === "string" ? treeNode.title : ""
+              return normalizeVietnamese(title).includes(normalizeVietnamese(input))
+            }}
           />
         </FormItem>
       </Col>

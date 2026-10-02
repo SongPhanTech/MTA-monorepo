@@ -943,9 +943,9 @@ const deleteStudentRoute = createRoute({
   path: "/{id}",
   method: "delete",
   summary: "Xóa sinh viên",
-  description: `Xóa hồ sơ sinh viên trên QL đào tạo.
+  description: `Xóa hồ sơ sinh viên trên QL đào tạo. Nếu hồ sơ không còn gắn giảng viên, cán bộ hoặc sinh viên khác thì gọi DELETE hồ sơ trên LSB.
 
-**Bảng dữ liệu nguồn:** Student, UserProfile.`,
+**Bảng dữ liệu nguồn:** Student, UserProfile, DM_NhanVien.`,
   request: {
     params: z.object({
       id: z.string().openapi(fieldDesc("ID sinh viên.")),

@@ -423,9 +423,52 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
     return cell.v instanceof Date ? dayjs(cell.v) : parseDate(String(cell.v))
   }
 
-  const students = data
-    .filter((row) => Number.isInteger(Number.parseFloat(row[cols.stt] || "")))
-    .map((row) => {
+  const readNumberText = (
+    value: string | undefined,
+    col: string,
+    rowNum: number,
+    label: string,
+    integer = false
+  ) => {
+    const text = value?.trim() ?? ""
+    if (!text) return undefined
+    const normalized = text.replace(",", ".")
+    const pattern = integer ? /^-?\d+$/ : /^-?\d+(\.\d+)?$/
+    const candidate = integer ? text : normalized
+    if (!pattern.test(candidate) || !Number.isFinite(Number.parseFloat(normalized))) {
+      errors.push({
+        sheetRef: sheetName,
+        cellRef: `${col}${rowNum + 1}`,
+        message: `${label} không hợp lệ`,
+      })
+      return text
+    }
+    return candidate
+  }
+
+  const students = data.flatMap((row) => {
+      const sttText = String(row[cols.stt] ?? "").trim()
+      const sttNumber = Number.parseFloat(sttText)
+      const sttValid = sttText !== "" && Number.isFinite(sttNumber) && Number.isInteger(sttNumber)
+      if (!sttValid) {
+        const hasContent = [
+          cols.code,
+          cols.fullname,
+          cols.idCardNumber,
+          cols.fixedClassCode,
+          cols.fixedClass,
+          cols.curriculum,
+        ].some((col) => String(row[col] ?? "").trim())
+        if (hasContent) {
+          errors.push({
+            sheetRef: sheetName,
+            cellRef: `${cols.stt}${row.__rowNum__ + 1}`,
+            message: "STT phải là số nguyên",
+          })
+        }
+        return []
+      }
+
       if (!row[cols.code]) {
         errors.push({
           sheetRef: sheetName,
@@ -488,7 +531,7 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
       if (row[cols.dateOfBirth] && !dateOfBirth.isValid()) {
         errors.push({
           sheetRef: sheetName,
-          cellRef: `${cols.code}${row.__rowNum__ + 1}`,
+          cellRef: `${cols.dateOfBirth}${row.__rowNum__ + 1}`,
           message: "Ngày sinh không hợp lệ (ngày/tháng/năm)",
         })
       }
@@ -502,7 +545,7 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
         })
       }
 
-      return {
+      return [{
         stt: row[cols.stt],
         registerNumber: row[cols.registerNumber]?.trim(),
         doctoralCode: row[cols.doctoralCode]?.trim(),
@@ -516,8 +559,13 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
         idCardNumber: idCardNumber as string,
         phoneNumber,
         admissionCombination: row[cols.admissionCombination]?.trim(),
-        entryScore: row[cols.entryScore]?.trim(),
-        competencyScore: row[cols.competencyScore]?.trim(),
+        entryScore: readNumberText(row[cols.entryScore], cols.entryScore, row.__rowNum__, "Tổng điểm"),
+        competencyScore: readNumberText(
+          row[cols.competencyScore],
+          cols.competencyScore,
+          row.__rowNum__,
+          "Điểm đánh giá năng lực"
+        ),
         fixedClassCode: row[cols.fixedClassCode]?.trim() as string,
         fixedClass: row[cols.fixedClass]?.trim() as string,
         trainingField: row[cols.trainingField]?.trim(),
@@ -530,24 +578,43 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
         position: normalizeCatalogName(row[cols.position]) || undefined,
         department: row[cols.department]?.trim(),
         departmentAddress: row[cols.departmentAddress]?.trim(),
-        careerYear: row[cols.careerYear]?.trim(),
+        careerYear: readNumberText(
+          row[cols.careerYear],
+          cols.careerYear,
+          row.__rowNum__,
+          "Năm vào nghề",
+          true
+        ),
         universitySchool: row[cols.universitySchool]?.trim(),
         universityTrainingType: row[cols.universityTrainingType]?.trim(),
-        universityGraduationYear: row[cols.universityGraduationYear]?.trim(),
+        universityGraduationYear: readNumberText(
+          row[cols.universityGraduationYear],
+          cols.universityGraduationYear,
+          row.__rowNum__,
+          "Năm tốt nghiệp",
+          true
+        ),
         universityMajor: row[cols.universityMajor]?.trim(),
         universityRank: row[cols.universityRank]?.trim(),
-        basic: row[cols.basic]?.trim(),
-        facility: row[cols.facility]?.trim(),
+        basic: readNumberText(row[cols.basic], cols.basic, row.__rowNum__, "Điểm cơ bản"),
+        facility: readNumberText(row[cols.facility], cols.facility, row.__rowNum__, "Điểm cơ sở"),
         foreignLanguage: row[cols.foreignLanguage]?.trim(),
         priorityReason: row[cols.priorityReason]?.trim(),
         description: row[cols.description]?.trim(),
-      }
+      }]
     })
 
-  const duplicateCodes = students
-    .map((student) => student.profileCode)
-    .filter((code, index, arr) => arr.indexOf(code) !== index)
+  const countDuplicates = (values: (string | undefined)[]) => {
+    const counts = new Map<string, number>()
+    for (const value of values) {
+      const key = value?.trim() ?? ""
+      if (!key) continue
+      counts.set(key, (counts.get(key) ?? 0) + 1)
+    }
+    return [...counts.entries()].filter(([, count]) => count > 1).map(([value]) => value)
+  }
 
+  const duplicateCodes = countDuplicates(students.map((student) => student.profileCode))
   if (duplicateCodes.length) {
     errors.push({
       sheetRef: sheetName,
@@ -556,10 +623,7 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
     })
   }
 
-  const duplicateIdCardNumbers = students
-    .map((student) => student.idCardNumber)
-    .filter((idCardNumber, index, arr) => arr.indexOf(idCardNumber) !== index)
-
+  const duplicateIdCardNumbers = countDuplicates(students.map((student) => student.idCardNumber))
   if (duplicateIdCardNumbers.length) {
     errors.push({
       sheetRef: sheetName,

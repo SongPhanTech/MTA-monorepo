@@ -1,4 +1,4 @@
-import { $Enums, type PrismaClient } from "@workspace/db"
+import { $Enums, type Prisma, type PrismaClient } from "@workspace/db"
 import { normalizeCatalogName } from "@workspace/libs/utils"
 import { APP_TIMEZONE, setupAppTimezone } from "@workspace/libs/timezone"
 import { HTTPException } from "hono/http-exception"
@@ -246,12 +246,18 @@ const catalogValueMatches = (
   return record.id === value || namesEqual(record.name, value) || namesEqual(record.code, value)
 }
 
+export const curriculumVersionMapKey = (
+  curriculum?: string | null,
+  trainingMajor?: string | null
+) => `${curriculum?.trim() ?? ""}\n${trainingMajor?.trim() ?? ""}`
+
 export const buildCurriculumMapOrThrow = async (
-  prisma: PrismaClient,
+  prisma: PrismaClient | Prisma.TransactionClient,
   students: CurriculumData[],
   trainingObjectTypeId: string,
   trainingCourseId: string,
-  createMissing = false
+  createMissing = false,
+  options?: { write?: boolean; joinTransaction?: boolean }
 ) => {
   const normalize = (value?: string) => value?.trim() ?? ""
 
@@ -385,7 +391,12 @@ export const buildCurriculumMapOrThrow = async (
     return true
   }
 
-  const createdItems: { id: string; name: string; code?: string | null }[] = []
+  const createdItems: {
+    id: string
+    name: string
+    code?: string | null
+    trainingMajor?: string
+  }[] = []
 
   const missing = uniqueTuples.filter(
     (tuple) => !existing.some((version) => versionMatchesTuple(version, tuple))
@@ -421,7 +432,42 @@ ${missingRecordIds
       })
     }
 
-    await prisma.$transaction(async (tx) => {
+    for (const item of missing) {
+      if (!normalize(item.trainingMajor)) {
+        throw new HTTPException(400, {
+          message: `Không thể tạo CTĐT ${item.curriculum} vì thiếu thông tin Chuyên ngành`,
+        })
+      }
+      if (!item.managementOrganization) {
+        throw new HTTPException(400, {
+          message: `Không thể tạo CTĐT ${item.curriculum} vì thiếu thông tin Đơn vị quản lý`,
+        })
+      }
+      if (!managementOrganizationMap.get(item.managementOrganization)) {
+        throw new HTTPException(400, {
+          message: `Đơn vị quản lý không tồn tại: ${item.managementOrganization}`,
+        })
+      }
+      const major = await prisma.trainingMajor.findFirst({
+        where: {
+          trainingObjectTypes: { some: { trainingObjectTypeId } },
+          OR: [
+            { name: { equals: normalize(item.trainingMajor), mode: "insensitive" } },
+            { code: { equals: normalize(item.trainingMajor), mode: "insensitive" } },
+            { id: normalize(item.trainingMajor) },
+          ],
+        },
+        select: { id: true },
+      })
+      if (!major) {
+        throw new HTTPException(400, {
+          message: `Chuyên ngành không tồn tại: ${item.trainingMajor}`,
+        })
+      }
+    }
+
+    if (options?.write !== false) {
+      const applyCreates = async (tx: Prisma.TransactionClient) => {
       const course = await tx.trainingCourse.findFirst({
         where: {
           id: trainingCourseId,
@@ -524,12 +570,6 @@ ${missingRecordIds
           })
         }
 
-        const versionCode = item.curriculum
-          .split(" ")
-          .map((w) => w[0])
-          .join("")
-          .toUpperCase()
-
         const created = await tx.curriculumVersion.create({
           data: {
             name: item.curriculum,
@@ -540,29 +580,40 @@ ${missingRecordIds
           select: { id: true, name: true },
         })
 
-        createdItems.push(created)
+        createdItems.push({ ...created, trainingMajor: item.trainingMajor })
       }
-    })
+      }
+
+      if (options?.joinTransaction) {
+        await applyCreates(prisma as Prisma.TransactionClient)
+      } else {
+        await (prisma as PrismaClient).$transaction(async (tx) => {
+          await applyCreates(tx)
+        })
+      }
+    }
   }
 
   const result = new Map<string, string>()
   const setLookupKeys = (
     excelName: string,
-    version: { id: string; name: string; code?: string | null }
+    version: { id: string; name: string; code?: string | null },
+    trainingMajor?: string
   ) => {
-    if (excelName) result.set(excelName, version.id)
+    if (excelName) result.set(curriculumVersionMapKey(excelName, trainingMajor), version.id)
+    if (excelName && !result.has(excelName)) result.set(excelName, version.id)
     if (version.id) result.set(version.id, version.id)
-    if (version.name) result.set(version.name, version.id)
-    if (version.code) result.set(version.code, version.id)
+    if (version.name && !result.has(version.name)) result.set(version.name, version.id)
+    if (version.code && !result.has(version.code)) result.set(version.code, version.id)
   }
 
   for (const tuple of uniqueTuples) {
     const version = existing.find((item) => versionMatchesTuple(item, tuple))
-    if (version) setLookupKeys(normalize(tuple.curriculum), version)
+    if (version) setLookupKeys(normalize(tuple.curriculum), version, tuple.trainingMajor)
   }
 
   for (const created of createdItems) {
-    setLookupKeys(created.name, created)
+    setLookupKeys(created.name, created, created.trainingMajor)
   }
 
   return result
@@ -1129,7 +1180,10 @@ export const buildPositionMapOrThrow = async (
   return map
 }
 
-export const buildDMTruongMap = async (prisma: PrismaClient, names: (string | undefined)[]) => {
+export const buildDMTruongMap = async (
+  prisma: PrismaClient | Prisma.TransactionClient,
+  names: (string | undefined)[]
+) => {
   const uniqNames = Array.from(new Set(names.filter((name): name is string => Boolean(name))))
 
   await prisma.dM_TruongDaoTaoBacDH.createMany({
@@ -1145,7 +1199,10 @@ export const buildDMTruongMap = async (prisma: PrismaClient, names: (string | un
   return new Map(data.map(({ name, id }) => [name, id]))
 }
 
-export const buildDMNganhMap = async (prisma: PrismaClient, names: (string | undefined)[]) => {
+export const buildDMNganhMap = async (
+  prisma: PrismaClient | Prisma.TransactionClient,
+  names: (string | undefined)[]
+) => {
   const uniqNames = Array.from(new Set(names.filter((name): name is string => Boolean(name))))
 
   await prisma.dM_NganhHoc.createMany({
@@ -1162,7 +1219,7 @@ export const buildDMNganhMap = async (prisma: PrismaClient, names: (string | und
 }
 
 export const buildDMChuyenNganhMap = async (
-  prisma: PrismaClient,
+  prisma: PrismaClient | Prisma.TransactionClient,
   names: (string | undefined)[]
 ) => {
   const uniqNames = Array.from(new Set(names.filter((name): name is string => Boolean(name))))
