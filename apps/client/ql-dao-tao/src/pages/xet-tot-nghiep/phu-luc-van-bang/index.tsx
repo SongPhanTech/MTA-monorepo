@@ -172,14 +172,52 @@ function toAppendixScore(value: unknown): number | "" {
   return Number.isFinite(n) ? n : ""
 }
 
-function estimateWrappedRowHeight(
+/** Hiển thị điểm theo mẫu (dấu phẩy thập phân). */
+function formatAppendixScoreDisplay(value: unknown, decimals = 1): string {
+  const n = toAppendixScore(value)
+  if (n === "") return ""
+  return n.toFixed(decimals).replace(".", ",")
+}
+
+/**
+ * Mẫu chuẩn độ dài 1 dòng: "Công tác đảng, công tác chính trị" = 33 ký tự.
+ * Tên dài hơn → xuống dòng 2. Chiều cao theo cỡ chữ môn học (10).
+ */
+const PLVB_NAME_ONE_LINE_SAMPLE = "Công tác đảng, công tác chính trị"
+const PLVB_NAME_ONE_LINE_MAX = PLVB_NAME_ONE_LINE_SAMPLE.length // 33
+const PLVB_BODY_ROW_HEIGHT_1 = 16
+const PLVB_BODY_ROW_HEIGHT_2 = 26
+
+function wrapAppendixSubjectName(name?: string | null): string {
+  const text = String(name || "").trim().replace(/\s+/g, " ")
+  if (!text || text.length <= PLVB_NAME_ONE_LINE_MAX) return text
+  // Ưu tiên ngắt tại khoảng trắng gần ngưỡng 33 ký tự
+  const head = text.slice(0, PLVB_NAME_ONE_LINE_MAX + 1)
+  const breakAt = Math.max(head.lastIndexOf(" "), head.lastIndexOf(","))
+  if (breakAt >= Math.floor(PLVB_NAME_ONE_LINE_MAX * 0.45)) {
+    return `${text.slice(0, breakAt + (text[breakAt] === "," ? 1 : 0)).trim()}\n${text
+      .slice(breakAt + 1)
+      .trim()}`
+  }
+  return `${text.slice(0, PLVB_NAME_ONE_LINE_MAX).trim()}\n${text.slice(PLVB_NAME_ONE_LINE_MAX).trim()}`
+}
+
+function isTwoLineAppendixName(name?: string | null): boolean {
+  return String(name || "").trim().replace(/\s+/g, " ").length > PLVB_NAME_ONE_LINE_MAX
+}
+
+function getAppendixSubjectRowHeight(names: Array<string | null | undefined>): number {
+  return names.some(isTwoLineAppendixName) ? PLVB_BODY_ROW_HEIGHT_2 : PLVB_BODY_ROW_HEIGHT_1
+}
+
+function countWrappedLines(
   texts: Array<string | null | undefined>,
   colWidth: number,
   fontSize: number
 ): number {
   const usablePx = Math.max(24, colWidth * 7 - 10)
   const pxPerChar = Math.max(4, fontSize * 0.5)
-  const lines = Math.max(
+  return Math.max(
     1,
     ...texts.map((text) =>
       String(text || "")
@@ -203,9 +241,18 @@ function estimateWrappedRowHeight(
         }, 0)
     )
   )
-  return lines * Math.ceil(fontSize * 1.3) + 2
 }
 
+function estimateWrappedRowHeight(
+  texts: Array<string | null | undefined>,
+  colWidth: number,
+  fontSize: number
+): number {
+  const lines = countWrappedLines(texts, colWidth, fontSize)
+  return Math.max(PLVB_BODY_ROW_HEIGHT_1, lines * Math.ceil(fontSize * 1.3) + 2)
+}
+
+/** Kiểu nét thin; màu khung/lưới do tableBorderRange (ngoài đen, trong xám). */
 const PLVB_TABLE_BORDER = "thin" as const
 
 function appendixSubjectCells(
@@ -232,10 +279,10 @@ function appendixSubjectCells(
   }
   return [
     cell(stt),
-    nameCell(subject.tenHocPhan ?? ""),
+    nameCell(wrapAppendixSubjectName(subject.tenHocPhan)),
     cell(subject.soTinChi ?? ""),
-    { ...cell(toAppendixScore(subject.thangDiem10)), numFmt: "0.0" },
-    { ...cell(toAppendixScore(subject.thangDiem4)), numFmt: "0.0" },
+    cell(formatAppendixScoreDisplay(subject.thangDiem10)),
+    cell(formatAppendixScoreDisplay(subject.thangDiem4)),
     cell(subject.thangDiemChu ?? ""),
   ]
 }
@@ -245,7 +292,7 @@ function buildTwoColumnSubjectRows(
   subjects: AppendixSubject[],
   maxRows: number,
   fontSize = 11,
-  nameColWidth = 24
+  _nameColWidth = 24
 ): TableRow[] {
   if (!subjects.length) return []
   const leftCount = Math.ceil(subjects.length / 2)
@@ -255,11 +302,7 @@ function buildTwoColumnSubjectRows(
   for (let i = 0; i < leftCount; i++) {
     const s2 = right[i]
     rows.push({
-      height: estimateWrappedRowHeight(
-        [left[i]?.tenHocPhan, s2?.tenHocPhan],
-        nameColWidth,
-        fontSize
-      ),
+      height: getAppendixSubjectRowHeight([left[i]?.tenHocPhan, s2?.tenHocPhan]),
       cells: [
         ...appendixSubjectCells(i + 1, left[i], fontSize),
         ...appendixSubjectCells(s2 ? leftCount + i + 1 : "", s2, fontSize),
@@ -288,7 +331,7 @@ function headerBoxCell(
     bold: true,
     fontSize: 9,
     wrapText: true,
-    borderStyle: "thin",
+    borderStyle: PLVB_TABLE_BORDER,
     ...extra,
   }
 }
@@ -297,12 +340,21 @@ function headerBoxCell(
 const PLVB_HALF = 12
 const PLVB_UNITS = PLVB_HALF * 2
 const PLVB_NAME_SPAN = 7
-const PLVB_STT_WIDTH = 4.8
-const PLVB_NAME_UNIT = 3.5
-const PLVB_CREDIT_WIDTH = 3.6
-const PLVB_SCORE_WIDTH = 6
+/**
+ * Độ rộng cột khít khổ in A4 (lề 0.6/0.3) ở scale ~100%.
+ * Cột quá rộng → Excel Scale-to-Fit thu nhỏ cả trang → font/cỡ chữ in ra sai.
+ */
+const PLVB_STT_WIDTH = 5.0
+const PLVB_NAME_UNIT = 3.6
+const PLVB_CREDIT_WIDTH = 3.8
+const PLVB_SCORE_WIDTH = 7.0
 const PLVB_INFO_ROW_HEIGHT = 18
-const PLVB_TABLE_FONT = 10
+/** Khoảng trống chữ ký — đẩy ghi chú xuống, giảm trắng chân trang khi ít môn. */
+const PLVB_SIGN_GAP_HEIGHT = 18
+const PLVB_SIGN_GAP_COUNT = 5
+const PLVB_TABLE_FONT = 10 // môn học / bảng điểm
+const PLVB_INFO_FONT = 13 // cụm thông tin sinh viên
+const PLVB_NOTE_FONT = 10 // cụm ghi chú
 const PLVB_HALF_WIDTHS = [
   PLVB_STT_WIDTH,
   ...Array.from({ length: PLVB_NAME_SPAN }, () => PLVB_NAME_UNIT),
@@ -315,11 +367,54 @@ const PLVB_COL_WIDTHS = [...PLVB_HALF_WIDTHS, ...PLVB_HALF_WIDTHS]
 const INFO_COL_WIDTH = PLVB_HALF_WIDTHS.reduce((sum, width) => sum + width, 0)
 const PLVB_NAME_COL_WIDTH = PLVB_NAME_UNIT * PLVB_NAME_SPAN
 
+/** Chia dải cột `[from, to)` thành `count` nhóm có tổng width gần bằng nhau → mảng colSpan. */
+function partitionColumnSpans(
+  colWidths: number[],
+  from: number,
+  to: number,
+  count: number
+): number[] {
+  const available = colWidths.slice(from, to)
+  const n = available.length
+  if (count <= 0 || n <= 0) return []
+  const groups = Math.min(count, n)
+  const totalW = available.reduce((sum, w) => sum + w, 0)
+  const target = totalW / groups
+  const spans: number[] = []
+  let idx = 0
+  for (let g = 0; g < groups; g++) {
+    const groupsLeft = groups - g
+    const colsLeft = n - idx
+    if (groupsLeft === 1) {
+      spans.push(colsLeft)
+      break
+    }
+    let span = 1
+    let sum = available[idx] ?? 0
+    const maxSpan = colsLeft - (groupsLeft - 1)
+    while (span < maxSpan) {
+      const next = available[idx + span] ?? 0
+      if (Math.abs(sum + next - target) <= Math.abs(sum - target)) {
+        sum += next
+        span += 1
+      } else {
+        break
+      }
+    }
+    spans.push(span)
+    idx += span
+  }
+  return spans
+}
+
 function infoRichText(label: string, value: string, boldValue: boolean): TableCell["value"] {
   return {
     richText: [
-      { text: label, font: { bold: false, name: "Times New Roman", size: 12 } },
-      { text: value || "", font: { bold: boldValue, name: "Times New Roman", size: 12 } },
+      { text: label, font: { bold: false, name: "Times New Roman", size: PLVB_INFO_FONT } },
+      {
+        text: value || "",
+        font: { bold: boldValue, name: "Times New Roman", size: PLVB_INFO_FONT },
+      },
     ],
   }
 }
@@ -331,31 +426,42 @@ function infoPairRow(
   rightValue: string,
   bold: { left?: boolean; right?: boolean } = {}
 ): TableRow {
+  const rightEmpty = !rightLabel && !rightValue
   return {
     height: PLVB_INFO_ROW_HEIGHT,
     cells: [
       noBorderCell(infoRichText(leftLabel, leftValue, !!bold.left), {
         colSpan: PLVB_HALF,
-        fontSize: 12,
+        fontSize: PLVB_INFO_FONT,
         align: "left",
-        indent: 1,
+        indent: 0,
       }),
-      noBorderCell(infoRichText(rightLabel, rightValue, !!bold.right), {
-        colSpan: PLVB_HALF,
-        fontSize: 12,
-        align: "left",
-        indent: 1,
-      }),
+      rightEmpty
+        ? noBorderCell("", { colSpan: PLVB_HALF, border: false })
+        : noBorderCell(infoRichText(rightLabel, rightValue, !!bold.right), {
+            colSpan: PLVB_HALF,
+            fontSize: PLVB_INFO_FONT,
+            align: "left",
+            indent: 0,
+          }),
     ],
   }
 }
 
 function buildPhuLuc2ColHeaderRows(header: ReturnType<typeof getDiplomaAppendixHeaderData>): TableRow[] {
+  const bangTotNghiep = header.trinh_do_dao_tao
+    ? ` tốt nghiệp ${header.trinh_do_dao_tao}`
+    : header.loai_bang
+      ? ` ${header.loai_bang}`
+      : " tốt nghiệp"
+  const scoreSubHeader = (label: string): TableCell =>
+    headerBoxCell(label, { fontSize: 8, wrapText: true })
+
   return [
     {
       height: 18,
       cells: [
-        noBorderCell("BỘ QUỐC PHÒNG", { colSpan: PLVB_HALF, align: "center", fontSize: 12 }),
+        noBorderCell("BỘ QUỐC PHÒNG", { colSpan: PLVB_HALF, align: "center", fontSize: 13 }),
         noBorderCell("CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM", {
           colSpan: PLVB_HALF,
           align: "center",
@@ -365,126 +471,146 @@ function buildPhuLuc2ColHeaderRows(header: ReturnType<typeof getDiplomaAppendixH
       ],
     },
     {
-      height: 18,
+      height: 20,
       cells: [
-        noBorderCell("HỌC VIỆN KỸ THUẬT QUÂN SỰ", {
-          colSpan: PLVB_HALF,
-          align: "center",
-          fontSize: 13,
-          bold: true,
-        }),
+        // Gạch chân chỉ dưới "KỸ THUẬT"
+        noBorderCell(
+          {
+            richText: [
+              {
+                text: "HỌC VIỆN ",
+                font: { name: "Times New Roman", size: 13, bold: true, family: 1 },
+              },
+              {
+                text: "KỸ THUẬT",
+                font: {
+                  name: "Times New Roman",
+                  size: 13,
+                  bold: true,
+                  underline: true,
+                  family: 1,
+                },
+              },
+              {
+                text: " QUÂN SỰ",
+                font: { name: "Times New Roman", size: 13, bold: true, family: 1 },
+              },
+            ],
+          },
+          {
+            colSpan: PLVB_HALF,
+            align: "center",
+            vertical: "bottom",
+            fontSize: 13,
+            bold: true,
+          }
+        ),
+        // Gạch chân cả dòng "Độc lập - Tự do - Hạnh phúc"
         noBorderCell("Độc lập - Tự do - Hạnh phúc", {
           colSpan: PLVB_HALF,
           align: "center",
+          vertical: "bottom",
           fontSize: 12,
           bold: true,
-          italic: true,
-        }),
-      ],
-    },
-    {
-      height: 10,
-      cells: [
-        noBorderCell("——————————————", {
-          colSpan: PLVB_HALF,
-          align: "center",
-          fontSize: 8,
-          bold: true,
-        }),
-        noBorderCell("————————————", {
-          colSpan: PLVB_HALF,
-          align: "center",
-          fontSize: 8,
-          bold: true,
+          italic: false,
+          underline: true,
         }),
       ],
     },
     { height: 10, cells: [noBorderCell("", { colSpan: PLVB_UNITS })] },
     {
-      height: 24,
+      height: 22,
       cells: [
         noBorderCell("PHỤ LỤC VĂN BẰNG", {
           colSpan: PLVB_UNITS,
           align: "center",
           bold: true,
-          fontSize: 16,
+          fontSize: 14,
         }),
       ],
     },
     {
-      height: 18,
+      height: 16,
       cells: [
-        noBorderCell(
-          `(Kèm theo bằng${header.loai_bang ? ` ${header.loai_bang}` : ""} số hiệu: ${header.so_ky_hieu || ""})`,
-          {
-            colSpan: PLVB_UNITS,
-            align: "center",
-            italic: true,
-            fontSize: 11,
-          }
-        ),
+        noBorderCell(`(Kèm theo bằng${bangTotNghiep} số hiệu: ${header.so_ky_hieu || ""})`, {
+          colSpan: PLVB_UNITS,
+          align: "center",
+          italic: true,
+          fontSize: 12,
+        }),
       ],
     },
+    // Mẫu Cục nhà trường: trái (họ tên→chuyên ngành), phải (ngôn ngữ→hình thức)
     infoPairRow(
       "Họ và tên: ",
       String(header.ho_ten || ""),
-      "Ngày sinh: ",
-      String(header.ngay_sinh || ""),
+      "Ngôn ngữ đào tạo: ",
+      String(header.ngon_ngu || ""),
       { left: true }
     ),
     infoPairRow(
-      "Mã học viên: ",
-      String(header.ma_hoc_vien || ""),
+      "Ngày sinh: ",
+      String(header.ngay_sinh || ""),
       "Ngày nhập học: ",
       String(header.ngay_nhap_hoc || "")
     ),
     infoPairRow(
-      "Ngôn ngữ đào tạo: ",
-      String(header.ngon_ngu || ""),
+      "Mã học viên: ",
+      String(header.ma_hoc_vien || ""),
       "Thời gian đào tạo: ",
       String(header.thoi_gian_dao_tao || "")
     ),
     infoPairRow(
-      "Ngành: ",
-      String(header.nganh_hoc || ""),
+      "Khóa: ",
+      String(header.khoa || ""),
       "Trình độ đào tạo: ",
       String(header.trinh_do_dao_tao || "")
     ),
     infoPairRow(
-      "Chuyên ngành: ",
-      String(header.chuyen_nganh || ""),
+      "Ngành: ",
+      String(header.nganh_hoc || ""),
       "Hình thức đào tạo: ",
-      String(header.hinh_thuc_dao_tao || ""),
-      { left: true }
+      String(header.hinh_thuc_dao_tao || "")
     ),
+    infoPairRow("Chuyên ngành: ", String(header.chuyen_nganh || ""), "", "", { left: true }),
+    // Cách nhẹ trước bảng điểm
+    { height: 8, cells: [noBorderCell("", { colSpan: PLVB_UNITS })] },
     {
-      height: 16,
+      height: 18,
       cells: [
         headerBoxCell("STT", { rowSpan: 2, fontSize: PLVB_TABLE_FONT, wrapText: false }),
-        headerBoxCell("Tên học phần", { rowSpan: 2, colSpan: PLVB_NAME_SPAN, fontSize: PLVB_TABLE_FONT }),
+        headerBoxCell("Tên học phần", {
+          rowSpan: 2,
+          colSpan: PLVB_NAME_SPAN,
+          fontSize: PLVB_TABLE_FONT,
+        }),
         headerBoxCell("Số\ntín\nchỉ", { rowSpan: 2, fontSize: 8 }),
         headerBoxCell("Điểm học phần", { colSpan: 3, fontSize: PLVB_TABLE_FONT }),
         headerBoxCell("STT", { rowSpan: 2, fontSize: PLVB_TABLE_FONT, wrapText: false }),
-        headerBoxCell("Tên học phần", { rowSpan: 2, colSpan: PLVB_NAME_SPAN, fontSize: PLVB_TABLE_FONT }),
+        headerBoxCell("Tên học phần", {
+          rowSpan: 2,
+          colSpan: PLVB_NAME_SPAN,
+          fontSize: PLVB_TABLE_FONT,
+        }),
         headerBoxCell("Số\ntín\nchỉ", { rowSpan: 2, fontSize: 8 }),
         headerBoxCell("Điểm học phần", { colSpan: 3, fontSize: PLVB_TABLE_FONT }),
       ],
     },
     {
-      height: 16,
+      height: 36,
       cells: [
         { skip: true, colSpan: 1 },
         { skip: true, colSpan: PLVB_NAME_SPAN },
         { skip: true, colSpan: 1 },
-        headerBoxCell("10", { fontSize: PLVB_TABLE_FONT, wrapText: false }),
-        headerBoxCell("4", { fontSize: PLVB_TABLE_FONT, wrapText: false }),
-        headerBoxCell("Chữ", { fontSize: PLVB_TABLE_FONT, wrapText: false }),
+        scoreSubHeader("Thang\nđiểm\n10"),
+        scoreSubHeader("Thang\nđiểm\n4"),
+        scoreSubHeader("Thang\nđiểm\nchữ"),
         { skip: true, colSpan: 1 },
         { skip: true, colSpan: PLVB_NAME_SPAN },
         { skip: true, colSpan: 1 },
-        headerBoxCell("10", { fontSize: PLVB_TABLE_FONT, wrapText: false }),
-        headerBoxCell("4", { fontSize: PLVB_TABLE_FONT, wrapText: false }),
-        headerBoxCell("Chữ", { fontSize: PLVB_TABLE_FONT, wrapText: false }),
+        scoreSubHeader("Thang\nđiểm\n10"),
+        scoreSubHeader("Thang\nđiểm\n4"),
+        scoreSubHeader("Thang\nđiểm\nchữ"),
       ],
     },
   ]
@@ -639,11 +765,15 @@ export type TStudentWithSemesters = TStudentWithSubjects & {
   }>
 }
 
+function formatAppendixDate(date?: string | Date | dayjs.Dayjs | null) {
+  if (!date) return ""
+  const d = dayjs(date)
+  if (!d.isValid()) return formatDateDMY(date as any) || ""
+  return d.format("DD/MM/YYYY")
+}
+
 function getDiplomaAppendixHeaderData(student: TStudentWithSemesters) {
-  const diplomaNumber =
-    student.graduationDecision?.diplomaNumber ||
-    student.graduationDecision?.originalDiplomaNumber ||
-    ""
+  const diplomaNumber = student.graduationDecision?.diplomaNumber || ""
   const course = student.fixedClass?.trainingCourse
   const classCurriculum = student.fixedClass?.curriculumVersion
   const curriculum = student.curriculumVersion || classCurriculum
@@ -656,8 +786,8 @@ function getDiplomaAppendixHeaderData(student: TStudentWithSemesters) {
   return {
     ho_ten: student.userProfile.fullname,
     ma_hoc_vien: student.userProfile.code,
-    ngay_sinh: formatDateDMY(student.userProfile.dateOfBirth),
-    ngay_nhap_hoc: formatDateDMY(student.from || course?.admissionStartDate || null),
+    ngay_sinh: formatAppendixDate(student.userProfile.dateOfBirth),
+    ngay_nhap_hoc: formatAppendixDate(student.from || course?.admissionStartDate || null),
     hinh_thuc_dao_tao: curriculum?.trainingType?.name || classCurriculum?.trainingType?.name || "",
     nganh_hoc: major?.trainingField?.name || "",
     chuyen_nganh: major?.name || "",
@@ -1148,81 +1278,148 @@ export default function StudentGradeSystem() {
     evenColumns = false
   ) => {
     const sortedData = [...scoreConverts].sort((a, b) => b.base4 - a.base4)
-    const mark = (value: number | string | null | undefined) =>
-      value == null || value === "" ? "" : String(value).replace(".", ",")
-    const toBase10Range = (item: ScoreConvert) =>
-      item.base10Min === 0
-        ? `<${mark(Number(item.base10Max) + 0.1)}`
-        : `${mark(item.base10Min)}${item.base10Max != null ? `-${mark(item.base10Max)}` : ""}`
+    const mark = (value: number | string | null | undefined, decimals?: number) => {
+      if (value == null || value === "") return ""
+      const n = Number(value)
+      if (!Number.isFinite(n)) return String(value).replace(".", ",")
+      if (decimals != null) return n.toFixed(decimals).replace(".", ",")
+      return String(value).replace(".", ",")
+    }
+    const toBase10Range = (item: ScoreConvert) => {
+      if (item.base10Min === 0) {
+        const upper = item.base10Max != null ? mark(Number(item.base10Max) + 0.1, 1) : ""
+        return upper ? `<${upper}` : ""
+      }
+      const min = mark(item.base10Min, 1)
+      if (item.base10Max == null) return min
+      const maxNum = Number(item.base10Max)
+      const max =
+        Number.isFinite(maxNum) && maxNum === 10 ? "10" : mark(item.base10Max, 1)
+      return `${min}-${max}`
+    }
 
     const letters = sortedData.map((item) => item.letter ?? "")
-    const base4Values = sortedData.map((item) => mark(item.base4))
+    const base4Values = sortedData.map((item) => mark(item.base4, 1))
     const base10Values = sortedData.map(toBase10Range)
-    const valueSpan =
-      letters.length > 0 && letters.length * 2 <= totalColumns - 4 ? 2 : 1
-    const labelSpan = Math.max(totalColumns - letters.length * valueSpan, 1)
 
-    const noteLine = (label: string, values: string[]): TableRow => {
-      if (!evenColumns || !values.length) {
+    // Gạch đầu dòng thẳng hàng; 3 hàng thang điểm lùi bằng lề "Ghi chú:"
+    const ghiChuLabelSpan = 2
+    const bulletSpan = Math.max(totalColumns - ghiChuLabelSpan, 1)
+    const SCALE_LABEL_WIDTH = 18 // fallback 1 cột (pad space)
+    const SCALE_VALUE_WIDTH = 10
+
+    const padCenter = (text: string, width: number) => {
+      const t = String(text ?? "")
+      if (t.length >= width) return t
+      const left = Math.floor((width - t.length) / 2)
+      return `${" ".repeat(left)}${t}${" ".repeat(width - t.length - left)}`
+    }
+
+    const contentRow = (value: string, withGhiChuLabel = false, wrapText = true): TableRow => ({
+      height: 16,
+      cells: [
+        {
+          value: withGhiChuLabel ? "Ghi chú:" : null,
+          colSpan: ghiChuLabelSpan,
+          fontSize: PLVB_NOTE_FONT,
+          align: "left",
+          wrapText: false,
+          border: false,
+          indent: 0,
+        },
+        {
+          value,
+          colSpan: bulletSpan,
+          fontSize: PLVB_NOTE_FONT,
+          align: "left",
+          wrapText,
+          border: false,
+        },
+      ],
+    })
+
+    /**
+     * Cụm thang điểm: ô Excel thật — sát lề trái (không thụt thêm).
+     * 3 hàng cùng colSpan → A+ / 4,0 / 9,0-10 thẳng cột.
+     */
+    const scaleRow = (label: string, values: string[]): TableRow => {
+      if (evenColumns && values.length) {
+        const leadSpan = 0 // sát lề trái trang/bảng
+        const labelSpan = 4
+        const valueStart = leadSpan + labelSpan
+        const remaining = Math.max(totalColumns - valueStart, values.length)
+        // Chừa 2 cột cuối (điểm rộng) để các cột giá trị cân width hơn
+        const valueEnd =
+          totalColumns === PLVB_UNITS && remaining >= values.length + 2
+            ? valueStart + remaining - 2
+            : valueStart + remaining
+        const spans =
+          totalColumns === PLVB_UNITS
+            ? partitionColumnSpans(PLVB_COL_WIDTHS, valueStart, valueEnd, values.length)
+            : (() => {
+                const use = valueEnd - valueStart
+                const each = Math.floor(use / values.length)
+                let leftover = use - each * values.length
+                return values.map(() => {
+                  const extra = leftover > 0 ? 1 : 0
+                  if (leftover > 0) leftover -= 1
+                  return Math.max(each + extra, 1)
+                })
+              })()
+        const used = spans.reduce((sum, s) => sum + s, 0)
+        const trailSpan = totalColumns - valueStart - used
         return {
           height: 16,
           cells: [
             {
-              value: values.length ? `${label}    ${values.join("    ")}` : label,
-              colSpan: totalColumns,
-              fontSize: 10,
+              value: label,
+              colSpan: labelSpan,
               align: "left",
-              wrapText: false,
+              fontSize: PLVB_NOTE_FONT,
               border: false,
-              indent: 1,
+              wrapText: false,
             },
+            ...values.map((v, i) => ({
+              value: v,
+              colSpan: spans[i] ?? 1,
+              align: "center" as const,
+              fontSize: PLVB_NOTE_FONT,
+              border: false,
+              wrapText: false,
+            })),
+            ...(trailSpan > 0 ? [{ value: null, colSpan: trailSpan, border: false }] : []),
           ],
         }
       }
+
+      const line = values.length
+        ? `${label.padEnd(SCALE_LABEL_WIDTH, " ")}${values.map((v) => padCenter(v, SCALE_VALUE_WIDTH)).join("")}`
+        : label
       return {
         height: 16,
         cells: [
           {
-            value: label,
-            colSpan: labelSpan,
-            fontSize: 10,
+            value: line,
+            colSpan: totalColumns,
+            fontSize: PLVB_NOTE_FONT,
             align: "left",
             wrapText: false,
             border: false,
-            indent: 1,
+            indent: 0,
           },
-          ...values.map(
-            (value): TableCell => ({
-              value,
-              colSpan: valueSpan,
-              fontSize: 9,
-              align: "center",
-              wrapText: false,
-              border: false,
-            })
-          ),
         ],
       }
     }
 
     return {
-      noteRow1: {
-        height: 16,
-        cells: [
-          {
-            value: "Ghi chú:  - Hệ thống điểm được quy định theo:",
-            colSpan: totalColumns,
-            fontSize: 10,
-            align: "left",
-            wrapText: false,
-            border: false,
-            indent: 1,
-          },
-        ],
-      } as TableRow,
-      noteRow2: noteLine("Thang điểm chữ", letters),
-      noteRow3: noteLine("Thang điểm 4", base4Values),
-      noteRow4: noteLine("Thang điểm 10", base10Values),
+      noteRow0: contentRow(
+        "- Các học phần có dấu * phía trước là học phần điều kiện, không tính vào điểm trung bình chung tích lũy toàn khóa.",
+        true
+      ),
+      noteRow1: contentRow("- Hệ thống điểm được quy định theo:"),
+      noteRow2: scaleRow("Thang điểm chữ", letters),
+      noteRow3: scaleRow("Thang điểm 4", base4Values),
+      noteRow4: scaleRow("Thang điểm 10", base10Values),
     }
   }
 
@@ -1248,19 +1445,21 @@ export default function StudentGradeSystem() {
       .map((item) => {
         const range =
           graduationBaseScore === "Base4"
-            ? `${formatRangeBound(item.base4Min)} - ${formatRangeBound(item.base4Max)}`
-            : `${formatRangeBound(item.base10Min)} - ${formatRangeBound(item.base10Max)}`
+            ? `${formatRangeBound(item.base4Min)}-${formatRangeBound(item.base4Max)}`
+            : `${formatRangeBound(item.base10Min)}-${formatRangeBound(item.base10Max)}`
 
         return `${item.classification}: ${range}`
       })
       .join("; ")
 
     const scaleLabel = graduationBaseScore === "Base4" ? "4" : "10"
+    const downgradeNote =
+      " (Hạng tốt nghiệp có thể bị hạ mức theo quy chế đào tạo đại học của HVKTQS được áp dụng tại thời điểm xét tốt nghiệp)."
     if (!rankingText) {
-      return ` - Phân loại tốt nghiệp theo thang điểm ${scaleLabel}: -`
+      return `- Phân loại tốt nghiệp theo thang điểm ${scaleLabel}: -${downgradeNote}`
     }
 
-    return ` - Phân loại tốt nghiệp theo thang điểm ${scaleLabel}: ${rankingText}`
+    return `- Phân loại tốt nghiệp theo thang điểm ${scaleLabel}: ${rankingText}.${downgradeNote}`
   }
 
   const handleExportPLVB2Col = () => {
@@ -1287,13 +1486,26 @@ export default function StudentGradeSystem() {
       const graduationSubjects = student.semesters
         .filter((semester) => isGraduationSemesterGroup(semester.id))
         .flatMap((semester) => semester?.subjects ?? [])
-      const tableBodyRows: TableRow[] = [
-        ...buildTwoColumnSubjectRows(regularSubjects, MAX_ROWS, 10, PLVB_NAME_COL_WIDTH),
-      ]
+      const regularBodyRows = buildTwoColumnSubjectRows(
+        regularSubjects,
+        MAX_ROWS,
+        PLVB_TABLE_FONT,
+        PLVB_NAME_COL_WIDTH
+      )
+      const tableBodyRows: TableRow[] = [...regularBodyRows]
+      // Hàng "Học phần tốt nghiệp" — đường kẻ ngang đậm phía trên
+      const graduationSectionExcelRow = graduationSubjects.length
+        ? tableTop + TABLE_HEADER_ROWS + regularBodyRows.length
+        : undefined
       if (graduationSubjects.length) {
         tableBodyRows.push(buildGraduationSectionHeaderRow(TOTAL_COLUMNS, PLVB_TABLE_FONT))
         tableBodyRows.push(
-          ...buildTwoColumnSubjectRows(graduationSubjects, MAX_ROWS, 10, PLVB_NAME_COL_WIDTH)
+          ...buildTwoColumnSubjectRows(
+            graduationSubjects,
+            MAX_ROWS,
+            PLVB_TABLE_FONT,
+            PLVB_NAME_COL_WIDTH
+          )
         )
       }
 
@@ -1343,15 +1555,6 @@ export default function StudentGradeSystem() {
         cells: [{ value: null, colSpan: TOTAL_COLUMNS, border: false }],
       }
 
-      const summaryCell = (value: TableCell["value"]): TableCell => ({
-        value,
-        colSpan: TOTAL_COLUMNS - SIGN_COL,
-        fontSize: 12,
-        align: "left",
-        border: false,
-        wrapText: true,
-        indent: 1,
-      })
       const signCell = (value: TableCell["value"], extra: Partial<TableCell> = {}): TableCell => ({
         value,
         colSpan: SIGN_COL,
@@ -1362,20 +1565,40 @@ export default function StudentGradeSystem() {
         ...extra,
       })
       const emptyLeft: TableCell = { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL, border: false }
-      const emptyRight: TableCell = { value: null, colSpan: SIGN_COL, border: false }
+      const signatureGapRow = (height = PLVB_INFO_ROW_HEIGHT): TableRow => ({
+        height,
+        cells: [{ value: null, colSpan: TOTAL_COLUMNS, border: false }],
+      })
 
       const signDate = printDate ? dayjs(printDate) : dayjs()
       const pad2 = (n: number) => String(n).padStart(2, "0")
+      const gpaText = diemTBHe10.toFixed(2).replace(".", ",")
+      const signDateText = `Hà Nội, ngày ${pad2(signDate.date())} tháng ${pad2(signDate.month() + 1)} năm ${signDate.year()}`
+      // Cụm tổng kết bên trái (full width); cụm ký tên bên phải, đặt dưới khối tổng tín chỉ
+      const PLVB_SUMMARY_FONT = 12
       const summaryCreditRow: TableRow = {
         height: PLVB_INFO_ROW_HEIGHT,
         cells: [
-          summaryCell({
-            richText: [
-              { text: "Tổng số tín chỉ: ", font: { bold: false, name: "Times New Roman", size: 12 } },
-              { text: String(tongTinChi), font: { bold: true, name: "Times New Roman", size: 12 } },
-            ],
-          }),
-          emptyRight,
+          {
+            value: {
+              richText: [
+                {
+                  text: "Tổng số tín chỉ: ",
+                  font: { bold: false, name: "Times New Roman", size: PLVB_SUMMARY_FONT },
+                },
+                {
+                  text: String(tongTinChi),
+                  font: { bold: true, name: "Times New Roman", size: PLVB_SUMMARY_FONT },
+                },
+              ],
+            },
+            colSpan: TOTAL_COLUMNS,
+            fontSize: PLVB_SUMMARY_FONT,
+            align: "left",
+            border: false,
+            wrapText: false,
+            indent: 0,
+          },
         ],
       }
       const summaryGpaRow: TableRow = {
@@ -1385,70 +1608,87 @@ export default function StudentGradeSystem() {
             value: {
               richText: [
                 {
-                  text: "Điểm trung bình chung tích lũy toàn khoá (Thang điểm 10): ",
-                  font: { bold: false, name: "Times New Roman", size: 11 },
+                  text: "Điểm trung bình chung tích lũy toàn khóa (Thang điểm 10): ",
+                  font: { bold: false, name: "Times New Roman", size: PLVB_SUMMARY_FONT },
                 },
                 {
-                  text: diemTBHe10.toFixed(2),
-                  font: { bold: true, name: "Times New Roman", size: 11 },
+                  text: gpaText,
+                  font: { bold: true, name: "Times New Roman", size: PLVB_SUMMARY_FONT },
                 },
               ],
             },
             colSpan: TOTAL_COLUMNS,
-            fontSize: 11,
+            fontSize: PLVB_SUMMARY_FONT,
             align: "left",
             border: false,
             wrapText: false,
-            indent: 1,
+            indent: 0,
           },
         ],
       }
-      const signDateText = `Hà Nội, ngày ${pad2(signDate.date())} tháng ${pad2(signDate.month() + 1)} năm ${signDate.year()}`
       const summaryRankRow: TableRow = {
         height: PLVB_INFO_ROW_HEIGHT,
         cells: [
-          summaryCell({
-            richText: [
-              { text: "Xếp loại: ", font: { bold: false, name: "Times New Roman", size: 12 } },
-              { text: xepLoai, font: { bold: true, name: "Times New Roman", size: 12 } },
-            ],
-          }),
-          signCell(signDateText, { italic: true }),
+          {
+            value: {
+              richText: [
+                {
+                  text: "Xếp hạng tốt nghiệp: ",
+                  font: { bold: false, name: "Times New Roman", size: PLVB_SUMMARY_FONT },
+                },
+                {
+                  text: xepLoai,
+                  font: { bold: true, name: "Times New Roman", size: PLVB_SUMMARY_FONT },
+                },
+              ],
+            },
+            colSpan: TOTAL_COLUMNS,
+            fontSize: PLVB_SUMMARY_FONT,
+            align: "left",
+            border: false,
+            wrapText: false,
+            indent: 0,
+          },
         ],
       }
+      const signDateRow: TableRow = {
+        height: PLVB_INFO_ROW_HEIGHT,
+        cells: [emptyLeft, signCell(signDateText, { italic: true, fontSize: 12 })],
+      }
       const signTitleRow1: TableRow = {
-        height: 16,
-        cells: [emptyLeft, signCell("TL. GIÁM ĐỐC", { bold: true })],
+        height: PLVB_INFO_ROW_HEIGHT,
+        cells: [emptyLeft, signCell("TL. GIÁM ĐỐC", { bold: true, fontSize: 13 })],
       }
       const signTitleRow2: TableRow = {
-        height: 16,
-        cells: [emptyLeft, signCell("TRƯỞNG PHÒNG ĐÀO TẠO", { bold: true })],
+        height: PLVB_INFO_ROW_HEIGHT,
+        cells: [emptyLeft, signCell("TRƯỞNG PHÒNG ĐÀO TẠO", { bold: true, fontSize: 13 })],
       }
       const nameSignatureRow: TableRow = {
-        height: 16,
-        cells: [emptyLeft, signCell(signerName?.trim() || "", { bold: true, fontSize: 13 })],
+        height: PLVB_INFO_ROW_HEIGHT,
+        cells: [emptyLeft, signCell(signerName?.trim() || "", { bold: true, fontSize: 14 })],
       }
 
-      const { noteRow1, noteRow2, noteRow3, noteRow4 } = buildScoreSystemNoteRows(
+      const { noteRow0, noteRow1, noteRow2, noteRow3, noteRow4 } = buildScoreSystemNoteRows(
         scoreConverts || [],
         TOTAL_COLUMNS,
         true
       )
 
       const rankingNote = buildGraduationRankingNote(academicRankingConvert)
+      // Cùng cột gạch đầu dòng với các dòng ghi chú phía trên
       const noteRow5: TableRow = {
+        height: estimateWrappedRowHeight([rankingNote], 90, PLVB_NOTE_FONT),
         cells: [
+          { value: null, colSpan: 2, border: false },
           {
             value: rankingNote,
-            colSpan: TOTAL_COLUMNS,
-            fontSize: 10,
+            colSpan: TOTAL_COLUMNS - 2,
+            fontSize: PLVB_NOTE_FONT,
             wrapText: true,
             align: "left",
-            indent: 1,
             border: false,
           },
         ],
-        height: estimateWrappedRowHeight([rankingNote], 80, 10),
       }
 
       return {
@@ -1461,6 +1701,10 @@ export default function StudentGradeSystem() {
           left: 1,
           bottom: tableTop + TABLE_HEADER_ROWS + tableBodyRows.length - 1,
           right: TOTAL_COLUMNS,
+          headerRows: TABLE_HEADER_ROWS,
+          accentTopRows:
+            graduationSectionExcelRow != null ? [graduationSectionExcelRow] : undefined,
+          midCol: PLVB_HALF,
         },
         rows: [
           ...headerRows,
@@ -1469,14 +1713,16 @@ export default function StudentGradeSystem() {
           summaryCreditRow,
           summaryGpaRow,
           summaryRankRow,
+          // Cụm ký tên bên phải, nằm dưới khối tổng tín chỉ
+          signDateRow,
           signTitleRow1,
           signTitleRow2,
-          ...Array.from({ length: 3 }, () => ({
-            height: 12,
-            cells: [{ value: null, colSpan: TOTAL_COLUMNS, border: false }],
-          })),
+          ...Array.from({ length: PLVB_SIGN_GAP_COUNT }, () =>
+            signatureGapRow(PLVB_SIGN_GAP_HEIGHT)
+          ),
           nameSignatureRow,
           gapRow,
+          noteRow0,
           noteRow1,
           noteRow2,
           noteRow3,
@@ -1496,20 +1742,23 @@ export default function StudentGradeSystem() {
       pageBreakBetweenSheets: true,
       sheetName: "PLVB",
       pageSetup: {
-        paperSize: 9,
+        paperSize: 9, // A4
         orientation: "portrait",
+        // 1 sinh viên = 1 trang, scale ~100% (cột đã khít khổ A4).
         fitToPage: true,
         fitToWidth: 1,
         fitToHeight: 1,
         horizontalCentered: true,
         verticalCentered: false,
+        horizontalDpi: 600,
+        verticalDpi: 600,
         margins: {
-          left: 0.4,
-          right: 0.4,
-          top: 0.4,
-          bottom: 0.4,
-          header: 0.2,
-          footer: 0.2,
+          left: 0.6,
+          right: 0.3,
+          top: 0.25,
+          bottom: 0.25,
+          header: 0.1,
+          footer: 0.1,
         },
       },
     })
@@ -1734,6 +1983,7 @@ export default function StudentGradeSystem() {
       }
 
       const nameSignatureRow: TableRow = {
+        height: 18,
         cells: [
           { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL, border: false },
           {
@@ -1741,23 +1991,25 @@ export default function StudentGradeSystem() {
             colSpan: SIGN_COL,
             align: "center",
             bold: true,
-            fontSize: 13,
+            fontSize: 14,
             border: false,
           },
         ],
       }
 
-      const { noteRow1, noteRow2, noteRow3, noteRow4 } = buildScoreSystemNoteRows(
+      const { noteRow0, noteRow1, noteRow2, noteRow3, noteRow4 } = buildScoreSystemNoteRows(
         scoreConverts || [],
         TOTAL_COLUMNS
       )
 
+      const rankingNote1Col = buildGraduationRankingNote(academicRankingConvert)
       const noteRow5: TableRow = {
         cells: [
+          { value: null, colSpan: 2, border: false, indent: 1 },
           {
-            value: buildGraduationRankingNote(academicRankingConvert),
-            colSpan: TOTAL_COLUMNS,
-            fontSize: 10,
+            value: rankingNote1Col,
+            colSpan: TOTAL_COLUMNS - 2,
+            fontSize: PLVB_NOTE_FONT,
             rowSpan: 2,
             border: false,
           },
@@ -1784,13 +2036,15 @@ export default function StudentGradeSystem() {
           xepLoaiRow,
           gapRow,
           dateSignatureRow,
-          titleSignatureRow1,
-          titleSignatureRow2,
+          { ...titleSignatureRow1, height: 18 },
+          { ...titleSignatureRow2, height: 18 },
           ...Array.from({ length: 5 }, () => ({
+            height: 18,
             cells: [{ value: null, colSpan: TOTAL_COLUMNS, border: false }],
           })),
           nameSignatureRow,
           gapRow,
+          noteRow0,
           noteRow1,
           noteRow2,
           noteRow3,

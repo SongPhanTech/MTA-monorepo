@@ -1,4 +1,5 @@
 import * as ExcelJS from "exceljs"
+import PizZip from "pizzip"
 import * as XLSX from "xlsx"
 
 /** ──────────────── Types ──────────────── */
@@ -7,13 +8,16 @@ export interface TableCell {
   colSpan?: number
   rowSpan?: number
   align?: "left" | "center" | "right"
+  /** Căn dọc ô. Mặc định middle. */
+  vertical?: "top" | "middle" | "bottom"
   bgColor?: string
   bold?: boolean
   italic?: boolean
+  underline?: boolean
   fontSize?: number
   wrapText?: boolean
   border?: boolean
-  /** Kiểu viền ô. Mặc định thin; bảng phụ lục dùng medium để khung in đậm. */
+  /** Kiểu viền ô. Mặc định thin; bảng PLVB tinh chỉnh màu qua tableBorderRange. */
   borderStyle?: ExcelJS.BorderStyle
   /** Lùi dòng (Excel indent), dùng cho ghi chú. */
   indent?: number
@@ -41,8 +45,23 @@ export interface SheetExportOptions {
   /** Độ rộng cột theo index 0 = cột A. `undefined` giữ nguyên width template. */
   columnWidths?: Array<number | undefined>
   thinBorderRange?: { top: number; left: number; bottom: number; right: number }
-  /** Viền trong thin, khung ngoài medium — khớp mẫu phụ lục văn bằng. */
-  tableBorderRange?: { top: number; left: number; bottom: number; right: number }
+  /**
+   * Viền bảng PLVB:
+   * - ngoài / đáy tiêu đề / hàng nhấn (Học phần TN) / cột giữa: medium đen
+   * - lưới trong: thin xám nhạt
+   */
+  tableBorderRange?: {
+    top: number
+    left: number
+    bottom: number
+    right: number
+    /** Số hàng tiêu đề bảng (STT / Thang điểm…) — đáy khung tiêu đề đậm */
+    headerRows?: number
+    /** Hàng cần đường kẻ ngang đậm phía trên (1-based), vd. "Học phần tốt nghiệp" */
+    accentTopRows?: number[]
+    /** Cột cuối nửa trái — cạnh phải đậm (phân cách 2 cột bảng) */
+    midCol?: number
+  }
   /** Căn tiêu đề / header template theo mẫu phụ lục văn bằng. */
   headerStylePreset?: "phu-luc-van-bang"
   /** Xóa nội dung sheet trước khi ghi `rows` (không dùng layout template). */
@@ -148,13 +167,23 @@ function toColumnLetter(col: number): string {
 
 function applyPageSetup(worksheet: ExcelJS.Worksheet, pageSetup?: Partial<ExcelJS.PageSetup>) {
   if (!pageSetup) return
-  worksheet.pageSetup = {
+  const next: Partial<ExcelJS.PageSetup> = {
     ...worksheet.pageSetup,
     ...pageSetup,
     margins: pageSetup.margins
       ? { ...worksheet.pageSetup.margins, ...pageSetup.margins }
       : worksheet.pageSetup.margins,
   }
+  // ExcelJS hay ghi DPI = 4294967295 → preview/in macOS lệch lề, nội dung bị thu nhỏ.
+  const dpi = (v: number | undefined) => (v == null || v <= 0 || v > 10000 ? 600 : v)
+  next.horizontalDpi = dpi(next.horizontalDpi)
+  next.verticalDpi = dpi(next.verticalDpi)
+  if (next.fitToWidth != null || next.fitToHeight != null || next.fitToPage) {
+    next.fitToPage = true
+    // Khi fit-to-page, bỏ scale cố định để Excel tính scale theo fit.
+    delete (next as { scale?: number }).scale
+  }
+  worksheet.pageSetup = next as ExcelJS.PageSetup
 }
 
 function applyPrintArea(worksheet: ExcelJS.Worksheet, lastColOverride?: number) {
@@ -305,62 +334,88 @@ function applyBorderRange(
   }
 }
 
-/** Lưới trong mỏng; khung ngoài đậm. Xóa viền ô phụ của vùng gộp để viền template không đè khung. */
-function applyTableFrameBorder(
-  worksheet: ExcelJS.Worksheet,
-  top: number,
-  left: number,
-  bottom: number,
+type TableFrameBorderOptions = {
+  top: number
+  left: number
+  bottom: number
   right: number
-) {
-  const inner = { style: "thin" as const, color: { argb: "FF000000" } }
-  const outer = { style: "medium" as const, color: { argb: "FF000000" } }
+  headerRows?: number
+  accentTopRows?: number[]
+  midCol?: number
+}
+
+/**
+ * Ngoài + khung tiêu đề + phân cách môn TN + cột giữa: medium đen.
+ * Lưới trong: thin xám.
+ * Quan trọng: gán viền theo vùng merge (ô gốc) — rowSpan STT/Tên HP nếu tô từng ô
+ * thì cạnh trên khung tiêu đề bị mất nét đậm.
+ */
+function applyTableFrameBorder(worksheet: ExcelJS.Worksheet, opts: TableFrameBorderOptions) {
+  const { top, left, bottom, right, headerRows = 0, midCol } = opts
+  const accentTops = new Set(opts.accentTopRows || [])
+  const headerBottom = headerRows > 0 ? top + headerRows - 1 : top - 1
+  const inner = { style: "thin" as const, color: { argb: "FFB0B0B0" } }
+  const strong = { style: "medium" as const, color: { argb: "FF000000" } }
   const none = { style: undefined as ExcelJS.BorderStyle | undefined }
 
-  const mergeBounds = (row: number, col: number) => {
-    const merges = worksheet.model.merges || []
-    for (const range of merges) {
-      const [startRef, endRef] = range.split(":")
-      if (!startRef) continue
-      const start = worksheet.getCell(startRef)
-      const end = worksheet.getCell(endRef || startRef)
-      const mt = Number(start.row)
-      const ml = Number(start.col)
-      const mb = Number(end.row)
-      const mr = Number(end.col)
-      if (row >= mt && row <= mb && col >= ml && col <= mr) {
-        return { top: mt, left: ml, bottom: mb, right: mr }
-      }
+  type Box = { t: number; l: number; b: number; r: number }
+  const merges: Box[] = []
+  for (const range of worksheet.model.merges || []) {
+    if (typeof range !== "string") continue
+    const [startRef, endRef] = range.split(":")
+    if (!startRef) continue
+    const start = worksheet.getCell(startRef)
+    const end = worksheet.getCell(endRef || startRef)
+    merges.push({
+      t: Number(start.row),
+      l: Number(start.col),
+      b: Number(end.row),
+      r: Number(end.col),
+    })
+  }
+
+  const mergeBox = (row: number, col: number): Box => {
+    for (const m of merges) {
+      if (row >= m.t && row <= m.b && col >= m.l && col <= m.r) return m
     }
-    return { top: row, left: col, bottom: row, right: col }
+    return { t: row, l: col, b: row, r: col }
   }
 
   const seen = new Set<string>()
   for (let row = top; row <= bottom; row++) {
     for (let col = left; col <= right; col++) {
-      const box = mergeBounds(row, col)
-      const key = `${box.top}:${box.left}:${box.bottom}:${box.right}`
+      const box = mergeBox(row, col)
+      const key = `${box.t}:${box.l}:${box.b}:${box.r}`
       if (seen.has(key)) continue
       seen.add(key)
-      const frame = {
-        top: box.top <= top ? outer : inner,
-        left: box.left <= left ? outer : inner,
-        bottom: box.bottom >= bottom ? outer : inner,
-        right: box.right >= right ? outer : inner,
-      }
-      for (let r = box.top; r <= box.bottom; r++) {
-        for (let c = box.left; c <= box.right; c++) {
-          if (r === box.top && c === box.left) continue
+
+      // Cạnh của CẢ vùng gộp (ô gốc) — STT/Tên HP rowSpan mới giữ được nét đậm trên/dưới
+      const isAccent = accentTops.has(box.t)
+      const topBorder = box.t === top || isAccent ? strong : inner
+      const bottomBorder =
+        box.b === bottom || box.b === headerBottom || isAccent ? strong : inner
+      const leftBorder = box.l === left ? strong : inner
+      const rightBorder =
+        box.r === right || (midCol != null && box.r === midCol) ? strong : inner
+
+      for (let r = box.t; r <= box.b; r++) {
+        for (let c = box.l; c <= box.r; c++) {
+          if (r === box.t && c === box.l) continue
           if (r < top || r > bottom || c < left || c > right) continue
           worksheet.getCell(r, c).border = {
-            top: r === box.top && box.top <= top ? outer : none,
-            left: c === box.left && box.left <= left ? outer : none,
-            bottom: r === box.bottom && box.bottom >= bottom ? outer : none,
-            right: c === box.right && box.right >= right ? outer : none,
+            top: none,
+            left: none,
+            bottom: none,
+            right: none,
           }
         }
       }
-      worksheet.getCell(box.top, box.left).border = frame
+      worksheet.getCell(box.t, box.l).border = {
+        top: topBorder,
+        left: leftBorder,
+        bottom: bottomBorder,
+        right: rightBorder,
+      }
     }
   }
 }
@@ -377,6 +432,162 @@ function cellPlainText(value: ExcelJS.CellValue): string {
   return String(value)
 }
 
+/**
+ * Ép font chữ khi xuất — không phụ thuộc font trong template.
+ * family=1 (Roman/serif) bắt buộc với Times New Roman; nếu để family=2 (Swiss)
+ * máy in / Excel dễ render giống Calibri/Arial dù tên font đúng.
+ */
+function resolveExportFontFamily(options: BuildExcelFromTemplateOptions): string {
+  return options.fontFamily?.trim() || "Times New Roman"
+}
+
+function isSerifExportFont(fontFamily: string): boolean {
+  return /times\s*new\s*roman|times|georgia|garamond|cambria/i.test(fontFamily)
+}
+
+function exportFontProps(fontFamily: string): Pick<ExcelJS.Font, "name" | "family"> {
+  return {
+    name: fontFamily,
+    family: isSerifExportFont(fontFamily) ? 1 : 2,
+  }
+}
+
+function applyWorkbookFontFamily(workbook: ExcelJS.Workbook, fontFamily: string) {
+  const themes = workbook.model?.themes as unknown
+  if (!themes || typeof themes !== "object" || Array.isArray(themes)) return
+  const themeMap = themes as Record<string, unknown>
+  for (const key of Object.keys(themeMap)) {
+    const xml = themeMap[key]
+    if (typeof xml !== "string") continue
+    // Đổi cả major + minor latin — tránh theme fallback sang Calibri/Cambria khi in.
+    themeMap[key] = xml
+      .replace(/(<a:minorFont>[\s\S]*?<a:latin\s+)typeface="[^"]*"/, `$1typeface="${fontFamily}"`)
+      .replace(/(<a:majorFont>[\s\S]*?<a:latin\s+)typeface="[^"]*"/, `$1typeface="${fontFamily}"`)
+  }
+}
+
+/**
+ * Vá styles/theme/sharedStrings sau khi ghi xlsx.
+ * - Đổi tên font mặc định (Calibri/Arial…) → fontFamily
+ * - Bỏ scheme theme
+ * - Ép family=1 cho font serif (quan trọng khi in)
+ */
+function rewriteXlsxFontFamily(buffer: Buffer, fontFamily: string): Buffer {
+  const zip = new PizZip(buffer)
+  const serifFamily = isSerifExportFont(fontFamily) ? "1" : "2"
+  const stylesEntry = zip.file("xl/styles.xml")
+  if (stylesEntry) {
+    let styles = stylesEntry.asText()
+    styles = styles.replace(
+      /name val="(?:Calibri|Arial|Helvetica|SansSerif|Microsoft Sans Serif)"/g,
+      `name val="${fontFamily}"`
+    )
+    styles = styles.replace(/<scheme val="(?:minor|major)"\s*\/>/g, "")
+    // Đổi family Swiss(2) → Roman(1) khi dùng Times New Roman
+    if (serifFamily === "1") {
+      styles = styles.replace(/<family val="2"\s*\/>/g, `<family val="1"/>`)
+      // Thêm family cho font chưa có (ExcelJS thường bỏ)
+      styles = styles.replace(/<font>([\s\S]*?)<\/font>/g, (_m, inner: string) => {
+        if (/<family\s/i.test(inner)) return `<font>${inner}</font>`
+        if (new RegExp(`name val="${fontFamily.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`).test(inner)) {
+          return `<font>${inner}<family val="1"/></font>`
+        }
+        return `<font>${inner}</font>`
+      })
+    }
+    zip.file("xl/styles.xml", styles)
+  }
+  const themeEntry = zip.file("xl/theme/theme1.xml")
+  if (themeEntry) {
+    let theme = themeEntry.asText()
+    theme = theme
+      .replace(/(<a:minorFont>[\s\S]*?<a:latin\s+)typeface="[^"]*"/, `$1typeface="${fontFamily}"`)
+      .replace(/(<a:majorFont>[\s\S]*?<a:latin\s+)typeface="[^"]*"/, `$1typeface="${fontFamily}"`)
+    zip.file("xl/theme/theme1.xml", theme)
+  }
+  const ssEntry = zip.file("xl/sharedStrings.xml")
+  if (ssEntry) {
+    let ss = ssEntry.asText()
+    ss = ss.replace(
+      /rFont val="(?:Calibri|Arial|Helvetica|SansSerif|Microsoft Sans Serif)"/g,
+      `rFont val="${fontFamily}"`
+    )
+    // Ép mọi rFont về fontFamily nếu thiếu / khác (chỉ khi export serif chuẩn)
+    if (serifFamily === "1") {
+      ss = ss.replace(/rFont val="[^"]*"/g, `rFont val="${fontFamily}"`)
+      ss = ss.replace(/<rPr>([\s\S]*?)<\/rPr>/g, (_m, inner: string) => {
+        let next = inner
+        if (!/<rFont\s/i.test(next)) {
+          next += `<rFont val="${fontFamily}"/>`
+        }
+        if (!/<family\s/i.test(next)) {
+          next += `<family val="1"/>`
+        } else {
+          next = next.replace(/<family val="\d+"\s*\/>/g, `<family val="1"/>`)
+        }
+        return `<rPr>${next}</rPr>`
+      })
+    }
+    zip.file("xl/sharedStrings.xml", ss)
+  }
+  // Sửa pageSetup: DPI lỗi + bỏ scale khi đang fitToPage (tránh in bị thụt lề / thu nhỏ).
+  for (const name of Object.keys(zip.files)) {
+    if (!/^xl\/worksheets\/sheet\d+\.xml$/i.test(name)) continue
+    const entry = zip.file(name)
+    if (!entry) continue
+    let sheetXml = entry.asText()
+    sheetXml = sheetXml
+      .replace(/horizontalDpi="4294967295"/g, 'horizontalDpi="600"')
+      .replace(/verticalDpi="4294967295"/g, 'verticalDpi="600"')
+    if (/fitToPage="1"/.test(sheetXml) || /fitToWidth="\d+"/.test(sheetXml)) {
+      sheetXml = sheetXml.replace(/\s+scale="\d+"/g, "")
+      if (!/<pageSetUpPr\b/i.test(sheetXml)) {
+        if (/<sheetPr\b[^>]*\/>/.test(sheetXml)) {
+          sheetXml = sheetXml.replace(
+            /<sheetPr\b([^>]*)\/>/,
+            `<sheetPr$1><pageSetUpPr fitToPage="1"/></sheetPr>`
+          )
+        } else if (/<sheetPr\b[^>]*>/.test(sheetXml) && !/fitToPage=/.test(sheetXml)) {
+          sheetXml = sheetXml.replace(
+            /<sheetPr\b([^>]*)>/,
+            `<sheetPr$1><pageSetUpPr fitToPage="1"/>`
+          )
+        }
+      }
+    }
+    zip.file(name, sheetXml)
+  }
+
+  return Buffer.from(zip.generate({ type: "nodebuffer", compression: "DEFLATE" }))
+}
+
+function enforceWorksheetFontFamily(worksheet: ExcelJS.Worksheet, fontFamily: string) {
+  const base = exportFontProps(fontFamily)
+  const withoutScheme = (font?: Partial<ExcelJS.Font> | null): Partial<ExcelJS.Font> => {
+    const { scheme: _scheme, ...rest } = (font || {}) as ExcelJS.Font & { scheme?: string }
+    return rest
+  }
+  worksheet.eachRow({ includeEmpty: true }, (row) => {
+    row.eachCell({ includeEmpty: true }, (cell) => {
+      cell.font = { ...withoutScheme(cell.font), ...base }
+      const value = cell.value
+      if (value && typeof value === "object" && "richText" in value && Array.isArray(value.richText)) {
+        cell.value = {
+          richText: value.richText.map((part) => ({
+            text: part.text,
+            font: { ...withoutScheme(part.font), ...base },
+          })),
+        }
+      }
+    })
+  })
+  worksheet.columns.forEach((col) => {
+    if (!col) return
+    const style = (col.style || {}) as Partial<ExcelJS.Style>
+    col.style = { ...style, font: { ...withoutScheme(style.font), ...base } }
+  })
+}
+
 function applyDynamicCellStyle(
   cell: ExcelJS.Cell,
   cellData: TableCell,
@@ -384,15 +595,17 @@ function applyDynamicCellStyle(
 ) {
   cell.alignment = {
     horizontal: cellData.align || "left",
-    vertical: "middle",
+    vertical: cellData.vertical || "middle",
     wrapText: cellData.wrapText ?? true,
     indent: cellData.indent,
   }
+  const fontFamily = resolveExportFontFamily(options)
   cell.font = {
-    name: options.fontFamily || "Times New Roman",
+    ...exportFontProps(fontFamily),
     size: cellData.fontSize ?? options.fontSize ?? 14,
     bold: !!cellData.bold,
     italic: !!cellData.italic,
+    underline: !!cellData.underline,
   }
   if (cellData.numFmt) {
     cell.numFmt = cellData.numFmt
@@ -435,14 +648,18 @@ function applyDynamicCellStyle(
   }
   if (cell.value && typeof cell.value === "object" && "richText" in cell.value && Array.isArray(cell.value.richText)) {
     const baseFont = cell.font || {}
+    const richFontBase = exportFontProps(fontFamily)
     cell.value = {
       richText: cell.value.richText.map((part) => ({
         text: part.text,
         font: {
-          name: part.font?.name || baseFont.name,
+          ...richFontBase,
+          name: part.font?.name || baseFont.name || richFontBase.name,
+          family: richFontBase.family,
           size: part.font?.size || baseFont.size,
           italic: part.font?.italic ?? baseFont.italic,
           bold: !!part.font?.bold,
+          underline: part.font?.underline ?? baseFont.underline,
           color: part.font?.color || baseFont.color,
         },
       })),
@@ -472,17 +689,18 @@ function addCenteredTitleUnderline(worksheet: ExcelJS.Worksheet, titleCell: Exce
   }
   const lineLeft = left + 1
   const lineRight = Math.max(lineLeft, right - 1)
+  // Gạch chân ở hàng kế — để cao hơn để không dính sát baseline chữ.
   const lineRow = worksheet.getRow(row + 1)
-  lineRow.height = Math.min(Number(lineRow.height) || 8, 8)
-  const line = { style: "medium" as const, color: { argb: "FF000000" } }
+  lineRow.height = Math.max(Number(lineRow.height) || 0, 10)
+  const line = { style: "thin" as const, color: { argb: "FF000000" } }
   for (let c = lineLeft; c <= lineRight; c++) {
     const cell = lineRow.getCell(c)
     cell.border = {
       ...(cell.border || {}),
-      top: { style: undefined },
+      top: line,
       left: { style: undefined },
       right: { style: undefined },
-      bottom: line,
+      bottom: { style: undefined },
     }
   }
 }
@@ -497,11 +715,11 @@ function applyPhuLucVanBangHeaderStyles(worksheet: ExcelJS.Worksheet, lastHeader
       const font = { name: times, color: cell.font?.color, family: cell.font?.family }
       if (/BỘ QUỐC PHÒNG/i.test(text)) {
         cell.alignment = { horizontal: "center", vertical: "middle", wrapText: true }
-        cell.font = { ...font, size: 12, bold: false }
+        cell.font = { ...font, size: 13, bold: false }
         return
       }
       if (/HỌC VIỆN KỸ THUẬT QUÂN SỰ/i.test(text)) {
-        cell.alignment = { horizontal: "center", vertical: "middle", wrapText: true }
+        cell.alignment = { horizontal: "center", vertical: "bottom", wrapText: true }
         cell.font = { ...font, size: 13, bold: true, underline: false }
         addCenteredTitleUnderline(worksheet, cell)
         return
@@ -512,19 +730,19 @@ function applyPhuLucVanBangHeaderStyles(worksheet: ExcelJS.Worksheet, lastHeader
         return
       }
       if (/Độc lập/i.test(text)) {
-        cell.alignment = { horizontal: "center", vertical: "middle", wrapText: true }
-        cell.font = { ...font, size: 12, bold: true, italic: true, underline: false }
+        cell.alignment = { horizontal: "center", vertical: "bottom", wrapText: true }
+        cell.font = { ...font, size: 12, bold: true, italic: false, underline: false }
         addCenteredTitleUnderline(worksheet, cell)
         return
       }
       if (/PHỤ LỤC VĂN BẰNG/i.test(text)) {
         cell.alignment = { horizontal: "center", vertical: "middle", wrapText: true }
-        cell.font = { ...font, size: 16, bold: true }
+        cell.font = { ...font, size: 14, bold: true }
         return
       }
       if (/Kèm theo bằng/i.test(text)) {
         cell.alignment = { horizontal: "center", vertical: "middle", wrapText: true }
-        cell.font = { ...font, size: 11, italic: true, bold: false }
+        cell.font = { ...font, size: 12, italic: true, bold: false }
         return
       }
       if (
@@ -532,7 +750,7 @@ function applyPhuLucVanBangHeaderStyles(worksheet: ExcelJS.Worksheet, lastHeader
         text.length < 40
       ) {
         cell.alignment = { horizontal: "center", vertical: "middle", wrapText: true }
-        cell.font = { ...font, size: 9, bold: true }
+        cell.font = { ...font, size: 10, bold: true }
         if (/^Thang điểm\s+/i.test(text) && !text.includes("\n")) {
           cell.value = text.replace(/^Thang điểm\s+/i, "Thang\nđiểm\n")
         }
@@ -544,7 +762,7 @@ function applyPhuLucVanBangHeaderStyles(worksheet: ExcelJS.Worksheet, lastHeader
         )
       ) {
         cell.alignment = { horizontal: "left", vertical: "middle", wrapText: true }
-        cell.font = { ...cell.font, name: times, size: 12 }
+        cell.font = { ...cell.font, name: times, size: 13 }
       }
     })
   }
@@ -563,8 +781,7 @@ function applySheetTableBorders(worksheet: ExcelJS.Worksheet, sheetOption: Sheet
     applyThinBorderRange(worksheet, r.top, r.left, r.bottom, r.right)
   }
   if (sheetOption.tableBorderRange) {
-    const r = sheetOption.tableBorderRange
-    applyTableFrameBorder(worksheet, r.top, r.left, r.bottom, r.right)
+    applyTableFrameBorder(worksheet, sheetOption.tableBorderRange)
   }
 }
 
@@ -656,6 +873,8 @@ async function handleExcelJSDefault(
 ): Promise<Buffer> {
   const workbook = new ExcelJS.Workbook()
   await workbook.xlsx.load(toArrayBuffer(templateBuffer))
+  const fontFamily = resolveExportFontFamily(options)
+  applyWorkbookFontFamily(workbook, fontFamily)
 
   const firstSheet = workbook.worksheets[0]
   if (!firstSheet) {
@@ -704,11 +923,12 @@ async function handleExcelJSDefault(
     applyPageSetup(worksheet, options.pageSetup)
     applyPrintArea(worksheet, sheetOption.columnWidths?.length)
     applySheetTableBorders(worksheet, sheetOption)
+    enforceWorksheetFontFamily(worksheet, fontFamily)
   }
 
   workbook.removeWorksheet(firstSheet.id)
   const outBuffer = await workbook.xlsx.writeBuffer()
-  return Buffer.from(outBuffer)
+  return rewriteXlsxFontFamily(Buffer.from(outBuffer), fontFamily)
 }
 
 /** ──────────────── XLS: SheetJS ──────────────── */
@@ -903,6 +1123,8 @@ async function handleExcelJSMergeSheets(
 ): Promise<Buffer> {
   const workbook = new ExcelJS.Workbook()
   await workbook.xlsx.load(toArrayBuffer(templateBuffer))
+  const fontFamily = resolveExportFontFamily(options)
+  applyWorkbookFontFamily(workbook, fontFamily)
 
   const firstSheet = workbook.worksheets[0] // Template
   if (!firstSheet) {
@@ -948,6 +1170,7 @@ async function handleExcelJSMergeSheets(
 
     applyColumnWidths(worksheet, sheetOption.columnWidths)
     applySheetTableBorders(worksheet, sheetOption)
+    enforceWorksheetFontFamily(worksheet, fontFamily)
 
     // 1d. Thêm sheet đã xử lý vào danh sách tạm
     tempWorksheets.push(worksheet)
@@ -999,10 +1222,11 @@ async function handleExcelJSMergeSheets(
     masterSheet.name = options.sheetName || "TongHopDiem"
     applyPageSetup(masterSheet, options.pageSetup)
     applyPrintArea(masterSheet, sheets[0]?.columnWidths?.length)
+    enforceWorksheetFontFamily(masterSheet, fontFamily)
   }
 
   const outBuffer = await workbook.xlsx.writeBuffer()
-  return Buffer.from(outBuffer)
+  return rewriteXlsxFontFamily(Buffer.from(outBuffer), fontFamily)
 }
 
 async function handleExcelJSExport(
