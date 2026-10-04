@@ -20,7 +20,8 @@ export async function exportFromTemplate(options: ExportOptions) {
     throw new Error(`Không tải được template: ${response.status} ${response.statusText}`)
   }
   const templateBuffer = await response.arrayBuffer()
-  const ext = extension ?? templateUrl.split(".").pop()?.toLowerCase() ?? "xlsx"
+  const templatePath = templateUrl.split(/[?#]/)[0] ?? templateUrl
+  const ext = extension ?? templatePath.split(".").pop()?.toLowerCase() ?? "xlsx"
   const outBuffer = await buildExcelFromTemplate({
     ...rest,
     templateBuffer,

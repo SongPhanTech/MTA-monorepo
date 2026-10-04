@@ -66,6 +66,25 @@ export interface SheetExportOptions {
   headerStylePreset?: "phu-luc-van-bang"
   /** Xóa nội dung sheet trước khi ghi `rows` (không dùng layout template). */
   resetSheet?: boolean
+  /**
+   * Chèn dòng dữ liệu quanh một dòng mốc có sẵn trong template.
+   * Không vẽ lại header, lề, chữ ký — chỉ điền giá trị và kẻ lưới dòng môn.
+   */
+  templateInserts?: TemplateInsert[]
+}
+
+export interface TemplateValueRow {
+  values: Array<string | number | null>
+  height?: number
+}
+
+export interface TemplateInsert {
+  /** Cụm chữ trên dòng mốc, ví dụ "Học phần tốt nghiệp". Dòng mốc được giữ. */
+  marker: string
+  before?: TemplateValueRow[]
+  after?: TemplateValueRow[]
+  /** Bỏ dòng mốc khi không có dòng `after`. */
+  removeMarkerWhenNoAfter?: boolean
 }
 
 export interface BuildExcelFromTemplateOptions {
@@ -80,6 +99,8 @@ export interface BuildExcelFromTemplateOptions {
   /** Khi gộp nhiều sheet: ngắt trang in giữa từng khối (mỗi học viên một trang). */
   pageBreakBetweenSheets?: boolean
   pageSetup?: Partial<ExcelJS.PageSetup>
+  /** Không ghi đè font, cỡ chữ, theme của template. */
+  preserveTemplateStyle?: boolean
 }
 
 /** @deprecated Dùng BuildExcelFromTemplateOptions trên server */
@@ -133,6 +154,11 @@ function replaceTemplatePlaceholders(
   }
 
   return value
+}
+
+function cellHasTemplatePlaceholder(value: ExcelJS.CellValue): boolean {
+  const text = cellPlainText(value)
+  return text.includes("{{") || text.includes("${")
 }
 
 function cellContainsPlaceholder(value: ExcelJS.CellValue, key: string): boolean {
@@ -193,6 +219,94 @@ function applyPrintArea(worksheet: ExcelJS.Worksheet, lastColOverride?: number) 
   worksheet.pageSetup.printArea = `A1:${toColumnLetter(lastCol)}${lastRow}`
 }
 
+const TABLE_GRID_COLOR = { argb: "FFBFBFBF" }
+
+/** Gán viền trên bản sao style. Gán trực tiếp làm các ô dùng chung một border, trang sau khác trang đầu. */
+function setCellBorder(cell: ExcelJS.Cell, border: Partial<ExcelJS.Borders>) {
+  const style = JSON.parse(JSON.stringify(cell.style || {})) as ExcelJS.Style
+  style.border = border as ExcelJS.Borders
+  cell.style = style
+}
+
+/** Lưới bảng điểm in mờ. Chỉ từ dòng tiêu đề bảng trở xuống, không đụng phần đầu trang. */
+function useThinBorders(worksheet: ExcelJS.Worksheet, minRow = 1) {
+  worksheet.eachRow({ includeEmpty: true }, (row) => {
+    if (row.number < minRow) return
+    row.eachCell({ includeEmpty: true }, (cell) => {
+      if (cell.master && cell.master.address !== cell.address) return
+      const border = cell.border
+      if (!border) return
+      let changed = false
+      const next: Partial<ExcelJS.Borders> = {}
+      for (const edge of ["top", "left", "bottom", "right"] as const) {
+        const side = border[edge]
+        if (!side?.style) continue
+        next[edge] = { style: "thin", color: TABLE_GRID_COLOR }
+        changed = true
+      }
+      if (changed) setCellBorder(cell, { ...border, ...next })
+    })
+  })
+}
+
+const TABLE_FRAME_COLOR = { argb: "FF000000" }
+
+function cellHasGridBorder(border?: Partial<ExcelJS.Borders> | null) {
+  return Boolean(border?.left?.style || border?.right?.style || border?.top?.style || border?.bottom?.style)
+}
+
+/** Viền ngoài và đường kẻ giữa của bảng điểm. Không kẻ lại phần đầu trang. */
+function emphasizeDiplomaTableFrame(worksheet: ExcelJS.Worksheet, minRow = 1) {
+  const maxCol = 12
+  const midCol = 6
+  const boxes: Array<{ top: number; left: number; bottom: number; right: number }> = []
+  const seen = new Set<string>()
+  worksheet.eachRow({ includeEmpty: true }, (row) => {
+    for (let col = 1; col <= maxCol; col++) {
+      const cell = row.getCell(col)
+      if (!cellHasGridBorder(cell.border)) continue
+      const master = cell.master && cell.master.address !== cell.address ? cell.master : cell
+      const key = master.address
+      if (seen.has(key)) continue
+      seen.add(key)
+      let top = Number(master.row)
+      let left = Number(master.col)
+      let bottom = top
+      let right = left
+      for (const range of worksheet.model.merges || []) {
+        if (typeof range !== "string") continue
+        const [startRef, endRef] = range.split(":")
+        if (startRef !== master.address) continue
+        const end = worksheet.getCell(endRef || startRef)
+        bottom = Number(end.row)
+        right = Number(end.col)
+        break
+      }
+      if (top < minRow) continue
+      boxes.push({ top, left, bottom, right })
+    }
+  })
+  if (!boxes.length) return
+  const frameTop = Math.min(...boxes.map((box) => box.top))
+  const maxRow = Math.max(...boxes.map((box) => box.bottom))
+  const strong = { style: "thin" as const, color: TABLE_FRAME_COLOR }
+  const grid = { style: "thin" as const, color: TABLE_GRID_COLOR }
+
+  for (const box of boxes) {
+    const cell = worksheet.getCell(box.top, box.left)
+    const crossesCenter = box.left <= midCol && box.right >= midCol + 1
+    const border: Partial<ExcelJS.Borders> = {
+      top: box.top === frameTop ? strong : grid,
+      bottom: box.bottom === maxRow ? strong : grid,
+      left: box.left === 1 ? strong : grid,
+      right:
+        box.right === maxCol || (!crossesCenter && box.right === midCol) ? strong : grid,
+    }
+    if (!crossesCenter && box.left === midCol + 1) border.left = strong
+    setCellBorder(cell, border)
+  }
+}
+
 function applyBoldToCell(cell: ExcelJS.Cell) {
   cell.font = {
     ...(cell.font ?? {}),
@@ -206,6 +320,12 @@ function cloneWorksheet(
   newSheetName: string
 ) {
   const newSheet = workbook.addWorksheet(newSheetName)
+  // ExcelJS gán dyDescent = 55 cho sheet mới, Excel nhân độ cao dòng thêm 4/3 (20 → 26,75, 30 → 40).
+  const sourceDyDescent = sourceSheet.properties?.dyDescent
+  newSheet.properties.dyDescent =
+    typeof sourceDyDescent === "number" && sourceDyDescent > 0 && sourceDyDescent < 5
+      ? sourceDyDescent
+      : 0.2
 
   // 1️⃣ Clone độ rộng cột
   sourceSheet.columns.forEach((col, idx) => {
@@ -229,11 +349,11 @@ function cloneWorksheet(
 
     row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
       const newCell = newRow.getCell(colNumber)
+      const master = cell.master
+      const isSlave = master != null && master.address !== cell.address
+      // Ô phụ trong vùng gộp không copy chữ — tránh lặp khi mất merge
+      newCell.value = isSlave ? null : cell.value
 
-      // ✅ copy giá trị
-      newCell.value = cell.value
-
-      // ✅ copy style
       if (cell.style && Object.keys(cell.style).length > 0) {
         newCell.style = JSON.parse(JSON.stringify(cell.style))
       }
@@ -244,7 +364,11 @@ function cloneWorksheet(
 
   // 3️⃣ Clone merge cell
   sourceSheet.model.merges.forEach((mergeRange) => {
-    newSheet.mergeCells(mergeRange)
+    try {
+      newSheet.mergeCells(mergeRange)
+    } catch {
+      /* vùng gộp đã có */
+    }
   })
 
   if (sourceSheet.pageSetup) {
@@ -472,11 +596,11 @@ function applyWorkbookFontFamily(workbook: ExcelJS.Workbook, fontFamily: string)
  * - Bỏ scheme theme
  * - Ép family=1 cho font serif (quan trọng khi in)
  */
-function rewriteXlsxFontFamily(buffer: Buffer, fontFamily: string): Buffer {
+function rewriteXlsxFontFamily(buffer: Buffer, fontFamily: string, preserveTemplateStyle = false): Buffer {
   const zip = new PizZip(buffer)
   const serifFamily = isSerifExportFont(fontFamily) ? "1" : "2"
   const stylesEntry = zip.file("xl/styles.xml")
-  if (stylesEntry) {
+  if (stylesEntry && !preserveTemplateStyle) {
     let styles = stylesEntry.asText()
     styles = styles.replace(
       /name val="(?:Calibri|Arial|Helvetica|SansSerif|Microsoft Sans Serif)"/g,
@@ -498,7 +622,7 @@ function rewriteXlsxFontFamily(buffer: Buffer, fontFamily: string): Buffer {
     zip.file("xl/styles.xml", styles)
   }
   const themeEntry = zip.file("xl/theme/theme1.xml")
-  if (themeEntry) {
+  if (themeEntry && !preserveTemplateStyle) {
     let theme = themeEntry.asText()
     theme = theme
       .replace(/(<a:minorFont>[\s\S]*?<a:latin\s+)typeface="[^"]*"/, `$1typeface="${fontFamily}"`)
@@ -506,7 +630,7 @@ function rewriteXlsxFontFamily(buffer: Buffer, fontFamily: string): Buffer {
     zip.file("xl/theme/theme1.xml", theme)
   }
   const ssEntry = zip.file("xl/sharedStrings.xml")
-  if (ssEntry) {
+  if (ssEntry && !preserveTemplateStyle) {
     let ss = ssEntry.asText()
     ss = ss.replace(
       /rFont val="(?:Calibri|Arial|Helvetica|SansSerif|Microsoft Sans Serif)"/g,
@@ -529,6 +653,10 @@ function rewriteXlsxFontFamily(buffer: Buffer, fontFamily: string): Buffer {
       })
     }
     zip.file("xl/sharedStrings.xml", ss)
+  }
+  // Khi giữ nguyên template thì không sửa DPI / fitToPage của file người dùng upload.
+  if (preserveTemplateStyle) {
+    return Buffer.from(zip.generate({ type: "nodebuffer", compression: "DEFLATE" }))
   }
   // Sửa pageSetup: DPI lỗi + bỏ scale khi đang fitToPage (tránh in bị thụt lề / thu nhỏ).
   for (const name of Object.keys(zip.files)) {
@@ -559,6 +687,232 @@ function rewriteXlsxFontFamily(buffer: Buffer, fontFamily: string): Buffer {
   }
 
   return Buffer.from(zip.generate({ type: "nodebuffer", compression: "DEFLATE" }))
+}
+
+function firstXmlTag(xml: string, tag: string): string | null {
+  const match =
+    xml.match(new RegExp(`<${tag}\\b[^>]*/>`)) ??
+    xml.match(new RegExp(`<${tag}\\b[^>]*>[\\s\\S]*?</${tag}>`))
+  return match?.[0] ?? null
+}
+
+function replaceXmlTag(xml: string, tag: string, replacement: string | null): string {
+  const existing = firstXmlTag(xml, tag)
+  if (replacement == null) return existing ? xml.replace(existing, "") : xml
+  if (existing) return xml.replace(existing, replacement)
+  return xml.replace("</worksheet>", `${replacement}</worksheet>`)
+}
+
+/**
+ * Giữ lề và khoảng cách của mẫu.
+ * Nhiều học viên: fitToHeight=0 để ngắt trang còn hiệu lực, mỗi người một trang.
+ * DPI 4294967295 là giá trị hỏng của ExcelJS.
+ */
+function fitPageSetupForPrint(pageSetupTag: string, pagesTall: number): string {
+  let tag = pageSetupTag.replace(/\s+horizontalDpi="4294967295"/g, "").replace(/\s+verticalDpi="4294967295"/g, "")
+  if (pagesTall <= 1) return tag
+  tag = tag.replace(/\s+fitToHeight="[^"]*"/g, "")
+  return tag.replace("<pageSetup", '<pageSetup fitToHeight="0"')
+}
+
+function blockStartRows(sheetXml: string): number[] {
+  const starts = [1]
+  for (const match of sheetXml.matchAll(/<brk\b[^>]*\bid="(\d+)"/g)) {
+    starts.push(Number(match[1]) + 1)
+  }
+  return starts
+}
+
+/** Gạch chân tiêu đề nằm trong drawing, neo theo dòng. Nhân bản cho từng học viên. */
+function repeatDrawingAnchors(drawingXml: string, excelStartRows: number[]): string {
+  if (excelStartRows.length <= 1) return drawingXml
+  const anchors = [...drawingXml.matchAll(/<xdr:oneCellAnchor>[\s\S]*?<\/xdr:oneCellAnchor>/g)].map(
+    (match) => match[0]
+  )
+  if (!anchors.length) return drawingXml
+  let nextId = 100
+  const copies: string[] = []
+  for (const start of excelStartRows) {
+    const delta = start - 1
+    for (const anchor of anchors) {
+      const shapeId = nextId
+      nextId += 1
+      let copy = anchor.replace(/(<xdr:row>)(\d+)(<\/xdr:row>)/g, (_match, open, row, close) => {
+        return `${open}${Number(row) + delta}${close}`
+      })
+      copy = copy.replace(
+        /(<xdr:cNvPr\b[^>]*\bid=")(\d+)(")/,
+        (_match, open, _id, close) => `${open}${shapeId}${close}`
+      )
+      copy = copy.replace(
+        /(<xdr:cNvPr\b[^>]*\bname=")([^"]*)(")/,
+        (_match, open, _name, close) => `${open}GachChan${shapeId}${close}`
+      )
+      const creationId = `{00000000-0008-0000-0000-${String(shapeId).padStart(12, "0")}}`
+      copy = copy.replace(
+        /(<a16:creationId\b[^>]*\bid=")\{[^"]*\}(")/,
+        (_match, open, close) => `${open}${creationId}${close}`
+      )
+      copies.push(copy)
+    }
+  }
+  let used = false
+  return drawingXml.replace(/<xdr:oneCellAnchor>[\s\S]*?<\/xdr:oneCellAnchor>/g, () => {
+    if (used) return ""
+    used = true
+    return copies.join("")
+  })
+}
+
+function ensureFitToPage(xml: string): string {
+  if (/<pageSetUpPr\b[^>]*fitToPage="1"/.test(xml)) return xml
+  if (/<pageSetUpPr\b/.test(xml)) {
+    return xml.replace(/<pageSetUpPr\b([^>]*?)\s*\/?>/, (_match, attrs: string) => {
+      const next = attrs.replace(/\s+fitToPage="[^"]*"/, "")
+      return `<pageSetUpPr${next} fitToPage="1"/>`
+    })
+  }
+  if (/<sheetPr\b[^>]*\/>/.test(xml)) {
+    return xml.replace(/<sheetPr\b([^>]*)\/>/, `<sheetPr$1><pageSetUpPr fitToPage="1"/></sheetPr>`)
+  }
+  if (/<sheetPr\b/.test(xml)) {
+    return xml.replace(/<sheetPr\b([^>]*)>/, `<sheetPr$1><pageSetUpPr fitToPage="1"/>`)
+  }
+  return xml.replace("<dimension", `<sheetPr><pageSetUpPr fitToPage="1"/></sheetPr><dimension`)
+}
+
+function absoluteCellRef(ref: string): string {
+  return ref.replace(/([A-Z]+)(\d+)/gi, "$$$1$$$2")
+}
+
+function quoteSheetName(name: string): string {
+  return `'${name.replace(/'/g, "''")}'`
+}
+
+/** Vùng in cũ của mẫu (A1:L32) không theo các dòng môn vừa chèn, nên phần dưới bị đẩy sang trang 2. */
+function rewritePrintAreas(zip: PizZip) {
+  const workbookEntry = zip.file("xl/workbook.xml")
+  const relsEntry = zip.file("xl/_rels/workbook.xml.rels")
+  if (!workbookEntry || !relsEntry) return
+  const rels = relsEntry.asText()
+  const sheetTags = [...workbookEntry.asText().matchAll(/<sheet\b[^>]*>/g)]
+  const areas: string[] = []
+  sheetTags.forEach((match, index) => {
+    const tag = match[0]
+    const name = tag.match(/\bname="([^"]*)"/)?.[1]
+    const relId = tag.match(/\br:id="([^"]+)"/)?.[1]
+    if (!name || !relId) return
+    const target = rels.match(new RegExp(`Id="${relId}"[^>]*Target="([^"]+)"`))?.[1]
+    const sheetPath = target ? `xl/${target.replace(/^\//, "")}` : `xl/worksheets/sheet${index + 1}.xml`
+    const sheetXml = zip.file(sheetPath)?.asText() ?? ""
+    const dimension = sheetXml.match(/<dimension\b[^>]*ref="([A-Z]+\d+:[A-Z]+\d+)"/i)?.[1]
+    const lastRow = [...sheetXml.matchAll(/<row\b[^>]*\br="(\d+)"/g)].reduce(
+      (max, row) => Math.max(max, Number(row[1])),
+      0
+    )
+    const usedRef = dimension
+      ? dimension.replace(/(\d+)$/, String(Math.max(lastRow, Number(dimension.match(/(\d+)$/)?.[1] ?? 0))))
+      : `A1:L${lastRow || 33}`
+    areas.push(
+      `<definedName name="_xlnm.Print_Area" localSheetId="${index}">${quoteSheetName(name)}!${absoluteCellRef(usedRef)}</definedName>`
+    )
+  })
+  if (!areas.length) return
+  let workbook = workbookEntry.asText().replace(/<definedName\b[^>]*name="_xlnm\.Print_Area"[\s\S]*?<\/definedName>/g, "")
+  if (/<definedNames>/.test(workbook)) {
+    workbook = workbook.replace("</definedNames>", `${areas.join("")}</definedNames>`)
+  } else {
+    workbook = workbook.replace("</workbook>", `<definedNames>${areas.join("")}</definedNames></workbook>`)
+  }
+  zip.file("xl/workbook.xml", workbook)
+}
+
+/** ExcelJS bỏ drawing và ghi thêm fit/căn trang. Gắn lại đúng phần đó từ file upload. */
+function restoreUploadedTemplateChrome(original: Buffer, output: Buffer): Buffer {
+  const src = new PizZip(original)
+  const dst = new PizZip(output)
+  const srcSheet = src.file("xl/worksheets/sheet1.xml")?.asText()
+  if (!srcSheet) return output
+
+  for (const name of Object.keys(src.files)) {
+    if (!name.startsWith("xl/drawings/") || name.endsWith("/")) continue
+    const file = src.file(name)
+    if (file && !dst.file(name)) dst.file(name, file.asUint8Array())
+  }
+
+  const drawingOverrides =
+    src.file("[Content_Types].xml")?.asText().match(/<Override[^>]*PartName="\/xl\/drawings\/[^"]+"[^>]*\/>/g) ??
+    []
+  const typesEntry = dst.file("[Content_Types].xml")
+  if (typesEntry && drawingOverrides.length) {
+    let types = typesEntry.asText()
+    for (const override of drawingOverrides) {
+      if (!types.includes(override)) types = types.replace("</Types>", `${override}</Types>`)
+    }
+    dst.file("[Content_Types].xml", types)
+  }
+
+  const sheetXmlNames = Object.keys(dst.files).filter((name) => /^xl\/worksheets\/sheet\d+\.xml$/i.test(name))
+  const stackedName =
+    sheetXmlNames.find((name) => /<brk\b/.test(dst.file(name)?.asText() ?? "")) ?? sheetXmlNames[0]
+  const stackedSheet = stackedName ? (dst.file(stackedName)?.asText() ?? "") : ""
+  const studentStarts = blockStartRows(stackedSheet)
+  const drawingFile = dst.file("xl/drawings/drawing1.xml")
+  if (drawingFile && studentStarts.length > 1) {
+    dst.file("xl/drawings/drawing1.xml", repeatDrawingAnchors(drawingFile.asText(), studentStarts))
+  }
+
+  const srcRels = src.file("xl/worksheets/_rels/sheet1.xml.rels")?.asText() ?? ""
+  const drawingRel = srcRels.match(/<Relationship\b[^>]*\/drawing[^>]*\/>/i)?.[0] ?? null
+  const pageMargins = firstXmlTag(srcSheet, "pageMargins")
+  const pageSetup = firstXmlTag(srcSheet, "pageSetup")
+  const printOptions = firstXmlTag(srcSheet, "printOptions")
+  const drawing = firstXmlTag(srcSheet, "drawing")
+  // ExcelJS ghi dyDescent="0.25" trên mọi dòng. Mẫu là 0.2, nên Excel hiện 20 thành 26,25 và 30 thành 40.
+  const rowDyDescent = srcSheet.match(/x14ac:dyDescent="([0-9.]+)"/)?.[1] ?? "0.2"
+
+  for (const name of Object.keys(dst.files)) {
+    if (!/^xl\/worksheets\/sheet\d+\.xml$/i.test(name)) continue
+    const entry = dst.file(name)
+    if (!entry) continue
+    let xml = entry.asText()
+    xml = xml.replace(/x14ac:dyDescent="[^"]*"/g, `x14ac:dyDescent="${rowDyDescent}"`)
+    if (pageMargins) xml = replaceXmlTag(xml, "pageMargins", pageMargins)
+    const fittedPageSetup = pageSetup ? fitPageSetupForPrint(pageSetup, blockStartRows(xml).length) : null
+    if (fittedPageSetup) xml = replaceXmlTag(xml, "pageSetup", fittedPageSetup)
+    xml = ensureFitToPage(xml)
+    xml = replaceXmlTag(xml, "printOptions", printOptions)
+    if (drawing) xml = replaceXmlTag(xml, "drawing", drawing)
+    dst.file(name, xml)
+
+    if (!drawingRel) continue
+    const relName = name.replace("xl/worksheets/", "xl/worksheets/_rels/") + ".rels"
+    const relEntry = dst.file(relName)
+    if (!relEntry) {
+      dst.file(
+        relName,
+        `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${drawingRel}</Relationships>`
+      )
+      continue
+    }
+    let rels = relEntry.asText()
+    if (!/\/drawing"/i.test(rels)) {
+      rels = rels.replace("</Relationships>", `${drawingRel}</Relationships>`)
+      dst.file(relName, rels)
+    }
+  }
+
+  rewritePrintAreas(dst)
+  // ExcelJS gắn theme Excel 2013. Excel 2016 trở đi nhân độ cao dòng × 1,3125 (20 → 26,25, 30 → 40).
+  const workbookEntry = dst.file("xl/workbook.xml")
+  const templateWorkbook = src.file("xl/workbook.xml")?.asText() ?? ""
+  if (workbookEntry) {
+    let workbookXml = workbookEntry.asText().replace(/\s+defaultThemeVersion="[^"]*"/g, "")
+    const fileVersion = templateWorkbook.match(/<fileVersion\b[^>]*\/>/)?.[0]
+    if (fileVersion) workbookXml = workbookXml.replace(/<fileVersion\b[^>]*\/>/, fileVersion)
+    dst.file("xl/workbook.xml", workbookXml)
+  }
+  return Buffer.from(dst.generate({ type: "nodebuffer", compression: "DEFLATE" }))
 }
 
 function enforceWorksheetFontFamily(worksheet: ExcelJS.Worksheet, fontFamily: string) {
@@ -785,6 +1139,240 @@ function applySheetTableBorders(worksheet: ExcelJS.Worksheet, sheetOption: Sheet
   }
 }
 
+function findMarkerRow(worksheet: ExcelJS.Worksheet, marker: string): number | null {
+  let found: number | null = null
+  worksheet.eachRow((row, rowNumber) => {
+    if (found != null) return
+    row.eachCell((cell) => {
+      if (found != null) return
+      if (cellPlainText(cell.value).includes(marker)) found = rowNumber
+    })
+  })
+  return found
+}
+
+type MergeBox = { top: number; left: number; bottom: number; right: number }
+
+function readMerges(worksheet: ExcelJS.Worksheet): MergeBox[] {
+  const boxes: MergeBox[] = []
+  for (const range of worksheet.model.merges || []) {
+    if (typeof range !== "string") continue
+    const [startRef, endRef] = range.split(":")
+    if (!startRef) continue
+    const start = worksheet.getCell(startRef)
+    const end = worksheet.getCell(endRef || startRef)
+    boxes.push({
+      top: Number(start.row),
+      left: Number(start.col),
+      bottom: Number(end.row),
+      right: Number(end.col),
+    })
+  }
+  return boxes
+}
+
+function isMergeSlave(boxes: MergeBox[], row: number, col: number) {
+  return boxes.some(
+    (box) =>
+      row >= box.top &&
+      row <= box.bottom &&
+      col >= box.left &&
+      col <= box.right &&
+      !(row === box.top && col === box.left)
+  )
+}
+
+function sheetMaxCol(worksheet: ExcelJS.Worksheet) {
+  return Math.max(worksheet.actualColumnCount || 0, worksheet.columnCount || 0, 12)
+}
+
+function copyRowCells(
+  source: ExcelJS.Row,
+  target: ExcelJS.Row,
+  maxCol: number,
+  slaveAt: (col: number) => boolean
+) {
+  target.height = source.height
+  for (let col = 1; col <= maxCol; col++) {
+    const from = source.getCell(col)
+    const to = target.getCell(col)
+    to.value = slaveAt(col) ? null : from.value
+    if (from.style && Object.keys(from.style).length > 0) {
+      to.style = JSON.parse(JSON.stringify(from.style)) as Partial<ExcelJS.Style>
+    }
+  }
+}
+
+function clearRow(row: ExcelJS.Row, maxCol: number) {
+  for (let col = 1; col <= maxCol; col++) {
+    row.getCell(col).value = null
+  }
+  delete (row as { height?: number }).height
+}
+
+/** Chèn dòng trống mà không dùng spliceRows — spliceRows làm vỡ ô gộp và lặp chữ. */
+function insertBlankRows(worksheet: ExcelJS.Worksheet, startRow: number, count: number) {
+  if (count <= 0) return
+  const merges = readMerges(worksheet)
+  const affected = merges.filter((box) => box.bottom >= startRow)
+  for (const box of affected) {
+    try {
+      worksheet.unMergeCells(box.top, box.left, box.bottom, box.right)
+    } catch {
+      /* ignore */
+    }
+  }
+  const maxCol = sheetMaxCol(worksheet)
+  const last = worksheet.lastRow?.number ?? startRow
+  for (let row = last; row >= startRow; row--) {
+    copyRowCells(worksheet.getRow(row), worksheet.getRow(row + count), maxCol, (col) =>
+      isMergeSlave(affected, row, col)
+    )
+    clearRow(worksheet.getRow(row), maxCol)
+  }
+  for (const box of affected) {
+    const top = box.top >= startRow ? box.top + count : box.top
+    const bottom = box.bottom + count
+    if (bottom < top || (top === bottom && box.left === box.right)) continue
+    try {
+      worksheet.mergeCells(top, box.left, bottom, box.right)
+    } catch {
+      /* ignore */
+    }
+  }
+}
+
+function deleteWorksheetRows(worksheet: ExcelJS.Worksheet, startRow: number, count: number) {
+  if (count <= 0) return
+  const merges = readMerges(worksheet)
+  const end = startRow + count - 1
+  const affected = merges.filter((box) => box.bottom >= startRow)
+  for (const box of affected) {
+    try {
+      worksheet.unMergeCells(box.top, box.left, box.bottom, box.right)
+    } catch {
+      /* ignore */
+    }
+  }
+  const maxCol = sheetMaxCol(worksheet)
+  const last = worksheet.lastRow?.number ?? startRow
+  for (let row = startRow + count; row <= last; row++) {
+    copyRowCells(worksheet.getRow(row), worksheet.getRow(row - count), maxCol, (col) =>
+      isMergeSlave(merges, row, col)
+    )
+  }
+  for (let row = Math.max(startRow, last - count + 1); row <= last; row++) {
+    clearRow(worksheet.getRow(row), maxCol)
+  }
+  for (const box of affected) {
+    if (box.top >= startRow && box.bottom <= end) continue
+    let top = box.top
+    let bottom = box.bottom
+    if (top > end) {
+      top -= count
+      bottom -= count
+    } else if (bottom >= startRow) {
+      const removed = Math.min(bottom, end) - Math.max(top, startRow) + 1
+      bottom -= removed
+    }
+    if (bottom < top || (top === bottom && box.left === box.right)) continue
+    try {
+      worksheet.mergeCells(top, box.left, bottom, box.right)
+    } catch {
+      /* ignore */
+    }
+  }
+}
+
+function unmergeRow(worksheet: ExcelJS.Worksheet, rowNumber: number) {
+  const merges = [...(worksheet.model.merges || [])]
+  for (const range of merges) {
+    if (typeof range !== "string") continue
+    const [startRef, endRef] = range.split(":")
+    if (!startRef) continue
+    const start = worksheet.getCell(startRef)
+    const end = worksheet.getCell(endRef || startRef)
+    const top = Number(start.row)
+    const bottom = Number(end.row)
+    if (rowNumber < top || rowNumber > bottom) continue
+    try {
+      worksheet.unMergeCells(range)
+    } catch {
+      /* ignore */
+    }
+  }
+}
+
+function captureRowStyles(worksheet: ExcelJS.Worksheet, rowNumber: number, colCount: number) {
+  const row = worksheet.getRow(rowNumber)
+  return Array.from({ length: colCount }, (_, index) => {
+    const style = row.getCell(index + 1).style
+    if (!style || Object.keys(style).length === 0) return undefined
+    return JSON.parse(JSON.stringify(style)) as Partial<ExcelJS.Style>
+  })
+}
+
+function writeTemplateDataRow(
+  worksheet: ExcelJS.Worksheet,
+  rowNumber: number,
+  rowData: TemplateValueRow,
+  styles: Array<Partial<ExcelJS.Style> | undefined>
+) {
+  const excelRow = worksheet.getRow(rowNumber)
+  if (rowData.height != null) excelRow.height = rowData.height
+  rowData.values.forEach((value, index) => {
+    const cell = excelRow.getCell(index + 1)
+    const style = styles[index]
+    if (style?.border) {
+      cell.border = JSON.parse(JSON.stringify(style.border)) as ExcelJS.Borders
+    }
+    const isName = index === 1 || index === 7
+    cell.alignment = {
+      horizontal: isName ? "left" : "center",
+      vertical: "middle",
+      wrapText: isName,
+    }
+    const { scheme: _scheme, ...font } = (cell.font ?? {}) as ExcelJS.Font & { scheme?: string }
+    cell.font = { ...font, name: "Times New Roman", size: 10, bold: false }
+    cell.value = sanitizeExcelCellValue(value ?? "") as ExcelJS.CellValue
+  })
+  excelRow.commit()
+}
+
+function applyTemplateInserts(worksheet: ExcelJS.Worksheet, inserts?: TemplateInsert[]) {
+  if (!inserts?.length) return
+  for (const insert of inserts) {
+    const before = insert.before ?? []
+    const after = insert.after ?? []
+    let markerRow = findMarkerRow(worksheet, insert.marker)
+    if (markerRow == null) continue
+
+    const colCount = Math.max(
+      ...before.map((row) => row.values.length),
+      ...after.map((row) => row.values.length),
+      1
+    )
+    const styles = captureRowStyles(worksheet, Math.max(1, markerRow - 1), colCount)
+
+    if (before.length) {
+      insertBlankRows(worksheet, markerRow, before.length)
+      before.forEach((row, index) => {
+        writeTemplateDataRow(worksheet, markerRow! + index, row, styles)
+      })
+      markerRow += before.length
+    }
+
+    if (after.length) {
+      insertBlankRows(worksheet, markerRow + 1, after.length)
+      after.forEach((row, index) => {
+        writeTemplateDataRow(worksheet, markerRow! + 1 + index, row, styles)
+      })
+    } else if (insert.removeMarkerWhenNoAfter) {
+      deleteWorksheetRows(worksheet, markerRow, 1)
+    }
+  }
+}
+
 function resetWorksheetContent(worksheet: ExcelJS.Worksheet) {
   const merges = [...(worksheet.model.merges || [])]
   for (const range of merges) {
@@ -874,19 +1462,36 @@ async function handleExcelJSDefault(
   const workbook = new ExcelJS.Workbook()
   await workbook.xlsx.load(toArrayBuffer(templateBuffer))
   const fontFamily = resolveExportFontFamily(options)
-  applyWorkbookFontFamily(workbook, fontFamily)
+  if (!options.preserveTemplateStyle) applyWorkbookFontFamily(workbook, fontFamily)
 
   const firstSheet = workbook.worksheets[0]
   if (!firstSheet) {
     throw new Error("Template is empty")
   }
-  for (const sheetOption of sheets) {
+  let usedOriginalSheet = false
+  const filledSheets: ExcelJS.Worksheet[] = []
+  const pristineCopies: ExcelJS.Worksheet[] = []
+  if (options.preserveTemplateStyle) {
+    const usedNames = new Set<string>([firstSheet.name])
+    for (let i = 0; i < sheets.length; i++) {
+      let name = String(sheets[i]?.sheet ?? `SV ${i + 1}`).slice(0, 31)
+      if (usedNames.has(name)) name = `${name.slice(0, 28)} ${i + 1}`.slice(0, 31)
+      usedNames.add(name)
+      pristineCopies.push(cloneWorksheet(workbook, firstSheet, name))
+    }
+  }
+  for (let sheetIndex = 0; sheetIndex < sheets.length; sheetIndex++) {
+    const sheetOption = sheets[sheetIndex]
+    if (!sheetOption) continue
     const { sheet, data = {}, rows, tableStartCell } = sheetOption
     let worksheet: ExcelJS.Worksheet | undefined
-    if (typeof sheet === "string" || typeof sheet === "number") {
+    const sheetName = String(sheet ?? firstSheet.name).slice(0, 31)
+    if (options.preserveTemplateStyle) {
+      worksheet = pristineCopies[sheetIndex]
+    } else if (typeof sheet === "string" || typeof sheet === "number") {
       worksheet = workbook.getWorksheet(sheet)
       if (!worksheet) {
-        worksheet = cloneWorksheet(workbook, firstSheet, String(sheet))
+        worksheet = cloneWorksheet(workbook, firstSheet, sheetName)
       }
     } else {
       worksheet = workbook.worksheets[0]
@@ -903,6 +1508,9 @@ async function handleExcelJSDefault(
       const boldDataKeys = sheetOption.boldDataKeys ?? []
       worksheet.eachRow((row) => {
         row.eachCell((cell) => {
+          const master = cell.master
+          if (master && master.address !== cell.address) return
+          if (options.preserveTemplateStyle && !cellHasTemplatePlaceholder(cell.value)) return
           const shouldBold = boldDataKeys.some((key) => cellContainsPlaceholder(cell.value, key))
           cell.value = replaceTemplatePlaceholders(cell.value, data)
           if (shouldBold) applyBoldToCell(cell)
@@ -910,6 +1518,16 @@ async function handleExcelJSDefault(
       })
       if (sheetOption.headerStylePreset === "phu-luc-van-bang") {
         applyPhuLucVanBangHeaderStyles(worksheet, (tableStartCell?.row ?? 14) - 1)
+      }
+      applyTemplateInserts(worksheet, sheetOption.templateInserts)
+      if (options.preserveTemplateStyle) {
+        const tableRow = findMarkerRow(worksheet, "Tên học phần")
+        if (tableRow != null) {
+          useThinBorders(worksheet, tableRow)
+          emphasizeDiplomaTableFrame(worksheet, tableRow)
+        }
+        const lastRow = worksheet.lastRow?.number ?? 1
+        worksheet.pageSetup.printArea = `A1:L${lastRow}`
       }
     } else {
       resetWorksheetContent(worksheet)
@@ -920,15 +1538,40 @@ async function handleExcelJSDefault(
     }
 
     applyColumnWidths(worksheet, sheetOption.columnWidths)
-    applyPageSetup(worksheet, options.pageSetup)
-    applyPrintArea(worksheet, sheetOption.columnWidths?.length)
+    if (!options.preserveTemplateStyle) {
+      applyPageSetup(worksheet, options.pageSetup)
+      applyPrintArea(worksheet, sheetOption.columnWidths?.length)
+    }
     applySheetTableBorders(worksheet, sheetOption)
-    enforceWorksheetFontFamily(worksheet, fontFamily)
+    if (!options.preserveTemplateStyle) enforceWorksheetFontFamily(worksheet, fontFamily)
+    filledSheets.push(worksheet)
   }
 
-  workbook.removeWorksheet(firstSheet.id)
-  const outBuffer = await workbook.xlsx.writeBuffer()
-  return rewriteXlsxFontFamily(Buffer.from(outBuffer), fontFamily)
+  if (options.preserveTemplateStyle && filledSheets.length > 1) {
+    const master = filledSheets[0]
+    if (master) {
+      for (let i = 1; i < filledSheets.length; i++) {
+        const source = filledSheets[i]
+        if (!source) continue
+        const breakAfter = master.lastRow?.number ?? 1
+        master.getRow(breakAfter).addPageBreak()
+        appendSheet(master, source, breakAfter + 1)
+        workbook.removeWorksheet(source.id)
+      }
+      master.name = String(options.sheetName || "PLVB").slice(0, 31)
+      const lastRow = master.lastRow?.number ?? 1
+      master.pageSetup.printArea = `A1:L${lastRow}`
+    }
+  }
+
+  if (!usedOriginalSheet) {
+    workbook.removeWorksheet(firstSheet.id)
+  }
+  const outBuffer = Buffer.from(await workbook.xlsx.writeBuffer())
+  const styled = rewriteXlsxFontFamily(outBuffer, fontFamily, options.preserveTemplateStyle)
+  if (!options.preserveTemplateStyle) return styled
+  const original = Buffer.isBuffer(templateBuffer) ? templateBuffer : Buffer.from(templateBuffer)
+  return restoreUploadedTemplateChrome(original, styled)
 }
 
 /** ──────────────── XLS: SheetJS ──────────────── */
@@ -1067,9 +1710,15 @@ function appendSheet(
 
     sourceRow.eachCell({ includeEmpty: true }, (sourceCell, colNumber) => {
       const newCell = newRow.getCell(colNumber)
-
-      // Sao chép giá trị
-      newCell.value = sourceCell.value
+      const master = sourceCell.master
+      const isSlave = master != null && master.address !== sourceCell.address
+      const value = sourceCell.value
+      newCell.value =
+        isSlave || value == null
+          ? null
+          : typeof value === "object"
+            ? (JSON.parse(JSON.stringify(value)) as ExcelJS.CellValue)
+            : value
 
       // Sao chép style
       if (sourceCell.style && Object.keys(sourceCell.style).length > 0) {
@@ -1124,7 +1773,7 @@ async function handleExcelJSMergeSheets(
   const workbook = new ExcelJS.Workbook()
   await workbook.xlsx.load(toArrayBuffer(templateBuffer))
   const fontFamily = resolveExportFontFamily(options)
-  applyWorkbookFontFamily(workbook, fontFamily)
+  if (!options.preserveTemplateStyle) applyWorkbookFontFamily(workbook, fontFamily)
 
   const firstSheet = workbook.worksheets[0] // Template
   if (!firstSheet) {
@@ -1160,6 +1809,7 @@ async function handleExcelJSMergeSheets(
       if (sheetOption.headerStylePreset === "phu-luc-van-bang") {
         applyPhuLucVanBangHeaderStyles(worksheet, (tableStartCell?.row ?? 14) - 1)
       }
+      applyTemplateInserts(worksheet, sheetOption.templateInserts)
     } else {
       resetWorksheetContent(worksheet)
     }
@@ -1170,7 +1820,7 @@ async function handleExcelJSMergeSheets(
 
     applyColumnWidths(worksheet, sheetOption.columnWidths)
     applySheetTableBorders(worksheet, sheetOption)
-    enforceWorksheetFontFamily(worksheet, fontFamily)
+    if (!options.preserveTemplateStyle) enforceWorksheetFontFamily(worksheet, fontFamily)
 
     // 1d. Thêm sheet đã xử lý vào danh sách tạm
     tempWorksheets.push(worksheet)
@@ -1222,11 +1872,11 @@ async function handleExcelJSMergeSheets(
     masterSheet.name = options.sheetName || "TongHopDiem"
     applyPageSetup(masterSheet, options.pageSetup)
     applyPrintArea(masterSheet, sheets[0]?.columnWidths?.length)
-    enforceWorksheetFontFamily(masterSheet, fontFamily)
+    if (!options.preserveTemplateStyle) enforceWorksheetFontFamily(masterSheet, fontFamily)
   }
 
   const outBuffer = await workbook.xlsx.writeBuffer()
-  return rewriteXlsxFontFamily(Buffer.from(outBuffer), fontFamily)
+  return rewriteXlsxFontFamily(Buffer.from(outBuffer), fontFamily, options.preserveTemplateStyle)
 }
 
 async function handleExcelJSExport(
