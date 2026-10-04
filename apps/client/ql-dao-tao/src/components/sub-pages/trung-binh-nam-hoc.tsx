@@ -191,14 +191,23 @@ const DiemTrungBinhKyHoc = () => {
   const { mutateAsync: exportExcel } = useExportStudentYearResult()
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const backgroundRefreshRef = useRef(false)
 
-  useEffect(() => {
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current)
-      }
+  const stopBackgroundRefresh = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+      intervalRef.current = null
     }
-  }, [])
+  }
+
+  useEffect(() => stopBackgroundRefresh, [])
+
+  const refreshInBackground = () => {
+    backgroundRefreshRef.current = true
+    return refetch().finally(() => {
+      backgroundRefreshRef.current = false
+    })
+  }
 
   const handleSummaryClick = async () => {
     if (!semesterId) {
@@ -228,14 +237,16 @@ const DiemTrungBinhKyHoc = () => {
       }
 
       message.success("Tổng kết kết quả năm học thành công, vui lòng chờ hệ thống cập nhật")
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current)
-      }
-
+      stopBackgroundRefresh()
+      const startedAt = Date.now()
+      void refreshInBackground()
       intervalRef.current = setInterval(() => {
-        refetch()
+        if (Date.now() - startedAt >= 3 * 60 * 1000) {
+          stopBackgroundRefresh()
+          return
+        }
+        void refreshInBackground()
       }, 5000)
-      refetch()
     } catch (error) {
       console.error("Lỗi khi tổng kết kết quả năm học:", error)
       message.error("Có lỗi xảy ra khi tổng kết kết quả năm học")
@@ -319,7 +330,7 @@ const DiemTrungBinhKyHoc = () => {
           <Table
             rowKey="id"
             className="m-0"
-            loading={isLoading || isFetching}
+            loading={(isLoading || isFetching) && !backgroundRefreshRef.current}
             filters={filters}
             setFilters={(value) => {
               setFilters(value)

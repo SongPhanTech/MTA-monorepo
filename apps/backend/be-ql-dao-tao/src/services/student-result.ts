@@ -2,6 +2,7 @@ import { getTemplateBuffer } from "@workspace/libs/server"
 import { formatDateVn } from "@workspace/libs/timezone"
 import type { Borders, Font, Alignment } from "exceljs"
 import { HTTPException } from "hono/http-exception"
+import PizZip from "pizzip"
 import XlsxTemplate from "xlsx-template"
 import { prisma } from ".."
 
@@ -42,6 +43,119 @@ const formatGpa = (val: any) => {
 // ${table:data.academicWarningLevel}	Academic Warning Level (Mức CC học vụ).
 // ${table:data.disciplinaryWarningLevel}	Disciplinary Warning Level (Mức CC rèn luyện).
 // ${table:data.note}	Note (Ghi chú - e.g., Học cải thiện, Tạm hoãn, Đình chỉ...).
+
+const isHiddenSemesterResultHeader = (value: unknown) => {
+  const label = String(value ?? "")
+    .trim()
+    .toLowerCase()
+  return (
+    label === "khoá" ||
+    label === "khóa" ||
+    label.startsWith("học kỳ thứ") ||
+    label.startsWith("năm học thứ")
+  )
+}
+
+const columnIndexFromRef = (ref: string) => {
+  const letters = ref.replace(/\d/g, "")
+  let index = 0
+  for (const char of letters) index = index * 26 + (char.charCodeAt(0) - 64)
+  return index
+}
+
+const decodeXmlText = (value: string) =>
+  value
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&amp;/g, "&")
+
+const sharedStringValues = (sharedXml: string) => {
+  const values: string[] = []
+  for (const item of sharedXml.matchAll(/<si\b[^>]*>([\s\S]*?)<\/si>/g)) {
+    const text = [...item[1]!.matchAll(/<t\b[^>]*>([\s\S]*?)<\/t>/g)]
+      .map((part) => decodeXmlText(part[1] ?? ""))
+      .join("")
+    values.push(text)
+  }
+  return values
+}
+
+const hiddenHeaderColumns = (sheetXml: string, sharedStrings: string[]) => {
+  const columns = new Set<number>()
+  for (const cell of sheetXml.matchAll(/<c\b([^>]*)>([\s\S]*?)<\/c>/g)) {
+    const attrs = cell[1] ?? ""
+    const ref = attrs.match(/\br="([A-Z]+\d+)"/)?.[1]
+    if (!ref || !/\bt="s"/.test(attrs)) continue
+    const index = Number(cell[2]?.match(/<v>(\d+)<\/v>/)?.[1])
+    if (!Number.isInteger(index) || !isHiddenSemesterResultHeader(sharedStrings[index])) continue
+    columns.add(columnIndexFromRef(ref))
+  }
+  return columns
+}
+
+const hideColumnRanges = (colsXml: string, hiddenColumns: Set<number>) => {
+  const columns = [...colsXml.matchAll(/<col\b([^>]*)\/>/g)].map((match) => {
+    const attrs = match[1] ?? ""
+    return {
+      min: Number(attrs.match(/\bmin="(\d+)"/)?.[1]),
+      max: Number(attrs.match(/\bmax="(\d+)"/)?.[1]),
+      attrs,
+    }
+  })
+
+  const pieces: string[] = []
+  for (const column of columns) {
+    if (!Number.isInteger(column.min) || !Number.isInteger(column.max)) {
+      pieces.push(`<col${column.attrs}/>`)
+      continue
+    }
+
+    let start = column.min
+    let hidden = hiddenColumns.has(start)
+    const emit = (from: number, to: number, isHidden: boolean) => {
+      let attrs = column.attrs
+        .replace(/\bmin="\d+"/, `min="${from}"`)
+        .replace(/\bmax="\d+"/, `max="${to}"`)
+        .replace(/\s+hidden="[^"]*"/, "")
+      if (isHidden) attrs += ' hidden="1"'
+      pieces.push(`<col${attrs}/>`)
+    }
+
+    for (let index = column.min + 1; index <= column.max; index++) {
+      const nextHidden = hiddenColumns.has(index)
+      if (nextHidden === hidden) continue
+      emit(start, index - 1, hidden)
+      start = index
+      hidden = nextHidden
+    }
+    emit(start, column.max, hidden)
+  }
+
+  return `<cols>${pieces.join("")}</cols>`
+}
+
+/** Ẩn cột trên XML mẫu, không ghi lại workbook để giữ nguyên AutoFilter của bảng. */
+const hideSemesterResultColumns = (buffer: Buffer) => {
+  const zip = new PizZip(buffer)
+  const sheetFile = zip.file("xl/worksheets/sheet1.xml")
+  const sharedFile = zip.file("xl/sharedStrings.xml")
+  if (!sheetFile || !sharedFile) return buffer
+
+  const sheetXml = sheetFile.asText()
+  const hiddenColumns = hiddenHeaderColumns(sheetXml, sharedStringValues(sharedFile.asText()))
+  if (hiddenColumns.size === 0) return buffer
+
+  const nextSheetXml = sheetXml.replace(/<cols>[\s\S]*?<\/cols>/, (colsXml) =>
+    hideColumnRanges(colsXml, hiddenColumns)
+  )
+  if (nextSheetXml === sheetXml) return buffer
+
+  zip.file("xl/worksheets/sheet1.xml", nextSheetXml)
+  return zip.generate({ type: "nodebuffer" }) as Buffer
+}
+
 export async function exportStudentSemesterResult({
   semesterId,
   trainingObjectTypeId,
@@ -149,7 +263,9 @@ export async function exportStudentSemesterResult({
     }
   })
 
-  const buffer = await getTemplateBuffer(prisma, "KET_QUA_HOC_TAP_HK.xlsx")
+  const buffer = hideSemesterResultColumns(
+    await getTemplateBuffer(prisma, "KET_QUA_HOC_TAP_HK.xlsx")
+  )
   const template = new XlsxTemplate(buffer)
 
   template.substitute(1, {

@@ -235,16 +235,6 @@ const DiemTrungBinhKyHoc = () => {
   const { mutateAsync: calculateSemesterResults } = useCalculateStudentSemesterResultJson()
   const { mutateAsync: exportExcel } = useExportStudentSemesterResult()
 
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
-
-  useEffect(() => {
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current)
-      }
-    }
-  }, [])
-
   const handleSummaryClick = async () => {
     if (!semesterId) {
       message.warning("Vui lòng chọn học kỳ")
@@ -267,15 +257,8 @@ const DiemTrungBinhKyHoc = () => {
         return
       }
 
-      message.success("Tổng kết kết quả học kỳ thành công, vui lòng chờ hệ thống cập nhật")
-
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current)
-      }
-
-      intervalRef.current = setInterval(() => {
-        refetch()
-      }, 5000)
+      message.success("Tổng kết kết quả học kỳ thành công")
+      void refetch()
     } catch (error) {
       console.error("Lỗi khi tổng kết kết quả học kỳ:", error)
       message.error("Có lỗi xảy ra khi tổng kết kết quả học kỳ")
