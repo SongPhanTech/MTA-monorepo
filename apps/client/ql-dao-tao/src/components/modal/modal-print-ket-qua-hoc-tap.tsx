@@ -244,7 +244,7 @@ const ModalPrintToKQHT = () => {
     },
     {
       title: "Mã sinh viên:",
-      value: <span>{input?.dataStudent?.code}</span>,
+      value: <span>{input?.dataStudent?.userProfile?.code}</span>,
     },
     {
       title: "Ngôn ngữ đào tạo:",

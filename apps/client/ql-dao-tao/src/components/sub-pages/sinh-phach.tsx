@@ -2,6 +2,7 @@ import { ClearOutlined, DeleteOutlined } from "@ant-design/icons"
 import Table from "@components/commons/table"
 import { examSuspendedReason } from "@constants/constants"
 import useSpinner from "@hooks/spinner"
+import { formatDate } from "@lib/utils"
 import { kythiStore } from "@pages/quan-ly-diem/nhap-diem-theo-phach"
 import { useStore } from "@tanstack/react-store"
 import {
@@ -29,6 +30,7 @@ import {
   Modal,
   message,
   Select,
+  Tooltip,
 } from "antd"
 import { Printer } from "lucide-react"
 import { useEffect, useState } from "react"
@@ -355,6 +357,26 @@ export default function SinhPhach() {
                 dataIndex: "fullname",
                 render: (_, record) =>
                   record?.studentSubjectScore?.student?.userProfile?.fullname || "không rõ",
+              },
+              {
+                title: "Ngày sinh",
+                width: 110,
+                align: "center",
+                render: (_, record) => {
+                  const dateOfBirth =
+                    record?.studentSubjectScore?.student?.userProfile?.dateOfBirth
+                  return dateOfBirth ? formatDate(dateOfBirth) : ""
+                },
+              },
+              {
+                title: "Lớp",
+                width: 120,
+                align: "center",
+                render: (_, record) => {
+                  const fixedClass = record?.studentSubjectScore?.student?.fixedClass
+                  if (!fixedClass?.code) return ""
+                  return <Tooltip title={fixedClass.name}>{fixedClass.code}</Tooltip>
+                },
               },
               {
                 title: "Điểm TX",
