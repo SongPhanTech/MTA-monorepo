@@ -1,3 +1,4 @@
+import { formatDateInSlash } from "@workspace/libs/timezone"
 import { useExamTypeOptions } from "@hooks/examType"
 import type { Prisma } from "@workspace/db/client"
 import { Button } from "antd"
@@ -336,7 +337,7 @@ const ExportTemplateExam = ({ dataTable, dataClass, disabled }: ExportTemplateEx
     worksheet.getCell("I6").value = "Ngày thi: "
     worksheet.getCell("I6").style = headerSubtitleStyleLeft
 
-    worksheet.getCell("J6").value = `${dayjs(dataClass?.examDate).format("DD/M/YYYY") || ""}`
+    worksheet.getCell("J6").value = `${formatDateInSlash(dataClass?.examDate) || ""}`
     worksheet.getCell("J6").style = headerSubtitleStyleLeft
 
     worksheet.getCell("E7").value = "Khoa: "
@@ -414,7 +415,7 @@ const ExportTemplateExam = ({ dataTable, dataClass, disabled }: ExportTemplateEx
         record?.student?.userProfile?.code || "",
         `${record.student?.userProfile?.fullname || ""}`,
         record.student?.userProfile?.dateOfBirth
-          ? dayjs(record.student.userProfile.dateOfBirth).format("DD/M/YYYY")
+          ? formatDateInSlash(record.student.userProfile.dateOfBirth)
           : "",
         record.student?.fixedClass?.code || "",
         record.attendanceScore || "0",

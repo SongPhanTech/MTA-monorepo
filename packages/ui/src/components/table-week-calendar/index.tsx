@@ -1,5 +1,6 @@
 import { ArrowLeftOutlined, ArrowRightOutlined, PlusOutlined } from "@ant-design/icons"
 import { useLocalStorage } from "@workspace/libs/hook/use-localstorage"
+import { formatThangIn } from "@workspace/libs/timezone"
 import { Button, Col, DatePicker, Row, Table } from "antd"
 import dayjs from "dayjs"
 import { useCallback, useEffect, useMemo, useState } from "react"
@@ -335,8 +336,8 @@ export function TableWeekCalendar({
             // Với multi-week events, hiển thị ngày gốc thay vì ngày đã cắt theo tuần
             const originalStart = new Date(eventStart)
             const originalEnd = new Date(eventEnd)
-            const startStr = `${pad(originalStart.getDate())}/${pad(originalStart.getMonth() + 1)}`
-            const endStr = `${pad(originalEnd.getDate())}/${pad(originalEnd.getMonth() + 1)}`
+            const startStr = `${pad(originalStart.getDate())}/${formatThangIn(originalStart.getMonth() + 1)}`
+            const endStr = `${pad(originalEnd.getDate())}/${formatThangIn(originalEnd.getMonth() + 1)}`
             groupKey = `Nhiều ngày|${startStr} - ${endStr}`
           } else {
             // Với multi-day events thường, hiển thị thứ như cũ
@@ -350,8 +351,8 @@ export function TableWeekCalendar({
                 weekday: "long",
               })
               .replace(/^thứ/, "Thứ")
-            const startStr = `${pad(displayStartDate.getDate())}/${pad(displayStartDate.getMonth() + 1)}`
-            const endStr = `${pad(displayEndDate.getDate())}/${pad(displayEndDate.getMonth() + 1)}`
+            const startStr = `${pad(displayStartDate.getDate())}/${formatThangIn(displayStartDate.getMonth() + 1)}`
+            const endStr = `${pad(displayEndDate.getDate())}/${formatThangIn(displayEndDate.getMonth() + 1)}`
             groupKey = `${startDayName} - ${endDayName}|${startStr} - ${endStr}`
           }
 
@@ -531,8 +532,8 @@ export function TableWeekCalendar({
 
     const pad = (num: number) => String(num).padStart(2, "0")
 
-    const startStr = `${pad(weekStart.getDate())}/${pad(weekStart.getMonth() + 1)}`
-    const endStr = `${pad(weekEnd.getDate())}/${pad(weekEnd.getMonth() + 1)}`
+    const startStr = `${pad(weekStart.getDate())}/${formatThangIn(weekStart.getMonth() + 1)}`
+    const endStr = `${pad(weekEnd.getDate())}/${formatThangIn(weekEnd.getMonth() + 1)}`
 
     return {
       title: `${startStr} - ${endStr} (Tuần ${weekNumber})`,
@@ -853,8 +854,8 @@ export function TableWeekCalendar({
                                 const originalStart = new Date(record.event.originalStartTime)
                                 const originalEnd = new Date(record.event.originalEndTime)
                                 const pad = (n: number) => String(n).padStart(2, "0")
-                                const startStr = `${pad(originalStart.getDate())}/${pad(originalStart.getMonth() + 1)}`
-                                const endStr = `${pad(originalEnd.getDate())}/${pad(originalEnd.getMonth() + 1)}`
+                                const startStr = `${pad(originalStart.getDate())}/${formatThangIn(originalStart.getMonth() + 1)}`
+                                const endStr = `${pad(originalEnd.getDate())}/${formatThangIn(originalEnd.getMonth() + 1)}`
                                 return `${startStr} - ${endStr}`
                               })()
                             : dateRange}
@@ -1022,7 +1023,7 @@ export function TableWeekCalendar({
                     const endTime = new Date(record.event?.endTime || weekEnd)
                     const pad = (n: number) => String(n).padStart(2, "0")
                     const formatTime = (d: Date) => `${pad(d.getHours())}:${pad(d.getMinutes())}`
-                    const formatDate = (d: Date) => `${pad(d.getDate())}/${pad(d.getMonth() + 1)}`
+                    const formatDate = (d: Date) => `${pad(d.getDate())}/${formatThangIn(d.getMonth() + 1)}`
 
                     // Kiểm tra nếu event đúng tròn 1 tuần (00:00 đầu tuần -> 23:59 cuối tuần)
                     const weekStartDate = new Date(weekStart)
@@ -1104,7 +1105,7 @@ export function TableWeekCalendar({
                     const formatTime = (d: Date) =>
                       `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`
                     const formatDate = (d: Date) =>
-                      `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}`
+                      `${String(d.getDate()).padStart(2, "0")}/${formatThangIn(d.getMonth() + 1)}`
 
                     // Nếu là multi-week event, hiển thị thông tin chi tiết hơn
                     if (event.isMultiWeekEvent) {
@@ -1182,7 +1183,7 @@ export function TableWeekCalendar({
                   const startTime = new Date(event.startTime)
                   const endTime = new Date(event.endTime)
                   const pad = (n: number) => String(n).padStart(2, "0")
-                  const formatDate = (d: Date) => `${pad(d.getDate())}/${pad(d.getMonth() + 1)}`
+                  const formatDate = (d: Date) => `${pad(d.getDate())}/${formatThangIn(d.getMonth() + 1)}`
                   // Chỉ coi là full-day nếu event thật sự là cả ngày (00:00:00 đến 23:59:59)
                   // Không áp dụng cho events có thời gian cụ thể
                   const isFullDayRange =

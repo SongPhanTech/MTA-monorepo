@@ -1,4 +1,5 @@
 import type { PrismaClient } from "@workspace/db"
+import { formatThangIn } from "@workspace/libs/timezone"
 import { HTTPException } from "hono/http-exception"
 
 export function parseDate(input?: number | string | Date): Date | null {
@@ -28,7 +29,7 @@ export function parseDate(input?: number | string | Date): Date | null {
 export const getCurrentDateForReport = () => {
   const currentDate = new Date()
   const date = String(currentDate.getDate()).padStart(2, "0")
-  const month = String(currentDate.getMonth() + 1)
+  const month = formatThangIn(currentDate.getMonth() + 1)
   const year = currentDate.getFullYear()
   return { date, month, year }
 }
@@ -217,8 +218,8 @@ export const buildCurriculumMapOrThrow = async (
       !existing.some(
         (version) =>
           version.name === curriculum &&
-          (!trainingMajor || trainingMajor === version.curriculum.trainingMajor.name) &&
-          (!trainingField || trainingField === version.curriculum.trainingMajor.trainingField.name)
+          (!trainingMajor || trainingMajor === version?.curriculum?.trainingMajor?.name) &&
+          (!trainingField || trainingField === version?.curriculum?.trainingMajor?.trainingField?.name)
       )
   )
 

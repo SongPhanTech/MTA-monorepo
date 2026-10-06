@@ -1,3 +1,4 @@
+import { formatDateInSlash, formatThangIn, formatThangNamIn } from "@workspace/libs/timezone"
 import { PrinterOutlined } from "@ant-design/icons"
 import { GridBlock } from "@components/commons/grid-block"
 import { useFindUniqueUserProfile } from "@workspace/db/hooks"
@@ -18,6 +19,7 @@ function formatDateOrPlaceholder(
   format: string
 ) {
   if (!value) return MISSING_DATE
+  if (format === "DD/M/YYYY") return formatDateInSlash(value) || MISSING_DATE
   const parsed = dayjs(value)
   return parsed.isValid() ? parsed.format(format) : MISSING_DATE
 }
@@ -27,7 +29,7 @@ type ModalLyLichCanBoInput = {
 }
 
 const ModalLyLichCanBo = () => {
-  const formattedDate = `..., Ngày ${dayjs().format("DD")} tháng ${dayjs().format("M")} năm ${dayjs().format("YYYY")}`
+  const formattedDate = `..., Ngày ${dayjs().format("DD")} tháng ${formatThangIn(dayjs().month() + 1)} năm ${dayjs().format("YYYY")}`
   const printRef = useRef<HTMLDivElement>(null)
 
   const { isOpen, onClose, input } = useDisclosure<ModalLyLichCanBoInput>({
@@ -290,7 +292,7 @@ const ModalLyLichCanBo = () => {
           <div className="w-[20%]">
             , Ngày hưởng:{" "}
             {initialData?.QuaTrinhLuong?.[0]?.tuNgay
-              ? dayjs(initialData.QuaTrinhLuong[0].tuNgay).format("DD/M/YYYY")
+              ? formatDateInSlash(initialData.QuaTrinhLuong[0].tuNgay)
               : ""}
           </div>
           <div className="w-[20%]">
@@ -336,12 +338,12 @@ const ModalLyLichCanBo = () => {
         <div className="flex w-full">
           <div className="w-[60%]">
             16) Ngày vào Đảng Cộng sản Việt Nam:{" "}
-            {initialData?.CPVJoinDate ? dayjs(initialData?.CPVJoinDate).format("DD/M/YYYY") : null}
+            {initialData?.CPVJoinDate ? formatDateInSlash(initialData?.CPVJoinDate) : null}
           </div>
           <div className="w-[40%]">
             , Ngày chính thức:{" "}
             {initialData?.officialCPVDate
-              ? dayjs(initialData?.officialCPVDate).format("DD/M/YYYY")
+              ? formatDateInSlash(initialData?.officialCPVDate)
               : null}
           </div>
         </div>
@@ -353,8 +355,8 @@ const ModalLyLichCanBo = () => {
                 [
                   item.ten?.name,
                   item?.congViec,
-                  dayjs(item?.tuNgay).format("DD/M/YYYY"),
-                  dayjs(item?.denNgay).format("DD/M/YYYY"),
+                  formatDateInSlash(item?.tuNgay),
+                  formatDateInSlash(item?.denNgay),
                 ]
                   .filter(Boolean)
                   .join(", ")
@@ -373,13 +375,13 @@ const ModalLyLichCanBo = () => {
           <div className="w-[33.3%]">
             18) Ngày nhập ngũ:{" "}
             {initialData?.enlistmentDate
-              ? dayjs(initialData?.enlistmentDate).format("DD/M/YYYY")
+              ? formatDateInSlash(initialData?.enlistmentDate)
               : null}
           </div>
           <div className="w-[33.3%]">
             Ngày xuất ngũ:{" "}
             {initialData?.dischargeDate
-              ? dayjs(initialData?.dischargeDate).format("DD/M/YYYY")
+              ? formatDateInSlash(initialData?.dischargeDate)
               : null}
           </div>
           <div className="w-[33.3%]">
@@ -394,7 +396,7 @@ const ModalLyLichCanBo = () => {
             {initialData?.khenThuong?.[0]
               ? `${initialData.khenThuong[0].hinhThucKhenThuong?.name || ""} ${
                   initialData.khenThuong[0].ngayNhanQuyetDinh
-                    ? `(${dayjs(initialData.khenThuong[0].ngayNhanQuyetDinh).format("DD/M/YYYY")})`
+                    ? `(${formatDateInSlash(initialData.khenThuong[0].ngayNhanQuyetDinh)})`
                     : ""
                 }`
               : ""}
@@ -404,7 +406,7 @@ const ModalLyLichCanBo = () => {
             {initialData?.kyLuat?.[0]
               ? `${initialData.kyLuat[0].hinhThucKyLuat || ""} ${
                   initialData.kyLuat[0].ngayNhanQuyetDinh
-                    ? `(${dayjs(initialData.kyLuat[0].ngayNhanQuyetDinh).format("DD/M/YYYY")})`
+                    ? `(${formatDateInSlash(initialData.kyLuat[0].ngayNhanQuyetDinh)})`
                     : null
                 }`
               : ""}
@@ -432,7 +434,7 @@ const ModalLyLichCanBo = () => {
           <div className="w-[33.3%]">25) Số chứng minh nhân dân: {initialData?.idCardNumber} </div>
           <div className="w-[33.3%]">
             Ngày cấp:{" "}
-            {initialData?.idCardDate ? dayjs(initialData?.idCardNumber).format("DD/M/YYYY") : null}
+            {initialData?.idCardDate ? formatDateInSlash(initialData?.idCardNumber) : null}
           </div>
           <div className="w-[33.3%]">26) Số sổ BHXH: {initialData?.healthInsuranceNumber}</div>
         </div>
@@ -503,8 +505,8 @@ const ModalLyLichCanBo = () => {
             {initialData?.quaTrinhCongTac.map((item, index) => (
               <tr key={item.id}>
                 <td className="border border-black p-1 h-[32px]">
-                  {item.tuThangNam ? dayjs(item.tuThangNam).format("MM/YYYY") : "....../......"} -{" "}
-                  {item.denThangNam ? dayjs(item.denThangNam).format("MM/YYYY") : "....../......"}
+                  {item.tuThangNam ? formatThangNamIn(item.tuThangNam) : "....../......"} -{" "}
+                  {item.denThangNam ? formatThangNamIn(item.denThangNam) : "....../......"}
                 </td>
 
                 <td className="border border-black p-1 h-[32px]">
@@ -514,7 +516,7 @@ const ModalLyLichCanBo = () => {
                     item.chucVuDangDoan,
                     item.soQuyetDinh,
                     item.ngayNhanQuyetDinh
-                      ? dayjs(item.ngayNhanQuyetDinh).format("DD/M/YYYY")
+                      ? formatDateInSlash(item.ngayNhanQuyetDinh)
                       : null,
                     item.chucVu?.sTen,
                   ]
@@ -646,7 +648,7 @@ const ModalLyLichCanBo = () => {
                     switch (headerIndex) {
                       case 0: // Tháng/năm
                         cellContent = salaryData.tuNgay
-                          ? dayjs(salaryData.tuNgay).format("MM/YYYY")
+                          ? formatThangNamIn(salaryData.tuNgay)
                           : ""
                         break
                       case 1: // Mã ngạch/bậc

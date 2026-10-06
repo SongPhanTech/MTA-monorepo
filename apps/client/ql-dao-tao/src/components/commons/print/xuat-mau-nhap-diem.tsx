@@ -1,3 +1,4 @@
+import { formatDateInSlash } from "@workspace/libs/timezone"
 import type { DiemLopMonHocProps } from "@pages/quan-ly-diem/ql-diem-lop-mon-hoc"
 import { Button } from "antd"
 import dayjs from "dayjs"
@@ -228,7 +229,7 @@ const ExportScoreTemplate = ({
         record.student?.userProfile?.code || "",
         `${record.student?.userProfile?.lastName || ""} ${record.student?.userProfile?.firstName || ""}`,
         record.student?.userProfile?.dateOfBirth
-          ? dayjs(record.student.userProfile.dateOfBirth).format("DD/M/YYYY")
+          ? formatDateInSlash(record.student.userProfile.dateOfBirth)
           : "",
         record.student?.fixedClass?.name || "",
         record.attendanceScore ?? "",

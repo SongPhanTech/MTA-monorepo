@@ -1,3 +1,4 @@
+import { formatDateInSlash, formatNgayIn, formatThangIn } from "@workspace/libs/timezone"
 import FormItem from "@components/commons/form-item"
 import Select from "@components/commons/select"
 import Table from "@components/commons/table"
@@ -5,7 +6,6 @@ import TableCollapse from "@components/commons/tableCollapse"
 import { ExportDiplomaAppendix } from "@components/ui/export-button"
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
-import { formatDateDMY } from "@lib/utils"
 import type { Semester, Student } from "@workspace/db"
 import {
   ApplicationStatus,
@@ -507,9 +507,7 @@ export type TStudentWithSemesters = TStudentWithSubjects & {
 
 function formatAppendixDate(date?: string | Date | dayjs.Dayjs | null) {
   if (!date) return ""
-  const d = dayjs(date)
-  if (!d.isValid()) return formatDateDMY(date as any) || ""
-  return d.format("DD/MM/YYYY")
+  return formatDateInSlash(date)
 }
 
 function getDiplomaAppendixHeaderData(student: TStudentWithSemesters) {
@@ -1208,7 +1206,6 @@ export default function StudentGradeSystem() {
       return
     }
     const signDate = printDate ? dayjs(printDate) : dayjs()
-    const pad2 = (n: number) => String(n).padStart(2, "0")
 
     const allSheetOptions: SheetExportOptions[] = studentsWithSemesters.map((student) => {
       const academicRankingConvert =
@@ -1265,8 +1262,8 @@ export default function StudentGradeSystem() {
           tong_tin_chi: String(tongTinChi),
           diem_tb: diemTBHe10.toFixed(2).replace(".", ","),
           xep_loai: xepLoai,
-          ngay: pad2(signDate.date()),
-          thang: pad2(signDate.month() + 1),
+          ngay: formatNgayIn(signDate.date()),
+          thang: formatThangIn(signDate.month() + 1),
           nam: String(signDate.year()),
           nguoi_ky: signerName?.trim() || "",
         },
@@ -1471,7 +1468,7 @@ export default function StudentGradeSystem() {
         cells: [
           { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL, border: false },
           {
-            value: `Hà Nội, ngày ${signDate.date()} tháng ${String(signDate.month() + 1).padStart(2, "0")} năm ${signDate.year()}`,
+            value: `Hà Nội, ngày ${formatNgayIn(signDate.date())} tháng ${formatThangIn(signDate.month() + 1)} năm ${signDate.year()}`,
             colSpan: SIGN_COL,
             align: "center",
             italic: true,

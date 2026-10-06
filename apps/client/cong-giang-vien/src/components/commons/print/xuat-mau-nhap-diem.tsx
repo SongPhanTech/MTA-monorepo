@@ -1,3 +1,4 @@
+import { formatDateInSlash } from "@workspace/libs/timezone"
 import { Button } from "antd"
 import dayjs from "dayjs"
 import ExcelJS from "exceljs"
@@ -237,7 +238,7 @@ const ExportScoreTemplate = ({
         record.student?.userProfile?.code || "",
         record.student?.userProfile?.fullname || "",
         record.student?.userProfile?.dateOfBirth
-          ? dayjs(record.student.userProfile.dateOfBirth).format("DD/M/YYYY")
+          ? formatDateInSlash(record.student.userProfile.dateOfBirth)
           : "",
         record.student?.fixedClass?.name || "",
         record.attendanceScore ?? "",

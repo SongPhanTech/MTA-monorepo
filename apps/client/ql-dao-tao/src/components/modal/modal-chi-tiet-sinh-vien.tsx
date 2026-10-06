@@ -6,6 +6,7 @@ import { FIXED_CLASS_STUDENT_STATUS, SCORE_CONVERT_STATUS } from "@constants/con
 import { useAcademicRankingBaseTypeOptions } from "@hooks/academicRankingBaseType"
 import { useStudentTrainingTypeOptions } from "@hooks/studentTrainingType"
 import { useFindUniqueStudent } from "@workspace/db/hooks"
+import { visibleScoreNote } from "@workspace/libs/bao-luu-diem"
 import { formatPlaceOfBirth } from "@workspace/libs/utils"
 
 dayjs.locale("vi")
@@ -1756,9 +1757,10 @@ const ModalChiTietSinhVien = () => {
               width: 150,
             },
             {
-              title: "Mô tả",
+              title: "Ghi chú",
               dataIndex: "description",
               width: 300,
+              render: (value: string | null) => visibleScoreNote(value),
             },
             {
               title: "Trạng thái",

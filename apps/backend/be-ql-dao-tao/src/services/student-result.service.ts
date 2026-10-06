@@ -21,6 +21,7 @@ import {
   type TrainingBlockSubject,
 } from "@workspace/db"
 import { criteriaFieldLabels, criteriaOperatorLabels } from "@workspace/libs/constants"
+import { formatDateVn } from "@workspace/libs/timezone"
 import { courseScoreConfigFrom, isFailedByCourseConfig } from "@workspace/libs/utils"
 import Decimal from "decimal.js"
 import pMap from "p-map"
@@ -111,7 +112,7 @@ const ThongTinTichLuy = async (
   curriculumVersionId: string,
   trainingCourseId: string,
   semesterStartDate: Date,
-  semesterEndDate?: Date,
+  _semesterEndDate?: Date,
   currentSemesterId?: string
 ) => {
   try {
@@ -192,6 +193,7 @@ const ThongTinTichLuy = async (
         graduation: true,
         subjectId: true,
         useForFinalScore: true,
+        semester: true,
       },
     })
 
@@ -200,20 +202,25 @@ const ThongTinTichLuy = async (
 
     // Kiểm tra tổng tích lũy tín chỉ của sinh viên đến kỳ xác định
     // Lấy tất cả điểm (kể cả lớp học lại), sau đó tự nhóm + lấy điểm cao nhất theo môn
-    const allSubjectScores = await prisma.studentSubjectScore.findMany({
+    const plannedSemesterBySubject = new Map(
+      curriculumSubjects.map((item) => [item.subjectId, item.semester ?? null])
+    )
+    const semesterIndexRows = await prisma.studentSemesterResult.findMany({
+      where: { studentId, deletedAt: null },
+      select: { semesterId: true, semesterIndexInCourse: true },
+    })
+    const indexBySemesterId = new Map(
+      semesterIndexRows.map((item) => [item.semesterId, item.semesterIndexInCourse])
+    )
+    const currentSemesterIndex = currentSemesterId
+      ? (indexBySemesterId.get(currentSemesterId) ?? kyDangHoc)
+      : kyDangHoc
+
+    const allSubjectScoresRaw = await prisma.studentSubjectScore.findMany({
       where: {
         OR: [
           {
             subjectClass: null,
-            createdAt:
-              shouldFilterByCurrentSemester && semesterEndDate
-                ? {
-                    gte: semesterStartDate,
-                    lte: semesterEndDate,
-                  }
-                : {
-                    lte: semesterStartDate, // lấy điểm nhập tay đến thời điểm kỳ đang xét
-                  },
           },
           {
             subjectClass: {
@@ -264,6 +271,17 @@ const ThongTinTichLuy = async (
         suspended: true, // Có đình chỉ học không
         exempted: true, // Có miễn thi không
       },
+    })
+
+    // Điểm không lớp (bảo lưu / chuyển điểm) tính theo kỳ dự kiến CTĐT, không theo ngày duyệt.
+    const allSubjectScores = allSubjectScoresRaw.filter((record) => {
+      if (record.subjectClass) return true
+      const planned = plannedSemesterBySubject.get(record.subjectVersionId)
+      if (shouldFilterByCurrentSemester) {
+        return planned != null && planned === currentSemesterIndex
+      }
+      if (planned == null) return true
+      return planned <= currentSemesterIndex
     })
 
     // Nhóm theo môn học và lấy điểm cao nhất (ưu tiên lớp học lại có điểm cao hơn)
@@ -1421,55 +1439,89 @@ export async function calculateStudentYearResult({
 
   const scoreToPass = student.fixedClass.trainingCourse.scoreToPass || 5.0 // Mặc định 4.0 hoặc 5.0 tùy quy chế
   const semesterIds = schoolYear.semesters.map((s) => s.id)
-
-  // 3. Lấy bảng điểm của sinh viên
-  // TODO: useForFinalScore lấy theo CTĐT
-  // Lấy TOÀN BỘ điểm từ trước đến nay để tính tích lũy
-  // Điểm dùng = manualFinalScore (phiên điểm / chuyển trường) ?? finalScore (học/thi)
-  const allScores = await prisma.studentSubjectScore.findMany({
-    where: {
-      studentId: studentId,
-      subjectClass: {
-        cancelled: false,
-        // Lọc điểm của các kỳ học kết thúc trước/trong năm học, HOẶC nằm trong chính năm học này
-        semester: {
-          OR: [{ id: { in: semesterIds } }, { endDate: { lte: schoolYear.endDate || new Date() } }],
-        },
-      },
-      // Chỉ lấy các môn được dùng để tính điểm tổng kết (loại bỏ GDQP, GDTC nếu cần)
-    },
-    include: {
-      subjectClass: { include: { semester: true } },
-      subjectVersion: true,
-    },
-  })
+  const yearEnd = schoolYear.endDate || new Date()
 
   // 3.1 Lấy thông tin môn học trong CTĐT của sinh viên
   const curriculumVersionId = student.curriculumVersionId || student.fixedClass?.curriculumVersionId
   if (!curriculumVersionId) throw new Error("Sinh viên chưa được gán CTĐT")
 
-  const trainingBlockSubjects = await prisma.trainingBlockSubject.findMany({
-    where: {
-      trainingBlockOnCurriculumVersion: {
-        curriculumVersionId: curriculumVersionId,
+  // Điểm dùng = manualFinalScore (phiên điểm / chuyển trường / bảo lưu) ?? finalScore (học/thi)
+  const [allScores, trainingBlockSubjects, semesterResults] = await Promise.all([
+    prisma.studentSubjectScore.findMany({
+      where: {
+        studentId: studentId,
+        OR: [
+          {
+            subjectClass: {
+              cancelled: false,
+              semester: {
+                OR: [{ id: { in: semesterIds } }, { endDate: { lte: yearEnd } }],
+              },
+            },
+          },
+          {
+            subjectClassId: null,
+            OR: [{ manualFinalScore: { not: null } }, { finalScore: { not: null } }],
+          },
+        ],
       },
-      active: true,
-      deletedAt: null,
-    },
-    select: {
-      subjectId: true,
-      useForFinalScore: true,
-      graduation: true,
-    },
-  })
+      include: {
+        subjectClass: { include: { semester: true } },
+        subjectVersion: true,
+      },
+    }),
+    prisma.trainingBlockSubject.findMany({
+      where: {
+        trainingBlockOnCurriculumVersion: {
+          curriculumVersionId: curriculumVersionId,
+        },
+        active: true,
+        deletedAt: null,
+      },
+      select: {
+        subjectId: true,
+        useForFinalScore: true,
+        graduation: true,
+        semester: true,
+      },
+    }),
+    prisma.studentSemesterResult.findMany({
+      where: { studentId, deletedAt: null },
+      select: {
+        semesterIndexInCourse: true,
+        semesterId: true,
+        semester: { select: { endDate: true } },
+      },
+    }),
+  ])
 
   const subjectConfigMap = new Map<string, { useForFinalScore: boolean; graduation: boolean }>()
+  const plannedIndexBySubject = new Map<string, number | null>()
   trainingBlockSubjects.forEach((tbs) => {
     subjectConfigMap.set(tbs.subjectId, {
       useForFinalScore: tbs.useForFinalScore,
       graduation: tbs.graduation,
     })
+    if (!plannedIndexBySubject.has(tbs.subjectId) || plannedIndexBySubject.get(tbs.subjectId) == null) {
+      plannedIndexBySubject.set(tbs.subjectId, tbs.semester ?? null)
+    }
   })
+  const semesterByIndex = new Map(semesterResults.map((item) => [item.semesterIndexInCourse, item]))
+
+  const manualScoreInYear = (subjectVersionId: string) => {
+    const index = plannedIndexBySubject.get(subjectVersionId)
+    if (index == null) return false
+    const mapped = semesterByIndex.get(index)
+    return mapped != null && semesterIds.includes(mapped.semesterId)
+  }
+
+  const manualScoreInCumulative = (subjectVersionId: string) => {
+    const index = plannedIndexBySubject.get(subjectVersionId)
+    if (index == null) return true
+    const mapped = semesterByIndex.get(index)
+    if (!mapped) return true
+    return semesterIds.includes(mapped.semesterId) || mapped.semester.endDate <= yearEnd
+  }
 
   // --- TÍNH TOÁN ---
   function convertScore10to4(score10: number): number {
@@ -1491,9 +1543,11 @@ export async function calculateStudentYearResult({
 
   // A. Phân loại điểm
   // Điểm trong năm học hiện tại
-  const scoresInYear = allScores.filter(
-    (s) => s.subjectClass && semesterIds.includes(s.subjectClass.semesterId)
-  )
+  const scoresInYear = allScores.filter((s) => {
+    if (s.subjectClass && semesterIds.includes(s.subjectClass.semesterId)) return true
+    if (!s.subjectClass) return manualScoreInYear(s.subjectVersionId)
+    return false
+  })
 
   const scoreToPassConditional = student.fixedClass.trainingCourse.scoreToPassConditional || 0
 
@@ -1571,6 +1625,7 @@ export async function calculateStudentYearResult({
   >()
 
   for (const record of allScores) {
+    if (!record.subjectClass && !manualScoreInCumulative(record.subjectVersionId)) continue
     const config = subjectConfigMap.get(record.subjectVersionId)
     if (!config || !config.useForFinalScore) continue
 
@@ -1987,11 +2042,7 @@ export const listStudentResultInfo = async (
           nganhId:
             student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.id ||
             "",
-          ngaySinh: (() => {
-            if (!userProfile?.dateOfBirth) return ""
-            const birthDate = new Date(userProfile.dateOfBirth)
-            return `${String(birthDate.getDate()).padStart(2, "0")}/${birthDate.getMonth() + 1}/${birthDate.getFullYear()}`
-          })(),
+          ngaySinh: userProfile?.dateOfBirth ? formatDateVn(userProfile.dateOfBirth) : "",
           heSoDiem: baseScore === AcademicRankingBaseType.Base10 ? 10 : 4, // Loại hệ số điểm, mặc định là 10
           fullDiemC: true,
           fullDiemD: true,

@@ -1,5 +1,5 @@
 import { CouncilRole, SupervisorRole } from "@workspace/db/client"
-import { formatDateVn, nowVn } from "@workspace/libs/timezone"
+import { formatDateVn, formatThangIn, nowVn } from "@workspace/libs/timezone"
 import {
   councilMemberProfile,
   councilRoleOrder,
@@ -192,7 +192,7 @@ export async function buildCouncilPaymentExportPayload(params: {
 
     return {
       ngay: now.format("DD"),
-      thang: now.format("M"),
+      thang: formatThangIn(now.month() + 1),
       nam: now.format("YYYY"),
       khoa: getStudentFromProject(firstProject!)?.fixedClass?.trainingCourse?.name || "",
       dotXet,
@@ -249,7 +249,7 @@ export async function buildSupervisorPaymentExportPayload(params: {
     if (!organizationMap.has(orgName)) {
       organizationMap.set(orgName, {
         ngay: now.format("DD"),
-        thang: now.format("M"),
+        thang: formatThangIn(now.month() + 1),
         nam: now.format("YYYY"),
         khoa: student.fixedClass?.trainingCourse?.name || "",
         dotXet: project.thesisSession?.name || "",

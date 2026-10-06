@@ -1,6 +1,7 @@
 import TabBieuDoHocTap from "@components/cong-giang-vien/ket-qua-hoc-tap/tab-bieu-do-hoc-tap"
 import type { KetQuaKyBieuDo } from "@hooks/use-bieu-do-hoc-tap-lop-quan-ly"
-import { useFindManyStudentSubjectScore } from "@workspace/db/hooks"
+import { useFindManyStudentSemesterResult, useFindManyStudentSubjectScore, useFindManyTrainingBlockSubject, useFindUniqueStudent } from "@workspace/db/hooks"
+import { baoLuuScoreDescriptionWhere, isBaoLuuScoreDescription } from "@workspace/libs/bao-luu-diem"
 import { $Enums } from "@workspace/db/client"
 import { Button, Card, Input, Select, Table, Tabs, Tag } from "antd"
 import type { ColumnsType } from "antd/es/table"
@@ -20,6 +21,7 @@ export type DiemHocKyRow = {
   diemHp: number | null
   diemChu: string
   ketQuaDat: boolean | null
+  baoLuu?: boolean
 }
 
 type HocKyOption = {
@@ -216,6 +218,58 @@ const BangDiemHocKy = ({
     { enabled: tabActive === "tong-hop-toan-khoa" && !!studentId }
   )
 
+  const { data: studentMini } = useFindUniqueStudent(
+    {
+      where: { id: studentId },
+      select: {
+        curriculumVersionId: true,
+        fixedClass: { select: { curriculumVersionId: true } },
+      },
+    },
+    { enabled: !!studentId && tabActive === "tong-hop-toan-khoa" }
+  )
+  const curriculumVersionId =
+    studentMini?.curriculumVersionId || studentMini?.fixedClass?.curriculumVersionId
+  const { data: plannedSubjects = [] } = useFindManyTrainingBlockSubject(
+    {
+      where: {
+        trainingBlockOnCurriculumVersion: { curriculumVersionId: curriculumVersionId || "" },
+        deletedAt: null,
+        active: true,
+      },
+      select: { subjectId: true, semester: true },
+    },
+    { enabled: !!curriculumVersionId && tabActive === "tong-hop-toan-khoa" }
+  )
+  const { data: semesterResults = [] } = useFindManyStudentSemesterResult(
+    {
+      where: { studentId, deletedAt: null },
+      include: {
+        semester: {
+          select: {
+            id: true,
+            code: true,
+            name: true,
+            schoolYear: { select: { name: true } },
+          },
+        },
+      },
+    },
+    { enabled: !!studentId && tabActive === "tong-hop-toan-khoa" }
+  )
+  const { data: baoLuuToanKhoa = [] } = useFindManyStudentSubjectScore(
+    {
+      where: {
+        studentId,
+        subjectClassId: null,
+        deletedAt: null,
+        ...baoLuuScoreDescriptionWhere(),
+      },
+      include: { subjectVersion: true },
+    },
+    { enabled: !!studentId && tabActive === "tong-hop-toan-khoa" }
+  )
+
   useEffect(() => {
     const el = vungBangRef.current
     if (!el || tabActive !== "bang-diem-hoc-ky") return
@@ -300,6 +354,7 @@ const BangDiemHocKy = ({
           diemHe4: number | null
           diemChu: string
           ketQuaDat: boolean | null
+          baoLuu?: boolean
         }>
       }
     >()
@@ -358,11 +413,62 @@ const BangDiemHocKy = ({
               ? true
               : false
             : null,
+        baoLuu: false,
       })
     }
 
+    if (hienThi === "tat_ca") {
+      const plannedBySubject = new Map<string, number | null>()
+      for (const block of plannedSubjects) {
+        if (!plannedBySubject.has(block.subjectId) || plannedBySubject.get(block.subjectId) == null) {
+          plannedBySubject.set(block.subjectId, block.semester ?? null)
+        }
+      }
+      const semesterByIndex = new Map(semesterResults.map((item) => [item.semesterIndexInCourse, item]))
+      for (const score of baoLuuToanKhoa) {
+        if (!isBaoLuuScoreDescription(score.description)) continue
+        const planned = plannedBySubject.get(score.subjectVersionId)
+        const mapped = planned != null ? semesterByIndex.get(planned) : undefined
+        const semester = mapped?.semester
+        if (!semester?.id) continue
+        const tenMonHoc = score.subjectVersion?.name ?? ""
+        const maMonHoc = score.subjectVersion?.code ?? ""
+        const q = tuKhoaToanKhoa.trim().toLowerCase()
+        if (q && !maMonHoc.toLowerCase().includes(q) && !tenMonHoc.toLowerCase().includes(q)) continue
+        if (!map.has(semester.id)) {
+          const kqKy = ketQuaTheoKy.find((item) => item.semesterId === semester.id)
+          map.set(semester.id, {
+            key: semester.id,
+            title: [semester.code, semester.name, semester.schoolYear?.name].filter(Boolean).join(" - "),
+            tbtl10: kqKy?.cumulativeGpaBase4 != null ? Number(kqKy.cumulativeGpaBase4) * 2.5 : null,
+            tbtl4: kqKy?.cumulativeGpaBase4 != null ? Number(kqKy.cumulativeGpaBase4) : null,
+            rows: [],
+          })
+        }
+        const group = map.get(semester.id)
+        if (group?.rows.some((row) => row.maMonHoc === maMonHoc && row.tenMonHoc === tenMonHoc)) continue
+        const diemHe10 = Number(score.manualFinalScore ?? score.finalScore)
+        group?.rows.push({
+          id: score.id,
+          maMonHoc,
+          tenMonHoc,
+          diemTx: null,
+          diemDk: null,
+          diemThi: null,
+          diemCong: 0,
+          diemTd: "—",
+          stc: score.subjectVersion?.credit ?? 0,
+          diemHe10: Number.isFinite(diemHe10) ? diemHe10 : null,
+          diemHe4: layDiemHe4(diemHe10),
+          diemChu: layDiemChu(Number.isFinite(diemHe10) ? diemHe10 : null),
+          ketQuaDat: Number.isFinite(diemHe10) ? diemHe10 >= 4 : null,
+          baoLuu: true,
+        })
+      }
+    }
+
     return Array.from(map.values())
-  }, [diemToanKhoaRaw, hienThi, ketQuaTheoKy, tuKhoaToanKhoa])
+  }, [diemToanKhoaRaw, hienThi, ketQuaTheoKy, tuKhoaToanKhoa, plannedSubjects, semesterResults, baoLuuToanKhoa])
 
   const tongKetToanKhoa = useMemo(() => {
     const allRows = dsToanKhoa.flatMap((group) => group.rows)
@@ -679,6 +785,9 @@ const BangDiemHocKy = ({
           dataSource={rows}
           loading={loading}
           pagination={false}
+          onRow={(record) =>
+            record.baoLuu ? { className: "[&>td]:!text-[#15803d]", style: { color: "#15803d" } } : {}
+          }
           scroll={{ x: 1040, y: chieuCaoBody }}
           bordered
           className="bang-lq-chi-tiet [&_.ant-table-thead>tr>th]:!bg-gray-50 [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400"
@@ -798,7 +907,9 @@ const BangDiemHocKy = ({
                               },
                               className: "cursor-pointer",
                             }
-                          : {}
+                          : record.rowType === "subject" && record.baoLuu
+                            ? { className: "[&>td]:!text-[#15803d]", style: { color: "#15803d" } }
+                            : {}
                       }
                       className="[&_.ant-table-thead>tr>th]:!bg-gray-50 [&_.ant-table-thead>tr>th]:!text-xs [&_.ant-table-thead>tr>th]:!font-semibold"
                     />

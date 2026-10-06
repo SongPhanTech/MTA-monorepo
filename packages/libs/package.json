@@ -7,6 +7,7 @@
         "./api/schemas": "./src/api/schemas/index.ts",
         "./api/*": "./src/api/*.ts",
         "./hook/*": "./src/hook/*.ts",
+        "./bao-luu-diem": "./src/bao-luu-diem.ts",
         "./constants": "./src/constants.ts",
         "./parseExcel": "./src/parseExcel.ts",
         "./template-excel": "./src/template-excel.ts",

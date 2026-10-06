@@ -1,3 +1,4 @@
+import { formatDateInSlash, formatDateVn, formatNgayIn, formatThangIn } from "@workspace/libs/timezone"
 import { normalizeVietnamese } from "@workspace/libs/utils"
 import clsx, { type ClassValue } from "clsx"
 import dayjs, { type Dayjs } from "dayjs"
@@ -11,19 +12,19 @@ const getPageCount = (totalItems: number, itemsPerPage: number) => {
 }
 
 const formatDate = (date: string | Date | Dayjs, unit?: "Day" | "Month" | "Year") => {
-  if (unit === "Year") return dayjs(date).format("YYYY")
-  if (unit === "Month") return dayjs(date).format("MM/YYYY")
-  return dayjs(date).format("DD/MM/YYYY")
+  if (unit === "Year") return formatDateVn(date, "YYYY")
+  if (unit === "Month") return formatDateVn(date, "MM/YYYY")
+  return formatDateInSlash(date)
 }
 
 const formatDateReadable = (date: string | Date | Dayjs) => {
   const d = dayjs(date)
-  return `${d.hour().toString().padStart(2, "0")}h:${d.minute().toString().padStart(2, "0")} - ${d.date().toString().padStart(2, "0")}/${(d.month() + 1).toString().padStart(2, "0")}/${d.year()}`
+  return `${d.hour().toString().padStart(2, "0")}h:${d.minute().toString().padStart(2, "0")} - ${formatNgayIn(d.date())}/${formatThangIn(d.month() + 1)}/${d.year()}`
 }
 
 const formatDateVN = (date: string | Date | Dayjs) => {
   const d = dayjs(date)
-  return `Ngày ${d.date().toString().padStart(2, "0")} tháng ${d.month() + 1} năm ${d.year()}`
+  return `Ngày ${formatNgayIn(d.date())} tháng ${formatThangIn(d.month() + 1)} năm ${d.year()}`
 }
 export function searchVietnamese(
   data: { value: string; label: string }[],

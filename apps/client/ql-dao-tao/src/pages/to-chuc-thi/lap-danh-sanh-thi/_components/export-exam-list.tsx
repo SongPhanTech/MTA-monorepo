@@ -1,3 +1,4 @@
+import { formatDateInSlash } from "@workspace/libs/timezone"
 import { DownloadOutlined } from "@ant-design/icons"
 import dayjs from "dayjs"
 import type { Prisma } from "@workspace/db/client"
@@ -323,7 +324,7 @@ function createExamSheet(worksheet: ExcelJS.Worksheet, params: CreateExamSheetPa
       student?.userProfile?.code || "",
       student?.userProfile?.fullname || "",
       student?.userProfile?.dateOfBirth
-        ? dayjs(student.userProfile.dateOfBirth).format("DD/M/YYYY")
+        ? formatDateInSlash(student.userProfile.dateOfBirth)
         : "",
       student?.fixedClass?.code || "",
       sss?.attendanceScore ?? "",

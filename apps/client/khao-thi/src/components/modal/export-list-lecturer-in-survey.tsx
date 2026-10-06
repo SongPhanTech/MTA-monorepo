@@ -1,3 +1,4 @@
+import { formatDateInSlash } from "@workspace/libs/timezone"
 import { DownloadOutlined } from "@ant-design/icons"
 import { sqlTransaction } from "@workspace/libs/api/model"
 
@@ -191,8 +192,8 @@ const ExportLecturerInSurvey = ({
                   .join("\n")
               : "",
             i?.userProfile?.phoneNumber || "",
-            i?.survey[0]?.startDate ? dayjs(i?.survey[0]?.startDate).format("DD/M/YYYY") : "",
-            i?.survey[0]?.endDate ? dayjs(i?.survey[0]?.endDate).format("DD/M/YYYY") : "",
+            i?.survey[0]?.startDate ? formatDateInSlash(i?.survey[0]?.startDate) : "",
+            i?.survey[0]?.endDate ? formatDateInSlash(i?.survey[0]?.endDate) : "",
           ]
           dataRow.eachCell((cell: ExcelJS.Cell, colNumber: number) => {
             cell.font = { ...golbalFontStyle, size: 14 }

@@ -1,5 +1,6 @@
+import { BAO_LUU_EXCEL_COLOR, isBaoLuuScoreDescription } from "@workspace/libs/bao-luu-diem"
 import { HTTPException } from "hono/http-exception"
-import { formatDateVn, nowVn } from "@workspace/libs/timezone"
+import { formatDateVn, formatNgayIn, formatThangIn, nowVn } from "@workspace/libs/timezone"
 import type { SheetExportOptions, TableRow } from "@workspace/libs/template-excel-core"
 import { prisma } from ".."
 import { buildFromTemplate } from "./build-from-template"
@@ -64,6 +65,7 @@ export async function exportBangDiemNganDaiHan({ studentIds }: { studentIds: str
     where: { id: { in: uniqueIds } },
     select: {
       id: true,
+      curriculumVersionId: true,
       userProfile: { select: { code: true, fullname: true, dateOfBirth: true } },
       curriculumVersion: {
         select: {
@@ -150,12 +152,51 @@ export async function exportBangDiemNganDaiHan({ studentIds }: { studentIds: str
         subjectVersionId: true,
         manualFinalScore: true,
         finalScore: true,
+        description: true,
         subjectVersion: { select: { id: true, name: true, credit: true } },
       },
     }),
   ])
 
-  type MonHoc = { TenMonhoc: string; soTC: number | null; diemhe10: number }
+  const curriculumVersionIds = [
+    ...new Set(
+      orderedStudents
+        .map((student) => student.curriculumVersionId || student.fixedClass?.curriculumVersionId)
+        .filter((id): id is string => Boolean(id))
+    ),
+  ]
+  const [trainingBlockSubjects, semesterResults] = await Promise.all([
+    curriculumVersionIds.length
+      ? prisma.trainingBlockSubject.findMany({
+          where: {
+            trainingBlockOnCurriculumVersion: { curriculumVersionId: { in: curriculumVersionIds } },
+            deletedAt: null,
+          },
+          select: {
+            subjectId: true,
+            semester: true,
+            trainingBlockOnCurriculumVersion: { select: { curriculumVersionId: true } },
+          },
+        })
+      : Promise.resolve([]),
+    prisma.studentSemesterResult.findMany({
+      where: { studentId: { in: ids }, deletedAt: null },
+      select: {
+        studentId: true,
+        semesterIndexInCourse: true,
+        semester: {
+          select: {
+            id: true,
+            code: true,
+            name: true,
+            schoolYear: { select: { name: true } },
+          },
+        },
+      },
+    }),
+  ])
+
+  type MonHoc = { TenMonhoc: string; soTC: number | null; diemhe10: number; baoLuu: boolean }
   type HocKi = { key: string; TenHocKi: string; monHocs: MonHoc[] }
 
   const today = nowVn()
@@ -177,6 +218,7 @@ export async function exportBangDiemNganDaiHan({ studentIds }: { studentIds: str
             TenMonhoc: subject?.name ?? "",
             soTC: toNumber(subject?.credit),
             diemhe10: getFinalScore(scs.manualFinalScore, scs.finalScore),
+            baoLuu: false,
           })
         }
       }
@@ -188,6 +230,20 @@ export async function exportBangDiemNganDaiHan({ studentIds }: { studentIds: str
       })
     }
 
+    const cvId = student.curriculumVersionId || student.fixedClass?.curriculumVersionId
+    const ctdtSemesterBySubject = new Map<string, number | null>()
+    for (const block of trainingBlockSubjects) {
+      if (block.trainingBlockOnCurriculumVersion.curriculumVersionId !== cvId) continue
+      if (!ctdtSemesterBySubject.has(block.subjectId) || ctdtSemesterBySubject.get(block.subjectId) == null) {
+        ctdtSemesterBySubject.set(block.subjectId, block.semester)
+      }
+    }
+    const ssrByIndex = new Map(
+      semesterResults
+        .filter((item) => item.studentId === student.id)
+        .map((item) => [item.semesterIndexInCourse, item])
+    )
+
     const phienHocKi: HocKi = { key: "phien-diem", TenHocKi: "Phiên điểm", monHocs: [] }
     const phienBySemester = new Map<string, MonHoc[]>()
     for (const score of phienDiemScores) {
@@ -198,11 +254,28 @@ export async function exportBangDiemNganDaiHan({ studentIds }: { studentIds: str
         TenMonhoc: subject.name,
         soTC: toNumber(subject.credit),
         diemhe10: getFinalScore(score.manualFinalScore, score.finalScore),
+        baoLuu: isBaoLuuScoreDescription(score.description),
       }
-      if (score.semesterId && hocKis.some((hk) => hk.key === score.semesterId)) {
-        const list = phienBySemester.get(score.semesterId) ?? []
+      const ctdtKy = ctdtSemesterBySubject.get(subject.id) ?? null
+      const mapped = ctdtKy != null ? ssrByIndex.get(ctdtKy) : undefined
+      const groupKey = mapped?.semester.id ?? (ctdtKy != null ? `ctdt-${ctdtKy}` : score.semesterId)
+      if (groupKey && hocKis.some((hk) => hk.key === groupKey)) {
+        const list = phienBySemester.get(groupKey) ?? []
         list.push(monHoc)
-        phienBySemester.set(score.semesterId, list)
+        phienBySemester.set(groupKey, list)
+      } else if (mapped) {
+        hocKis.push({
+          key: mapped.semester.id,
+          TenHocKi: [mapped.semester.code, mapped.semester.name, mapped.semester.schoolYear?.name]
+            .filter(Boolean)
+            .join(" - "),
+          monHocs: [monHoc],
+        })
+      } else if (ctdtKy != null) {
+        const virtualKey = `ctdt-${ctdtKy}`
+        const existing = hocKis.find((hk) => hk.key === virtualKey)
+        if (existing) existing.monHocs.push(monHoc)
+        else hocKis.push({ key: virtualKey, TenHocKi: `Học kỳ ${ctdtKy}`, monHocs: [monHoc] })
       } else {
         phienHocKi.monHocs.push(monHoc)
       }
@@ -217,10 +290,23 @@ export async function exportBangDiemNganDaiHan({ studentIds }: { studentIds: str
     const tableRows: TableRow[] = hocKis.flatMap((hocKi) =>
       hocKi.monHocs.map((monHoc) => ({
         cells: [
-          { value: globalCounter++ },
-          { value: monHoc.TenMonhoc, colSpan: 8, border: true },
-          { value: monHoc.soTC, align: "center" as const },
-          { value: monHoc.diemhe10 ?? 0, align: "right" as const },
+          { value: globalCounter++, ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}) },
+          {
+            value: monHoc.TenMonhoc,
+            colSpan: 8,
+            border: true,
+            ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}),
+          },
+          {
+            value: monHoc.soTC,
+            align: "center" as const,
+            ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}),
+          },
+          {
+            value: monHoc.diemhe10 ?? 0,
+            align: "right" as const,
+            ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}),
+          },
         ],
       }))
     )
@@ -288,7 +374,7 @@ export async function exportBangDiemNganDaiHan({ studentIds }: { studentIds: str
             { value: null, border: false },
             { value: null, border: false },
             {
-              value: `Hà Nội, ngày ${today.date()} tháng ${today.month() + 1} năm ${today.year()}`,
+              value: `Hà Nội, ngày ${formatNgayIn(today.date())} tháng ${formatThangIn(today.month() + 1)} năm ${today.year()}`,
               colSpan: 5,
               border: false,
               align: "center",

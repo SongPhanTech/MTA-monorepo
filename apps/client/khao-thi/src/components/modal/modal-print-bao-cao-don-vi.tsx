@@ -1,3 +1,4 @@
+import { formatThangIn } from "@workspace/libs/timezone"
 import { PrinterOutlined } from "@ant-design/icons"
 import { Button, Modal } from "antd"
 import dayjs from "dayjs"
@@ -167,7 +168,7 @@ const ModalPrintBaoCaoDonVi = () => {
 
         {/* ===== FOOTER ===== */}
         <div className="mt-6 text-right italic">
-          Hà Nội, ngày {dayjs().format("DD")} tháng {dayjs().format("M")} năm{" "}
+          Hà Nội, ngày {dayjs().format("DD")} tháng {formatThangIn(dayjs().month() + 1)} năm{" "}
           {dayjs().format("YYYY")}
         </div>
       </div>

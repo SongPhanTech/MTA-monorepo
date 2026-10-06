@@ -14,7 +14,13 @@ import {
 } from "react-big-calendar"
 import "react-big-calendar/lib/css/react-big-calendar.css"
 import "./style.css"
+import { withPrintMonth } from "@workspace/libs/timezone"
 import { cn } from "@workspace/ui/lib/utils"
+
+const formatMomentIn = (value: moment.Moment | Date, pattern: string) => {
+  const date = moment(value)
+  return date.format(withPrintMonth(pattern, date.month() + 1))
+}
 
 // Set Vietnamese locale
 moment.locale("vi")
@@ -192,12 +198,12 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
   const getCurrentLabel = useCallback(() => {
     switch (currentView) {
       case Views.MONTH:
-        return moment(currentDate).format("[Tháng] M [năm] YYYY")
+        return formatMomentIn(currentDate, "[Tháng] M [năm] YYYY")
       case Views.WEEK: {
         const start = moment(currentDate).startOf("week")
         const end = moment(currentDate).endOf("week")
         const weekNumber = moment(currentDate).week()
-        return `${start.format("DD/MM")} - ${end.format("DD/MM/YYYY")} (Tuần ${weekNumber})`
+        return `${formatMomentIn(start, "DD/MM")} - ${formatMomentIn(end, "DD/MM/YYYY")} (Tuần ${weekNumber})`
       }
       case Views.DAY:
         return moment(currentDate).format("dddd, DD MMMM [năm] YYYY")
@@ -645,7 +651,7 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
       const today = new Date()
       const isToday = isSameDay(date, today)
       const isHighlighted = highlightedDate && isSameDay(date, highlightedDate)
-      const raw = moment(date).format("dddd DD/MM")
+      const raw = formatMomentIn(date, "dddd DD/MM")
       const dayLabel = raw.charAt(0).toUpperCase() + raw.slice(1)
 
       const handleDateClick = (e: React.MouseEvent) => {
@@ -699,7 +705,7 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
       const isToday = isSameDay(date, today)
       const isHighlighted = highlightedDate && isSameDay(date, highlightedDate)
       const dayLabel = compact
-        ? moment(date).format("dddd, DD/MM")
+        ? formatMomentIn(date, "dddd, DD/MM")
         : moment(date).format("dddd, DD MMMM YYYY")
 
       const handleDateClick = (e: React.MouseEvent) => {

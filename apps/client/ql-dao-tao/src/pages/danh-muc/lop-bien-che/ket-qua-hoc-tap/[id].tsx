@@ -5,6 +5,7 @@ import TableCollapse from "@components/commons/tableCollapse"
 import type { FilterProps } from "@constants/type"
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
+import { baoLuuRowProps, isBaoLuuScoreDescription, visibleScoreNote } from "@workspace/libs/bao-luu-diem"
 import { convertScoreWithCourseConfig } from "@workspace/libs/utils"
 import {
   $Enums,
@@ -16,6 +17,7 @@ import {
   useFindManySemester,
   useFindManyStudentSubjectScore,
   useFindManySubjectVersion,
+  useFindManyTrainingBlockSubject,
   useFindUniqueStudent,
 } from "@workspace/db/hooks"
 import { customTrainingFetch } from "@workspace/libs/api/custom-instance"
@@ -139,7 +141,10 @@ export default function StudentScoreClassPage() {
           },
         },
         studentSemesterResult: {
-          include: { rank: true },
+          include: {
+            rank: true,
+            semester: { include: { schoolYear: true } },
+          },
         },
         studentYearResult: {
           where: { deletedAt: null, active: true },
@@ -196,6 +201,21 @@ export default function StudentScoreClassPage() {
       scoreToTakeExam,
       examScoreToPass,
     ]
+  )
+
+  const curriculumVersionId =
+    student?.curriculumVersionId || student?.fixedClass?.curriculumVersionId
+
+  const { data: plannedSubjects = [] } = useFindManyTrainingBlockSubject(
+    {
+      where: {
+        trainingBlockOnCurriculumVersion: { curriculumVersionId: curriculumVersionId || "" },
+        deletedAt: null,
+        active: true,
+      },
+      select: { subjectId: true, semester: true },
+    },
+    { enabled: !!curriculumVersionId }
   )
 
   const { data: manualScoreData = [] } = useFindManyStudentSubjectScore(
@@ -395,16 +415,100 @@ export default function StudentScoreClassPage() {
   }, [data, student?.studentSemesterResult])
 
   const dataWithSummary = useMemo(() => {
-    const semesters = data
+    const plannedBySubject = new Map<string, number | null>()
+    for (const block of plannedSubjects) {
+      if (!plannedBySubject.has(block.subjectId) || plannedBySubject.get(block.subjectId) == null) {
+        plannedBySubject.set(block.subjectId, block.semester ?? null)
+      }
+    }
+    const semesterByIndex = new Map(
+      (student?.studentSemesterResult ?? []).map((item) => [item.semesterIndexInCourse, item])
+    )
+    const baoLuuBySemester = new Map<string, any[]>()
+    const extraSemesters: any[] = []
+
+    if (!subjectClassTypeFilter) {
+      for (const score of manualScoreData) {
+        if (score.subjectClassId || !isBaoLuuScoreDescription(score.description)) continue
+        const planned = plannedBySubject.get(score.subjectVersionId)
+        const mapped = planned != null ? semesterByIndex.get(planned) : undefined
+        const row = {
+          id: `bao-luu-${score.id}`,
+          key: `bao-luu-${score.id}`,
+          baoLuu: true,
+          subject: score.subjectVersion,
+          subjectClassStudent: [
+            {
+              id: score.id,
+              manualFinalScore: score.manualFinalScore,
+              finalScore: score.finalScore,
+              attendanceScore: null,
+              midtermScore: null,
+              examScore: null,
+              awards: [],
+              certificates: [],
+              description: score.description,
+              subjectVersion: score.subjectVersion,
+            },
+          ],
+        }
+        if (mapped?.semester?.id) {
+          const list = baoLuuBySemester.get(mapped.semester.id) ?? []
+          list.push(row)
+          baoLuuBySemester.set(mapped.semester.id, list)
+          if (
+            !data.some((semester) => semester.id === mapped.semester.id) &&
+            !extraSemesters.some((semester) => semester.id === mapped.semester.id)
+          ) {
+            extraSemesters.push({
+              id: mapped.semester.id,
+              key: mapped.semester.id,
+              code: mapped.semester.code,
+              name: mapped.semester.name,
+              schoolYear: mapped.semester.schoolYear,
+              studentSemesterResult: [],
+              subjectClasses: [],
+            })
+          }
+        } else if (planned != null) {
+          const virtualId = `ctdt-${planned}`
+          const list = baoLuuBySemester.get(virtualId) ?? []
+          list.push(row)
+          baoLuuBySemester.set(virtualId, list)
+          if (!extraSemesters.some((semester) => semester.id === virtualId)) {
+            extraSemesters.push({
+              id: virtualId,
+              key: virtualId,
+              code: `Học kỳ ${planned}`,
+              name: "",
+              schoolYear: null,
+              studentSemesterResult: [],
+              subjectClasses: [],
+            })
+          }
+        }
+      }
+    }
+
+    const semesters = [...data, ...extraSemesters]
       .filter((s) => !semesterId || semesterId === s.id)
       .map((semester) => {
         const result = semesterResultById.get(semester.id)
-        if (!result) return semester
+        const existingSubjectIds = new Set(
+          (semester.subjectClasses ?? [])
+            .map((item: { subject?: { id?: string } }) => item.subject?.id)
+            .filter(Boolean)
+        )
+        const baoLuuRows = (baoLuuBySemester.get(semester.id) ?? []).filter(
+          (row) => !existingSubjectIds.has(row.subject?.id)
+        )
+        const subjectClasses = [...(semester.subjectClasses ?? []), ...baoLuuRows]
+        if (!result) return { ...semester, subjectClasses }
         return {
           ...semester,
           studentSemesterResult: [result],
           subjectClasses: [
-            ...semester.subjectClasses,
+            ...subjectClasses,
             {
               id: `summary-${semester.id}`,
               $isSummary: true,
@@ -430,7 +534,16 @@ export default function StudentScoreClassPage() {
         subjectClasses: [],
       },
     ]
-  }, [data, semesterId, latestYearResult, semesterResultById])
+  }, [
+    data,
+    semesterId,
+    latestYearResult,
+    semesterResultById,
+    plannedSubjects,
+    manualScoreData,
+    student?.studentSemesterResult,
+    subjectClassTypeFilter,
+  ])
 
   const exportTemplate = async () => {
     if (!studentId) {
@@ -656,6 +769,7 @@ export default function StudentScoreClassPage() {
             </Flex>
             <TableCollapse
               rowKey="key"
+              onRow={(record: any) => baoLuuRowProps(!!record?.baoLuu)}
               currentPage={1}
               headerTitleKey={({ code, name, schoolYear }) => (
                 <p className="font-bold text-base">
@@ -970,8 +1084,8 @@ export default function StudentScoreClassPage() {
                       )
                     }
                     return (
-                      <Tooltip title={value}>
-                        <span className="line-clamp-2">{value}</span>
+                      <Tooltip title={visibleScoreNote(value)}>
+                        <span className="line-clamp-2">{visibleScoreNote(value)}</span>
                       </Tooltip>
                     )
                   },
@@ -1032,19 +1146,29 @@ export default function StudentScoreClassPage() {
                 {
                   title: "Tên môn học",
                   align: "center",
-                  render: (_, record) => record?.subjectVersion?.name,
+                  render: (_, record) => (
+                    <span style={isBaoLuuScoreDescription(record.description) ? { color: "#15803d" } : undefined}>
+                      {record?.subjectVersion?.name}
+                    </span>
+                  ),
                 },
                 {
                   title: "Điểm",
                   dataIndex: "manualFinalScore",
                   align: "center",
                   width: 150,
+                  render: (value, record) => (
+                    <span style={isBaoLuuScoreDescription(record.description) ? { color: "#15803d" } : undefined}>
+                      {value}
+                    </span>
+                  ),
                 },
                 {
                   title: "Ghi chú",
                   dataIndex: "description",
                   align: "center",
                   width: 250,
+                  render: (value: string) => visibleScoreNote(value),
                 },
               ]}
               data={manualScoreData}

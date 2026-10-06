@@ -1,3 +1,4 @@
+import { formatDateInSlash } from "@workspace/libs/timezone"
 import { DownloadOutlined } from "@ant-design/icons"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { Button, Flex } from "antd"
@@ -235,7 +236,7 @@ const ExportStudentInSurvey = ({
               i?.student?.userProfile?.code || "",
               `${i?.student?.userProfile?.lastName || ""} ${i?.student?.userProfile?.firstName || ""}`,
               i?.student?.userProfile?.dateOfBirth
-                ? dayjs(i?.student?.userProfile?.dateOfBirth).format("DD/M/YYYY")
+                ? formatDateInSlash(i?.student?.userProfile?.dateOfBirth)
                 : "",
               i?.student?.userProfile?.phoneNumber || "",
               i?.student ? `${i?.student?.fixedClass?.code || ""}` : "",

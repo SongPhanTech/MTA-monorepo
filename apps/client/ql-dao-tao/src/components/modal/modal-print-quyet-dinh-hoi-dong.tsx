@@ -1,3 +1,4 @@
+import { formatDateInSlash } from "@workspace/libs/timezone"
 import { PrinterOutlined } from "@ant-design/icons"
 import { useCouncilRoleOptions } from "@hooks/councilRole"
 import type {
@@ -167,7 +168,7 @@ const ModalPrintDecision = () => {
                     const trainingCourse = registration.student?.fixedClass?.trainingCourse
                     return `${fullname}${
                       dateOfBirth
-                        ? `, sinh ngày ${dayjs(dateOfBirth).format("DD/M/YYYY")}
+                        ? `, sinh ngày ${formatDateInSlash(dateOfBirth)}
                                         ${trainingCourse ? `, ${trainingCourse.name}(${trainingCourse.startYear}-${trainingCourse.endYear})` : ""}`
                         : ""
                     }`

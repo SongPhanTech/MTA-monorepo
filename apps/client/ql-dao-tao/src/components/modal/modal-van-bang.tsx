@@ -1,3 +1,4 @@
+import { formatThangIn } from "@workspace/libs/timezone"
 import useSpinner from "@hooks/spinner"
 import { useFindUniqueStudent, useUpdateGraduationDecision } from "@workspace/db/hooks"
 import { getRuntimeEnv } from "@workspace/libs/utils"
@@ -9,7 +10,7 @@ import { useDisclosure } from "react-hook-disclosure-modal"
 import { useReactToPrint } from "react-to-print"
 
 export const ModalVanBang = () => {
-  const formattedDate = `Hà Nội, ngày ${dayjs().format("DD")} tháng ${dayjs().format("M")} năm ${dayjs().format("YYYY")}`
+  const formattedDate = `Hà Nội, ngày ${dayjs().format("DD")} tháng ${formatThangIn(dayjs().month() + 1)} năm ${dayjs().format("YYYY")}`
   const {
     isOpen,
     onClose,

@@ -2,6 +2,7 @@ import { Column, Pie } from "@ant-design/plots"
 import { useClassRegisterStatus } from "@hooks/classRegisterStatus"
 import useSpinner from "@hooks/spinner"
 import { ClassRegisterStatus } from "@workspace/db"
+import { formatDateInSlash } from "@workspace/libs/timezone"
 import {
   useFindManyClassRegisterLogs,
   useFindManyStudent,
@@ -435,8 +436,7 @@ export default function ThongKeDangKy({ sessionId }: Props) {
               idx + 1,
               s.code,
               s.name,
-              s.dateOfBirth
-                ? `${String(new Date(s.dateOfBirth).getDate()).padStart(2, "0")}/${new Date(s.dateOfBirth).getMonth() + 1}/${new Date(s.dateOfBirth).getFullYear()}`
+              s.dateOfBirth ? formatDateInSlash(s.dateOfBirth)
                 : "",
               s.fixedClassCode,
               s.logCount,

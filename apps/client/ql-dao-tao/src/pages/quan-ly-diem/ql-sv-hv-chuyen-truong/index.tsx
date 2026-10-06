@@ -13,6 +13,7 @@ import {
   useFindManyStudentScoreConvert,
   useUpdateStudentScoreConvert,
 } from "@workspace/db/hooks"
+import { visibleScoreNote } from "@workspace/libs/bao-luu-diem"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
 import { Select } from "@workspace/ui"
@@ -274,10 +275,11 @@ export default function StudentScoreConvertPage() {
                 render: (_, record) => record._count.subjectScoreConvert,
               },
               {
-                title: "Mô tả",
+                title: "Ghi chú",
                 align: "left",
                 dataIndex: "description",
                 width: 250,
+                render: (value: string | null) => visibleScoreNote(value),
               },
               {
                 title: "Trạng thái phiếu",

@@ -1,4 +1,5 @@
 import { CouncilRole, ThesisType } from "@workspace/db/client"
+import { formatThangIn } from "@workspace/libs/timezone"
 import ExcelJS from "exceljs"
 import { prisma } from ".."
 
@@ -70,7 +71,7 @@ function formatDate(value: Date | string | null | undefined) {
   const date = value instanceof Date ? value : new Date(value)
   if (Number.isNaN(date.getTime())) return ""
   const day = String(date.getDate()).padStart(2, "0")
-  const month = String(date.getMonth() + 1)
+  const month = formatThangIn(date.getMonth() + 1)
   const year = date.getFullYear()
   return `${day}/${month}/${year}`
 }

@@ -1,7 +1,7 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { $Enums, Prisma, type ScoreConvert } from "@workspace/db"
 import { examTypeOptions } from "@workspace/libs/constants"
-import { formatDateTimeVn, formatDateVn, nowVn } from "@workspace/libs/timezone"
+import { formatDateTimeIn, formatDateVn, formatNgayIn, formatThangIn, nowVn } from "@workspace/libs/timezone"
 import { fetchMinio, getScoreStatistics, convertScoreWithCourseConfig, courseScoreConfigFrom } from "@workspace/libs/utils"
 import { read, utils } from "xlsx"
 import XlsxTemplate from "xlsx-template"
@@ -1069,7 +1069,11 @@ app.openapi(exportSubjectClassScore, async (c) => {
         where: {
           deletedAt: null,
           student: { deletedAt: null },
-          ...(type === "DANH-SACH-THI"
+          // Phiếu DS thi trên màn nhập điểm (cổng đào tạo và cổng giảng viên) không truyền
+          // examId: in toàn bộ sinh viên của lớp. "Lên danh sách thi" chỉ tạo ExamList,
+          // ExamPaper chỉ có sau "Lấy điểm SV" — lọc bài thi khi không có examId sẽ ra bảng trống.
+          // Chỉ lọc theo bài thi khi caller truyền đúng kỳ thi.
+          ...(type === "DANH-SACH-THI" && examId
             ? {
                 examPaper: {
                   is: {
@@ -1080,7 +1084,7 @@ app.openapi(exportSubjectClassScore, async (c) => {
                         examRoom: {
                           is: {
                             deletedAt: null,
-                            ...(examId ? { examId } : {}),
+                            examId,
                             exam: {
                               deletedAt: null,
                               subjectClass: { some: { id: id ?? "" } },
@@ -1264,7 +1268,7 @@ app.openapi(exportSubjectClassScore, async (c) => {
     currentUser?.fullName ||
     currentUser?.userName ||
     ""
-  const THOI_GIAN_IN = formatDateTimeVn(printedAt, "HH:mm:ss DD/M/YYYY")
+  const THOI_GIAN_IN = formatDateTimeIn(printedAt)
   const data = {
     HOC_KY: subjectClass.semester?.name || "",
     MA_LMH: subjectClass.code,
@@ -1290,8 +1294,8 @@ app.openapi(exportSubjectClassScore, async (c) => {
         }`,
     KHOA: subjectClass.subject?.managementOrganization?.sCode || "",
     HINH_THUC_THI: examTypeOptions.find((et) => et.value === subjectClass.examType)?.label || "",
-    d: printedAt.date(),
-    m: printedAt.month() + 1,
+    d: formatNgayIn(printedAt.date()),
+    m: formatThangIn(printedAt.month() + 1),
     y: printedAt.year(),
     CHUC_DANH_KY: role === "P13" ? "BAN KHẢO THÍ & ĐBCL GD-ĐT" : "CHỦ NHIỆM BỘ MÔN",
     NGUOI_IN,
@@ -1350,11 +1354,16 @@ app.openapi(exportSubjectClassScore, async (c) => {
   const worksheet = workbook.getWorksheet(1)
 
   if (worksheet) {
+    // Chỉ oddFooter. Gán cả evenFooter thì OnlyOffice vẽ cả hai trên cùng một trang.
     worksheet.headerFooter = {
       ...worksheet.headerFooter,
+      differentOddEven: false,
+      evenFooter: "",
+      firstFooter: "",
       oddFooter: `&LNgười in: ${NGUOI_IN}&C&P/&N&R${THOI_GIAN_IN}`,
-      evenFooter: `&LNgười in: ${NGUOI_IN}&C&P/&N&R${THOI_GIAN_IN}`,
     }
+    // Mẫu danh sách thi còn một hàng ô ${NGUOI_IN} | 1/1 | ${THOI_GIAN_IN} ngay dưới chữ ký.
+    clearEmbeddedPrintFooter(worksheet, NGUOI_IN, THOI_GIAN_IN)
     const headerRange = findTableHeaderRange(worksheet)
     if (headerRange) {
       const firstDataRow = headerRange.end + 1
@@ -1538,6 +1547,34 @@ function rowHasUniqueSubheaderText(row: ExcelJS.Row, headerTexts: string[]): boo
   if (!nextTexts.length) return false
   const headerSet = new Set(headerTexts)
   return nextTexts.some((text) => !headerSet.has(text))
+}
+
+/** Bỏ hàng người in/giờ in nằm trong thân sheet. Footer in thật nằm ở headerFooter. */
+function clearEmbeddedPrintFooter(
+  worksheet: ExcelJS.Worksheet,
+  nguoiIn: string,
+  thoiGianIn: string
+) {
+  if (!nguoiIn && !thoiGianIn) return
+  const rows: number[] = []
+  worksheet.eachRow({ includeEmpty: false }, (row) => {
+    let hasName = false
+    let hasTime = false
+    row.eachCell({ includeEmpty: false }, (cell) => {
+      const text = excelCellText(cell)
+      if (nguoiIn && text === nguoiIn) hasName = true
+      if (thoiGianIn && text === thoiGianIn) hasTime = true
+    })
+    if (hasName && hasTime) rows.push(row.number)
+  })
+  for (const rowNumber of rows) {
+    worksheet.getRow(rowNumber).eachCell({ includeEmpty: false }, (cell) => {
+      const text = excelCellText(cell)
+      if (text === nguoiIn || text === thoiGianIn || text === "1/1") {
+        cell.value = null
+      }
+    })
+  }
 }
 
 function findLastDataRow(worksheet: ExcelJS.Worksheet, firstDataRow: number): number {

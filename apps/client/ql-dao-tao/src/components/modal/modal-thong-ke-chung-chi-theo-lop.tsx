@@ -1,4 +1,5 @@
 import { ArchivedCertificateStatus } from "@workspace/db/client"
+import { formatDateInSlash } from "@workspace/libs/timezone"
 import {
   useFindManyCertificate,
   useFindManyFixedClass,
@@ -42,7 +43,7 @@ const formatIssuedDate = (value?: string | Date | null) => {
   if (!value) return ""
   const date = new Date(value)
   if (Number.isNaN(date.getTime())) return ""
-  return `${String(date.getDate()).padStart(2, "0")}/${date.getMonth() + 1}/${date.getFullYear()}`
+  return formatDateInSlash(date)
 }
 
 const pickCertKind = (

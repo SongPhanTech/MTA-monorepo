@@ -4,7 +4,8 @@ import TheHeaderKetQuaHocTap, {
 } from "@components/cong-giang-vien/ket-qua-hoc-tap/the-header-ket-qua-hoc-tap"
 import { chiTietLopQuanLyPath } from "@/utils/cong-giang-vien-path-helper"
 import { useScoreConverter } from "@hooks/scoreConverter"
-import { useFindManyStudentSubjectScore, useFindUniqueStudent } from "@workspace/db/hooks"
+import { useFindManyStudentSubjectScore, useFindManyTrainingBlockSubject, useFindUniqueStudent } from "@workspace/db/hooks"
+import { baoLuuScoreDescriptionWhere, isBaoLuuScoreDescription } from "@workspace/libs/bao-luu-diem"
 import { courseScoreConfigFrom } from "@workspace/libs/utils"
 import { Alert, Button, Skeleton } from "antd"
 import dayjs from "dayjs"
@@ -23,6 +24,7 @@ type RowData = {
   diemHp: number | null
   diemChu: string
   ketQuaDat: boolean | null
+  baoLuu?: boolean
 }
 
 const dinhDangNgay = (value?: string | Date | null) =>
@@ -160,32 +162,104 @@ export default function KetQuaHocTapSinhVienPage() {
     { enabled: !!studentId && !!semesterId }
   )
 
-  const rows: RowData[] = useMemo(
-    () =>
-      diemMonHoc.map((item) => {
-        const diemHp =
-          item.manualFinalScore != null
-            ? Number(item.manualFinalScore)
-            : Number(item.finalScore ?? 0)
-        const quyDoi = convertScore(
-          diemHp,
-          courseScoreConfigFrom(student?.fixedClass?.trainingCourse, item)
-        )
-        return {
-          id: item.id,
-          maHocPhan: item.subjectClass?.subject?.code ?? "",
-          tenHocPhan: item.subjectClass?.subject?.name ?? "",
-          tinChi: item.subjectClass?.subject?.credit ?? 0,
-          cc: item.attendanceScore ?? null,
-          dk: item.midtermScore ?? null,
-          diemThi: item.examScore ?? null,
+  const curriculumVersionId =
+    student?.curriculumVersionId || student?.fixedClass?.curriculumVersionId
+  const { data: plannedSubjects = [] } = useFindManyTrainingBlockSubject(
+    {
+      where: {
+        trainingBlockOnCurriculumVersion: { curriculumVersionId: curriculumVersionId || "" },
+        deletedAt: null,
+        active: true,
+      },
+      select: { subjectId: true, semester: true },
+    },
+    { enabled: !!curriculumVersionId }
+  )
+  const { data: baoLuuScores = [] } = useFindManyStudentSubjectScore(
+    {
+      where: {
+        studentId,
+        subjectClassId: null,
+        deletedAt: null,
+        ...baoLuuScoreDescriptionWhere(),
+      },
+      include: { subjectVersion: true },
+    },
+    { enabled: !!studentId }
+  )
+
+  const rows: RowData[] = useMemo(() => {
+    const classRows = diemMonHoc.map((item) => {
+      const diemHp =
+        item.manualFinalScore != null ? Number(item.manualFinalScore) : Number(item.finalScore ?? 0)
+      const quyDoi = convertScore(
+        diemHp,
+        courseScoreConfigFrom(student?.fixedClass?.trainingCourse, item)
+      )
+      return {
+        id: item.id,
+        maHocPhan: item.subjectClass?.subject?.code ?? "",
+        tenHocPhan: item.subjectClass?.subject?.name ?? "",
+        tinChi: item.subjectClass?.subject?.credit ?? 0,
+        cc: item.attendanceScore ?? null,
+        dk: item.midtermScore ?? null,
+        diemThi: item.examScore ?? null,
+        diemHp: diemHp || null,
+        diemChu: quyDoi?.letter ?? "—",
+        ketQuaDat: quyDoi?.pass ?? null,
+      }
+    })
+
+    const plannedBySubject = new Map<string, number | null>()
+    for (const block of plannedSubjects) {
+      if (!plannedBySubject.has(block.subjectId) || plannedBySubject.get(block.subjectId) == null) {
+        plannedBySubject.set(block.subjectId, block.semester ?? null)
+      }
+    }
+    const indexBySemester = new Map(
+      (student?.studentSemesterResult ?? []).map((item) => [item.semesterId, item.semesterIndexInCourse])
+    )
+    const currentIndex = semesterId ? indexBySemester.get(semesterId) : undefined
+    const existingIds = new Set(diemMonHoc.map((item) => item.subjectVersionId))
+
+    const baoLuuRows = baoLuuScores.flatMap((score) => {
+      if (!isBaoLuuScoreDescription(score.description) || existingIds.has(score.subjectVersionId)) {
+        return []
+      }
+      const planned = plannedBySubject.get(score.subjectVersionId)
+      if (currentIndex == null || planned !== currentIndex) return []
+      const diemHp = Number(score.manualFinalScore ?? score.finalScore ?? 0)
+      const quyDoi = convertScore(
+        diemHp,
+        courseScoreConfigFrom(student?.fixedClass?.trainingCourse, score)
+      )
+      return [
+        {
+          id: score.id,
+          maHocPhan: score.subjectVersion?.code ?? "",
+          tenHocPhan: score.subjectVersion?.name ?? "",
+          tinChi: score.subjectVersion?.credit ?? 0,
+          cc: null,
+          dk: null,
+          diemThi: null,
           diemHp: diemHp || null,
           diemChu: quyDoi?.letter ?? "—",
           ketQuaDat: quyDoi?.pass ?? null,
-        }
-      }),
-    [diemMonHoc, convertScore, student?.fixedClass?.trainingCourse]
-  )
+          baoLuu: true,
+        },
+      ]
+    })
+
+    return [...classRows, ...baoLuuRows]
+  }, [
+    diemMonHoc,
+    convertScore,
+    student?.fixedClass?.trainingCourse,
+    student?.studentSemesterResult,
+    plannedSubjects,
+    baoLuuScores,
+    semesterId,
+  ])
 
   const tongTinChi = useMemo(() => rows.reduce((acc, item) => acc + item.tinChi, 0), [rows])
 

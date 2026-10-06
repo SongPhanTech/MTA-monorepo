@@ -1,3 +1,4 @@
+import { formatDateInSlash, formatNgayThangNamIn } from "@workspace/libs/timezone"
 import Select from "@components/commons/select"
 import Table from "@components/commons/table"
 import TableCollapse from "@components/commons/tableCollapse"
@@ -14,13 +15,16 @@ import {
 import {
   useFindManyArchivedCertificate,
   useFindManySemester,
+  useFindManyStudentSemesterResult,
   useFindManyStudentSubjectScore,
   useFindManySubjectVersion,
+  useFindManyTrainingBlockSubject,
   useFindUniqueStudent,
   useFindUniqueUserProfile,
 } from "@workspace/db/hooks"
 import { exportAndDownloadFromTemplate } from "@workspace/libs/download-excel"
 import type { TableRow } from "@workspace/libs/template-excel"
+import { baoLuuRowProps, isBaoLuuScoreDescription, visibleScoreNote } from "@workspace/libs/bao-luu-diem"
 import { courseScoreConfigFrom } from "@workspace/libs/utils"
 import { Button, Col, Flex, Row, Tooltip } from "antd"
 import dayjs from "dayjs"
@@ -121,8 +125,8 @@ export default function StudentScoreClassPage() {
   })
   const exportTemplate = async () => {
     const monhocAll: IMonHoc[] = []
-    if (data.length > 0) {
-      data.forEach((item) => {
+    if (displaySemesters.length > 0) {
+      displaySemesters.forEach((item) => {
         item.subjectClasses.forEach((subjectClass) => {
           subjectClass.subjectClassStudent.forEach((subjectClassStudent) => {
             monhocAll.push({
@@ -148,7 +152,7 @@ export default function StudentScoreClassPage() {
                   courseScoreConfigFrom(student?.fixedClass?.trainingCourse, subjectClassStudent)
                 ).letter ?? "",
 
-              ghichu: subjectClassStudent.description ?? "",
+              ghichu: visibleScoreNote(subjectClassStudent.description),
             })
           })
         })
@@ -242,7 +246,7 @@ export default function StudentScoreClassPage() {
       cells: [
         { value: null, colSpan: 12, border: false }, // Ô trống bên trái
         {
-          value: `Hà Nội, ngày ${new Date().getDate()} tháng ${new Date().getMonth() + 1} năm ${new Date().getFullYear()}`,
+          value: `Hà Nội, ${formatNgayThangNamIn(new Date())}`,
           colSpan: 6,
           border: false,
           align: "center",
@@ -282,7 +286,7 @@ export default function StudentScoreClassPage() {
           data: {
             fullname: sampleStudentData.fullname ?? "",
             dateOfBirth: sampleStudentData.dateOfBirth
-              ? dayjs(sampleStudentData.dateOfBirth).format("DD/M/YYYY")
+              ? formatDateInSlash(sampleStudentData.dateOfBirth)
               : "",
             htdt: sampleStudentData.htdt ?? "",
             maSV: sampleStudentData.maSV ?? "",
@@ -526,6 +530,114 @@ export default function StudentScoreClassPage() {
     },
   })
 
+  const curriculumVersionId =
+    student?.curriculumVersionId || student?.fixedClass?.curriculumVersionId
+  const { data: plannedSubjects = [] } = useFindManyTrainingBlockSubject(
+    {
+      where: {
+        trainingBlockOnCurriculumVersion: { curriculumVersionId: curriculumVersionId || "" },
+        deletedAt: null,
+        active: true,
+      },
+      select: { subjectId: true, semester: true },
+    },
+    { enabled: !!curriculumVersionId }
+  )
+  const { data: semesterResults = [] } = useFindManyStudentSemesterResult(
+    {
+      where: { studentId, deletedAt: null },
+      include: { semester: { include: { schoolYear: true } } },
+    },
+    { enabled: !!studentId }
+  )
+
+  const displaySemesters = useMemo(() => {
+    const plannedBySubject = new Map<string, number | null>()
+    for (const block of plannedSubjects) {
+      if (!plannedBySubject.has(block.subjectId) || plannedBySubject.get(block.subjectId) == null) {
+        plannedBySubject.set(block.subjectId, block.semester ?? null)
+      }
+    }
+    const semesterByIndex = new Map(semesterResults.map((item) => [item.semesterIndexInCourse, item]))
+    const baoLuuBySemester = new Map<string, any[]>()
+    const extraSemesters: any[] = []
+
+    for (const score of manualScoreData) {
+      if (score.subjectClassId || !isBaoLuuScoreDescription(score.description)) continue
+      const planned = plannedBySubject.get(score.subjectVersionId)
+      const mapped = planned != null ? semesterByIndex.get(planned) : undefined
+      const row = {
+        id: `bao-luu-${score.id}`,
+        key: `bao-luu-${score.id}`,
+        baoLuu: true,
+        subjectClassStudent: [
+          {
+            manualFinalScore: score.manualFinalScore,
+            finalScore: score.finalScore,
+            attendanceScore: null,
+            midtermScore: null,
+            examScore: null,
+            awards: [],
+            certificates: [],
+            description: score.description,
+            subjectVersion: score.subjectVersion,
+          },
+        ],
+      }
+      if (mapped?.semester?.id) {
+        const list = baoLuuBySemester.get(mapped.semester.id) ?? []
+        list.push(row)
+        baoLuuBySemester.set(mapped.semester.id, list)
+        if (
+          !data.some((semester) => semester.id === mapped.semester.id) &&
+          !extraSemesters.some((semester) => semester.id === mapped.semester.id)
+        ) {
+          extraSemesters.push({
+            id: mapped.semester.id,
+            key: mapped.semester.id,
+            name: mapped.semester.name,
+            code: mapped.semester.code,
+            schoolYear: mapped.semester.schoolYear,
+            subjectClasses: [],
+          })
+        }
+      } else if (planned != null) {
+        const virtualId = `ctdt-${planned}`
+        const list = baoLuuBySemester.get(virtualId) ?? []
+        list.push(row)
+        baoLuuBySemester.set(virtualId, list)
+        if (!extraSemesters.some((semester) => semester.id === virtualId)) {
+          extraSemesters.push({
+            id: virtualId,
+            key: virtualId,
+            name: `Học kỳ ${planned}`,
+            code: "",
+            schoolYear: null,
+            subjectClasses: [],
+          })
+        }
+      }
+    }
+
+    return [...data, ...extraSemesters].map((semester) => {
+      const existingIds = new Set(
+        (semester.subjectClasses ?? [])
+          .flatMap((item: { subjectClassStudent?: { subjectVersionId?: string }[] }) =>
+            (item.subjectClassStudent ?? []).map((score) => score.subjectVersionId)
+          )
+          .filter(Boolean)
+      )
+      const baoLuuRows = (baoLuuBySemester.get(semester.id) ?? []).filter(
+        (row) => !existingIds.has(row.subjectClassStudent?.[0]?.subjectVersion?.id)
+      )
+      if (!baoLuuRows.length) return semester
+      return {
+        ...semester,
+        subjectClasses: [...(semester.subjectClasses ?? []), ...baoLuuRows],
+      }
+    })
+  }, [data, manualScoreData, plannedSubjects, semesterResults])
+
   const { convertScore } = useScoreConverter(
     student?.fixedClass?.trainingCourse.scoreConverts || []
   )
@@ -579,6 +691,7 @@ export default function StudentScoreClassPage() {
         <Col span={24}>
           <TableCollapse
             rowKey="key"
+            onRow={(record: any) => baoLuuRowProps(!!record?.baoLuu)}
             header={<div className="text-sm font-semibold uppercase">Kết quả học tập theo kỳ</div>}
             currentPage={1}
             headerTitleKey={({ name, schoolYear }) => (
@@ -770,11 +883,11 @@ export default function StudentScoreClassPage() {
                 dataIndex: ["subjectClassStudent", "0", "description"],
                 width: 200,
                 render: (value: string) => {
-                  return <span className="line-clamp-1">{value}</span>
+                  return <span className="line-clamp-1">{visibleScoreNote(value)}</span>
                 },
               },
             ]}
-            data={data.filter((s) => !semesterId || semesterId === s.id)}
+            data={displaySemesters.filter((s) => !semesterId || semesterId === s.id)}
             pagination={{
               hideOnSinglePage: true,
             }}
@@ -865,6 +978,7 @@ export default function StudentScoreClassPage() {
                 dataIndex: "description",
                 align: "center",
                 width: 250,
+                render: (value: string) => visibleScoreNote(value),
               },
             ]}
             pagination={false}

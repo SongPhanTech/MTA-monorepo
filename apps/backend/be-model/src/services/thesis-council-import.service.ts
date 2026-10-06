@@ -1,4 +1,5 @@
 import { CouncilProposalStatus, CouncilRole, ThesisType } from "@workspace/db/client"
+import { formatNgayIn, formatThangIn } from "@workspace/libs/timezone"
 import ExcelJS from "exceljs"
 import { prisma } from ".."
 import { resolveCurrentVersionIds } from "./expert-version"
@@ -44,8 +45,8 @@ function cellText(cell: ExcelJS.Cell | undefined): string {
   if (typeof value === "string") return value.trim()
   if (typeof value === "number") return String(value)
   if (value instanceof Date) {
-    const day = String(value.getDate()).padStart(2, "0")
-    const month = String(value.getMonth() + 1).padStart(2, "0")
+    const day = formatNgayIn(value.getDate())
+    const month = formatThangIn(value.getMonth() + 1)
     const year = value.getFullYear()
     return `${day}/${month}/${year}`
   }
@@ -61,8 +62,8 @@ function cellText(cell: ExcelJS.Cell | undefined): string {
       const result = value.result
       if (result === null || result === undefined) return ""
       if (result instanceof Date) {
-        const day = String(result.getDate()).padStart(2, "0")
-        const month = String(result.getMonth() + 1).padStart(2, "0")
+        const day = formatNgayIn(result.getDate())
+        const month = formatThangIn(result.getMonth() + 1)
         const year = result.getFullYear()
         return `${day}/${month}/${year}`
       }
@@ -276,7 +277,10 @@ export async function importCouncilFromExcel(
   }
 
   const workbook = new ExcelJS.Workbook()
-  await workbook.xlsx.load(Buffer.isBuffer(fileBuffer) ? fileBuffer : Buffer.from(fileBuffer))
+  const nodeBuffer = Buffer.isBuffer(fileBuffer) ? fileBuffer : Buffer.from(fileBuffer)
+  const excelData = new ArrayBuffer(nodeBuffer.byteLength)
+  new Uint8Array(excelData).set(nodeBuffer)
+  await workbook.xlsx.load(excelData)
 
   const rows = readImportRows(workbook)
   const maps = readLabelMaps(workbook) ?? (await buildLabelMapsFromDb())

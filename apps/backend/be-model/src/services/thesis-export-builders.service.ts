@@ -1,5 +1,6 @@
 import { CouncilRole, SupervisorRole, TrainingObjectTypes } from "@workspace/db/client"
 import { fetchMinio } from "@workspace/libs"
+import { formatDateInSlash } from "@workspace/libs/timezone"
 import { buildExcelFromTemplate, type TableRow } from "@workspace/libs/template-excel-core"
 import { resolveCouncilMemberUnitName, type OrgUnitNode } from "@workspace/libs/utils"
 import dayjs from "dayjs"
@@ -49,14 +50,10 @@ function getProject(student: StudentRow): Project | undefined {
 
 function formatDocDate(date?: Date | string | null) {
   if (!date) return { day: "", month: "", year: "", full: "" }
-  const d = dayjs(date)
-  if (!d.isValid()) return { day: "", month: "", year: "", full: "" }
-  return {
-    day: d.format("DD"),
-    month: d.format("M"),
-    year: d.format("YYYY"),
-    full: d.format("DD/M/YYYY"),
-  }
+  const full = formatDateInSlash(date)
+  if (!full) return { day: "", month: "", year: "", full: "" }
+  const [day = "", month = "", year = ""] = full.split("/")
+  return { day, month, year, full }
 }
 
 function formatBirthDate(date?: Date | string | null) {
@@ -501,25 +498,22 @@ function buildDanhSachBaoVeDanPhongSlots(
 
   for (const entry of entries) {
     const { project } = entry
-    const date = project?.defenseDate ? dayjs(project.defenseDate).format("DD/M/YYYY") : ""
+    const sortDate = project?.defenseDate ? dayjs(project.defenseDate).format("YYYY-MM-DD") : ""
+    const dateLabel = project?.defenseDate ? formatDateInSlash(project.defenseDate) : ""
     const time = project?.defenseSession?.startTime ? dayjs(project.defenseSession.startTime).format("HH:mm") : ""
-    if (!date || !time) continue
+    if (!sortDate || !dateLabel || !time) continue
     const roomName = project?.room?.name || ""
     if (roomName) allRoomSet.add(roomName)
-    const key = `${date}__${time}`
+    const key = `${sortDate}__${time}__${dateLabel}`
     if (!slotMap.has(key)) slotMap.set(key, [])
     slotMap.get(key)?.push(entry)
   }
 
   const allRooms = Array.from(allRoomSet).sort()
   const slots = Array.from(slotMap.entries())
-    .sort(([a], [b]) => {
-      const [aDate, aTime] = a.split("__")
-      const [bDate, bTime] = b.split("__")
-      return dayjs(`${aDate} ${aTime}`, "DD/MM/YYYY HH:mm").valueOf() - dayjs(`${bDate} ${bTime}`, "DD/MM/YYYY HH:mm").valueOf()
-    })
+    .sort(([a], [b]) => a.localeCompare(b))
     .map(([key, slotEntries], slotIdx) => {
-      const [ngayBaoVe, thoiGianBatDau] = key.split("__")
+      const [, thoiGianBatDau, ngayBaoVe] = key.split("__")
       const hallsByRoom = new Map<string, DanhSachBaoVeDanPhongHall>()
       const roomStudentNames = new Map<string, string[]>()
 
@@ -1073,7 +1067,7 @@ function reviewerInviteItems(
       const group = groups.get(key)!
       const thesisType = r.type || "luận văn"
       group.types.add(thesisType)
-      group.students.add(r.maHv || r.hoTen)
+      group.students.add(String(r.maHv || r.hoTen))
       group.rows.push({
         ngaybaove: r.ngaybaove,
         giobaove: r.giobaove,

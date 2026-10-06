@@ -1,3 +1,4 @@
+import { formatDateInSlash, formatThangIn } from "@workspace/libs/timezone"
 import { PrinterOutlined } from "@ant-design/icons"
 import { useScoreConverter } from "@hooks/scoreConverter"
 import { SubjectRequirementType } from "@workspace/db/client"
@@ -42,7 +43,7 @@ type ModalPrintToKQHTInput = {
 }
 
 const ModalPrintToKQHT = () => {
-  const formattedDate = `..., ngày ${dayjs().format("DD")} tháng ${dayjs().format("M")} năm ${dayjs().format("YYYY")}`
+  const formattedDate = `..., ngày ${dayjs().format("DD")} tháng ${formatThangIn(dayjs().month() + 1)} năm ${dayjs().format("YYYY")}`
   const printRef = useRef<HTMLDivElement>(null)
   const [signerName, setSignerName] = useState("Đại tá, TS Nguyễn Trọng Lưu")
   const [gpaScore, setGpaScore] = useState(0)
@@ -173,7 +174,7 @@ const ModalPrintToKQHT = () => {
       value: (
         <span>
           {input?.dataStudent?.userProfile?.dateOfBirth &&
-            dayjs(input?.dataStudent?.userProfile?.dateOfBirth).format("DD/M/YYYY")}
+            formatDateInSlash(input?.dataStudent?.userProfile?.dateOfBirth)}
         </span>
       ),
     },

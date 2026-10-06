@@ -1,3 +1,4 @@
+import { formatThangIn } from "@workspace/libs/timezone"
 import { renderWithMath } from "@components/commons/rich-text-editor/renderWithMath"
 import { formatDateVN } from "@lib/utils"
 import type { ExamBankQuestion, Question } from "@workspace/db"
@@ -12,7 +13,7 @@ import { useDisclosure } from "react-hook-disclosure-modal"
 import { useReactToPrint } from "react-to-print"
 
 export const ModalPrintExamBank = () => {
-  const formattedDate = `Ngày ${dayjs().format("DD")} tháng ${dayjs().format("M")} năm ${dayjs().format("YYYY")}`
+  const formattedDate = `Ngày ${dayjs().format("DD")} tháng ${formatThangIn(dayjs().month() + 1)} năm ${dayjs().format("YYYY")}`
   const { isOpen, onClose, input } = useDisclosure<{
     data?: (ExamBankQuestion & { question: Question })[]
     subjectVersionName: string

@@ -21,7 +21,7 @@ import {
 } from "@workspace/db/zod/models"
 import { getFilesEmployeeUserIdImage } from "@workspace/libs/api/system-share"
 import { getLuanVanTemplateBuffer, getTemplateBuffer } from "@workspace/libs/server"
-import { APP_TIMEZONE, formatDateVn, nowVn, setupAppTimezone, toVnDayjs } from "@workspace/libs/timezone"
+import { APP_TIMEZONE, formatDateVn, formatNgayIn, formatThangIn, nowVn, setupAppTimezone, toVnDayjs } from "@workspace/libs/timezone"
 import {
   chunk,
   convertScoreWithCourseConfig,
@@ -1607,7 +1607,7 @@ app.openapi(graduationSessionDecision, async (c) => {
       FULLNAME: graduationDecision.student.userProfile.fullname?.toUpperCase(),
       gender: graduationDecision.student.userProfile.gender?.sTen,
       dayOfBirth: dateOfBirth ? dateOfBirth.getDate().toString().padStart(2, "0") : null,
-      monthOfBirth: dateOfBirth ? (dateOfBirth.getMonth() + 1).toString() : null,
+      monthOfBirth: dateOfBirth ? formatThangIn(dateOfBirth.getMonth() + 1) : null,
       mmmOfBirth: dateOfBirth ? dateOfBirth.toLocaleString("en-US", { month: "short" }) : null,
       yearOfBirth: dateOfBirth ? dateOfBirth.getFullYear() : null,
       trainingMajor: graduationDecision.trainingMajor?.name,
@@ -2083,7 +2083,7 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
   if (!selectedDate.isValid()) {
     selectedDate = nowVn()
   }
-  const ngayInText = `ngày ${selectedDate.date()} tháng ${selectedDate.month() + 1} năm ${selectedDate.year()}`
+  const ngayInText = `ngày ${formatNgayIn(selectedDate.date())} tháng ${formatThangIn(selectedDate.month() + 1)} năm ${selectedDate.year()}`
 
   const signerInfo = parseSignerInfo(signerName || "")
 

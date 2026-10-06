@@ -1,5 +1,6 @@
+import { BAO_LUU_EXCEL_COLOR, isBaoLuuScoreDescription, visibleScoreNote } from "@workspace/libs/bao-luu-diem"
 import { HTTPException } from "hono/http-exception"
-import { formatDateVn, nowVn } from "@workspace/libs/timezone"
+import { formatDateVn, formatNgayIn, formatThangIn, nowVn } from "@workspace/libs/timezone"
 import type { TableRow } from "@workspace/libs/template-excel-core"
 import { prisma } from ".."
 import { buildFromTemplate } from "./build-from-template"
@@ -355,6 +356,7 @@ async function exportBangDiemCaNhanMau({
     diemhe4: number
     diemchu: string
     ghichu: string
+    baoLuu: boolean
   }
 
   type HocKiBuilder = {
@@ -428,7 +430,8 @@ async function exportBangDiemCaNhanMau({
       diemhe10: rawScore,
       diemhe4: converted.base4 ?? 0,
       diemchu: converted.letter ?? "",
-      ghichu: description ?? "",
+      ghichu: visibleScoreNote(description),
+      baoLuu: isBaoLuuScoreDescription(description),
     }
   }
 
@@ -603,20 +606,25 @@ async function exportBangDiemCaNhanMau({
 
   const tableRows: TableRow[] = flatMonHocs.map((monHoc, index) => ({
     cells: [
-      { value: index + 1, align: "center" },
-      { value: monHoc.TenMonhoc ?? "", colSpan: 6, border: true },
-      { value: monHoc.MaMH ?? "" },
-      { value: monHoc.soTC, align: "center" },
-      { value: roundTo(monHoc.diem01, 1), align: "right", numFmt: "0.0" },
-      { value: roundTo(monHoc.diem02, 1), align: "right", numFmt: "0.0" },
-      { value: roundTo(monHoc.diem07, 1), align: "right", numFmt: "0.0" },
+      { value: index + 1, align: "center", ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}) },
+      {
+        value: monHoc.TenMonhoc ?? "",
+        colSpan: 6,
+        border: true,
+        ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}),
+      },
+      { value: monHoc.MaMH ?? "", ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}) },
+      { value: monHoc.soTC, align: "center", ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}) },
+      { value: roundTo(monHoc.diem01, 1), align: "right", numFmt: "0.0", ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}) },
+      { value: roundTo(monHoc.diem02, 1), align: "right", numFmt: "0.0", ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}) },
+      { value: roundTo(monHoc.diem07, 1), align: "right", numFmt: "0.0", ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}) },
       { value: null },
       { value: null },
-      { value: roundTo(monHoc.diemhe10, 1), align: "right", numFmt: "0.0" },
-      { value: roundTo(monHoc.diemhe4, 1), align: "right", numFmt: "0.0" },
-      { value: monHoc.diemchu ?? "", align: "center" },
+      { value: roundTo(monHoc.diemhe10, 1), align: "right", numFmt: "0.0", ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}) },
+      { value: roundTo(monHoc.diemhe4, 1), align: "right", numFmt: "0.0", ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}) },
+      { value: monHoc.diemchu ?? "", align: "center", ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}) },
       { value: null },
-      { value: monHoc.ghichu ?? "" },
+      { value: monHoc.ghichu ?? "", ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}) },
     ],
   }))
 
@@ -658,7 +666,7 @@ async function exportBangDiemCaNhanMau({
     cells: [
       { value: null, colSpan: 8, border: false },
       {
-        value: `Hà Nội, ngày ${today.date()} tháng ${today.month() + 1} năm ${today.year()}`,
+        value: `Hà Nội, ngày ${formatNgayIn(today.date())} tháng ${formatThangIn(today.month() + 1)} năm ${today.year()}`,
         colSpan: 11,
         border: false,
         align: "center",

@@ -1,3 +1,4 @@
+import { formatDateInSlash, formatThangIn } from "@workspace/libs/timezone"
 import { PrinterOutlined } from "@ant-design/icons"
 import { useFindUniqueUserProfile } from "@workspace/db/hooks"
 import { getMinioUrl } from "@workspace/libs/utils"
@@ -17,6 +18,7 @@ function formatDateOrPlaceholder(
   format: string
 ) {
   if (!value) return MISSING_DATE
+  if (format === "DD/M/YYYY") return formatDateInSlash(value) || MISSING_DATE
   const parsed = dayjs(value)
   return parsed.isValid() ? parsed.format(format) : MISSING_DATE
 }
@@ -26,7 +28,7 @@ type ModalSoYeuLyLichInput = {
 }
 
 const ModalSoYeuLyLich = () => {
-  const formattedDate = `..., Ngày ${dayjs().format("DD")} tháng ${dayjs().format("M")} năm ${dayjs().format("YYYY")}`
+  const formattedDate = `..., Ngày ${dayjs().format("DD")} tháng ${formatThangIn(dayjs().month() + 1)} năm ${dayjs().format("YYYY")}`
   const printRef = useRef<HTMLDivElement>(null)
 
   const { isOpen, onClose, input } = useDisclosure<ModalSoYeuLyLichInput>({
@@ -290,7 +292,7 @@ const ModalSoYeuLyLich = () => {
               11. Số CMND/CCCD: {initialData?.idCardNumber}
               <span className="inline-block w-40 flex-1 " />
               Ngày cấp:{" "}
-              {initialData?.idCardDate ? dayjs(initialData?.idCardDate).format("DD/M/YYYY") : null}
+              {initialData?.idCardDate ? formatDateInSlash(initialData?.idCardDate) : null}
               <span className="inline-block w-40 flex-1 " />
               Nơi cấp: {initialData?.placeOfIdCardNumber}
               <span className="inline-block w-40 flex-1" />
@@ -367,18 +369,18 @@ const ModalSoYeuLyLich = () => {
             </p>
             <p className="flex w-full leading-[12px] mb-4">
               15. Ngày vào đoàn TNCS HCM:{" "}
-              {initialData?.unionDate ? dayjs(initialData.unionDate).format("DD/M/YYYY") : null}
+              {initialData?.unionDate ? formatDateInSlash(initialData.unionDate) : null}
               <span className="inline-block w-40 flex-1" />
             </p>
             <p className="flex w-full leading-[12px] mb-4">
               16. Ngày vào đảng CSVN:{" "}
               {initialData?.CPVJoinDate
-                ? dayjs(initialData.CPVJoinDate).format("DD/M/YYYY")
+                ? formatDateInSlash(initialData.CPVJoinDate)
                 : null}
               <span className="inline-block w-40 flex-1" />
               Chính thức:{" "}
               {initialData?.officialCPVDate
-                ? dayjs(initialData.officialCPVDate).format("DD/M/YYYY")
+                ? formatDateInSlash(initialData.officialCPVDate)
                 : null}
               <span className="inline-block w-40 flex-1" />
             </p>
@@ -399,7 +401,7 @@ const ModalSoYeuLyLich = () => {
               {initialData?.khenThuong?.[0]
                 ? `${initialData.khenThuong[0].hinhThucKhenThuong?.name || ""} ${
                     initialData.khenThuong[0].ngayNhanQuyetDinh
-                      ? `(${dayjs(initialData.khenThuong[0].ngayNhanQuyetDinh).format("DD/M/YYYY")})`
+                      ? `(${formatDateInSlash(initialData.khenThuong[0].ngayNhanQuyetDinh)})`
                       : ""
                   }`
                 : ""}
@@ -410,7 +412,7 @@ const ModalSoYeuLyLich = () => {
               {initialData?.kyLuat?.[0]
                 ? `${initialData.kyLuat[0].hinhThucKyLuat || ""} ${
                     initialData.kyLuat[0].ngayNhanQuyetDinh
-                      ? `(${dayjs(initialData.kyLuat[0].ngayNhanQuyetDinh).format("DD/M/YYYY")})`
+                      ? `(${formatDateInSlash(initialData.kyLuat[0].ngayNhanQuyetDinh)})`
                       : null
                   }`
                 : ""}
@@ -523,8 +525,8 @@ const ModalSoYeuLyLich = () => {
               {initialData?.quaTrinhCongTac?.map((item, index) => (
                 <tr key={item.id}>
                   <td className="border border-black p-1 h-[32px]">
-                    {item.tuThangNam ? dayjs(item.tuThangNam).format("DD/M/YYYY") : ""} -{" "}
-                    {item.denThangNam ? dayjs(item.denThangNam).format("DD/M/YYYY") : ""}
+                    {item.tuThangNam ? formatDateInSlash(item.tuThangNam) : ""} -{" "}
+                    {item.denThangNam ? formatDateInSlash(item.denThangNam) : ""}
                   </td>
                   <td className="border border-black p-1 h-[32px]">{item.chucVu?.sTen || ""}</td>
                   <td className="border border-black p-1 h-[32px]">{item.chucVu?.sTen || ""}</td>

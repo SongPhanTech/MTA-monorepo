@@ -1,3 +1,4 @@
+export * from "./bao-luu-diem"
 export * from "./constants"
 export * from "./lecturer-org"
 export * from "./profile-code"

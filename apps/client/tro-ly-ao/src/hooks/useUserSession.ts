@@ -1,4 +1,5 @@
 import { useCreateUserSession, useFindUniqueUserSession } from "@workspace/db/hooks"
+import { formatDateInSlash } from "@workspace/libs/timezone"
 import { useEffect, useState } from "react"
 
 const SESSION_KEY = "chatbot-session-id"
@@ -14,7 +15,7 @@ const generateSessionName = (): string => {
   }
 
   const now = new Date()
-  const dateStr = `${now.getDate().toString().padStart(2, "0")}/${(now.getMonth() + 1).toString().padStart(2, "0")}/${now.getFullYear()}`
+  const dateStr = formatDateInSlash(now)
   const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`
 
   return `${getBrowserName()} - ${dateStr} ${timeStr}`

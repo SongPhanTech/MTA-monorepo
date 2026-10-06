@@ -1,3 +1,4 @@
+import { formatDateInSlash } from "@workspace/libs/timezone"
 import { PrinterOutlined } from "@ant-design/icons"
 import { queryClient } from "@api/index"
 import { useExamTypeOptions } from "@hooks/examType"
@@ -255,7 +256,7 @@ const ModalPrintStudentSubjectScore = () => {
     },
     {
       title: "Ngày thi:",
-      value: <span>{data?.examDate ? dayjs(data?.examDate).format("DD/M/YYYY") : "-"}</span>,
+      value: <span>{data?.examDate ? formatDateInSlash(data?.examDate) : "-"}</span>,
     },
     {
       title: "Quân số:",
@@ -427,7 +428,7 @@ const ModalPrintStudentSubjectScore = () => {
                   </td>
                   <td className="border border-black text-center">
                     {item?.student?.userProfile?.dateOfBirth
-                      ? dayjs(item?.student?.userProfile?.dateOfBirth).format("DD/M/YYYY")
+                      ? formatDateInSlash(item?.student?.userProfile?.dateOfBirth)
                       : ""}
                   </td>
                   <td className="border border-black text-center">

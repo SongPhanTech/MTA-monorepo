@@ -1,3 +1,4 @@
+import { formatDateInSlash } from "@workspace/libs/timezone"
 import { DownloadOutlined } from "@ant-design/icons"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { Button, Flex } from "antd"
@@ -205,7 +206,7 @@ const ExportStudentToanDot = ({
               i?.student?.userProfile?.code || "",
               `${i?.student?.userProfile?.lastName || ""} ${i?.student?.userProfile?.firstName || ""}`,
               i?.student?.userProfile?.dateOfBirth
-                ? dayjs(i?.student?.userProfile?.dateOfBirth).format("DD/M/YYYY")
+                ? formatDateInSlash(i?.student?.userProfile?.dateOfBirth)
                 : "",
               i?.student?.userProfile?.idCardNumber || "",
               i?.student?.userProfile?.phoneNumber || "",

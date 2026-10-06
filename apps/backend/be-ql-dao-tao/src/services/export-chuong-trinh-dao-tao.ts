@@ -1,6 +1,6 @@
 import { HTTPException } from "hono/http-exception"
 import { $Enums } from "@workspace/db"
-import { nowVn } from "@workspace/libs/timezone"
+import { formatNgayIn, formatThangIn, nowVn } from "@workspace/libs/timezone"
 import Docxtemplater from "docxtemplater"
 import PizZip from "pizzip"
 import { prisma } from ".."
@@ -136,8 +136,8 @@ export async function exportChuongTrinhDaoTao({
   }))
 
   const data = {
-    d: today.format("DD"),
-    m: today.format("M"),
+    d: formatNgayIn(today.date()),
+    m: formatThangIn(today.month() + 1),
     y: today.format("YYYY"),
     TEN_CTDT: (fixedClass.curriculumVersion?.name ?? "").toUpperCase(),
     KHOA_HOC: (fixedClass.trainingCourse?.name ?? "").toUpperCase(),

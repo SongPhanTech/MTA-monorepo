@@ -1,3 +1,4 @@
+import { formatDateInSlash, formatThangIn } from "@workspace/libs/timezone"
 import { FileOutlined, SearchOutlined } from "@ant-design/icons"
 import DatePicker from "@components/commons/date-picker"
 import Select from "@components/commons/select"
@@ -834,9 +835,9 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                               tt: globalIndex,
                               ten: `${e.studentSubjectScore.student?.userProfile?.fullname}\n${
                                 e.studentSubjectScore.student?.userProfile?.dateOfBirth
-                                  ? dayjs(
+                                  ? formatDateInSlash(
                                       e.studentSubjectScore.student?.userProfile?.dateOfBirth
-                                    ).format("DD/M/YYYY")
+                                    )
                                   : ""
                               }`.trim(),
                               cbhd:
@@ -1373,7 +1374,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                                   tt: idx + 1,
                                   ten: profile?.userProfile?.fullname,
                                   ngay_sinh: profile?.userProfile?.dateOfBirth
-                                    ? dayjs(profile?.userProfile?.dateOfBirth).format("DD/M/YYYY")
+                                    ? formatDateInSlash(profile?.userProfile?.dateOfBirth)
                                     : "",
                                   nganh_chuyen_nganh: `${
                                     profile?.curriculumVersion?.curriculum.trainingMajor
@@ -1533,9 +1534,9 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                         const item = e as unknown as ResearchTopicRecord
                         const decisionNum = item.decisionNumber || item.code || ""
                         const decisionDate = item.decisionDate
-                          ? dayjs(item.decisionDate).format("DD/M/YYYY")
+                          ? formatDateInSlash(item.decisionDate)
                           : item.reportDate
-                            ? dayjs(item.reportDate).format("DD/M/YYYY")
+                            ? formatDateInSlash(item.reportDate)
                             : ""
                         const quyetDinhText = decisionNum
                           ? `${decisionNum}${decisionDate ? ` ngày ${decisionDate}` : ""}`
@@ -1563,7 +1564,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                           {
                             data: {
                               ngay: dayjs().format("DD"),
-                              thang: dayjs().format("M"),
+                              thang: formatThangIn(dayjs().month() + 1),
                               nam: dayjs().format("YYYY"),
                               tieu_de: "KINH PHÍ HƯỚNG DẪN CHUYÊN ĐỀ NGHỊÊN CỨU",
                               dot_bao_ve: `Khoá: ${khoaName} - ${kyName}`,

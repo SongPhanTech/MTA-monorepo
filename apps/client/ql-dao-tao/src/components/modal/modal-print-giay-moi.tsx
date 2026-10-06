@@ -1,3 +1,4 @@
+import { formatDateInSlash, formatThangIn } from "@workspace/libs/timezone"
 import { PrinterOutlined } from "@ant-design/icons"
 import { useFindManyInvitation } from "@workspace/db/hooks"
 import { Button, Modal } from "antd"
@@ -116,7 +117,7 @@ const ModalPrintInvitation = () => {
                   <span className="normal-case leading-none">Độc lập - Tự do - Hạnh phúc</span>
                   <hr className="border-t-[1px] border-black mx-14" />
                   <div className="font-normal normal-case italic mt-1">
-                    Hà Nội, ngày {dayjs().format("DD")} tháng {dayjs().format("M")} năm{" "}
+                    Hà Nội, ngày {dayjs().format("DD")} tháng {formatThangIn(dayjs().month() + 1)} năm{" "}
                     {dayjs().format("YYYY")}
                   </div>
                 </div>
@@ -151,7 +152,7 @@ const ModalPrintInvitation = () => {
                     const trainingCourse = registration.student?.fixedClass?.trainingCourse
                     return `${fullname}${
                       dateOfBirth
-                        ? `, sinh ngày ${dayjs(dateOfBirth).format("DD/M/YYYY")}
+                        ? `, sinh ngày ${formatDateInSlash(dateOfBirth)}
                                         ${trainingCourse ? `, ${trainingCourse.name}(${trainingCourse.startYear}-${trainingCourse.endYear})` : ""}`
                         : ""
                     }`

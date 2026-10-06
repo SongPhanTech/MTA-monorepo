@@ -23,6 +23,13 @@ import { PlusOutlined } from "@ant-design/icons"
 import DocumentPaths from "@components/commons/documentPaths"
 import { $Enums } from "@workspace/db/client"
 import { sqlTransaction } from "@workspace/libs/api/model"
+import {
+  type ScoreConvertSource,
+  SCORE_CONVERT_SOURCE_OPTIONS,
+  ScoreConvertSource as ScoreConvertSourceValue,
+  decodeScoreConvertNote,
+  encodeScoreConvertNote,
+} from "@workspace/libs/bao-luu-diem"
 import { Select } from "@workspace/ui"
 import type { TableColumnsType } from "antd"
 import { Trash2 } from "lucide-react"
@@ -38,6 +45,7 @@ const statusOptions = [
 export type PutStudentScoreConvert = StudentScoreConvert & {
   subjectScoreConvert: Partial<SubjectScoreConvert>[]
   documentFiles?: DocumentFile[]
+  scoreSource?: ScoreConvertSource
 }
 dayjs.locale("vi")
 const PutStudentScoreConvertModal = () => {
@@ -140,6 +148,10 @@ const PutStudentScoreConvertModal = () => {
   async function onOk(output?: PutStudentScoreConvert) {
     if (!output) return
 
+    const scoreSource = output.scoreSource ?? ScoreConvertSourceValue.TRANSFER
+    const description = encodeScoreConvertNote(scoreSource, output.description)
+    const scoreDescription = description
+
     const rows = (output.subjectScoreConvert || []) as Array<{
       id?: string
       subjectVersionId?: string
@@ -192,7 +204,7 @@ const PutStudentScoreConvertModal = () => {
             subjectVersionId: row.subjectVersionId,
             finalScore: Number(row.score),
             manualFinalScore: Number(row.score),
-            description: "Điểm sinh viên chuyển trường",
+            description: scoreDescription,
           }))
         const listSqlTransaction: any[] = [
           {
@@ -202,7 +214,7 @@ const PutStudentScoreConvertModal = () => {
               where: { id },
               data: {
                 studentId: output.studentId,
-                description: output.description,
+                description,
                 documentFiles: {
                   upsert: (output.documentFiles || [])
                     .filter((file) => !!file.id)
@@ -267,7 +279,7 @@ const PutStudentScoreConvertModal = () => {
         await createStudentScoreConvert({
           data: {
             studentId: output.studentId,
-            description: output.description,
+            description,
             documentFiles: {
               create:
                 (output.documentFiles || []).map((file) => ({
@@ -326,8 +338,11 @@ const PutStudentScoreConvertModal = () => {
         score: i.score,
         status: i.status,
       }))
+      const decoded = decodeScoreConvertNote(initialValue.description)
       form.setFieldsValue({
         ...initialValue,
+        description: decoded.note,
+        scoreSource: decoded.source,
         subjectScoreConvert: subjects,
       })
       originalStatusRef.current = Object.fromEntries(
@@ -336,7 +351,7 @@ const PutStudentScoreConvertModal = () => {
       initialSubjectsRef.current = subjects
       setDocument((initialValue.documentFiles || []) as DocumentFile[])
     } else {
-      form.setFieldsValue({})
+      form.setFieldsValue({ scoreSource: ScoreConvertSourceValue.TRANSFER })
       setDocument([])
     }
   }, [initialValue, isOpen, form])
@@ -393,6 +408,15 @@ const PutStudentScoreConvertModal = () => {
               const extra = s?.userProfile?.code ? ` - ${s.userProfile.code}` : ""
               return { value: s.id, label: `${fullName}${extra}` }
             })}
+          />
+        </FormItem>
+      </Col>
+      <Col span={24}>
+        <FormItem form={form} name="scoreSource" label="Nguồn điểm" required>
+          <Select
+            placeholder="Chọn nguồn điểm"
+            options={SCORE_CONVERT_SOURCE_OPTIONS}
+            disabled={isViewMode}
           />
         </FormItem>
       </Col>
@@ -573,8 +597,8 @@ const PutStudentScoreConvertModal = () => {
       </Col>
 
       <Col span={24}>
-        <FormItem form={form} name="description" label="Mô tả">
-          <Input.TextArea placeholder="Nhập mô tả" disabled={isViewMode} />
+        <FormItem form={form} name="description" label="Ghi chú">
+          <Input.TextArea placeholder="Nhập ghi chú" disabled={isViewMode} />
         </FormItem>
       </Col>
     </PutFormModal>

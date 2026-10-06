@@ -1,3 +1,4 @@
+import { formatThangIn } from "@workspace/libs/timezone"
 import { queryClient } from "@api/index"
 import DatePicker from "@components/commons/date-picker"
 import TreeSelectDepartment from "@components/commons/department-select/TreeSelectDepartment"
@@ -1061,8 +1062,8 @@ export default function PhanCongGiangDay({
             data: {
               khoa: khoa?.sTen || "",
               bo_mon: boMon?.sTen || "",
-              ngay_gui: `Ngày ${ngayGui.format("DD")} tháng ${ngayGui.format("M")} năm ${ngayGui.format("YYYY")}`,
-              ngay_nhan: `Ngày ${ngayNhan.format("DD")} tháng ${ngayNhan.format("M")} năm ${ngayNhan.format("YYYY")}`,
+              ngay_gui: `Ngày ${ngayGui.format("DD")} tháng ${formatThangIn(ngayGui.month() + 1)} năm ${ngayGui.format("YYYY")}`,
+              ngay_nhan: `Ngày ${ngayNhan.format("DD")} tháng ${formatThangIn(ngayNhan.month() + 1)} năm ${ngayNhan.format("YYYY")}`,
               hoc_ky: hocKy,
               nam_hoc: namHoc,
             },

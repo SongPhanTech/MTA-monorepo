@@ -1,6 +1,7 @@
 import { queryClient } from "@api/index"
 import { useFindUniqueExamBank, useUpdateExamBank } from "@workspace/db/hooks"
 import { useGetExamBankWithGrouping } from "@workspace/libs/api/exam"
+import { formatNgayIn, formatThangIn } from "@workspace/libs/timezone"
 import { getMinioUrl, formatQuestionPoint } from "@workspace/libs/utils"
 import { Button, Flex, Input, Modal } from "antd"
 import { TemplateHandler } from "easy-template-x"
@@ -60,8 +61,8 @@ const PrintExplanation = () => {
   })
 
   const examDate = data?.examDay ? new Date(data.examDay) : new Date()
-  const day = examDate.getDate()
-  const month = examDate.getMonth() + 1
+  const day = formatNgayIn(examDate.getDate())
+  const month = formatThangIn(examDate.getMonth() + 1)
   const year = examDate.getFullYear()
   const subjectClassName = data?.subjectClass?.name || ""
 

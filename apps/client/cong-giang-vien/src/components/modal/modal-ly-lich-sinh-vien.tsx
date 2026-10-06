@@ -1,3 +1,4 @@
+import { formatDateInSlash, formatThangIn, formatThangNamIn } from "@workspace/libs/timezone"
 import { PrinterOutlined } from "@ant-design/icons"
 import { GridBlock } from "@components/commons/grid-block"
 import { useFindUniqueUserProfile } from "@workspace/db/hooks"
@@ -17,6 +18,7 @@ function formatDateOrPlaceholder(
   format: string
 ) {
   if (!value) return MISSING_DATE
+  if (format === "DD/M/YYYY") return formatDateInSlash(value) || MISSING_DATE
   const parsed = dayjs(value)
   return parsed.isValid() ? parsed.format(format) : MISSING_DATE
 }
@@ -26,7 +28,7 @@ type ModalTomTatLyLichInput = {
 }
 
 const ModalTomTatLyLich = () => {
-  const formattedDate = `${dayjs().format("DD")}/${dayjs().format("M")}/${dayjs().format("YYYY")}`
+  const formattedDate = `${dayjs().format("DD")}/${formatThangIn(dayjs().month() + 1)}/${dayjs().format("YYYY")}`
   const printRef = useRef<HTMLDivElement>(null)
   const [signerName, setSignerName] = useState("Đại úy Đào Văn Thắng")
 
@@ -73,7 +75,7 @@ const ModalTomTatLyLich = () => {
     if (capBacBeforeOrAt) {
       return {
         ten: capBacBeforeOrAt?.capBac?.sTen || "",
-        thangNam: dayjs(capBacBeforeOrAt.ngayNhanQuyetDinh).format("MM/YYYY"),
+        thangNam: formatThangNamIn(capBacBeforeOrAt.ngayNhanQuyetDinh),
       }
     }
 
@@ -235,7 +237,7 @@ const ModalTomTatLyLich = () => {
             <div className="mb-1">
               Cấp bậc, hệ số lương, tháng năm: {initialData?.capBac?.[0]?.capBac?.sTen || ""}/(
               {initialData?.capBac?.[0]?.ngayNhanQuyetDinh
-                ? dayjs(initialData?.capBac?.[0]?.ngayNhanQuyetDinh).format("MM/YYYY")
+                ? formatThangNamIn(initialData?.capBac?.[0]?.ngayNhanQuyetDinh)
                 : ""}
               )
             </div>
@@ -288,7 +290,7 @@ const ModalTomTatLyLich = () => {
                   <>
                     Ngày tham gia cách mạng:{" "}
                     {initialData?.revolutionaryDate
-                      ? dayjs(initialData?.revolutionaryDate).format("DD/M/YYYY")
+                      ? formatDateInSlash(initialData?.revolutionaryDate)
                       : ""}
                   </>
                 ),
@@ -299,7 +301,7 @@ const ModalTomTatLyLich = () => {
                   <>
                     Ngày tuyển dụng:{" "}
                     {initialData?.recruitmentDate
-                      ? dayjs(initialData?.recruitmentDate).format("DD/M/YYYY")
+                      ? formatDateInSlash(initialData?.recruitmentDate)
                       : ""}
                   </>
                 ),
@@ -315,7 +317,7 @@ const ModalTomTatLyLich = () => {
                   <>
                     Ngày nhập ngũ:{" "}
                     {initialData?.enlistmentDate
-                      ? dayjs(initialData?.enlistmentDate).format("DD/M/YYYY")
+                      ? formatDateInSlash(initialData?.enlistmentDate)
                       : ""}
                   </>
                 ),
@@ -326,7 +328,7 @@ const ModalTomTatLyLich = () => {
                   <>
                     Xuất ngũ:{" "}
                     {initialData?.dischargeDate
-                      ? dayjs(initialData?.dischargeDate).format("DD/M/YYYY")
+                      ? formatDateInSlash(initialData?.dischargeDate)
                       : ""}
                   </>
                 ),
@@ -337,7 +339,7 @@ const ModalTomTatLyLich = () => {
                   <>
                     Tái ngũ:{" "}
                     {initialData?.reEnlistmentDate
-                      ? dayjs(initialData?.reEnlistmentDate).format("DD/M/YYYY")
+                      ? formatDateInSlash(initialData?.reEnlistmentDate)
                       : ""}
                   </>
                 ),
@@ -353,7 +355,7 @@ const ModalTomTatLyLich = () => {
                   <>
                     Ngày vào Đảng:{" "}
                     {initialData?.CPVJoinDate
-                      ? dayjs(initialData?.CPVJoinDate).format("DD/M/YYYY")
+                      ? formatDateInSlash(initialData?.CPVJoinDate)
                       : ""}
                   </>
                 ),
@@ -364,7 +366,7 @@ const ModalTomTatLyLich = () => {
                   <>
                     Chính thức:{" "}
                     {initialData?.officialCPVDate
-                      ? dayjs(initialData?.officialCPVDate).format("DD/M/YYYY")
+                      ? formatDateInSlash(initialData?.officialCPVDate)
                       : ""}
                   </>
                 ),
@@ -492,8 +494,8 @@ const ModalTomTatLyLich = () => {
                 ? initialData.diNuocNgoai
                     .map((item) => [
                       item?.tenNuoc?.sTen,
-                      dayjs(item?.tuNgay).format("DD/M/YYYY"),
-                      dayjs(item?.denNgay).format("DD/M/YYYY"),
+                      formatDateInSlash(item?.tuNgay),
+                      formatDateInSlash(item?.denNgay),
                       item?.lyDo,
                     ])
                     .join("\n")
@@ -534,9 +536,9 @@ const ModalTomTatLyLich = () => {
                       item?.loai?.name,
                       item?.tiLe,
                       item?.nguyenNhan,
-                      dayjs(item?.thoiGian).format("DD/M/YYYY"),
+                      formatDateInSlash(item?.thoiGian),
                       item?.noiBiThuong,
-                      dayjs(item?.thoiGianGiamDinh).format("DD/M/YYYY"),
+                      formatDateInSlash(item?.thoiGianGiamDinh),
                     ])
                     .join("\n")
                     .split("\n")
@@ -554,7 +556,7 @@ const ModalTomTatLyLich = () => {
             Danh hiệu được phong tháng năm:
             {initialData?.danhHieu?.length
               ? initialData.danhHieu
-                  .map((item) => [item?.ten, dayjs(item?.thoiGian).format("DD/M/YYYY")])
+                  .map((item) => [item?.ten, formatDateInSlash(item?.thoiGian)])
                   .join("\n")
                   .split("\n")
                   .map((line, idx) => (
@@ -573,7 +575,7 @@ const ModalTomTatLyLich = () => {
                 ? initialData.khenThuong
                     .map((item) => [
                       item?.hinhThucKhenThuong?.name,
-                      dayjs(item?.ngayNhanQuyetDinh).format("DD/M/YYYY"),
+                      formatDateInSlash(item?.ngayNhanQuyetDinh),
                     ])
                     .join("\n")
                     .split("\n")
@@ -594,7 +596,7 @@ const ModalTomTatLyLich = () => {
                 ? initialData.kyLuat
                     .map((item) => [
                       item?.hinhThucKyLuat,
-                      dayjs(item?.ngayNhanQuyetDinh).format("DD/M/YYYY"),
+                      formatDateInSlash(item?.ngayNhanQuyetDinh),
                     ])
                     .join("\n")
                     .split("\n")
@@ -657,11 +659,11 @@ const ModalTomTatLyLich = () => {
                         return (
                           <tr key={item.id}>
                             <td className="border border-black p-1 text-center">
-                              {item.tuThangNam ? dayjs(item.tuThangNam).format("MM/YYYY") : ""}
+                              {item.tuThangNam ? formatThangNamIn(item.tuThangNam) : ""}
                             </td>
                             <td className="border border-black p-1 text-center">
                               {item.denThangNam
-                                ? dayjs(item.denThangNam).format("MM/YYYY")
+                                ? formatThangNamIn(item.denThangNam)
                                 : "Hiện tại"}
                             </td>
                             <td className="border border-black p-1">

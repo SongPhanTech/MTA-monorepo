@@ -1,6 +1,7 @@
+import { BAO_LUU_EXCEL_COLOR, isBaoLuuScoreDescription } from "@workspace/libs/bao-luu-diem"
 import { HTTPException } from "hono/http-exception"
 import { $Enums } from "@workspace/db"
-import { formatDateVn, nowVn } from "@workspace/libs/timezone"
+import { formatDateVn, formatNgayIn, formatThangIn, nowVn } from "@workspace/libs/timezone"
 import type { TableRow } from "@workspace/libs/template-excel-core"
 import { prisma } from ".."
 import { buildFromTemplate } from "./build-from-template"
@@ -230,6 +231,7 @@ export async function exportBangDiemQuaTrinhHocVien({ studentId }: { studentId: 
         subjectVersionId: true,
         manualFinalScore: true,
         finalScore: true,
+        description: true,
         subjectVersion: {
           select: {
             id: true,
@@ -309,6 +311,7 @@ export async function exportBangDiemQuaTrinhHocVien({ studentId }: { studentId: 
     diemhe4: number | null
     diemchu: string | null
     pass: boolean | null
+    baoLuu: boolean
   }
 
   const toRow = ({
@@ -320,6 +323,7 @@ export async function exportBangDiemQuaTrinhHocVien({ studentId }: { studentId: 
     attendanceScore,
     midtermScore,
     examScore,
+    baoLuu = false,
   }: {
     tenMonHoc: string
     soTC: number | null
@@ -329,6 +333,7 @@ export async function exportBangDiemQuaTrinhHocVien({ studentId }: { studentId: 
     attendanceScore?: number | null
     midtermScore?: number | null
     examScore?: number | null
+    baoLuu?: boolean
   }): MonHocRow => {
     const converted =
       rawScore != null
@@ -354,6 +359,7 @@ export async function exportBangDiemQuaTrinhHocVien({ studentId }: { studentId: 
       diemhe4: converted?.base4 ?? null,
       diemchu: converted?.letter ?? null,
       pass: converted?.pass ?? null,
+      baoLuu,
     }
   }
 
@@ -423,6 +429,7 @@ export async function exportBangDiemQuaTrinhHocVien({ studentId }: { studentId: 
         rawScore,
         isGraduation: ctdt?.graduation ?? trainingBlock?.graduation === true,
         isConditional: ctdt?.isConditional ?? trainingBlock?.useForFinalScore === false,
+        baoLuu: isBaoLuuScoreDescription(score.description),
       })
     )
     phienRowsByGroup.set(groupKey, rows)
@@ -437,7 +444,11 @@ export async function exportBangDiemQuaTrinhHocVien({ studentId }: { studentId: 
     return monHocs.map((monHoc) => {
       const hasScore = monHoc.diemhe10 != null || monHoc.diemhe4 != null || monHoc.diemchu != null
       const isFail = hasScore && monHoc.pass === false
-      const cellStyle = isFail ? { bgColor: "FFFFC7CE", color: "FFFF0000" } : {}
+      const cellStyle = monHoc.baoLuu
+        ? { color: BAO_LUU_EXCEL_COLOR }
+        : isFail
+          ? { bgColor: "FFFFC7CE", color: "FFFF0000" }
+          : {}
       return {
         cells: [
           { value: stt++, align: "center" as const, ...cellStyle },
@@ -557,7 +568,7 @@ export async function exportBangDiemQuaTrinhHocVien({ studentId }: { studentId: 
             cells: [
               { value: null, colSpan: 5, border: false },
               {
-                value: `Hà Nội, ngày ${today.date()} tháng ${today.month() + 1} năm ${today.year()}`,
+                value: `Hà Nội, ngày ${formatNgayIn(today.date())} tháng ${formatThangIn(today.month() + 1)} năm ${today.year()}`,
                 colSpan: 6,
                 border: false,
                 align: "center",

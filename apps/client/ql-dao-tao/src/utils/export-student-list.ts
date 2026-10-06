@@ -1,3 +1,4 @@
+import { formatDateInSlash, formatThangIn } from "@workspace/libs/timezone"
 import ExcelJS from "exceljs"
 import { saveAs } from "file-saver"
 import dayjs from "dayjs"
@@ -151,7 +152,7 @@ export const exportStudentList = async ({
     row.getCell(3).alignment = ALIGN_LEFT
 
     const dateOfBirth = student.student?.userProfile?.dateOfBirth
-    row.getCell(4).value = dateOfBirth ? dayjs(dateOfBirth).format("DD/M/YYYY") : ""
+    row.getCell(4).value = dateOfBirth ? formatDateInSlash(dateOfBirth) : ""
     row.getCell(4).alignment = ALIGN_CENTER
 
     row.getCell(5).value = student.student?.fixedClass?.code || ""
@@ -180,7 +181,7 @@ export const exportStudentList = async ({
 
   currentRow += 1
   worksheet.mergeCells(`D${currentRow}:F${currentRow}`)
-  worksheet.getCell(`D${currentRow}`).value = `ngày ${dayjs().format("DD")} tháng ${dayjs().format("M")} năm ${dayjs().format("YYYY")}`
+  worksheet.getCell(`D${currentRow}`).value = `ngày ${dayjs().format("DD")} tháng ${formatThangIn(dayjs().month() + 1)} năm ${dayjs().format("YYYY")}`
   worksheet.getCell(`D${currentRow}`).font = { ...FONT_NORMAL, italic: true }
   worksheet.getCell(`D${currentRow}`).alignment = ALIGN_CENTER
 

@@ -1,6 +1,7 @@
+import { BAO_LUU_EXCEL_COLOR, isBaoLuuScoreDescription, visibleScoreNote } from "@workspace/libs/bao-luu-diem"
 import { HTTPException } from "hono/http-exception"
 import ExcelJS from "exceljs"
-import { formatDateVn, nowVn } from "@workspace/libs/timezone"
+import { formatDateVn, formatNgayIn, formatThangIn, nowVn } from "@workspace/libs/timezone"
 import type { SheetExportOptions, TableRow } from "@workspace/libs/template-excel-core"
 import { prisma } from ".."
 import { buildFromTemplate } from "./build-from-template"
@@ -60,6 +61,7 @@ type MonHoc = {
   diemhe4: number
   diemchu: string
   ghichu: string
+  baoLuu: boolean
 }
 
 type HocKi = {
@@ -225,7 +227,7 @@ function sanitizeSheetName(name: string): string {
 
 function signatureDateLabel(): string {
   const today = nowVn()
-  return `Hà Nội, ngày ${today.date()} tháng ${today.month() + 1} năm ${today.year()}`
+  return `Hà Nội, ngày ${formatNgayIn(today.date())} tháng ${formatThangIn(today.month() + 1)} năm ${today.year()}`
 }
 
 function signatureRows(signatureDate: string): TableRow[] {
@@ -731,7 +733,8 @@ function toMonHocRow(row: ScoreRow, student: ExportStudent, data: BangDiemExport
     diemhe10: rawScore,
     diemhe4: converted.base4 ?? 0,
     diemchu: converted.letter ?? "",
-    ghichu: row.description ?? "",
+    ghichu: visibleScoreNote(row.description),
+    baoLuu: isBaoLuuScoreDescription(row.description),
   }
 }
 
@@ -800,7 +803,7 @@ export async function exportBangDiemCaNhan({ studentIds }: { studentIds: string[
         { value: monHoc.diemchu ?? "", align: "center" },
         { value: null },
         { value: monHoc.ghichu ?? "" },
-      ],
+      ].map((cell) => (monHoc.baoLuu ? { ...cell, color: BAO_LUU_EXCEL_COLOR } : cell)),
     }))
 
     const yearResult = pickLatestYearResult(student.studentYearResult)
@@ -944,7 +947,7 @@ export async function exportBangDiemQuaTrinh({ studentIds }: { studentIds: strin
           { value: monHoc.diemchu ?? "", align: "center" },
           { value: null },
           { value: monHoc.ghichu ?? "" },
-        ],
+        ].map((cell) => (monHoc.baoLuu ? { ...cell, color: BAO_LUU_EXCEL_COLOR } : cell)),
       }))
 
       const trungBinhRow: TableRow = {

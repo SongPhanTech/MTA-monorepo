@@ -1,3 +1,4 @@
+import { formatThangIn } from "@workspace/libs/timezone"
 import { renderWithMath } from "@components/commons/rich-text-editor/renderWithMath"
 import type { Question } from "@workspace/db"
 import { Button, Modal } from "antd"
@@ -94,7 +95,7 @@ const ModalPrintAllExams = () => {
                 </table>
 
                 <span className="flex w-full justify-end italic">
-                  Ngày {dayjs().format("DD")} tháng {dayjs().format("M")} năm{" "}
+                  Ngày {dayjs().format("DD")} tháng {formatThangIn(dayjs().month() + 1)} năm{" "}
                   {dayjs().format("YYYY")}
                 </span>
 

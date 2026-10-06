@@ -1,7 +1,10 @@
 import { normalizeVietnamese } from "@workspace/libs/utils"
 import {
+  formatDateInSlash,
   formatDateTimeVn,
   formatDateVn as formatDateVnTz,
+  formatNgayIn,
+  formatThangIn,
   toVnDayjs,
 } from "@workspace/libs/timezone"
 import clsx, { type ClassValue } from "clsx"
@@ -35,26 +38,24 @@ export const formatDate = (date?: string | Date | Dayjs, unit?: "Day" | "Month" 
   if (!date) return ""
   if (unit === "Year") return formatDateVnTz(date, "YYYY")
   if (unit === "Month") return formatDateVnTz(date, "MM/YYYY")
-  return formatDateVnTz(date, "DD/MM/YYYY")
+  return formatDateInSlash(date)
 }
 
 export const formatDateReadable = (date: string | Date | Dayjs) => {
   const d = toVnDayjs(date)
   if (!d) return ""
-  return `${d.hour().toString().padStart(2, "0")}h:${d.minute().toString().padStart(2, "0")} - ${d.date().toString().padStart(2, "0")}/${(d.month() + 1).toString().padStart(2, "0")}/${d.year()}`
+  return `${d.hour().toString().padStart(2, "0")}h:${d.minute().toString().padStart(2, "0")} - ${formatNgayIn(d.date())}/${formatThangIn(d.month() + 1)}/${d.year()}`
 }
 
 export const formatDateVN = (date: string | Date | Dayjs) => {
   const d = toVnDayjs(date)
   if (!d) return ""
-  return `Ngày ${d.date().toString().padStart(2, "0")} tháng ${d.month() + 1} năm ${d.year()}`
+  return `Ngày ${formatNgayIn(d.date())} tháng ${formatThangIn(d.month() + 1)} năm ${d.year()}`
 }
 
 export const formatDateDMY = (date?: string | Date | Dayjs | null) => {
   if (!date) return ""
-  const d = toVnDayjs(date)
-  if (!d) return ""
-  return `${d.date()}/${d.month() + 1}/${d.year()}`
+  return formatDateInSlash(date)
 }
 
 export const formatDateTime = (date?: string | Date | Dayjs) => {

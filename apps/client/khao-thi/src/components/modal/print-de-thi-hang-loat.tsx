@@ -3,6 +3,7 @@ import type { Prisma } from "@workspace/db/client"
 import { useFindManyExamBank, useUpdateExamBank } from "@workspace/db/hooks"
 import { getExamBankWithGrouping } from "@workspace/libs/api/exam"
 import type { ExamBankQuestionsResult } from "@workspace/libs/api/schemas/examBankQuestionsResult"
+import { formatNgayIn, formatThangIn } from "@workspace/libs/timezone"
 import { getMinioUrl, formatQuestionPoint } from "@workspace/libs/utils"
 import { Button, Divider, Flex, Input, Modal } from "antd"
 import { TemplateHandler } from "easy-template-x"
@@ -150,8 +151,8 @@ const PrintBatchExamBank = () => {
         return {
           semester: exam?.exam?.semester?.name || "",
           className: exam?.subjectClass?.name || "",
-          day: examDate.getDate(),
-          month: examDate.getMonth() + 1,
+          day: formatNgayIn(examDate.getDate()),
+          month: formatThangIn(examDate.getMonth() + 1),
           year: examDate.getFullYear(),
           semesterName: exam?.exam?.semester?.name || "",
           examCode: exam?.examCode || "",
@@ -194,8 +195,8 @@ const PrintBatchExamBank = () => {
 
   const renderExamPreview = (exam: ExamBankType, index: number) => {
     const examDate = exam?.examDay ? new Date(exam.examDay) : new Date()
-    const day = examDate.getDate()
-    const month = examDate.getMonth() + 1
+    const day = formatNgayIn(examDate.getDate())
+    const month = formatThangIn(examDate.getMonth() + 1)
     const year = examDate.getFullYear()
     const grouped = groupedExamsData.get(exam.id)
 

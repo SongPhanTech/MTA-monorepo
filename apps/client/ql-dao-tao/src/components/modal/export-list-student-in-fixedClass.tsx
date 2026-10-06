@@ -1,3 +1,4 @@
+import { formatDateInSlash } from "@workspace/libs/timezone"
 import { DownloadOutlined } from "@ant-design/icons"
 import type { Student } from "@workspace/db/client"
 import { Button, Flex } from "antd"
@@ -184,7 +185,7 @@ const ExportStudentInFixedClass = ({
           index + 1,
           i?.code,
           `${i?.userProfile?.lastName} ${i?.userProfile?.firstName}`,
-          dayjs(i.userProfile.dateOfBirth).format("DD/M/YYYY") || "",
+          formatDateInSlash(i.userProfile.dateOfBirth) || "",
           i?.userProfile?.gender?.sTen || "",
           i.userProfile?.phoneNumber || "",
           i.userProfile?.rank?.sTen,

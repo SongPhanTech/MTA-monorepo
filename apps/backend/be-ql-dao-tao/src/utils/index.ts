@@ -1,6 +1,6 @@
 import { $Enums, type Prisma, type PrismaClient } from "@workspace/db"
 import { normalizeCatalogName } from "@workspace/libs/utils"
-import { APP_TIMEZONE, setupAppTimezone } from "@workspace/libs/timezone"
+import { APP_TIMEZONE, formatThangIn, setupAppTimezone } from "@workspace/libs/timezone"
 import { HTTPException } from "hono/http-exception"
 import ExcelJS from "exceljs"
 import XlsxTemplate from "xlsx-template"
@@ -34,7 +34,7 @@ export function parseDate(input?: number | string | Date): Date | null {
 export const getCurrentDateForReport = () => {
   const currentDate = new Date()
   const date = String(currentDate.getDate()).padStart(2, "0")
-  const month = String(currentDate.getMonth() + 1)
+  const month = formatThangIn(currentDate.getMonth() + 1)
   const year = currentDate.getFullYear()
   return { date, month, year }
 }
@@ -63,7 +63,7 @@ export const getReportDateParts = (date?: Date | dayjs.Dayjs | string | number |
   const vn = d.tz(APP_TIMEZONE)
   const day = vn.date().toString().padStart(2, "0")
   const monthRaw = vn.month() + 1
-  const monthVi = monthRaw.toString()
+  const monthVi = formatThangIn(monthRaw)
   const monthEn = MONTH_EN[vn.month()]
   const year = vn.year().toString()
 
