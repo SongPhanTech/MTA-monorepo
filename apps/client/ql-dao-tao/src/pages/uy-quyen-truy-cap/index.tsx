@@ -21,11 +21,13 @@ import {
   Card,
   Checkbox,
   Col,
+  Divider,
   Flex,
   Input,
   Modal,
   Popconfirm,
   Row,
+  Select,
   Table,
   Tag,
   Tooltip,
@@ -57,13 +59,13 @@ const PERMISSION_LABELS: { key: keyof typeof PERMISSIONS; bit: number; label: st
 const getRoleKey = (role: SystemRole, index = 0) =>
   role.sRoleId || role.sCodeName || role.sRoleName || `role-${index}`
 
-const formatMaskTags = (mask: number) => {
+const formatMaskTags = (mask: number, highlightMask = 0) => {
   const matched = PERMISSION_LABELS.filter((item) => (mask & item.bit) === item.bit)
   if (!matched.length) return <Tag>Không có quyền</Tag>
   return (
     <Flex wrap="wrap" gap={4}>
       {matched.map((item) => (
-        <Tag key={item.key} color="blue">
+        <Tag key={item.key} color={(highlightMask & item.bit) !== 0 ? "red" : "blue"}>
           {item.label}
         </Tag>
       ))}
@@ -119,7 +121,10 @@ export default function UyQuyenTruyCapPage() {
   const [selectedRoleKeys, setSelectedRoleKeys] = useState<string[]>([])
   const [bitMasks, setBitMasks] = useState<Record<string, Record<string, number>>>({})
   const [detailRole, setDetailRole] = useState<SystemRole | null>(null)
+  const [dropdownOrder, setDropdownOrder] = useState<{ formName: string; bits: number[] } | null>(null)
   const [selectedGrantIds, setSelectedGrantIds] = useState<string[]>([])
+  const [grantSearch, setGrantSearch] = useState("")
+  const [grantBits, setGrantBits] = useState<number[]>([])
   const queryClient = useQueryClient()
   const assignDelegation = useAssignDelegation()
   const revokeGrants = useRevokeGrants()
@@ -134,6 +139,27 @@ export default function UyQuyenTruyCapPage() {
         ? grantsRes.data
         : grantsRes.data.message
       : undefined
+  const grantBitFilter = grantBits.reduce((mask, bit) => mask | bit, 0)
+  const filteredGrants = useMemo(() => {
+    const keyword = grantSearch.trim().toLowerCase()
+    return grantedRoles.filter((grant) => {
+      if (
+        keyword &&
+        ![grant.fullname, grant.code, grant.officerNumber].some((value) =>
+          value?.toLowerCase().includes(keyword)
+        )
+      ) {
+        return false
+      }
+      if (
+        grantBitFilter &&
+        !grant.permissions.some((permission) => (permission.lPermission & grantBitFilter) !== 0)
+      ) {
+        return false
+      }
+      return true
+    })
+  }, [grantedRoles, grantSearch, grantBitFilter])
 
   const canAssign = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_UY_QUYEN_TRUY_CAP, "SUA")
 
@@ -248,28 +274,43 @@ export default function UyQuyenTruyCapPage() {
 
   const detailRoleKey = detailRole ? getRoleKey(detailRole) : ""
 
-  const togglePermissionBit = (permission: SystemPermission, bit: number, checked: boolean) => {
+  const setPermissionMask = (permission: SystemPermission, mask: number) => {
     const formName = permission.sFormName
     if (!detailRoleKey || !formName) return
     const owned = ownedMask(permission)
-    setBitMasks((current) => {
-      const roleMasks = current[detailRoleKey] ?? {}
-      const mask = roleMasks[formName] ?? 0
-      return {
-        ...current,
-        [detailRoleKey]: {
-          ...roleMasks,
-          [formName]: withViewBit(checked ? mask | bit : mask & ~bit, owned),
-        },
-      }
-    })
+    setBitMasks((current) => ({
+      ...current,
+      [detailRoleKey]: {
+        ...(current[detailRoleKey] ?? {}),
+        [formName]: withViewBit(mask, owned),
+      },
+    }))
+  }
+
+  const detailSummary = useMemo(() => {
+    const roleMasks = bitMasks[detailRoleKey] ?? {}
+    let permissionCount = 0
+    let formCount = 0
+    for (const permission of detailRole?.Permissions ?? []) {
+      if (!permission.sFormName) continue
+      const mask = (roleMasks[permission.sFormName] ?? 0) & ownedMask(permission)
+      if (!mask) continue
+      formCount += 1
+      permissionCount += PERMISSION_LABELS.filter((item) => (mask & item.bit) === item.bit).length
+    }
+    return { permissionCount, formCount }
+  }, [bitMasks, detailRoleKey, detailRole])
+
+  const closeDetail = () => {
+    setDetailRole(null)
+    setDropdownOrder(null)
   }
 
   const permissionColumns: ColumnsType<SystemPermission> = [
     {
       title: "Chức năng",
       key: "sTen",
-      width: 280,
+      width: 240,
       render: (_, row) => row.sTen || row.sFormName || "—",
     },
     {
@@ -281,19 +322,62 @@ export default function UyQuyenTruyCapPage() {
         if (!available.length || !row.sFormName) {
           return formatPermissionTags(row)
         }
-        const selected = bitMasks[detailRoleKey]?.[row.sFormName] ?? 0
+        const formName = row.sFormName
+        const selected = bitMasks[detailRoleKey]?.[formName] ?? 0
+        const isChecked = (bit: number) => (selected & bit) === bit
+        const orderedItems =
+          dropdownOrder?.formName === formName
+            ? dropdownOrder.bits.flatMap((bit) => available.filter((item) => item.bit === bit))
+            : available
+
         return (
-          <Flex wrap="wrap" gap={8}>
-            {available.map((item) => (
-              <Checkbox
-                key={item.key}
-                checked={(selected & item.bit) === item.bit}
-                onChange={(event) => togglePermissionBit(row, item.bit, event.target.checked)}
-              >
-                {item.label}
-              </Checkbox>
-            ))}
-          </Flex>
+          <Select<number[]>
+            mode="multiple"
+            className="w-full"
+            placeholder="Chưa chọn quyền"
+            value={available.filter((item) => isChecked(item.bit)).map((item) => item.bit)}
+            options={orderedItems.map((item) => ({ value: item.bit, label: item.label }))}
+            maxTagCount="responsive"
+            allowClear
+            showSearch
+            optionFilterProp="label"
+            menuItemSelectedIcon={null}
+            onDropdownVisibleChange={(open) => {
+              if (!open) {
+                setDropdownOrder(null)
+                return
+              }
+              setDropdownOrder({
+                formName,
+                bits: [
+                  ...available.filter((item) => isChecked(item.bit)),
+                  ...available.filter((item) => !isChecked(item.bit)),
+                ].map((item) => item.bit),
+              })
+            }}
+            optionRender={(option) => (
+              <Checkbox checked={isChecked(Number(option.value))}>{option.label}</Checkbox>
+            )}
+            dropdownRender={(menu) => (
+              <>
+                <Flex
+                  justify="space-between"
+                  className="px-2 py-1"
+                  onMouseDown={(event) => event.preventDefault()}
+                >
+                  <Button type="link" size="small" onClick={() => setPermissionMask(row, owned)}>
+                    Chọn tất cả
+                  </Button>
+                  <Button type="link" size="small" onClick={() => setPermissionMask(row, 0)}>
+                    Bỏ chọn
+                  </Button>
+                </Flex>
+                <Divider className="my-1" />
+                {menu}
+              </>
+            )}
+            onChange={(bits) => setPermissionMask(row, bits.reduce((mask, bit) => mask | bit, 0))}
+          />
         )
       },
     },
@@ -431,7 +515,7 @@ export default function UyQuyenTruyCapPage() {
           {row.permissions.map((permission) => (
             <Flex key={permission.sFormName} vertical gap={4}>
               <Typography.Text>{permission.sTen || permission.sFormName}</Typography.Text>
-              {formatMaskTags(permission.lPermission)}
+              {formatMaskTags(permission.lPermission, grantBitFilter)}
             </Flex>
           ))}
         </Flex>
@@ -460,28 +544,18 @@ export default function UyQuyenTruyCapPage() {
   ]
 
   return (
-    <Flex vertical gap={16}>
-      <Card>
-        <Flex align="center" gap={12} className="mb-3">
-          <ShieldCheck size={22} />
-          <Typography.Title level={4} className="!m-0">
-            Ủy quyền truy cập chức năng
-          </Typography.Title>
-        </Flex>
-        <Alert
-          type="info"
-          showIcon
-          message="Giao vai trò hiện có của bạn cho cán bộ hoặc giảng viên."
-          description="Tick vai trò cần ủy quyền. Trong chi tiết, chọn từng quyền như Thêm hoặc Sửa. Bảng bên dưới liệt kê các lần đã giao; thu hồi sẽ tắt quyền đó của người nhận."
-        />
-      </Card>
-
+    <Flex vertical gap={12} className="h-[calc(100vh-153px)] min-h-0 overflow-hidden">
       {currentError ? (
         <Alert type="error" showIcon message={currentError} />
       ) : (
-        <Row gutter={[16, 16]}>
-          <Col xs={24} lg={11}>
-            <Card title="Quyền — vai trò hiện tại của tôi" loading={loadingCurrent}>
+        <Row gutter={[12, 12]} className="flex-[3] min-h-0">
+          <Col xs={24} lg={11} className="h-full">
+            <Card
+              size="small"
+              className="h-full"
+              title="Quyền — vai trò hiện tại của tôi"
+              loading={loadingCurrent}
+            >
               <Table
                 rowKey={(row, index) => getRoleKey(row, index)}
                 size="small"
@@ -489,7 +563,7 @@ export default function UyQuyenTruyCapPage() {
                 dataSource={currentRoles}
                 pagination={false}
                 locale={{ emptyText: "Chưa có vai trò" }}
-                scroll={{ y: 420 }}
+                scroll={{ y: "calc(60vh - 200px)" }}
                 rowSelection={{
                   selectedRowKeys: selectedRoleKeys,
                   onChange: (keys) => setSelectedRoleKeys(keys.map(String)),
@@ -497,8 +571,8 @@ export default function UyQuyenTruyCapPage() {
               />
             </Card>
           </Col>
-          <Col xs={24} lg={13}>
-            <Card title="Chọn người được ủy quyền">
+          <Col xs={24} lg={13} className="h-full">
+            <Card size="small" className="h-full" title="Chọn người được ủy quyền">
               <Flex vertical gap={12}>
                 <Input.Search
                   allowClear
@@ -516,7 +590,7 @@ export default function UyQuyenTruyCapPage() {
                   dataSource={users}
                   pagination={false}
                   locale={{ emptyText: "Không có cán bộ/giảng viên phù hợp" }}
-                  scroll={{ y: 360 }}
+                  scroll={{ y: "calc(60vh - 288px)" }}
                   rowSelection={{
                     selectedRowKeys: selectedUserIds,
                     onChange: (keys) => setSelectedUserIds(keys.map(String)),
@@ -540,6 +614,8 @@ export default function UyQuyenTruyCapPage() {
       )}
 
       <Card
+        size="small"
+        className="flex-[2] min-h-0"
         title="Quyền đã ủy quyền"
         extra={
           <Popconfirm
@@ -563,14 +639,42 @@ export default function UyQuyenTruyCapPage() {
         }
       >
         {grantsError ? <Alert type="error" showIcon message={grantsError} className="mb-3" /> : null}
+        <Flex gap={8} className="mb-3">
+          <Input.Search
+            allowClear
+            className="max-w-[360px]"
+            placeholder="Tìm theo họ tên, mã hoặc số hiệu"
+            onChange={(event) => setGrantSearch(event.target.value)}
+          />
+          <Select<number[]>
+            mode="multiple"
+            allowClear
+            className="min-w-[280px]"
+            placeholder="Lọc theo quyền"
+            maxTagCount="responsive"
+            optionFilterProp="label"
+            options={PERMISSION_LABELS.map((item) => ({ value: item.bit, label: item.label }))}
+            value={grantBits}
+            onChange={setGrantBits}
+          />
+        </Flex>
         <Table
           rowKey="id"
           size="small"
+          className="[&_.ant-table-body]:!h-[calc(40vh-252px)]"
           loading={loadingGrants || revokeGrants.isPending}
           columns={grantColumns}
-          dataSource={grantedRoles}
-          pagination={{ pageSize: 8, hideOnSinglePage: true }}
-          locale={{ emptyText: "Chưa ủy quyền cho ai" }}
+          dataSource={filteredGrants}
+          pagination={{
+            pageSize: 5,
+            size: "small",
+            showTotal: (total) => `${total} lần giao`,
+          }}
+          scroll={{ y: "calc(40vh - 252px)" }}
+          locale={{
+            emptyText:
+              grantSearch || grantBits.length ? "Không có kết quả phù hợp" : "Chưa ủy quyền cho ai",
+          }}
           rowSelection={{
             selectedRowKeys: selectedGrantIds,
             onChange: (keys) => setSelectedGrantIds(keys.map(String)),
@@ -581,10 +685,20 @@ export default function UyQuyenTruyCapPage() {
       <Modal
         title={`Quyền trong vai trò: ${detailRole?.sRoleName || detailRole?.sCodeName || ""}`}
         open={!!detailRole}
-        onCancel={() => setDetailRole(null)}
-        footer={null}
-        width={760}
+        onCancel={closeDetail}
+        width={860}
         destroyOnClose
+        footer={
+          <Flex justify="space-between" align="center" gap={8} wrap="wrap">
+            <Typography.Text type="secondary">
+              Đã chọn <Typography.Text strong>{detailSummary.permissionCount}</Typography.Text> quyền trên{" "}
+              <Typography.Text strong>{detailSummary.formCount}</Typography.Text> chức năng
+            </Typography.Text>
+            <Button type="primary" onClick={closeDetail}>
+              Xong
+            </Button>
+          </Flex>
+        }
       >
         <Table
           rowKey={(row, index) => row.sFormName || row.sTen || `permission-${index}`}
@@ -593,7 +707,7 @@ export default function UyQuyenTruyCapPage() {
           dataSource={detailRole?.Permissions ?? []}
           pagination={false}
           locale={{ emptyText: "Vai trò này chưa có quyền" }}
-          scroll={{ y: 420 }}
+          scroll={{ y: "calc(100vh - 320px)" }}
         />
       </Modal>
     </Flex>
