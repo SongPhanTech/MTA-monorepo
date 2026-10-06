@@ -127,8 +127,8 @@ export default function StudentScoreClassPage() {
     const monhocAll: IMonHoc[] = []
     if (displaySemesters.length > 0) {
       displaySemesters.forEach((item) => {
-        item.subjectClasses.forEach((subjectClass) => {
-          subjectClass.subjectClassStudent.forEach((subjectClassStudent) => {
+        item.subjectClasses.forEach((subjectClass:any) => {
+          subjectClass.subjectClassStudent.forEach((subjectClassStudent: any) => {
             monhocAll.push({
               TenMonhoc: subjectClassStudent.subjectVersion.name,
               MaMH: subjectClassStudent.subjectVersion.code?.slice(0, 2) ?? "",
