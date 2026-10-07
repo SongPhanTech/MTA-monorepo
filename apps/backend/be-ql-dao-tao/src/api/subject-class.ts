@@ -1362,7 +1362,8 @@ app.openapi(exportSubjectClassScore, async (c) => {
       firstFooter: "",
       oddFooter: `&LNgười in: ${NGUOI_IN}&C&P/&N&R${THOI_GIAN_IN}`,
     }
-    // Mẫu danh sách thi còn một hàng ô ${NGUOI_IN} | 1/1 | ${THOI_GIAN_IN} ngay dưới chữ ký.
+    // Mẫu còn ô ${THOI_GIAN_IN} trong thân sheet (phiếu kèm phách chỉ có giờ in,
+    // không kèm tên người in). Footer đã in giờ này — xóa bản trong thân để khỏi lặp.
     clearEmbeddedPrintFooter(worksheet, NGUOI_IN, THOI_GIAN_IN)
     const headerRange = findTableHeaderRange(worksheet)
     if (headerRange) {
@@ -1376,7 +1377,9 @@ app.openapi(exportSubjectClassScore, async (c) => {
           ...worksheet.pageSetup,
           printTitlesRow: `${headerRange.start}:${headerRange.end}`,
         }
-        addStudentPageBreaks(worksheet, firstDataRow, lastStudentRow, 25)
+        // Tên dài xuống nhiều dòng: nâng chiều cao hàng để không tràn sang hàng kế.
+        fitNameColumnRowHeight(worksheet, headerRange, firstDataRow, lastStudentRow)
+        addStudentPageBreaks(worksheet, headerRange, firstDataRow, lastStudentRow)
       } else {
         worksheet.pageSetup.printTitlesRow = undefined
       }
@@ -1549,32 +1552,27 @@ function rowHasUniqueSubheaderText(row: ExcelJS.Row, headerTexts: string[]): boo
   return nextTexts.some((text) => !headerSet.has(text))
 }
 
-/** Bỏ hàng người in/giờ in nằm trong thân sheet. Footer in thật nằm ở headerFooter. */
+/** Bỏ giờ in nằm trong thân sheet. Footer in thật nằm ở headerFooter. */
 function clearEmbeddedPrintFooter(
   worksheet: ExcelJS.Worksheet,
   nguoiIn: string,
   thoiGianIn: string
 ) {
-  if (!nguoiIn && !thoiGianIn) return
-  const rows: number[] = []
+  if (!thoiGianIn) return
   worksheet.eachRow({ includeEmpty: false }, (row) => {
-    let hasName = false
     let hasTime = false
     row.eachCell({ includeEmpty: false }, (cell) => {
-      const text = excelCellText(cell)
-      if (nguoiIn && text === nguoiIn) hasName = true
-      if (thoiGianIn && text === thoiGianIn) hasTime = true
+      if (excelCellText(cell) === thoiGianIn) hasTime = true
     })
-    if (hasName && hasTime) rows.push(row.number)
-  })
-  for (const rowNumber of rows) {
-    worksheet.getRow(rowNumber).eachCell({ includeEmpty: false }, (cell) => {
+    if (!hasTime) return
+    row.eachCell({ includeEmpty: false }, (cell) => {
       const text = excelCellText(cell)
-      if (text === nguoiIn || text === thoiGianIn || text === "1/1") {
+      // Cùng hàng có thể còn tên người in và "1/1" của mẫu danh sách thi.
+      if (text === thoiGianIn || (nguoiIn && text === nguoiIn) || text === "1/1") {
         cell.value = null
       }
     })
-  }
+  })
 }
 
 function findLastDataRow(worksheet: ExcelJS.Worksheet, firstDataRow: number): number {
@@ -1608,22 +1606,158 @@ function toColumnLetter(columnNumber: number): string {
   return result
 }
 
-/** Fixed N students per page; remainder stays on the last page (no thin middle pages). */
+function findNameColumn(
+  worksheet: ExcelJS.Worksheet,
+  headerRange: { start: number; end: number }
+): number | undefined {
+  for (let rowNumber = headerRange.start; rowNumber <= headerRange.end; rowNumber++) {
+    const row = worksheet.getRow(rowNumber)
+    let found: number | undefined
+    row.eachCell({ includeEmpty: false }, (cell, colNumber) => {
+      if (found || isMergedSlaveCell(cell)) return
+      const text = normalizeHeaderText(excelCellText(cell))
+      if (
+        text === "ho ten" ||
+        text.startsWith("ho ten ") ||
+        text.includes("ho va ten") ||
+        text === "ten thi sinh" ||
+        text.startsWith("ten thi sinh ")
+      ) {
+        found = colNumber
+      }
+    })
+    if (found) return found
+  }
+  return undefined
+}
+
+/** Ước lượng số dòng khi Excel ngắt theo từ, không ngắt giữa một từ. */
+function estimateWrappedLineCount(text: string, charsPerLine: number): number {
+  const limit = Math.max(1, charsPerLine)
+  let lines = 0
+  for (const paragraph of text.split(/\r?\n/)) {
+    const words = paragraph.trim().split(/\s+/).filter(Boolean)
+    if (words.length === 0) {
+      lines += 1
+      continue
+    }
+    let used = 0
+    let paragraphLines = 1
+    for (const word of words) {
+      const wordLines = Math.max(1, Math.ceil(word.length / limit))
+      const wordWidth = word.length > limit ? word.length % limit || limit : word.length
+      if (used === 0) {
+        paragraphLines += wordLines - 1
+        used = wordWidth
+        continue
+      }
+      if (word.length <= limit && used + 1 + word.length <= limit) {
+        used += 1 + word.length
+        continue
+      }
+      paragraphLines += wordLines
+      used = wordWidth
+    }
+    lines += paragraphLines
+  }
+  return Math.max(1, lines)
+}
+
+/** Nâng chiều cao hàng theo cột họ tên để tên nhiều dòng không đè lên hàng dưới khi in/PDF. */
+function fitNameColumnRowHeight(
+  worksheet: ExcelJS.Worksheet,
+  headerRange: { start: number; end: number },
+  firstDataRow: number,
+  lastDataRow: number
+) {
+  const nameCol = findNameColumn(worksheet, headerRange)
+  if (!nameCol) return
+
+  const columnWidth = worksheet.getColumn(nameCol).width
+  // width Excel ~ số ký tự; trừ padding và hệ số chữ hoa để không ước lượng thiếu dòng.
+  const charsPerLine =
+    columnWidth && columnWidth > 0 ? Math.max(8, Math.floor(columnWidth * 0.9) - 1) : 12
+
+  for (let rowNumber = firstDataRow; rowNumber <= lastDataRow; rowNumber++) {
+    const row = worksheet.getRow(rowNumber)
+    const cell = row.getCell(nameCol)
+    const text = excelCellText(cell)
+    if (!text) continue
+
+    cell.alignment = {
+      ...(cell.alignment ?? {}),
+      wrapText: true,
+      vertical: "middle",
+      shrinkToFit: false,
+    }
+
+    const lines = estimateWrappedLineCount(text, charsPerLine)
+    if (lines <= 1) continue
+
+    const fontSize = typeof cell.font?.size === "number" ? cell.font.size : 11
+    const needed = lines * (fontSize + 6) + 6
+    if (!row.height || row.height < needed) row.height = needed
+  }
+}
+
+function rowHeightOf(worksheet: ExcelJS.Worksheet, rowNumber: number, fallback: number) {
+  return worksheet.getRow(rowNumber).height || fallback
+}
+
+function pageContentHeight(worksheet: ExcelJS.Worksheet): number {
+  const setup = worksheet.pageSetup ?? {}
+  const landscape = setup.orientation === "landscape"
+  const isLetter = setup.paperSize === 1
+  const pageHeight = landscape ? (isLetter ? 612 : 595) : isLetter ? 792 : 842
+  const margins = setup.margins
+  const top = (margins?.top ?? 0.5) * 72
+  const bottom = (margins?.bottom ?? 0.5) * 72
+  const header = (margins?.header ?? 0.2) * 72
+  const footer = (margins?.footer ?? 0.2) * 72
+  return Math.max(180, pageHeight - top - bottom - header - footer)
+}
+
+/** Ngắt trang theo chiều cao hàng đã nâng, phần dư nằm ở trang cuối. */
 function addStudentPageBreaks(
   worksheet: ExcelJS.Worksheet,
+  headerRange: { start: number; end: number },
   firstDataRow: number,
-  lastDataRow: number,
-  studentsPerPage: number
+  lastDataRow: number
 ) {
-  const totalStudents = lastDataRow - firstDataRow + 1
-  if (totalStudents <= studentsPerPage) return
+  const pageHeight = pageContentHeight(worksheet)
+  let preamble = 0
+  for (let rowNumber = 1; rowNumber < headerRange.start; rowNumber++) {
+    preamble += rowHeightOf(worksheet, rowNumber, 15)
+  }
+  let tableHeader = 0
+  for (let rowNumber = headerRange.start; rowNumber <= headerRange.end; rowNumber++) {
+    tableHeader += rowHeightOf(worksheet, rowNumber, 18)
+  }
 
-  for (
-    let rowNumber = firstDataRow + studentsPerPage - 1;
-    rowNumber < lastDataRow;
-    rowNumber += studentsPerPage
-  ) {
-    worksheet.getRow(rowNumber).addPageBreak()
+  const lastUsedRow = findLastUsedRow(worksheet)
+  let tailHeight = 0
+  for (let rowNumber = lastDataRow + 1; rowNumber <= lastUsedRow; rowNumber++) {
+    tailHeight += rowHeightOf(worksheet, rowNumber, 15)
+  }
+
+  const firstPageBudget = Math.max(120, pageHeight - preamble - tableHeader)
+  const nextPageBudget = Math.max(120, pageHeight - tableHeader)
+  const maxPerPage = 25
+  let used = 0
+  let onPage = 0
+  let budget = firstPageBudget
+
+  for (let rowNumber = firstDataRow; rowNumber <= lastDataRow; rowNumber++) {
+    const height = rowHeightOf(worksheet, rowNumber, 18)
+    const limit = rowNumber === lastDataRow ? Math.max(height, budget - tailHeight) : budget
+    if (used > 0 && (used + height > limit || onPage >= maxPerPage)) {
+      worksheet.getRow(rowNumber - 1).addPageBreak()
+      used = 0
+      onPage = 0
+      budget = nextPageBudget
+    }
+    used += height
+    onPage += 1
   }
 }
 

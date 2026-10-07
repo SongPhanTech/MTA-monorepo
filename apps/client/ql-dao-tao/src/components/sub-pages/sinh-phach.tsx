@@ -78,25 +78,35 @@ export default function SinhPhach() {
           },
         },
       },
-      include: {
+      select: {
+        id: true,
+        examCode: true,
+        studentSubjectScoreId: true,
         studentSubjectScore: {
-          include: {
+          select: {
+            attendanceScore: true,
+            midtermScore: true,
+            examScore: true,
+            suspended: true,
+            suspendedReason: true,
+            description: true,
             student: {
-              include: {
-                userProfile: true,
-                fixedClass: true,
-              },
-            },
-            subjectClass: {
-              include: {
-                fixedClasses: {
-                  include: {
-                    trainingCourse: true,
+              select: {
+                userProfile: {
+                  select: {
+                    code: true,
+                    fullname: true,
+                    dateOfBirth: true,
+                  },
+                },
+                fixedClass: {
+                  select: {
+                    code: true,
+                    name: true,
                   },
                 },
               },
             },
-            subjectVersion: true,
           },
         },
       },
@@ -510,12 +520,25 @@ function AddExamPaperModal({
           },
         },
       },
-      include: {
+      select: {
+        id: true,
+        studentSubjectScoreId: true,
         studentSubjectScore: {
-          include: {
+          select: {
+            examBanned: true,
+            examBannedReason: true,
+            examPostponed: true,
+            examPostponedReason: true,
             student: {
-              include: {
-                userProfile: { include: { gender: true } },
+              select: {
+                userProfile: {
+                  select: {
+                    code: true,
+                    fullname: true,
+                    dateOfBirth: true,
+                    gender: { select: { sTen: true } },
+                  },
+                },
               },
             },
           },
