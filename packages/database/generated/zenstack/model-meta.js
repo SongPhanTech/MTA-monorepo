@@ -17767,6 +17767,19 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'notification',
+                }, targetDeviceId: {
+                    name: "targetDeviceId",
+                    type: "String",
+                    isOptional: true,
+                }, pushExpiresAt: {
+                    name: "pushExpiresAt",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Timestamptz", "args": [{ "name": "x", "value": 6 }] }],
+                }, reminderData: {
+                    name: "reminderData",
+                    type: "Json",
+                    isOptional: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -17777,7 +17790,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-danh-muc" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-danh-muc" }] }],
         },
         personalWorkTag: {
             name: 'PersonalWorkTag', fields: {

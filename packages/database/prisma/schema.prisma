@@ -301,6 +301,7 @@ enum NotificationType {
   EXAM_DEADLINE
   SURVEY_DEADLINE
   INDIVIDUAL_SCHEDULE
+  CLASS_REMINDER
 
   @@schema("ql-danh-muc")
 }
@@ -4776,8 +4777,13 @@ model Notification {
   lecturer       Lecturer?            @relation(fields: [lecturerId], references: [id])
   lecturerId     String?
   attachments    DocumentFile[]
+  targetDeviceId String?
+  pushExpiresAt  DateTime?            @db.Timestamptz(6)
+  reminderData   Json?
 
   @@index([lecturerId])
+  @@index([type, publishedAt])
+  @@index([targetDeviceId])
   @@schema("ql-danh-muc")
 }
 
