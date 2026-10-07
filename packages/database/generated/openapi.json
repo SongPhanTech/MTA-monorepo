@@ -1448,7 +1448,8 @@
           "PROCESS_SCORE_DEADLINE",
           "EXAM_DEADLINE",
           "SURVEY_DEADLINE",
-          "INDIVIDUAL_SCHEDULE"
+          "INDIVIDUAL_SCHEDULE",
+          "CLASS_REMINDER"
         ]
       },
       "NotificationPriority": {
@@ -17605,6 +17606,18 @@
             "items": {
               "$ref": "#/components/schemas/DocumentFile"
             }
+          },
+          "targetDeviceId": {
+            "type": "string",
+            "nullable": true
+          },
+          "pushExpiresAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "reminderData": {
+            "nullable": true
           }
         },
         "required": [
@@ -56073,6 +56086,18 @@
           },
           "lecturerId": {
             "type": "string",
+            "nullable": true
+          },
+          "targetDeviceId": {
+            "type": "string",
+            "nullable": true
+          },
+          "pushExpiresAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "reminderData": {
             "nullable": true
           },
           "_count": {
@@ -120362,6 +120387,15 @@
           "lecturerId": {
             "type": "integer"
           },
+          "targetDeviceId": {
+            "type": "integer"
+          },
+          "pushExpiresAt": {
+            "type": "integer"
+          },
+          "reminderData": {
+            "type": "integer"
+          },
           "_all": {
             "type": "integer"
           }
@@ -120389,6 +120423,9 @@
           "expiresAt",
           "targetAll",
           "lecturerId",
+          "targetDeviceId",
+          "pushExpiresAt",
+          "reminderData",
           "_all"
         ]
       },
@@ -120497,6 +120534,15 @@
           "lecturerId": {
             "type": "string",
             "nullable": true
+          },
+          "targetDeviceId": {
+            "type": "string",
+            "nullable": true
+          },
+          "pushExpiresAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         }
       },
@@ -120604,6 +120650,15 @@
           },
           "lecturerId": {
             "type": "string",
+            "nullable": true
+          },
+          "targetDeviceId": {
+            "type": "string",
+            "nullable": true
+          },
+          "pushExpiresAt": {
+            "type": "string",
+            "format": "date-time",
             "nullable": true
           }
         }

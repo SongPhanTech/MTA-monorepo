@@ -16820,6 +16820,18 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'notification',
+                }, targetDeviceId: {
+                    name: "targetDeviceId",
+                    type: "String",
+                    isOptional: true,
+                }, pushExpiresAt: {
+                    name: "pushExpiresAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, reminderData: {
+                    name: "reminderData",
+                    type: "Json",
+                    isOptional: true,
                 },
             }, uniqueConstraints: {
                 id: {

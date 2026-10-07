@@ -22,6 +22,7 @@ enum NotificationType {
   EXAM_DEADLINE     // Hạn nhập điểm thi
   SURVEY_DEADLINE   // Hạn điền khảo sát
   INDIVIDUAL_SCHEDULE // Lịch cá nhân
+  CLASS_REMINDER    // Nhắc trước buổi học (StudentPortal tạo)
   @@schema("ql-danh-muc")
 }
 
@@ -57,7 +58,15 @@ model Notification extends Base {
   // Tệp đính kèm
   attachments    DocumentFile[]
 
+  // Chỉ dùng cho CLASS_REMINDER: thiết bị nhận, hạn gửi push (giờ bắt đầu học) và snapshot buổi học.
+  // CHECK trong migration: nhắc học bắt buộc có đủ ba trường, loại khác bắt buộc null.
+  targetDeviceId String?
+  pushExpiresAt  DateTime?            @db.Timestamptz(6)
+  reminderData   Json?
+
   @@index([lecturerId])
+  @@index([type, publishedAt])
+  @@index([targetDeviceId])
   @@schema("ql-danh-muc")
 }
 
