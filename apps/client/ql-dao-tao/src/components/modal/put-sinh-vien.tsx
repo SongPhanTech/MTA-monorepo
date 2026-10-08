@@ -306,32 +306,7 @@ const PutStudentModal = () => {
         status: studentData.status,
         curriculumVersionId: studentData.curriculumVersionId ?? undefined,
         curriculumVersionParallelId: studentData.curriculumVersionParallelId ?? undefined,
-
-        // UserProfile fields với ID
-        firstName: studentData.userProfile?.firstName,
-        lastName: studentData.userProfile?.lastName,
-
-        idCardNumber: studentData.userProfile?.idCardNumber,
-      })
-    }
-  }, [studentData, form])
-
-  // Effect để fill thông tin khi có dữ liệu từ API
-  useEffect(() => {
-    if (cccdUserProfileData && !id) {
-      fillUserInfo(cccdUserProfileData)
-    }
-  }, [cccdUserProfileData, id, fillUserInfo])
-  useEffect(() => {
-    if (studentData) {
-      form.setFieldsValue({
-        // Student fields với ID
-        code: studentData.userProfile?.code,
-        fixedClassId: studentData.fixedClassId ?? undefined,
-        trainingCourseId: studentData.fixedClass?.trainingCourse?.id ?? undefined,
-        status: studentData.status,
-        curriculumVersionId: studentData.curriculumVersionId ?? undefined,
-        curriculumVersionParallelId: studentData.curriculumVersionParallelId ?? undefined,
+        note: studentData.note ?? undefined,
 
         // UserProfile fields với ID
         firstName: studentData.userProfile?.firstName,
