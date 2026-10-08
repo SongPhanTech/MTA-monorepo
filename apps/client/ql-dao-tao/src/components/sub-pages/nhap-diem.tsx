@@ -859,7 +859,8 @@ export default function NhapDiem({
           })
 
           openXemTaiLieu({
-            uri: getUrl(baseUrl, exportUrl),
+            // Cache-bust OnlyOffice document.key (lấy từ URL) để không mở phiếu cũ
+            uri: getUrl(baseUrl, `${exportUrl}&t=${Date.now()}`),
             name: "Phiếu điểm",
             mimeType: "xlsx",
             // convertTo: "pdf",
@@ -1101,12 +1102,12 @@ export default function NhapDiem({
                       uri: getUrl(
                         getRuntimeEnv("NEXT_PUBLIC_API_LMS_BASE_URL") ||
                           "https://api.daotao.mta.swantech.vn",
-                        getExportSubjectClassScoreUrl({
+                        `${getExportSubjectClassScoreUrl({
                           id: selectedSubjectClassId ?? "",
                           type: "NHAP",
                           role: role || "",
                           userId: profileId,
-                        })
+                        })}&t=${Date.now()}`
                       ),
                       name: "Phiếu điểm nháp",
                       mimeType: "xlsx",

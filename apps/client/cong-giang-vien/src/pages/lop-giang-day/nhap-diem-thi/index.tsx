@@ -627,47 +627,41 @@ const NhapDiemThiGiangDayPage = () => {
     })
   }
 
-  const handleInPhieuDiem = () => {
+  const moPhieuDiem = (opts: { type?: "NHAP"; name: string }) => {
     if (!lopId) {
       message.warning("Vui lòng chọn lớp học trước khi in")
       return
     }
-    if (laKyThiDanhPhach && !daKhoaDiem) {
-      message.warning("Kỳ thi đánh phách chỉ được in phiếu điểm khi lớp đã được khoá điểm")
+    if (rows.some((r) => r.isChanged)) {
+      message.warning("Có điểm chưa lưu. Vui lòng bấm Lưu trước khi in để phiếu có đủ điểm thi/HP")
       return
     }
     const baseUrl =
       getRuntimeEnv("NEXT_PUBLIC_API_LMS_BASE_URL") || "https://api.daotao.mta.swantech.vn"
     const exportUrl = getExportSubjectClassScoreUrl({
       id: lopId,
+      ...(opts.type ? { type: opts.type } : {}),
       role: "GV",
       userId: profileId || undefined,
     })
+    // Cache-bust: OnlyOffice key lấy từ URL; không có `t` thì mở lại phiếu cũ (chỉ CC/TX).
     openXemTaiLieu({
-      uri: getUrl(baseUrl, exportUrl),
-      name: "Phiếu điểm",
+      uri: getUrl(baseUrl, `${exportUrl}&t=${Date.now()}`),
+      name: opts.name,
       mimeType: "xlsx",
     })
   }
 
-  const handleInPhieuDiemNhap = () => {
-    if (!lopId) {
-      message.warning("Vui lòng chọn lớp học trước khi in")
+  const handleInPhieuDiem = () => {
+    if (laKyThiDanhPhach && !daKhoaDiem) {
+      message.warning("Kỳ thi đánh phách chỉ được in phiếu điểm khi lớp đã được khoá điểm")
       return
     }
-    const baseUrl =
-      getRuntimeEnv("NEXT_PUBLIC_API_LMS_BASE_URL") || "https://api.daotao.mta.swantech.vn"
-    const exportUrl = getExportSubjectClassScoreUrl({
-      id: lopId,
-      type: "NHAP",
-      role: "GV",
-      userId: profileId || undefined,
-    })
-    openXemTaiLieu({
-      uri: getUrl(baseUrl, exportUrl),
-      name: "Phiếu điểm nháp",
-      mimeType: "xlsx",
-    })
+    moPhieuDiem({ name: "Phiếu điểm" })
+  }
+
+  const handleInPhieuDiemNhap = () => {
+    moPhieuDiem({ type: "NHAP", name: "Phiếu điểm nháp" })
   }
 
   return (
