@@ -6080,7 +6080,8 @@ export namespace $Enums {
         PROCESS_SCORE_DEADLINE: 'PROCESS_SCORE_DEADLINE',
         EXAM_DEADLINE: 'EXAM_DEADLINE',
         SURVEY_DEADLINE: 'SURVEY_DEADLINE',
-        INDIVIDUAL_SCHEDULE: 'INDIVIDUAL_SCHEDULE'
+        INDIVIDUAL_SCHEDULE: 'INDIVIDUAL_SCHEDULE',
+        CLASS_REMINDER: 'CLASS_REMINDER'
     };
     export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType];
     export const NotificationPriority: {
@@ -9793,7 +9794,10 @@ export namespace Prisma {
         publishedAt: 'publishedAt',
         expiresAt: 'expiresAt',
         targetAll: 'targetAll',
-        lecturerId: 'lecturerId'
+        lecturerId: 'lecturerId',
+        targetDeviceId: 'targetDeviceId',
+        pushExpiresAt: 'pushExpiresAt',
+        reminderData: 'reminderData'
     };
     export const PersonalWorkTagScalarFieldEnum: {
         id: 'id',
@@ -14989,7 +14993,8 @@ export namespace Prisma {
         sThietBiSua: 'sThietBiSua',
         title: 'title',
         content: 'content',
-        lecturerId: 'lecturerId'
+        lecturerId: 'lecturerId',
+        targetDeviceId: 'targetDeviceId'
     };
     export const PersonalWorkTagOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -66773,6 +66778,9 @@ export namespace Prisma {
         readonly expiresAt: FieldRef<"Notification", 'DateTime'>;
         readonly targetAll: FieldRef<"Notification", 'Boolean'>;
         readonly lecturerId: FieldRef<"Notification", 'String'>;
+        readonly targetDeviceId: FieldRef<"Notification", 'String'>;
+        readonly pushExpiresAt: FieldRef<"Notification", 'DateTime'>;
+        readonly reminderData: FieldRef<"Notification", 'Json'>;
     }
 
     export interface PersonalWorkTagDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -270732,6 +270740,8 @@ export namespace Prisma {
         expiresAt: Date | null
         targetAll: boolean | null
         lecturerId: string | null
+        targetDeviceId: string | null
+        pushExpiresAt: Date | null
     };
     export type NotificationMaxAggregateOutputType = {
         id: string | null
@@ -270756,6 +270766,8 @@ export namespace Prisma {
         expiresAt: Date | null
         targetAll: boolean | null
         lecturerId: string | null
+        targetDeviceId: string | null
+        pushExpiresAt: Date | null
     };
     export type NotificationCountAggregateOutputType = {
         id: number
@@ -270780,6 +270792,9 @@ export namespace Prisma {
         expiresAt: number
         targetAll: number
         lecturerId: number
+        targetDeviceId: number
+        pushExpiresAt: number
+        reminderData: number
         _all: number
     };
     export type NotificationMinAggregateInputType = {
@@ -270805,6 +270820,8 @@ export namespace Prisma {
         expiresAt?: true
         targetAll?: true
         lecturerId?: true
+        targetDeviceId?: true
+        pushExpiresAt?: true
     };
     export type NotificationMaxAggregateInputType = {
         id?: true
@@ -270829,6 +270846,8 @@ export namespace Prisma {
         expiresAt?: true
         targetAll?: true
         lecturerId?: true
+        targetDeviceId?: true
+        pushExpiresAt?: true
     };
     export type NotificationCountAggregateInputType = {
         id?: true
@@ -270853,6 +270872,9 @@ export namespace Prisma {
         expiresAt?: true
         targetAll?: true
         lecturerId?: true
+        targetDeviceId?: true
+        pushExpiresAt?: true
+        reminderData?: true
         _all?: true
     };
     export type NotificationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -270944,6 +270966,9 @@ export namespace Prisma {
         expiresAt: Date | null
         targetAll: boolean
         lecturerId: string | null
+        targetDeviceId: string | null
+        pushExpiresAt: Date | null
+        reminderData: JsonValue | null
         _count: NotificationCountAggregateOutputType | null
         _min: NotificationMinAggregateOutputType | null
         _max: NotificationMaxAggregateOutputType | null
@@ -270983,6 +271008,9 @@ export namespace Prisma {
         expiresAt?: boolean
         targetAll?: boolean
         lecturerId?: boolean
+        targetDeviceId?: boolean
+        pushExpiresAt?: boolean
+        reminderData?: boolean
         targetCourses?: boolean | Notification$targetCoursesArgs<ExtArgs>
         targetClasses?: boolean | Notification$targetClassesArgs<ExtArgs>
         targetStudents?: boolean | Notification$targetStudentsArgs<ExtArgs>
@@ -271013,6 +271041,9 @@ export namespace Prisma {
         expiresAt?: boolean
         targetAll?: boolean
         lecturerId?: boolean
+        targetDeviceId?: boolean
+        pushExpiresAt?: boolean
+        reminderData?: boolean
         lecturer?: boolean | Notification$lecturerArgs<ExtArgs>
     }, ExtArgs["result"]["notification"]>;
     export type NotificationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -271038,6 +271069,9 @@ export namespace Prisma {
         expiresAt?: boolean
         targetAll?: boolean
         lecturerId?: boolean
+        targetDeviceId?: boolean
+        pushExpiresAt?: boolean
+        reminderData?: boolean
         lecturer?: boolean | Notification$lecturerArgs<ExtArgs>
     }, ExtArgs["result"]["notification"]>;
     export type NotificationSelectScalar = {
@@ -271063,8 +271097,11 @@ export namespace Prisma {
         expiresAt?: boolean
         targetAll?: boolean
         lecturerId?: boolean
+        targetDeviceId?: boolean
+        pushExpiresAt?: boolean
+        reminderData?: boolean
     };
-    export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "sNguoiTao" | "sNguoiSua" | "dNgayTao" | "dNgaySua" | "sThietBiTao" | "sThietBiSua" | "title" | "content" | "type" | "priority" | "publishedAt" | "expiresAt" | "targetAll" | "lecturerId", ExtArgs["result"]["notification"]>;
+    export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "sNguoiTao" | "sNguoiSua" | "dNgayTao" | "dNgaySua" | "sThietBiTao" | "sThietBiSua" | "title" | "content" | "type" | "priority" | "publishedAt" | "expiresAt" | "targetAll" | "lecturerId" | "targetDeviceId" | "pushExpiresAt" | "reminderData", ExtArgs["result"]["notification"]>;
     export type NotificationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         targetCourses?: boolean | Notification$targetCoursesArgs<ExtArgs>
         targetClasses?: boolean | Notification$targetClassesArgs<ExtArgs>
@@ -271111,6 +271148,9 @@ export namespace Prisma {
             expiresAt: Date | null
             targetAll: boolean
             lecturerId: string | null
+            targetDeviceId: string | null
+            pushExpiresAt: Date | null
+            reminderData: Prisma.JsonValue | null
         }, ExtArgs["result"]["notification"]>
         composites: {}
     };
@@ -425173,6 +425213,9 @@ export namespace Prisma {
         expiresAt?: DateTimeNullableFilter<"Notification"> | Date | string | null
         targetAll?: BoolFilter<"Notification"> | boolean
         lecturerId?: StringNullableFilter<"Notification"> | string | null
+        targetDeviceId?: StringNullableFilter<"Notification"> | string | null
+        pushExpiresAt?: DateTimeNullableFilter<"Notification"> | Date | string | null
+        reminderData?: JsonNullableFilter<"Notification">
         targetCourses?: TrainingCourseListRelationFilter
         targetClasses?: FixedClassListRelationFilter
         targetStudents?: StudentListRelationFilter
@@ -425202,6 +425245,9 @@ export namespace Prisma {
         expiresAt?: SortOrderInput | SortOrder
         targetAll?: SortOrder
         lecturerId?: SortOrderInput | SortOrder
+        targetDeviceId?: SortOrderInput | SortOrder
+        pushExpiresAt?: SortOrderInput | SortOrder
+        reminderData?: SortOrderInput | SortOrder
         targetCourses?: TrainingCourseOrderByRelationAggregateInput
         targetClasses?: FixedClassOrderByRelationAggregateInput
         targetStudents?: StudentOrderByRelationAggregateInput
@@ -425235,6 +425281,9 @@ export namespace Prisma {
         expiresAt?: DateTimeNullableFilter<"Notification"> | Date | string | null
         targetAll?: BoolFilter<"Notification"> | boolean
         lecturerId?: StringNullableFilter<"Notification"> | string | null
+        targetDeviceId?: StringNullableFilter<"Notification"> | string | null
+        pushExpiresAt?: DateTimeNullableFilter<"Notification"> | Date | string | null
+        reminderData?: JsonNullableFilter<"Notification">
         targetCourses?: TrainingCourseListRelationFilter
         targetClasses?: FixedClassListRelationFilter
         targetStudents?: StudentListRelationFilter
@@ -425264,6 +425313,9 @@ export namespace Prisma {
         expiresAt?: SortOrderInput | SortOrder
         targetAll?: SortOrder
         lecturerId?: SortOrderInput | SortOrder
+        targetDeviceId?: SortOrderInput | SortOrder
+        pushExpiresAt?: SortOrderInput | SortOrder
+        reminderData?: SortOrderInput | SortOrder
         _count?: NotificationCountOrderByAggregateInput
         _max?: NotificationMaxOrderByAggregateInput
         _min?: NotificationMinOrderByAggregateInput
@@ -425294,6 +425346,9 @@ export namespace Prisma {
         expiresAt?: DateTimeNullableWithAggregatesFilter<"Notification"> | Date | string | null
         targetAll?: BoolWithAggregatesFilter<"Notification"> | boolean
         lecturerId?: StringNullableWithAggregatesFilter<"Notification"> | string | null
+        targetDeviceId?: StringNullableWithAggregatesFilter<"Notification"> | string | null
+        pushExpiresAt?: DateTimeNullableWithAggregatesFilter<"Notification"> | Date | string | null
+        reminderData?: JsonNullableWithAggregatesFilter<"Notification">
     };
     export type PersonalWorkTagWhereInput = {
         AND?: PersonalWorkTagWhereInput | PersonalWorkTagWhereInput[]
@@ -467436,6 +467491,9 @@ export namespace Prisma {
         publishedAt?: Date | string
         expiresAt?: Date | string | null
         targetAll?: boolean
+        targetDeviceId?: string | null
+        pushExpiresAt?: Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
         targetCourses?: TrainingCourseCreateNestedManyWithoutNotificationsInput
         targetClasses?: FixedClassCreateNestedManyWithoutNotificationsInput
         targetStudents?: StudentCreateNestedManyWithoutNotificationsInput
@@ -467465,6 +467523,9 @@ export namespace Prisma {
         expiresAt?: Date | string | null
         targetAll?: boolean
         lecturerId?: string | null
+        targetDeviceId?: string | null
+        pushExpiresAt?: Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
         targetCourses?: TrainingCourseUncheckedCreateNestedManyWithoutNotificationsInput
         targetClasses?: FixedClassUncheckedCreateNestedManyWithoutNotificationsInput
         targetStudents?: StudentUncheckedCreateNestedManyWithoutNotificationsInput
@@ -467492,6 +467553,9 @@ export namespace Prisma {
         publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         targetAll?: BoolFieldUpdateOperationsInput | boolean
+        targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
+        pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
         targetCourses?: TrainingCourseUpdateManyWithoutNotificationsNestedInput
         targetClasses?: FixedClassUpdateManyWithoutNotificationsNestedInput
         targetStudents?: StudentUpdateManyWithoutNotificationsNestedInput
@@ -467521,6 +467585,9 @@ export namespace Prisma {
         expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         targetAll?: BoolFieldUpdateOperationsInput | boolean
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
+        pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
         targetCourses?: TrainingCourseUncheckedUpdateManyWithoutNotificationsNestedInput
         targetClasses?: FixedClassUncheckedUpdateManyWithoutNotificationsNestedInput
         targetStudents?: StudentUncheckedUpdateManyWithoutNotificationsNestedInput
@@ -467549,6 +467616,9 @@ export namespace Prisma {
         expiresAt?: Date | string | null
         targetAll?: boolean
         lecturerId?: string | null
+        targetDeviceId?: string | null
+        pushExpiresAt?: Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
     };
     export type NotificationUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -467572,6 +467642,9 @@ export namespace Prisma {
         publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         targetAll?: BoolFieldUpdateOperationsInput | boolean
+        targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
+        pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
     };
     export type NotificationUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -467596,6 +467669,9 @@ export namespace Prisma {
         expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         targetAll?: BoolFieldUpdateOperationsInput | boolean
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
+        pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
     };
     export type PersonalWorkTagCreateInput = {
         id?: string
@@ -504733,6 +504809,9 @@ export namespace Prisma {
         expiresAt?: SortOrder
         targetAll?: SortOrder
         lecturerId?: SortOrder
+        targetDeviceId?: SortOrder
+        pushExpiresAt?: SortOrder
+        reminderData?: SortOrder
     };
     export type NotificationMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -504757,6 +504836,8 @@ export namespace Prisma {
         expiresAt?: SortOrder
         targetAll?: SortOrder
         lecturerId?: SortOrder
+        targetDeviceId?: SortOrder
+        pushExpiresAt?: SortOrder
     };
     export type NotificationMinOrderByAggregateInput = {
         id?: SortOrder
@@ -504781,6 +504862,8 @@ export namespace Prisma {
         expiresAt?: SortOrder
         targetAll?: SortOrder
         lecturerId?: SortOrder
+        targetDeviceId?: SortOrder
+        pushExpiresAt?: SortOrder
     };
     export type EnumNotificationTypeWithAggregatesFilter<$PrismaModel = never> = {
         equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>
@@ -613191,6 +613274,9 @@ export namespace Prisma {
         publishedAt?: Date | string
         expiresAt?: Date | string | null
         targetAll?: boolean
+        targetDeviceId?: string | null
+        pushExpiresAt?: Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
         targetClasses?: FixedClassCreateNestedManyWithoutNotificationsInput
         targetStudents?: StudentCreateNestedManyWithoutNotificationsInput
         lecturer?: LecturerCreateNestedOneWithoutNotificationsInput
@@ -613219,6 +613305,9 @@ export namespace Prisma {
         expiresAt?: Date | string | null
         targetAll?: boolean
         lecturerId?: string | null
+        targetDeviceId?: string | null
+        pushExpiresAt?: Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
         targetClasses?: FixedClassUncheckedCreateNestedManyWithoutNotificationsInput
         targetStudents?: StudentUncheckedCreateNestedManyWithoutNotificationsInput
         attachments?: DocumentFileUncheckedCreateNestedManyWithoutNotificationInput
@@ -614210,6 +614299,9 @@ export namespace Prisma {
         expiresAt?: DateTimeNullableFilter<"Notification"> | Date | string | null
         targetAll?: BoolFilter<"Notification"> | boolean
         lecturerId?: StringNullableFilter<"Notification"> | string | null
+        targetDeviceId?: StringNullableFilter<"Notification"> | string | null
+        pushExpiresAt?: DateTimeNullableFilter<"Notification"> | Date | string | null
+        reminderData?: JsonNullableFilter<"Notification">
     };
     export type SurveyObjectTypeUpsertWithWhereUniqueWithoutTrainingCoursesInput = {
         where: SurveyObjectTypeWhereUniqueInput
@@ -616140,6 +616232,9 @@ export namespace Prisma {
         publishedAt?: Date | string
         expiresAt?: Date | string | null
         targetAll?: boolean
+        targetDeviceId?: string | null
+        pushExpiresAt?: Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
         targetCourses?: TrainingCourseCreateNestedManyWithoutNotificationsInput
         targetStudents?: StudentCreateNestedManyWithoutNotificationsInput
         lecturer?: LecturerCreateNestedOneWithoutNotificationsInput
@@ -616168,6 +616263,9 @@ export namespace Prisma {
         expiresAt?: Date | string | null
         targetAll?: boolean
         lecturerId?: string | null
+        targetDeviceId?: string | null
+        pushExpiresAt?: Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
         targetCourses?: TrainingCourseUncheckedCreateNestedManyWithoutNotificationsInput
         targetStudents?: StudentUncheckedCreateNestedManyWithoutNotificationsInput
         attachments?: DocumentFileUncheckedCreateNestedManyWithoutNotificationInput
@@ -639728,6 +639826,9 @@ export namespace Prisma {
         publishedAt?: Date | string
         expiresAt?: Date | string | null
         targetAll?: boolean
+        targetDeviceId?: string | null
+        pushExpiresAt?: Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
         targetCourses?: TrainingCourseCreateNestedManyWithoutNotificationsInput
         targetClasses?: FixedClassCreateNestedManyWithoutNotificationsInput
         lecturer?: LecturerCreateNestedOneWithoutNotificationsInput
@@ -639756,6 +639857,9 @@ export namespace Prisma {
         expiresAt?: Date | string | null
         targetAll?: boolean
         lecturerId?: string | null
+        targetDeviceId?: string | null
+        pushExpiresAt?: Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
         targetCourses?: TrainingCourseUncheckedCreateNestedManyWithoutNotificationsInput
         targetClasses?: FixedClassUncheckedCreateNestedManyWithoutNotificationsInput
         attachments?: DocumentFileUncheckedCreateNestedManyWithoutNotificationInput
@@ -647335,6 +647439,9 @@ export namespace Prisma {
         publishedAt?: Date | string
         expiresAt?: Date | string | null
         targetAll?: boolean
+        targetDeviceId?: string | null
+        pushExpiresAt?: Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
         targetCourses?: TrainingCourseCreateNestedManyWithoutNotificationsInput
         targetClasses?: FixedClassCreateNestedManyWithoutNotificationsInput
         targetStudents?: StudentCreateNestedManyWithoutNotificationsInput
@@ -647362,6 +647469,9 @@ export namespace Prisma {
         publishedAt?: Date | string
         expiresAt?: Date | string | null
         targetAll?: boolean
+        targetDeviceId?: string | null
+        pushExpiresAt?: Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
         targetCourses?: TrainingCourseUncheckedCreateNestedManyWithoutNotificationsInput
         targetClasses?: FixedClassUncheckedCreateNestedManyWithoutNotificationsInput
         targetStudents?: StudentUncheckedCreateNestedManyWithoutNotificationsInput
@@ -669193,6 +669303,9 @@ export namespace Prisma {
         publishedAt?: Date | string
         expiresAt?: Date | string | null
         targetAll?: boolean
+        targetDeviceId?: string | null
+        pushExpiresAt?: Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
         targetCourses?: TrainingCourseCreateNestedManyWithoutNotificationsInput
         targetClasses?: FixedClassCreateNestedManyWithoutNotificationsInput
         targetStudents?: StudentCreateNestedManyWithoutNotificationsInput
@@ -669221,6 +669334,9 @@ export namespace Prisma {
         expiresAt?: Date | string | null
         targetAll?: boolean
         lecturerId?: string | null
+        targetDeviceId?: string | null
+        pushExpiresAt?: Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
         targetCourses?: TrainingCourseUncheckedCreateNestedManyWithoutNotificationsInput
         targetClasses?: FixedClassUncheckedCreateNestedManyWithoutNotificationsInput
         targetStudents?: StudentUncheckedCreateNestedManyWithoutNotificationsInput
@@ -670707,6 +670823,9 @@ export namespace Prisma {
         publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         targetAll?: BoolFieldUpdateOperationsInput | boolean
+        targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
+        pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
         targetCourses?: TrainingCourseUpdateManyWithoutNotificationsNestedInput
         targetClasses?: FixedClassUpdateManyWithoutNotificationsNestedInput
         targetStudents?: StudentUpdateManyWithoutNotificationsNestedInput
@@ -670735,6 +670854,9 @@ export namespace Prisma {
         expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         targetAll?: BoolFieldUpdateOperationsInput | boolean
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
+        pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
         targetCourses?: TrainingCourseUncheckedUpdateManyWithoutNotificationsNestedInput
         targetClasses?: FixedClassUncheckedUpdateManyWithoutNotificationsNestedInput
         targetStudents?: StudentUncheckedUpdateManyWithoutNotificationsNestedInput
@@ -749681,6 +749803,9 @@ export namespace Prisma {
         publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         targetAll?: BoolFieldUpdateOperationsInput | boolean
+        targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
+        pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
         targetClasses?: FixedClassUpdateManyWithoutNotificationsNestedInput
         targetStudents?: StudentUpdateManyWithoutNotificationsNestedInput
         lecturer?: LecturerUpdateOneWithoutNotificationsNestedInput
@@ -749709,6 +749834,9 @@ export namespace Prisma {
         expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         targetAll?: BoolFieldUpdateOperationsInput | boolean
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
+        pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
         targetClasses?: FixedClassUncheckedUpdateManyWithoutNotificationsNestedInput
         targetStudents?: StudentUncheckedUpdateManyWithoutNotificationsNestedInput
         attachments?: DocumentFileUncheckedUpdateManyWithoutNotificationNestedInput
@@ -749736,6 +749864,9 @@ export namespace Prisma {
         expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         targetAll?: BoolFieldUpdateOperationsInput | boolean
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
+        pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
     };
     export type SurveyObjectTypeUpdateWithoutTrainingCoursesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -750855,6 +750986,9 @@ export namespace Prisma {
         publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         targetAll?: BoolFieldUpdateOperationsInput | boolean
+        targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
+        pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
         targetCourses?: TrainingCourseUpdateManyWithoutNotificationsNestedInput
         targetStudents?: StudentUpdateManyWithoutNotificationsNestedInput
         lecturer?: LecturerUpdateOneWithoutNotificationsNestedInput
@@ -750883,6 +751017,9 @@ export namespace Prisma {
         expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         targetAll?: BoolFieldUpdateOperationsInput | boolean
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
+        pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
         targetCourses?: TrainingCourseUncheckedUpdateManyWithoutNotificationsNestedInput
         targetStudents?: StudentUncheckedUpdateManyWithoutNotificationsNestedInput
         attachments?: DocumentFileUncheckedUpdateManyWithoutNotificationNestedInput
@@ -750910,6 +751047,9 @@ export namespace Prisma {
         expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         targetAll?: BoolFieldUpdateOperationsInput | boolean
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
+        pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
     };
     export type SurveyObjectTypeUpdateWithoutFixedClassesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -760892,6 +761032,9 @@ export namespace Prisma {
         publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         targetAll?: BoolFieldUpdateOperationsInput | boolean
+        targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
+        pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
         targetCourses?: TrainingCourseUpdateManyWithoutNotificationsNestedInput
         targetClasses?: FixedClassUpdateManyWithoutNotificationsNestedInput
         lecturer?: LecturerUpdateOneWithoutNotificationsNestedInput
@@ -760920,6 +761063,9 @@ export namespace Prisma {
         expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         targetAll?: BoolFieldUpdateOperationsInput | boolean
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
+        pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
         targetCourses?: TrainingCourseUncheckedUpdateManyWithoutNotificationsNestedInput
         targetClasses?: FixedClassUncheckedUpdateManyWithoutNotificationsNestedInput
         attachments?: DocumentFileUncheckedUpdateManyWithoutNotificationNestedInput
@@ -760947,6 +761093,9 @@ export namespace Prisma {
         expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         targetAll?: BoolFieldUpdateOperationsInput | boolean
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
+        pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
     };
     export type StudentResearchRegistrationUpdateWithoutStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -763814,6 +763963,9 @@ export namespace Prisma {
         publishedAt?: Date | string
         expiresAt?: Date | string | null
         targetAll?: boolean
+        targetDeviceId?: string | null
+        pushExpiresAt?: Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
     };
     export type PersonalWorkTagCreateManyLecturerInput = {
         id?: string
@@ -766067,6 +766219,9 @@ export namespace Prisma {
         publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         targetAll?: BoolFieldUpdateOperationsInput | boolean
+        targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
+        pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
         targetCourses?: TrainingCourseUpdateManyWithoutNotificationsNestedInput
         targetClasses?: FixedClassUpdateManyWithoutNotificationsNestedInput
         targetStudents?: StudentUpdateManyWithoutNotificationsNestedInput
@@ -766094,6 +766249,9 @@ export namespace Prisma {
         publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         targetAll?: BoolFieldUpdateOperationsInput | boolean
+        targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
+        pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
         targetCourses?: TrainingCourseUncheckedUpdateManyWithoutNotificationsNestedInput
         targetClasses?: FixedClassUncheckedUpdateManyWithoutNotificationsNestedInput
         targetStudents?: StudentUncheckedUpdateManyWithoutNotificationsNestedInput
@@ -766121,6 +766279,9 @@ export namespace Prisma {
         publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         targetAll?: BoolFieldUpdateOperationsInput | boolean
+        targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
+        pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reminderData?: NullableJsonNullValueInput | InputJsonValue
     };
     export type PersonalWorkTagUpdateWithoutLecturerInput = {
         id?: StringFieldUpdateOperationsInput | string

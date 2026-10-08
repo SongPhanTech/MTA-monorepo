@@ -30,6 +30,9 @@ const baseSchema = z.object({
     publishedAt: z.coerce.date().default(() => new Date()),
     expiresAt: z.coerce.date().nullish(),
     targetAll: z.boolean().default(false),
+    targetDeviceId: z.string().nullish(),
+    pushExpiresAt: z.coerce.date().nullish(),
+    reminderData: z.any().nullish(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -54,6 +57,9 @@ const baseSchemaWithoutDefaults = z.object({
     publishedAt: z.coerce.date(),
     expiresAt: z.coerce.date().nullish(),
     targetAll: z.boolean(),
+    targetDeviceId: z.string().nullish(),
+    pushExpiresAt: z.coerce.date().nullish(),
+    reminderData: z.any().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -113,7 +119,10 @@ export const NotificationPrismaUpdateSchema = z.object({
     priority: NotificationPrioritySchema,
     publishedAt: z.coerce.date(),
     expiresAt: z.coerce.date().nullish(),
-    targetAll: z.boolean()
+    targetAll: z.boolean(),
+    targetDeviceId: z.string().nullish(),
+    pushExpiresAt: z.coerce.date().nullish(),
+    reminderData: z.any().nullish()
 }).partial().passthrough();
 
 
