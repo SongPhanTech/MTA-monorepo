@@ -217,8 +217,11 @@ const BangLopGiangDay = ({ danhSach, loading, trang, soTrang }: BangLopGiangDayP
           },
           {
             key: "nhap-diem-qua-trinh",
-            label: "Nhập điểm quá trình",
+            label: record.monMotDauDiem
+              ? "Nhập điểm quá trình (môn 1 đầu điểm)"
+              : "Nhập điểm quá trình",
             icon: <PenLine size={14} />,
+            disabled: record.monMotDauDiem,
             onClick: () => moNhapDiem(record.id, "qua-trinh"),
           },
           {

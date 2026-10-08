@@ -35,6 +35,21 @@ const PutNotificationModal = () => {
   async function onOk(value: PutNotification) {
     try {
       showSpinner()
+      const notificationData = {
+        title: value.title,
+        content: value.content,
+        active: value.active,
+        publishedAt: value.publishedAt ? dayjs(value.publishedAt).toDate() : undefined,
+        expiresAt: value.expiresAt ? dayjs(value.expiresAt).toDate() : undefined,
+        attachments: {
+          create: attachments?.map((file) => ({
+            name: file.name,
+            path: file.path,
+            size: file.size ? Number(file.size) : 0,
+            mimeType: file.mimeType || "",
+          })),
+        },
+      }
       if (id) {
         const resUpdate = await sqlTransaction([
           {
@@ -53,19 +68,7 @@ const PutNotificationModal = () => {
             model: "Notification",
             operation: "update",
             data: {
-              data: {
-                ...value,
-                publishedAt: value.publishedAt ? dayjs(value.publishedAt).toDate() : undefined,
-                expiresAt: value.expiresAt ? dayjs(value.expiresAt).toDate() : undefined,
-                attachments: {
-                  create: attachments?.map((file) => ({
-                    name: file.name,
-                    path: file.path,
-                    size: file.size ? Number(file.size) : 0,
-                    mimeType: file.mimeType || "",
-                  })),
-                },
-              },
+              data: notificationData,
               where: { id },
             },
           },
@@ -76,19 +79,7 @@ const PutNotificationModal = () => {
         message.success("Cập nhật thành công")
       } else {
         await create({
-          data: {
-            ...value,
-            publishedAt: value.publishedAt ? dayjs(value.publishedAt).toDate() : undefined,
-            expiresAt: value.expiresAt ? dayjs(value.expiresAt).toDate() : undefined,
-            attachments: {
-              create: attachments?.map((file) => ({
-                name: file.name,
-                path: file.path,
-                size: file.size ? Number(file.size) : 0,
-                mimeType: file.mimeType || "",
-              })),
-            },
-          },
+          data: notificationData,
         })
         message.success("Thêm mới thành công")
       }

@@ -294,6 +294,7 @@ const NhapDiemThiGiangDayPage = () => {
   )
 
   const lopMonHoc = subjectClass?.[0]
+  const isOnePoint = !!lopMonHoc?.subject?.onePoint
 
   const coTheXuatDanhSachThi =
     !!lopMonHoc?.exam?.id &&
@@ -363,15 +364,19 @@ const NhapDiemThiGiangDayPage = () => {
       ...(function () {
         const trainingCourse = r.student?.fixedClass?.trainingCourse
         const storedHp = r.finalScore != null ? Number(r.finalScore) : null
+        const examScore = r.examScore ?? null
+        // Môn 1 đầu điểm: TX/ĐK = điểm thi để tính HP
+        const attendanceScore = isOnePoint ? examScore : (r.attendanceScore ?? null)
+        const midtermScore = isOnePoint ? examScore : (r.midtermScore ?? null)
         const computed =
-          r.attendanceScore == null || r.midtermScore == null || r.examScore == null
+          attendanceScore == null || midtermScore == null || examScore == null
             ? null
             : calcFinalScore(
                 trainingCourse ?? HE_SO_MAC_DINH,
                 {
-                  attendanceScore: r.attendanceScore,
-                  midtermScore: r.midtermScore,
-                  examScore: r.examScore,
+                  attendanceScore,
+                  midtermScore,
+                  examScore,
                   certificates: [],
                   awards: [],
                 },
@@ -388,19 +393,17 @@ const NhapDiemThiGiangDayPage = () => {
                 finalScore,
                 trainingCourse?.scoreConverts ?? [],
                 courseScoreConfigFrom(trainingCourse, {
-                  attendanceScore: r.attendanceScore,
-                  midtermScore: r.midtermScore,
-                  examScore: r.examScore,
+                  attendanceScore,
+                  midtermScore,
+                  examScore,
                 })
               )
             : null
-        return { finalScore, letter: convert?.letter ?? "" }
+        return { finalScore, letter: convert?.letter ?? "", attendanceScore, midtermScore }
       })(),
       id: r.id,
       mssv: r.student?.userProfile?.code ?? "",
       hoTen: r.student?.userProfile?.fullname ?? "",
-      attendanceScore: r.attendanceScore ?? null,
-      midtermScore: r.midtermScore ?? null,
       examScore: r.examScore ?? null,
       description: r.description ?? "",
       examBanned: r.examBanned ?? false,
@@ -412,7 +415,7 @@ const NhapDiemThiGiangDayPage = () => {
       isChanged: false,
     }))
     setRows(mapped)
-  }, [scoreRows])
+  }, [scoreRows, isOnePoint])
 
   type PatchDiemThi = Partial<
     Pick<
@@ -428,6 +431,11 @@ const NhapDiemThiGiangDayPage = () => {
 
   const tinhDongSauCapNhat = (row: RowData, patch: PatchDiemThi): RowData => {
     const next = { ...row, ...patch }
+    // Môn 1 đầu điểm: chỉ nhập điểm thi → TX/ĐK = điểm thi
+    if (isOnePoint) {
+      next.attendanceScore = next.examScore
+      next.midtermScore = next.examScore
+    }
     const goc = scoreRows.find((x) => x.id === row.id)
     const trainingCourse = goc?.student?.fixedClass?.trainingCourse
     const finalScoreTinhToan =
@@ -569,6 +577,10 @@ const NhapDiemThiGiangDayPage = () => {
             data: {
               where: { id: r.id },
               data: {
+                // Môn 1 đầu điểm: lưu TX/ĐK = điểm thi cùng lúc với điểm thi/HP
+                ...(isOnePoint
+                  ? { attendanceScore: r.examScore, midtermScore: r.examScore }
+                  : {}),
                 examScore: r.examScore,
                 finalScore: r.finalScore,
                 description: r.description || null,
@@ -585,8 +597,8 @@ const NhapDiemThiGiangDayPage = () => {
             data: {
               data: changed.map((r) => ({
                 studentSubjectScoreId: r.id,
-                attendanceScore: r.attendanceScore,
-                midtermScore: r.midtermScore,
+                attendanceScore: isOnePoint ? r.examScore : r.attendanceScore,
+                midtermScore: isOnePoint ? r.examScore : r.midtermScore,
                 examScore: r.examScore,
                 finalScore: r.finalScore,
                 description: r.description || null,
@@ -915,7 +927,11 @@ const NhapDiemThiGiangDayPage = () => {
                       max={10}
                       step={0.5}
                       disabled={khoaNhapDiem}
-                      onChange={(v) => capNhatDong(row.id, { examScore: Number(v) })}
+                      onChange={(v) =>
+                        capNhatDong(row.id, {
+                          examScore: v == null || Number.isNaN(Number(v)) ? null : Number(v),
+                        })
+                      }
                       className="w-full"
                     />
                   ),

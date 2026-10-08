@@ -1012,7 +1012,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 student: {
                   OR: [
                     { userProfile: { fullname: containsKw } },
-                    { code: containsKw },
+                    { userProfile: { code: containsKw } },
                     { fixedClass: { name: containsKw } },
                   ],
                 },
@@ -1096,7 +1096,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 student: {
                   OR: [
                     { userProfile: { fullname: containsKw } },
-                    { code: containsKw },
+                    { userProfile: { code: containsKw } },
                     { fixedClass: { name: containsKw } },
                   ],
                 },

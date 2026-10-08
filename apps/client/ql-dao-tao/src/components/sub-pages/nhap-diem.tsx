@@ -378,7 +378,17 @@ export default function NhapDiem({
     try {
       showSpinner()
 
-      const listChange = Object.entries(rowData)
+      // Flush pending UI updates trước khi đọc rowData (tránh mất TX/ĐK sync onePoint)
+      const pending = pendingRowUpdatesRef.current
+      const mergedRowData =
+        Object.keys(pending).length > 0 ? { ...rowData, ...pending } : rowData
+      if (Object.keys(pending).length > 0) {
+        pendingRowUpdatesRef.current = {}
+        setRowData(mergedRowData)
+      }
+
+      const isOnePoint = !!dataDetailSubjectClass?.subject?.onePoint
+      const listChange = Object.entries(mergedRowData)
         .map(([key, value]) => ({ id: key, ...value }))
         .filter((e) => e.isChanged)
 
@@ -395,10 +405,14 @@ export default function NhapDiem({
       }
       if (listChange.length > 0) {
         const dataWithFinalScore = listChange.map((item) => {
+          // Môn 1 đầu điểm: luôn lưu TX/ĐK = điểm thi
+          const examScore = item.examScore
+          const attendanceScore = isOnePoint ? examScore : item.attendanceScore
+          const midtermScore = isOnePoint ? examScore : item.midtermScore
           return {
-            attendanceScore: item.attendanceScore,
-            midtermScore: item.midtermScore,
-            examScore: item.examScore,
+            attendanceScore,
+            midtermScore,
+            examScore,
             finalScore: isNullish(item.finalScore) ? null : item.finalScore,
             description: item?.description,
             examPostponed: isNullish(item.examPostponed) ? null : item.examPostponed,
@@ -911,8 +925,9 @@ export default function NhapDiem({
           isConditional,
         })
         newRowData[cur.id] = {
-          attendanceScore: cur.attendanceScore,
-          midtermScore: cur.midtermScore,
+          // Môn 1 đầu điểm: hiển thị/lưu TX/ĐK theo điểm thi
+          attendanceScore: isOnePoint ? cur.examScore : cur.attendanceScore,
+          midtermScore: isOnePoint ? cur.examScore : cur.midtermScore,
           examScore: cur.examScore,
           description: cur.description,
           examBanned: cur.examBanned,
@@ -965,7 +980,7 @@ export default function NhapDiem({
         )}
         {!!dataDetailSubjectClass?.subject?.onePoint && (
           <Tag color={"green"} className="w-fit border-none px-2 py-1 text-[12px]">
-            Ba đầu điểm bằng nhau. Chỉ nhập điểm thi.
+            Môn 1 đầu điểm
           </Tag>
         )}
         {dataDetailSubjectClass?.type === $Enums.SubjectClassType.REEXAM && (
@@ -1295,7 +1310,10 @@ export default function NhapDiem({
                 align: "center",
                 render: (_, record) => {
                   const readOnly =
-                    role !== "GV" || score === "THI" || (disabledForm && !manualEnableLockPrint)
+                    role !== "GV" ||
+                    score === "THI" ||
+                    !!dataDetailSubjectClass?.subject?.onePoint ||
+                    (disabledForm && !manualEnableLockPrint)
                   return (
                     <ScoreInputCell
                       recordId={record.id}
@@ -1330,7 +1348,10 @@ export default function NhapDiem({
                 align: "center",
                 render: (_, record) => {
                   const readOnly =
-                    role !== "GV" || score === "THI" || (disabledForm && !manualEnableLockPrint)
+                    role !== "GV" ||
+                    score === "THI" ||
+                    !!dataDetailSubjectClass?.subject?.onePoint ||
+                    (disabledForm && !manualEnableLockPrint)
                   return (
                     <ScoreInputCell
                       recordId={record.id}

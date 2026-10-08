@@ -27,6 +27,7 @@ import {
   Modal,
   Select,
   Table,
+  Tag,
   message,
 } from "antd"
 import { cn } from "@workspace/ui/lib/utils"
@@ -302,6 +303,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
   )
 
   const lopMonHoc = subjectClass?.[0]
+  const isOnePoint = !!lopMonHoc?.subject?.onePoint
   const coTheXuatDanhSachThi =
     !!lopMonHoc?.exam?.id &&
     (lopMonHoc.exam.examRooms?.some((room) => (room.examList?.length ?? 0) > 0) ?? false)
@@ -309,6 +311,8 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
     if (!lopMonHoc?.scoreDeadline) return false
     return nowVn().isAfter(dayjs(lopMonHoc.scoreDeadline))
   }, [lopMonHoc?.scoreDeadline])
+  // Môn 1 đầu điểm: không nhập điểm quá trình (chỉ nhập điểm thi)
+  const khoaNhapDiemQuaTrinh = isOnePoint || quaHanNhapDiemQuaTrinh
 
   const { data: scoreRows = [], refetch } = useFindManyStudentSubjectScore(
     {
@@ -538,6 +542,10 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
   }, [rows, scoreRows])
 
   const luu = async () => {
+    if (isOnePoint) {
+      message.warning("Môn 1 đầu điểm")
+      return
+    }
     if (quaHanNhapDiemQuaTrinh) {
       message.warning("Đã quá hạn nhập điểm quá trình")
       return
@@ -775,17 +783,22 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
 
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-gray-100 bg-white p-3">
         <div className="mb-2 flex shrink-0 flex-wrap items-center justify-between gap-x-3 gap-y-2">
-          <span className="text-sm font-semibold text-cgv-green-dark">
-            BẢNG NHẬP ĐIỂM QUÁ TRÌNH
-          </span>
           <div className="flex items-center gap-2">
-            <Button icon={<Save size={14} />} onClick={luu} disabled={quaHanNhapDiemQuaTrinh}>
+            <span className="text-sm font-semibold text-cgv-green-dark">
+              BẢNG NHẬP ĐIỂM QUÁ TRÌNH
+            </span>
+            {isOnePoint && (
+              <Tag color="orange">Môn 1 đầu điểm</Tag>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            <Button icon={<Save size={14} />} onClick={luu} disabled={khoaNhapDiemQuaTrinh}>
               Lưu
             </Button>
             <Button
               icon={<FileUp size={14} />}
               onClick={() => setImportModalVisible(true)}
-              disabled={!lopId || rows.length === 0 || quaHanNhapDiemQuaTrinh}
+              disabled={!lopId || rows.length === 0 || khoaNhapDiemQuaTrinh}
             >
               Nhập điểm từ file
             </Button>
@@ -794,7 +807,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
               subjectClass={lopMonHoc}
               dataTable={scoreRows}
               type="TX/ĐK"
-              disabled={quaHanNhapDiemQuaTrinh}
+              disabled={khoaNhapDiemQuaTrinh}
             />
             <XuatDanhSachThiButton
               subjectClassId={lopId}
@@ -832,7 +845,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
                     min={0}
                     max={10}
                     step={0.5}
-                    disabled={quaHanNhapDiemQuaTrinh}
+                    disabled={khoaNhapDiemQuaTrinh}
                     onChange={(v) => capNhatDong(row.id, { attendanceScore: Number(v) })}
                     className="w-full"
                   />
@@ -850,7 +863,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
                     min={0}
                     max={10}
                     step={0.5}
-                    disabled={quaHanNhapDiemQuaTrinh}
+                    disabled={khoaNhapDiemQuaTrinh}
                     onChange={(v) => capNhatDong(row.id, { midtermScore: Number(v) })}
                     className="w-full"
                   />
@@ -879,7 +892,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
                 render: (value, row) => (
                   <Checkbox
                     checked={!!value}
-                    disabled={quaHanNhapDiemQuaTrinh}
+                    disabled={khoaNhapDiemQuaTrinh}
                     onChange={(e) =>
                       capNhatDong(row.id, {
                         examBanned: e.target.checked,
@@ -901,7 +914,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
                     onChange={(v: string) => capNhatDong(row.id, { examBannedReason: v })}
                     placeholder="Nhập lý do cấm thi"
                     options={examBanReason.map((s) => ({ label: s, value: s }))}
-                    disabled={!row.examBanned || quaHanNhapDiemQuaTrinh}
+                    disabled={!row.examBanned || khoaNhapDiemQuaTrinh}
                     className="w-full"
                   >
                     <Input size="small" />
@@ -929,7 +942,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
                       size="small"
                       value={value}
                       onChange={(e) => capNhatDong(row.id, { description: e.target.value })}
-                      disabled={quaHanNhapDiemQuaTrinh}
+                      disabled={khoaNhapDiemQuaTrinh}
                     />
                     <Button
                       type="text"
@@ -943,7 +956,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
                       size="small"
                       icon={<RotateCcw size={12} />}
                       title="Đặt lại dòng điểm"
-                      disabled={quaHanNhapDiemQuaTrinh}
+                      disabled={khoaNhapDiemQuaTrinh}
                       onClick={() =>
                         capNhatDong(row.id, {
                           attendanceScore: null,
