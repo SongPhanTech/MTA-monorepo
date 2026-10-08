@@ -1,3 +1,8 @@
+import {
+  AcademicRankingBaseType,
+  type AcademicRankingConvert,
+  RankingContext,
+} from "@workspace/db"
 import { getTemplateBuffer } from "@workspace/libs/server"
 import { formatDateVn } from "@workspace/libs/timezone"
 import type { Borders, Font, Alignment } from "exceljs"
@@ -696,4 +701,217 @@ export async function exportStudentYearResult({
   const result = (await template.generate({ type: "arraybuffer" })) as ArrayBuffer
 
   return result
+}
+
+const RANK_KEYS = ["xs", "gioi", "kha", "tbkha", "tb", "tbyeu", "yeu", "kem"] as const
+type RankKey = (typeof RANK_KEYS)[number]
+type RankCounts = Record<RankKey, number> & { soSV: number }
+
+const RANK_NAME_TO_KEY: Record<string, RankKey> = {
+  "xuất sắc": "xs",
+  giỏi: "gioi",
+  khá: "kha",
+  "trung bình khá": "tbkha",
+  "trung bình": "tb",
+  "trung bình yếu": "tbyeu",
+  yếu: "yeu",
+  kém: "kem",
+}
+
+const toRankKey = (classification?: string | null) =>
+  classification ? RANK_NAME_TO_KEY[classification.trim().toLowerCase()] : undefined
+
+const emptyCounts = (): RankCounts => ({
+  soSV: 0,
+  xs: 0,
+  gioi: 0,
+  kha: 0,
+  tbkha: 0,
+  tb: 0,
+  tbyeu: 0,
+  yeu: 0,
+  kem: 0,
+})
+
+const fmtCount = (n: number) => (n ? n : "")
+const fmtPct = (n: number, total: number) =>
+  n && total ? Math.round((n / total) * 1000) / 10 : ""
+
+const toRankOutput = (counts: RankCounts) => ({
+  soSV: counts.soSV,
+  ...Object.fromEntries(
+    RANK_KEYS.flatMap((k) => [
+      [k, fmtCount(counts[k])],
+      [`${k}Pct`, fmtPct(counts[k], counts.soSV)],
+    ])
+  ),
+})
+
+function buildRankSheetData(items: { classCode: string; classification?: string | null }[]) {
+  const byClass = new Map<string, RankCounts>()
+  for (const item of items) {
+    const counts = byClass.get(item.classCode) ?? emptyCounts()
+    counts.soSV++
+    const key = toRankKey(item.classification)
+    if (key) counts[key]++
+    byClass.set(item.classCode, counts)
+  }
+
+  const total = emptyCounts()
+  const rows = [...byClass.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([maLop, counts], idx) => {
+      total.soSV += counts.soSV
+      RANK_KEYS.forEach((k) => (total[k] += counts[k]))
+      return { stt: idx + 1, maLop, ...toRankOutput(counts) }
+    })
+
+  return { rows, tong: toRankOutput(total) }
+}
+
+function classifyByGpa(
+  gpa: number,
+  trainingCourseId: string | undefined,
+  baseScore: AcademicRankingBaseType,
+  converts: AcademicRankingConvert[]
+) {
+  if (!trainingCourseId) return undefined
+  const isBase10 = baseScore === AcademicRankingBaseType.Base10
+  return converts.find((item) => {
+    if (item.trainingCourseId !== trainingCourseId) return false
+    const min = isBase10 ? item.base10Min : item.base4Min
+    const max = isBase10 ? item.base10Max : item.base4Max
+    return min !== null && max !== null && gpa >= min && gpa <= max
+  })?.classification
+}
+
+export async function exportStudentSemesterResultV3({
+  semesterId,
+  trainingObjectTypeId,
+  trainingCourseId,
+  fixedClassId,
+}: {
+  semesterId: string
+  trainingObjectTypeId: string
+  trainingCourseId?: string
+  fixedClassId?: string
+}) {
+  const semester = await prisma.semester.findUniqueOrThrow({
+    where: { id: semesterId },
+    include: { schoolYear: true },
+  })
+
+  const trainingObjectType = await prisma.trainingObjectType.findUniqueOrThrow({
+    where: { id: trainingObjectTypeId },
+  })
+
+  const trainingCourse = trainingCourseId
+    ? await prisma.trainingCourse.findUnique({ where: { id: trainingCourseId } })
+    : null
+
+  const studentFilter = {
+    ...(fixedClassId ? { fixedClassId } : {}),
+    fixedClass: {
+      ...(trainingCourseId ? { trainingCourseId } : {}),
+      trainingCourse: { trainingObjectTypeId },
+    },
+  }
+
+  const studentSelect = {
+    select: {
+      fixedClass: { select: { code: true, trainingCourseId: true } },
+    },
+  }
+
+  const semesterResults = await prisma.studentSemesterResult.findMany({
+    where: { semesterId, student: studentFilter },
+    select: {
+      baseScore: true,
+      cumulativeGpaBase4: true,
+      cumulativeGpaBase10: true,
+      rank: { select: { classification: true } },
+      student: studentSelect,
+    },
+  })
+
+  if (semesterResults.length === 0) {
+    throw new HTTPException(404, { message: "Chưa có kết quả tổng kết học kỳ" })
+  }
+
+  const yearResults = await prisma.studentYearResult.findMany({
+    where: { schoolYearId: semester.schoolYearId, student: studentFilter },
+    select: {
+      rank: { select: { classification: true } },
+      student: studentSelect,
+    },
+  })
+
+  const trainingCourseIds = [
+    ...new Set(
+      semesterResults
+        .map((r) => r.student.fixedClass?.trainingCourseId)
+        .filter((id): id is string => !!id)
+    ),
+  ]
+
+  const rankingConverts = await prisma.academicRankingConvert.findMany({
+    where: {
+      trainingCourseId: { in: trainingCourseIds },
+      context: RankingContext.STUDYING,
+      deletedAt: null,
+    },
+  })
+
+  const sheetHK = buildRankSheetData(
+    semesterResults.map((r) => ({
+      classCode: r.student.fixedClass?.code ?? "",
+      classification: r.rank?.classification,
+    }))
+  )
+
+  const sheetNH = buildRankSheetData(
+    yearResults.map((r) => ({
+      classCode: r.student.fixedClass?.code ?? "",
+      classification: r.rank?.classification,
+    }))
+  )
+
+  const sheetTL = buildRankSheetData(
+    semesterResults.map((r) => {
+      const isBase10 = r.baseScore === AcademicRankingBaseType.Base10
+      const gpa = Number(isBase10 ? r.cumulativeGpaBase10 : r.cumulativeGpaBase4)
+      return {
+        classCode: r.student.fixedClass?.code ?? "",
+        classification: classifyByGpa(
+          gpa,
+          r.student.fixedClass?.trainingCourseId,
+          r.baseScore,
+          rankingConverts
+        ),
+      }
+    })
+  )
+
+  const doiTuong = trainingCourse?.name ?? trainingObjectType.name
+
+  const buffer = await getTemplateBuffer(prisma, "TK_KQHT_THEO_PHAN_TRAM.xlsx")
+  const template = new XlsxTemplate(buffer)
+
+  template.substitute(1, {
+    doiTuong,
+    thoiDiem: `Đến hiện tại ${formatDateVn(new Date())} (TÍCH LŨY)`,
+    ...sheetTL,
+  })
+  template.substitute(2, {
+    doiTuong,
+    thoiDiem: `Năm học ${semester.schoolYear.name}`,
+    ...sheetNH,
+  })
+  template.substitute(3, {
+    doiTuong,
+    thoiDiem: semester.name,
+    ...sheetHK,
+  })
+
+  return (await template.generate({ type: "arraybuffer" })) as ArrayBuffer
 }

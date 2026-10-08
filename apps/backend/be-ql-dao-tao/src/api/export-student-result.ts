@@ -2,6 +2,7 @@ import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import {
   exportStudentSemesterResult,
   exportStudentSemesterResultV2,
+  exportStudentSemesterResultV3,
 } from "../services/student-result"
 import { exportBangDiemCaNhan, exportBangDiemQuaTrinh } from "../services/export-bang-diem-ca-nhan"
 import {
@@ -159,6 +160,81 @@ app.openapi(exportStudentSemesterResultV2Route, async (c) => {
   })
 
   const fileName = "KET_QUA_HOC_TAP_HK_MAU2.xlsx"
+  const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+
+  return c.body(result, 200, {
+    "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "Content-Disposition": disposition,
+  })
+})
+
+const exportStudentSemesterResultV3Route = createRoute({
+  operationId: "exportStudentSemesterResultV3",
+  tags: ["Kết quả học tập"],
+  path: "/export-student-semester-result-v3",
+  method: "post",
+  summary: "Xuất thống kê KQHT theo % - Mẫu 3",
+  description: `Xuất file Excel thống kê số lượng và tỷ lệ % sinh viên theo xếp loại học lực của từng lớp, gồm 3 sheet: tích lũy, năm học, học kỳ.
+
+**Bảng dữ liệu nguồn:** StudentSemesterResult, StudentYearResult, AcademicRankingConvert, FixedClass.
+
+**Tham số:** semesterId, trainingObjectTypeId.`,
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: z
+            .object({
+              semesterId: z.string().openapi(fieldDesc("ID học kỳ (Semester).")),
+              trainingObjectTypeId: z
+                .string()
+                .openapi(fieldDesc("ID hệ đào tạo (TrainingObjectType).")),
+              trainingCourseId: z
+                .string()
+                .optional()
+                .openapi(fieldDesc("ID khoá đào tạo (TrainingCourse). Bỏ trống để xuất mọi khoá.")),
+              fixedClassId: z
+                .string()
+                .optional()
+                .openapi(fieldDesc("ID lớp quản lý (FixedClass). Bỏ trống để xuất mọi lớp.")),
+            })
+            .openapi("ExportStudentSemesterResultV3Request"),
+        },
+      },
+    },
+  },
+  responses: {
+    ...standardErrorResponses(),
+    200: {
+      description: "File Excel thống kê KQHT theo % - Mẫu 3",
+      content: {
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+          schema: ExcelBinaryResponseSchema,
+        },
+      },
+    },
+    404: {
+      description: "Not Found",
+      content: {
+        "application/json": {
+          schema: ErrorMessageResponseSchema,
+        },
+      },
+    },
+  },
+})
+
+app.openapi(exportStudentSemesterResultV3Route, async (c) => {
+  const { semesterId, trainingObjectTypeId, trainingCourseId, fixedClassId } = c.req.valid("json")
+
+  const result = await exportStudentSemesterResultV3({
+    semesterId,
+    trainingObjectTypeId,
+    trainingCourseId,
+    fixedClassId,
+  })
+
+  const fileName = "TK_KQHT_THEO_PHAN_TRAM.xlsx"
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
   return c.body(result, 200, {
