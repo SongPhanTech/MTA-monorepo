@@ -145,17 +145,51 @@ export type OrgTreeItem = {
   children?: OrgTreeItem[]
 }
 
-export function buildOrgTree(
-  list: Array<{
-    Id: string
-    sTen: string | null
-    sParentId: string | null
-    sMa: string | null
-  }>,
-  parentId = "0"
-): OrgTreeItem[] {
+type OrgListItem = {
+  Id: string
+  sTen: string | null
+  sParentId: string | null
+  sMa: string | null
+  iSTT?: number | null
+}
+
+const orgSttValue = (iSTT?: number | null) => (iSTT != null ? iSTT : Number.MAX_SAFE_INTEGER)
+
+const compareOrgBySTT = (a: { iSTT?: number | null }, b: { iSTT?: number | null }) =>
+  orgSttValue(a.iSTT) - orgSttValue(b.iSTT)
+
+/** Chỉ đổi thứ tự các đơn vị cùng cha. Thiếu iSTT thì xếp cuối. */
+export function sortOrgSiblings<T extends { sParentId?: string | null; iSTT?: number | null }>(
+  items: T[]
+): T[] {
+  const parentKeyOf = (item: T) =>
+    !item.sParentId || item.sParentId === "0" ? null : item.sParentId
+
+  const groups = new Map<string | null, T[]>()
+  for (const item of items) {
+    const key = parentKeyOf(item)
+    const group = groups.get(key)
+    if (group) group.push(item)
+    else groups.set(key, [item])
+  }
+
+  for (const group of groups.values()) {
+    group.sort(compareOrgBySTT)
+  }
+
+  const cursor = new Map<string | null, number>()
+  return items.map((item) => {
+    const key = parentKeyOf(item)
+    const index = cursor.get(key) ?? 0
+    cursor.set(key, index + 1)
+    return groups.get(key)![index]!
+  })
+}
+
+export function buildOrgTree(list: OrgListItem[], parentId = "0"): OrgTreeItem[] {
   return list
     .filter((item) => (item.sParentId || "0") === parentId)
+    .sort(compareOrgBySTT)
     .map((item) => ({
       label: [item.sMa, item.sTen].filter(Boolean).join(" - ") || "",
       value: item.Id,
@@ -179,13 +213,11 @@ export const limitTreeDepth = (
   }))
 }
 
-export const buildOrgFlat = (
-  list: Array<{ Id: string; sTen: string | null; sParentId: string | null; sMa: string | null }>,
-  parentId = "0"
-): OrgTreeItem[] => {
+export const buildOrgFlat = (list: OrgListItem[], parentId = "0"): OrgTreeItem[] => {
   let result: OrgTreeItem[] = []
   list
     .filter((item) => (item.sParentId || "0") === parentId)
+    .sort(compareOrgBySTT)
     .forEach((item) => {
       result.push({
         label: [item.sMa, item.sTen].filter(Boolean).join(" - ") || "",

@@ -10,6 +10,7 @@ export type DashboardOrg = {
   sTen: string | null
   sParentId: string | null
   sMa: string | null
+  iSTT?: number | null
   iLoaiDonVi: number | null
   lecturerCount: number
 }
@@ -19,6 +20,7 @@ export const dashboardOrgSelect = {
   sTen: true,
   sParentId: true,
   sMa: true,
+  iSTT: true,
   iLoaiDonVi: true,
   _count: {
     select: {
@@ -33,6 +35,7 @@ export function mapDashboardOrgs(
     sTen: string | null
     sParentId: string | null
     sMa: string | null
+    iSTT?: number | null
     iLoaiDonVi: number | null
     _count: { userProfiles: number }
   }>
@@ -42,6 +45,7 @@ export function mapDashboardOrgs(
     sTen: o.sTen,
     sParentId: o.sParentId,
     sMa: o.sMa,
+    iSTT: o.iSTT,
     iLoaiDonVi: o.iLoaiDonVi,
     lecturerCount: o._count.userProfiles,
   }))

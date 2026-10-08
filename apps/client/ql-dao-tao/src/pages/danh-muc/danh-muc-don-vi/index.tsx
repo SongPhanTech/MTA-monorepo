@@ -12,6 +12,7 @@ import {
 } from "@components/modal/put-danh-muc-don-vi"
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
+import { sortOrgSiblings } from "@lib/utils"
 import type { DM_DonVi } from "@workspace/db/client"
 import { useFindManyDM_DonVi, useUpdateDM_DonVi } from "@workspace/db/hooks"
 import { Button, Col, Flex, Input, message, Row, Tag, Tooltip } from "antd"
@@ -54,7 +55,7 @@ export default function DanhMucDonViPage() {
     })
 
     if (!keyword.trim()) {
-      return data.map(normalizeParent)
+      return sortOrgSiblings(data.map(normalizeParent))
     }
 
     const map = new Map(data.map((item) => [item.Id, item]))
@@ -79,7 +80,7 @@ export default function DanhMucDonViPage() {
       if (matched) markMatchedAndAncestors(item)
     })
 
-    return data.filter((item) => matchedIds.has(item.Id)).map(normalizeParent)
+    return sortOrgSiblings(data.filter((item) => matchedIds.has(item.Id)).map(normalizeParent))
   }, [data, keyword])
 
   async function handleDelete(Id: string) {
