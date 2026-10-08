@@ -33,6 +33,17 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
 dayjs.locale("vi")
 
+const EXPORT_TEMPLATES: Record<string, { url: string; fileName: string }> = {
+  "2": {
+    url: "/api/student-result/export-student-semester-result-v2",
+    fileName: "KET_QUA_HOC_TAP_HK_MAU2.xlsx",
+  },
+  "3": {
+    url: "/api/student-result/export-student-semester-result-v3",
+    fileName: "TK_KQHT_THEO_PHAN_TRAM.xlsx",
+  },
+}
+
 const DiemTrungBinhKyHoc = () => {
   const { id: semesterId } = useSemesterStore()
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
@@ -285,20 +296,21 @@ const DiemTrungBinhKyHoc = () => {
       ...(filters.fixedClassId ? { fixedClassId: filters.fixedClassId } : {}),
     }
 
-    if (template === "2") {
+    const exportConfig = EXPORT_TEMPLATES[template]
+    if (exportConfig) {
       try {
         showSpinner()
         const res = await customTrainingFetch<{
           status: number
           data: Blob & { message?: string }
-        }>("/api/student-result/export-student-semester-result-v2", {
+        }>(exportConfig.url, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
         })
         if (res.status === 200) {
           message.success("Xuất file thành công")
-          saveAs(res.data, "KET_QUA_HOC_TAP_HK_MAU2.xlsx")
+          saveAs(res.data, exportConfig.fileName)
         } else {
           message.error(res.data?.message || "Xuất file thất bại")
         }
@@ -361,6 +373,7 @@ const DiemTrungBinhKyHoc = () => {
                     items: [
                       { key: "1", label: "Mẫu 1" },
                       { key: "2", label: "Mẫu 2" },
+                      { key: "3", label: "Mẫu 3" },
                     ],
                     onClick: ({ key }) => handleExportExcel(key),
                   }}
