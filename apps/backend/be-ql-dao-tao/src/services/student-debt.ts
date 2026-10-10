@@ -44,9 +44,9 @@ export const latestAttemptRnExpr = PrismaNamespace.sql`
 `
 
 export const truotMonExpr = PrismaNamespace.sql`
-  (TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation")
-  or (TBS."graduation" = false and TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass")
-  or (TBS."graduation" = false and TBS."useForFinalScore" = false and SSS."finalScore" < TC."scoreToPassConditional")
+  (TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation"::numeric)
+  or (TBS."graduation" = false and TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass"::numeric)
+  or (TBS."graduation" = false and TBS."useForFinalScore" = false and SSS."finalScore" < TC."scoreToPassConditional"::numeric)
   or SSS."examScore" < TC."examScoreToPass"
   or SSS."attendanceScore" < TC."scoreToTakeExam"
   or SSS."midtermScore" < TC."scoreToTakeExam"
@@ -104,7 +104,7 @@ export async function queryDebtExportRows(
     with mon_no as (
       select
         S.id as "studentId",
-        S.code as "studentCode",
+        "UP"."code" as "studentCode",
         "UP"."fullname",
         "UP"."dateOfBirth",
         FC.code as "fixedClassCode",

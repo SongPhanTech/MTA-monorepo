@@ -451,7 +451,7 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
   }
   if (search) {
     conditions.push(
-      PrismaNamespace.sql`(S.code ILIKE ${`%${search}%`} OR "UP"."fullname" ILIKE ${`%${search}%`})`
+      PrismaNamespace.sql`("UP"."code" ILIKE ${`%${search}%`} OR "UP"."fullname" ILIKE ${`%${search}%`})`
     )
   }
   if (subjectVersionId) {
@@ -460,7 +460,7 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
   const whereClause = PrismaNamespace.join(conditions, " and ")
   const res = await prisma.$queryRaw<Result>`
         with mon_no as (select sv.id,
-                               S.code,
+                               "UP"."code",
                                sv.name,
                                "UP"."fullname",
                                sv."trainingObjectTypeId",
@@ -792,7 +792,7 @@ app.openapi(openSubjectClassReExamStudents, async (c) => {
   }
   if (search) {
     conditions.push(
-      PrismaNamespace.sql`(S.code ILIKE ${`%${search}%`} OR "UP"."fullname" ILIKE ${`%${search}%`})`
+      PrismaNamespace.sql`("UP"."code" ILIKE ${`%${search}%`} OR "UP"."fullname" ILIKE ${`%${search}%`})`
     )
   }
   if (subjectVersionId) {
@@ -801,7 +801,7 @@ app.openapi(openSubjectClassReExamStudents, async (c) => {
   const whereClause = PrismaNamespace.join(conditions, " and ")
   const res = await prisma.$queryRaw<Result>`
         with mon_no as (select sv.id,
-                               S.code,
+                               "UP"."code",
                                sv.name,
                                "UP"."fullname",
                                sv."trainingObjectTypeId",
