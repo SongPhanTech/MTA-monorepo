@@ -48,6 +48,49 @@ const COUNCIL_ROLE_LABEL: Record<CouncilRole, string> = {
   [CouncilRole.MEMBER]: "Ủy viên",
 }
 
+/** Chuẩn hóa tên học hàm/học vị để so khớp (bỏ dấu, sĩ/sỹ, hoa thường). */
+function normalizeAcademicLabel(value?: string | null) {
+  return (value ?? "")
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "")
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim()
+}
+
+/** Nhóm học hàm cho phép trên màn chuyên gia; ưu tiên nhận diện Phó giáo sư trước Giáo sư. */
+function expertRankKey(sTen?: string | null, sMa?: string | null) {
+  const name = normalizeAcademicLabel(sTen)
+  const code = (sMa ?? "").trim().toUpperCase()
+  if (name.includes("pho giao su") || code === "PGS") return "phó giáo sư"
+  if (name === "giao su" || code === "GS") return "giáo sư"
+  return null
+}
+
+/** Nhóm học vị cho phép trên màn chuyên gia. */
+function expertDegreeKey(sTen?: string | null, sMa?: string | null) {
+  const name = normalizeAcademicLabel(sTen)
+  const code = (sMa ?? "").trim().toUpperCase()
+  if (name.includes("thac s") || code === "THS") return "thạc sĩ"
+  if (name.includes("tien s") || code === "TS") return "tiến sĩ"
+  return null
+}
+
+function pickUniqueByKey<T extends { Id: string; sTen?: string | null; sMa?: string | null }>(
+  items: T[] | undefined,
+  getKey: (item: T) => string | null
+) {
+  const seen = new Set<string>()
+  const result: T[] = []
+  for (const item of items ?? []) {
+    const key = getKey(item)
+    if (!key || seen.has(key)) continue
+    seen.add(key)
+    result.push(item)
+  }
+  return result
+}
+
 export interface PutExpertProps {
   id?: string
   /** true = danh mục luận văn; false = danh mục đồ án */
@@ -206,8 +249,32 @@ const PutExpert = () => {
     { enabled: !!selectedLecturerId }
   )
 
-  const { data: academicRankType } = useFindManyDM_HocHam()
-  const { data: academicDegreeType } = useFindManyDM_HocVi()
+  // Chỉ hiển thị Giáo sư/Phó giáo sư và Tiến sĩ(sỹ)/Thạc sĩ(sỹ) trên màn chỉnh sửa chuyên gia
+  const { data: academicRankTypeRaw } = useFindManyDM_HocHam({
+    where: {
+      OR: [
+        { sTen: { contains: "giáo sư", mode: "insensitive" } },
+        { sMa: { in: ["GS", "PGS"] } },
+      ],
+    },
+  })
+  const { data: academicDegreeTypeRaw } = useFindManyDM_HocVi({
+    where: {
+      OR: [
+        { sTen: { contains: "tiến", mode: "insensitive" } },
+        { sTen: { contains: "thạc", mode: "insensitive" } },
+        { sMa: { in: ["TS", "ThS"] } },
+      ],
+    },
+  })
+  const academicRankType = useMemo(
+    () => pickUniqueByKey(academicRankTypeRaw, (item) => expertRankKey(item.sTen, item.sMa)),
+    [academicRankTypeRaw]
+  )
+  const academicDegreeType = useMemo(
+    () => pickUniqueByKey(academicDegreeTypeRaw, (item) => expertDegreeKey(item.sTen, item.sMa)),
+    [academicDegreeTypeRaw]
+  )
 
   const { data: councilMemberships = [], isFetching: loadingCouncilHistory } =
     useFindManyCouncilMember(

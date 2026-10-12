@@ -1375,9 +1375,10 @@ app.openapi(exportSubjectClassScore, async (c) => {
       const hasStudents = lastStudentRow >= firstDataRow
 
       if (hasStudents) {
-        // Native Excel/OnlyOffice repeat — reliable vs manual header row copies.
+        // Lặp header bằng printTitlesRow; số SV mỗi trang tính theo chiều cao thực.
         worksheet.pageSetup = {
           ...worksheet.pageSetup,
+          paperSize: worksheet.pageSetup.paperSize || 9,
           printTitlesRow: `${headerRange.start}:${headerRange.end}`,
         }
         addStudentPageBreaks(worksheet, headerRange, firstDataRow, lastStudentRow)
@@ -1490,7 +1491,6 @@ function findTableHeaderRange(
       if (parsed && parsed.top === rowNumber && parsed.bottom > endRow) endRow = parsed.bottom
     }
 
-    // Sub-header row (C.cần / T.xuyên...). Mẫu in phách để TT ở cột B, không phải cột A.
     if (endRow === rowNumber) {
       const nextRow = worksheet.getRow(endRow + 1)
       const sttColumn = findSttColumn(worksheet, { start: rowNumber, end: rowNumber })
@@ -1542,7 +1542,6 @@ function isMergedSlaveCell(cell: ExcelJS.Cell): boolean {
   return master.address !== cell.address
 }
 
-/** True when next row has sub-labels (C.cần, T.xuyên...) rather than a duplicate of the main header. */
 function rowHasUniqueSubheaderText(row: ExcelJS.Row, headerTexts: string[]): boolean {
   const nextTexts: string[] = []
   row.eachCell({ includeEmpty: false }, (cell) => {
@@ -1555,7 +1554,6 @@ function rowHasUniqueSubheaderText(row: ExcelJS.Row, headerTexts: string[]): boo
   return nextTexts.some((text) => !headerSet.has(text))
 }
 
-/** Bỏ giờ in nằm trong thân sheet. Footer in thật nằm ở headerFooter. */
 function clearEmbeddedPrintFooter(
   worksheet: ExcelJS.Worksheet,
   nguoiIn: string,
@@ -1653,7 +1651,6 @@ function columnLettersToIndex(letters: string): number {
   return index
 }
 
-/** Chừa một dòng footer (người in + giờ in) dưới nội dung, không đè lên bảng. */
 function reservePrintFooterLine(worksheet: ExcelJS.Worksheet) {
   const margins = { ...(worksheet.pageSetup?.margins ?? {}) }
   const footer = 0.28
@@ -1683,25 +1680,129 @@ function toColumnLetter(columnNumber: number): string {
   return result
 }
 
-const STUDENTS_PER_PRINT_PAGE = 25
-
-/** Ngắt trang sau mỗi 25 sinh viên; phần còn lại sang trang sau (header bảng lặp theo printTitlesRow). */
 function addStudentPageBreaks(
   worksheet: ExcelJS.Worksheet,
-  _headerRange: { start: number; end: number },
+  headerRange: { start: number; end: number },
   firstDataRow: number,
   lastDataRow: number
 ) {
   const studentCount = lastDataRow - firstDataRow + 1
-  if (studentCount <= STUDENTS_PER_PRINT_PAGE) return
+  if (studentCount <= 0) return
 
-  for (
-    let studentsOnPage = STUDENTS_PER_PRINT_PAGE;
-    studentsOnPage < studentCount;
-    studentsOnPage += STUDENTS_PER_PRINT_PAGE
-  ) {
-    worksheet.getRow(firstDataRow + studentsOnPage - 1).addPageBreak()
+  const printable = printableHeightPt(worksheet)
+  if (printable <= 0) return
+
+  let titleHeight = 0
+  for (let row = 1; row < headerRange.start; row++) {
+    titleHeight += rowHeightPt(worksheet, row)
   }
+  let headerHeight = 0
+  for (let row = headerRange.start; row <= headerRange.end; row++) {
+    headerHeight += rowHeightPt(worksheet, row)
+  }
+
+  const studentHeights: number[] = []
+  for (let row = firstDataRow; row <= lastDataRow; row++) {
+    studentHeights.push(rowHeightPt(worksheet, row))
+  }
+
+  let signatureHeight = 0
+  const lastUsed = findLastUsedRow(worksheet)
+  for (let row = lastDataRow + 1; row <= lastUsed; row++) {
+    signatureHeight += rowHeightPt(worksheet, row)
+  }
+
+  const sumRange = (from: number, to: number) => {
+    let total = 0
+    for (let i = from; i < to; i++) total += studentHeights[i]!
+    return total
+  }
+
+  if (
+    titleHeight + headerHeight + sumRange(0, studentCount) + signatureHeight <=
+    printable
+  ) {
+    worksheet.pageSetup.printTitlesRow = undefined
+    return
+  }
+
+  const countFitting = (start: number, end: number, budget: number) => {
+    let used = 0
+    let count = 0
+    for (let i = start; i < end; i++) {
+      const height = studentHeights[i]!
+      if (count > 0 && used + height > budget) break
+      if (count === 0 && height > budget) return 1
+      used += height
+      count += 1
+    }
+    return count
+  }
+
+  const breakAfterCounts: number[] = []
+  let consumed = 0
+
+
+  {
+    const budget = printable - titleHeight - headerHeight
+    let take = countFitting(0, studentCount, budget)
+    while (
+      take > 1 &&
+      take === studentCount &&
+      titleHeight + headerHeight + sumRange(0, take) + signatureHeight > printable
+    ) {
+      take -= 1
+    }
+    take = Math.max(1, Math.min(studentCount, take))
+    consumed = take
+    if (consumed < studentCount) breakAfterCounts.push(consumed)
+  }
+
+  while (consumed < studentCount) {
+    const remainingHeight = sumRange(consumed, studentCount)
+    if (headerHeight + remainingHeight + signatureHeight <= printable) {
+      break
+    }
+
+    const budget = printable - headerHeight
+    const take = Math.max(1, Math.min(studentCount - consumed, countFitting(consumed, studentCount, budget)))
+    consumed += take
+    if (consumed < studentCount) breakAfterCounts.push(consumed)
+    else break
+  }
+
+  for (const count of breakAfterCounts) {
+    worksheet.getRow(firstDataRow + count - 1).addPageBreak()
+  }
+}
+
+function printableHeightPt(worksheet: ExcelJS.Worksheet): number {
+  const { height } = paperSizePoints(worksheet)
+  const margins = worksheet.pageSetup?.margins
+  const top = (margins?.top ?? 0.5) * 72
+  const bottom = (margins?.bottom ?? 0.5) * 72
+  return Math.max(0, height - top - bottom)
+}
+
+function paperSizePoints(worksheet: ExcelJS.Worksheet): { width: number; height: number } {
+  const code = worksheet.pageSetup?.paperSize
+  const a4: [number, number] = [(210 / 25.4) * 72, (297 / 25.4) * 72]
+  const sizes: Record<number, [number, number]> = {
+    1: [8.5 * 72, 11 * 72],
+    8: [(297 / 25.4) * 72, (420 / 25.4) * 72],
+    9: a4,
+  }
+  const [shortSide, longSide] = sizes[code ?? 9] ?? a4
+  if (worksheet.pageSetup?.orientation === "landscape") {
+    return { width: longSide, height: shortSide }
+  }
+  return { width: shortSide, height: longSide }
+}
+
+function rowHeightPt(worksheet: ExcelJS.Worksheet, rowNumber: number): number {
+  const height = worksheet.getRow(rowNumber).height
+  if (height && height > 0) return height
+  return worksheet.properties.defaultRowHeight || 15
 }
 
 const deleteSubjectClassCascadeRoute = createRoute({
