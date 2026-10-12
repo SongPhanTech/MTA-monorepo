@@ -25,12 +25,18 @@ export default function KyThi({ setActiveKey }: { setActiveKey: (key: string) =>
   const [filters, setFilters] = useState<FilterProps>({
     name: "",
     searchText: "",
+    subjects: "",
     examType: undefined,
   })
 
   const { examId } = useStore(kythiStore)
 
   const where: Prisma.ExamWhereInput = useMemo(() => {
+    const searchText = filters.searchText?.trim()
+    const code = filters.code?.trim()
+    const name = filters.name?.trim()
+    const subjectClassText = filters.subjects?.trim()
+
     return {
       subjectClass: {
         some: {
@@ -39,8 +45,62 @@ export default function KyThi({ setActiveKey }: { setActiveKey: (key: string) =>
           ...(filters.examType && filters.examType.length > 0
             ? { examType: { in: filters.examType } }
             : {}),
+          ...(subjectClassText
+            ? {
+                OR: [
+                  {
+                    code: { contains: subjectClassText, mode: "insensitive" as const },
+                  },
+                  {
+                    name: { contains: subjectClassText, mode: "insensitive" as const },
+                  },
+                ],
+              }
+            : {}),
         },
       },
+      ...(searchText
+        ? {
+            OR: [
+              {
+                subjectVersion: {
+                  name: { contains: searchText, mode: "insensitive" as const },
+                },
+              },
+              {
+                subjectVersion: {
+                  code: { contains: searchText, mode: "insensitive" as const },
+                },
+              },
+              {
+                subjectClass: {
+                  some: {
+                    OR: [
+                      {
+                        name: { contains: searchText, mode: "insensitive" as const },
+                      },
+                      {
+                        code: { contains: searchText, mode: "insensitive" as const },
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
+          }
+        : {}),
+      ...(code || name
+        ? {
+            subjectVersion: {
+              ...(code
+                ? { code: { contains: code, mode: "insensitive" as const } }
+                : {}),
+              ...(name
+                ? { name: { contains: name, mode: "insensitive" as const } }
+                : {}),
+            },
+          }
+        : {}),
       lockExamSessions: true,
     }
   }, [trainingObjectTypeId, semesterId, filters])
@@ -85,6 +145,7 @@ export default function KyThi({ setActiveKey }: { setActiveKey: (key: string) =>
   )
   const debouncedSearch = useCallback(
     _.debounce((value: string) => {
+      setCurrentPage(1)
       setFilters((prev) => ({
         ...prev,
         searchText: value,
@@ -92,6 +153,11 @@ export default function KyThi({ setActiveKey }: { setActiveKey: (key: string) =>
     }, 300),
     []
   )
+
+  const handleSetFilters = useCallback((value: FilterProps) => {
+    setCurrentPage(1)
+    setFilters(value)
+  }, [])
 
   return (
     <div className="bg-white">
@@ -108,23 +174,25 @@ export default function KyThi({ setActiveKey }: { setActiveKey: (key: string) =>
             mode="multiple"
             placeholder="Chọn hình thức thi"
             className="w-60"
+            value={filters.examType}
             options={examTypeOptions.map((opt) => ({
               label: opt.label,
               value: opt.value,
             }))}
-            onChange={(value) =>
+            onChange={(value) => {
+              setCurrentPage(1)
               setFilters((prev) => ({
                 ...prev,
                 examType: value,
               }))
-            }
+            }}
           />
         </Flex>
         <Col span={24}>
           <Table
             rowKey="id"
             filters={filters}
-            setFilters={setFilters}
+            setFilters={handleSetFilters}
             onRow={(record) => {
               return {
                 onClick: () => {
@@ -185,9 +253,14 @@ export default function KyThi({ setActiveKey }: { setActiveKey: (key: string) =>
               },
               {
                 title: "Hình thức thi",
+                dataIndex: "examType",
                 width: 80,
-                type: "input",
+                type: "select",
                 align: "center",
+                options: examTypeOptions.map((opt) => ({
+                  label: opt.label,
+                  value: opt.value,
+                })),
                 render: (_, record) => {
                   const examType = record?.subjectClass?.[0]?.examType
                   if (!examType) return ""
@@ -213,6 +286,7 @@ export default function KyThi({ setActiveKey }: { setActiveKey: (key: string) =>
               },
               {
                 title: "Lớp môn học",
+                dataIndex: "subjects",
                 width: 150,
                 type: "input",
                 align: "center",
