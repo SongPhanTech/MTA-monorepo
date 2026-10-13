@@ -24,6 +24,7 @@ import {
   exportStudentsMissingCertificateExcel,
   useDeleteArchivedCertificate,
 } from "@workspace/libs/api/training"
+import { formatDateInSlash, parseVnDateEnd, parseVnDateStart } from "@workspace/libs/timezone"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
@@ -163,12 +164,12 @@ export default function ArchivedCertificate() {
       }
     }
 
-    if ((filters as any).phone) {
+    if ((filters as any).dateOfBirth?.length === 2) {
       studentCondition.userProfile = {
         ...studentCondition.userProfile,
-        phoneNumber: {
-          contains: (filters as any).phone,
-          mode: "insensitive" as const,
+        dateOfBirth: {
+          gte: parseVnDateStart(String((filters as any).dateOfBirth[0])) ?? undefined,
+          lte: parseVnDateEnd(String((filters as any).dateOfBirth[1])) ?? undefined,
         },
       }
     }
@@ -243,6 +244,16 @@ export default function ArchivedCertificate() {
       conditions.decisionNumber = {
         contains: (filters as any).decisionNumber,
         mode: "insensitive" as const,
+      }
+    }
+
+    const hasDocumentFile = (filters as any).hasDocumentFile
+    if (hasValue(hasDocumentFile)) {
+      const value = Array.isArray(hasDocumentFile) ? hasDocumentFile[0] : hasDocumentFile
+      if (value === "HAS") {
+        conditions.documentFiles = { some: {} }
+      } else if (value === "NONE") {
+        conditions.documentFiles = { none: {} }
       }
     }
 
@@ -845,12 +856,15 @@ export default function ArchivedCertificate() {
               },
             },
             {
-              title: "SĐT",
+              title: "Ngày sinh",
               align: "center",
               width: 120,
-              dataIndex: "phone",
-              type: "input",
-              render: (__, record) => record.student?.userProfile?.phoneNumber || "",
+              dataIndex: "dateOfBirth",
+              type: "date",
+              render: (__, record) => {
+                const dob = record.student?.userProfile?.dateOfBirth
+                return dob ? formatDateInSlash(dob) : "-"
+              },
             },
             {
               title: "Lớp",
@@ -995,22 +1009,39 @@ export default function ArchivedCertificate() {
               align: "center",
               width: 110,
               render: (__, record) =>
-                record?.issuedDate ? new Date(record.issuedDate).toLocaleDateString("vi-VN") : "-",
+                record?.issuedDate ? formatDateInSlash(record.issuedDate) : "-",
             },
             {
               title: "Ngày hết hạn",
               align: "center",
               width: 110,
               render: (__, record) =>
-                record?.expiredDate
-                  ? new Date(record.expiredDate).toLocaleDateString("vi-VN")
-                  : "-",
+                record?.expiredDate ? formatDateInSlash(record.expiredDate) : "-",
             },
             {
               title: "Ghi chú",
               align: "left",
               width: 180,
               render: (__, record) => record?.description || "-",
+            },
+            {
+              title: "Minh chứng",
+              align: "center",
+              width: 130,
+              dataIndex: "hasDocumentFile",
+              type: "select",
+              options: [
+                { label: "Đã có", value: "HAS" },
+                { label: "Chưa có", value: "NONE" },
+              ],
+              render: (__, record) => {
+                const hasFile = (record?.documentFiles?.length || 0) > 0
+                return (
+                  <span style={{ color: hasFile ? "green" : "orange" }}>
+                    {hasFile ? "Đã có" : "Chưa chưa"}
+                  </span>
+                )
+              },
             },
             {
               title: "Trạng thái",

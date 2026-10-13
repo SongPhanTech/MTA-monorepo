@@ -289,7 +289,7 @@ const ModalDanhSachChungChi = () => {
         .map((f: any) => ({ id: f.id }))
       const newFiles = files.filter((f) => !f.id)
 
-      await updateArchivedCertificate({
+      const updated = await updateArchivedCertificate({
         where: { id: certId },
         data: {
           ...saveData,
@@ -303,6 +303,7 @@ const ModalDanhSachChungChi = () => {
             })),
           },
         } as any,
+        include: { documentFiles: true },
       })
 
       // Xóa mapping cũ (hard delete vì unique archivedCertificateId+subjectVersionId), tạo lại theo draft
@@ -321,7 +322,18 @@ const ModalDanhSachChungChi = () => {
 
       const curriculumSubjects = getCurriculumSubjects(cert)
       const subjectMap = new Map(curriculumSubjects.map((s) => [s.id, s]))
+      const savedDocumentFiles = ((updated as any)?.documentFiles || []).map((f: any) => ({
+        id: f.id,
+        name: f.name,
+        path: f.path,
+        size: f.size ? BigInt(f.size) : BigInt(0),
+        mimeType: f.mimeType || "",
+      }))
 
+      setDraftDocFiles((prev) => ({
+        ...prev,
+        [certId]: savedDocumentFiles,
+      }))
       setDisplayCertificates((prev) =>
         prev.map((c) =>
           c.id === certId
@@ -330,6 +342,7 @@ const ModalDanhSachChungChi = () => {
               ...saveData,
               issuedDate: draft.issuedDate ? draft.issuedDate.toISOString() : null,
               expiredDate: draft.expiredDate ? draft.expiredDate.toISOString() : null,
+              documentFiles: savedDocumentFiles,
               subjectScores: subjectScores.map((s, idx) => ({
                 id: `temp-${idx}`,
                 subjectVersionId: s.subjectVersionId,
@@ -683,7 +696,6 @@ const ModalDanhSachChungChi = () => {
                     <Upload
                       multiple
                       accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx"
-                      disabled={cert.status === $Enums.ArchivedCertificateStatus.APPROVED}
                       beforeUpload={(file: File) => {
                         if (file.size / 1024 / 1024 > 50) {
                           message.error(`${file.name} vượt quá 50MB`)
@@ -698,7 +710,6 @@ const ModalDanhSachChungChi = () => {
                         type="default"
                         icon={<UploadOutlined />}
                         size="small"
-                        disabled={cert.status === $Enums.ArchivedCertificateStatus.APPROVED}
                         loading={uploadingCertId === cert.id}
                       >
                         Tải lên
@@ -744,11 +755,9 @@ const ModalDanhSachChungChi = () => {
 
               return (
                 <Flex justify="center" gap={8}>
-                  {!isApproved && (
-                    <Button size="small" onClick={() => setEditingCertId(cert.id)}>
-                      Sửa
-                    </Button>
-                  )}
+                  <Button size="small" onClick={() => setEditingCertId(cert.id)}>
+                    Sửa
+                  </Button>
                   <Button
                     size="small"
                     danger
