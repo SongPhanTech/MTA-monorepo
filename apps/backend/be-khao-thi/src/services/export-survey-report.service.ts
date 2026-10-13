@@ -1,6 +1,10 @@
 import { PrismaClient } from "@workspace/db"
 import ExcelJS from "exceljs"
-import { buildSurveyObjectTypeProfileOrClauses, SURVEY_OBJECT_TYPE_INCLUDE } from "../lib/survey-audience"
+import {
+  buildSurveyObjectTypeProfileOrClauses,
+  resolveMajorOrgFromSurveyObjectTypes,
+  SURVEY_OBJECT_TYPE_REPORT_INCLUDE,
+} from "../lib/survey-audience"
 
 function buildSheetData(survey: any, answerCountMap: Record<string, number>) {
   const groupsMap = new Map<string, { id: string, name?: string, questions: any[] }>()
@@ -83,16 +87,19 @@ const appendDataToSheet = (worksheet: ExcelJS.Worksheet, rowIndex: number, tData
   worksheet.getCell(`A${rowIndex}`).style = { ...titleStyle, alignment: { horizontal: "center" as const, vertical: "middle" as const } }
   rowIndex++
 
-  let orgString = majorOrg || "VIỆN CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG"
-  worksheet.mergeCells(`A${rowIndex}:${lastColLetter}${rowIndex}`)
-  worksheet.getCell(`A${rowIndex}`).value = majorName ? `KHOA/ĐƠN VỊ: ${orgString.toUpperCase()}` : "TỔNG HỢP CHUNG TOÀN HỌC VIỆN"
-  worksheet.getCell(`A${rowIndex}`).style = { ...titleStyle, alignment: { horizontal: "center" as const, vertical: "middle" as const } }
-  rowIndex++
+  if (majorOrg) {
+    worksheet.mergeCells(`A${rowIndex}:${lastColLetter}${rowIndex}`)
+    worksheet.getCell(`A${rowIndex}`).value = majorOrg.toUpperCase()
+    worksheet.getCell(`A${rowIndex}`).style = { ...titleStyle, alignment: { horizontal: "center" as const, vertical: "middle" as const } }
+    rowIndex++
+  }
 
-  worksheet.mergeCells(`A${rowIndex}:${lastColLetter}${rowIndex}`)
-  worksheet.getCell(`A${rowIndex}`).value = majorName ? `CHUYÊN NGÀNH: ${majorName.toUpperCase()}` : ""
-  worksheet.getCell(`A${rowIndex}`).style = { ...titleStyle, alignment: { horizontal: "center" as const, vertical: "middle" as const } }
-  rowIndex++
+  if (majorName) {
+    worksheet.mergeCells(`A${rowIndex}:${lastColLetter}${rowIndex}`)
+    worksheet.getCell(`A${rowIndex}`).value = `CHUYÊN NGÀNH HỌC: ${majorName.toUpperCase()}`
+    worksheet.getCell(`A${rowIndex}`).style = { ...titleStyle, alignment: { horizontal: "center" as const, vertical: "middle" as const } }
+    rowIndex++
+  }
 
   rowIndex++ 
 
@@ -222,11 +229,16 @@ export async function exportSurveyExcelReportService(prisma: PrismaClient, surve
         include: { surveyQuestionGroup: true },
       },
       surveyChoice: { orderBy: { answer: "asc" } },
-      surveyObjectType: { include: SURVEY_OBJECT_TYPE_INCLUDE },
+      surveyObjectType: { include: SURVEY_OBJECT_TYPE_REPORT_INCLUDE },
     },
   })
 
   if (!survey) return { buffer: null, surveyName: "" }
+
+  // Đơn vị từ thiết lập đối tượng: chuyên ngành đã chọn, hoặc chuyên ngành của lớp QL
+  const configOrgByMajor = resolveMajorOrgFromSurveyObjectTypes(survey.surveyObjectType)
+  const singleConfigOrg =
+    configOrgByMajor.size === 1 ? [...configOrgByMajor.values()][0] : ""
 
   let allProfiles: any[] = []
   for (const surveyObjectType of survey.surveyObjectType) {
@@ -247,10 +259,11 @@ export async function exportSurveyExcelReportService(prisma: PrismaClient, surve
                         trainingMajor: {
                           select: {
                             name: true,
-                            trainingField: { select: { name: true, organization: { select: { sTen: true } } } }
+                            organization: { select: { sTen: true } },
+                            trainingField: { select: { name: true } }
                           }
                         },
-                        trainingField: { select: { name: true, organization: { select: { sTen: true } } } }
+                        trainingField: { select: { name: true } }
                       }
                     }
                   }
@@ -270,16 +283,19 @@ export async function exportSurveyExcelReportService(prisma: PrismaClient, surve
     if (profileToMajorMap.has(p.id)) continue
 
     let mName = "Khác"
-    let org = "VIỆN CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG"
+    let org = ""
 
     const studentInfo = p.educationAndTraining?.[0]
-    if (studentInfo) {
-      const curriculum = studentInfo.fixedClass?.curriculumVersion?.curriculum
-      if (curriculum) {
-        mName = curriculum.trainingMajor?.name || curriculum.trainingField?.name || "Khác"
-        org = curriculum.trainingMajor?.trainingField?.organization?.sTen || curriculum.trainingField?.organization?.sTen || org
-      }
+    const curriculum = studentInfo?.fixedClass?.curriculumVersion?.curriculum
+    if (curriculum) {
+      mName = curriculum.trainingMajor?.name || curriculum.trainingField?.name || "Khác"
     }
+    // Đơn vị = đơn vị chuyên ngành (từ HV hoặc từ thiết lập đối tượng / lớp QL)
+    org =
+      curriculum?.trainingMajor?.organization?.sTen ||
+      configOrgByMajor.get(mName) ||
+      singleConfigOrg ||
+      ""
     profileToMajorMap.set(p.id, { majorName: mName, orgName: org })
   }
 
@@ -338,14 +354,29 @@ export async function exportSurveyExcelReportService(prisma: PrismaClient, surve
   let currentRowIndex = 1
   const globalData = buildSheetData(survey, globalAnswerCountMap)
   if (globalData.length > 0) {
-    currentRowIndex = appendDataToSheet(worksheet, currentRowIndex, globalData, survey.name)
+    const primaryMajorName =
+      [...majorsInfo.keys()].find((n) => n !== "Khác" && majorsInfo.get(n)) ||
+      [...majorsInfo.keys()].find((n) => n !== "Khác") ||
+      [...majorsInfo.keys()][0] ||
+      ""
+    const primaryMajorOrg = primaryMajorName
+      ? majorsInfo.get(primaryMajorName) || singleConfigOrg || ""
+      : singleConfigOrg || ""
+    currentRowIndex = appendDataToSheet(
+      worksheet,
+      currentRowIndex,
+      globalData,
+      survey.name,
+      primaryMajorName,
+      primaryMajorOrg
+    )
     currentRowIndex += 3
   }
 
   for (const [majorName, mCountMap] of majorAnswerCountMaps.entries()) {
     const majorData = buildSheetData(survey, mCountMap)
     if (majorData.length > 0) {
-      const orgName = majorsInfo.get(majorName) || "VIỆN CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG"
+      const orgName = majorsInfo.get(majorName) || ""
       currentRowIndex = appendDataToSheet(worksheet, currentRowIndex, majorData, survey.name, majorName, orgName)
       currentRowIndex += 3
     }

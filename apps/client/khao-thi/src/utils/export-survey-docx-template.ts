@@ -1,7 +1,7 @@
 import { message } from "antd"
 import { TemplateHandler } from "easy-template-x"
 import PizZip from "pizzip"
-import { getMinioUrl } from "@workspace/libs/utils"
+import { fetchMinio, getMinioUrl } from "@workspace/libs/utils"
 import { saveFile } from "@/utils/saveFile"
 
 import type { SurveyDocxTemplateVariant } from "@/constants/constants"
@@ -194,7 +194,8 @@ export async function exportSurveyDocxTemplate(input: ExportSurveyDocxTemplateIn
   }
 
   try {
-    const res = await fetch(templateUrl)
+    // fetchMinio: cache: no-store + query v=timestamp để lấy bản template mới sau khi upload đè
+    const res = await fetchMinio(TEMPLATE_KEYS[input.variant])
     if (!res.ok) {
       message.error("Không tải được file mẫu")
       return

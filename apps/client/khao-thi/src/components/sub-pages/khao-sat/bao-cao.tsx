@@ -458,20 +458,46 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
       }
 
       const buildSection = (title: string, tData: any, majorName: string = "", majorOrg: string = "") => {
-        return [
-          new Paragraph({
-            alignment: "center",
-            children: [
-              new TextRun({ text: majorName ? `CHUYÊN NGÀNH HỌC: ${majorName}`: "", bold: true, underline: majorName ? {} : undefined }),
-            ],
-          }),
-          new Paragraph({ text: "" }),
+        const headerParagraphs = [
           new Paragraph({
             alignment: "center",
             children: [
               new TextRun({ text: `Báo cáo khảo sát: ${name}`, bold: true, size: 28 }),
             ],
           }),
+          ...(majorOrg
+            ? [
+                new Paragraph({
+                  alignment: "center",
+                  children: [
+                    new TextRun({
+                      text: majorOrg.toUpperCase(),
+                      bold: true,
+                      size: 26,
+                    }),
+                  ],
+                }),
+              ]
+            : []),
+          ...(majorName
+            ? [
+                new Paragraph({
+                  alignment: "center",
+                  children: [
+                    new TextRun({
+                      text: `CHUYÊN NGÀNH: ${majorName.toUpperCase()}`,
+                      bold: true,
+                      underline: {},
+                      size: 26,
+                    }),
+                  ],
+                }),
+              ]
+            : []),
+        ]
+
+        return [
+          ...headerParagraphs,
           new Paragraph({ text: "" }),
           new Paragraph({
             children: [new TextRun({ text: "Thống kê theo từng Câu hỏi", bold: true, size: 24 })],
@@ -481,10 +507,20 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
       }
 
       const sections = []
-      
+
+      const primaryMajor =
+        (dataMajorCount || []).find((m: any) => m.name !== "Khác" && m.organization) ||
+        (dataMajorCount || []).find((m: any) => m.name !== "Khác") ||
+        (dataMajorCount || [])[0]
+
       sections.push({
         properties: {},
-        children: buildSection("Tổng hợp chung", dataTable)
+        children: buildSection(
+          "Tổng hợp chung",
+          dataTable,
+          primaryMajor?.name || "",
+          primaryMajor?.organization || ""
+        ),
       })
 
       if (dataMajorCount && dataMajorCount.length > 0) {

@@ -17,7 +17,9 @@ import {
 } from "../dto/survey-statistic.dto"
 import {
   SURVEY_OBJECT_TYPE_INCLUDE,
+  SURVEY_OBJECT_TYPE_REPORT_INCLUDE,
   buildSurveyObjectTypeProfileOrClauses,
+  resolveMajorOrgFromSurveyObjectTypes,
 } from "../lib/survey-audience"
 import { getBufferFromUrl } from "../services/template.service"
 import { exportSurveyExcelReportService } from "../services/export-survey-report.service"
@@ -916,7 +918,7 @@ app.openapi(getSurveyMajorCount, async (c) => {
     where: { id },
     include: {
       surveyObjectType: {
-        include: SURVEY_OBJECT_TYPE_INCLUDE,
+        include: SURVEY_OBJECT_TYPE_REPORT_INCLUDE,
       },
     },
   })
@@ -924,6 +926,11 @@ app.openapi(getSurveyMajorCount, async (c) => {
   if (!survey) {
     return c.json({ message: "Không tìm thấy khảo sát" }, 404)
   }
+
+  // Đơn vị từ thiết lập đối tượng: chuyên ngành đã chọn, hoặc chuyên ngành của lớp QL
+  const configOrgByMajor = resolveMajorOrgFromSurveyObjectTypes(survey.surveyObjectType)
+  const singleConfigOrg =
+    configOrgByMajor.size === 1 ? [...configOrgByMajor.values()][0] : ""
 
   let allProfiles: any[] = []
 
@@ -988,16 +995,19 @@ app.openapi(getSurveyMajorCount, async (c) => {
     let orgName = ""
 
     const studentInfo = p.educationAndTraining?.[0]
-    if (studentInfo) {
-      const curriculum = studentInfo.fixedClass?.curriculumVersion?.curriculum
-      if (curriculum) {
-        majorName = curriculum.trainingMajor?.trainingField?.name
-          || curriculum.trainingMajor?.name
-          || curriculum.trainingField?.name
-          || "Khác"
-        orgName = curriculum.trainingMajor?.organization?.sTen || ""
-      }
+    const curriculum = studentInfo?.fixedClass?.curriculumVersion?.curriculum
+    if (curriculum) {
+      majorName = curriculum.trainingMajor?.trainingField?.name
+        || curriculum.trainingMajor?.name
+        || curriculum.trainingField?.name
+        || "Khác"
     }
+    // Đơn vị = đơn vị chuyên ngành (từ HV hoặc từ thiết lập đối tượng / lớp QL)
+    orgName =
+      curriculum?.trainingMajor?.organization?.sTen ||
+      configOrgByMajor.get(majorName) ||
+      singleConfigOrg ||
+      ""
 
     profileIdToMajor.set(p.id, { majorName, orgName })
   })

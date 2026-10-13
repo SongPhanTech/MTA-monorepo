@@ -10,6 +10,86 @@ export const SURVEY_OBJECT_TYPE_INCLUDE = {
   subjectClasses: { select: { id: true } },
 }
 
+/** Include dùng cho báo cáo: lấy đơn vị từ chuyên ngành (hoặc chuyên ngành của lớp QL). */
+export const SURVEY_OBJECT_TYPE_REPORT_INCLUDE = {
+  ...SURVEY_OBJECT_TYPE_INCLUDE,
+  trainingMajors: {
+    select: {
+      id: true,
+      name: true,
+      organization: { select: { sTen: true } },
+      trainingField: { select: { name: true } },
+    },
+  },
+  fixedClasses: {
+    select: {
+      id: true,
+      curriculumVersion: {
+        select: {
+          curriculum: {
+            select: {
+              trainingMajor: {
+                select: {
+                  id: true,
+                  name: true,
+                  organization: { select: { sTen: true } },
+                  trainingField: { select: { name: true } },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+}
+
+type SurveyObjectMajorForOrg = {
+  name: string
+  organization?: { sTen: string | null } | null
+  trainingField?: { name: string } | null
+}
+
+/**
+ * Map tên chuyên ngành/ngành → đơn vị quản lý từ thiết lập đối tượng KS.
+ * - Có chọn chuyên ngành → lấy đơn vị của chuyên ngành đó
+ * - Không chọn chuyên ngành → lấy chuyên ngành từ lớp quản lý (lớp niên chế) rồi lấy đơn vị
+ */
+export function resolveMajorOrgFromSurveyObjectTypes(
+  objectTypes: Array<{
+    trainingMajors: SurveyObjectMajorForOrg[]
+    fixedClasses: Array<{
+      curriculumVersion?: {
+        curriculum?: {
+          trainingMajor?: SurveyObjectMajorForOrg | null
+        } | null
+      } | null
+    }>
+  }>
+): Map<string, string> {
+  const byName = new Map<string, string>()
+
+  const addMajor = (m?: SurveyObjectMajorForOrg | null) => {
+    if (!m?.organization?.sTen) return
+    byName.set(m.name, m.organization.sTen)
+    if (m.trainingField?.name) {
+      byName.set(m.trainingField.name, m.organization.sTen)
+    }
+  }
+
+  for (const ot of objectTypes) {
+    if (ot.trainingMajors.length > 0) {
+      for (const m of ot.trainingMajors) addMajor(m)
+    } else {
+      for (const fc of ot.fixedClasses) {
+        addMajor(fc.curriculumVersion?.curriculum?.trainingMajor)
+      }
+    }
+  }
+
+  return byName
+}
+
 type SurveyObjectTypeWithRelations = {
   type: string[]
   organizations: { Id: string }[]
