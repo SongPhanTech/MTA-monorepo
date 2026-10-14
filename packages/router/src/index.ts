@@ -489,6 +489,7 @@ const NAVIGATION: NavigationType = {
         id: "category",
         label: "Danh mục",
         icon: ListTree,
+        hidden: true,
         children: [
           {
             id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_DON_VI,
@@ -795,26 +796,26 @@ const NAVIGATION: NavigationType = {
         ],
       },
       {
-        id: "ql-xet-tot-nghiep",
-        label: "Xét tốt nghiệp",
-        icon: GraduationCap,
+        id: "ql-ho-so",
+        label: "Quản lý hồ sơ",
+        icon: FolderOpen,
         children: [
           {
-            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP,
-            label: "Đợt xét tốt nghiệp",
-            path: ROUTER_PATH.QL_DAO_TAO.XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP,
-            description: "Đợt xét tốt nghiệp",
+            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN,
+            label: "QL sinh viên, học viên",
+            icon: ReadOutlined,
+            path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_SINH_VIEN,
+            description: "QL sinh viên, học viên",
           },
-
           {
-            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_PHU_LUC_VAN_BANG,
-            label: "In phụ lục văn bằng, phôi bằng tốt nghiệp",
-            path: ROUTER_PATH.QL_DAO_TAO.XET_TOT_NGHIEP_PHU_LUC_VAN_BANG,
-            description: "In phụ lục văn bằng, phôi bằng tốt nghiệp",
+            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_DANH_SACH_GIANG_VIEN,
+            label: "QL giảng viên",
+            icon: ReadOutlined,
+            path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_DANH_SACH_GIANG_VIEN,
+            description: "QL giảng viên",
           },
         ],
       },
-
       {
         id: "quan-ly-van-bang",
         label: "Quản lý văn bằng",
@@ -848,23 +849,22 @@ const NAVIGATION: NavigationType = {
         ],
       },
       {
-        id: "ql-ho-so",
-        label: "Quản lý hồ sơ",
-        icon: FolderOpen,
+        id: "ql-xet-tot-nghiep",
+        label: "Xét tốt nghiệp",
+        icon: GraduationCap,
         children: [
           {
-            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN,
-            label: "QL sinh viên, học viên",
-            icon: ReadOutlined,
-            path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_SINH_VIEN,
-            description: "QL sinh viên, học viên",
+            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP,
+            label: "Đợt xét tốt nghiệp",
+            path: ROUTER_PATH.QL_DAO_TAO.XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP,
+            description: "Đợt xét tốt nghiệp",
           },
+
           {
-            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_DANH_SACH_GIANG_VIEN,
-            label: "QL giảng viên",
-            icon: ReadOutlined,
-            path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_DANH_SACH_GIANG_VIEN,
-            description: "QL giảng viên",
+            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_PHU_LUC_VAN_BANG,
+            label: "In phụ lục văn bằng, phôi bằng tốt nghiệp",
+            path: ROUTER_PATH.QL_DAO_TAO.XET_TOT_NGHIEP_PHU_LUC_VAN_BANG,
+            description: "In phụ lục văn bằng, phôi bằng tốt nghiệp",
           },
         ],
       },

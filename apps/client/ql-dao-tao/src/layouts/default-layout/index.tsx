@@ -1,4 +1,5 @@
 import logo_mta from "@assets/images/daotao.svg"
+import CatalogConfigMenu from "@components/layouts/catalog-config-menu"
 import SidebarMenuLayout from "@components/layouts/sider"
 import { useMenuList } from "@hooks/menu-list"
 import { cn } from "@lib/utils"
@@ -108,6 +109,7 @@ const DefaultLayout = ({
             <Breadcrumb className="text-xs" items={listBreadcrumb} />
           </div>
           <div className="flex items-center gap-2">
+            <CatalogConfigMenu />
             <HeaderApp />
           </div>
         </Header>
