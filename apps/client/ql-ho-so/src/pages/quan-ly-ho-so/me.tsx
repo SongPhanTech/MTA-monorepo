@@ -584,9 +584,9 @@ export default function UpdateUserPage() {
                 : null,
               tenureDate: values.tenureDate ? dayjs(values.tenureDate).toISOString() : null,
               avatar: form.getFieldValue("avatar"),
-              rankId: rank?.capBacId ?? undefined,
-              academicRankTypeId: hocham?.academicRankTypeId ?? undefined,
-              academicDegreeTypeId: hocvi?.academicDegreeTypeId ?? undefined,
+              rankId: rank?.capBacId ?? null,
+              academicRankTypeId: hocham?.academicRankTypeId ?? null,
+              academicDegreeTypeId: hocvi?.academicDegreeTypeId ?? null,
               hocVi:
                 values.hocVi && values.hocVi.length > 0
                   ? {

@@ -705,26 +705,35 @@ export const buildSubjectMapOrThrow = async (
   const unmappedOrgSet = new Set(unmappedOrgCodes)
   const warnings: string[] = []
 
-  const subjectsWithCode = subjects.filter((s): s is SubjectData & { code: string } =>
-    Boolean(s.code)
-  )
-  const existingCode = subjectsWithCode.length
+  const normalizeSubjectCode = (code: string) => code.trim().toUpperCase()
+
+  const subjectsWithCode = subjects
+    .filter((s): s is SubjectData & { code: string } => Boolean(s.code?.trim()))
+    .map((s) => ({ ...s, code: s.code.trim() }))
+
+  const uniqueCodes = [...new Set(subjectsWithCode.map((s) => s.code))]
+  const existingCode = uniqueCodes.length
     ? await prisma.subjectVersion.findMany({
         where: {
-          OR: subjectsWithCode.map((s) => ({
-            code: s.code,
+          OR: uniqueCodes.map((code) => ({
+            code: { equals: code, mode: "insensitive" as const },
           })),
         },
         include: { managementOrganization: { select: { sMa: true } } },
       })
     : []
 
-  const existingByCode = new Map(existingCode.map((e) => [e.code as string, e]))
+  // Key theo mã chuẩn hóa; nếu DB có nhiều bản cùng mã thì giữ bản đầu tiên
+  const existingByCode = new Map<string, (typeof existingCode)[number]>()
+  for (const row of existingCode) {
+    const key = normalizeSubjectCode(row.code)
+    if (!existingByCode.has(key)) existingByCode.set(key, row)
+  }
 
   const codeConflicts = subjects
     .map((s) => {
       if (!s.code) return null
-      const existing = existingByCode.get(s.code)
+      const existing = existingByCode.get(normalizeSubjectCode(s.code))
       if (!existing) return null
 
       const diffs: string[] = []
@@ -800,9 +809,11 @@ export const buildSubjectMapOrThrow = async (
   }
 
   // Ưu tiên map theo mã đã có trong hệ thống (kể cả khi lệch TC/tiết/đơn vị)
+  // Key theo đúng mã trong Excel để caller `.get(excelCode)` luôn khớp
   const resolved = new Map<string, string>()
-  for (const [code, row] of existingByCode) {
-    resolved.set(code, row.id)
+  for (const s of subjectsWithCode) {
+    const existing = existingByCode.get(normalizeSubjectCode(s.code))
+    if (existing) resolved.set(s.code, existing.id)
   }
 
   const existing = await prisma.subjectVersion.findMany({
@@ -810,7 +821,7 @@ export const buildSubjectMapOrThrow = async (
       OR: subjects.map((s) => ({
         name: s.name,
         trainingObjectTypeId: s.trainingObjectTypeId,
-        ...(s.code ? { code: s.code } : {}),
+        ...(s.code ? { code: { equals: s.code.trim(), mode: "insensitive" as const } } : {}),
         ...(s.organizationCode &&
         !unmappedOrgSet.has(s.organizationCode) &&
         orgMap.get(s.organizationCode)
@@ -823,16 +834,25 @@ export const buildSubjectMapOrThrow = async (
     select: { id: true, code: true },
   })
 
-  for (const row of existing) {
-    if (row.code) resolved.set(row.code, row.id)
+  const existingByNormFromName = new Map(
+    existing.map((row) => [normalizeSubjectCode(row.code), row.id])
+  )
+  for (const s of subjectsWithCode) {
+    if (resolved.has(s.code)) continue
+    const id = existingByNormFromName.get(normalizeSubjectCode(s.code))
+    if (id) resolved.set(s.code, id)
   }
 
-  const missing = subjects.filter(({ code }) => Boolean(code) && !resolved.has(code))
+  const missing = subjectsWithCode.filter(({ code }) => !resolved.has(code))
+  // Tránh tạo nhiều SubjectVersion cùng mã trong một lần import
+  const missingUnique = [
+    ...new Map(missing.map((s) => [normalizeSubjectCode(s.code), s])).values(),
+  ]
 
-  if (missing.length && createNewSubject) {
+  if (missingUnique.length && createNewSubject) {
     const newSubjects = await prisma.$transaction(async (tx) => {
       await tx.subject.createMany({
-        data: missing.map((s) => ({
+        data: missingUnique.map((s) => ({
           name: s.name,
           managementOrganizationId: orgMap.get(s.organizationCode || "") ?? undefined,
         })),
@@ -841,7 +861,7 @@ export const buildSubjectMapOrThrow = async (
 
       const subjectGroup = await tx.subject.findMany({
         where: {
-          OR: missing.map((s) => ({
+          OR: missingUnique.map((s) => ({
             name: s.name,
             managementOrganizationId: orgMap.get(s.organizationCode || "") ?? null,
           })),
@@ -854,7 +874,7 @@ export const buildSubjectMapOrThrow = async (
       )
 
       return await tx.subjectVersion.createManyAndReturn({
-        data: missing.map((subject) => {
+        data: missingUnique.map((subject) => {
           const orgId = orgMap.get(subject.organizationCode || "")
           return {
             name: subject.name,
@@ -881,8 +901,13 @@ export const buildSubjectMapOrThrow = async (
       })
     })
 
-    for (const row of newSubjects) {
-      if (row.code) resolved.set(row.code, row.id)
+    const newByNorm = new Map(
+      newSubjects.map((row) => [normalizeSubjectCode(row.code), row.id])
+    )
+    for (const s of subjectsWithCode) {
+      if (resolved.has(s.code)) continue
+      const id = newByNorm.get(normalizeSubjectCode(s.code))
+      if (id) resolved.set(s.code, id)
     }
 
     return {
@@ -891,8 +916,8 @@ export const buildSubjectMapOrThrow = async (
       warnings,
     }
   }
-  if (missing.length && !createNewSubject) {
-    const missingDetails = missing
+  if (missingUnique.length && !createNewSubject) {
+    const missingDetails = missingUnique
       .map(({ name, organizationCode, credit }) => `${name} (${credit}) - ${organizationCode}`)
       .join("; ")
 

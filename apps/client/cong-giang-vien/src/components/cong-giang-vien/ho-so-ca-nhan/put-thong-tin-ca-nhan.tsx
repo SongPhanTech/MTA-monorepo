@@ -161,6 +161,23 @@ const PutThongTinCaNhanModal = () => {
     if (!id) return
     try {
       showSpinner()
+      const hocViList = value.hocVi ?? []
+      const hocHamList = value.hocHam ?? []
+      const latestHocVi =
+        hocViList.length > 0
+          ? hocViList.reduce((latest, current) =>
+              (current.year ?? 0) >= (latest.year ?? 0) ? current : latest
+            )
+          : null
+      const latestHocHam =
+        hocHamList.length > 0
+          ? hocHamList.reduce((latest, current) => {
+              const currentFrom = current.from ? dayjs(current.from).valueOf() : 0
+              const latestFrom = latest.from ? dayjs(latest.from).valueOf() : 0
+              return currentFrom >= latestFrom ? current : latest
+            })
+          : null
+
       await update({
         where: { id },
         data: {
@@ -180,10 +197,13 @@ const PutThongTinCaNhanModal = () => {
           // Mã người dùng thuộc UserProfile.code.
           code: value.lectureCode || undefined,
           sDM_DonViId: value.organizationId || null,
+          // Đồng bộ field denormalized để hồ sơ đào tạo đọc đúng khi thêm/xoá.
+          academicDegreeTypeId: latestHocVi?.academicDegreeTypeId || null,
+          academicRankTypeId: latestHocHam?.academicRankTypeId || null,
           // Thay thế toàn bộ danh sách quan hệ bằng dữ liệu mới trên form.
           hocVi: {
             deleteMany: {},
-            create: (value.hocVi ?? []).map((h) => ({
+            create: hocViList.map((h) => ({
               academicDegreeTypeId: h.academicDegreeTypeId || null,
               nationalityId: h.nationalityId || null,
               linhVuc: h.linhVuc,
@@ -194,7 +214,7 @@ const PutThongTinCaNhanModal = () => {
           },
           hocHam: {
             deleteMany: {},
-            create: (value.hocHam ?? []).map((h) => ({
+            create: hocHamList.map((h) => ({
               academicRankTypeId: h.academicRankTypeId || null,
               noiCap: h.noiCap,
               soQuyetDinh: h.soQuyetDinh,

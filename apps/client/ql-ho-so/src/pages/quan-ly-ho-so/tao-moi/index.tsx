@@ -575,9 +575,9 @@ export default function CreateUserPage() {
           tenureDate: values.tenureDate ? dayjs(values.tenureDate).toISOString() : null,
           avatar: form.getFieldValue("avatar"),
           fullname: `${values.lastName?.trim() || ""} ${values.firstName?.trim() || ""}`.trim(),
-          rankId: rank?.capBacId ?? undefined,
-          academicDegreeTypeId: hocvi?.academicRankTypeId ?? undefined,
-          academicRankTypeId: hocham?.academicRankTypeId ?? undefined,
+          rankId: rank?.capBacId ?? null,
+          academicDegreeTypeId: hocvi?.academicDegreeTypeId ?? null,
+          academicRankTypeId: hocham?.academicRankTypeId ?? null,
         }
 
         const resProfile = await upsertUserProfile({

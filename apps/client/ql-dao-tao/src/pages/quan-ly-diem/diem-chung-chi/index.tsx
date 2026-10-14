@@ -1038,7 +1038,7 @@ export default function ArchivedCertificate() {
                 const hasFile = (record?.documentFiles?.length || 0) > 0
                 return (
                   <span style={{ color: hasFile ? "green" : "orange" }}>
-                    {hasFile ? "Đã có" : "Chưa chưa"}
+                    {hasFile ? "Đã có" : "Chưa có"}
                   </span>
                 )
               },

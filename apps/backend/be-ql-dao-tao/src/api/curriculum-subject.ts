@@ -128,6 +128,7 @@ app.openapi(importCurriculumVersion, async (c) => {
   let existingTBSs: {
     trainingBlockOnCurriculumVersionId: string
     subjectId: string
+    subject: { code: string }
   }[] = []
 
   if (!deleteOldData) {
@@ -142,13 +143,24 @@ app.openapi(importCurriculumVersion, async (c) => {
           curriculumVersionId,
         },
       },
-      select: { trainingBlockOnCurriculumVersionId: true, subjectId: true },
+      select: {
+        trainingBlockOnCurriculumVersionId: true,
+        subjectId: true,
+        subject: { select: { code: true } },
+      },
     })
   }
 
   const existingTBCVMap = new Map(existingTBCVs.map((item) => [item.trainingBlockId, item.id]))
+  // Skip theo subjectId hoặc theo mã môn (tránh trùng khi DB có nhiều SubjectVersion cùng mã)
   const existingTBSSet = new Set(
     existingTBSs.map((item) => `${item.trainingBlockOnCurriculumVersionId}-${item.subjectId}`)
+  )
+  const existingTBSCodeSet = new Set(
+    existingTBSs.map(
+      (item) =>
+        `${item.trainingBlockOnCurriculumVersionId}-${item.subject.code.trim().toUpperCase()}`
+    )
   )
 
   const curriculumTrainingBlock = new Map(
@@ -180,27 +192,40 @@ app.openapi(importCurriculumVersion, async (c) => {
         priority: i + 1,
       }))
 
-  const trainingBlockSubjects: Prisma.TrainingBlockSubjectCreateManyInput[] = data.subjects
-    .map(({ code, trainingBlockName, semester, type, useForFinalScore, graduation }) => {
-      const trainingBlockOnCurriculumVersionId = curriculumTrainingBlock.get(trainingBlockName)
-        ?.id as string
-      const subjectId = subjectMap.get(code) as string
+  const trainingBlockSubjects: Prisma.TrainingBlockSubjectCreateManyInput[] = []
+  for (const {
+    code,
+    trainingBlockName,
+    semester,
+    type,
+    useForFinalScore,
+    graduation,
+  } of data.subjects) {
+    const trainingBlockOnCurriculumVersionId = curriculumTrainingBlock.get(trainingBlockName)
+      ?.id as string
+    const subjectId = subjectMap.get(code) as string
+    if (!trainingBlockOnCurriculumVersionId || !subjectId) continue
 
-      if (existingTBSSet.has(`${trainingBlockOnCurriculumVersionId}-${subjectId}`)) {
-        return null
-      }
+    const idKey = `${trainingBlockOnCurriculumVersionId}-${subjectId}`
+    const codeKey = `${trainingBlockOnCurriculumVersionId}-${code.trim().toUpperCase()}`
 
-      return {
-        id: createId(),
-        trainingBlockOnCurriculumVersionId,
-        subjectId,
-        semester,
-        type,
-        useForFinalScore,
-        graduation,
-      }
+    if (existingTBSSet.has(idKey) || existingTBSCodeSet.has(codeKey)) {
+      continue
+    }
+
+    existingTBSSet.add(idKey)
+    existingTBSCodeSet.add(codeKey)
+
+    trainingBlockSubjects.push({
+      id: createId(),
+      trainingBlockOnCurriculumVersionId,
+      subjectId,
+      semester,
+      type,
+      useForFinalScore,
+      graduation,
     })
-    .filter((item) => item !== null) as Prisma.TrainingBlockSubjectCreateManyInput[]
+  }
 
   const maxSemester = Math.max(...data.subjects.map((s) => s.semester || 0))
 
