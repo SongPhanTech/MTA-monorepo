@@ -94,16 +94,40 @@ const extractLsbId = (data: unknown): string | undefined => {
 
 const studentLsbEmail = (idCardNumber: string) => `${idCardNumber}@gmail.com`
 
-/** LSB bắt buộc SĐT khi tạo DM_NhanVien, trong khi file mẫu không bắt buộc. */
-const studentLsbPhone = (
-  phoneNumber: string | undefined,
-  idCardNumber: string,
-  code: string
-) => {
-  const phone = phoneNumber?.trim()
-  if (phone) return phone
-  const digits = `${idCardNumber}${code}`.replace(/\D/g, "")
-  return `09${digits.slice(-8).padStart(8, "0")}`
+/**
+ * Placeholder khi LSB bắt buộc SĐT lúc tạo mới mà file không có.
+ * Dùng CCCD (unique) + đầu 02 (ít trùng SĐT thật hơn 09x sinh từ mã SV).
+ */
+const studentLsbPhonePlaceholder = (idCardNumber: string, code: string) => {
+  const cccd = idCardNumber.replace(/\D/g, "")
+  if (cccd.length >= 8) return `02${cccd.slice(-8)}`
+  const digits = `${cccd}${code}`.replace(/\D/g, "")
+  return `02${digits.slice(-8).padStart(8, "0")}`
+}
+
+const lsbErrorText = (extra?: ErrorExtra, raw?: unknown) => {
+  const rawText =
+    raw && typeof raw === "object" && "message" in raw && typeof raw.message === "string"
+      ? raw.message
+      : ""
+  const dataText = Array.isArray(extra?.data) ? extra.data.join(" ") : ""
+  return [extra?.message, extra?.code, dataText, rawText].filter(Boolean).join(" ")
+}
+
+const isLsbPhoneDuplicate = (extra?: ErrorExtra, raw?: unknown) => {
+  if (!isLsbDuplicate(extra, raw)) return false
+  return /số điện thoại|ssdtdidong/i.test(lsbErrorText(extra, raw))
+}
+
+const isLsbPhoneRequired = (extra?: ErrorExtra, raw?: unknown) => {
+  const code = extra?.code?.toLowerCase()
+  const text = lsbErrorText(extra, raw)
+  if (code === "require" || code === "required") {
+    return /số điện thoại|ssdtdidong/i.test(text) || !extra?.data
+  }
+  return /số điện thoại.*(bắt buộc|required|không được để trống)|required.*phone/i.test(
+    text
+  )
 }
 
 const parseImportNumber = (value: string | undefined, integer = false): number | null => {
@@ -1462,6 +1486,7 @@ app.openapi(importStudent, async (c) => {
     }
 
     try {
+      // Không tự sinh SĐT từ mã SV khi file trống — số giả dạng 09x dễ trùng SĐT thật trên LSB.
       const lsbPayload = {
         sMa: student.profileCode,
         bLaHocVien: true,
@@ -1471,8 +1496,7 @@ app.openapi(importStudent, async (c) => {
         sHoVaDem: profileData.lastName,
         sTen: profileData.firstName,
         sTenDayDu: student.fullname,
-        sSDTDiDong:
-          phoneNumber || studentLsbPhone(undefined, student.idCardNumber, student.profileCode),
+        sSDTDiDong: phoneNumber || "",
         sEmail: email,
         sDM_GioiTinhId: student.gender ? (genderMap.get(student.gender) ?? null) : null,
         sDM_DonViId: donViId,
@@ -1480,20 +1504,55 @@ app.openapi(importStudent, async (c) => {
 
       let lsbProfileId =
         profileHit?.id ?? (await findLsbNhanVienId(student.profileCode, student.idCardNumber))
-      let lsbRes = lsbProfileId
-        ? await putDMNhanViens({ Id: lsbProfileId, ...lsbPayload }, lsbRequestOptions())
-        : await postDMNhanViens(lsbPayload, lsbRequestOptions())
+      const sendLsb = (phone: string) => {
+        const payload = { ...lsbPayload, sSDTDiDong: phone }
+        return lsbProfileId
+          ? putDMNhanViens({ Id: lsbProfileId, ...payload }, lsbRequestOptions())
+          : postDMNhanViens(payload, lsbRequestOptions())
+      }
+
+      let lsbRes = await sendLsb(lsbPayload.sSDTDiDong)
 
       if (lsbRes.status !== 200) {
         const extra = (lsbRes.data as { extra?: ErrorExtra } | undefined)?.extra
         if (isLsbDuplicate(extra, lsbRes.data)) {
           const foundId = await findLsbNhanVienId(student.profileCode, student.idCardNumber)
           if (foundId && foundId !== lsbProfileId) {
-            lsbRes = await putDMNhanViens({ Id: foundId, ...lsbPayload }, lsbRequestOptions())
-            if (lsbRes.status === 200) lsbProfileId = foundId
+            lsbProfileId = foundId
+            // Cập nhật hồ sơ đã có: giữ SĐT trống nếu file không có, tránh đè bằng SĐT giả.
+            lsbRes = await sendLsb(phoneNumber || "")
           }
         }
-      } else if (!lsbProfileId) {
+      }
+
+      // LSB bắt buộc SĐT khi tạo mới — chỉ khi đó mới dùng placeholder từ CCCD.
+      if (
+        lsbRes.status !== 200 &&
+        !phoneNumber &&
+        !lsbProfileId &&
+        isLsbPhoneRequired(
+          (lsbRes.data as { extra?: ErrorExtra } | undefined)?.extra,
+          lsbRes.data
+        )
+      ) {
+        const placeholder = studentLsbPhonePlaceholder(
+          student.idCardNumber,
+          student.profileCode
+        )
+        lsbRes = await sendLsb(placeholder)
+        if (
+          lsbRes.status !== 200 &&
+          isLsbPhoneDuplicate(
+            (lsbRes.data as { extra?: ErrorExtra } | undefined)?.extra,
+            lsbRes.data
+          )
+        ) {
+          // Placeholder vẫn trùng SĐT người khác trên LSB → bỏ SĐT.
+          lsbRes = await sendLsb("")
+        }
+      }
+
+      if (lsbRes.status === 200 && !lsbProfileId) {
         lsbProfileId = extractLsbId(lsbRes.data)
       }
 

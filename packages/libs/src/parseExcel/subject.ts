@@ -35,6 +35,22 @@ const subjectRequirementTypes: Record<string, $Enums.SubjectRequirementType> = {
   "Tự chọn": $Enums.SubjectRequirementType.Optional,
 }
 
+/** Gộp dấu gạch ngang và chữ hoa để "Luận văn-Đề án" khớp "Luận văn/đề án". */
+const normalizeSubjectVersionLabel = (value: string) =>
+  value
+    .trim()
+    .toLowerCase()
+    .replace(/[‐‑‒–—−-]/g, "/")
+    .replace(/\s*\/\s*/g, "/")
+    .replace(/\s+/g, " ")
+
+const subjectVersionTypeByLabel = new Map(
+  Object.entries(subjectVersionTypes).map(([label, type]) => [
+    normalizeSubjectVersionLabel(label),
+    type,
+  ])
+)
+
 export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => {
   const wb = read(file)
   const sheetName = wb.SheetNames[0]
@@ -242,7 +258,9 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
       continue
     }
 
-    const subjectVersionType = subjectVersionTypes[subjectVersionText]
+    const subjectVersionType = subjectVersionTypeByLabel.get(
+      normalizeSubjectVersionLabel(subjectVersionText)
+    )
     if (!subjectVersionType) {
       errors.push({
         sheetRef: sheetName,
