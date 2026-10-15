@@ -4,6 +4,7 @@ import { useAbility } from "@workspace/permissions/hooks"
 import { useGetDelegatedPermissions } from "@workspace/libs/api/training"
 import { useGetUserPermissionsPermissionAppCodeUserId } from "@workspace/libs/api/system"
 import { getRuntimeEnv } from "@workspace/libs/utils"
+import { getMenuIdsShownInCatalog } from "@components/layouts/catalog-config-menu"
 import NAVIGATION, { type QL_DAO_TAO_PERMISSION } from "@workspace/router"
 import { useEffect, useMemo, useState } from "react"
 
@@ -74,9 +75,13 @@ const useMenuList = () => {
   }, [permissions, systemSettled, delegatedSettled, setIsUpdateAbility])
 
   const menus = useMemo(() => {
-    if (showAllMenus()) return NAVIGATION.QL_DAO_TAO.menus
+    const shownInCatalog = getMenuIdsShownInCatalog()
+    const visibleMenus = NAVIGATION.QL_DAO_TAO.menus.filter(
+      (menu) => !menu.hidden && !shownInCatalog.has(menu.id)
+    )
+    if (showAllMenus()) return visibleMenus
 
-    return NAVIGATION.QL_DAO_TAO.menus
+    return visibleMenus
       .map((menu) => {
         if (menu.children) {
           const filteredChildren = menu.children.filter((child) => {
