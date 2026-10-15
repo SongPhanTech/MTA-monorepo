@@ -372,7 +372,7 @@ const DiemTrungBinhKyHoc = () => {
                 width: 120,
                 align: "center",
                 render: (__, record) => (
-                  <Tooltip title={record?.fixedClass?.name}>{record?.fixedClass.code}</Tooltip>
+                  <Tooltip title={record?.fixedClass?.name}>{record?.fixedClass?.code}</Tooltip>
                 ),
               },
 

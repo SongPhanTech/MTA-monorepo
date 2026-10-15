@@ -416,9 +416,18 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                 name="bLaCanBoNhanVien"
                 label=""
                 valuePropName="checked"
-                className="mb-0"
+                className="mb-0 mr-4"
               >
                 <Checkbox>Bạn là cán bộ, nhân viên</Checkbox>
+              </FormItem>
+              <FormItem
+                form={form}
+                name="bLaNguoiDung"
+                label=""
+                valuePropName="checked"
+                className="mb-0"
+              >
+                <Checkbox>Bạn là người dùng</Checkbox>
               </FormItem>
             </Flex>
           </Col>

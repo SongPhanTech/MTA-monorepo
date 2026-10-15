@@ -1121,6 +1121,7 @@ export default function UpdateUserPage() {
         bLaHocVien: !!userData.bLaHocVien,
         bLaCanBoNhanVien: !!userData.bLaCanBoNhanVien,
         bLaGiangVien: !!userData.bLaGiangVien,
+        bLaNguoiDung: !!userData.bLaNguoiDung,
         dateOfBirth: userData.dateOfBirth ? dayjs(userData.dateOfBirth) : null,
         idCardDate: userData.idCardDate ? dayjs(userData.idCardDate) : null,
         idCardExpirationDate: userData.idCardExpirationDate

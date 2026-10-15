@@ -100,7 +100,10 @@ export default function ArchivedAward() {
 
   const where = useMemo(() => {
     return {
-      ...(filters.archivedAwardStatus ? { status: { in: filters.archivedAwardStatus } } : {}),
+      deletedAt: null,
+      status: filters.archivedAwardStatus
+        ? { in: filters.archivedAwardStatus }
+        : { not: ArchivedCertificateStatus.CANCEL },
       award: filters.awardName
         ? {
             name: {
@@ -200,10 +203,7 @@ export default function ArchivedAward() {
   )
 
   const { data: count } = useCountArchivedAward({
-    where: {
-      ...where,
-      deletedAt: null,
-    },
+    where,
   })
 
   const handleOpenAprove = () => {
