@@ -8857,7 +8857,7 @@ model SurveyObjectType {
 /// @@allow('read', auth() != null)
 model SurveyTopic {
   id                  String                @id() @default(cuid())
-  code                String?               @unique()
+  code                String?
   active              Boolean               @default(true)
   description         String?               @db.Text()
   deletedAt           DateTime?

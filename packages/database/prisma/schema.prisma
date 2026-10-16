@@ -8120,7 +8120,6 @@ model SurveyObjectType {
 
 model SurveyTopic {
   id                  String                @id() @default(cuid())
-  code                String?               @unique()
   active              Boolean               @default(true)
   description         String?               @db.Text()
   deletedAt           DateTime?
@@ -8133,6 +8132,7 @@ model SurveyTopic {
   dNgaySua            DateTime?             @db.Timestamp(6)
   sThietBiTao         String?
   sThietBiSua         String?
+  code                String?
   name                String
   clusterSurvey       ClusterSurvey[]
   survey              Survey[]

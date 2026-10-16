@@ -3,9 +3,11 @@
     "version": "0.0.0",
     "scripts": {
         "generate:sql": "prisma generate --sql",
-        "generate": "zenstack generate",
+        "clean:generated": "node src/script/clean-generated.mjs",
+        "generate": "pnpm clean:generated && zenstack generate",
         "db:push": "prisma db push --skip-generate",
-        "db:sync": "zenstack generate && prisma db push --skip-generate"
+        "seed:civilian": "bun src/script/seed-civilian-thesis-demo.ts",
+        "db:sync": "pnpm generate && prisma db push --skip-generate"
     },
     "exports": {
         "./client": "./src/client/index.ts",
@@ -16,6 +18,7 @@
         "./zod": "./generated/zod/index.ts",
         "./zod/models": "./generated/zod/models/index.ts",
         "./zod/enums": "./generated/zod/enums/index.ts",
+        "./zod/schemas": "./src/zod-schemas.ts",
         "./hooks": "./generated/hooks/index.ts",
         "./hono": "./src/hono/index.ts",
         "./openapi": "./src/openapi.ts"
