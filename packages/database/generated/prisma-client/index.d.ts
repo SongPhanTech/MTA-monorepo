@@ -1762,7 +1762,8 @@ export const NotificationType: {
   EXAM_DEADLINE: 'EXAM_DEADLINE',
   SURVEY_DEADLINE: 'SURVEY_DEADLINE',
   INDIVIDUAL_SCHEDULE: 'INDIVIDUAL_SCHEDULE',
-  CLASS_REMINDER: 'CLASS_REMINDER'
+  CLASS_REMINDER: 'CLASS_REMINDER',
+  CHAT: 'CHAT'
 };
 
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
@@ -40183,6 +40184,7 @@ export namespace Prisma {
     dNgaySua: Date | null
     sThietBiTao: string | null
     sThietBiSua: string | null
+    mock: boolean | null
     bLaNguoiDung: boolean | null
     bLaGiangVien: boolean | null
     bLaCanBoNhanVien: boolean | null
@@ -40317,6 +40319,7 @@ export namespace Prisma {
     dNgaySua: Date | null
     sThietBiTao: string | null
     sThietBiSua: string | null
+    mock: boolean | null
     bLaNguoiDung: boolean | null
     bLaGiangVien: boolean | null
     bLaCanBoNhanVien: boolean | null
@@ -40451,6 +40454,7 @@ export namespace Prisma {
     dNgaySua: number
     sThietBiTao: number
     sThietBiSua: number
+    mock: number
     bLaNguoiDung: number
     bLaGiangVien: number
     bLaCanBoNhanVien: number
@@ -40601,6 +40605,7 @@ export namespace Prisma {
     dNgaySua?: true
     sThietBiTao?: true
     sThietBiSua?: true
+    mock?: true
     bLaNguoiDung?: true
     bLaGiangVien?: true
     bLaCanBoNhanVien?: true
@@ -40735,6 +40740,7 @@ export namespace Prisma {
     dNgaySua?: true
     sThietBiTao?: true
     sThietBiSua?: true
+    mock?: true
     bLaNguoiDung?: true
     bLaGiangVien?: true
     bLaCanBoNhanVien?: true
@@ -40869,6 +40875,7 @@ export namespace Prisma {
     dNgaySua?: true
     sThietBiTao?: true
     sThietBiSua?: true
+    mock?: true
     bLaNguoiDung?: true
     bLaGiangVien?: true
     bLaCanBoNhanVien?: true
@@ -41090,6 +41097,7 @@ export namespace Prisma {
     dNgaySua: Date | null
     sThietBiTao: string | null
     sThietBiSua: string | null
+    mock: boolean | null
     bLaNguoiDung: boolean | null
     bLaGiangVien: boolean | null
     bLaCanBoNhanVien: boolean | null
@@ -41243,6 +41251,7 @@ export namespace Prisma {
     dNgaySua?: boolean
     sThietBiTao?: boolean
     sThietBiSua?: boolean
+    mock?: boolean
     bLaNguoiDung?: boolean
     bLaGiangVien?: boolean
     bLaCanBoNhanVien?: boolean
@@ -41471,6 +41480,7 @@ export namespace Prisma {
     dNgaySua?: boolean
     sThietBiTao?: boolean
     sThietBiSua?: boolean
+    mock?: boolean
     bLaNguoiDung?: boolean
     bLaGiangVien?: boolean
     bLaCanBoNhanVien?: boolean
@@ -41651,6 +41661,7 @@ export namespace Prisma {
     dNgaySua?: boolean
     sThietBiTao?: boolean
     sThietBiSua?: boolean
+    mock?: boolean
     bLaNguoiDung?: boolean
     bLaGiangVien?: boolean
     bLaCanBoNhanVien?: boolean
@@ -41831,6 +41842,7 @@ export namespace Prisma {
     dNgaySua?: boolean
     sThietBiTao?: boolean
     sThietBiSua?: boolean
+    mock?: boolean
     bLaNguoiDung?: boolean
     bLaGiangVien?: boolean
     bLaCanBoNhanVien?: boolean
@@ -41950,7 +41962,7 @@ export namespace Prisma {
     trinhDoHocVanId?: boolean
   }
 
-  export type UserProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "sNguoiTao" | "sNguoiSua" | "dNgayTao" | "dNgaySua" | "sThietBiTao" | "sThietBiSua" | "bLaNguoiDung" | "bLaGiangVien" | "bLaCanBoNhanVien" | "bLaHocVien" | "groupId" | "sDM_DonViId" | "sDM_ViTriCongViecId" | "sQuanlyTrucTiepId" | "iDictionaryKey" | "bSystem" | "avatar" | "firstName" | "lastName" | "idCardNumber" | "placeOfIdCardNumber" | "fullname" | "healthInsuranceNumber" | "bankAccountNumber" | "bankName" | "currentAddress" | "newCurrentAddress" | "occupationWhenRecruiting" | "thuongBinh" | "benh" | "tinhHinhNhaO" | "truocKhiNhapNgu" | "thanhPhanGiaDinh" | "soTruong" | "hoTenThuongDung" | "lichSuBanThan" | "conThuMay" | "chieuCao" | "canNang" | "soACE" | "kinhTeGiaDinh" | "chinhTriGiaDinh" | "fSoACE" | "fKinhTeGiaDinh" | "fThanhPhanGiaDinh" | "fChinhTriGiaDinh" | "fBanThan" | "nationalId" | "provinceCurrentAddressId" | "districtCurrentAddressId" | "communeCurrentAddressId" | "newProvinceCurrentAddressId" | "newCommuneCurrentAddressId" | "dateOfBirth" | "placeOfBirth" | "provinceOfBirthId" | "districtOfBirthId" | "communeOfBirthId" | "newProvinceOfBirthId" | "newCommuneOfBirthId" | "homeTown" | "idCardDate" | "idCardExpirationDate" | "genderId" | "permanentAddress" | "provincePermanentAddressId" | "districtPermanentAddressId" | "communePermanentAddressId" | "newProvincePermanentAddressId" | "newCommunePermanentAddressId" | "temporaryAddress" | "contactAddress" | "phoneNumber" | "officePhone" | "email" | "nationalityId" | "religionId" | "ethnicityId" | "provinceHometownId" | "districtHometownId" | "communeHometownId" | "newProvinceHometownId" | "newCommuneHometownId" | "officerNumber" | "rankId" | "rankDate" | "academicDegreeTypeId" | "academicDegreeDate" | "academicRankTypeId" | "academicRankDate" | "levelId" | "positionId" | "chiHuyQuanLyId" | "chuyenMonKyThuatId" | "sucKhoeId" | "nhomMauId" | "tinhTrangHonNhanId" | "trangThaiLamViecId" | "dM_ChucDanhCMNVGiangVienId" | "dM_ChucDanhCMNVNghienCuuVienId" | "dM_ChucDanhCMNVKySuId" | "dM_XepLoaiDanhGiaChatLuongDangVienId" | "dM_XepLoaiDanhGiaCanBoId" | "dM_HinhThucKhenThuongDangId" | "unionDate" | "unionPlace" | "CPVJoinDate" | "officialCPVDate" | "CPVJoinPlace" | "positionCPVId" | "chucVuChinhQuyenId" | "tenureDate" | "enlistmentDate" | "reEnlistmentDate" | "dischargeDate" | "recruitmentDate" | "recruitmentAgency" | "mainJobAssigned" | "revolutionaryDate" | "originalPlace" | "familyPhone" | "familyName" | "trinhDoHocVanId", ExtArgs["result"]["userProfile"]>
+  export type UserProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "sNguoiTao" | "sNguoiSua" | "dNgayTao" | "dNgaySua" | "sThietBiTao" | "sThietBiSua" | "mock" | "bLaNguoiDung" | "bLaGiangVien" | "bLaCanBoNhanVien" | "bLaHocVien" | "groupId" | "sDM_DonViId" | "sDM_ViTriCongViecId" | "sQuanlyTrucTiepId" | "iDictionaryKey" | "bSystem" | "avatar" | "firstName" | "lastName" | "idCardNumber" | "placeOfIdCardNumber" | "fullname" | "healthInsuranceNumber" | "bankAccountNumber" | "bankName" | "currentAddress" | "newCurrentAddress" | "occupationWhenRecruiting" | "thuongBinh" | "benh" | "tinhHinhNhaO" | "truocKhiNhapNgu" | "thanhPhanGiaDinh" | "soTruong" | "hoTenThuongDung" | "lichSuBanThan" | "conThuMay" | "chieuCao" | "canNang" | "soACE" | "kinhTeGiaDinh" | "chinhTriGiaDinh" | "fSoACE" | "fKinhTeGiaDinh" | "fThanhPhanGiaDinh" | "fChinhTriGiaDinh" | "fBanThan" | "nationalId" | "provinceCurrentAddressId" | "districtCurrentAddressId" | "communeCurrentAddressId" | "newProvinceCurrentAddressId" | "newCommuneCurrentAddressId" | "dateOfBirth" | "placeOfBirth" | "provinceOfBirthId" | "districtOfBirthId" | "communeOfBirthId" | "newProvinceOfBirthId" | "newCommuneOfBirthId" | "homeTown" | "idCardDate" | "idCardExpirationDate" | "genderId" | "permanentAddress" | "provincePermanentAddressId" | "districtPermanentAddressId" | "communePermanentAddressId" | "newProvincePermanentAddressId" | "newCommunePermanentAddressId" | "temporaryAddress" | "contactAddress" | "phoneNumber" | "officePhone" | "email" | "nationalityId" | "religionId" | "ethnicityId" | "provinceHometownId" | "districtHometownId" | "communeHometownId" | "newProvinceHometownId" | "newCommuneHometownId" | "officerNumber" | "rankId" | "rankDate" | "academicDegreeTypeId" | "academicDegreeDate" | "academicRankTypeId" | "academicRankDate" | "levelId" | "positionId" | "chiHuyQuanLyId" | "chuyenMonKyThuatId" | "sucKhoeId" | "nhomMauId" | "tinhTrangHonNhanId" | "trangThaiLamViecId" | "dM_ChucDanhCMNVGiangVienId" | "dM_ChucDanhCMNVNghienCuuVienId" | "dM_ChucDanhCMNVKySuId" | "dM_XepLoaiDanhGiaChatLuongDangVienId" | "dM_XepLoaiDanhGiaCanBoId" | "dM_HinhThucKhenThuongDangId" | "unionDate" | "unionPlace" | "CPVJoinDate" | "officialCPVDate" | "CPVJoinPlace" | "positionCPVId" | "chucVuChinhQuyenId" | "tenureDate" | "enlistmentDate" | "reEnlistmentDate" | "dischargeDate" | "recruitmentDate" | "recruitmentAgency" | "mainJobAssigned" | "revolutionaryDate" | "originalPlace" | "familyPhone" | "familyName" | "trinhDoHocVanId", ExtArgs["result"]["userProfile"]>
   export type UserProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     group?: boolean | UserProfile$groupArgs<ExtArgs>
     donVi?: boolean | UserProfile$donViArgs<ExtArgs>
@@ -42271,6 +42283,11 @@ export namespace Prisma {
       dNgaySua: Date | null
       sThietBiTao: string | null
       sThietBiSua: string | null
+      /**
+       * Set on the auth user by modelPolicyUser for the shared dev profile.
+       * The database value stays null. CHAT reads treat auth().mock == true as closed.
+       */
+      mock: boolean | null
       bLaNguoiDung: boolean | null
       bLaGiangVien: boolean | null
       bLaCanBoNhanVien: boolean | null
@@ -42918,6 +42935,7 @@ export namespace Prisma {
     readonly dNgaySua: FieldRef<"UserProfile", 'DateTime'>
     readonly sThietBiTao: FieldRef<"UserProfile", 'String'>
     readonly sThietBiSua: FieldRef<"UserProfile", 'String'>
+    readonly mock: FieldRef<"UserProfile", 'Boolean'>
     readonly bLaNguoiDung: FieldRef<"UserProfile", 'Boolean'>
     readonly bLaGiangVien: FieldRef<"UserProfile", 'Boolean'>
     readonly bLaCanBoNhanVien: FieldRef<"UserProfile", 'Boolean'>
@@ -208741,6 +208759,7 @@ export namespace Prisma {
     lecturerId: string | null
     targetDeviceId: string | null
     pushExpiresAt: Date | null
+    recipientProfileId: string | null
   }
 
   export type NotificationMaxAggregateOutputType = {
@@ -208768,6 +208787,7 @@ export namespace Prisma {
     lecturerId: string | null
     targetDeviceId: string | null
     pushExpiresAt: Date | null
+    recipientProfileId: string | null
   }
 
   export type NotificationCountAggregateOutputType = {
@@ -208796,6 +208816,7 @@ export namespace Prisma {
     targetDeviceId: number
     pushExpiresAt: number
     reminderData: number
+    recipientProfileId: number
     _all: number
   }
 
@@ -208825,6 +208846,7 @@ export namespace Prisma {
     lecturerId?: true
     targetDeviceId?: true
     pushExpiresAt?: true
+    recipientProfileId?: true
   }
 
   export type NotificationMaxAggregateInputType = {
@@ -208852,6 +208874,7 @@ export namespace Prisma {
     lecturerId?: true
     targetDeviceId?: true
     pushExpiresAt?: true
+    recipientProfileId?: true
   }
 
   export type NotificationCountAggregateInputType = {
@@ -208880,6 +208903,7 @@ export namespace Prisma {
     targetDeviceId?: true
     pushExpiresAt?: true
     reminderData?: true
+    recipientProfileId?: true
     _all?: true
   }
 
@@ -208981,6 +209005,7 @@ export namespace Prisma {
     targetDeviceId: string | null
     pushExpiresAt: Date | null
     reminderData: JsonValue | null
+    recipientProfileId: string | null
     _count: NotificationCountAggregateOutputType | null
     _min: NotificationMinAggregateOutputType | null
     _max: NotificationMaxAggregateOutputType | null
@@ -209026,6 +209051,7 @@ export namespace Prisma {
     targetDeviceId?: boolean
     pushExpiresAt?: boolean
     reminderData?: boolean
+    recipientProfileId?: boolean
     targetCourses?: boolean | Notification$targetCoursesArgs<ExtArgs>
     targetClasses?: boolean | Notification$targetClassesArgs<ExtArgs>
     targetStudents?: boolean | Notification$targetStudentsArgs<ExtArgs>
@@ -209060,6 +209086,7 @@ export namespace Prisma {
     targetDeviceId?: boolean
     pushExpiresAt?: boolean
     reminderData?: boolean
+    recipientProfileId?: boolean
     lecturer?: boolean | Notification$lecturerArgs<ExtArgs>
   }, ExtArgs["result"]["notification"]>
 
@@ -209089,6 +209116,7 @@ export namespace Prisma {
     targetDeviceId?: boolean
     pushExpiresAt?: boolean
     reminderData?: boolean
+    recipientProfileId?: boolean
     lecturer?: boolean | Notification$lecturerArgs<ExtArgs>
   }, ExtArgs["result"]["notification"]>
 
@@ -209118,9 +209146,10 @@ export namespace Prisma {
     targetDeviceId?: boolean
     pushExpiresAt?: boolean
     reminderData?: boolean
+    recipientProfileId?: boolean
   }
 
-  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "sNguoiTao" | "sNguoiSua" | "dNgayTao" | "dNgaySua" | "sThietBiTao" | "sThietBiSua" | "title" | "content" | "type" | "priority" | "publishedAt" | "expiresAt" | "targetAll" | "lecturerId" | "targetDeviceId" | "pushExpiresAt" | "reminderData", ExtArgs["result"]["notification"]>
+  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "sNguoiTao" | "sNguoiSua" | "dNgayTao" | "dNgaySua" | "sThietBiTao" | "sThietBiSua" | "title" | "content" | "type" | "priority" | "publishedAt" | "expiresAt" | "targetAll" | "lecturerId" | "targetDeviceId" | "pushExpiresAt" | "reminderData" | "recipientProfileId", ExtArgs["result"]["notification"]>
   export type NotificationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     targetCourses?: boolean | Notification$targetCoursesArgs<ExtArgs>
     targetClasses?: boolean | Notification$targetClassesArgs<ExtArgs>
@@ -209171,6 +209200,7 @@ export namespace Prisma {
       targetDeviceId: string | null
       pushExpiresAt: Date | null
       reminderData: Prisma.JsonValue | null
+      recipientProfileId: string | null
     }, ExtArgs["result"]["notification"]>
     composites: {}
   }
@@ -209624,6 +209654,7 @@ export namespace Prisma {
     readonly targetDeviceId: FieldRef<"Notification", 'String'>
     readonly pushExpiresAt: FieldRef<"Notification", 'DateTime'>
     readonly reminderData: FieldRef<"Notification", 'Json'>
+    readonly recipientProfileId: FieldRef<"Notification", 'String'>
   }
     
 
@@ -423139,6 +423170,7 @@ export namespace Prisma {
     dNgaySua: 'dNgaySua',
     sThietBiTao: 'sThietBiTao',
     sThietBiSua: 'sThietBiSua',
+    mock: 'mock',
     bLaNguoiDung: 'bLaNguoiDung',
     bLaGiangVien: 'bLaGiangVien',
     bLaCanBoNhanVien: 'bLaCanBoNhanVien',
@@ -426505,7 +426537,8 @@ export namespace Prisma {
     lecturerId: 'lecturerId',
     targetDeviceId: 'targetDeviceId',
     pushExpiresAt: 'pushExpiresAt',
-    reminderData: 'reminderData'
+    reminderData: 'reminderData',
+    recipientProfileId: 'recipientProfileId'
   };
 
   export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
@@ -432870,7 +432903,8 @@ export namespace Prisma {
     title: 'title',
     content: 'content',
     lecturerId: 'lecturerId',
-    targetDeviceId: 'targetDeviceId'
+    targetDeviceId: 'targetDeviceId',
+    recipientProfileId: 'recipientProfileId'
   };
 
   export type NotificationOrderByRelevanceFieldEnum = (typeof NotificationOrderByRelevanceFieldEnum)[keyof typeof NotificationOrderByRelevanceFieldEnum]
@@ -437018,6 +437052,7 @@ export namespace Prisma {
     dNgaySua?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
     sThietBiTao?: StringNullableFilter<"UserProfile"> | string | null
     sThietBiSua?: StringNullableFilter<"UserProfile"> | string | null
+    mock?: BoolNullableFilter<"UserProfile"> | boolean | null
     bLaNguoiDung?: BoolNullableFilter<"UserProfile"> | boolean | null
     bLaGiangVien?: BoolNullableFilter<"UserProfile"> | boolean | null
     bLaCanBoNhanVien?: BoolNullableFilter<"UserProfile"> | boolean | null
@@ -437245,6 +437280,7 @@ export namespace Prisma {
     dNgaySua?: SortOrderInput | SortOrder
     sThietBiTao?: SortOrderInput | SortOrder
     sThietBiSua?: SortOrderInput | SortOrder
+    mock?: SortOrderInput | SortOrder
     bLaNguoiDung?: SortOrderInput | SortOrder
     bLaGiangVien?: SortOrderInput | SortOrder
     bLaCanBoNhanVien?: SortOrderInput | SortOrder
@@ -437477,6 +437513,7 @@ export namespace Prisma {
     dNgaySua?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
     sThietBiTao?: StringNullableFilter<"UserProfile"> | string | null
     sThietBiSua?: StringNullableFilter<"UserProfile"> | string | null
+    mock?: BoolNullableFilter<"UserProfile"> | boolean | null
     bLaNguoiDung?: BoolNullableFilter<"UserProfile"> | boolean | null
     bLaGiangVien?: BoolNullableFilter<"UserProfile"> | boolean | null
     bLaCanBoNhanVien?: BoolNullableFilter<"UserProfile"> | boolean | null
@@ -437703,6 +437740,7 @@ export namespace Prisma {
     dNgaySua?: SortOrderInput | SortOrder
     sThietBiTao?: SortOrderInput | SortOrder
     sThietBiSua?: SortOrderInput | SortOrder
+    mock?: SortOrderInput | SortOrder
     bLaNguoiDung?: SortOrderInput | SortOrder
     bLaGiangVien?: SortOrderInput | SortOrder
     bLaCanBoNhanVien?: SortOrderInput | SortOrder
@@ -437845,6 +437883,7 @@ export namespace Prisma {
     dNgaySua?: DateTimeNullableWithAggregatesFilter<"UserProfile"> | Date | string | null
     sThietBiTao?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
     sThietBiSua?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
+    mock?: BoolNullableWithAggregatesFilter<"UserProfile"> | boolean | null
     bLaNguoiDung?: BoolNullableWithAggregatesFilter<"UserProfile"> | boolean | null
     bLaGiangVien?: BoolNullableWithAggregatesFilter<"UserProfile"> | boolean | null
     bLaCanBoNhanVien?: BoolNullableWithAggregatesFilter<"UserProfile"> | boolean | null
@@ -455328,6 +455367,7 @@ export namespace Prisma {
     targetDeviceId?: StringNullableFilter<"Notification"> | string | null
     pushExpiresAt?: DateTimeNullableFilter<"Notification"> | Date | string | null
     reminderData?: JsonNullableFilter<"Notification">
+    recipientProfileId?: UuidNullableFilter<"Notification"> | string | null
     targetCourses?: TrainingCourseListRelationFilter
     targetClasses?: FixedClassListRelationFilter
     targetStudents?: StudentListRelationFilter
@@ -455361,6 +455401,7 @@ export namespace Prisma {
     targetDeviceId?: SortOrderInput | SortOrder
     pushExpiresAt?: SortOrderInput | SortOrder
     reminderData?: SortOrderInput | SortOrder
+    recipientProfileId?: SortOrderInput | SortOrder
     targetCourses?: TrainingCourseOrderByRelationAggregateInput
     targetClasses?: FixedClassOrderByRelationAggregateInput
     targetStudents?: StudentOrderByRelationAggregateInput
@@ -455398,6 +455439,7 @@ export namespace Prisma {
     targetDeviceId?: StringNullableFilter<"Notification"> | string | null
     pushExpiresAt?: DateTimeNullableFilter<"Notification"> | Date | string | null
     reminderData?: JsonNullableFilter<"Notification">
+    recipientProfileId?: UuidNullableFilter<"Notification"> | string | null
     targetCourses?: TrainingCourseListRelationFilter
     targetClasses?: FixedClassListRelationFilter
     targetStudents?: StudentListRelationFilter
@@ -455431,6 +455473,7 @@ export namespace Prisma {
     targetDeviceId?: SortOrderInput | SortOrder
     pushExpiresAt?: SortOrderInput | SortOrder
     reminderData?: SortOrderInput | SortOrder
+    recipientProfileId?: SortOrderInput | SortOrder
     _count?: NotificationCountOrderByAggregateInput
     _max?: NotificationMaxOrderByAggregateInput
     _min?: NotificationMinOrderByAggregateInput
@@ -455465,6 +455508,7 @@ export namespace Prisma {
     targetDeviceId?: StringNullableWithAggregatesFilter<"Notification"> | string | null
     pushExpiresAt?: DateTimeNullableWithAggregatesFilter<"Notification"> | Date | string | null
     reminderData?: JsonNullableWithAggregatesFilter<"Notification">
+    recipientProfileId?: UuidNullableWithAggregatesFilter<"Notification"> | string | null
   }
 
   export type PersonalWorkTagWhereInput = {
@@ -477404,6 +477448,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -477585,6 +477630,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -477766,6 +477812,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -477947,6 +477994,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -478128,6 +478176,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -478262,6 +478311,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -478350,6 +478400,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -499289,6 +499340,7 @@ export namespace Prisma {
     targetDeviceId?: string | null
     pushExpiresAt?: Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: string | null
     targetCourses?: TrainingCourseCreateNestedManyWithoutNotificationsInput
     targetClasses?: FixedClassCreateNestedManyWithoutNotificationsInput
     targetStudents?: StudentCreateNestedManyWithoutNotificationsInput
@@ -499322,6 +499374,7 @@ export namespace Prisma {
     targetDeviceId?: string | null
     pushExpiresAt?: Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: string | null
     targetCourses?: TrainingCourseUncheckedCreateNestedManyWithoutNotificationsInput
     targetClasses?: FixedClassUncheckedCreateNestedManyWithoutNotificationsInput
     targetStudents?: StudentUncheckedCreateNestedManyWithoutNotificationsInput
@@ -499353,6 +499406,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     targetCourses?: TrainingCourseUpdateManyWithoutNotificationsNestedInput
     targetClasses?: FixedClassUpdateManyWithoutNotificationsNestedInput
     targetStudents?: StudentUpdateManyWithoutNotificationsNestedInput
@@ -499386,6 +499440,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     targetCourses?: TrainingCourseUncheckedUpdateManyWithoutNotificationsNestedInput
     targetClasses?: FixedClassUncheckedUpdateManyWithoutNotificationsNestedInput
     targetStudents?: StudentUncheckedUpdateManyWithoutNotificationsNestedInput
@@ -499418,6 +499473,7 @@ export namespace Prisma {
     targetDeviceId?: string | null
     pushExpiresAt?: Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: string | null
   }
 
   export type NotificationUpdateManyMutationInput = {
@@ -499445,6 +499501,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type NotificationUncheckedUpdateManyInput = {
@@ -499473,6 +499530,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PersonalWorkTagCreateInput = {
@@ -526212,6 +526270,7 @@ export namespace Prisma {
     dNgaySua?: SortOrder
     sThietBiTao?: SortOrder
     sThietBiSua?: SortOrder
+    mock?: SortOrder
     bLaNguoiDung?: SortOrder
     bLaGiangVien?: SortOrder
     bLaCanBoNhanVien?: SortOrder
@@ -526353,6 +526412,7 @@ export namespace Prisma {
     dNgaySua?: SortOrder
     sThietBiTao?: SortOrder
     sThietBiSua?: SortOrder
+    mock?: SortOrder
     bLaNguoiDung?: SortOrder
     bLaGiangVien?: SortOrder
     bLaCanBoNhanVien?: SortOrder
@@ -526487,6 +526547,7 @@ export namespace Prisma {
     dNgaySua?: SortOrder
     sThietBiTao?: SortOrder
     sThietBiSua?: SortOrder
+    mock?: SortOrder
     bLaNguoiDung?: SortOrder
     bLaGiangVien?: SortOrder
     bLaCanBoNhanVien?: SortOrder
@@ -538880,6 +538941,7 @@ export namespace Prisma {
     targetDeviceId?: SortOrder
     pushExpiresAt?: SortOrder
     reminderData?: SortOrder
+    recipientProfileId?: SortOrder
   }
 
   export type NotificationMaxOrderByAggregateInput = {
@@ -538907,6 +538969,7 @@ export namespace Prisma {
     lecturerId?: SortOrder
     targetDeviceId?: SortOrder
     pushExpiresAt?: SortOrder
+    recipientProfileId?: SortOrder
   }
 
   export type NotificationMinOrderByAggregateInput = {
@@ -538934,6 +538997,7 @@ export namespace Prisma {
     lecturerId?: SortOrder
     targetDeviceId?: SortOrder
     pushExpiresAt?: SortOrder
+    recipientProfileId?: SortOrder
   }
 
   export type EnumNotificationTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -585751,6 +585815,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -585931,6 +585996,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -586127,6 +586193,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -586307,6 +586374,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -596176,6 +596244,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -596356,6 +596425,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -596605,6 +596675,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -596785,6 +596856,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -597020,6 +597092,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -597200,6 +597273,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -597457,6 +597531,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -597637,6 +597712,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -597872,6 +597948,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -598052,6 +598129,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -598309,6 +598387,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -598489,6 +598568,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -598806,6 +598886,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -598986,6 +599067,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -599337,6 +599419,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -599517,6 +599600,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -599738,6 +599822,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -599918,6 +600003,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -600161,6 +600247,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -600341,6 +600428,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -600521,6 +600609,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -600701,6 +600790,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -600938,6 +601028,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -601118,6 +601209,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -601345,6 +601437,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -601525,6 +601618,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -601762,6 +601856,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -601942,6 +602037,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -602253,6 +602349,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -602433,6 +602530,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -602725,6 +602823,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -602905,6 +603004,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -603126,6 +603226,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -603306,6 +603407,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -603549,6 +603651,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -603729,6 +603832,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -603909,6 +604013,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -604089,6 +604194,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -604285,6 +604391,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -604465,6 +604572,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -604688,6 +604796,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -604868,6 +604977,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -605113,6 +605223,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -605293,6 +605404,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -605569,6 +605681,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -605749,6 +605862,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -606053,6 +606167,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -606233,6 +606348,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -606591,6 +606707,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -606771,6 +606888,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -607169,6 +607287,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -607349,6 +607468,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -607611,6 +607731,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -607791,6 +607912,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -608081,6 +608203,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -608261,6 +608384,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -608482,6 +608606,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -608662,6 +608787,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -608905,6 +609031,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -609085,6 +609212,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -609265,6 +609393,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -609445,6 +609574,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -609641,6 +609771,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -609821,6 +609952,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -610001,6 +610133,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -610181,6 +610314,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -610377,6 +610511,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -610557,6 +610692,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -610737,6 +610873,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -610917,6 +611054,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -611113,6 +611251,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -611293,6 +611432,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -611520,6 +611660,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -611700,6 +611841,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -611949,6 +612091,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -612129,6 +612272,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -612309,6 +612453,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -612489,6 +612634,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -612685,6 +612831,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -612865,6 +613012,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -613092,6 +613240,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -613272,6 +613421,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -613521,6 +613671,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -613701,6 +613852,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -613922,6 +614074,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -614102,6 +614255,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -614345,6 +614499,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -614525,6 +614680,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -614705,6 +614861,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -614885,6 +615042,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -615081,6 +615239,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -615261,6 +615420,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -615566,6 +615726,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -615746,6 +615907,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -616085,6 +616247,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -616265,6 +616428,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -616486,6 +616650,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -616666,6 +616831,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -616909,6 +617075,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -617089,6 +617256,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -617351,6 +617519,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -617531,6 +617700,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -617821,6 +617991,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -618001,6 +618172,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -618312,6 +618484,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -618492,6 +618665,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -618796,6 +618970,7 @@ export namespace Prisma {
     dNgaySua?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
     sThietBiTao?: StringNullableFilter<"UserProfile"> | string | null
     sThietBiSua?: StringNullableFilter<"UserProfile"> | string | null
+    mock?: BoolNullableFilter<"UserProfile"> | boolean | null
     bLaNguoiDung?: BoolNullableFilter<"UserProfile"> | boolean | null
     bLaGiangVien?: BoolNullableFilter<"UserProfile"> | boolean | null
     bLaCanBoNhanVien?: BoolNullableFilter<"UserProfile"> | boolean | null
@@ -619266,6 +619441,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -619446,6 +619622,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -619631,6 +619808,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -619811,6 +619989,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -620100,6 +620279,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -620280,6 +620460,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -620471,6 +620652,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -620651,6 +620833,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -621152,6 +621335,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -621332,6 +621516,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -621517,6 +621702,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -621697,6 +621883,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -621950,6 +622137,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -622130,6 +622318,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -622321,6 +622510,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -622501,6 +622691,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -622789,6 +622980,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -622969,6 +623161,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -623367,6 +623560,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -623547,6 +623741,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -624688,6 +624883,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -624868,6 +625064,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -625142,6 +625339,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -625322,6 +625520,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -625528,6 +625727,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -625708,6 +625908,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -625898,6 +626099,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -626078,6 +626280,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -626268,6 +626471,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -626448,6 +626652,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -626968,6 +627173,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -627148,6 +627354,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -627671,6 +627878,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -627851,6 +628059,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -628311,6 +628520,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -628491,6 +628701,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -628929,6 +629140,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -629109,6 +629321,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -631172,6 +631385,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -631352,6 +631566,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -631700,6 +631915,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -631880,6 +632096,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -632328,6 +632545,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -632508,6 +632726,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -632798,6 +633017,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -632978,6 +633198,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -633168,6 +633389,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -633348,6 +633570,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -633538,6 +633761,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -633718,6 +633942,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -633908,6 +634133,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -634088,6 +634314,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -634435,6 +634662,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -634615,6 +634843,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -634805,6 +635034,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -634985,6 +635215,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -635175,6 +635406,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -635355,6 +635587,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -635545,6 +635778,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -635725,6 +635959,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -636049,6 +636284,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -636229,6 +636465,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -636419,6 +636656,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -636599,6 +636837,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -636789,6 +637028,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -636969,6 +637209,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -637159,6 +637400,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -637339,6 +637581,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -637593,6 +637836,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -637773,6 +638017,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -637963,6 +638208,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -638143,6 +638389,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -638333,6 +638580,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -638513,6 +638761,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -638703,6 +638952,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -638883,6 +639133,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -639137,6 +639388,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -639317,6 +639569,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -639507,6 +639760,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -639687,6 +639941,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -639877,6 +640132,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -640057,6 +640313,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -640247,6 +640504,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -640427,6 +640685,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -645551,6 +645810,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -645731,6 +645991,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -646030,6 +646291,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -646210,6 +646472,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -654441,6 +654704,7 @@ export namespace Prisma {
     targetDeviceId?: string | null
     pushExpiresAt?: Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: string | null
     targetClasses?: FixedClassCreateNestedManyWithoutNotificationsInput
     targetStudents?: StudentCreateNestedManyWithoutNotificationsInput
     lecturer?: LecturerCreateNestedOneWithoutNotificationsInput
@@ -654473,6 +654737,7 @@ export namespace Prisma {
     targetDeviceId?: string | null
     pushExpiresAt?: Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: string | null
     targetClasses?: FixedClassUncheckedCreateNestedManyWithoutNotificationsInput
     targetStudents?: StudentUncheckedCreateNestedManyWithoutNotificationsInput
     attachments?: DocumentFileUncheckedCreateNestedManyWithoutNotificationInput
@@ -655539,6 +655804,7 @@ export namespace Prisma {
     targetDeviceId?: StringNullableFilter<"Notification"> | string | null
     pushExpiresAt?: DateTimeNullableFilter<"Notification"> | Date | string | null
     reminderData?: JsonNullableFilter<"Notification">
+    recipientProfileId?: UuidNullableFilter<"Notification"> | string | null
   }
 
   export type SurveyObjectTypeUpsertWithWhereUniqueWithoutTrainingCoursesInput = {
@@ -657537,6 +657803,7 @@ export namespace Prisma {
     targetDeviceId?: string | null
     pushExpiresAt?: Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: string | null
     targetCourses?: TrainingCourseCreateNestedManyWithoutNotificationsInput
     targetStudents?: StudentCreateNestedManyWithoutNotificationsInput
     lecturer?: LecturerCreateNestedOneWithoutNotificationsInput
@@ -657569,6 +657836,7 @@ export namespace Prisma {
     targetDeviceId?: string | null
     pushExpiresAt?: Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: string | null
     targetCourses?: TrainingCourseUncheckedCreateNestedManyWithoutNotificationsInput
     targetStudents?: StudentUncheckedCreateNestedManyWithoutNotificationsInput
     attachments?: DocumentFileUncheckedCreateNestedManyWithoutNotificationInput
@@ -665033,6 +665301,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -665213,6 +665482,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -665544,6 +665814,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -665724,6 +665995,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -671954,6 +672226,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -672134,6 +672407,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -672598,6 +672872,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -672778,6 +673053,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -673676,6 +673952,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -673856,6 +674133,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -674197,6 +674475,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -674377,6 +674656,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -675229,6 +675509,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -675409,6 +675690,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -677011,6 +677293,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -677191,6 +677474,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -677450,6 +677734,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -677630,6 +677915,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -680694,6 +680980,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -680874,6 +681161,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -682189,6 +682477,7 @@ export namespace Prisma {
     targetDeviceId?: string | null
     pushExpiresAt?: Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: string | null
     targetCourses?: TrainingCourseCreateNestedManyWithoutNotificationsInput
     targetClasses?: FixedClassCreateNestedManyWithoutNotificationsInput
     lecturer?: LecturerCreateNestedOneWithoutNotificationsInput
@@ -682221,6 +682510,7 @@ export namespace Prisma {
     targetDeviceId?: string | null
     pushExpiresAt?: Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: string | null
     targetCourses?: TrainingCourseUncheckedCreateNestedManyWithoutNotificationsInput
     targetClasses?: FixedClassUncheckedCreateNestedManyWithoutNotificationsInput
     attachments?: DocumentFileUncheckedCreateNestedManyWithoutNotificationInput
@@ -683373,6 +683663,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -683553,6 +683844,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -687530,6 +687822,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -687710,6 +688003,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -688050,6 +688344,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -688230,6 +688525,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -690196,6 +690492,7 @@ export namespace Prisma {
     targetDeviceId?: string | null
     pushExpiresAt?: Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: string | null
     targetCourses?: TrainingCourseCreateNestedManyWithoutNotificationsInput
     targetClasses?: FixedClassCreateNestedManyWithoutNotificationsInput
     targetStudents?: StudentCreateNestedManyWithoutNotificationsInput
@@ -690227,6 +690524,7 @@ export namespace Prisma {
     targetDeviceId?: string | null
     pushExpiresAt?: Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: string | null
     targetCourses?: TrainingCourseUncheckedCreateNestedManyWithoutNotificationsInput
     targetClasses?: FixedClassUncheckedCreateNestedManyWithoutNotificationsInput
     targetStudents?: StudentUncheckedCreateNestedManyWithoutNotificationsInput
@@ -690449,6 +690747,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -690629,6 +690928,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -691379,6 +691679,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -691559,6 +691860,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -691891,6 +692193,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -692071,6 +692374,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -713276,6 +713580,7 @@ export namespace Prisma {
     targetDeviceId?: string | null
     pushExpiresAt?: Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: string | null
     targetCourses?: TrainingCourseCreateNestedManyWithoutNotificationsInput
     targetClasses?: FixedClassCreateNestedManyWithoutNotificationsInput
     targetStudents?: StudentCreateNestedManyWithoutNotificationsInput
@@ -713308,6 +713613,7 @@ export namespace Prisma {
     targetDeviceId?: string | null
     pushExpiresAt?: Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: string | null
     targetCourses?: TrainingCourseUncheckedCreateNestedManyWithoutNotificationsInput
     targetClasses?: FixedClassUncheckedCreateNestedManyWithoutNotificationsInput
     targetStudents?: StudentUncheckedCreateNestedManyWithoutNotificationsInput
@@ -714874,6 +715180,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     targetCourses?: TrainingCourseUpdateManyWithoutNotificationsNestedInput
     targetClasses?: FixedClassUpdateManyWithoutNotificationsNestedInput
     targetStudents?: StudentUpdateManyWithoutNotificationsNestedInput
@@ -714906,6 +715213,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     targetCourses?: TrainingCourseUncheckedUpdateManyWithoutNotificationsNestedInput
     targetClasses?: FixedClassUncheckedUpdateManyWithoutNotificationsNestedInput
     targetStudents?: StudentUncheckedUpdateManyWithoutNotificationsNestedInput
@@ -732140,6 +732448,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -732320,6 +732629,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -732683,6 +732993,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -732863,6 +733174,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -735997,6 +736309,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -736177,6 +736490,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -736430,6 +736744,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -736610,6 +736925,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -746960,6 +747276,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -747140,6 +747457,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -747705,6 +748023,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -747885,6 +748204,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -748649,6 +748969,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -748829,6 +749150,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -749284,6 +749606,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -749464,6 +749787,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -749855,6 +750179,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -750035,6 +750360,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -750408,6 +750734,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -750588,6 +750915,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -753909,6 +754237,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -754089,6 +754418,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -754435,6 +754765,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -754615,6 +754946,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -754895,6 +755227,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -755075,6 +755408,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -755353,6 +755687,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -755533,6 +755868,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -755739,6 +756075,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -755919,6 +756256,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -756125,6 +756463,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -756305,6 +756644,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -756961,6 +757301,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -757141,6 +757482,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -757347,6 +757689,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -757527,6 +757870,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -757733,6 +758077,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -757913,6 +758258,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -758339,6 +758685,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -758519,6 +758866,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -758725,6 +759073,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -758905,6 +759254,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -759111,6 +759461,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -759291,6 +759642,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -759497,6 +759849,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -759677,6 +760030,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -764735,6 +765089,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -765040,6 +765395,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -765220,6 +765576,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -765400,6 +765757,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -766551,6 +766909,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -766705,6 +767064,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -766885,6 +767245,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -767065,6 +767426,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -767261,6 +767623,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -767394,6 +767757,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -767574,6 +767938,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -767754,6 +768119,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -767887,6 +768253,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -768020,6 +768387,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -768153,6 +768521,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -768375,6 +768744,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -768555,6 +768925,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -768735,6 +769106,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -768868,6 +769240,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -769048,6 +769421,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -769228,6 +769602,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -769361,6 +769736,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -769541,6 +769917,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -769721,6 +770098,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -770121,6 +770499,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -770332,6 +770711,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -770512,6 +770892,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -770692,6 +771073,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -771079,6 +771461,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -771290,6 +771673,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -771470,6 +771854,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -771650,6 +772035,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -772037,6 +772423,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -772191,6 +772578,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -772371,6 +772759,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -772551,6 +772940,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -772813,6 +773203,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -773491,6 +773882,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -773671,6 +774063,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -773851,6 +774244,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -775575,6 +775969,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -775708,6 +776103,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -775888,6 +776284,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -776068,6 +776465,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -776381,6 +776779,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -776514,6 +776913,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -776694,6 +777094,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -776874,6 +777275,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -777110,6 +777512,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -777333,6 +777736,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -777513,6 +777917,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -777693,6 +778098,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -777889,6 +778295,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -778022,6 +778429,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -778155,6 +778563,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -778288,6 +778697,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -778440,6 +778850,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -778620,6 +779031,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -778800,6 +779212,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -778933,6 +779346,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -779113,6 +779527,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -779293,6 +779708,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -779426,6 +779842,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -779606,6 +780023,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -779786,6 +780204,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -779919,6 +780338,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -780099,6 +780519,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -780279,6 +780700,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -780475,6 +780897,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -780608,6 +781031,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -780741,6 +781165,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -780874,6 +781299,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -781026,6 +781452,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -781206,6 +781633,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -781386,6 +781814,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -781519,6 +781948,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -781699,6 +782129,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -781879,6 +782310,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -782012,6 +782444,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -782192,6 +782625,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -782372,6 +782806,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -782505,6 +782940,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -782685,6 +783121,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -782865,6 +783302,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -783061,6 +783499,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -783194,6 +783633,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -783327,6 +783767,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -783460,6 +783901,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -783593,6 +784035,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -783773,6 +784216,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -783953,6 +784397,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -784086,6 +784531,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -784266,6 +784712,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -784446,6 +784893,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -784579,6 +785027,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -784759,6 +785208,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -784939,6 +785389,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -785072,6 +785523,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -785252,6 +785704,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -785432,6 +785885,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -785565,6 +786019,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -785698,6 +786153,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -785831,6 +786287,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -785964,6 +786421,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -786097,6 +786555,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -786277,6 +786736,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -786457,6 +786917,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -786590,6 +787051,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -786770,6 +787232,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -786950,6 +787413,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -787083,6 +787547,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -787263,6 +787728,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -787443,6 +787909,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -787576,6 +788043,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -787756,6 +788224,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -787936,6 +788405,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -788069,6 +788539,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -788202,6 +788673,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -788335,6 +788807,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -788468,6 +788941,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -788601,6 +789075,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -788781,6 +789256,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -788961,6 +789437,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -789094,6 +789571,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -789274,6 +789752,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -789454,6 +789933,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -789587,6 +790067,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -789767,6 +790248,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -789947,6 +790429,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -790080,6 +790563,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -790260,6 +790744,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -790440,6 +790925,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -796716,6 +797202,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     targetClasses?: FixedClassUpdateManyWithoutNotificationsNestedInput
     targetStudents?: StudentUpdateManyWithoutNotificationsNestedInput
     lecturer?: LecturerUpdateOneWithoutNotificationsNestedInput
@@ -796748,6 +797235,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     targetClasses?: FixedClassUncheckedUpdateManyWithoutNotificationsNestedInput
     targetStudents?: StudentUncheckedUpdateManyWithoutNotificationsNestedInput
     attachments?: DocumentFileUncheckedUpdateManyWithoutNotificationNestedInput
@@ -796779,6 +797267,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SurveyObjectTypeUpdateWithoutTrainingCoursesInput = {
@@ -797931,6 +798420,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     targetCourses?: TrainingCourseUpdateManyWithoutNotificationsNestedInput
     targetStudents?: StudentUpdateManyWithoutNotificationsNestedInput
     lecturer?: LecturerUpdateOneWithoutNotificationsNestedInput
@@ -797963,6 +798453,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     targetCourses?: TrainingCourseUncheckedUpdateManyWithoutNotificationsNestedInput
     targetStudents?: StudentUncheckedUpdateManyWithoutNotificationsNestedInput
     attachments?: DocumentFileUncheckedUpdateManyWithoutNotificationNestedInput
@@ -797994,6 +798485,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SurveyObjectTypeUpdateWithoutFixedClassesInput = {
@@ -804651,6 +805143,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -804831,6 +805324,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -805011,6 +805505,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -808297,6 +808792,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     targetCourses?: TrainingCourseUpdateManyWithoutNotificationsNestedInput
     targetClasses?: FixedClassUpdateManyWithoutNotificationsNestedInput
     lecturer?: LecturerUpdateOneWithoutNotificationsNestedInput
@@ -808329,6 +808825,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     targetCourses?: TrainingCourseUncheckedUpdateManyWithoutNotificationsNestedInput
     targetClasses?: FixedClassUncheckedUpdateManyWithoutNotificationsNestedInput
     attachments?: DocumentFileUncheckedUpdateManyWithoutNotificationNestedInput
@@ -808360,6 +808857,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StudentResearchRegistrationUpdateWithoutStudentInput = {
@@ -810178,6 +810676,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -810358,6 +810857,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -810538,6 +811038,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -811313,6 +811814,7 @@ export namespace Prisma {
     targetDeviceId?: string | null
     pushExpiresAt?: Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: string | null
   }
 
   export type PersonalWorkTagCreateManyLecturerInput = {
@@ -813633,6 +814135,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     targetCourses?: TrainingCourseUpdateManyWithoutNotificationsNestedInput
     targetClasses?: FixedClassUpdateManyWithoutNotificationsNestedInput
     targetStudents?: StudentUpdateManyWithoutNotificationsNestedInput
@@ -813664,6 +814167,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     targetCourses?: TrainingCourseUncheckedUpdateManyWithoutNotificationsNestedInput
     targetClasses?: FixedClassUncheckedUpdateManyWithoutNotificationsNestedInput
     targetStudents?: StudentUncheckedUpdateManyWithoutNotificationsNestedInput
@@ -813695,6 +814199,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PersonalWorkTagUpdateWithoutLecturerInput = {
@@ -837466,6 +837971,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -837599,6 +838105,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -837779,6 +838286,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -837959,6 +838467,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -838268,6 +838777,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -838401,6 +838911,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -838581,6 +839092,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -838761,6 +839273,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -838990,6 +839503,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -839123,6 +839637,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -839303,6 +839818,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -839483,6 +839999,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -839708,6 +840225,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -839841,6 +840359,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -840021,6 +840540,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -840201,6 +840721,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -840334,6 +840855,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -840467,6 +840989,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -840647,6 +841170,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -840827,6 +841351,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -840960,6 +841485,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -841093,6 +841619,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -841273,6 +841800,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -841453,6 +841981,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -842174,6 +842703,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -842307,6 +842837,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -842487,6 +843018,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -842667,6 +843199,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -842800,6 +843333,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -842933,6 +843467,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -843113,6 +843648,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -843293,6 +843829,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -843426,6 +843963,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -843559,6 +844097,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -843739,6 +844278,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -843919,6 +844459,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -844336,6 +844877,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -844469,6 +845011,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -844649,6 +845192,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -844829,6 +845373,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -844962,6 +845507,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -845095,6 +845641,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -845275,6 +845822,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -845455,6 +846003,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -845588,6 +846137,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -845721,6 +846271,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -845901,6 +846452,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -846081,6 +846633,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -846214,6 +846767,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    mock?: boolean | null
     bLaNguoiDung?: boolean | null
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
@@ -846347,6 +846901,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -846527,6 +847082,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -846707,6 +847263,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    mock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null

@@ -1,6 +1,8 @@
 import { OpenAPIHono } from "@hono/zod-openapi"
 import { jwtAuth } from "@workspace/auth/hono"
 import { enhance, Prisma, PrismaClient } from "@workspace/db"
+import { modelApiAppCodes } from "@workspace/db/model-api-app-codes"
+import { modelPolicyUser } from "@workspace/db/model-policy-user"
 import { createHonoHandler } from "@workspace/db/hono"
 import { setupAppTimezone } from "@workspace/libs/timezone"
 import type { Context } from "hono"
@@ -125,14 +127,12 @@ app.route("/api/export-template", ExportTemplateApp)
 app.route("/api/export-training-data", ExportTrainingDataApp)
 app.route("/api/import-training-data", ImportTrainingDataApp)
 app.route("/api/class-register-session", InvalidateClassRegisterCacheApp)
-const nv = await prisma.userProfile.findFirstOrThrow()
-
+app.use("/api/model/*", jwtAuth(modelApiAppCodes()))
 app.use(
   "/api/model/*",
   createHonoHandler({
     getPrisma: async (ctx: Context) => {
-      return enhance(prisma, { user: nv })
-      // return enhance(prisma, { user: ctx.get('user') })
+      return enhance(prisma, { user: modelPolicyUser(ctx.get("user")) })
     },
   })
 )

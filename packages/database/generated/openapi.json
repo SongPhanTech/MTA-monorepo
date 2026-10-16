@@ -1449,7 +1449,8 @@
           "EXAM_DEADLINE",
           "SURVEY_DEADLINE",
           "INDIVIDUAL_SCHEDULE",
-          "CLASS_REMINDER"
+          "CLASS_REMINDER",
+          "CHAT"
         ]
       },
       "NotificationPriority": {
@@ -17606,6 +17607,11 @@
             "items": {
               "$ref": "#/components/schemas/DocumentFile"
             }
+          },
+          "recipientProfileId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
           },
           "targetDeviceId": {
             "type": "string",
@@ -56086,6 +56092,11 @@
           },
           "lecturerId": {
             "type": "string",
+            "nullable": true
+          },
+          "recipientProfileId": {
+            "type": "string",
+            "format": "uuid",
             "nullable": true
           },
           "targetDeviceId": {
@@ -120387,6 +120398,10 @@
           "lecturerId": {
             "type": "integer"
           },
+          "recipientProfileId": {
+            "type": "string",
+            "nullable": true
+          },
           "targetDeviceId": {
             "type": "integer"
           },
@@ -120535,6 +120550,11 @@
             "type": "string",
             "nullable": true
           },
+          "recipientProfileId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
           "targetDeviceId": {
             "type": "string",
             "nullable": true
@@ -120650,6 +120670,11 @@
           },
           "lecturerId": {
             "type": "string",
+            "nullable": true
+          },
+          "recipientProfileId": {
+            "type": "string",
+            "format": "uuid",
             "nullable": true
           },
           "targetDeviceId": {
