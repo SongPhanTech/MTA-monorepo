@@ -1,11 +1,12 @@
 CREATE OR REPLACE FUNCTION "ql-dao-tao".log_subject_class_changes()
 RETURNS TRIGGER AS $$
 DECLARE
-  v_updated_by_id TEXT;
+  v_updated_by_id UUID;
 BEGIN
-  -- Safe read of user ID from session config (returns NULL if not set)
+  -- Session config is text. Column "updatedById" is uuid; an uncast text
+  -- expression fails even when the value is NULL (SQLSTATE 42804).
   BEGIN
-    v_updated_by_id := current_setting('app.updated_by_id', true);
+    v_updated_by_id := NULLIF(btrim(current_setting('app.updated_by_id', true)), '')::uuid;
   EXCEPTION
     WHEN others THEN
       v_updated_by_id := NULL;
