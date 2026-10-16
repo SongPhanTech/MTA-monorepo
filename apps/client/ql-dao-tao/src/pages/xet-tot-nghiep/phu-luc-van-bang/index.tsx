@@ -61,6 +61,17 @@ import dayjs, { Dayjs } from "dayjs"
 import { saveAs } from "file-saver"
 import type React from "react"
 import { useEffect, useMemo, useState } from "react"
+import { useDisclosure } from "react-hook-disclosure-modal"
+import type { ModalPrintPhuLucVbInput } from "../../../utils/phu-luc-van-bang/plvb-print-types"
+import type { PlvbPrintVariant } from "../../../utils/phu-luc-van-bang/plvb-print-settings"
+import {
+  PLVB_BODY_ROW_HEIGHT_1,
+  PLVB_BODY_ROW_HEIGHT_2,
+  PLVB_NAME_ONE_LINE_MAX,
+  PLVB_NOTE_FONT,
+  getAppendixSubjectRowHeight as sharedGetAppendixSubjectRowHeight,
+  wrapAppendixSubjectName as sharedWrapAppendixSubjectName,
+} from "../../../utils/phu-luc-van-bang/plvb-print-settings"
 
 type TSubjectItem = StudentSubjectScore & {
   subjectVersion: SubjectVersion
@@ -179,40 +190,16 @@ function formatAppendixScoreDisplay(value: unknown, decimals = 1): string {
   return n.toFixed(decimals).replace(".", ",")
 }
 
-/**
- * Tên môn dài hơn 34 ký tự thì xuống dòng 2, cao 30.
- * Tên từ 34 ký tự trở xuống giữ 1 dòng, cao 20.
- * Đếm cả chữ, dấu câu và dấu cách.
- */
-const PLVB_NAME_ONE_LINE_MAX = 34
-const PLVB_BODY_ROW_HEIGHT_1 = 20
-const PLVB_BODY_ROW_HEIGHT_2 = 30
-
-/** Độ dài tên in trên phiếu. Mỗi dấu cách tính là 1 ký tự. */
-function appendixSubjectNameLength(name?: string | null): number {
-  return String(name || "").replace(/\s+/g, " ").trim().length
-}
-
 function wrapAppendixSubjectName(name?: string | null): string {
-  const text = String(name || "").replace(/\s+/g, " ").trim()
-  if (!text || appendixSubjectNameLength(text) <= PLVB_NAME_ONE_LINE_MAX) return text
-  // Ưu tiên ngắt tại dấu cách gần ngưỡng 34 ký tự (dấu cách vẫn được tính)
-  const head = text.slice(0, PLVB_NAME_ONE_LINE_MAX + 1)
-  const breakAt = Math.max(head.lastIndexOf(" "), head.lastIndexOf(","))
-  if (breakAt >= Math.floor(PLVB_NAME_ONE_LINE_MAX * 0.45)) {
-    return `${text.slice(0, breakAt + (text[breakAt] === "," ? 1 : 0)).trim()}\n${text
-      .slice(breakAt + 1)
-      .trim()}`
-  }
-  return `${text.slice(0, PLVB_NAME_ONE_LINE_MAX).trim()}\n${text.slice(PLVB_NAME_ONE_LINE_MAX).trim()}`
-}
-
-function isTwoLineAppendixName(name?: string | null): boolean {
-  return appendixSubjectNameLength(name) > PLVB_NAME_ONE_LINE_MAX
+  return sharedWrapAppendixSubjectName(name, PLVB_NAME_ONE_LINE_MAX)
 }
 
 function getAppendixSubjectRowHeight(names: Array<string | null | undefined>): number {
-  return names.some(isTwoLineAppendixName) ? PLVB_BODY_ROW_HEIGHT_2 : PLVB_BODY_ROW_HEIGHT_1
+  return sharedGetAppendixSubjectRowHeight(names, {
+    nameOneLineMax: PLVB_NAME_ONE_LINE_MAX,
+    rowHeight1: PLVB_BODY_ROW_HEIGHT_1,
+    rowHeight2: PLVB_BODY_ROW_HEIGHT_2,
+  })
 }
 
 function countWrappedLines(
@@ -305,7 +292,6 @@ const PLVB_STT_WIDTH = 5.0
 const PLVB_NAME_UNIT = 3.6
 const PLVB_CREDIT_WIDTH = 3.8
 const PLVB_SCORE_WIDTH = 7.0
-const PLVB_NOTE_FONT = 10 // cụm ghi chú
 const PLVB_HALF_WIDTHS = [
   PLVB_STT_WIDTH,
   ...Array.from({ length: PLVB_NAME_SPAN }, () => PLVB_NAME_UNIT),
@@ -840,6 +826,16 @@ export default function StudentGradeSystem() {
       const curriculumVersionId =
         student?.fixedClass?.curriculumVersion?.id || student?.curriculumVersion?.id
 
+      const getPlannedSemester = (item: (typeof student.subjectClassStudent)[number]) => {
+        const matchedTrainingBlock = item?.subjectVersion?.trainingBlocks?.find(
+          (trainingBlock) =>
+            trainingBlock?.trainingBlockOnCurriculumVersion?.curriculumVersionId ===
+            curriculumVersionId
+        )
+        const raw = matchedTrainingBlock?.semester
+        return typeof raw === "number" && Number.isFinite(raw) ? raw : null
+      }
+
       const sortedSubjectClassStudent = pickHighestScoreBySubject(
         student.subjectClassStudent || []
       ).sort((a, b) => {
@@ -847,18 +843,8 @@ export default function StudentGradeSystem() {
         const bGrad = isGraduationSubjectType(b.subjectVersion?.type)
         if (aGrad !== bGrad) return aGrad ? 1 : -1
 
-        const getPlannedSemester = (item: (typeof student.subjectClassStudent)[number]) => {
-          const matchedTrainingBlock = item?.subjectVersion?.trainingBlocks?.find(
-            (trainingBlock) =>
-              trainingBlock?.trainingBlockOnCurriculumVersion?.curriculumVersionId ===
-              curriculumVersionId
-          )
-
-          return matchedTrainingBlock?.semester ?? Number.MAX_SAFE_INTEGER
-        }
-
-        const plannedSemesterA = getPlannedSemester(a)
-        const plannedSemesterB = getPlannedSemester(b)
+        const plannedSemesterA = getPlannedSemester(a) ?? Number.MAX_SAFE_INTEGER
+        const plannedSemesterB = getPlannedSemester(b) ?? Number.MAX_SAFE_INTEGER
 
         if (plannedSemesterA !== plannedSemesterB) {
           return plannedSemesterA - plannedSemesterB
@@ -897,6 +883,8 @@ export default function StudentGradeSystem() {
         semesterGroup.subjects.push({
           id: item.id,
           key: item.id,
+          subjectKey: item.subjectVersion?.id || item.id,
+          hocKyDuKien: getPlannedSemester(item),
           stt: semesterGroup.subjects.length + 1,
           tenHocPhan: getDiplomaAppendixSubjectName(item),
           soTinChi: item.subjectVersion?.credit || "",
@@ -1198,6 +1186,24 @@ export default function StudentGradeSystem() {
     }
 
     return `- Phân loại tốt nghiệp theo thang điểm ${scaleLabel}: ${rankingText}.${downgradeNote}`
+  }
+
+  const { onOpen: openPrintPhuLucVb } = useDisclosure<ModalPrintPhuLucVbInput>({
+    tag: "ModalPrintPhuLucVb",
+  })
+
+  const handlePrintPLVBHtml = (variant: PlvbPrintVariant, columns: 1 | 2 = 2) => {
+    if (!studentsWithSemesters?.length) {
+      notification.info({ message: "Không có dữ liệu để xuất!" })
+      return
+    }
+    openPrintPhuLucVb({
+      students: studentsWithSemesters,
+      printDate,
+      signerName,
+      defaultColumns: columns,
+      variant,
+    })
   }
 
   const handleExportPLVB2Col = () => {
@@ -1871,15 +1877,14 @@ export default function StudentGradeSystem() {
   }
 
   const subjects: {
-    daiHoc: { id: number; name: string; onClick?: () => void }[]
+    daiHoc: { id: number; name: string; onClick?: () => void; dropdown?: boolean }[]
     nganHan: { id: number; name: string; onClick?: () => Promise<void> }[]
     caoHoc: { id: number; name: string; onClick?: () => Promise<void> }[]
   } = {
     daiHoc: [
-      { id: 1, name: "Phụ lục VB (1 cột)", onClick: handleExportPLVB1Col },
-      { id: 2, name: "Phụ lục VB (2 cột)", onClick: handleExportPLVB2Col },
-      // { id: 3, name: "Phụ lục VB (2 cột - 1 trang)" },
-      // { id: 4, name: "Bảng điểm Ngân hạn (P2)" },
+      { id: 1, name: "Phụ lục văn bằng", dropdown: true },
+      // { id: 3, name: "Xuất Excel PLVB (1 cột)", onClick: handleExportPLVB1Col },
+      // { id: 4, name: "Xuất Excel PLVB (2 cột)", onClick: handleExportPLVB2Col },
     ],
     nganHan: [
       // { id: 5, name: "Bảng điểm ngắn hạn SDH" },
@@ -2074,8 +2079,34 @@ export default function StudentGradeSystem() {
         <div className="mb-6">
           <h3 className="text-sm font-bold color text-primary mb-3">I. Đại học</h3>
           <div className="grid grid-cols-4 gap-3">
-            {subjects.daiHoc.map((subject, index) => {
-              return (
+            {subjects.daiHoc.map((subject, index) =>
+              subject.dropdown ? (
+                <Dropdown
+                  key={subject.id}
+                  trigger={["click"]}
+                  menu={{
+                    items: [
+                      {
+                        key: "military",
+                        label: "QUÂN SỰ",
+                        onClick: () => handlePrintPLVBHtml("military"),
+                      },
+                      {
+                        key: "international",
+                        label: "QUỐC TẾ",
+                        onClick: () => handlePrintPLVBHtml("international"),
+                      },
+                    ],
+                  }}
+                >
+                  <Button
+                    type="primary"
+                    className="h-auto w-full py-2 px-3 text-xs justify-start text-white"
+                  >
+                    {index + 1}. {subject.name} <DownOutlined />
+                  </Button>
+                </Dropdown>
+              ) : (
                 <ExportDiplomaAppendix
                   onClick={subject?.onClick}
                   key={subject?.id}
@@ -2084,7 +2115,7 @@ export default function StudentGradeSystem() {
                   className="h-auto px-3 text-xs justify-start text-white"
                 />
               )
-            })}
+            )}
           </div>
         </div>
 
