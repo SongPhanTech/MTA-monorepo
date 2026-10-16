@@ -132,11 +132,6 @@ export default function BaoCaoGiangVien() {
     () => buildProgressRows(orgs, clusterLecturers),
     [orgs, clusterLecturers]
   )
-  const orgKeys = useMemo(() => orgs.map((org) => org.Id), [orgs])
-
-  useEffect(() => {
-    setExpandedKeys(orgKeys)
-  }, [orgKeys])
 
   const findTreeNode = (nodes: ReportTreeNode[], key: Key): ReportTreeNode | undefined => {
     for (const node of nodes) {
