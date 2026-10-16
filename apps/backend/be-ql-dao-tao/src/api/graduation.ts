@@ -56,6 +56,7 @@ import {
   parsePostgraduateDeptSignerInfo,
   stripLeadingCommaBeforeSignerName,
   generateExcelFromTemplate,
+  fixPhoiBangNganHanEndDateEnDisplay,
   getScoreClassification,
   getReportDateParts,
   formatScore,
@@ -286,6 +287,29 @@ function isGraduationSubjectType(type?: string | null) {
     type === SubjectVersionType.Project ||
     type === SubjectVersionType.Graduation
   )
+}
+
+/** In đậm các cụm chữ trong DOCX (sau khi Docxtemplater render). */
+function boldDocxPlainTexts(docXml: string, phrases: string[]) {
+  let next = docXml
+  for (const phrase of phrases) {
+    if (!phrase) continue
+    const escaped = phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+    next = next.replace(
+      new RegExp(
+        `(<w:r\\b[^>]*>)(?:<w:rPr>([\\s\\S]*?)</w:rPr>)?(<w:t[^>]*>${escaped}</w:t>)`,
+        "g"
+      ),
+      (_match, rStart: string, rPr: string | undefined, tNode: string) => {
+        if (rPr && /<w:b[\s/>]/.test(rPr)) {
+          return `${rStart}<w:rPr>${rPr}</w:rPr>${tNode}`
+        }
+        const mergedPr = `${rPr || ""}<w:b/>`
+        return `${rStart}<w:rPr>${mergedPr}</w:rPr>${tNode}`
+      }
+    )
+  }
+  return next
 }
 
 function getPlannedSemester(
@@ -2473,6 +2497,7 @@ const exportPhoiBangNganHan = createRoute({
             managementOrganizationId: z.string().optional(),
             printDate: z.string().optional(),
             signerName: z.string().optional(),
+            includeNamePrefix: z.boolean().optional(),
           }),
         },
       },
@@ -2506,6 +2531,7 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
     thesisSessionIds,
     printDate,
     signerName,
+    includeNamePrefix,
   } = c.req.valid("json")
 
   const students = await prisma.student.findMany({
@@ -2537,6 +2563,7 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
           trainingCourse: {
             include: {
               semesterStart: true,
+              trainingObjectType: true,
               scoreConverts: {
                 where: { deletedAt: null, active: true },
               },
@@ -2599,9 +2626,12 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
     }
     const xepLoaiEn = classificationMappingEn[xepLoaiVi] || ""
 
+    const isCivilian =
+      student.fixedClass?.trainingCourse?.trainingObjectType?.type === TrainingObjectTypes.CIVILIAN
     const isFemale = user?.gender?.sTen?.toLowerCase() === "nữ"
-    const prefixVi = isFemale ? "Bà " : "Ông "
-    const prefixEn = isFemale ? "Ms " : "Mr "
+    const usePrefix = includeNamePrefix ?? isCivilian
+    const prefixVi = usePrefix ? (isFemale ? "Bà " : "Ông ") : ""
+    const prefixEn = usePrefix ? (isFemale ? "Ms " : "Mr ") : ""
 
     return {
       data: {
@@ -2642,7 +2672,7 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
           ? `Ngày ${pDateParts.day} tháng ${pDateParts.monthVi} năm ${pDateParts.year}`
           : "",
         ngay_in_en: pDateParts?.day
-          ? `${pDateParts.monthEn} ${pDateParts.day}, ${pDateParts.year}`
+          ? `${pDateParts.day} ${pDateParts.monthEn} ${pDateParts.year}`
           : "",
 
         ngay_tn: pDateParts?.day || "",
@@ -2660,10 +2690,11 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
 
   try {
     const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhoiBangNganHan_v4.xlsx")
-    const result = await generateExcelFromTemplate(templateBuffer, payload, {
+    const rawResult = await generateExcelFromTemplate(templateBuffer, payload, {
       showGridLines: true,
       wrapText: true,
     })
+    const result = await fixPhoiBangNganHanEndDateEnDisplay(rawResult as Buffer)
 
     const fileName = "PhoiBangNganHan.xlsx"
     const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
@@ -2800,8 +2831,18 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
           },
           thesisProject: {
             include: {
-              supervisor: true,
-              coSupervisor: true,
+              supervisor: {
+                include: {
+                  academicDegreeType: true,
+                  academicRankType: true,
+                },
+              },
+              coSupervisor: {
+                include: {
+                  academicDegreeType: true,
+                  academicRankType: true,
+                },
+              },
               defenseRecord: true,
               subjectClass: { include: { subject: true } },
               thesisSession: true,
@@ -2925,6 +2966,18 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
     return Number(val)
   }
 
+  const formatExpertWithTitles = (expert?: {
+    name?: string | null
+    academicRankType?: { sMa?: string | null } | null
+    academicDegreeType?: { sMa?: string | null } | null
+  } | null) => {
+    if (!expert) return ""
+    const title = [safeString(expert.academicRankType?.sMa), safeString(expert.academicDegreeType?.sMa)]
+      .filter(Boolean)
+      .join(".")
+    return [title, safeString(expert.name)].filter(Boolean).join(" ").trim()
+  }
+
   const sheetData = Array.from(groups.entries()).map(([sheetName, groupStudents]) => {
     const payloads = groupStudents.map((student) => {
       const user = student.userProfile
@@ -2936,7 +2989,10 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
       const curriculumVersion = student.fixedClass?.curriculumVersion
       const academicYear = course?.academicYear
       const dobParts = getReportDateParts(user?.dateOfBirth)
-      const enrollDateParts = getReportDateParts(student.from || student.fixedClass?.createdAt)
+      // Ngày nhập học lấy từ danh mục Khóa (admissionStartDate)
+      const enrollDateParts = getReportDateParts(
+        course?.admissionStartDate || student.from || student.fixedClass?.createdAt
+      )
       const defenseDateParts = getReportDateParts(tP?.defenseDate || tP?.thesisSession?.startDate)
       let totalCredits = 0
       let totalPoints10 = 0
@@ -2964,13 +3020,15 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
               totalPoints4 += safeNumber(conversion.base4) * credits
             }
           }
+          const tenHocPhan = safeString(getDiplomaAppendixSubjectName(record, curriculumVersion))
           return {
             stt: idx + 1,
-            ten_hoc_phan: safeString(getDiplomaAppendixSubjectName(record, curriculumVersion)),
+            ten_hoc_phan: tenHocPhan,
             stc: credits,
             diem_he_10: formatScore(score, 1) || "0,0",
             diem_he_4: formatScore(conversion?.base4 || 0, 1) || "0,0",
             diem_he_chu: conversion?.letter,
+            is_graduation_subject: isGraduationSubjectType(record.subjectVersion?.type),
           }
         }
       )
@@ -3022,8 +3080,8 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
           const degree = safeString(version?.academicDegreeType?.sMa)
           const title = [rank, degree].filter(Boolean).join(".")
           const chucVi = chucViByRole[m.role] ?? "Ủy viên"
-          const inAcademy =
-            typeof version?.inAcademy === "boolean" ? version.inAcademy : !!lecturer
+          // Trust inAcademy trên hồ sơ chuyên gia (mặc định trong HV)
+          const inAcademy = version?.inAcademy ?? true
           return {
             chuc_vi: `${idx + 1}. ${chucVi}`,
             ten_day_du: [title, safeString(version?.name)].filter(Boolean).join(" ").trim(),
@@ -3038,18 +3096,24 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
             vai_tro_hoi_dong: vaiTroByRole[m.role] ?? "",
           }
         })
-      const supervisors = [tP?.supervisor?.name, tP?.coSupervisor?.name]
+      const supervisors = [formatExpertWithTitles(tP?.supervisor), formatExpertWithTitles(tP?.coSupervisor)]
         .filter(Boolean)
-        .map(safeString)
         .join("; ")
       const isApplicationProgram = isApplicationOrientation(
         student.fixedClass?.classType,
         tP?.thesisType === ThesisType.PROJECT
       )
 
+      const soHieuBang = safeString(gD?.diplomaNumber)
+      const soVaoSoGoc = safeString(gD?.originalDiplomaNumber)
+      // fullVi = "ngày D tháng M năm Y" — template đã có chữ "ngày" phía trước
+      const ngayBaoVe = safeString(defenseDateParts?.fullVi).replace(/^ngày\s+/i, "")
+
       return {
         data: {
-          so_quyet_dinh: safeString(gD?.originalDiplomaNumber),
+          so_hieu_bang: soHieuBang,
+          so_vao_so_goc: soVaoSoGoc,
+          so_quyet_dinh: soHieuBang || soVaoSoGoc,
           ho_ten_hoc_vien: safeString(user?.fullname?.toUpperCase()),
           ma_hoc_vien: safeString(student.userProfile?.code),
           ngay_sinh: safeString(dobParts?.dateVi),
@@ -3072,7 +3136,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
 
           ten_de_an_tot_nghiep: safeString(tP?.title),
           danh_sach_can_bo_huong_dan: safeString(supervisors),
-          ngay_bao_ve: safeString(defenseDateParts?.fullVi),
+          ngay_bao_ve: ngayBaoVe,
           hoc_phan_tot_nghiep: safeString(
             getCurriculumGraduationSubjectName(curriculumVersion, tR?.studentSubjectScore) ||
               tR?.studentSubjectScore?.subjectVersion?.name ||
@@ -3129,6 +3193,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
     if (!signerInfo.quan_ham) {
       docXml = stripLeadingCommaBeforeSignerName(docXml, signerInfo.ten_day_du)
     }
+    docXml = boldDocxPlainTexts(docXml, ["Luận văn tốt nghiệp", "Đề án tốt nghiệp"])
 
     const pRegex = /<w:p\b[^>]*?>(?:(?!<w:p\b).)*?ngắt trang(?:(?!<\/w:p>).)*?<\/w:p>/g
     const matches = docXml.match(pRegex)

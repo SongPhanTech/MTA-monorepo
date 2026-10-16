@@ -1891,7 +1891,6 @@ export default function StudentGradeSystem() {
       {
         id: 6,
         name: "In phôi bằng ngắn hạn SĐH",
-        onClick: () => handleCommonExport(exportHandlers.phoiBangNganHan),
       },
       {
         id: 7,
@@ -2124,16 +2123,50 @@ export default function StudentGradeSystem() {
             II. Ngắn hạn - Dài hạn sau đại học
           </h3>
           <div className="grid grid-cols-4 gap-3">
-            {subjects.nganHan.map((subject, index) => (
-              <Button
-                key={index}
-                onClick={subject?.onClick}
-                type="primary"
-                className="h-auto py-2 px-3 text-xs justify-start text-white"
-              >
-                {index + 1}. {subject.name}
-              </Button>
-            ))}
+            {subjects.nganHan.map((subject, index) =>
+              subject.id === 6 ? (
+                <Dropdown
+                  key={subject.id}
+                  trigger={["click"]}
+                  menu={{
+                    items: [
+                      {
+                        key: "civilian",
+                        label: "DÂN SỰ",
+                        onClick: () =>
+                          handleCommonExport(exportHandlers.phoiBangNganHan, {
+                            includeNamePrefix: true,
+                          }),
+                      },
+                      {
+                        key: "military",
+                        label: "QUÂN SỰ",
+                        onClick: () =>
+                          handleCommonExport(exportHandlers.phoiBangNganHan, {
+                            includeNamePrefix: false,
+                          }),
+                      },
+                    ],
+                  }}
+                >
+                  <Button
+                    type="primary"
+                    className="h-auto w-full py-2 px-3 text-xs justify-start text-white"
+                  >
+                    {index + 1}. {subject.name} <DownOutlined />
+                  </Button>
+                </Dropdown>
+              ) : (
+                <Button
+                  key={subject.id}
+                  onClick={subject?.onClick}
+                  type="primary"
+                  className="h-auto py-2 px-3 text-xs justify-start text-white"
+                >
+                  {index + 1}. {subject.name}
+                </Button>
+              )
+            )}
           </div>
         </div>
 

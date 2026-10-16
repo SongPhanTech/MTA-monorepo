@@ -1318,9 +1318,10 @@ export const parsePostgraduateDeptSignerInfo = (signerName: string, isChief = tr
       ten_day_du,
     }
   }
+  // Phó trưởng phòng: TL. Giám đốc / KT. Trưởng phòng SĐH / Phó trưởng phòng
   return {
-    chuc_vi: "KT. TRƯỞNG PHÒNG",
-    chuc_vi_ky_thay: "PHÓ TRƯỞNG PHÒNG",
+    chuc_vi: "TL. GIÁM ĐỐC",
+    chuc_vi_ky_thay: "KT. TRƯỞNG PHÒNG SAU ĐẠI HỌC\nPHÓ TRƯỞNG PHÒNG",
     quan_ham: "",
     ten_day_du,
   }
@@ -1621,6 +1622,43 @@ export const generateExcelFromTemplate = async (
   }
 
   return await mergedWorkbook.xlsx.writeBuffer()
+}
+
+/**
+ * Phôi bằng ngắn hạn: ô ngày kết thúc EN (G:H) hẹp hơn chuỗi "05 January 2024"
+ * nên wrapText cắt mất năm. Mở rộng merge sang cột I (trống) và tắt wrap.
+ */
+export const fixPhoiBangNganHanEndDateEnDisplay = async (
+  buffer: Buffer | ArrayBuffer | Uint8Array
+) => {
+  const workbook = new ExcelJS.Workbook()
+  await workbook.xlsx.load(buffer as any)
+  const sheet = workbook.worksheets[0]
+  if (!sheet) return buffer
+
+  const merges = [...(sheet.model?.merges ?? [])]
+  for (const merge of merges) {
+    const match = /^G(\d+):H\1$/i.exec(merge)
+    if (!match?.[1]) continue
+
+    const row = Number(match[1])
+    const cell = sheet.getCell(`G${row}`)
+    const text = String(cell.value ?? "").trim()
+    if (!/^\d{2}\s+[A-Za-z]+\s+\d{4}$/.test(text)) continue
+
+    sheet.unMergeCells(merge)
+    sheet.mergeCells(`G${row}:I${row}`)
+    const master = sheet.getCell(`G${row}`)
+    master.value = text
+    master.alignment = {
+      ...(master.alignment || {}),
+      horizontal: "center",
+      vertical: master.alignment?.vertical || "middle",
+      wrapText: false,
+    }
+  }
+
+  return workbook.xlsx.writeBuffer()
 }
 
 export const generateExcelMultiSheet = async (

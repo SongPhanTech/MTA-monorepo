@@ -138,7 +138,16 @@ export function getAcademyLevelOrgName(
   return findAcademyOrgName(orgById) || (org.sTen || "").trim()
 }
 
-/** Đơn vị hội đồng: trong HV = cấp nhà trường; ngoài HV = organization. */
+/** Viết tắt tên Học viện trên phụ lục / hội đồng. */
+export function abbreviateAcademyUnitName(name: string): string {
+  const trimmed = (name || "").trim()
+  if (!trimmed) return ""
+  return trimmed
+    .replace(/Học viện\s+Kỹ thuật\s+Quân sự/gi, "Học viện KTQS")
+    .replace(/Hoc vien\s+Ky thuat\s+Quan su/gi, "Học viện KTQS")
+}
+
+/** Đơn vị hội đồng: trong HV = Học viện KTQS; ngoài HV = organization. */
 export function resolveCouncilMemberUnitName(args: {
   inAcademy: boolean
   lecturerOrg?: OrgUnitNode | null
@@ -146,10 +155,19 @@ export function resolveCouncilMemberUnitName(args: {
   orgById: Map<string, OrgUnitNode>
 }): string {
   const organization = (args.organization || "").trim()
-  if (args.inAcademy) {
-    return getAcademyLevelOrgName(args.lecturerOrg, args.orgById)
+  // Ngoài HV, hoặc hồ sơ có tổ chức ngoài dù cờ inAcademy lệch
+  if (!args.inAcademy) {
+    return organization
   }
-  return organization
+  if (organization && !/học viện/i.test(organization)) {
+    return organization
+  }
+  const academy =
+    getAcademyLevelOrgName(args.lecturerOrg, args.orgById) || findAcademyOrgName(args.orgById)
+  const abbreviated = abbreviateAcademyUnitName(academy)
+  if (/học viện KTQS/i.test(abbreviated)) return abbreviated
+  // Cây đơn vị lỗi (ra PTN/khoa) → vẫn dùng tên ngắn chuẩn của Học viện
+  return "Học viện KTQS"
 }
 
 export function normalizeVietnamese(str: string): string {

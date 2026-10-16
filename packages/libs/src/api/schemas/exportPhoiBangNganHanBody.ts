@@ -89,4 +89,5 @@ export type ExportPhoiBangNganHanBody = {
   managementOrganizationId?: string;
   printDate?: string;
   signerName?: string;
+  includeNamePrefix?: boolean;
 };
