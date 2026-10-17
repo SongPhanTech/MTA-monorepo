@@ -2,6 +2,7 @@ import Select from "@components/commons/select"
 import SurveylecturerReport from "@components/sub-pages/khao-sat/survey-lecturer-report"
 import SurveyOrganizationReport from "@components/sub-pages/khao-sat/survey-oragation-report"
 import DefaultLayout from "@layouts/default-layout"
+import { $Enums } from "@workspace/db/client"
 import {
   useFindManyClusterSurvey,
   useFindManyDM_DonVi,
@@ -9,7 +10,6 @@ import {
   useFindUniqueSemester,
   useFindUniqueTrainingObjectType,
 } from "@workspace/db/hooks"
-import { $Enums } from "@workspace/db/client"
 import { getRuntimeEnv } from "@workspace/libs"
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import { Col, Flex, Row, Skeleton, Tree } from "antd"
@@ -19,7 +19,6 @@ import { useEffect, useMemo, useState, type Key } from "react"
 import OrganizationSurveyReport from "@/components/sub-pages/khao-sat/bao-cao-don-vi"
 import {
   buildOrgLecturerTree,
-  buildProgressRows,
   CLUSTER_LECTURER_INCLUDE,
   CLUSTER_LECTURER_SURVEY_INCLUDE,
   getLecturerSurveyStats,
@@ -30,6 +29,11 @@ import {
   ORG_SELECT,
   type ReportTreeNode,
 } from "@/utils/buildOrgLecturerTree"
+import {
+  buildFacultySummarySectionTitle,
+  SURVEY_OBJECT_TYPE_COURSE_INCLUDE,
+  TRAINING_COURSE_SELECT,
+} from "@/utils/export-faculty-survey-summary-docx"
 
 function trainingSystemNameFromDbType(type: $Enums.TrainingObjectTypes | undefined): string {
   if (type === $Enums.TrainingObjectTypes.MILITARY) return "Quân sự"
@@ -74,18 +78,41 @@ export default function BaoCaoGiangVien() {
       },
     },
     include: {
-      surveyObjectType: true,
+      surveyObjectType: {
+        include: SURVEY_OBJECT_TYPE_COURSE_INCLUDE,
+      },
       surveyTopic: true,
       surveyQuestion: true,
       surveys: {
         include: {
           surveySessions: true,
-          subjectClass: { include: { semester: true } },
+          surveyObjectType: {
+            include: SURVEY_OBJECT_TYPE_COURSE_INCLUDE,
+          },
+          subjectClass: {
+            select: {
+              id: true,
+              semester: true,
+              fixedClasses: {
+                select: {
+                  id: true,
+                  name: true,
+                  startYear: true,
+                  trainingCourse: { select: TRAINING_COURSE_SELECT },
+                },
+              },
+            },
+          },
         },
       },
     },
     orderBy: { createdAt: "desc" },
   })
+
+  const sectionTitle = useMemo(() => {
+    const cluster = clusters.find((item) => item.id === clusterId)
+    return buildFacultySummarySectionTitle(trainingObjectType?.name, cluster)
+  }, [clusters, clusterId, trainingObjectType?.name])
 
   const { data: organizations = [], isFetching } = useFindManyDM_DonVi(
     {
@@ -128,10 +155,11 @@ export default function BaoCaoGiangVien() {
     () => buildOrgLecturerTree(orgs, clusterLecturers),
     [orgs, clusterLecturers]
   )
-  const progressData = useMemo(
-    () => buildProgressRows(orgs, clusterLecturers),
-    [orgs, clusterLecturers]
-  )
+  const orgKeys = useMemo(() => orgs.map((org) => org.Id), [orgs])
+
+  useEffect(() => {
+    setExpandedKeys(orgKeys)
+  }, [orgKeys])
 
   const findTreeNode = (nodes: ReportTreeNode[], key: Key): ReportTreeNode | undefined => {
     for (const node of nodes) {
@@ -186,6 +214,8 @@ export default function BaoCaoGiangVien() {
           departmentName={isDepartment ? org.sTen ?? "" : ""}
           departmentCode={isDepartment ? org.sMa ?? "" : ""}
           selectedItem={org}
+          selectedOrgNode={selectedNode}
+          sectionTitle={sectionTitle}
         />
       )
     }
@@ -229,7 +259,7 @@ export default function BaoCaoGiangVien() {
     semesterId,
     trainingObjectTypeId,
     organizations,
-    progressData,
+    sectionTitle,
   ])
 
   return (
