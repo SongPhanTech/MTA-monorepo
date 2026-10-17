@@ -183,7 +183,8 @@ const PrintBatchExplanation = () => {
           </div>
 
           <div style={{ textAlign: "right", fontStyle: "italic", marginBottom: "15px" }}>
-            Ngày {formatNgayIn(examDate.getDate())} tháng {formatThangIn(examDate.getMonth() + 1)} năm {examDate.getFullYear()}
+            Ngày {formatNgayIn(examDate.getDate())} tháng {formatThangIn(examDate.getMonth() + 1)}{" "}
+            năm {examDate.getFullYear()}
           </div>
 
           <table

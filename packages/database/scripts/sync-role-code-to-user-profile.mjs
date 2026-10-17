@@ -160,7 +160,9 @@ async function main() {
     )
 
     if (overwriteLecturer.length) {
-      console.log(`\noverwrite_to_lecturer (${overwriteLecturer.length} GV+HV → dùng mã định danh):`)
+      console.log(
+        `\noverwrite_to_lecturer (${overwriteLecturer.length} GV+HV → dùng mã định danh):`
+      )
       for (const row of overwriteLecturer.slice(0, 50)) {
         console.log(
           `  ${row.fullname || row.userProfileId} profile=${row.profileCode} → ${row.chosen} (student=${row.studentCode})`

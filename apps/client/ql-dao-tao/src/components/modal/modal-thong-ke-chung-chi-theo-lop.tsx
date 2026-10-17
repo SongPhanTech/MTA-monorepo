@@ -88,17 +88,18 @@ const CERT_KIND_TAG_COLOR: Record<CertKind, string> = {
   none: "red",
 }
 
-const CERT_KIND_EXCEL: Record<
-  CertKind,
-  { fill: string; font: string } | null
-> = {
+const CERT_KIND_EXCEL: Record<CertKind, { fill: string; font: string } | null> = {
   approved: { fill: "FFC6EFCE", font: "FF006100" },
   pending: { fill: "FFFFC000", font: "FF9C5700" },
   none: null,
 }
 
 const toSheetName = (raw: string, used: Set<string>) => {
-  let name = raw.replace(/[*?:\\/[\]]/g, " ").replace(/\s+/g, " ").trim() || "Lop"
+  let name =
+    raw
+      .replace(/[*?:\\/[\]]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim() || "Lop"
   name = name.slice(0, 31)
   let unique = name
   let i = 2

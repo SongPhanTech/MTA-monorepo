@@ -875,7 +875,8 @@ export default function DanhSachSinhVien() {
                 title: "Mã sinh viên",
                 align: "center",
                 width: 100,
-                render: (_, record) => record?.studentSubjectScore?.student?.userProfile?.code || "",
+                render: (_, record) =>
+                  record?.studentSubjectScore?.student?.userProfile?.code || "",
               },
               {
                 title: "Họ và tên",

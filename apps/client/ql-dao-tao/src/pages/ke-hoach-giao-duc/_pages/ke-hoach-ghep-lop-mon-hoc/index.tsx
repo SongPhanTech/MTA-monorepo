@@ -136,7 +136,8 @@ const SubjectClassDropItem: React.FC<{
           size={14}
         />
       </Tooltip>
-      {item?.code} ({(item?.baseCount || 0) + fixedClass.reduce((sum, fcId) => sum + (fcId?.count || 0), 0)})
+      {item?.code} (
+      {(item?.baseCount || 0) + fixedClass.reduce((sum, fcId) => sum + (fcId?.count || 0), 0)})
       <div className="gap-1 w-fit">
         {!!fixedClass?.length &&
           fixedClass.map((fcId) => (
@@ -416,7 +417,11 @@ export default function KeHoachGhepLopMonHoc() {
                   return {}
                 }
                 const mappedCount = subCur?.fixedClasses.reduce(
-                  (sum, fc) => sum + (subCur?.subjectClassStudent?.filter((sss: any) => sss?.student?.fixedClassId === fc?.id)?.length || 0),
+                  (sum, fc) =>
+                    sum +
+                    (subCur?.subjectClassStudent?.filter(
+                      (sss: any) => sss?.student?.fixedClassId === fc?.id
+                    )?.length || 0),
                   0
                 )
                 subAcc[subCur.id] = {
@@ -429,7 +434,10 @@ export default function KeHoachGhepLopMonHoc() {
                   fixedClasses: subCur.fixedClasses.map((fc) => ({
                     id: fc.id,
                     code: fc?.code,
-                    count: subCur?.subjectClassStudent?.filter((sss: any) => sss?.student?.fixedClassId === fc?.id)?.length || 0,
+                    count:
+                      subCur?.subjectClassStudent?.filter(
+                        (sss: any) => sss?.student?.fixedClassId === fc?.id
+                      )?.length || 0,
                   })),
                 }
                 return subAcc
@@ -803,21 +811,27 @@ export default function KeHoachGhepLopMonHoc() {
                               </Tooltip>
                             </div>
                             <div className="flex h-fit">
-                              {record?.trainingBlocks?.flatMap(
-                                // @ts-expect-error
-                                (block) =>
-                                  block?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses?.map((fc: any) => ({
-                                    ...fc,
-                                    count: record?.studentSubjectScore?.filter((sss: any) => sss?.student?.fixedClassId === fc?.id)?.length || 0,
-                                  })) ??
-                                  []
-                              ).map((fixedClass: any) => (
-                                <FixedClassDragItem
-                                  subjectVersionId={record.id}
-                                  item={fixedClass}
-                                  key={fixedClass?.id}
-                                />
-                              ))}
+                              {record?.trainingBlocks
+                                ?.flatMap(
+                                  // @ts-expect-error
+                                  (block) =>
+                                    block?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses?.map(
+                                      (fc: any) => ({
+                                        ...fc,
+                                        count:
+                                          record?.studentSubjectScore?.filter(
+                                            (sss: any) => sss?.student?.fixedClassId === fc?.id
+                                          )?.length || 0,
+                                      })
+                                    ) ?? []
+                                )
+                                .map((fixedClass: any) => (
+                                  <FixedClassDragItem
+                                    subjectVersionId={record.id}
+                                    item={fixedClass}
+                                    key={fixedClass?.id}
+                                  />
+                                ))}
                               {/* {record?.trainingBlocks?.[0]?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses?.map?.(
                                                                 (e: FixedClass) => (
                                                                     <FixedClassDragItem
@@ -834,18 +848,18 @@ export default function KeHoachGhepLopMonHoc() {
                       },
                     },
                     {
-                        title: "Tổng SV",
-                        width: 80,
-                        align: "center" as const,
-                        render: (_: any, record: any) => {
-                          return (
-                            record?.subjectClass?.reduce(
-                              (sum: number, sc: any) => sum + (sc?._count?.subjectClassStudent ?? 0),
-                              0
-                            ) || 0
-                          )
-                        },
+                      title: "Tổng SV",
+                      width: 80,
+                      align: "center" as const,
+                      render: (_: any, record: any) => {
+                        return (
+                          record?.subjectClass?.reduce(
+                            (sum: number, sc: any) => sum + (sc?._count?.subjectClassStudent ?? 0),
+                            0
+                          ) || 0
+                        )
                       },
+                    },
                     {
                       title: "Đơn vị phụ trách",
                       width: 150,

@@ -81,7 +81,11 @@ export default function ThongKeNoHocLai() {
     }
   }
 
-  const { data: res, isLoading, isFetching } = useOpenSubjectClassRetake(
+  const {
+    data: res,
+    isLoading,
+    isFetching,
+  } = useOpenSubjectClassRetake(
     {
       search: searchText || undefined,
       trainingCourseId: trainingCourseId as string,

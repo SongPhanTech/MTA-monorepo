@@ -65,6 +65,12 @@ import type { NhanVienEditDtoState } from './nhanVienEditDtoState';
 export type NhanVienEditDto = NhanVien & {
   /** @nullable */
   State?: NhanVienEditDtoState;
+  /** @nullable */
+  DonViCongTacChanged?: boolean | null;
+  InitializeWorkHistory?: boolean;
+  HasPreviousAssignment?: boolean;
+  /** @nullable */
+  PreviousDonViCongTacId?: string | null;
   /**
    * Tên đơn vị
    * @nullable

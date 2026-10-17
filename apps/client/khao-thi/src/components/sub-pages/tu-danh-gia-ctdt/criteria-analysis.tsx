@@ -336,10 +336,7 @@ const CriteriaAnalysisSubPage = ({
                             onConfirm={() => {
                               const id = item.analysisCriterions?.id
                               if (id) {
-                                handleSubmitCriterion(
-                                  id,
-                                  item.analysisCriterions?.description
-                                )
+                                handleSubmitCriterion(id, item.analysisCriterions?.description)
                               }
                             }}
                             okText="Đồng ý"
@@ -390,8 +387,7 @@ const CriteriaAnalysisSubPage = ({
                   ).length > 0 && (
                     <div className="my-2 p-3 bg-red-50 border border-red-200 rounded text-sm text-red-800">
                       <div className="font-semibold mb-2 flex items-center gap-2">
-                        <MessageCircle size={15} />
-                        Ý kiến yêu cầu chỉnh sửa tiêu chí:
+                        <MessageCircle size={15} />Ý kiến yêu cầu chỉnh sửa tiêu chí:
                       </div>
                       <CommentList
                         comments={item.analysisCriterions.evaluationCriterionComments.filter(

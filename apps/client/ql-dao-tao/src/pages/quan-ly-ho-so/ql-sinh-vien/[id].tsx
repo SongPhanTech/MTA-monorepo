@@ -488,13 +488,10 @@ export default function StudentDetailV2Page() {
               {studentData?.fixedClass?.trainingCourse?.name}
             </Descriptions.Item>
             <Descriptions.Item label="Ngành đào tạo">
-              {
-                (
-                  studentData?.curriculumVersion || studentData?.fixedClass?.curriculumVersion
-                )?.curriculum?.trainingMajor?.trainingField?.name ||
+              {(studentData?.curriculumVersion || studentData?.fixedClass?.curriculumVersion)
+                ?.curriculum?.trainingMajor?.trainingField?.name ||
                 (studentData?.curriculumVersion || studentData?.fixedClass?.curriculumVersion)
-                  ?.curriculum?.trainingField?.name
-              }
+                  ?.curriculum?.trainingField?.name}
             </Descriptions.Item>
             <Descriptions.Item label="Chuyên ngành">
               {
@@ -503,10 +500,7 @@ export default function StudentDetailV2Page() {
               }
             </Descriptions.Item>
             <Descriptions.Item label="CTĐT">
-              {
-                (studentData?.curriculumVersion || studentData?.fixedClass?.curriculumVersion)
-                  ?.name
-              }
+              {(studentData?.curriculumVersion || studentData?.fixedClass?.curriculumVersion)?.name}
             </Descriptions.Item>
             <Descriptions.Item label="CTĐT song song">
               {studentData?.curriculumVersionParallel?.name}

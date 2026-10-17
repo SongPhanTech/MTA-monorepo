@@ -1502,7 +1502,10 @@ export async function calculateStudentYearResult({
       useForFinalScore: tbs.useForFinalScore,
       graduation: tbs.graduation,
     })
-    if (!plannedIndexBySubject.has(tbs.subjectId) || plannedIndexBySubject.get(tbs.subjectId) == null) {
+    if (
+      !plannedIndexBySubject.has(tbs.subjectId) ||
+      plannedIndexBySubject.get(tbs.subjectId) == null
+    ) {
       plannedIndexBySubject.set(tbs.subjectId, tbs.semester ?? null)
     }
   })
@@ -1535,10 +1538,7 @@ export async function calculateStudentYearResult({
 
   const roundGpa = (totalWeightedScore: Decimal, credits: number) =>
     credits > 0
-      ? totalWeightedScore
-          .dividedBy(credits)
-          .toDecimalPlaces(2, Decimal.ROUND_HALF_UP)
-          .toNumber()
+      ? totalWeightedScore.dividedBy(credits).toDecimalPlaces(2, Decimal.ROUND_HALF_UP).toNumber()
       : 0
 
   // A. Phân loại điểm

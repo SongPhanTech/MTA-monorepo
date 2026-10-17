@@ -287,9 +287,7 @@ function buildPurgeMap(allOrgs, refCache) {
         else {
           // chọn bản nhiều FK nhất
           candidates = [
-            [...list].sort(
-              (a, b) => (refCache.get(b.Id) || 0) - (refCache.get(a.Id) || 0)
-            )[0],
+            [...list].sort((a, b) => (refCache.get(b.Id) || 0) - (refCache.get(a.Id) || 0))[0],
           ]
         }
       }
@@ -463,11 +461,11 @@ async function runPurge(prisma) {
     return
   }
 
-  const { remapped, deleted: hardDeleted, failed } = await applyRemapAndHardDelete(
-    prisma,
-    mergeTo,
-    byId
-  )
+  const {
+    remapped,
+    deleted: hardDeleted,
+    failed,
+  } = await applyRemapAndHardDelete(prisma, mergeTo, byId)
 
   // Unmapped: try hard-delete only if zero refs; else remap to KEEP_ROOT as last resort
   let unmappedDeleted = 0
@@ -499,7 +497,9 @@ async function runPurge(prisma) {
   console.log("\n--- Purge Summary ---")
   console.log(`FK rows remapped: ${remapped}`)
   console.log(`Hard-deleted (mapped): ${hardDeleted}`)
-  console.log(`Hard-deleted (unmapped/forced): ${unmappedDeleted} (forced→KEEP_ROOT: ${forcedToRoot})`)
+  console.log(
+    `Hard-deleted (unmapped/forced): ${unmappedDeleted} (forced→KEEP_ROOT: ${forcedToRoot})`
+  )
   console.log(`Failed: ${failed}`)
   console.log(`Leftover FK on remaining soft-deleted: ${leftoverAfter}`)
 }
@@ -563,7 +563,9 @@ async function runMerge(prisma) {
 
   let reparented = 0
   const winnersFromDrop = new Set(
-    [...mergeTo.values()].filter((w) => dropTreeIds.has(w) && w !== KEEP_ROOT && byId.get(w) && !byId.get(w).bDeleted)
+    [...mergeTo.values()].filter(
+      (w) => dropTreeIds.has(w) && w !== KEEP_ROOT && byId.get(w) && !byId.get(w).bDeleted
+    )
   )
   for (const wid of winnersFromDrop) {
     await ensureUnderKeepTree(prisma, wid, keepTreeIds, mergeTo)

@@ -33,7 +33,9 @@ export const SurveyMajorCountItemSchema = z.object({
   organization: z.string().optional(),
 })
 
-export const SurveyMajorCountResponseSchema = z.array(SurveyMajorCountItemSchema).openapi("SurveyMajorCountResponse")
+export const SurveyMajorCountResponseSchema = z
+  .array(SurveyMajorCountItemSchema)
+  .openapi("SurveyMajorCountResponse")
 
 export const SurveyStatisticsByFieldResponseSchema = z
   .object({

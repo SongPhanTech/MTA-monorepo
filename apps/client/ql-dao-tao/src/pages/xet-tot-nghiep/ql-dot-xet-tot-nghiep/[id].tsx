@@ -12,7 +12,12 @@ import { useApplicationStatusOptions } from "@hooks/applicationStatus"
 import { useCriteriaFieldOptions } from "@hooks/criteriaField"
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
-import { ApplicationStatus, GraduationSessionStatus, type Prisma, StudentStatus } from "@workspace/db/client"
+import {
+  ApplicationStatus,
+  GraduationSessionStatus,
+  type Prisma,
+  StudentStatus,
+} from "@workspace/db/client"
 import {
   useCountStudentGraduationApplication,
   useFindManyCertificate,
@@ -879,8 +884,7 @@ export default function StudentGraduationApplication() {
                           title: "Nơi sinh",
                           width: 100,
                           align: "center",
-                          render: (_, record) =>
-                            formatPlaceOfBirth(record?.student?.userProfile),
+                          render: (_, record) => formatPlaceOfBirth(record?.student?.userProfile),
                         },
                         {
                           title: "Dân tộc",

@@ -185,7 +185,6 @@ export default function Certificate() {
                 align: "center",
                 type: "input",
                 render: (__, record) => {
-
                   return record?.subject?.name || ""
                 },
               },
@@ -207,7 +206,6 @@ export default function Certificate() {
                   "XOA"
                 ),
                 render: (_, { id, certificateId, certificate }) => {
-
                   return (
                     <Row className="justify-center gap-2">
                       {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG, "SUA") && (

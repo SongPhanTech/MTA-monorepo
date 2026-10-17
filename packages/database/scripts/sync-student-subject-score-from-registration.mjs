@@ -417,9 +417,7 @@ async function copyMode() {
     if (toInsert.length > 0) {
       console.log("[sync-sss] Sample copy (max 5):")
       for (const r of toInsert.slice(0, 5)) {
-        console.log(
-          `  ${r.studentId} / ${r.subjectClassId} finalScore=${r.finalScore ?? "null"}`
-        )
+        console.log(`  ${r.studentId} / ${r.subjectClassId} finalScore=${r.finalScore ?? "null"}`)
       }
     }
 

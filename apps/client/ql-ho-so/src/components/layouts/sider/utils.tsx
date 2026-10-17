@@ -113,7 +113,9 @@ export const findOpenKeys = (menus: MenuItem[], currentPath: string | null): str
 const isPathMatch = (itemPath: string, pathname: string) => {
   const normalizedPath = itemPath.replace(/\/$/, "")
   const normalizedPathname = pathname.replace(/\/$/, "")
-  return normalizedPathname === normalizedPath || normalizedPathname.startsWith(`${normalizedPath}/`)
+  return (
+    normalizedPathname === normalizedPath || normalizedPathname.startsWith(`${normalizedPath}/`)
+  )
 }
 
 export const findMatchingKey = (menus: MenuItem[], pathname: string | null): string | undefined => {

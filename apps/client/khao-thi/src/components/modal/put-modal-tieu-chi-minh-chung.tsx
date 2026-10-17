@@ -258,7 +258,8 @@ const PutTieuChiMinhChungModal = () => {
     if (!output) return
 
     let evidenceItems = [...items]
-    const shouldCreateFromTab = activeTab === "2" && (hasEvidenceFormInput() || evidenceItems.length === 0)
+    const shouldCreateFromTab =
+      activeTab === "2" && (hasEvidenceFormInput() || evidenceItems.length === 0)
 
     if (shouldCreateFromTab) {
       try {
@@ -630,7 +631,12 @@ const PutTieuChiMinhChungModal = () => {
               children: (
                 <>
                   <Col span={24}>
-                    <FormItem form={form} label="Minh chứng" name="evidences" required={activeTab === "1"}>
+                    <FormItem
+                      form={form}
+                      label="Minh chứng"
+                      name="evidences"
+                      required={activeTab === "1"}
+                    >
                       <TreeSelect
                         multiple
                         maxTagCount="responsive"
@@ -717,7 +723,12 @@ const PutTieuChiMinhChungModal = () => {
                   </Row>
                   <Row>
                     <Col span={24}>
-                      <Button type="primary" htmlType="button" onClick={handleCreateNewEvidence} block>
+                      <Button
+                        type="primary"
+                        htmlType="button"
+                        onClick={handleCreateNewEvidence}
+                        block
+                      >
                         Tạo mới minh chứng
                       </Button>
                     </Col>

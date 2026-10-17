@@ -123,38 +123,79 @@ function DanhSachHocVien({
         subjectClassStudent: {
           where: {
             student: {
-              ...(filters.name
+              ...(filters.name ||
+              filters.code ||
+              filters.idCardNumber ||
+              filters.phoneNumber ||
+              filters.dateOfBirth?.length === 2 ||
+              (filters.statusSurvey && filters.statusSurvey.length === 1)
                 ? {
                     userProfile: {
-                      fullname: {
-                        contains: filters.name,
-                        mode: "insensitive" as const,
-                      },
+                      ...(filters.name
+                        ? {
+                            fullname: {
+                              contains: filters.name,
+                              mode: "insensitive" as const,
+                            },
+                          }
+                        : {}),
+                      ...(filters.code
+                        ? {
+                            code: {
+                              contains: filters.code,
+                              mode: "insensitive" as const,
+                            },
+                          }
+                        : {}),
+                      ...(filters.idCardNumber
+                        ? {
+                            idCardNumber: {
+                              contains: filters.idCardNumber,
+                              mode: "insensitive" as const,
+                            },
+                          }
+                        : {}),
+                      ...(filters.phoneNumber
+                        ? {
+                            phoneNumber: {
+                              contains: filters.phoneNumber,
+                              mode: "insensitive" as const,
+                            },
+                          }
+                        : {}),
+                      ...(filters.dateOfBirth?.length === 2
+                        ? {
+                            dateOfBirth: {
+                              gte: dayjs(filters.dateOfBirth?.[0], "DD/MM/YYYY").toDate(),
+                              lte: dayjs(filters.dateOfBirth?.[1], "DD/MM/YYYY").toDate(),
+                            },
+                          }
+                        : {}),
+                      ...(filters.statusSurvey && filters.statusSurvey.length === 1
+                        ? {
+                            surveySession:
+                              filters.statusSurvey[0] === true
+                                ? {
+                                    some: {
+                                      survey: {
+                                        lectureId: lecturer?.id,
+                                        clusterSurveyId: selectedId,
+                                      },
+                                    },
+                                  }
+                                : {
+                                    none: {
+                                      survey: {
+                                        lectureId: lecturer?.id,
+                                        clusterSurveyId: selectedId,
+                                      },
+                                    },
+                                  },
+                          }
+                        : {}),
                     },
                   }
                 : {}),
-              ...(filters.code && {
-                code: {
-                  contains: filters.code,
-                  mode: "insensitive" as const,
-                },
-              }),
-              ...(filters.idCardNumber && {
-                userProfile: {
-                  idCardNumber: {
-                    contains: filters.idCardNumber,
-                    mode: "insensitive" as const,
-                  },
-                },
-              }),
-              ...(filters.phoneNumber && {
-                userProfile: {
-                  idCardNumber: {
-                    contains: filters.phoneNumber,
-                    mode: "insensitive" as const,
-                  },
-                },
-              }),
               ...(filters.fixedClassIds && {
                 fixedClassId: {
                   in: filters.fixedClassIds,
@@ -167,42 +208,6 @@ function DanhSachHocVien({
                   },
                 },
               }),
-              ...(filters.statusSurvey && filters.statusSurvey.length === 1
-                ? {
-                    userProfile: {
-                      surveySession:
-                        filters.statusSurvey[0] === true
-                          ? {
-                              // Trường hợp chọn "Đã làm" [true]
-                              some: {
-                                survey: {
-                                  lectureId: lecturer?.id,
-                                  clusterSurveyId: selectedId,
-                                },
-                              },
-                            }
-                          : {
-                              // Trường hợp chọn "Chưa làm" [false]
-                              none: {
-                                survey: {
-                                  lectureId: lecturer?.id,
-                                  clusterSurveyId: selectedId,
-                                },
-                              },
-                            },
-                    },
-                  }
-                : {}),
-              ...(filters.dateOfBirth?.length === 2
-                ? {
-                    userProfile: {
-                      dateOfBirth: {
-                        gte: dayjs(filters.dateOfBirth?.[0], "DD/MM/YYYY").toDate(),
-                        lte: dayjs(filters.dateOfBirth?.[1], "DD/MM/YYYY").toDate(),
-                      },
-                    },
-                  }
-                : {}),
             },
           },
           include: {
@@ -311,10 +316,10 @@ function DanhSachHocVien({
                 hideDefaultSTT={true}
                 columns={[
                   {
-                      title: 'STT',
-                      width: 60,
-                      align: 'center',
-                      render: (_, record, index) => record.$type === 'child' ? index + 1 : '',
+                    title: "STT",
+                    width: 60,
+                    align: "center",
+                    render: (_, record, index) => (record.$type === "child" ? index + 1 : ""),
                   },
                   {
                     title: "Mã định danh",

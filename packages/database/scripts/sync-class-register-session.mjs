@@ -120,16 +120,21 @@ async function main() {
     })
     const subjectIds = uniqueIds(subjectVersions.map((sv) => sv.subjectId))
 
-    const [subjects, subjectClassTimes, classSchedules, trainingCourses, trainingCourseRegulations] =
-      await Promise.all([
-        src.subject.findMany({ where: { id: { in: subjectIds } } }),
-        src.subjectClassTime.findMany({ where: { subjectClassId: { in: subjectClassIds } } }),
-        src.classSchedule.findMany({ where: { subjectClassId: { in: subjectClassIds } } }),
-        src.trainingCourse.findMany({ where: { id: { in: trainingCourseIds } } }),
-        src.trainingCourseRegulation.findMany({
-          where: { trainingCourseId: { in: trainingCourseIds }, deletedAt: null },
-        }),
-      ])
+    const [
+      subjects,
+      subjectClassTimes,
+      classSchedules,
+      trainingCourses,
+      trainingCourseRegulations,
+    ] = await Promise.all([
+      src.subject.findMany({ where: { id: { in: subjectIds } } }),
+      src.subjectClassTime.findMany({ where: { subjectClassId: { in: subjectClassIds } } }),
+      src.classSchedule.findMany({ where: { subjectClassId: { in: subjectClassIds } } }),
+      src.trainingCourse.findMany({ where: { id: { in: trainingCourseIds } } }),
+      src.trainingCourseRegulation.findMany({
+        where: { trainingCourseId: { in: trainingCourseIds }, deletedAt: null },
+      }),
+    ])
 
     const trainingObjectTypeIds = uniqueIds(subjectClasses.map((sc) => sc.trainingObjectTypeId))
     const trainingObjectTypes = await src.trainingObjectType.findMany({
@@ -197,20 +202,42 @@ async function main() {
 
     const steps = []
 
-    steps.push({ table: "SchoolYear", count: await upsertMany(tgt, "schoolYear", session.semester?.schoolYear ? [session.semester.schoolYear] : []) })
+    steps.push({
+      table: "SchoolYear",
+      count: await upsertMany(
+        tgt,
+        "schoolYear",
+        session.semester?.schoolYear ? [session.semester.schoolYear] : []
+      ),
+    })
     const semesterRow = serializeRow(session.semester)
     delete semesterRow.schoolYear
-    steps.push({ table: "Semester", count: await upsertMany(tgt, "semester", semesterRow ? [semesterRow] : []) })
-    steps.push({ table: "TrainingObjectType", count: await upsertMany(tgt, "trainingObjectType", trainingObjectTypes) })
-    steps.push({ table: "TrainingCourse", count: await upsertMany(tgt, "trainingCourse", trainingCourses) })
+    steps.push({
+      table: "Semester",
+      count: await upsertMany(tgt, "semester", semesterRow ? [semesterRow] : []),
+    })
+    steps.push({
+      table: "TrainingObjectType",
+      count: await upsertMany(tgt, "trainingObjectType", trainingObjectTypes),
+    })
+    steps.push({
+      table: "TrainingCourse",
+      count: await upsertMany(tgt, "trainingCourse", trainingCourses),
+    })
     steps.push({
       table: "TrainingCourseRegulation",
       count: await upsertMany(tgt, "trainingCourseRegulation", trainingCourseRegulations),
     })
     steps.push({ table: "Curriculum", count: await upsertMany(tgt, "curriculum", curriculums) })
-    steps.push({ table: "CurriculumVersion", count: await upsertMany(tgt, "curriculumVersion", curriculumVersions) })
+    steps.push({
+      table: "CurriculumVersion",
+      count: await upsertMany(tgt, "curriculumVersion", curriculumVersions),
+    })
     steps.push({ table: "Subject", count: await upsertMany(tgt, "subject", subjects) })
-    steps.push({ table: "SubjectVersion", count: await upsertMany(tgt, "subjectVersion", subjectVersions) })
+    steps.push({
+      table: "SubjectVersion",
+      count: await upsertMany(tgt, "subjectVersion", subjectVersions),
+    })
     steps.push({ table: "FixedClass", count: await upsertMany(tgt, "fixedClass", fixedClasses) })
 
     for (const profile of userProfiles) {
@@ -254,8 +281,14 @@ async function main() {
     }
     steps.push({ table: "SubjectClass", count: subjectClasses.length })
 
-    steps.push({ table: "SubjectClassTime", count: await upsertMany(tgt, "subjectClassTime", subjectClassTimes) })
-    steps.push({ table: "ClassSchedule", count: await upsertMany(tgt, "classSchedule", classSchedules) })
+    steps.push({
+      table: "SubjectClassTime",
+      count: await upsertMany(tgt, "subjectClassTime", subjectClassTimes),
+    })
+    steps.push({
+      table: "ClassSchedule",
+      count: await upsertMany(tgt, "classSchedule", classSchedules),
+    })
     steps.push({
       table: "StudentSubjectScore",
       count: await upsertMany(tgt, "studentSubjectScore", studentSubjectScores),

@@ -31,8 +31,7 @@ export function SystemMaintenanceScreen({
   checking?: boolean
 }) {
   const customMessage = message?.trim()
-  const subtitle =
-    customMessage && !DEFAULT_MESSAGES.has(customMessage) ? customMessage : undefined
+  const subtitle = customMessage && !DEFAULT_MESSAGES.has(customMessage) ? customMessage : undefined
 
   return (
     <ConfigProvider theme={lightThemeCustom}>
@@ -48,7 +47,7 @@ export function SystemMaintenanceScreen({
       `}</style>
       <div
         style={{
-          minHeight: "100vh", 
+          minHeight: "100vh",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -216,9 +215,7 @@ export function MaintenanceGate({ children }: { children: ReactNode }) {
   if (status === null) return null
 
   if (status.maintenance) {
-    return (
-      <SystemMaintenanceScreen message={status.message} onRetry={check} checking={checking} />
-    )
+    return <SystemMaintenanceScreen message={status.message} onRetry={check} checking={checking} />
   }
 
   return <>{children}</>

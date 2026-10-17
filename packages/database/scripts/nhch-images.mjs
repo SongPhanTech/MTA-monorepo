@@ -268,8 +268,8 @@ export async function docToHtmlViaWord(docPath) {
         maxBuffer: 4 * 1024 * 1024,
         encoding: "utf8",
       })
-      const htmlFile = [tmpHtml, tmpHtml.replace(/\.html$/i, ".htm"), `${tmpHtml}.htm`].find(
-        (p) => existsSync(p)
+      const htmlFile = [tmpHtml, tmpHtml.replace(/\.html$/i, ".htm"), `${tmpHtml}.htm`].find((p) =>
+        existsSync(p)
       )
       if (!htmlFile) {
         const extras = readdirSync(TMP_DIR).filter((n) => n.includes(`word_out_${id}`))
@@ -342,12 +342,7 @@ async function minioPutObject(objectKey, buffer, contentType) {
     payloadHash,
   ].join("\n")
   const scope = `${dateStamp}/${region}/s3/aws4_request`
-  const stringToSign = [
-    "AWS4-HMAC-SHA256",
-    amz,
-    scope,
-    sha256Hex(canonicalRequest),
-  ].join("\n")
+  const stringToSign = ["AWS4-HMAC-SHA256", amz, scope, sha256Hex(canonicalRequest)].join("\n")
   const kDate = hmac(`AWS4${secretKey}`, dateStamp)
   const kRegion = hmac(kDate, region)
   const kService = hmac(kRegion, "s3")

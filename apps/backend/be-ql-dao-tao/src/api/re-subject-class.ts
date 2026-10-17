@@ -27,12 +27,7 @@ const app = new OpenAPIHono({ strict: false })
 
 /** Default page/limit — tránh LIMIT/OFFSET NULL khi FE không gửi. */
 const ListPaginationSchema = PaginationQuerySchema.omit({ page: true, limit: true }).extend({
-  page: z
-    .number({ coerce: true })
-    .min(1)
-    .max(1000)
-    .default(1)
-    .openapi(fieldDesc("Số trang.", 1)),
+  page: z.number({ coerce: true }).min(1).max(1000).default(1).openapi(fieldDesc("Số trang.", 1)),
   limit: z
     .number({ coerce: true })
     .min(1)

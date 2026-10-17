@@ -8,9 +8,12 @@ const app = new OpenAPIHono()
 
 const exportTrainingDataRequestSchema = z
   .object({
-    classRegisterSessionId: z.string().optional().openapi(
-      fieldDesc("Tùy chọn, giữ tương thích. Xuất luôn toàn bộ dữ liệu, không lọc theo đợt.")
-    ),
+    classRegisterSessionId: z
+      .string()
+      .optional()
+      .openapi(
+        fieldDesc("Tùy chọn, giữ tương thích. Xuất luôn toàn bộ dữ liệu, không lọc theo đợt.")
+      ),
   })
   .openapi("ExportTrainingDataRequest")
 

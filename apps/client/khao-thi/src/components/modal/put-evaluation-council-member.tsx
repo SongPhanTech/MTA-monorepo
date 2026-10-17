@@ -218,9 +218,6 @@ const PutEvaluationCouncilMember = () => {
             treeData={orgLecturerTree}
             showSearch
             placeholder="Chọn giảng viên"
-            filterTreeNode={(input, option) =>
-              (option?.title?.toString() ?? "").toLowerCase().includes(input.toLowerCase())
-            }
             className="w-full"
           />
         </FormItem>

@@ -85,39 +85,39 @@ function App({ Component, pageProps }: AppProps) {
 
   return (
     <MaintenanceGate>
-    <SessionProvider session={pageProps.session}>
-      <StoreProvider store={store}>
-        <LoadingBar
-          color={colors.common.green}
-          waitingTime={400}
-          progress={progress}
-          onLoaderFinished={onRouteDone}
-        />
-        <Head>
-          <title>Cổng giảng viên</title>
-        </Head>
-        <ConfigProvider theme={lightThemeCustom}>
-          <QueryClientProvider client={queryClient}>
-            <ZenStackHooksProvider
-              value={{
-                endpoint: `${getRuntimeEnv("NEXT_PUBLIC_API_MODEL_BASE_URL")}/api/model`,
-                fetch: fetchInstance,
-              }}
-            >
-              <GiangVienAccessGuard>
-                <ReactHookModalProvider modals={modals}>
-                  <CongGiangVienLayout unLayout={unLayout}>
-                    <Component {...pageProps} />
-                  </CongGiangVienLayout>
-                  {/* <WidgetChatbot src={getRuntimeEnv("NEXT_PUBLIC_CHATBOT_SRC")} /> */}
-                  <Spinner />
-                </ReactHookModalProvider>
-              </GiangVienAccessGuard>
-            </ZenStackHooksProvider>
-          </QueryClientProvider>
-        </ConfigProvider>
-      </StoreProvider>
-    </SessionProvider>
+      <SessionProvider session={pageProps.session}>
+        <StoreProvider store={store}>
+          <LoadingBar
+            color={colors.common.green}
+            waitingTime={400}
+            progress={progress}
+            onLoaderFinished={onRouteDone}
+          />
+          <Head>
+            <title>Cổng giảng viên</title>
+          </Head>
+          <ConfigProvider theme={lightThemeCustom}>
+            <QueryClientProvider client={queryClient}>
+              <ZenStackHooksProvider
+                value={{
+                  endpoint: `${getRuntimeEnv("NEXT_PUBLIC_API_MODEL_BASE_URL")}/api/model`,
+                  fetch: fetchInstance,
+                }}
+              >
+                <GiangVienAccessGuard>
+                  <ReactHookModalProvider modals={modals}>
+                    <CongGiangVienLayout unLayout={unLayout}>
+                      <Component {...pageProps} />
+                    </CongGiangVienLayout>
+                    {/* <WidgetChatbot src={getRuntimeEnv("NEXT_PUBLIC_CHATBOT_SRC")} /> */}
+                    <Spinner />
+                  </ReactHookModalProvider>
+                </GiangVienAccessGuard>
+              </ZenStackHooksProvider>
+            </QueryClientProvider>
+          </ConfigProvider>
+        </StoreProvider>
+      </SessionProvider>
     </MaintenanceGate>
   )
 }

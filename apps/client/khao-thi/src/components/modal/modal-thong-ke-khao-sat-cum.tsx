@@ -57,7 +57,9 @@ const ModalThongKeKhaoSatCum = () => {
     const satisfied = choices
       .filter((c) => {
         const t = textOf(c)
-        return t.includes("hài lòng") && !t.includes("không hài lòng") && !t.includes("rất hài lòng")
+        return (
+          t.includes("hài lòng") && !t.includes("không hài lòng") && !t.includes("rất hài lòng")
+        )
       })
       .map((c) => c.id)
     const concern = choices

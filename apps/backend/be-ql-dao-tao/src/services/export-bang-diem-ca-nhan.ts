@@ -1,4 +1,8 @@
-import { BAO_LUU_EXCEL_COLOR, isBaoLuuScoreDescription, visibleScoreNote } from "@workspace/libs/bao-luu-diem"
+import {
+  BAO_LUU_EXCEL_COLOR,
+  isBaoLuuScoreDescription,
+  visibleScoreNote,
+} from "@workspace/libs/bao-luu-diem"
 import { HTTPException } from "hono/http-exception"
 import ExcelJS from "exceljs"
 import { formatDateVn, formatNgayIn, formatThangIn, nowVn } from "@workspace/libs/timezone"
@@ -93,10 +97,8 @@ export function pickLatestYearResult<
   if (results.length === 0) return null
   return (
     [...results].sort((a, b) => {
-      const aTime =
-        a.schoolYear?.endDate?.getTime() ?? a.schoolYear?.startDate?.getTime() ?? 0
-      const bTime =
-        b.schoolYear?.endDate?.getTime() ?? b.schoolYear?.startDate?.getTime() ?? 0
+      const aTime = a.schoolYear?.endDate?.getTime() ?? a.schoolYear?.startDate?.getTime() ?? 0
+      const bTime = b.schoolYear?.endDate?.getTime() ?? b.schoolYear?.startDate?.getTime() ?? 0
       if (bTime !== aTime) return bTime - aTime
       return (b.studyYear ?? 0) - (a.studyYear ?? 0)
     })[0] ?? null
@@ -477,20 +479,20 @@ async function loadBangDiemExportData(studentIds: string[]) {
   const [trainingBlockSubjects, semesterResults] = await Promise.all([
     curriculumVersionIds.length
       ? prisma.trainingBlockSubject.findMany({
-        where: {
-          trainingBlockOnCurriculumVersion: {
-            curriculumVersionId: { in: curriculumVersionIds },
+          where: {
+            trainingBlockOnCurriculumVersion: {
+              curriculumVersionId: { in: curriculumVersionIds },
+            },
+            deletedAt: null,
           },
-          deletedAt: null,
-        },
-        select: {
-          subjectId: true,
-          semester: true,
-          graduation: true,
-          useForFinalScore: true,
-          trainingBlockOnCurriculumVersion: { select: { curriculumVersionId: true } },
-        },
-      })
+          select: {
+            subjectId: true,
+            semester: true,
+            graduation: true,
+            useForFinalScore: true,
+            trainingBlockOnCurriculumVersion: { select: { curriculumVersionId: true } },
+          },
+        })
       : Promise.resolve([]),
     prisma.studentSemesterResult.findMany({
       where: { studentId: { in: orderedStudents.map((s) => s.id) } },
@@ -574,15 +576,11 @@ type ScoreRow = BangDiemExportData["scoresByStudent"] extends Map<string, (infer
 function resolveScoreSemester(
   row: ScoreRow,
   student: ExportStudent,
-  data: Pick<
-    BangDiemExportData,
-    "ctdtByKey" | "ssrByStudentIndex" | "ssrIndexByStudentSemester"
-  >
+  data: Pick<BangDiemExportData, "ctdtByKey" | "ssrByStudentIndex" | "ssrIndexByStudentSemester">
 ): SemesterMeta | null {
   const classSemester = row.subjectClass?.semester
   if (classSemester?.id) {
-    const index =
-      data.ssrIndexByStudentSemester.get(`${row.studentId}:${classSemester.id}`) ?? null
+    const index = data.ssrIndexByStudentSemester.get(`${row.studentId}:${classSemester.id}`) ?? null
     return toSemesterMeta(classSemester, index)
   }
 
@@ -644,10 +642,7 @@ function scoresForExport(studentScores: ScoreRow[]): ScoreRow[] {
 function groupScoresBySemester(
   student: ExportStudent,
   studentScores: ScoreRow[],
-  data: Pick<
-    BangDiemExportData,
-    "ctdtByKey" | "ssrByStudentIndex" | "ssrIndexByStudentSemester"
-  >
+  data: Pick<BangDiemExportData, "ctdtByKey" | "ssrByStudentIndex" | "ssrIndexByStudentSemester">
 ) {
   const semesterMap = new Map<string, { meta: SemesterMeta; rows: ScoreRow[] }>()
 
@@ -677,8 +672,12 @@ function sortSemesters(
     const ai = a.meta.semesterIndex
     const bi = b.meta.semesterIndex
     if (ai != null && bi != null && ai !== bi) return ai - bi
-    const aTime = a.meta[field] ? new Date(a.meta[field] as Date).getTime() : Number.MAX_SAFE_INTEGER
-    const bTime = b.meta[field] ? new Date(b.meta[field] as Date).getTime() : Number.MAX_SAFE_INTEGER
+    const aTime = a.meta[field]
+      ? new Date(a.meta[field] as Date).getTime()
+      : Number.MAX_SAFE_INTEGER
+    const bTime = b.meta[field]
+      ? new Date(b.meta[field] as Date).getTime()
+      : Number.MAX_SAFE_INTEGER
     return aTime - bTime
   })
 }
@@ -699,7 +698,11 @@ function courseThresholds(student: ExportStudent) {
   }
 }
 
-function toMonHocRow(row: ScoreRow, student: ExportStudent, data: BangDiemExportData): MonHoc | null {
+function toMonHocRow(
+  row: ScoreRow,
+  student: ExportStudent,
+  data: BangDiemExportData
+): MonHoc | null {
   const subject = row.subjectVersion
   if (!subject?.id) return null
 

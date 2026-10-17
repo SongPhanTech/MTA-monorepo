@@ -344,24 +344,36 @@ async function main() {
     { metric: "  · Ngừng", value: lecturers.length - activeLecturers.length },
     { metric: "GV thuộc Khoa/Viện (kể cả bộ môn con)", value: inKhoaVien.length },
     { metric: "GV thuộc Bộ môn", value: inBoMon.length },
-    { metric: "GV gắn trực tiếp Khoa/Viện (chưa gán BM)", value: lecturers.filter((l) => l._khoaVien && !l._boMon).length },
+    {
+      metric: "GV gắn trực tiếp Khoa/Viện (chưa gán BM)",
+      value: lecturers.filter((l) => l._khoaVien && !l._boMon).length,
+    },
     { metric: "GV đơn vị khác (phòng/ban/...)", value: otherUnits.length },
     { metric: "Số Khoa/Viện", value: khoaVienList.length },
     { metric: "Số Bộ môn", value: boMonList.length },
     { metric: "Bộ môn có GV", value: [...byBoMon.values()].filter((arr) => arr.length > 0).length },
-    { metric: "Bộ môn chưa có GV", value: [...byBoMon.values()].filter((arr) => arr.length === 0).length },
+    {
+      metric: "Bộ môn chưa có GV",
+      value: [...byBoMon.values()].filter((arr) => arr.length === 0).length,
+    },
     { metric: "—", value: "" },
     { metric: "Theo học hàm", value: "" },
   ]
-  for (const [k, v] of Object.entries(countBy(lecturers, (l) => l.userProfile?.academicRankType?.sTen)).sort()) {
+  for (const [k, v] of Object.entries(
+    countBy(lecturers, (l) => l.userProfile?.academicRankType?.sTen)
+  ).sort()) {
     summaryRows.push({ metric: `  · ${k}`, value: v })
   }
   summaryRows.push({ metric: "Theo học vị", value: "" })
-  for (const [k, v] of Object.entries(countBy(lecturers, (l) => l.userProfile?.academicDegreeType?.sTen)).sort()) {
+  for (const [k, v] of Object.entries(
+    countBy(lecturers, (l) => l.userProfile?.academicDegreeType?.sTen)
+  ).sort()) {
     summaryRows.push({ metric: `  · ${k}`, value: v })
   }
   summaryRows.push({ metric: "Theo giới tính", value: "" })
-  for (const [k, v] of Object.entries(countBy(lecturers, (l) => l.userProfile?.gender?.sTen)).sort()) {
+  for (const [k, v] of Object.entries(
+    countBy(lecturers, (l) => l.userProfile?.gender?.sTen)
+  ).sort()) {
     summaryRows.push({ metric: `  · ${k}`, value: v })
   }
   summaryRows.push({ metric: "Theo loại GV", value: "" })

@@ -211,7 +211,6 @@ export default function UserProfilePageDs() {
       })
       message.success("Xoá hồ sơ thành công")
     } catch (error) {
-
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
     } finally {
       hideSpinner()
@@ -530,9 +529,7 @@ export default function UserProfilePageDs() {
 
 UserProfilePageDs.getLayout = function getLayout(page: React.ReactElement) {
   return (
-    <DefaultLayout
-      breadcrumbList={[{ title: "Hồ sơ giảng viên/cán bộ", href: "/quan-ly-ho-so" }]}
-    >
+    <DefaultLayout breadcrumbList={[{ title: "Hồ sơ giảng viên/cán bộ", href: "/quan-ly-ho-so" }]}>
       {page}
     </DefaultLayout>
   )

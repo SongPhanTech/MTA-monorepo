@@ -18,6 +18,7 @@ import {
 } from "@workspace/db/hooks"
 import { useCreateClusterSurvey } from "@workspace/libs/api/exam"
 import { sqlTransaction } from "@workspace/libs/api/model"
+import { fuzzyMatch } from "@workspace/libs/utils"
 import { ROUTER_PATH } from "@workspace/router"
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import {
@@ -439,9 +440,8 @@ const PutSurveyModal = () => {
     }
   )
 
-  const filterTreeNode = (input: string, treeNode: any) => {
-    return treeNode?.title?.toLowerCase()?.includes(input?.toLowerCase())
-  }
+  const filterTreeNode = (input: string, treeNode: any) =>
+    fuzzyMatch(input, treeNode?.title?.toString?.() || treeNode?.label?.toString?.() || "")
 
   const surveyTopicId = Form.useWatch("surveyTopicId", form)
   const isPublic = Form.useWatch("isPublic", form)

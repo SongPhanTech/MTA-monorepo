@@ -475,8 +475,7 @@ export default function DanhMucDoAn() {
             record.council?.members.find((x: any) => x.role === CouncilRole.REVIEWER_2)?.expertId ||
             "",
           councilMember:
-            record.council?.members.find((x: any) => x.role === CouncilRole.MEMBER)?.expertId ||
-            "",
+            record.council?.members.find((x: any) => x.role === CouncilRole.MEMBER)?.expertId || "",
           status: record.status || "",
           defenseRecordComments: record.defenseRecord?.comments || "",
           defenseRecordFinalScore: record.defenseRecord?.finalScore || null,
@@ -917,7 +916,8 @@ export default function DanhMucDoAn() {
                   <div style={{ display: "flex", flexDirection: "column" }}>
                     {registrations.map((x: any, index: number) => (
                       <div key={index}>
-                        {x.student?.userProfile?.fullname} - {x.student?.userProfile?.code || "N/A"} -{" "}
+                        {x.student?.userProfile?.fullname} - {x.student?.userProfile?.code || "N/A"}{" "}
+                        -{" "}
                         {x.student?.userProfile?.dateOfBirth
                           ? dayjs(x.student?.userProfile?.dateOfBirth).format("DD/MM/YYYY")
                           : "N/A"}{" "}
@@ -1120,7 +1120,8 @@ export default function DanhMucDoAn() {
                       )}
                       {record?.thirdSupervisor && (
                         <div>
-                          {record.thirdSupervisor.expert?.lecturer?.userProfile?.donVi?.sMa || "---"}
+                          {record.thirdSupervisor.expert?.lecturer?.userProfile?.donVi?.sMa ||
+                            "---"}
                         </div>
                       )}
                     </div>

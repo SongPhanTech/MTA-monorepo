@@ -20,7 +20,7 @@ import {
 } from "lucide-react"
 import { Col, Row, Tooltip } from "antd"
 import { Panel } from "./shared"
-import { QuyTrinhDeThiDetailView, QuyTrinhDeThiView } from "./type";
+import { QuyTrinhDeThiDetailView, QuyTrinhDeThiView } from "./type"
 
 interface StepItem {
   num: number

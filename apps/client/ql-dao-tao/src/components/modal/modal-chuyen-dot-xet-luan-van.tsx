@@ -514,7 +514,8 @@ const ModalChuyenDotXetLuanVan = () => {
                   {conflictingRegistrations.map((registration) => (
                     <li key={registration.id}>
                       <Typography.Text strong>
-                        {registration.student?.userProfile?.fullname || registration.student?.userProfile?.code}
+                        {registration.student?.userProfile?.fullname ||
+                          registration.student?.userProfile?.code}
                       </Typography.Text>
                       {": "}
                       {registration.thesisProject?.title || "Chưa có tên đề tài"}

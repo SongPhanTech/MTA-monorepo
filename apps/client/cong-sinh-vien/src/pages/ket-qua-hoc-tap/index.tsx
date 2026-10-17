@@ -24,7 +24,11 @@ import {
 } from "@workspace/db/hooks"
 import { exportAndDownloadFromTemplate } from "@workspace/libs/download-excel"
 import type { TableRow } from "@workspace/libs/template-excel"
-import { baoLuuRowProps, isBaoLuuScoreDescription, visibleScoreNote } from "@workspace/libs/bao-luu-diem"
+import {
+  baoLuuRowProps,
+  isBaoLuuScoreDescription,
+  visibleScoreNote,
+} from "@workspace/libs/bao-luu-diem"
 import { courseScoreConfigFrom } from "@workspace/libs/utils"
 import { Button, Col, Flex, Row, Tooltip } from "antd"
 import dayjs from "dayjs"
@@ -127,8 +131,8 @@ export default function StudentScoreClassPage() {
     const monhocAll: IMonHoc[] = []
     if (displaySemesters.length > 0) {
       displaySemesters.forEach((item) => {
-        item.subjectClasses.forEach((subjectClass:any) => {
-          subjectClass.subjectClassStudent.forEach((subjectClassStudent:any) => {
+        item.subjectClasses.forEach((subjectClass: any) => {
+          subjectClass.subjectClassStudent.forEach((subjectClassStudent: any) => {
             monhocAll.push({
               TenMonhoc: subjectClassStudent.subjectVersion.name,
               MaMH: subjectClassStudent.subjectVersion.code?.slice(0, 2) ?? "",
@@ -558,7 +562,9 @@ export default function StudentScoreClassPage() {
         plannedBySubject.set(block.subjectId, block.semester ?? null)
       }
     }
-    const semesterByIndex = new Map(semesterResults.map((item) => [item.semesterIndexInCourse, item]))
+    const semesterByIndex = new Map(
+      semesterResults.map((item) => [item.semesterIndexInCourse, item])
+    )
     const baoLuuBySemester = new Map<string, any[]>()
     const extraSemesters: any[] = []
 

@@ -11,9 +11,7 @@ export const getOnlyOfficeJwtHeader = () =>
   process.env.ONLYOFFICE_JWT_HEADER?.trim() || "AuthorizationJwt"
 
 /** HS256 JWT for OnlyOffice Document Server (config editor / converter body). */
-export async function signOnlyOfficeJwt(
-  payload: Record<string, unknown>
-): Promise<string | null> {
+export async function signOnlyOfficeJwt(payload: Record<string, unknown>): Promise<string | null> {
   const secret = getOnlyOfficeJwtSecret()
   if (!secret) return null
 

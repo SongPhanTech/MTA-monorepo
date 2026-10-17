@@ -5,7 +5,11 @@ import TableCollapse from "@components/commons/tableCollapse"
 import type { FilterProps } from "@constants/type"
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
-import { baoLuuRowProps, isBaoLuuScoreDescription, visibleScoreNote } from "@workspace/libs/bao-luu-diem"
+import {
+  baoLuuRowProps,
+  isBaoLuuScoreDescription,
+  visibleScoreNote,
+} from "@workspace/libs/bao-luu-diem"
 import { convertScoreWithCourseConfig } from "@workspace/libs/utils"
 import {
   $Enums,
@@ -782,8 +786,9 @@ export default function StudentScoreClassPage() {
                   render: (_, semester) => {
                     const { code, name, schoolYear, id } = semester
                     if (id === "toan-khoa") {
-                      const yearResult = (semester as { yearResult?: { cumulativeGpaBase4?: unknown } })
-                        .yearResult
+                      const yearResult = (
+                        semester as { yearResult?: { cumulativeGpaBase4?: unknown } }
+                      ).yearResult
                       const tbctl4 =
                         yearResult?.cumulativeGpaBase4 != null
                           ? Number(yearResult.cumulativeGpaBase4).toFixed(2)
@@ -1147,7 +1152,13 @@ export default function StudentScoreClassPage() {
                   title: "Tên môn học",
                   align: "center",
                   render: (_, record) => (
-                    <span style={isBaoLuuScoreDescription(record.description) ? { color: "#15803d" } : undefined}>
+                    <span
+                      style={
+                        isBaoLuuScoreDescription(record.description)
+                          ? { color: "#15803d" }
+                          : undefined
+                      }
+                    >
                       {record?.subjectVersion?.name}
                     </span>
                   ),
@@ -1158,7 +1169,13 @@ export default function StudentScoreClassPage() {
                   align: "center",
                   width: 150,
                   render: (value, record) => (
-                    <span style={isBaoLuuScoreDescription(record.description) ? { color: "#15803d" } : undefined}>
+                    <span
+                      style={
+                        isBaoLuuScoreDescription(record.description)
+                          ? { color: "#15803d" }
+                          : undefined
+                      }
+                    >
                       {value}
                     </span>
                   ),

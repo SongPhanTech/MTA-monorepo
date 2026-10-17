@@ -1023,7 +1023,8 @@ export function TableWeekCalendar({
                     const endTime = new Date(record.event?.endTime || weekEnd)
                     const pad = (n: number) => String(n).padStart(2, "0")
                     const formatTime = (d: Date) => `${pad(d.getHours())}:${pad(d.getMinutes())}`
-                    const formatDate = (d: Date) => `${pad(d.getDate())}/${formatThangIn(d.getMonth() + 1)}`
+                    const formatDate = (d: Date) =>
+                      `${pad(d.getDate())}/${formatThangIn(d.getMonth() + 1)}`
 
                     // Kiểm tra nếu event đúng tròn 1 tuần (00:00 đầu tuần -> 23:59 cuối tuần)
                     const weekStartDate = new Date(weekStart)
@@ -1183,7 +1184,8 @@ export function TableWeekCalendar({
                   const startTime = new Date(event.startTime)
                   const endTime = new Date(event.endTime)
                   const pad = (n: number) => String(n).padStart(2, "0")
-                  const formatDate = (d: Date) => `${pad(d.getDate())}/${formatThangIn(d.getMonth() + 1)}`
+                  const formatDate = (d: Date) =>
+                    `${pad(d.getDate())}/${formatThangIn(d.getMonth() + 1)}`
                   // Chỉ coi là full-day nếu event thật sự là cả ngày (00:00:00 đến 23:59:59)
                   // Không áp dụng cho events có thời gian cụ thể
                   const isFullDayRange =

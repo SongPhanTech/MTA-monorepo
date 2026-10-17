@@ -45,9 +45,9 @@ const SKIP_LARGE_MB = skipLargeArg !== -1 ? Number(process.argv[skipLargeArg + 1
 const errorsArg = process.argv.indexOf("--errors")
 const errorsPath =
   errorsArg !== -1
-    ? (process.argv[errorsArg + 1].startsWith("/")
-        ? process.argv[errorsArg + 1]
-        : join(SCRIPT_DIR, process.argv[errorsArg + 1]))
+    ? process.argv[errorsArg + 1].startsWith("/")
+      ? process.argv[errorsArg + 1]
+      : join(SCRIPT_DIR, process.argv[errorsArg + 1])
     : join(SCRIPT_DIR, "import-errors.json")
 
 function resetWord() {

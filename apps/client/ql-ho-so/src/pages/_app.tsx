@@ -84,34 +84,34 @@ function App({ Component, pageProps }: AppProps) {
 
   return (
     <MaintenanceGate>
-    <SessionProvider session={pageProps.session}>
-      <StoreProvider store={store}>
-        <LoadingBar
-          color={colors.common.green}
-          waitingTime={400}
-          progress={progress}
-          onLoaderFinished={onRouteDone}
-        />
-        <Head>
-          <title>Học viện kỹ thuật quân sự</title>
-        </Head>
-        <ConfigProvider theme={lightThemeCustom}>
-          <QueryClientProvider client={queryClient}>
-            <ZenStackHooksProvider
-              value={{
-                endpoint: `${getRuntimeEnv("NEXT_PUBLIC_API_MODEL_BASE_URL")}/api/model`,
-                fetch: fetchInstance,
-              }}
-            >
-              <ReactHookModalProvider modals={modals}>
-                {getLayout(<Component {...pageProps} />)}
-                <Spinner />
-              </ReactHookModalProvider>
-            </ZenStackHooksProvider>
-          </QueryClientProvider>
-        </ConfigProvider>
-      </StoreProvider>
-    </SessionProvider>
+      <SessionProvider session={pageProps.session}>
+        <StoreProvider store={store}>
+          <LoadingBar
+            color={colors.common.green}
+            waitingTime={400}
+            progress={progress}
+            onLoaderFinished={onRouteDone}
+          />
+          <Head>
+            <title>Học viện kỹ thuật quân sự</title>
+          </Head>
+          <ConfigProvider theme={lightThemeCustom}>
+            <QueryClientProvider client={queryClient}>
+              <ZenStackHooksProvider
+                value={{
+                  endpoint: `${getRuntimeEnv("NEXT_PUBLIC_API_MODEL_BASE_URL")}/api/model`,
+                  fetch: fetchInstance,
+                }}
+              >
+                <ReactHookModalProvider modals={modals}>
+                  {getLayout(<Component {...pageProps} />)}
+                  <Spinner />
+                </ReactHookModalProvider>
+              </ZenStackHooksProvider>
+            </QueryClientProvider>
+          </ConfigProvider>
+        </StoreProvider>
+      </SessionProvider>
     </MaintenanceGate>
   )
 }

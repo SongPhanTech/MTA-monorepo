@@ -234,7 +234,6 @@ const ThemTaiLieu = () => {
   const processWithOCR = async (file: File, fileId: string) => {
     return new Promise<string>((resolve) => {
       try {
-
         // Bắt đầu OCR
         form.setFieldsValue({
           files: {
@@ -624,8 +623,7 @@ const ThemTaiLieu = () => {
           }
         })
       )
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   const getSimilarDocumentTitle = (similarDocumentId?: string) => {

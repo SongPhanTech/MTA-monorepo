@@ -1,16 +1,9 @@
 import { formatNgayIn, formatThangIn } from "@workspace/libs/timezone"
 import { formatPlaceOfBirth } from "@workspace/libs/utils"
-import { PrinterOutlined, SettingOutlined } from "@ant-design/icons"
-import { Button, Checkbox, Collapse, Input, InputNumber, Modal, Radio, Select, Space } from "antd"
+import { PrinterOutlined } from "@ant-design/icons"
+import { Button, Checkbox, Input, InputNumber, Modal, Radio, Select, Space } from "antd"
 import dayjs from "dayjs"
-import {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type CSSProperties,
-  type ReactNode,
-} from "react"
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { useReactToPrint } from "react-to-print"
 import {
@@ -95,13 +88,9 @@ function getGraduationClassification(
 
   const matched = graduationRankingData.find((range) => {
     if (graduationBaseScore === "Base4") {
-      return (
-        finalScoreBase4 >= (range.base4Min ?? 0) && finalScoreBase4 <= (range.base4Max ?? 0)
-      )
+      return finalScoreBase4 >= (range.base4Min ?? 0) && finalScoreBase4 <= (range.base4Max ?? 0)
     }
-    return (
-      finalScoreBase10 >= (range.base10Min ?? 0) && finalScoreBase10 <= (range.base10Max ?? 0)
-    )
+    return finalScoreBase10 >= (range.base10Min ?? 0) && finalScoreBase10 <= (range.base10Max ?? 0)
   })
 
   return matched?.classification ?? ""
@@ -141,8 +130,7 @@ function buildGraduationRankingNote(academicRankingConvert: RankingItem[] = []) 
 }
 
 function buildStudentSummary(student: PlvbPrintStudent) {
-  const academicRankingConvert =
-    student.fixedClass?.trainingCourse?.academicRankingConvert || []
+  const academicRankingConvert = student.fixedClass?.trainingCourse?.academicRankingConvert || []
   const scoreConverts = (student.fixedClass?.trainingCourse?.scoreConverts ||
     []) as ScoreConvertItem[]
 
@@ -183,8 +171,7 @@ function buildStudentSummary(student: PlvbPrintStudent) {
     officialGpa != null && Number.isFinite(Number(officialGpa))
       ? Number(Number(officialGpa).toFixed(2))
       : computedGpa10
-  const diemTBHe4 =
-    tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe4 / tongTinChi).toFixed(2))
+  const diemTBHe4 = tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe4 / tongTinChi).toFixed(2))
   const xepLoai =
     student.graduationDecision?.finalRanking?.classification ??
     getGraduationClassification(diemTBHe10, diemTBHe4, academicRankingConvert || [])
@@ -199,8 +186,7 @@ function buildStudentSummary(student: PlvbPrintStudent) {
   const curriculum = student.curriculumVersion || classCurriculum
   const major =
     student.graduationDecision?.trainingMajor || classCurriculum?.curriculum?.trainingMajor
-  const language =
-    curriculum?.trainingLanguage?.name || course?.trainingLanguage?.name || ""
+  const language = curriculum?.trainingLanguage?.name || course?.trainingLanguage?.name || ""
   const loaiBang =
     student.graduationDecision?.diplomaType?.name || curriculum?.diplomaType?.name || "tốt nghiệp"
 
@@ -241,9 +227,7 @@ function buildStudentSummary(student: PlvbPrintStudent) {
       so_hieu_bang: diplomaNumber,
       loai_bang: loaiBang,
       khoa: course?.name || "",
-      noi_sinh: formatPlaceOfBirth(
-        student.userProfile as Parameters<typeof formatPlaceOfBirth>[0]
-      ),
+      noi_sinh: formatPlaceOfBirth(student.userProfile as Parameters<typeof formatPlaceOfBirth>[0]),
     },
   }
 }
@@ -509,8 +493,7 @@ function HalfHeaderCells({
         rowSpan={2}
         style={{
           ...spanBase,
-          borderRight:
-            rightThick && showScoreCols === 0 ? BORDER_THICK : BORDER_FAINT,
+          borderRight: rightThick && showScoreCols === 0 ? BORDER_THICK : BORDER_FAINT,
         }}
         className={["plvb-credits", dividerClass({ right: rightThick && showScoreCols === 0 })]
           .filter(Boolean)
@@ -560,7 +543,10 @@ function HalfSubHeaderCells({
       {settings.showScore10 ? (
         <th
           style={subStyle(scoreCount - 1 === idx)}
-          className={["plvb-score-col", dividerClass({ right: rightThick && scoreCount - 1 === idx++ })]
+          className={[
+            "plvb-score-col",
+            dividerClass({ right: rightThick && scoreCount - 1 === idx++ }),
+          ]
             .filter(Boolean)
             .join(" ")}
         >
@@ -574,15 +560,17 @@ function HalfSubHeaderCells({
       {settings.showScore4 ? (
         <th
           style={subStyle(scoreCount - 1 === idx)}
-          className={["plvb-score-col", dividerClass({ right: rightThick && scoreCount - 1 === idx++ })]
+          className={[
+            "plvb-score-col",
+            dividerClass({ right: rightThick && scoreCount - 1 === idx++ }),
+          ]
             .filter(Boolean)
             .join(" ")}
         >
           Thang
           <br />
           điểm
-          <br />
-          4
+          <br />4
         </th>
       ) : null}
       {settings.showLetterGrade ? (
@@ -635,15 +623,12 @@ const SCORE_TABLE_STYLE: CSSProperties = {
   border: BORDER_OUTER,
 }
 
-function ScoreTableWrap({
-  children,
-  className,
-}: {
-  children: ReactNode
-  className?: string
-}) {
+function ScoreTableWrap({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <div className={["plvb-score-table-wrap", className].filter(Boolean).join(" ")} style={SCORE_TABLE_WRAP_STYLE}>
+    <div
+      className={["plvb-score-table-wrap", className].filter(Boolean).join(" ")}
+      style={SCORE_TABLE_WRAP_STYLE}
+    >
       {children}
     </div>
   )
@@ -729,7 +714,10 @@ function SubjectOneColumnTable({
             </tr>
           ))}
           {showGrad ? (
-            <tr className="plvb-grad-banner-row" style={{ height: `${settings.bodyFontSize + 8}pt` }}>
+            <tr
+              className="plvb-grad-banner-row"
+              style={{ height: `${settings.bodyFontSize + 8}pt` }}
+            >
               <GraduationBannerCells settings={settings} columns={1} />
             </tr>
           ) : null}
@@ -769,86 +757,89 @@ function SubjectTwoColumnTable({
 
   return (
     <ScoreTableWrap>
-    <table
-      className="plvb-score-table plvb-score-table-2col"
-      style={{
-        ...SCORE_TABLE_STYLE,
-        fontFamily: settings.fontFamily,
-        fontSize: `${settings.bodyFontSize}pt`,
-      }}
-    >
-      <colgroup>
-        <HalfColGroup settings={settings} />
-        <HalfColGroup settings={settings} />
-      </colgroup>
-      {showHeader ? (
-        <thead>
-          <tr className="plvb-thead-top" style={{ height: "14pt" }}>
-            <HalfHeaderCells settings={settings} rightThick />
-            <HalfHeaderCells settings={settings} afterDivider />
-          </tr>
-          <tr className="plvb-thead-bottom" style={{ height: "36pt" }}>
-            <HalfSubHeaderCells settings={settings} rightThick />
-            <HalfSubHeaderCells settings={settings} />
-          </tr>
-        </thead>
-      ) : null}
-      <tbody>
-        {Array.from({ length: rowCount }, (_, index) => {
-          const leftSubject = left[index]
-          const rightSubject = right[index]
-          const height = getAppendixSubjectRowHeight(
-            [leftSubject?.tenHocPhan, rightSubject?.tenHocPhan],
-            settings
-          )
-          return (
-            <tr key={`2col-${index}`} style={{ height: `${height}pt` }}>
-              <SubjectScoreCells
-                subject={leftSubject}
-                settings={settings}
-                stt={leftSubject ? index + 1 : ""}
-                rightThick
-              />
-              <SubjectScoreCells
-                subject={rightSubject}
-                settings={settings}
-                stt={rightSubject ? left.length + index + 1 : ""}
-                afterDivider
-              />
+      <table
+        className="plvb-score-table plvb-score-table-2col"
+        style={{
+          ...SCORE_TABLE_STYLE,
+          fontFamily: settings.fontFamily,
+          fontSize: `${settings.bodyFontSize}pt`,
+        }}
+      >
+        <colgroup>
+          <HalfColGroup settings={settings} />
+          <HalfColGroup settings={settings} />
+        </colgroup>
+        {showHeader ? (
+          <thead>
+            <tr className="plvb-thead-top" style={{ height: "14pt" }}>
+              <HalfHeaderCells settings={settings} rightThick />
+              <HalfHeaderCells settings={settings} afterDivider />
             </tr>
-          )
-        })}
-        {showGrad ? (
-          <tr className="plvb-grad-banner-row" style={{ height: `${settings.bodyFontSize + 8}pt` }}>
-            <GraduationBannerCells settings={settings} columns={2} />
-          </tr>
+            <tr className="plvb-thead-bottom" style={{ height: "36pt" }}>
+              <HalfSubHeaderCells settings={settings} rightThick />
+              <HalfSubHeaderCells settings={settings} />
+            </tr>
+          </thead>
         ) : null}
-        {Array.from({ length: gradRowCount }, (_, index) => {
-          const leftSubject = gradSplit.left[index]
-          const rightSubject = gradSplit.right[index]
-          const height = getAppendixSubjectRowHeight(
-            [leftSubject?.tenHocPhan, rightSubject?.tenHocPhan],
-            settings
-          )
-          return (
-            <tr key={`2col-grad-${index}`} style={{ height: `${height}pt` }}>
-              <SubjectScoreCells
-                subject={leftSubject}
-                settings={settings}
-                stt={leftSubject ? index + 1 : ""}
-                rightThick
-              />
-              <SubjectScoreCells
-                subject={rightSubject}
-                settings={settings}
-                stt={rightSubject ? gradSplit.left.length + index + 1 : ""}
-                afterDivider
-              />
+        <tbody>
+          {Array.from({ length: rowCount }, (_, index) => {
+            const leftSubject = left[index]
+            const rightSubject = right[index]
+            const height = getAppendixSubjectRowHeight(
+              [leftSubject?.tenHocPhan, rightSubject?.tenHocPhan],
+              settings
+            )
+            return (
+              <tr key={`2col-${index}`} style={{ height: `${height}pt` }}>
+                <SubjectScoreCells
+                  subject={leftSubject}
+                  settings={settings}
+                  stt={leftSubject ? index + 1 : ""}
+                  rightThick
+                />
+                <SubjectScoreCells
+                  subject={rightSubject}
+                  settings={settings}
+                  stt={rightSubject ? left.length + index + 1 : ""}
+                  afterDivider
+                />
+              </tr>
+            )
+          })}
+          {showGrad ? (
+            <tr
+              className="plvb-grad-banner-row"
+              style={{ height: `${settings.bodyFontSize + 8}pt` }}
+            >
+              <GraduationBannerCells settings={settings} columns={2} />
             </tr>
-          )
-        })}
-      </tbody>
-    </table>
+          ) : null}
+          {Array.from({ length: gradRowCount }, (_, index) => {
+            const leftSubject = gradSplit.left[index]
+            const rightSubject = gradSplit.right[index]
+            const height = getAppendixSubjectRowHeight(
+              [leftSubject?.tenHocPhan, rightSubject?.tenHocPhan],
+              settings
+            )
+            return (
+              <tr key={`2col-grad-${index}`} style={{ height: `${height}pt` }}>
+                <SubjectScoreCells
+                  subject={leftSubject}
+                  settings={settings}
+                  stt={leftSubject ? index + 1 : ""}
+                  rightThick
+                />
+                <SubjectScoreCells
+                  subject={rightSubject}
+                  settings={settings}
+                  stt={rightSubject ? gradSplit.left.length + index + 1 : ""}
+                  afterDivider
+                />
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
     </ScoreTableWrap>
   )
 }
@@ -872,7 +863,10 @@ const FALLBACK_RANKING_NOTE =
 
 /** Xuống dòng sau "Trung bình khá: …;" — phần còn lại thẳng mép "Ghi chú:". */
 function splitRankingNote(text: string): { firstLine: string; rest: string } {
-  const cleaned = text.replace(/^\s*-\s*/, "").replace(/\s+/g, " ").trim()
+  const cleaned = text
+    .replace(/^\s*-\s*/, "")
+    .replace(/\s+/g, " ")
+    .trim()
   const match = cleaned.match(/^(.*?Trung bình khá:\s*[\d,.\-–]+\s*;)(\s*)(.*)$/i)
   if (match?.[3]) return { firstLine: match[1].trim(), rest: match[3].trim() }
   return { firstLine: cleaned, rest: "" }
@@ -1214,7 +1208,9 @@ function StudentAppendixPage({
         </div>
       ) : null}
 
-      <div className={settings.showTrainingResultLabel ? "mt-0.5" : "mt-1"}>{renderSubjectsBlock()}</div>
+      <div className={settings.showTrainingResultLabel ? "mt-0.5" : "mt-1"}>
+        {renderSubjectsBlock()}
+      </div>
 
       {/* Tổng kết trái + chữ ký phải — Số vào sổ gốc cùng hàng ngày ký (mẫu Hệ QS R69) */}
       <table
@@ -1312,9 +1308,11 @@ const ModalPrintPhuLucVb = () => {
     tag: "ModalPrintPhuLucVb",
   })
 
-  const variant: PlvbPrintVariant = input?.variant === "international" ? "international" : "military"
-  const [settings, setSettings] = useState<PlvbPrintSettings>(() => getDefaultPlvbPrintSettings("military"))
-  const [settingsOpen, setSettingsOpen] = useState(true)
+  const variant: PlvbPrintVariant =
+    input?.variant === "international" ? "international" : "military"
+  const [settings, setSettings] = useState<PlvbPrintSettings>(() =>
+    getDefaultPlvbPrintSettings("military")
+  )
   /** Người được chọn để in (không lưu localStorage). */
   const [selectedStudentIds, setSelectedStudentIds] = useState<string[]>([])
 
@@ -1483,7 +1481,10 @@ const ModalPrintPhuLucVb = () => {
     `,
   })
 
-  const updateSetting = <K extends keyof PlvbPrintSettings>(key: K, value: PlvbPrintSettings[K]) => {
+  const updateSetting = <K extends keyof PlvbPrintSettings>(
+    key: K,
+    value: PlvbPrintSettings[K]
+  ) => {
     setSettings((prev) => {
       const next = { ...prev, [key]: value }
       savePlvbPrintSettings(next, variant)
@@ -1504,7 +1505,9 @@ const ModalPrintPhuLucVb = () => {
         max={opts?.max ?? 80}
         step={opts?.step ?? 0.5}
         value={settings[key] as number}
-        onChange={(v) => updateSetting(key, (Number(v) || opts?.fallback || 0) as PlvbPrintSettings[typeof key])}
+        onChange={(v) =>
+          updateSetting(key, (Number(v) || opts?.fallback || 0) as PlvbPrintSettings[typeof key])
+        }
       />
     </div>
   )
@@ -1524,8 +1527,9 @@ const ModalPrintPhuLucVb = () => {
       open={isOpen}
       onCancel={onClose}
       footer={null}
-      width={settings.columns === 2 ? 1100 : 900}
-      style={{ top: 16 }}
+      width="min(96vw, 1440px)"
+      style={{ top: 12 }}
+      styles={{ body: { paddingTop: 8, paddingBottom: 12 } }}
       title={
         <div className="flex w-[98%] flex-wrap items-center justify-between gap-2 pr-6">
           <span>
@@ -1537,552 +1541,564 @@ const ModalPrintPhuLucVb = () => {
               </span>
             ) : null}
           </span>
-          <Space>
-            <Button icon={<SettingOutlined />} onClick={() => setSettingsOpen((v) => !v)}>
-              Cấu hình in
-            </Button>
-            <Button
-              type="primary"
-              icon={<PrinterOutlined />}
-              onClick={() => handlePrint()}
-              disabled={!summaries.length}
-            >
-              In
-            </Button>
-          </Space>
+          <Button
+            type="primary"
+            icon={<PrinterOutlined />}
+            onClick={() => handlePrint()}
+            disabled={!summaries.length}
+          >
+            In
+          </Button>
         </div>
       }
     >
-      {settingsOpen ? (
-        <Collapse
-          className="mb-3"
-          defaultActiveKey={["settings"]}
-          items={[
-            {
-              key: "settings",
-              label: "Cấu hình in (lưu trên trình duyệt)",
-              children: (
-                <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
-                  <div>
-                    <div className="mb-1 text-xs text-gray-500">Bố cục bảng điểm</div>
-                    <Radio.Group
-                      value={settings.columns}
-                      onChange={(e) => updateSetting("columns", e.target.value)}
-                    >
-                      <Radio value={1}>1 cột</Radio>
-                      <Radio value={2}>2 cột</Radio>
-                    </Radio.Group>
-                  </div>
-                  <div className="md:col-span-2">
-                    <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
-                      <div className="text-xs text-gray-500">
-                        Người in ({selectedStudentIds.length}/{totalStudents || 0})
-                      </div>
-                      <Space size="small">
-                        <Button
-                          size="small"
-                          type="link"
-                          className="px-0"
-                          disabled={!totalStudents}
-                          onClick={() =>
-                            setSelectedStudentIds(allSummaries.map((s) => s.student.id))
-                          }
-                        >
-                          Chọn tất cả
-                        </Button>
-                        <Button
-                          size="small"
-                          type="link"
-                          className="px-0"
-                          disabled={!selectedStudentIds.length}
-                          onClick={() => setSelectedStudentIds([])}
-                        >
-                          Bỏ chọn
-                        </Button>
-                      </Space>
-                    </div>
-                    <Select
-                      className="w-full"
-                      mode="multiple"
-                      allowClear
-                      showSearch
-                      optionFilterProp="label"
-                      placeholder="Chọn học viên để in"
-                      disabled={!totalStudents}
-                      maxTagCount="responsive"
-                      value={selectedStudentIds}
-                      options={studentSelectOptions}
-                      onChange={(ids) => setSelectedStudentIds(ids)}
-                    />
-                  </div>
-                  <div>
-                    <div className="mb-1 text-xs text-gray-500">Font chữ</div>
-                    <Input
-                      value={settings.fontFamily}
-                      onChange={(e) => updateSetting("fontFamily", e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <div className="mb-1 text-xs text-gray-500">Cỡ chữ bảng (pt)</div>
-                    <InputNumber
-                      className="w-full"
-                      min={8}
-                      max={16}
-                      value={settings.bodyFontSize}
-                      onChange={(v) => updateSetting("bodyFontSize", Number(v) || 10)}
-                    />
-                  </div>
-                  <div>
-                    <div className="mb-1 text-xs text-gray-500">Cỡ chữ header bảng (pt)</div>
-                    <InputNumber
-                      className="w-full"
-                      min={8}
-                      max={14}
-                      value={settings.headerFontSize}
-                      onChange={(v) => updateSetting("headerFontSize", Number(v) || 9)}
-                    />
-                  </div>
-                  <div>
-                    <div className="mb-1 text-xs text-gray-500">Cỡ chữ thông tin SV (pt)</div>
-                    <InputNumber
-                      className="w-full"
-                      min={10}
-                      max={14}
-                      value={settings.infoFontSize}
-                      onChange={(v) => updateSetting("infoFontSize", Number(v) || 12)}
-                    />
-                  </div>
-                  <div>
-                    <div className="mb-1 text-xs text-gray-500">Cỡ chữ ghi chú (pt)</div>
-                    <InputNumber
-                      className="w-full"
-                      min={8}
-                      max={14}
-                      value={settings.noteFontSize}
-                      onChange={(v) => updateSetting("noteFontSize", Number(v) || 10)}
-                    />
-                  </div>
-                  <div>
-                    <div className="mb-1 text-xs text-gray-500">Ngưỡng xuống dòng tên HP</div>
-                    <InputNumber
-                      className="w-full"
-                      min={20}
-                      max={80}
-                      value={settings.nameOneLineMax}
-                      onChange={(v) => updateSetting("nameOneLineMax", Number(v) || 34)}
-                    />
-                  </div>
-                  <div>
-                    <div className="mb-1 text-xs text-gray-500">Row height 1 dòng (pt)</div>
-                    <InputNumber
-                      className="w-full"
-                      min={12}
-                      max={40}
-                      step={0.1}
-                      value={settings.rowHeight1}
-                      onChange={(v) => updateSetting("rowHeight1", Number(v) || 15.6)}
-                    />
-                  </div>
-                  <div>
-                    <div className="mb-1 text-xs text-gray-500">Row height 2 dòng (pt)</div>
-                    <InputNumber
-                      className="w-full"
-                      min={18}
-                      max={60}
-                      step={0.1}
-                      value={settings.rowHeight2}
-                      onChange={(v) => updateSetting("rowHeight2", Number(v) || 25.5)}
-                    />
-                  </div>
-                  <div>
-                    <div className="mb-1 text-xs text-gray-500">Lề trên (mm)</div>
-                    <InputNumber
-                      className="w-full"
-                      min={0}
-                      max={40}
-                      value={settings.marginTopMm}
-                      onChange={(v) => updateSetting("marginTopMm", Number(v) || 0)}
-                    />
-                  </div>
-                  <div>
-                    <div className="mb-1 text-xs text-gray-500">Lề dưới (mm)</div>
-                    <InputNumber
-                      className="w-full"
-                      min={0}
-                      max={40}
-                      value={settings.marginBottomMm}
-                      onChange={(v) => updateSetting("marginBottomMm", Number(v) || 0)}
-                    />
-                  </div>
-                  <div>
-                    <div className="mb-1 text-xs text-gray-500">Lề trái (mm)</div>
-                    <InputNumber
-                      className="w-full"
-                      min={0}
-                      max={40}
-                      value={settings.marginLeftMm}
-                      onChange={(v) => updateSetting("marginLeftMm", Number(v) || 0)}
-                    />
-                  </div>
-                  <div>
-                    <div className="mb-1 text-xs text-gray-500">Lề phải (mm)</div>
-                    <InputNumber
-                      className="w-full"
-                      min={0}
-                      max={40}
-                      value={settings.marginRightMm}
-                      onChange={(v) => updateSetting("marginRightMm", Number(v) || 0)}
-                    />
-                  </div>
-                  <div>
-                    <div className="mb-1 text-xs text-gray-500">Chức danh ký (dòng 1)</div>
-                    <Input
-                      value={settings.signerTitle1}
-                      onChange={(e) => updateSetting("signerTitle1", e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <div className="mb-1 text-xs text-gray-500">Chức danh ký (dòng 2)</div>
-                    <Input
-                      value={settings.signerTitle2}
-                      onChange={(e) => updateSetting("signerTitle2", e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <div className="mb-1 text-xs text-gray-500">Tiêu đề</div>
-                    <Input
-                      value={settings.title}
-                      onChange={(e) => updateSetting("title", e.target.value)}
-                    />
-                  </div>
-                  <div className="md:col-span-2">
-                    <div className="mb-1 text-xs text-gray-500">
-                      Dòng kèm theo (`{"{trinh_do}"}, {"{so_hieu}"}`)
-                    </div>
-                    <Input
-                      value={settings.subtitleTemplate}
-                      onChange={(e) => updateSetting("subtitleTemplate", e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <div className="mb-1 text-xs text-gray-500">QH trái dòng 1</div>
-                    <Input
-                      value={settings.headerLeftLine1}
-                      onChange={(e) => updateSetting("headerLeftLine1", e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <div className="mb-1 text-xs text-gray-500">QH trái dòng 2</div>
-                    <Input
-                      value={settings.headerLeftLine2}
-                      onChange={(e) => updateSetting("headerLeftLine2", e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <div className="mb-1 text-xs text-gray-500">Đoạn gạch chân (dòng 2 trái)</div>
-                    <Input
-                      value={settings.headerLeftLine2Underline}
-                      onChange={(e) => updateSetting("headerLeftLine2Underline", e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <div className="mb-1 text-xs text-gray-500">QH phải dòng 1</div>
-                    <Input
-                      value={settings.headerRightLine1}
-                      onChange={(e) => updateSetting("headerRightLine1", e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <div className="mb-1 text-xs text-gray-500">QH phải dòng 2</div>
-                    <Input
-                      value={settings.headerRightLine2}
-                      onChange={(e) => updateSetting("headerRightLine2", e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <div className="mb-1 text-xs text-gray-500">Nhãn kết quả đào tạo</div>
-                    <Input
-                      value={settings.trainingResultLabel}
-                      onChange={(e) => updateSetting("trainingResultLabel", e.target.value)}
-                    />
-                  </div>
-
-                  <div className="md:col-span-2 lg:col-span-3 border-t border-gray-200 pt-2 text-xs font-medium text-gray-600">
-                    Quốc hiệu / tiêu đề — row height & cỡ chữ (pt)
-                  </div>
-                  {ptField("QH trái dòng 1 — height", "headerLeftLine1Height", { fallback: 16 })}
-                  {ptField("QH trái dòng 1 — cỡ chữ", "headerLeftLine1FontSize", {
-                    min: 8,
-                    max: 20,
-                    fallback: 13,
-                  })}
-                  {ptField("QH trái dòng 2 — height", "headerLeftLine2Height", { fallback: 18 })}
-                  {ptField("QH trái dòng 2 — cỡ chữ", "headerLeftLine2FontSize", {
-                    min: 8,
-                    max: 20,
-                    fallback: 13,
-                  })}
-                  {ptField("QH phải dòng 1 — height", "headerRightLine1Height", { fallback: 16 })}
-                  {ptField("QH phải dòng 1 — cỡ chữ", "headerRightLine1FontSize", {
-                    min: 8,
-                    max: 20,
-                    fallback: 13,
-                  })}
-                  {ptField("QH phải dòng 2 — height", "headerRightLine2Height", { fallback: 18 })}
-                  {ptField("QH phải dòng 2 — cỡ chữ", "headerRightLine2FontSize", {
-                    min: 8,
-                    max: 20,
-                    fallback: 14,
-                  })}
-                  {ptField("Cách quốc hiệu → tiêu đề", "titleBlockMarginTop", {
-                    min: 0,
-                    fallback: 10,
-                  })}
-                  {ptField("Tiêu đề PLVB — height", "titleLineHeight", { fallback: 18 })}
-                  {ptField("Tiêu đề PLVB — cỡ chữ", "titleFontSize", {
-                    min: 8,
-                    max: 22,
-                    fallback: 14,
-                  })}
-                  {ptField("Subtitle — height", "subtitleLineHeight", { fallback: 16 })}
-                  {ptField("Subtitle — cỡ chữ", "subtitleFontSize", {
-                    min: 8,
-                    max: 18,
-                    fallback: 12,
-                  })}
-
-                  <div className="md:col-span-2 lg:col-span-3 border-t border-gray-200 pt-2 text-xs font-medium text-gray-600">
-                    Tổng kết / chữ ký — row height & cỡ chữ (pt)
-                  </div>
-                  {ptField("Cỡ chữ khối tổng kết", "summaryFontSize", {
-                    min: 8,
-                    max: 16,
-                    fallback: 12,
-                  })}
-                  {ptField("Ngày ký — height", "signDateLineHeight", {
-                    fallback: 15.9,
-                    step: 0.1,
-                  })}
-                  {ptField("Chức danh dòng 1 — height", "signerTitle1LineHeight", {
-                    fallback: 18,
-                  })}
-                  {ptField("Chức danh dòng 1 — cỡ chữ", "signerTitle1FontSize", {
-                    min: 8,
-                    max: 20,
-                    fallback: 14,
-                  })}
-                  {ptField("Chức danh dòng 2 — height", "signerTitle2LineHeight", {
-                    fallback: 18,
-                  })}
-                  {ptField("Chức danh dòng 2 — cỡ chữ", "signerTitle2FontSize", {
-                    min: 8,
-                    max: 20,
-                    fallback: 14,
-                  })}
-                  {ptField("Khoảng trống chữ ký", "signerGapHeight", {
-                    min: 12,
-                    max: 120,
-                    fallback: 48,
-                  })}
-                  {ptField("Tên người ký — height", "signerNameLineHeight", { fallback: 16 })}
-                  {ptField("Tên người ký — cỡ chữ", "signerNameFontSize", {
-                    min: 8,
-                    max: 18,
-                    fallback: 12,
-                  })}
-
-                  <div className="flex flex-col gap-1">
-                    <Checkbox
-                      checked={settings.showScore10}
-                      onChange={(e) => updateSetting("showScore10", e.target.checked)}
-                    >
-                      Hiện thang điểm 10
-                    </Checkbox>
-                    <Checkbox
-                      checked={settings.showScore4}
-                      onChange={(e) => updateSetting("showScore4", e.target.checked)}
-                    >
-                      Hiện thang điểm 4
-                    </Checkbox>
-                    <Checkbox
-                      checked={settings.showLetterGrade}
-                      onChange={(e) => updateSetting("showLetterGrade", e.target.checked)}
-                    >
-                      Hiện thang điểm chữ
-                    </Checkbox>
-                    <Checkbox
-                      checked={settings.showGraduationSection}
-                      onChange={(e) => updateSetting("showGraduationSection", e.target.checked)}
-                    >
-                      Tách khối học phần tốt nghiệp
-                    </Checkbox>
-                    <Checkbox
-                      checked={settings.showTrainingResultLabel}
-                      onChange={(e) => updateSetting("showTrainingResultLabel", e.target.checked)}
-                    >
-                      Kết quả đào tạo
-                    </Checkbox>
-                    <Checkbox
-                      checked={settings.showRegistryNumber}
-                      onChange={(e) => updateSetting("showRegistryNumber", e.target.checked)}
-                    >
-                      Số vào sổ
-                    </Checkbox>
-                  </div>
-                  <div className="flex items-end">
-                    <Button onClick={resetSettings}>Khôi phục mặc định</Button>
-                  </div>
-
-                  {variant === "international" ? (
-                    <div className="md:col-span-2 lg:col-span-3 border-t border-gray-200 pt-2">
-                      <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
-                        <div className="text-xs font-medium text-gray-600">
-                          Môn HKDK 1–2 (bỏ chọn để ẩn khi in; môn khác luôn hiện)
-                        </div>
-                        <Space size="small">
-                          <Button
-                            size="small"
-                            type="link"
-                            className="px-0"
-                            disabled={!hkdk12SubjectOptions.length}
-                            onClick={() => updateSetting("hiddenHkdk12SubjectKeys", [])}
-                          >
-                            Chọn tất cả
-                          </Button>
-                          <Button
-                            size="small"
-                            type="link"
-                            className="px-0"
-                            disabled={!hkdk12SubjectOptions.length}
-                            onClick={() =>
-                              updateSetting(
-                                "hiddenHkdk12SubjectKeys",
-                                hkdk12SubjectOptions.map((item) => item.key)
-                              )
-                            }
-                          >
-                            Bỏ chọn tất cả
-                          </Button>
-                        </Space>
-                      </div>
-                      {!hkdk12SubjectOptions.length ? (
-                        <div className="text-xs text-gray-400">
-                          Không có môn học kỳ dự kiến 1 hoặc 2 trong dữ liệu đang in.
-                        </div>
-                      ) : (
-                        <div className="max-h-48 overflow-auto rounded border border-gray-100 bg-gray-50/80 p-2">
-                          <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
-                            {hkdk12SubjectOptions.map((item) => {
-                              const checked = !(
-                                settings.hiddenHkdk12SubjectKeys || []
-                              ).includes(item.key)
-                              return (
-                                <Checkbox
-                                  key={item.key}
-                                  checked={checked}
-                                  onChange={(e) => {
-                                    const hidden = new Set(settings.hiddenHkdk12SubjectKeys || [])
-                                    if (e.target.checked) hidden.delete(item.key)
-                                    else hidden.add(item.key)
-                                    updateSetting("hiddenHkdk12SubjectKeys", Array.from(hidden))
-                                  }}
-                                >
-                                  <span className="text-xs">
-                                    <span className="text-gray-400">HK{item.hocKyDuKien}</span>{" "}
-                                    {item.name}
-                                  </span>
-                                </Checkbox>
-                              )
-                            })}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ) : null}
-                </div>
-              ),
-            },
-          ]}
-        />
-      ) : null}
-
-      <div className="max-h-[70vh] overflow-auto rounded border border-gray-200 bg-white p-4">
-        {!summaries.length ? (
-          <div className="py-10 text-center text-gray-500">Không có dữ liệu để in</div>
-        ) : (
-          <div ref={printRef} className="plvb-print-root">
-            <style>{`
-              .plvb-print-root .plvb-score-table-wrap {
-                border: none;
-                padding: 0;
-                overflow: visible;
-              }
-              .plvb-print-root .plvb-score-table {
-                border: ${RULE_EMPH_PT} solid #000 !important;
-                box-sizing: border-box;
-                border-collapse: collapse !important;
-              }
-              .plvb-print-root .plvb-score-table th,
-              .plvb-print-root .plvb-score-table td {
-                border: ${RULE_FAINT} !important;
-                box-shadow: none !important;
-              }
-              .plvb-print-root .plvb-score-table tr > *:first-child {
-                border-left: ${RULE_EMPH_PT} solid #000 !important;
-              }
-              .plvb-print-root .plvb-score-table tr > *:last-child {
-                border-right: ${RULE_EMPH_PT} solid #000 !important;
-              }
-              .plvb-print-root .plvb-score-table .plvb-stt,
-              .plvb-print-root .plvb-score-table .plvb-credits,
-              .plvb-print-root .plvb-score-table .plvb-score-col {
-                border-left: ${RULE_FAINT} !important;
-                border-right: ${RULE_FAINT} !important;
-              }
-              .plvb-print-root .plvb-score-table .plvb-col-divider {
-                border-right: ${RULE_EMPH_PT} solid #000 !important;
-              }
-              .plvb-print-root .plvb-score-table .plvb-after-divider {
-                border-left: none !important;
-              }
-              .plvb-print-root .plvb-score-table .plvb-thead-top th,
-              .plvb-print-root .plvb-score-table th[rowspan] {
-                border-top: ${RULE_EMPH_PT} solid #000 !important;
-              }
-              .plvb-print-root .plvb-score-table thead .plvb-thead-bottom th,
-              .plvb-print-root .plvb-score-table thead th[rowspan] {
-                border-bottom: ${RULE_EMPH_PT} solid #000 !important;
-              }
-              .plvb-print-root .plvb-score-table tbody tr:has(+ .plvb-grad-banner-row) > * {
-                border-bottom: ${RULE_EMPH_PT} solid #000 !important;
-              }
-              .plvb-print-root .plvb-score-table .plvb-grad-banner {
-                border-top: none !important;
-                border-bottom: ${RULE_EMPH_PT} solid #000 !important;
-                border-left: ${RULE_EMPH_PT} solid #000 !important;
-                border-right: ${RULE_EMPH_PT} solid #000 !important;
-                box-shadow: none !important;
-              }
-              .plvb-print-root .plvb-score-table .plvb-grad-banner-row + tr > * {
-                border-top: none !important;
-              }
-              .plvb-print-root .plvb-score-table tbody tr:last-child > * {
-                border-bottom: ${RULE_EMPH_PT} solid #000 !important;
-              }
-            `}</style>
-            {summaries.map((summary, index) => (
-              <StudentAppendixPage
-                key={summary.student.id}
-                summary={summary}
-                settings={settings}
-                variant={variant}
-                signDate={signDate}
-                signerName={signerName}
-                isLast={index === summaries.length - 1}
-              />
-            ))}
+      <div className="flex gap-3" style={{ height: "calc(100vh - 130px)", minHeight: 520 }}>
+        <aside className="flex w-[420px] shrink-0 flex-col overflow-hidden rounded border border-gray-200 bg-gray-50/60">
+          <div className="shrink-0 border-b border-gray-200 px-3 py-2 text-sm font-medium text-gray-700">
+            Cấu hình in
+            <span className="ml-1 font-normal text-gray-400">(lưu trình duyệt)</span>
           </div>
-        )}
+          <div className="min-h-0 flex-1 overflow-auto p-3">
+            <div className="grid grid-cols-2 gap-2.5">
+              <div className="col-span-2">
+                <div className="mb-1 text-xs text-gray-500">Bố cục bảng điểm</div>
+                <Radio.Group
+                  value={settings.columns}
+                  onChange={(e) => updateSetting("columns", e.target.value)}
+                >
+                  <Radio value={1}>1 cột</Radio>
+                  <Radio value={2}>2 cột</Radio>
+                </Radio.Group>
+              </div>
+              <div className="col-span-2">
+                <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
+                  <div className="text-xs text-gray-500">
+                    Chọn học viên in ({selectedStudentIds.length}/{totalStudents || 0})
+                  </div>
+                  <Space size="small">
+                    <Button
+                      size="small"
+                      type="link"
+                      className="px-0"
+                      disabled={!totalStudents}
+                      onClick={() => setSelectedStudentIds(allSummaries.map((s) => s.student.id))}
+                    >
+                      Chọn tất cả
+                    </Button>
+                    <Button
+                      size="small"
+                      type="link"
+                      className="px-0"
+                      disabled={!selectedStudentIds.length}
+                      onClick={() => setSelectedStudentIds([])}
+                    >
+                      Bỏ chọn
+                    </Button>
+                  </Space>
+                </div>
+                <Select
+                  className="w-full"
+                  mode="multiple"
+                  allowClear
+                  showSearch
+                  optionFilterProp="label"
+                  placeholder="Chọn học viên để in"
+                  disabled={!totalStudents}
+                  maxTagCount="responsive"
+                  value={selectedStudentIds}
+                  options={studentSelectOptions}
+                  onChange={(ids) => setSelectedStudentIds(ids)}
+                />
+              </div>
+
+              <div className="col-span-2 border-t border-gray-200 pt-2 text-xs font-medium text-gray-600">
+                Phông chữ & cỡ chữ
+              </div>
+              <div className="col-span-2">
+                <div className="mb-1 text-xs text-gray-500">Phông chữ</div>
+                <Input
+                  value={settings.fontFamily}
+                  onChange={(e) => updateSetting("fontFamily", e.target.value)}
+                />
+              </div>
+              <div>
+                <div className="mb-1 text-xs text-gray-500">Cỡ chữ bảng điểm</div>
+                <InputNumber
+                  className="w-full"
+                  min={8}
+                  max={16}
+                  value={settings.bodyFontSize}
+                  onChange={(v) => updateSetting("bodyFontSize", Number(v) || 10)}
+                />
+              </div>
+              <div>
+                <div className="mb-1 text-xs text-gray-500">Cỡ chữ tiêu đề cột</div>
+                <InputNumber
+                  className="w-full"
+                  min={8}
+                  max={14}
+                  value={settings.headerFontSize}
+                  onChange={(v) => updateSetting("headerFontSize", Number(v) || 9)}
+                />
+              </div>
+              <div>
+                <div className="mb-1 text-xs text-gray-500">Cỡ chữ thông tin SV</div>
+                <InputNumber
+                  className="w-full"
+                  min={10}
+                  max={14}
+                  value={settings.infoFontSize}
+                  onChange={(v) => updateSetting("infoFontSize", Number(v) || 12)}
+                />
+              </div>
+              <div>
+                <div className="mb-1 text-xs text-gray-500">Cỡ chữ ghi chú cuối</div>
+                <InputNumber
+                  className="w-full"
+                  min={8}
+                  max={14}
+                  value={settings.noteFontSize}
+                  onChange={(v) => updateSetting("noteFontSize", Number(v) || 10)}
+                />
+              </div>
+
+              <div className="col-span-2 border-t border-gray-200 pt-2 text-xs font-medium text-gray-600">
+                Hàng môn học & lề trang
+              </div>
+              <div>
+                <div className="mb-1 text-xs text-gray-500">
+                  Tên môn dài quá → xuống dòng (ký tự)
+                </div>
+                <InputNumber
+                  className="w-full"
+                  min={20}
+                  max={80}
+                  value={settings.nameOneLineMax}
+                  onChange={(v) => updateSetting("nameOneLineMax", Number(v) || 34)}
+                />
+              </div>
+              <div>
+                <div className="mb-1 text-xs text-gray-500">Chiều cao hàng 1 dòng (pt)</div>
+                <InputNumber
+                  className="w-full"
+                  min={12}
+                  max={40}
+                  step={0.1}
+                  value={settings.rowHeight1}
+                  onChange={(v) => updateSetting("rowHeight1", Number(v) || 15.6)}
+                />
+              </div>
+              <div>
+                <div className="mb-1 text-xs text-gray-500">Chiều cao hàng 2 dòng (pt)</div>
+                <InputNumber
+                  className="w-full"
+                  min={18}
+                  max={60}
+                  step={0.1}
+                  value={settings.rowHeight2}
+                  onChange={(v) => updateSetting("rowHeight2", Number(v) || 25.5)}
+                />
+              </div>
+              <div>
+                <div className="mb-1 text-xs text-gray-500">Lề trên (mm)</div>
+                <InputNumber
+                  className="w-full"
+                  min={0}
+                  max={40}
+                  value={settings.marginTopMm}
+                  onChange={(v) => updateSetting("marginTopMm", Number(v) || 0)}
+                />
+              </div>
+              <div>
+                <div className="mb-1 text-xs text-gray-500">Lề dưới (mm)</div>
+                <InputNumber
+                  className="w-full"
+                  min={0}
+                  max={40}
+                  value={settings.marginBottomMm}
+                  onChange={(v) => updateSetting("marginBottomMm", Number(v) || 0)}
+                />
+              </div>
+              <div>
+                <div className="mb-1 text-xs text-gray-500">Lề trái (mm)</div>
+                <InputNumber
+                  className="w-full"
+                  min={0}
+                  max={40}
+                  value={settings.marginLeftMm}
+                  onChange={(v) => updateSetting("marginLeftMm", Number(v) || 0)}
+                />
+              </div>
+              <div>
+                <div className="mb-1 text-xs text-gray-500">Lề phải (mm)</div>
+                <InputNumber
+                  className="w-full"
+                  min={0}
+                  max={40}
+                  value={settings.marginRightMm}
+                  onChange={(v) => updateSetting("marginRightMm", Number(v) || 0)}
+                />
+              </div>
+
+              <div className="col-span-2 border-t border-gray-200 pt-2 text-xs font-medium text-gray-600">
+                Nội dung đầu trang & chữ ký
+              </div>
+              <div className="col-span-2">
+                <div className="mb-1 text-xs text-gray-500">Tiêu đề phụ lục</div>
+                <Input
+                  value={settings.title}
+                  onChange={(e) => updateSetting("title", e.target.value)}
+                />
+              </div>
+              <div className="col-span-2">
+                <div className="mb-1 text-xs text-gray-500">
+                  Dòng phụ đề (dùng {"{trinh_do}"}, {"{so_hieu}"} để chèn tự động)
+                </div>
+                <Input
+                  value={settings.subtitleTemplate}
+                  onChange={(e) => updateSetting("subtitleTemplate", e.target.value)}
+                />
+              </div>
+              <div className="col-span-2">
+                <div className="mb-1 text-xs text-gray-500">
+                  Cơ quan cấp trên (góc trái, dòng 1)
+                </div>
+                <Input
+                  value={settings.headerLeftLine1}
+                  onChange={(e) => updateSetting("headerLeftLine1", e.target.value)}
+                />
+              </div>
+              <div className="col-span-2">
+                <div className="mb-1 text-xs text-gray-500">Tên đơn vị (góc trái, dòng 2)</div>
+                <Input
+                  value={settings.headerLeftLine2}
+                  onChange={(e) => updateSetting("headerLeftLine2", e.target.value)}
+                />
+              </div>
+              <div className="col-span-2">
+                <div className="mb-1 text-xs text-gray-500">
+                  Từ cần gạch chân trong tên đơn vị (vd: KỸ THUẬT)
+                </div>
+                <Input
+                  value={settings.headerLeftLine2Underline}
+                  onChange={(e) => updateSetting("headerLeftLine2Underline", e.target.value)}
+                />
+              </div>
+              <div className="col-span-2">
+                <div className="mb-1 text-xs text-gray-500">Quốc hiệu (góc phải, dòng 1)</div>
+                <Input
+                  value={settings.headerRightLine1}
+                  onChange={(e) => updateSetting("headerRightLine1", e.target.value)}
+                />
+              </div>
+              <div className="col-span-2">
+                <div className="mb-1 text-xs text-gray-500">Tiêu ngữ (góc phải, dòng 2)</div>
+                <Input
+                  value={settings.headerRightLine2}
+                  onChange={(e) => updateSetting("headerRightLine2", e.target.value)}
+                />
+              </div>
+              <div className="col-span-2">
+                <div className="mb-1 text-xs text-gray-500">Nhãn trước bảng điểm</div>
+                <Input
+                  value={settings.trainingResultLabel}
+                  onChange={(e) => updateSetting("trainingResultLabel", e.target.value)}
+                />
+              </div>
+              <div className="col-span-2">
+                <div className="mb-1 text-xs text-gray-500">Chức danh ký — dòng 1</div>
+                <Input
+                  value={settings.signerTitle1}
+                  onChange={(e) => updateSetting("signerTitle1", e.target.value)}
+                />
+              </div>
+              <div className="col-span-2">
+                <div className="mb-1 text-xs text-gray-500">Chức danh ký — dòng 2</div>
+                <Input
+                  value={settings.signerTitle2}
+                  onChange={(e) => updateSetting("signerTitle2", e.target.value)}
+                />
+              </div>
+
+              <div className="col-span-2 border-t border-gray-200 pt-2 text-xs font-medium text-gray-600">
+                Khoảng cách & cỡ chữ đầu trang (pt)
+              </div>
+              {ptField("Cơ quan cấp trên — chiều cao", "headerLeftLine1Height", { fallback: 16 })}
+              {ptField("Cơ quan cấp trên — cỡ chữ", "headerLeftLine1FontSize", {
+                min: 8,
+                max: 20,
+                fallback: 13,
+              })}
+              {ptField("Tên đơn vị — chiều cao", "headerLeftLine2Height", { fallback: 18 })}
+              {ptField("Tên đơn vị — cỡ chữ", "headerLeftLine2FontSize", {
+                min: 8,
+                max: 20,
+                fallback: 13,
+              })}
+              {ptField("Quốc hiệu — chiều cao", "headerRightLine1Height", { fallback: 16 })}
+              {ptField("Quốc hiệu — cỡ chữ", "headerRightLine1FontSize", {
+                min: 8,
+                max: 20,
+                fallback: 13,
+              })}
+              {ptField("Tiêu ngữ — chiều cao", "headerRightLine2Height", { fallback: 18 })}
+              {ptField("Tiêu ngữ — cỡ chữ", "headerRightLine2FontSize", {
+                min: 8,
+                max: 20,
+                fallback: 14,
+              })}
+              {ptField("Khoảng cách xuống tiêu đề", "titleBlockMarginTop", {
+                min: 0,
+                fallback: 10,
+              })}
+              {ptField("Tiêu đề phụ lục — chiều cao", "titleLineHeight", { fallback: 18 })}
+              {ptField("Tiêu đề phụ lục — cỡ chữ", "titleFontSize", {
+                min: 8,
+                max: 22,
+                fallback: 14,
+              })}
+              {ptField("Dòng phụ đề — chiều cao", "subtitleLineHeight", { fallback: 16 })}
+              {ptField("Dòng phụ đề — cỡ chữ", "subtitleFontSize", {
+                min: 8,
+                max: 18,
+                fallback: 12,
+              })}
+
+              <div className="col-span-2 border-t border-gray-200 pt-2 text-xs font-medium text-gray-600">
+                Tổng kết & chữ ký (pt)
+              </div>
+              {ptField("Cỡ chữ khối tổng kết", "summaryFontSize", {
+                min: 8,
+                max: 16,
+                fallback: 12,
+              })}
+              {ptField("Dòng ngày ký — chiều cao", "signDateLineHeight", {
+                fallback: 15.9,
+                step: 0.1,
+              })}
+              {ptField("Chức danh dòng 1 — chiều cao", "signerTitle1LineHeight", {
+                fallback: 18,
+              })}
+              {ptField("Chức danh dòng 1 — cỡ chữ", "signerTitle1FontSize", {
+                min: 8,
+                max: 20,
+                fallback: 14,
+              })}
+              {ptField("Chức danh dòng 2 — chiều cao", "signerTitle2LineHeight", {
+                fallback: 18,
+              })}
+              {ptField("Chức danh dòng 2 — cỡ chữ", "signerTitle2FontSize", {
+                min: 8,
+                max: 20,
+                fallback: 14,
+              })}
+              {ptField("Khoảng trống chỗ ký", "signerGapHeight", {
+                min: 12,
+                max: 120,
+                fallback: 48,
+              })}
+              {ptField("Tên người ký — chiều cao", "signerNameLineHeight", { fallback: 16 })}
+              {ptField("Tên người ký — cỡ chữ", "signerNameFontSize", {
+                min: 8,
+                max: 18,
+                fallback: 12,
+              })}
+
+              <div className="col-span-2 flex flex-col gap-1">
+                <Checkbox
+                  checked={settings.showScore10}
+                  onChange={(e) => updateSetting("showScore10", e.target.checked)}
+                >
+                  Hiện thang điểm 10
+                </Checkbox>
+                <Checkbox
+                  checked={settings.showScore4}
+                  onChange={(e) => updateSetting("showScore4", e.target.checked)}
+                >
+                  Hiện thang điểm 4
+                </Checkbox>
+                <Checkbox
+                  checked={settings.showLetterGrade}
+                  onChange={(e) => updateSetting("showLetterGrade", e.target.checked)}
+                >
+                  Hiện thang điểm chữ
+                </Checkbox>
+                <Checkbox
+                  checked={settings.showGraduationSection}
+                  onChange={(e) => updateSetting("showGraduationSection", e.target.checked)}
+                >
+                  Tách khối học phần tốt nghiệp
+                </Checkbox>
+                <Checkbox
+                  checked={settings.showTrainingResultLabel}
+                  onChange={(e) => updateSetting("showTrainingResultLabel", e.target.checked)}
+                >
+                  Kết quả đào tạo
+                </Checkbox>
+                <Checkbox
+                  checked={settings.showRegistryNumber}
+                  onChange={(e) => updateSetting("showRegistryNumber", e.target.checked)}
+                >
+                  Số vào sổ
+                </Checkbox>
+              </div>
+              <div className="col-span-2">
+                <Button onClick={resetSettings}>Khôi phục mặc định</Button>
+              </div>
+
+              {variant === "international" ? (
+                <div className="col-span-2 border-t border-gray-200 pt-2">
+                  <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
+                    <div className="text-xs font-medium text-gray-600">
+                      Môn HKDK 1–2 (bỏ chọn để ẩn khi in; môn khác luôn hiện)
+                    </div>
+                    <Space size="small">
+                      <Button
+                        size="small"
+                        type="link"
+                        className="px-0"
+                        disabled={!hkdk12SubjectOptions.length}
+                        onClick={() => updateSetting("hiddenHkdk12SubjectKeys", [])}
+                      >
+                        Chọn tất cả
+                      </Button>
+                      <Button
+                        size="small"
+                        type="link"
+                        className="px-0"
+                        disabled={!hkdk12SubjectOptions.length}
+                        onClick={() =>
+                          updateSetting(
+                            "hiddenHkdk12SubjectKeys",
+                            hkdk12SubjectOptions.map((item) => item.key)
+                          )
+                        }
+                      >
+                        Bỏ chọn tất cả
+                      </Button>
+                    </Space>
+                  </div>
+                  {!hkdk12SubjectOptions.length ? (
+                    <div className="text-xs text-gray-400">
+                      Không có môn học kỳ dự kiến 1 hoặc 2 trong dữ liệu đang in.
+                    </div>
+                  ) : (
+                    <div className="max-h-48 overflow-auto rounded border border-gray-100 bg-white p-2">
+                      <div className="grid grid-cols-1 gap-1">
+                        {hkdk12SubjectOptions.map((item) => {
+                          const checked = !(settings.hiddenHkdk12SubjectKeys || []).includes(
+                            item.key
+                          )
+                          return (
+                            <Checkbox
+                              key={item.key}
+                              checked={checked}
+                              onChange={(e) => {
+                                const hidden = new Set(settings.hiddenHkdk12SubjectKeys || [])
+                                if (e.target.checked) hidden.delete(item.key)
+                                else hidden.add(item.key)
+                                updateSetting("hiddenHkdk12SubjectKeys", Array.from(hidden))
+                              }}
+                            >
+                              <span className="text-xs">
+                                <span className="text-gray-400">HK{item.hocKyDuKien}</span>{" "}
+                                {item.name}
+                              </span>
+                            </Checkbox>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : null}
+            </div>
+          </div>
+        </aside>
+
+        <div className="flex min-w-0 flex-1 flex-col overflow-hidden rounded border border-gray-200 bg-white">
+          <div className="shrink-0 border-b border-gray-200 px-3 py-2 text-sm font-medium text-gray-700">
+            Xem trước
+          </div>
+          <div className="min-h-0 flex-1 overflow-auto p-4">
+            {!summaries.length ? (
+              <div className="py-10 text-center text-gray-500">Không có dữ liệu để in</div>
+            ) : (
+              <div ref={printRef} className="plvb-print-root">
+                <style>{`
+                  .plvb-print-root .plvb-score-table-wrap {
+                    border: none;
+                    padding: 0;
+                    overflow: visible;
+                  }
+                  .plvb-print-root .plvb-score-table {
+                    border: ${RULE_EMPH_PT} solid #000 !important;
+                    box-sizing: border-box;
+                    border-collapse: collapse !important;
+                  }
+                  .plvb-print-root .plvb-score-table th,
+                  .plvb-print-root .plvb-score-table td {
+                    border: ${RULE_FAINT} !important;
+                    box-shadow: none !important;
+                  }
+                  .plvb-print-root .plvb-score-table tr > *:first-child {
+                    border-left: ${RULE_EMPH_PT} solid #000 !important;
+                  }
+                  .plvb-print-root .plvb-score-table tr > *:last-child {
+                    border-right: ${RULE_EMPH_PT} solid #000 !important;
+                  }
+                  .plvb-print-root .plvb-score-table .plvb-stt,
+                  .plvb-print-root .plvb-score-table .plvb-credits,
+                  .plvb-print-root .plvb-score-table .plvb-score-col {
+                    border-left: ${RULE_FAINT} !important;
+                    border-right: ${RULE_FAINT} !important;
+                  }
+                  .plvb-print-root .plvb-score-table .plvb-col-divider {
+                    border-right: ${RULE_EMPH_PT} solid #000 !important;
+                  }
+                  .plvb-print-root .plvb-score-table .plvb-after-divider {
+                    border-left: none !important;
+                  }
+                  .plvb-print-root .plvb-score-table .plvb-thead-top th,
+                  .plvb-print-root .plvb-score-table th[rowspan] {
+                    border-top: ${RULE_EMPH_PT} solid #000 !important;
+                  }
+                  .plvb-print-root .plvb-score-table thead .plvb-thead-bottom th,
+                  .plvb-print-root .plvb-score-table thead th[rowspan] {
+                    border-bottom: ${RULE_EMPH_PT} solid #000 !important;
+                  }
+                  .plvb-print-root .plvb-score-table tbody tr:has(+ .plvb-grad-banner-row) > * {
+                    border-bottom: ${RULE_EMPH_PT} solid #000 !important;
+                  }
+                  .plvb-print-root .plvb-score-table .plvb-grad-banner {
+                    border-top: none !important;
+                    border-bottom: ${RULE_EMPH_PT} solid #000 !important;
+                    border-left: ${RULE_EMPH_PT} solid #000 !important;
+                    border-right: ${RULE_EMPH_PT} solid #000 !important;
+                    box-shadow: none !important;
+                  }
+                  .plvb-print-root .plvb-score-table .plvb-grad-banner-row + tr > * {
+                    border-top: none !important;
+                  }
+                  .plvb-print-root .plvb-score-table tbody tr:last-child > * {
+                    border-bottom: ${RULE_EMPH_PT} solid #000 !important;
+                  }
+                `}</style>
+                {summaries.map((summary, index) => (
+                  <StudentAppendixPage
+                    key={summary.student.id}
+                    summary={summary}
+                    settings={settings}
+                    variant={variant}
+                    signDate={signDate}
+                    signerName={signerName}
+                    isLast={index === summaries.length - 1}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </Modal>
   )

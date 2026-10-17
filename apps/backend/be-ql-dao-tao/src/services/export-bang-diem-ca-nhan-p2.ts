@@ -1,4 +1,8 @@
-import { BAO_LUU_EXCEL_COLOR, isBaoLuuScoreDescription, visibleScoreNote } from "@workspace/libs/bao-luu-diem"
+import {
+  BAO_LUU_EXCEL_COLOR,
+  isBaoLuuScoreDescription,
+  visibleScoreNote,
+} from "@workspace/libs/bao-luu-diem"
 import { HTTPException } from "hono/http-exception"
 import { formatDateVn, formatNgayIn, formatThangIn, nowVn } from "@workspace/libs/timezone"
 import type { TableRow } from "@workspace/libs/template-excel-core"
@@ -606,7 +610,11 @@ async function exportBangDiemCaNhanMau({
 
   const tableRows: TableRow[] = flatMonHocs.map((monHoc, index) => ({
     cells: [
-      { value: index + 1, align: "center", ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}) },
+      {
+        value: index + 1,
+        align: "center",
+        ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}),
+      },
       {
         value: monHoc.TenMonhoc ?? "",
         colSpan: 6,
@@ -614,15 +622,48 @@ async function exportBangDiemCaNhanMau({
         ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}),
       },
       { value: monHoc.MaMH ?? "", ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}) },
-      { value: monHoc.soTC, align: "center", ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}) },
-      { value: roundTo(monHoc.diem01, 1), align: "right", numFmt: "0.0", ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}) },
-      { value: roundTo(monHoc.diem02, 1), align: "right", numFmt: "0.0", ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}) },
-      { value: roundTo(monHoc.diem07, 1), align: "right", numFmt: "0.0", ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}) },
+      {
+        value: monHoc.soTC,
+        align: "center",
+        ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}),
+      },
+      {
+        value: roundTo(monHoc.diem01, 1),
+        align: "right",
+        numFmt: "0.0",
+        ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}),
+      },
+      {
+        value: roundTo(monHoc.diem02, 1),
+        align: "right",
+        numFmt: "0.0",
+        ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}),
+      },
+      {
+        value: roundTo(monHoc.diem07, 1),
+        align: "right",
+        numFmt: "0.0",
+        ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}),
+      },
       { value: null },
       { value: null },
-      { value: roundTo(monHoc.diemhe10, 1), align: "right", numFmt: "0.0", ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}) },
-      { value: roundTo(monHoc.diemhe4, 1), align: "right", numFmt: "0.0", ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}) },
-      { value: monHoc.diemchu ?? "", align: "center", ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}) },
+      {
+        value: roundTo(monHoc.diemhe10, 1),
+        align: "right",
+        numFmt: "0.0",
+        ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}),
+      },
+      {
+        value: roundTo(monHoc.diemhe4, 1),
+        align: "right",
+        numFmt: "0.0",
+        ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}),
+      },
+      {
+        value: monHoc.diemchu ?? "",
+        align: "center",
+        ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}),
+      },
       { value: null },
       { value: monHoc.ghichu ?? "", ...(monHoc.baoLuu ? { color: BAO_LUU_EXCEL_COLOR } : {}) },
     ],

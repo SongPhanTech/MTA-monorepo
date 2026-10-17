@@ -96,7 +96,9 @@ const MemberTable = ({ data, onDelete, onEdit, loading }: MemberTableProps) => {
           title: "Đơn vị",
           width: 180,
           render: (_, record) => (
-            <span className="text-gray-600">{record?.lecturer?.userProfile?.donVi?.sTen || "-"}</span>
+            <span className="text-gray-600">
+              {record?.lecturer?.userProfile?.donVi?.sTen || "-"}
+            </span>
           ),
         },
         {

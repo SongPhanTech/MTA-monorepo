@@ -130,7 +130,6 @@ const PutEvidence = () => {
     }
   )
 
-
   // biome-ignore lint/correctness/useExhaustiveDependencies: <>
   useEffect(() => {
     if (initialValue) {

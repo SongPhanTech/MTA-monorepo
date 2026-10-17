@@ -780,11 +780,7 @@ export default function ThoiKhoaBieu({
                   align: "center",
                   type: "order",
                   distinctFilters: ["maxStudent", "credit"],
-                  render: (_, record) => (
-                    <p>
-                      {record?.subjectClassStudent?.length ?? 0}
-                    </p>
-                  ),
+                  render: (_, record) => <p>{record?.subjectClassStudent?.length ?? 0}</p>,
                 },
                 {
                   title: "GV 1",
@@ -1019,8 +1015,8 @@ export default function ThoiKhoaBieu({
           <p className="mb-0 text-red-600">
             Nếu xóa lớp môn học
             {deleteTarget?.code ? ` "${deleteTarget.code}"` : ""} sẽ xóa toàn bộ dữ liệu liên quan
-            (danh sách sinh viên, thời khoá biểu, lịch sử lớp, đề thi, điểm danh, khảo sát, tiết học,
-            nhật ký đăng ký, điểm liên kết…) và <strong>không thể hoàn tác</strong>.
+            (danh sách sinh viên, thời khoá biểu, lịch sử lớp, đề thi, điểm danh, khảo sát, tiết
+            học, nhật ký đăng ký, điểm liên kết…) và <strong>không thể hoàn tác</strong>.
           </p>
           <Checkbox
             checked={deleteUnderstood}

@@ -8,7 +8,10 @@ import ExcelJS from "exceljs"
 import { buildExcelWorkbookBuffer } from "../api/excel-template"
 import type { ThesisExportFilter } from "../dto/thesis-export.dto"
 import { renderThesisPaymentXlsx } from "./thesis-excel-render.service"
-import { findThesisExportStudentIds, findThesisExportStudentRows } from "./thesis-export-query.service"
+import {
+  findThesisExportStudentIds,
+  findThesisExportStudentRows,
+} from "./thesis-export-query.service"
 import {
   buildCouncilPaymentExportPayload,
   buildSupervisorPaymentExportPayload,
@@ -92,7 +95,8 @@ function studentTrainingField(student: StudentRow) {
   const majorName = String(major?.name || "")
   const majorField = String(major?.trainingField?.name || "")
   const curriculumField = String(curriculum?.trainingField?.name || "")
-  if (curriculumField && majorField === majorName && curriculumField !== majorField) return curriculumField
+  if (curriculumField && majorField === majorName && curriculumField !== majorField)
+    return curriculumField
   return majorField || curriculumField
 }
 
@@ -283,7 +287,10 @@ function commonStudentRows(rows: StudentRow[]) {
       language: project?.language || "",
       gvhd1: getSupervisorName(project?.supervisor, true),
       gvhd2: getSupervisorName(project?.coSupervisor, true),
-      gvhd: [getSupervisorName(project?.supervisor, true), getSupervisorName(project?.coSupervisor, true)]
+      gvhd: [
+        getSupervisorName(project?.supervisor, true),
+        getSupervisorName(project?.coSupervisor, true),
+      ]
         .filter(Boolean)
         .map((name, idx, arr) => (arr.length > 1 ? `${idx + 1}. ${name}` : name))
         .join("\n"),
@@ -303,7 +310,11 @@ function commonStudentRows(rows: StudentRow[]) {
 async function buildPhuLucDsLuanVan(rows: StudentRow[]) {
   const groups = new Map<
     string,
-    { majorName: string; specializationName: string; thesisProject: ReturnType<typeof commonStudentRows> }
+    {
+      majorName: string
+      specializationName: string
+      thesisProject: ReturnType<typeof commonStudentRows>
+    }
   >()
   const firstProject = getProject(firstRow(rows))
   const decisionDate = formatDocDate(firstProject?.thesisSession?.decisionDate)
@@ -490,9 +501,10 @@ function buildDanhSachBaoVeDanPhongHall(
   }
 }
 
-function buildDanhSachBaoVeDanPhongSlots(
-  entries: { project: Project; studentName: string }[]
-): { allRooms: string[]; slots: DanhSachBaoVeDanPhongSlot[] } {
+function buildDanhSachBaoVeDanPhongSlots(entries: { project: Project; studentName: string }[]): {
+  allRooms: string[]
+  slots: DanhSachBaoVeDanPhongSlot[]
+} {
   const allRoomSet = new Set<string>()
   const slotMap = new Map<string, { project: Project; studentName: string }[]>()
 
@@ -500,7 +512,9 @@ function buildDanhSachBaoVeDanPhongSlots(
     const { project } = entry
     const sortDate = project?.defenseDate ? dayjs(project.defenseDate).format("YYYY-MM-DD") : ""
     const dateLabel = project?.defenseDate ? formatDateInSlash(project.defenseDate) : ""
-    const time = project?.defenseSession?.startTime ? dayjs(project.defenseSession.startTime).format("HH:mm") : ""
+    const time = project?.defenseSession?.startTime
+      ? dayjs(project.defenseSession.startTime).format("HH:mm")
+      : ""
     if (!sortDate || !dateLabel || !time) continue
     const roomName = project?.room?.name || ""
     if (roomName) allRoomSet.add(roomName)
@@ -547,12 +561,16 @@ function buildDanhSachBaoVeDanPhongSlots(
 
 function convertToDanhSachBaoVeDanPhongData(rows: StudentRow[]): DanhSachBaoVeDanPhongGroup[] {
   const validRows = commonStudentRows(rows).filter(
-    (row) => row.project?.defenseDate && row.project?.defenseSession?.startTime && row.project?.room?.name
+    (row) =>
+      row.project?.defenseDate && row.project?.defenseSession?.startTime && row.project?.room?.name
   )
   if (!validRows.length) return []
 
   const dotXet = validRows[0]?.project?.thesisSession?.name || ""
-  const orgMap = new Map<string, { orgName: string; nganh: string; entries: { project: Project; studentName: string }[] }>()
+  const orgMap = new Map<
+    string,
+    { orgName: string; nganh: string; entries: { project: Project; studentName: string }[] }
+  >()
 
   for (const row of validRows) {
     const project = row.project
@@ -572,7 +590,11 @@ function convertToDanhSachBaoVeDanPhongData(rows: StudentRow[]): DanhSachBaoVeDa
 }
 
 function safeWorksheetName(name: string, usedNames: Set<string>) {
-  const base = (name || "Chưa có đơn vị").replace(/[\\/*?:[\]]/g, " ").trim().slice(0, 31) || "Sheet"
+  const base =
+    (name || "Chưa có đơn vị")
+      .replace(/[\\/*?:[\]]/g, " ")
+      .trim()
+      .slice(0, 31) || "Sheet"
   let candidate = base
   let counter = 1
   while (usedNames.has(candidate)) {
@@ -757,7 +779,14 @@ async function buildDanhSachBaoVeDanPhong(rows: StudentRow[]) {
         const room = allRooms[i] || ""
         const startCol = FIXED_COLS + i * COLS_PER_ROOM + 1
         const hall = slot.hallsByRoom.get(room)
-        setMemberRow(startCol, hall?.pb1Name ? "UV" : "", hall?.pb1Name || "", hall?.pb1Name ? "PB1" : "", r, false)
+        setMemberRow(
+          startCol,
+          hall?.pb1Name ? "UV" : "",
+          hall?.pb1Name || "",
+          hall?.pb1Name ? "PB1" : "",
+          r,
+          false
+        )
       }
       r++
 
@@ -765,7 +794,14 @@ async function buildDanhSachBaoVeDanPhong(rows: StudentRow[]) {
         const room = allRooms[i] || ""
         const startCol = FIXED_COLS + i * COLS_PER_ROOM + 1
         const hall = slot.hallsByRoom.get(room)
-        setMemberRow(startCol, hall?.pb2Name ? "UV" : "", hall?.pb2Name || "", hall?.pb2Name ? "PB2" : "", r, false)
+        setMemberRow(
+          startCol,
+          hall?.pb2Name ? "UV" : "",
+          hall?.pb2Name || "",
+          hall?.pb2Name ? "PB2" : "",
+          r,
+          false
+        )
       }
       r++
 
@@ -798,7 +834,11 @@ async function buildDanhSachBaoVeDanPhong(rows: StudentRow[]) {
 
 function councilNames(project?: Project) {
   return [...(project?.council?.members ?? [])]
-    .sort((a, b) => (councilRoleOrder[a.role as CouncilRole] || 99) - (councilRoleOrder[b.role as CouncilRole] || 99))
+    .sort(
+      (a, b) =>
+        (councilRoleOrder[a.role as CouncilRole] || 99) -
+        (councilRoleOrder[b.role as CouncilRole] || 99)
+    )
     .map((m) => {
       const label =
         m.role === CouncilRole.CHAIRMAN
@@ -877,13 +917,18 @@ function managingUnitName(startId: string | undefined, map: Map<string, OrgNode>
   let current: OrgNode | undefined = start
   for (let i = 0; i < 5 && current; i++) {
     const name = current.sTen?.trim() || ""
-    if (isFacultyOrg(current) || /^(khoa|viện)\s+/i.test(name)) return formatManagingUnit(name, true)
+    if (isFacultyOrg(current) || /^(khoa|viện)\s+/i.test(name))
+      return formatManagingUnit(name, true)
     current = current.sParentId ? map.get(current.sParentId) : undefined
   }
   return formatManagingUnit(start.sTen || "", false)
 }
 
-function resolveKhoa(student: StudentRow, project: Project | undefined, orgMap: Map<string, OrgNode>) {
+function resolveKhoa(
+  student: StudentRow,
+  project: Project | undefined,
+  orgMap: Map<string, OrgNode>
+) {
   const curriculum = studentCurriculum(student)
   const ids = [
     curriculum?.trainingMajor?.organization?.Id,
@@ -908,9 +953,7 @@ function guideSupervisorLine(expert: any, index: number) {
   const militaryRank = profile?.rank?.sTen || profile?.rank?.sMa || ""
   const position = String(expert.position || profile?.position?.sTen || "").trim()
   const lecturerId = expert.expert?.lecturerId || expert.lecturerId
-  const parts = lecturerId
-    ? [militaryRank, name, position]
-    : [name, resolveExpertWorkplace(expert)]
+  const parts = lecturerId ? [militaryRank, name, position] : [name, resolveExpertWorkplace(expert)]
   const text = parts.filter(Boolean).join(", ")
   return text ? `${index}. ${text}` : ""
 }
@@ -948,11 +991,13 @@ async function buildSaoQdHuongDan(rows: StudentRow[], filters: ThesisExportFilte
     const qd = formatDocDate(session?.decisionDate)
     const maker = splitDecisionMaker(session?.decisionMaker)
     const trainingType =
-      studentCourse(r.student)?.trainingObjectType?.type || session?.trainingCourses?.[0]?.trainingObjectType?.type
+      studentCourse(r.student)?.trainingObjectType?.type ||
+      session?.trainingCourses?.[0]?.trainingObjectType?.type
     const header = guideDecisionHeader(trainingType)
     const courseRegulation =
       studentCourse(r.student)?.regulation ||
-      session?.trainingCourses?.find((course: { regulation?: string | null }) => course.regulation)?.regulation
+      session?.trainingCourses?.find((course: { regulation?: string | null }) => course.regulation)
+        ?.regulation
     return {
       soQD: session?.decisionNumber || "",
       councilReport: session?.councilReport || "",
@@ -989,7 +1034,11 @@ async function buildSaoQdHuongDan(rows: StudentRow[], filters: ThesisExportFilte
   })
   return renderDocx(
     "BanSaoQDHuongDanLuanVan.docx",
-    { items, councilReport: items[0]?.councilReport || "", proposalReport: items[0]?.proposalReport || "" },
+    {
+      items,
+      councilReport: items[0]?.councilReport || "",
+      proposalReport: items[0]?.proposalReport || "",
+    },
     "BanSaoQDHuongDanLuanVan.docx",
     patchSaoQdHuongDanTemplate
   )
@@ -1046,7 +1095,9 @@ function reviewerInviteItems(
 
   for (const r of commonStudentRows(rows)) {
     const members = [...(r.project?.council?.members ?? [])].sort(
-      (a, b) => (councilRoleOrder[a.role as CouncilRole] ?? 99) - (councilRoleOrder[b.role as CouncilRole] ?? 99)
+      (a, b) =>
+        (councilRoleOrder[a.role as CouncilRole] ?? 99) -
+        (councilRoleOrder[b.role as CouncilRole] ?? 99)
     )
     for (const member of members) {
       const expert = councilMemberProfile(member)
@@ -1095,13 +1146,20 @@ function reviewerInviteItems(
 }
 
 async function buildGiayMoiChamPb(_rows: StudentRow[], filters: ThesisExportFilter) {
-  const sessionRows = await findThesisExportStudentRows({ thesisSessionId: filters.thesisSessionId })
+  const sessionRows = await findThesisExportStudentRows({
+    thesisSessionId: filters.thesisSessionId,
+  })
   assertRows(sessionRows, "Không có học viên trong đợt để xuất giấy mời.")
   const orgById = await loadAcademyOrgById()
   const items = reviewerInviteItems(sessionRows, filters, orgById)
   return renderDocx(
     "GiayMoiChamLuanVan.docx",
-    { items: items.map((item, idx) => ({ ...item, "ngắt trang": idx === items.length - 1 ? "" : "ngắt trang" })) },
+    {
+      items: items.map((item, idx) => ({
+        ...item,
+        "ngắt trang": idx === items.length - 1 ? "" : "ngắt trang",
+      })),
+    },
     "GiayMoiChamLuanVan.docx"
   )
 }
@@ -1170,21 +1228,30 @@ async function buildBanSaoHd(rows: StudentRow[], filters: ThesisExportFilter) {
         .filter(Boolean)
         .join(", "),
       tenChuTich: getSupervisorName(getMemberProfile(project, CouncilRole.CHAIRMAN)),
-      toChucChuTich: resolveExpertWorkplace(getMemberProfile(project, CouncilRole.CHAIRMAN)) || "HVKTQS",
+      toChucChuTich:
+        resolveExpertWorkplace(getMemberProfile(project, CouncilRole.CHAIRMAN)) || "HVKTQS",
       tenThuKy: getSupervisorName(getMemberProfile(project, CouncilRole.SECRETARY)),
-      toChucThuKy: resolveExpertWorkplace(getMemberProfile(project, CouncilRole.SECRETARY)) || "HVKTQS",
+      toChucThuKy:
+        resolveExpertWorkplace(getMemberProfile(project, CouncilRole.SECRETARY)) || "HVKTQS",
       tenUyVien: getSupervisorName(getMemberProfile(project, CouncilRole.MEMBER)),
-      toChucUyVien: resolveExpertWorkplace(getMemberProfile(project, CouncilRole.MEMBER)) || "HVKTQS",
+      toChucUyVien:
+        resolveExpertWorkplace(getMemberProfile(project, CouncilRole.MEMBER)) || "HVKTQS",
       tenPb1: getSupervisorName(getMemberProfile(project, CouncilRole.REVIEWER_1)),
-      toChucPb1: resolveExpertWorkplace(getMemberProfile(project, CouncilRole.REVIEWER_1)) || "HVKTQS",
+      toChucPb1:
+        resolveExpertWorkplace(getMemberProfile(project, CouncilRole.REVIEWER_1)) || "HVKTQS",
       tenPb2: getSupervisorName(getMemberProfile(project, CouncilRole.REVIEWER_2)),
-      toChucPb2: resolveExpertWorkplace(getMemberProfile(project, CouncilRole.REVIEWER_2)) || "HVKTQS",
+      toChucPb2:
+        resolveExpertWorkplace(getMemberProfile(project, CouncilRole.REVIEWER_2)) || "HVKTQS",
       ngay: now.day,
       thang: now.month,
       nam: now.year,
     }
   })
-  return renderDocx("BanSaoHoiDongDanhGiaLuanVan.docx", { items }, "BanSaoHoiDongDanhGiaLuanVan.docx")
+  return renderDocx(
+    "BanSaoHoiDongDanhGiaLuanVan.docx",
+    { items },
+    "BanSaoHoiDongDanhGiaLuanVan.docx"
+  )
 }
 
 function toRoman(num: number) {
@@ -1233,7 +1300,8 @@ function storedOutsideUnit(expert: any) {
 function councilDecisionUnit(expert: any, orgById: Map<string, OrgUnitNode>) {
   if (!expert) return ""
   if (!resolveInAcademy(expert)) return storedOutsideUnit(expert)
-  const lecturerOrg = expert?.expert?.lecturer?.userProfile?.donVi ?? expert?.lecturer?.userProfile?.donVi
+  const lecturerOrg =
+    expert?.expert?.lecturer?.userProfile?.donVi ?? expert?.lecturer?.userProfile?.donVi
   return resolveCouncilMemberUnitName({
     inAcademy: true,
     lecturerOrg: lecturerOrg?.Id ? lecturerOrg : undefined,
@@ -1302,16 +1370,22 @@ async function buildPhuLucQdHd(rows: StudentRow[]) {
     if (!groups.has(key)) groups.set(key, { label: field, items: [] })
     const group = groups.get(key)!
     const project = row.project
-    const unitOf = (role: CouncilRole) => councilDecisionUnit(getMemberProfile(project, role), orgById)
+    const unitOf = (role: CouncilRole) =>
+      councilDecisionUnit(getMemberProfile(project, role), orgById)
     group.items.push({
       sttHoiDong: String(group.items.length + 1),
       loaiLuanVan: row.loaiLuanVan || "luận văn",
       nganh: formatCouncilMajorLine(group.label, row.chuyennganh),
-      tenDeTai: String(row.deTai || "").trim().replace(/\s+/g, " "),
+      tenDeTai: String(row.deTai || "")
+        .trim()
+        .replace(/\s+/g, " "),
       tenHocVien: row.hoTen,
       ngaySinh: row.ngaySinh,
       khoaHoc: row.khoaHoc,
-      gvhd: [appendixSupervisorLine(project?.supervisor, orgById), appendixSupervisorLine(project?.coSupervisor, orgById)]
+      gvhd: [
+        appendixSupervisorLine(project?.supervisor, orgById),
+        appendixSupervisorLine(project?.coSupervisor, orgById),
+      ]
         .filter(Boolean)
         .join("; "),
       tenChuTich: getSupervisorName(getMemberProfile(project, CouncilRole.CHAIRMAN)),
@@ -1367,7 +1441,8 @@ async function buildDsChuyenGia(rows: StudentRow[], filters: ThesisExportFilter)
     chucVu: expert?.position || "",
     donViQuanLi: resolveExpertWorkplace(expert),
     soTien: formatAmountWithComma(amount),
-    stk: expert?.bankAccountNumber || expert?.expert?.lecturer?.userProfile?.bankAccountNumber || "",
+    stk:
+      expert?.bankAccountNumber || expert?.expert?.lecturer?.userProfile?.bankAccountNumber || "",
     ngangHang: expert?.bankName || expert?.expert?.lecturer?.userProfile?.bankName || "",
     kiNhan: "",
   }))
@@ -1391,7 +1466,12 @@ async function buildDsChuyenGia(rows: StudentRow[], filters: ThesisExportFilter)
 
 async function buildThongKeGvhd(rows: StudentRow[]) {
   const stats = new Map<string, any>()
-  const paymentAmount = (project: Project | undefined, recorded: unknown, role: SupervisorRole, expert: any) => {
+  const paymentAmount = (
+    project: Project | undefined,
+    recorded: unknown,
+    role: SupervisorRole,
+    expert: any
+  ) => {
     const amount = readDecimalAmount(recorded)
     if (amount > 0) return amount
     const defaults = project?.thesisSession?.configPayment?.supervisorPayAmounts ?? []
@@ -1436,7 +1516,12 @@ async function buildThongKeGvhd(rows: StudentRow[]) {
       updateStats(
         project,
         project?.supervisor,
-        paymentAmount(project, project?.supervisorPayment?.amount, SupervisorRole.SUPERVISOR, project?.supervisor),
+        paymentAmount(
+          project,
+          project?.supervisorPayment?.amount,
+          SupervisorRole.SUPERVISOR,
+          project?.supervisor
+        ),
         "GVHD1"
       )
       updateStats(
@@ -1483,7 +1568,9 @@ async function buildThongKeGvhd(rows: StudentRow[]) {
         tongsodoclap: data.reduce((sum, item) => sum + item.doclap, 0),
         tongsohd1: data.reduce((sum, item) => sum + item.gvhd1, 0),
         tongsohd2: data.reduce((sum, item) => sum + item.gvhd2, 0),
-        tongsotien: formatAmountWithComma(Array.from(stats.values()).reduce((sum, item) => sum + item.thanhtoan, 0)),
+        tongsotien: formatAmountWithComma(
+          Array.from(stats.values()).reduce((sum, item) => sum + item.thanhtoan, 0)
+        ),
         data,
       },
     ],
@@ -1595,7 +1682,8 @@ async function buildKetQuaBaoVe(rows: StudentRow[]) {
     }
   })
   const total = data.reduce((sum, item) => sum + item.tongSo, 0)
-  const totalPart = (field: keyof (typeof data)[number]) => data.reduce((sum, item) => sum + Number(item[field] || 0), 0)
+  const totalPart = (field: keyof (typeof data)[number]) =>
+    data.reduce((sum, item) => sum + Number(item[field] || 0), 0)
   const rate = (n: number) => (total ? Number(((n / total) * 100).toFixed(2)) : 0)
   const xs = totalPart("soLuongXuatSac")
   const gioi = totalPart("soLuongGioi")
@@ -1693,7 +1781,9 @@ async function buildKiemTraTienDo(rows: StudentRow[]) {
 
   let count = 1
   const dataRows: TableRow[] = Array.from(organizationMap.values()).flatMap((item, index) => {
-    const tongHocVien = new Set(item.thesisProject.map((thesis) => thesis.student.id).filter(Boolean)).size
+    const tongHocVien = new Set(
+      item.thesisProject.map((thesis) => thesis.student.id).filter(Boolean)
+    ).size
     const orgRow: TableRow = {
       cells: [
         { value: "" },
@@ -1712,7 +1802,8 @@ async function buildKiemTraTienDo(rows: StudentRow[]) {
         cells: [
           { value: rowIndex + 1, border: true, align: "center", fontSize: 12 },
           {
-            value: `${thesis.hoTen}\nNS:${thesis.ngaySinh} \nĐT:${thesis.dt} - ${thesis.khoaHoc} \n${thesis.gvhd ? `CBHD:\n${thesis.gvhd}` : "CBHD"}`.trim(),
+            value:
+              `${thesis.hoTen}\nNS:${thesis.ngaySinh} \nĐT:${thesis.dt} - ${thesis.khoaHoc} \n${thesis.gvhd ? `CBHD:\n${thesis.gvhd}` : "CBHD"}`.trim(),
             border: true,
             align: "left",
             fontSize: 12,
@@ -1803,7 +1894,10 @@ async function buildPayment(kind: "council" | "supervisor", filters: ThesisExpor
       studentIds,
       recreateAll: !!filters.recreateAllPayments,
     })
-    const payload = await buildCouncilPaymentExportPayload({ thesisSessionId: filters.thesisSessionId, studentIds })
+    const payload = await buildCouncilPaymentExportPayload({
+      thesisSessionId: filters.thesisSessionId,
+      studentIds,
+    })
     if (!payload) throw new Error("Chưa có dữ liệu để tạo thanh toán hội đồng bảo vệ")
     return {
       buffer: await renderThesisPaymentXlsx(payload),
@@ -1817,7 +1911,10 @@ async function buildPayment(kind: "council" | "supervisor", filters: ThesisExpor
     studentIds,
     recreateAll: !!filters.recreateAllPayments,
   })
-  const payload = await buildSupervisorPaymentExportPayload({ thesisSessionId: filters.thesisSessionId, studentIds })
+  const payload = await buildSupervisorPaymentExportPayload({
+    thesisSessionId: filters.thesisSessionId,
+    studentIds,
+  })
   if (payload.empty) throw new Error("Chưa có dữ liệu để xuất thanh toán hướng dẫn")
   return {
     buffer: await renderThesisPaymentXlsx(payload),

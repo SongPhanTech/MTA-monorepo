@@ -70,27 +70,18 @@ type FormValues = {
   bActive?: boolean
 }
 
-const excludeNodeAndDescendants = (
-  nodes: OrgTreeItem[],
-  excludeId: string
-): OrgTreeItem[] => {
+const excludeNodeAndDescendants = (nodes: OrgTreeItem[], excludeId: string): OrgTreeItem[] => {
   return nodes
     .filter((node) => node.value !== excludeId)
     .map((node) => ({
       ...node,
-      children: node.children
-        ? excludeNodeAndDescendants(node.children, excludeId)
-        : undefined,
+      children: node.children ? excludeNodeAndDescendants(node.children, excludeId) : undefined,
     }))
 }
 
 const PutDMDonViModal = () => {
   const [form] = Form.useForm<FormValues>()
-  const {
-    isOpen,
-    onClose,
-    input,
-  } = useDisclosure<PutDMDonViInput>({
+  const { isOpen, onClose, input } = useDisclosure<PutDMDonViInput>({
     tag: "PutDMDonViModal",
     onClose: form.resetFields,
   })
@@ -252,29 +243,17 @@ const PutDMDonViModal = () => {
         </Col>
         <Col span={12}>
           <FormItem form={form} name="iNhomDonVi" label="Nhóm đơn vị">
-            <Select
-              allowClear
-              placeholder="Chọn nhóm đơn vị"
-              options={NHOM_DON_VI_OPTIONS}
-            />
+            <Select allowClear placeholder="Chọn nhóm đơn vị" options={NHOM_DON_VI_OPTIONS} />
           </FormItem>
         </Col>
         <Col span={12}>
           <FormItem form={form} name="iCapDonVi" label="Cấp đơn vị">
-            <Select
-              allowClear
-              placeholder="Chọn cấp đơn vị"
-              options={CAP_DON_VI_OPTIONS}
-            />
+            <Select allowClear placeholder="Chọn cấp đơn vị" options={CAP_DON_VI_OPTIONS} />
           </FormItem>
         </Col>
         <Col span={12}>
           <FormItem form={form} name="iLoaiDonVi" label="Loại đơn vị">
-            <Select
-              allowClear
-              placeholder="Chọn loại đơn vị"
-              options={LOAI_DON_VI_OPTIONS}
-            />
+            <Select allowClear placeholder="Chọn loại đơn vị" options={LOAI_DON_VI_OPTIONS} />
           </FormItem>
         </Col>
         <Col span={12}>

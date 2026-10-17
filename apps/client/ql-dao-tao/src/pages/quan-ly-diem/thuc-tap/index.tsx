@@ -514,11 +514,7 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
         const supervisorVersionId = toVersionId(item.data.update.supervisorId)
         const coSupervisorVersionId = toVersionId(item.data.update.coSupervisorId)
         const { supervisorId: _s, coSupervisorId: _c, ...updateRest } = item.data.update
-        const {
-          supervisorId: _s2,
-          coSupervisorId: _c2,
-          ...createRest
-        } = item.data.create
+        const { supervisorId: _s2, coSupervisorId: _c2, ...createRest } = item.data.create
 
         return {
           ...item,
