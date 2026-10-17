@@ -44,17 +44,51 @@ export const latestAttemptRnExpr = PrismaNamespace.sql`
 `
 
 export const truotMonExpr = PrismaNamespace.sql`
-  (TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation"::numeric)
-  or (TBS."graduation" = false and TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass"::numeric)
-  or (TBS."graduation" = false and TBS."useForFinalScore" = false and SSS."finalScore" < TC."scoreToPassConditional"::numeric)
-  or SSS."examScore" < TC."examScoreToPass"
-  or SSS."attendanceScore" < TC."scoreToTakeExam"
-  or SSS."midtermScore" < TC."scoreToTakeExam"
+  (TBS."graduation" = true and SSS."finalScore" is not null and SSS."finalScore" < TC."scoreToPassGraduation"::numeric)
+  or (TBS."graduation" = false and TBS."useForFinalScore" = true and SSS."finalScore" is not null and SSS."finalScore" < TC."scoreToPass"::numeric)
+  or (TBS."graduation" = false and TBS."useForFinalScore" = false and SSS."finalScore" is not null and SSS."finalScore" < TC."scoreToPassConditional"::numeric)
+  or (SSS."examScore" is not null and SSS."examScore" < TC."examScoreToPass")
+  or SSS."examScore" is null
+  or SSS."examBanned" = true
+  or SSS.suspended = true
+  or (coalesce(sv."onePoint", false) = false and SSS."attendanceScore" is not null and SSS."attendanceScore" < TC."scoreToTakeExam")
+  or (coalesce(sv."onePoint", false) = false and SSS."midtermScore" is not null and SSS."midtermScore" < TC."scoreToTakeExam")
+  or (coalesce(sv."onePoint", false) = false and (SSS."attendanceScore" is null or SSS."midtermScore" is null))
 `
 
 export const reexamEligibleExpr = PrismaNamespace.sql`
-  ("isRetakeExam" = true and (training_object_type != 'CIVILIAN' or training_object_type is null))
+  (
+    ("isRetakeExam" = true or training_object_type = 'MILITARY')
+    and (training_object_type != 'CIVILIAN' or training_object_type is null)
+  )
   or is_national_defense = true
+`
+
+export const duDieuKienDuThiExpr = PrismaNamespace.sql`
+  (
+    cam_thi = false
+    and dinh_chi = false
+    and (
+      is_one_point = true
+      or (
+        thuong_xuyen is not null
+        and dinh_ky is not null
+        and thuong_xuyen >= score_to_take_exam
+        and dinh_ky >= score_to_take_exam
+      )
+    )
+  )
+`
+
+export const failedExamOrAbsentExpr = PrismaNamespace.sql`
+  (
+    hoan_thi = true
+    or diem_thi is null
+    or diem_thi < exam_score_to_pass
+    or (is_graduation = true and diem_cuoi is not null and diem_cuoi < score_to_pass_graduation::numeric)
+    or (is_graduation = false and use_for_final_score = true and diem_cuoi is not null and diem_cuoi < score_to_pass::numeric)
+    or (is_graduation = false and use_for_final_score = false and diem_cuoi is not null and diem_cuoi < score_to_pass_conditional::numeric)
+  )
 `
 
 export type DebtExportRow = {
@@ -113,14 +147,33 @@ export async function queryDebtExportRows(
         sv.name as "subjectName",
         sv.credit as "subjectCredit",
         Sem.code as "semesterCode",
+        SSS."attendanceScore" as thuong_xuyen,
+        SSS."midtermScore" as dinh_ky,
+        SSS."examScore" as diem_thi,
+        SSS."finalScore" as diem_cuoi,
         SSS."finalScore" as "finalScore",
         SSS."examScore" as "examScore",
         SSS."examBanned" as "examBanned",
+        SSS."examBanned" as cam_thi,
         SSS."examBannedReason" as "examBannedReason",
+        SSS."examBannedReason" as ly_do_cam_thi,
         SSS.suspended,
+        SSS.suspended as dinh_chi,
+        SSS."suspendedReason" as ly_do_dinh_chi,
         SSS."examPostponed" as "examPostponed",
+        SSS."examPostponed" as hoan_thi,
+        SSS."examPostponedReason" as ly_do_hoan_thi,
         SSS.withdrew,
         SSS.exempted,
+        SSS.exempted as mien_thi,
+        coalesce(sv."onePoint", false) as is_one_point,
+        TBS."graduation" as is_graduation,
+        TBS."useForFinalScore" as use_for_final_score,
+        TC."scoreToTakeExam" as score_to_take_exam,
+        TC."examScoreToPass" as exam_score_to_pass,
+        TC."scoreToPass" as score_to_pass,
+        TC."scoreToPassGraduation" as score_to_pass_graduation,
+        TC."scoreToPassConditional" as score_to_pass_conditional,
         TC."isRetakeExam" as "isRetakeExam",
         TOT.type as training_object_type,
         TB."isNationalDefense" as is_national_defense,
@@ -162,16 +215,20 @@ export async function queryDebtExportRows(
         "examPostponed",
         attempt_count,
         case
-          when "examBanned" = false and suspended = false and attempt_count = 1
-               and (truot_mon = true or "examPostponed" = true)
-               and withdrew = false and exempted = false
+          when withdrew = false and mien_thi = false
+               and attempt_count = 1
                and (${reexamEligibleExpr})
+               and (${duDieuKienDuThiExpr})
+               and (${failedExamOrAbsentExpr})
             then 'THI LẠI'
-          when (truot_mon = true or "examBanned" = true or suspended = true)
-               and withdrew = false and exempted = false and "examPostponed" = false
-               and not (attempt_count = 1 and first_attempt_exam_banned = false
-                        and truot_mon = true and "examBanned" = false and suspended = false
-                        and (${reexamEligibleExpr}))
+          when withdrew = false and mien_thi = false
+               and (truot_mon = true or cam_thi = true or dinh_chi = true)
+               and not (
+                 attempt_count = 1
+                 and (${reexamEligibleExpr})
+                 and (${duDieuKienDuThiExpr})
+                 and (${failedExamOrAbsentExpr})
+               )
             then 'HỌC LẠI'
           else null
         end as type

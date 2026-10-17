@@ -52,7 +52,8 @@ enum SurveyType {
 }
 
 // chủ đề khảo sát (Đánh giá giảng viên, đánh giá cơ sở vật chất,...)
-model SurveyTopic extends Base {
+model SurveyTopic extends BaseNoCode {
+  code                String?
   name                String
   clusterSurvey       ClusterSurvey[]
   survey              Survey[]

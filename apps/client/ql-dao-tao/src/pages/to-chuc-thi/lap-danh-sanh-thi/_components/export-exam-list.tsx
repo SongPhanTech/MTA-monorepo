@@ -1,6 +1,5 @@
 import { formatDateInSlash } from "@workspace/libs/timezone"
 import { DownloadOutlined } from "@ant-design/icons"
-import dayjs from "dayjs"
 import type { Prisma } from "@workspace/db/client"
 import { Button, message } from "antd"
 import ExcelJS from "exceljs"
@@ -75,7 +74,8 @@ interface ExportExamListProps {
   data: ExamListData[]
   examName?: string
   disabled?: boolean
-  updateExamData?: any
+  updateExamData: () => Promise<void>
+  refreshExamLists?: () => Promise<ExamListData[]>
 }
 
 // Helper function to sanitize Excel sheet name
@@ -87,23 +87,28 @@ const sanitizeSheetName = (name: string): string => {
     .slice(0, 31) // Excel limits sheet name to 31 chars
 }
 
-const ExportExamList = ({ data, examName, disabled, updateExamData }: ExportExamListProps) => {
+const ExportExamList = ({
+  data,
+  examName,
+  disabled,
+  updateExamData,
+  refreshExamLists,
+}: ExportExamListProps) => {
   const exportToExcel = async () => {
-    if (!data || data.length === 0) {
-      message.warning("Không có dữ liệu để xuất")
-      return
-    }
-
-    // Collect all exam papers from all exam lists
-    const allExamPapers = data.flatMap((el) => el.examPapers)
-
-    if (allExamPapers.length === 0) {
-      message.warning("Không có sinh viên nào trong danh sách thi")
-      return
-    }
-
     try {
       await updateExamData()
+      const latestData = refreshExamLists ? await refreshExamLists() : data
+      if (!latestData || latestData.length === 0) {
+        message.warning("Không có dữ liệu để xuất")
+        return
+      }
+
+      const allExamPapers = latestData.flatMap((el) => el.examPapers)
+      if (allExamPapers.length === 0) {
+        message.warning("Không có sinh viên nào trong danh sách thi")
+        return
+      }
+
       const workbook = new ExcelJS.Workbook()
 
       // Global font style
@@ -155,11 +160,11 @@ const ExportExamList = ({ data, examName, disabled, updateExamData }: ExportExam
       }
 
       // Check if rooms are assigned
-      const hasRoomAssignment = data.some((el) => el.examRoom?.room?.name)
+      const hasRoomAssignment = latestData.some((el) => el.examRoom?.room?.name)
 
       if (hasRoomAssignment) {
         // Export by room - each room gets a separate sheet
-        for (const examList of data) {
+        for (const examList of latestData) {
           if (examList.examPapers.length === 0) continue
 
           const roomName = examList.examRoom?.room?.name || "Chua phan phong"
@@ -249,7 +254,7 @@ function createExamSheet(worksheet: ExcelJS.Worksheet, params: CreateExamSheetPa
   } = params
 
   // Title row
-  worksheet.mergeCells("A1:M1")
+  worksheet.mergeCells("A1:O1")
   const titleCell = worksheet.getCell("A1")
   titleCell.value = `DANH SÁCH THI${examName ? ` - ${examName}` : ""}`
   titleCell.style = {
@@ -259,7 +264,7 @@ function createExamSheet(worksheet: ExcelJS.Worksheet, params: CreateExamSheetPa
   worksheet.getRow(1).height = 30
 
   // Room info row
-  worksheet.mergeCells("A2:M2")
+  worksheet.mergeCells("A2:O2")
   const roomInfoCell = worksheet.getCell("A2")
   const capacityText = capacity ? ` - Sức chứa: ${capacity}` : ""
   roomInfoCell.value = `Phòng thi: ${roomName} - Ca thi: ${caNumber}${capacityText}`
@@ -287,6 +292,8 @@ function createExamSheet(worksheet: ExcelJS.Worksheet, params: CreateExamSheetPa
     "Lý do cấm thi",
     "Hoãn thi",
     "Lý do hoãn thi",
+    "Đình chỉ thi",
+    "Lý do đình chỉ thi",
     "Ghi chú",
   ]
   headerRow.values = headers
@@ -309,6 +316,8 @@ function createExamSheet(worksheet: ExcelJS.Worksheet, params: CreateExamSheetPa
     { width: 25 }, // Lý do cấm thi
     { width: 10 }, // Hoãn thi
     { width: 25 }, // Lý do hoãn thi
+    { width: 12 }, // Đình chỉ thi
+    { width: 25 }, // Lý do đình chỉ thi
     { width: 20 }, // Ghi chú
   ]
 
@@ -332,6 +341,8 @@ function createExamSheet(worksheet: ExcelJS.Worksheet, params: CreateExamSheetPa
       sss?.examBannedReason || "",
       sss?.examPostponed ? "Có" : "",
       sss?.examPostponedReason || "",
+      sss?.suspended ? "Có" : "",
+      sss?.suspendedReason || "",
       sss?.description || "",
     ]
 
@@ -348,13 +359,15 @@ function createExamSheet(worksheet: ExcelJS.Worksheet, params: CreateExamSheetPa
     row.getCell(10).style = cellStyleLeft // Lý do cấm thi
     row.getCell(11).style = cellStyle // Hoãn thi
     row.getCell(12).style = cellStyleLeft // Lý do hoãn thi
-    row.getCell(13).style = cellStyleLeft // Ghi chú
+    row.getCell(13).style = cellStyle // Đình chỉ thi
+    row.getCell(14).style = cellStyleLeft // Lý do đình chỉ thi
+    row.getCell(15).style = cellStyleLeft // Ghi chú
 
     rowIndex++
   })
 
   // Summary row
-  worksheet.mergeCells(`A${rowIndex + 1}:M${rowIndex + 1}`)
+  worksheet.mergeCells(`A${rowIndex + 1}:O${rowIndex + 1}`)
   const summaryCell = worksheet.getCell(`A${rowIndex + 1}`)
   summaryCell.value = `Tổng số sinh viên: ${examPapers.length}`
   summaryCell.style = {

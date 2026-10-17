@@ -53,23 +53,32 @@ export const prisma: PrismaClient = new PrismaClient()
 const app = new OpenAPIHono({ strict: false })
 
 const originEnv = process.env.ORIGIN || ""
-const originList = originEnv.split(",").map((item) => item.trim())
+const originList = originEnv
+  .split(",")
+  .map((item) => item.trim())
+  .filter(Boolean)
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:3001",
+  "https://user.mta.swantech.vn",
+  "https://daotao.swantech.vn",
+  "https://daotao.mta.swantech.vn",
+  "https://am.swantech.vn",
+  "https://api.am.swantech.vn",
+  ...originList,
+]
 
 app.use(
   "*",
   cors({
-    origin: [
-      "http://localhost:3000",
-      "http://localhost:3001",
-      "https://user.mta.swantech.vn",
-      "https://daotao.swantech.vn",
-      "https://daotao.mta.swantech.vn",
-      "https://am.swantech.vn",
-      "https://api.am.swantech.vn",
-      "https://*.swantech.vn",
-      ...originList,
-      "*",
-    ],
+    origin: (origin) => {
+      // Exact match
+      if (allowedOrigins.includes(origin)) return origin
+      // Wildcard *.swantech.vn
+      if (/^https:\/\/[a-zA-Z0-9-]+\.swantech\.vn$/.test(origin)) return origin
+      return null
+    },
     credentials: true,
   })
 )
