@@ -19,6 +19,7 @@ import {
   getOrganizationsSurveyStats,
   getSurveyStats,
   getSurveyStatsforDonVi,
+  getSurveyChoiceCountsForLecturers,
   getSurveyStatsforQuestion,
   LecturerSurveyStatsSchema,
   OrgazationsSurveyStatsSchema,
@@ -773,6 +774,88 @@ app.openapi(getClusterSurveyStatisticsForLecturer, async (c) => {
   }
 
   return c.json(data, 200)
+})
+
+const LecturerChoiceCountsSchema = z.object({
+  lecturers: z.array(
+    z.object({
+      lectureId: z.string(),
+      answers: z.array(
+        z.object({
+          id: z.string(),
+          answer: z.string(),
+          description: z.string().nullable().optional(),
+          count: z.number(),
+        })
+      ),
+    })
+  ),
+})
+
+const getClusterSurveyChoiceCountsForLecturers = createRoute({
+  operationId: "get-cluster-survey-choice-counts-for-lecturers",
+  path: "/{id}/choice-counts-for-lecturers",
+  method: "post",
+  tags: ["Cụm khảo sát"],
+  summary: "Tổng số phiếu theo mức trả lời cho nhiều giảng viên (batch)",
+  request: {
+    params: z.object({ id: z.string() }),
+    body: {
+      content: {
+        "application/json": {
+          schema: z.object({
+            lectureIds: z.array(z.string()).min(1),
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    ...standardErrorResponses(),
+    200: {
+      description: "Thành công",
+      content: {
+        "application/json": {
+          schema: LecturerChoiceCountsSchema,
+        },
+      },
+    },
+    404: {
+      description: "Không tìm thấy khảo sát.",
+      content: {
+        "application/json": {
+          schema: ErrorMessageResponseSchema,
+        },
+      },
+    },
+  },
+})
+
+app.openapi(getClusterSurveyChoiceCountsForLecturers, async (c) => {
+  const { id } = c.req.valid("param")
+  const { lectureIds } = c.req.valid("json")
+
+  assertDbIds(lectureIds, "lecture")
+
+  const cluster = await prisma.clusterSurvey.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      surveyChoice: { orderBy: { answer: "asc" } },
+    },
+  })
+  if (!cluster) {
+    return c.json({ message: "Không tìm thấy khảo sát" }, 404)
+  }
+
+  const lecturers = await getSurveyChoiceCountsForLecturers(
+    prisma,
+    id,
+    lectureIds,
+    cluster.surveyChoice
+  )
+
+  return c.json({ lecturers }, 200)
 })
 
 const getClusterSurveyStatisticsForDonVi = createRoute({

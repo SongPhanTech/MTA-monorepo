@@ -66,6 +66,10 @@ const ModalPrintSurvey = () => {
                 print-color-adjust: exact !important;
                 }
 
+            .special-star {
+                color: #FF0000 !important;
+            }
+
             body {
                 font-family: "Times New Roman" !important;
                 font-size: 13px !important;
@@ -139,7 +143,7 @@ const ModalPrintSurvey = () => {
               <th className="border border-black text-center" style={{ width: 60 }}>
                 STT
               </th>
-              <th className="border border-black text-center" style={{ width: 100 }}>
+              <th className="border border-black text-center" style={{ width: 120 }}>
                 Câu hỏi
               </th>
               {dataTable[0]?.answers?.map((a: any) => (
@@ -152,18 +156,43 @@ const ModalPrintSurvey = () => {
           <tbody>
             {dataTable.map((q: any, index: number) => {
               const percent = calculatePercent(q.answers)
+              const isSpecial = q.specificChoice?.length > 0
 
               return (
                 <tr key={q.id}>
                   <td className="text-center border border-black">{index + 1}</td>
 
-                  <td className="text-center border border-black">{`Câu ${index + 1}`}</td>
+                  <td className="text-center border border-black">
+                    {`Câu ${index + 1}`}
+                    {isSpecial && (
+                      <span className="special-star" style={{ color: "#FF0000", fontWeight: 700 }}>
+                        {" "}
+                        *
+                      </span>
+                    )}
+                  </td>
 
-                  {percent.map((p: any) => (
-                    <td key={p.id} className="text-center border border-black">
-                      {p.percent}% ({p.count}/{p.total})
-                    </td>
-                  ))}
+                  {percent.map((p: any, answerIndex: number) => {
+                    const special =
+                      isSpecial &&
+                      (q.specificChoice.find(
+                        (c: any) => String(c.answer) === String(p.answer)
+                      ) ||
+                        q.specificChoice[answerIndex])
+                    const specialLabel =
+                      special?.description?.trim() || special?.answer?.trim() || ""
+
+                    return (
+                      <td key={p.id} className="text-center border border-black">
+                        {specialLabel && (
+                          <div style={{ fontWeight: 700, fontSize: 12, marginBottom: 2 }}>
+                            {specialLabel}
+                          </div>
+                        )}
+                        {p.percent}% ({p.count}/{p.total})
+                      </td>
+                    )
+                  })}
                 </tr>
               )
             })}

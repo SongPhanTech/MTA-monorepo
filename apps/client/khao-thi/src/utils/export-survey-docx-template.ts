@@ -5,6 +5,11 @@ import { fetchMinio, getMinioUrl } from "@workspace/libs/utils"
 import { saveFile } from "@/utils/saveFile"
 
 import type { SurveyDocxTemplateVariant } from "@/constants/constants"
+import {
+  formatSpecialAnswerCell,
+  getSpecialChoiceLabel,
+  type SpecificChoiceItem,
+} from "@/utils/survey-specific-choice"
 
 const TEMPLATE_KEYS: Record<SurveyDocxTemplateVariant, string> = {
   GIANG_VIEN: "mta/template/TongHopPhieuGiangVien.docx",
@@ -45,7 +50,12 @@ export type ExportSurveyDocxTemplateInput = {
   organizationName?: string
   organizationCode?: string
 
-  questions: Array<{ name?: string; answers: AnswerItem[] }>
+  questions: Array<{
+    id?: string
+    name?: string
+    answers: AnswerItem[]
+    specificChoice?: SpecificChoiceItem[]
+  }>
   fileName?: string
 }
 
@@ -67,17 +77,27 @@ const calcPercent = (answers: AnswerItem[]) => {
 const formatCell = ({ percent, count, total }: { percent: number; count: number; total: number }) =>
   `${percent}% (${count}/${total})`
 
-const getCellByOrder = (items: AnswerWithPercent[], order: number) => {
+const getCellByOrder = (
+  items: AnswerWithPercent[],
+  order: number,
+  specificChoice?: SpecificChoiceItem[]
+) => {
   // Prefer matching by numeric answer value (1..5)
   const foundByAnswer = items.find((p) => Number(p.answer) === order)
-  if (foundByAnswer) return foundByAnswer.count
-
-  // Fallback: match by position (same as UI rendering order)
   const foundByIndex = items[order - 1]
-  if (foundByIndex) return foundByIndex.count
+  const found = foundByAnswer || foundByIndex
+  const percentText = found
+    ? found.count
+    : formatCell({ percent: 0, count: 0, total: items[0]?.total ?? 0 })
 
-  const total = items[0]?.total ?? 0
-  return formatCell({ percent: 0, count: 0, total })
+  if (!specificChoice?.length) return percentText
+
+  const label = getSpecialChoiceLabel(
+    specificChoice,
+    order - 1,
+    found?.answer ?? String(order)
+  )
+  return formatSpecialAnswerCell(label, percentText)
 }
 
 type AverageRow = {
@@ -126,19 +146,21 @@ const buildDocxData = (input: ExportSurveyDocxTemplateInput) => {
 
   const dataRows = questions.map((q, idx) => {
     const answersWithPercent = calcPercent(q.answers || [])
+    const specificChoice = q.specificChoice || []
+    const isSpecial = specificChoice.length > 0
 
     return {
       ...q,
-      index: idx + 1,
+      index: isSpecial ? `${idx + 1} *` : idx + 1,
       answers: answersWithPercent.map((a) => ({
         ...a,
         description: a.description || "",
       })),
-      muc1: getCellByOrder(answersWithPercent, 1),
-      muc2: getCellByOrder(answersWithPercent, 2),
-      muc3: getCellByOrder(answersWithPercent, 3),
-      muc4: getCellByOrder(answersWithPercent, 4),
-      muc5: getCellByOrder(answersWithPercent, 5),
+      muc1: getCellByOrder(answersWithPercent, 1, specificChoice),
+      muc2: getCellByOrder(answersWithPercent, 2, specificChoice),
+      muc3: getCellByOrder(answersWithPercent, 3, specificChoice),
+      muc4: getCellByOrder(answersWithPercent, 4, specificChoice),
+      muc5: getCellByOrder(answersWithPercent, 5, specificChoice),
     }
   })
 

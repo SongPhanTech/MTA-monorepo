@@ -70,6 +70,10 @@ const ModalPrintSurveyOrganization = () => {
                 print-color-adjust: exact;
             }
 
+            .special-star {
+                color: #FF0000 !important;
+            }
+
             .echarts-for-react text {
                 fill: #000 !important;
             }
@@ -148,7 +152,7 @@ const ModalPrintSurveyOrganization = () => {
         <div className="text-center mt-6  ">
           <div className="text-lg font-bold uppercase">TỔNG HỢP PHIẾU LẤY Ý KIẾN NGƯỜI HỌC</div>
           <div className="text-lg mt-1 font-bold uppercase">VỀ HOẠT ĐỘNG GIẢNG DẠY</div>
-          <div className="text-sm font-normal mt-1 font-semibold uppercase">
+          <div className="text-sm mt-1 font-semibold uppercase">
             <span>HĐGD của GV, </span>
             <span>{input.surveyName}</span>
             <span> - {input.trainingObjectTypeName}</span>
@@ -209,6 +213,7 @@ const ModalPrintSurveyOrganization = () => {
               .map((q: any, index: number) => {
                 const percent = calcPercent(q.answers)
                 const isAvg = q.id === "DGTB"
+                const isSpecial = !isAvg && q.specificChoice?.length > 0
 
                 return (
                   <tr key={q.id} className={isAvg ? "avg-row" : ""}>
@@ -216,13 +221,41 @@ const ModalPrintSurveyOrganization = () => {
                       {isAvg ? "ĐGTB" : index + 1}
                     </td>
                     <td className="text-center border border-black">
-                      {isAvg ? "" : `Câu ${index + 1}`}
+                      {isAvg ? (
+                        ""
+                      ) : (
+                        <>
+                          {`Câu ${index + 1}`}
+                          {isSpecial && (
+                            <span className="special-star" style={{ color: "#FF0000", fontWeight: 700 }}>
+                              {" "}
+                              *
+                            </span>
+                          )}
+                        </>
+                      )}
                     </td>
-                    {percent.map((p: any) => (
-                      <td key={p.id} className="text-center border border-black">
-                        {p.percent}% ({p.count}/{p.total})
-                      </td>
-                    ))}
+                    {percent.map((p: any, answerIndex: number) => {
+                      const special =
+                        isSpecial &&
+                        (q.specificChoice.find(
+                          (c: any) => String(c.answer) === String(p.answer)
+                        ) ||
+                          q.specificChoice[answerIndex])
+                      const specialLabel =
+                        special?.description?.trim() || special?.answer?.trim() || ""
+
+                      return (
+                        <td key={p.id} className="text-center border border-black">
+                          {specialLabel && (
+                            <div style={{ fontWeight: 700, fontSize: 12, marginBottom: 2 }}>
+                              {specialLabel}
+                            </div>
+                          )}
+                          {p.percent}% ({p.count}/{p.total})
+                        </td>
+                      )
+                    })}
                   </tr>
                 )
               })}
