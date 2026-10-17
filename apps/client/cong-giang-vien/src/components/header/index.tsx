@@ -12,8 +12,7 @@ const GiangVienHeaderApp: React.FC<{ className?: string }> = ({ className }) => 
         tenantCode: window.tenantCode || "dev",
         appCode: getRuntimeEnv("NEXT_PUBLIC_APP_CODE") || "lms",
       })
-    } catch (error) {
-    }
+    } catch (error) {}
   }, [])
 
   return <div id="pluginContainer" className={className} />

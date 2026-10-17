@@ -360,7 +360,8 @@ export default function SinhPhach() {
                 dataIndex: "name",
                 align: "center",
                 width: 150,
-                render: (_, record) => record?.studentSubjectScore?.student?.userProfile?.code || "",
+                render: (_, record) =>
+                  record?.studentSubjectScore?.student?.userProfile?.code || "",
               },
               {
                 title: "Tên thí sinh",
@@ -373,8 +374,7 @@ export default function SinhPhach() {
                 width: 110,
                 align: "center",
                 render: (_, record) => {
-                  const dateOfBirth =
-                    record?.studentSubjectScore?.student?.userProfile?.dateOfBirth
+                  const dateOfBirth = record?.studentSubjectScore?.student?.userProfile?.dateOfBirth
                   return dateOfBirth ? formatDate(dateOfBirth) : ""
                 },
               },

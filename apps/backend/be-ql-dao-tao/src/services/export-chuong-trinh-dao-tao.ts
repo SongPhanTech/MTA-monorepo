@@ -119,7 +119,10 @@ export async function exportChuongTrinhDaoTao({
   )
 
   const periodOf = (semester: number) =>
-    subjects.reduce((total, curr) => total + (curr.semester === semester ? curr.subject.period || 0 : 0), 0)
+    subjects.reduce(
+      (total, curr) => total + (curr.semester === semester ? curr.subject.period || 0 : 0),
+      0
+    )
 
   const today = nowVn()
   const monHoc = subjects.map((e, index) => ({

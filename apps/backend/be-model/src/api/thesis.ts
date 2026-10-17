@@ -17,11 +17,11 @@ const XLSX_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.spreads
 const app = new OpenAPIHono({ strict: false })
 
 const optionalIdSchema = z.string().nullable().optional()
-const ThesisExportKindSchema = z.enum(
-  thesisExportTemplateKinds as unknown as [string, ...string[]]
-).openapi({
-  description: "Mã mẫu in/xuất luận văn.",
-})
+const ThesisExportKindSchema = z
+  .enum(thesisExportTemplateKinds as unknown as [string, ...string[]])
+  .openapi({
+    description: "Mã mẫu in/xuất luận văn.",
+  })
 
 const BatchUpdateThesisItemSchema = z.object({
   thesisProjectId: z.string().min(1).openapi({ description: "ID đề tài/luận văn." }),

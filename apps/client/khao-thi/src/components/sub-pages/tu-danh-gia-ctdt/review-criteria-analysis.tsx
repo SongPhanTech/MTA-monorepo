@@ -3,11 +3,7 @@ import DatePicker from "@components/commons/date-picker"
 import { RichTextEditor } from "@components/commons/rich-text-editor"
 import Select from "@components/commons/select"
 import Table from "@components/commons/table"
-import {
-  DEADLINE_OPTIONS,
-  getRejectedBy,
-  getStatusEvaluation,
-} from "@constants/constants"
+import { DEADLINE_OPTIONS, getRejectedBy, getStatusEvaluation } from "@constants/constants"
 import useSpinner from "@hooks/spinner"
 import { formatDate } from "@lib/utils"
 import type { ReviewDataTabType } from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/review-criteria-analysis"
@@ -44,12 +40,7 @@ type Props = {
   refetch?: () => void
 }
 
-const ReviewCriteriaAnalysisSubPage = ({
-  data,
-  idx,
-  userRole = "SECRETARY",
-  refetch,
-}: Props) => {
+const ReviewCriteriaAnalysisSubPage = ({ data, idx, userRole = "SECRETARY", refetch }: Props) => {
   const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([])
   const [deadlineFilter, setDeadlineFilter] = useState<string | null>(null)
   const [rejectModalOpen, setRejectModalOpen] = useState(false)
@@ -327,7 +318,9 @@ const ReviewCriteriaAnalysisSubPage = ({
               })
             )
         )
-        message.success(`Phê duyệt thành công ${approvableCriteria.length} tiêu chí, đã chuyển Ban tư vấn duyệt`)
+        message.success(
+          `Phê duyệt thành công ${approvableCriteria.length} tiêu chí, đã chuyển Ban tư vấn duyệt`
+        )
       }
     } catch (error) {
       message.error("Phê duyệt tiêu chí thất bại. Vui lòng thử lại.")
@@ -504,16 +497,13 @@ const ReviewCriteriaAnalysisSubPage = ({
                   ).length > 0 && (
                     <div className="my-2 p-3 bg-red-50 border border-red-200 rounded text-sm text-red-800">
                       <div className="font-semibold mb-2 flex items-center gap-2">
-                        <MessageCircle size={15} />
-                        Ý kiến yêu cầu chỉnh sửa tiêu chí:
+                        <MessageCircle size={15} />Ý kiến yêu cầu chỉnh sửa tiêu chí:
                       </div>
                       <CommentList
                         comments={item.analysisCriterions.evaluationCriterionComments.filter(
                           (c) => !c.requirementCriterionId
                         )}
-                        lecturerUserProfileId={
-                          item.analysisCriterions?.lecturer?.userProfileId
-                        }
+                        lecturerUserProfileId={item.analysisCriterions?.lecturer?.userProfileId}
                       />
                     </div>
                   )}
@@ -780,9 +770,7 @@ const ReviewCriteriaAnalysisSubPage = ({
               <DatePicker
                 format="DD/MM/YYYY"
                 placeholder="Chọn ngày gia hạn"
-                disabledDate={(current) =>
-                  current && current < dayjs().startOf("day")
-                }
+                disabledDate={(current) => current && current < dayjs().startOf("day")}
                 className="w-full"
               />
             </Form.Item>

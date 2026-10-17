@@ -118,9 +118,7 @@ export async function fetchSubjectClassExamDates(
   return results
 }
 
-export function resolveSubjectClassIdFromExamDateDto(
-  item: SubjectClassExamDateDto
-): string | null {
+export function resolveSubjectClassIdFromExamDateDto(item: SubjectClassExamDateDto): string | null {
   const raw = item.subjectClassId ?? item.subject_class_id
   if (raw == null) return null
   const value = String(raw).trim()

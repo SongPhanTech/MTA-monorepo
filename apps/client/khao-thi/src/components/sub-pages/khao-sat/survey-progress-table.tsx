@@ -98,8 +98,7 @@ export function SurveyProgressTable({ data }: { data: ProgressRow[] }) {
     rows.filter((row) => row.type === "faculty").forEach((row) => visit(row))
     rows
       .filter(
-        (row) =>
-          row.type === "department" && (!row.parentKey || !knownKeys.has(row.parentKey))
+        (row) => row.type === "department" && (!row.parentKey || !knownKeys.has(row.parentKey))
       )
       .forEach((row) => visit(row))
 
@@ -204,11 +203,9 @@ export function SurveyProgressTable({ data }: { data: ProgressRow[] }) {
             render: (_, row: ProgressRow & { depth?: number }) => {
               const isExpanded = expandedKeys[row.key] !== false
               const canToggleFaculty =
-                row.type === "faculty" &&
-                (hasDepartmentChildren(row) || hasLectureChildren(row))
+                row.type === "faculty" && (hasDepartmentChildren(row) || hasLectureChildren(row))
               const canToggleDepartment =
-                row.type === "department" &&
-                (hasLectureChildren(row) || hasDepartmentChildren(row))
+                row.type === "department" && (hasLectureChildren(row) || hasDepartmentChildren(row))
               const canToggle = canToggleFaculty || canToggleDepartment
 
               return (

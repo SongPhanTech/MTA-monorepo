@@ -30,7 +30,10 @@ type SurveyFormIntroProps = {
 const joinName = (...parts: (string | null | undefined)[]) =>
   parts.filter((part) => part && part.trim()).join(" ")
 
-function fieldValue(bindKey: SurveyFormFieldBindKey | undefined, survey?: SurveyFormIntroData | null) {
+function fieldValue(
+  bindKey: SurveyFormFieldBindKey | undefined,
+  survey?: SurveyFormIntroData | null
+) {
   if (!bindKey || !survey) return ""
   switch (bindKey) {
     case "lecturerName":

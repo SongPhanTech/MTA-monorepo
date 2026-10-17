@@ -237,7 +237,8 @@ const PutCurriculumVersion = () => {
         yearCreation: output.yearCreation,
         yearApplication: output.yearApplication,
         trainingObjectTypeId: output.trainingObjectTypeId,
-        trainingLevelId: output.trainingLevelId ?? trainingObjectTypeSelected?.trainingLevelId ?? null,
+        trainingLevelId:
+          output.trainingLevelId ?? trainingObjectTypeSelected?.trainingLevelId ?? null,
         trainingCourseId: output.trainingCourseId ?? null,
         trainingTypeId: output.trainingTypeId,
         trainingTimeId: output.trainingTimeId,
@@ -328,7 +329,9 @@ const PutCurriculumVersion = () => {
         message.success("Cập nhật thành công")
       } else {
         if (!input?.curriculumId) {
-          message.error(`Thiếu curriculumId, không thể tạo ${input?.isFramework ? "CTĐT khung" : "CTĐT toàn khoá"}`)
+          message.error(
+            `Thiếu curriculumId, không thể tạo ${input?.isFramework ? "CTĐT khung" : "CTĐT toàn khoá"}`
+          )
           return
         }
 
@@ -496,7 +499,11 @@ const PutCurriculumVersion = () => {
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem form={form} name="englishName" label={`Tên ${ctdtTypeLabel} (tiếng anh)`}>
+                    <FormItem
+                      form={form}
+                      name="englishName"
+                      label={`Tên ${ctdtTypeLabel} (tiếng anh)`}
+                    >
                       <Input placeholder={`Nhập tên ${ctdtTypeLabel} (tiếng anh)`} />
                     </FormItem>
                   </Col>

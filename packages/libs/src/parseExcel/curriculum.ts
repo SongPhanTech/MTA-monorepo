@@ -221,7 +221,6 @@ export const parseCurriculumSheet = (file: ArrayBufferLike): ParseCurriculumShee
 
       continue
     }
-
   }
 
   if (trainingBlocks.length === 0) {

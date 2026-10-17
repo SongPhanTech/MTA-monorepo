@@ -117,8 +117,8 @@ const ModalPrintInvitation = () => {
                   <span className="normal-case leading-none">Độc lập - Tự do - Hạnh phúc</span>
                   <hr className="border-t-[1px] border-black mx-14" />
                   <div className="font-normal normal-case italic mt-1">
-                    Hà Nội, ngày {dayjs().format("DD")} tháng {formatThangIn(dayjs().month() + 1)} năm{" "}
-                    {dayjs().format("YYYY")}
+                    Hà Nội, ngày {dayjs().format("DD")} tháng {formatThangIn(dayjs().month() + 1)}{" "}
+                    năm {dayjs().format("YYYY")}
                   </div>
                 </div>
               </div>

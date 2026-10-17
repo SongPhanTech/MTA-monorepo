@@ -33,9 +33,7 @@ export function buildMinioApiBases(rawModelBase: string): string[] {
   if (!trimmed) return []
 
   const modelEndpoint =
-    trimmed.endsWith("/api/model") || trimmed.endsWith("/model")
-      ? trimmed
-      : `${trimmed}/api/model`
+    trimmed.endsWith("/api/model") || trimmed.endsWith("/model") ? trimmed : `${trimmed}/api/model`
 
   const viaGateway = `${modelEndpoint}/api/minio`
   const direct = modelEndpoint.replace(/\/model$/, "/minio")
@@ -134,7 +132,10 @@ export function clusterSurveyPrintObjectName(clusterSurveyId: string) {
 /** Parse stored printFormTemplate; old field-JSON shape is treated as missing file. */
 export function parseSurveyPrintFormDocMeta(raw: unknown): SurveyPrintFormDocMeta | null {
   if (!isRecord(raw)) return null
-  if (typeof raw.objectName !== "string" || !raw.objectName.startsWith(SURVEY_PRINT_OBJECT_PREFIX)) {
+  if (
+    typeof raw.objectName !== "string" ||
+    !raw.objectName.startsWith(SURVEY_PRINT_OBJECT_PREFIX)
+  ) {
     return null
   }
   if (typeof raw.filePath !== "string" || !raw.filePath.includes(SURVEY_PRINT_OBJECT_PREFIX)) {

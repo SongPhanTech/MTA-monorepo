@@ -7,16 +7,18 @@ export function flattenExpertForSelect<
     lecturerId?: string | null
     currentVersionId?: string | null
     lecturer?: PersonLike["lecturer"] | null
-    currentVersion?: (PersonLike & {
-      eligiblePresident?: boolean | null
-      eligibleSecretary?: boolean | null
-      inAcademy?: boolean | null
-      phone?: string | null
-      email?: string | null
-      bankAccountNumber?: string | null
-      bankName?: string | null
-      position?: string | null
-    }) | null
+    currentVersion?:
+      | (PersonLike & {
+          eligiblePresident?: boolean | null
+          eligibleSecretary?: boolean | null
+          inAcademy?: boolean | null
+          phone?: string | null
+          email?: string | null
+          bankAccountNumber?: string | null
+          bankName?: string | null
+          position?: string | null
+        })
+      | null
   },
 >(expert: T) {
   const v = expert.currentVersion
@@ -53,20 +55,19 @@ export function versionToPersonLike(
   return {
     ...version,
     lecturer: version.expert?.lecturer ?? version.lecturer,
-    lecturerId: version.expert?.lecturerId ?? (version as { lecturerId?: string | null }).lecturerId,
+    lecturerId:
+      version.expert?.lecturerId ?? (version as { lecturerId?: string | null }).lecturerId,
   }
 }
 
 /** inAcademy từ version đã gán (ưu tiên field tường minh). */
 export function versionInAcademy(
-  version?:
-    | {
-        inAcademy?: boolean | null
-        expert?: { lecturerId?: string | null; lecturer?: unknown } | null
-        lecturerId?: string | null
-        lecturer?: unknown
-      }
-    | null
+  version?: {
+    inAcademy?: boolean | null
+    expert?: { lecturerId?: string | null; lecturer?: unknown } | null
+    lecturerId?: string | null
+    lecturer?: unknown
+  } | null
 ): boolean {
   if (!version) return true
   if (typeof version.inAcademy === "boolean") return version.inAcademy
@@ -103,9 +104,7 @@ export function assignedExpertProfile(
     )
   }
   if ("supervisor" in memberOrRelation && memberOrRelation.supervisor) {
-    return (
-      versionToPersonLike(memberOrRelation.supervisor as any) ?? memberOrRelation.supervisor
-    )
+    return versionToPersonLike(memberOrRelation.supervisor as any) ?? memberOrRelation.supervisor
   }
   return memberOrRelation.expert ?? null
 }

@@ -7,20 +7,15 @@
  * Message chỉ chứa syncHistoryId + đường dẫn file (không đẩy JSON lớn lên Kafka).
  * File nằm thư mục DATA_SYNC_IMPORT_DIR (volume dùng chung nếu API và worker tách container).
  */
-import {
-  hasKafkaBrokers,
-  produceKafkaMessage,
-} from "../class-registration/kafka-queue"
+import { hasKafkaBrokers, produceKafkaMessage } from "../class-registration/kafka-queue"
 
-export const DATA_SYNC_IMPORT_TOPIC =
-  process.env.DATA_SYNC_IMPORT_TOPIC || "data_sync_import_queue"
+export const DATA_SYNC_IMPORT_TOPIC = process.env.DATA_SYNC_IMPORT_TOPIC || "data_sync_import_queue"
 export const DATA_SYNC_IMPORT_DLQ_TOPIC =
   process.env.DATA_SYNC_IMPORT_DLQ_TOPIC || "data_sync_import_queue_dlq"
 export const DATA_SYNC_CONSUMER_GROUP =
   process.env.DATA_SYNC_CONSUMER_GROUP || "be-portal-data-sync-worker"
 
-export const DATA_SYNC_KAFKA_ENABLED =
-  hasKafkaBrokers && process.env.DATA_SYNC_ASYNC !== "false"
+export const DATA_SYNC_KAFKA_ENABLED = hasKafkaBrokers && process.env.DATA_SYNC_ASYNC !== "false"
 
 export type DataSyncImportJob = {
   syncHistoryId: string

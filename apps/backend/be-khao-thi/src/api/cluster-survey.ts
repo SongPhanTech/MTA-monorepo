@@ -1249,8 +1249,7 @@ app.openapi(exportClusterSurveySummaryReport, async (c) => {
     const { buffer, fileName } = await buildClusterSurveySummaryReport(prisma, id, body)
     const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
     return c.body(new Uint8Array(buffer), 200, {
-      "Content-Type":
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       "Content-Disposition": disposition,
     })
   } catch (error: any) {

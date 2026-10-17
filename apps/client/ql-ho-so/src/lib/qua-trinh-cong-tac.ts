@@ -78,11 +78,7 @@ export function useSyncQuaTrinhCongTacOnOrgChange(
 
     form.setFieldValue(
       "quaTrinhCongTac",
-      appendQuaTrinhCongTacForOrgChange(
-        form.getFieldValue("quaTrinhCongTac"),
-        previousOrg,
-        nextOrg
-      )
+      appendQuaTrinhCongTacForOrgChange(form.getFieldValue("quaTrinhCongTac"), previousOrg, nextOrg)
     )
   }, [form, orgId, organizations])
 }

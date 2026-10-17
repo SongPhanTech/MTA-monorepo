@@ -312,11 +312,12 @@ const PutOneSubjectClassModal = () => {
     if (!subjectClassData) return
     const hideLoading = message.loading("Đang xuất Excel...", 0)
     try {
-      const scheduleText = subjectClassData.subjectClassTimes
-        ?.map((t: any) => `${t.dayOfWeek}, ${t.startPeriod} - ${t.endPeriod}`)
-        .join("; ") || ""
+      const scheduleText =
+        subjectClassData.subjectClassTimes
+          ?.map((t: any) => `${t.dayOfWeek}, ${t.startPeriod} - ${t.endPeriod}`)
+          .join("; ") || ""
       const roomName = subjectClassData.room?.name || ""
-      
+
       await exportStudentList({
         subjectName: subjectClassData.subject?.name || "",
         subjectClassCode: subjectClassData.code || "",
@@ -988,9 +989,9 @@ const PutOneSubjectClassModal = () => {
             </Tabs.TabPane>
             <Tabs.TabPane tab={"Danh sách sinh viên"} key="danh-sach-sinh-vien">
               <Flex justify="end" className="mb-2">
-                <Button 
-                  type="primary" 
-                  icon={<DownloadOutlined />} 
+                <Button
+                  type="primary"
+                  icon={<DownloadOutlined />}
                   onClick={handleExportExcel}
                   disabled={!dataTable?.length}
                 >

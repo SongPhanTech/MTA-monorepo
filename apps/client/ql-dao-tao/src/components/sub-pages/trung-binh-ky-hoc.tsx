@@ -149,7 +149,12 @@ const DiemTrungBinhKyHoc = () => {
     }
   }, [filters, semesterId, trainingObjectTypeId, trainingCourseId])
 
-  const { data: dataStudents, refetch, isLoading, isFetching } = useFindManyStudent(
+  const {
+    data: dataStudents,
+    refetch,
+    isLoading,
+    isFetching,
+  } = useFindManyStudent(
     {
       where,
       include: {

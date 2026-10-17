@@ -160,7 +160,10 @@ const ModalTraCuuVanBang = () => {
                             </span>
                           </span>
                           <span>
-                            MSSV: <span className="uppercase font-bold">{item?.student?.userProfile?.code}</span>
+                            MSSV:{" "}
+                            <span className="uppercase font-bold">
+                              {item?.student?.userProfile?.code}
+                            </span>
                           </span>
                           <span>
                             Ngày sinh:{" "}

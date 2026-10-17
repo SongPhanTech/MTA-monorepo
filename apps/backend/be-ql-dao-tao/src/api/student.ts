@@ -631,7 +631,7 @@ const debtStatistics = createRoute({
       trainingCourseId: z.string().optional().openapi(fieldDesc("ID khóa (tùy chọn).")),
       semesterId: z.string().optional().openapi(fieldDesc("ID HK — lấy ngày cuối kỳ.")),
       date: z.coerce.date().optional().openapi(fieldDesc("Ngày chốt nợ (mặc định hôm nay).")),
-      trainingMajorId: z.string().optional().openapi(fieldDesc("ID chuyên ngành (tùy chọn)."))
+      trainingMajorId: z.string().optional().openapi(fieldDesc("ID chuyên ngành (tùy chọn).")),
     }),
   },
   responses: {

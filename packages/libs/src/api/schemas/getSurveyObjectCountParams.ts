@@ -59,12 +59,15 @@ import type { GetSurveyObjectCountIsStudent } from './getSurveyObjectCountIsStud
 export type GetSurveyObjectCountParams = {
 id: string;
 fullname?: string;
-organizationId?: string[];
+organizationId?: string | string[];
+organizationCode?: string;
 lecturerCode?: string;
 staffCode?: string;
 studentCode?: string;
-fixedClassIds?: string[];
-trainingCourseIds?: string[];
+idCardNumber?: string;
+phoneNumber?: string;
+fixedClassIds?: string | string[];
+trainingCourseIds?: string | string[];
 taken?: boolean;
 isStudent?: GetSurveyObjectCountIsStudent;
 };

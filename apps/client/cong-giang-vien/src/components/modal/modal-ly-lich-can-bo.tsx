@@ -14,10 +14,7 @@ dayjs.locale("vi")
 
 const MISSING_DATE = "- -"
 
-function formatDateOrPlaceholder(
-  value: Date | string | null | undefined,
-  format: string
-) {
+function formatDateOrPlaceholder(value: Date | string | null | undefined, format: string) {
   if (!value) return MISSING_DATE
   if (format === "DD/M/YYYY") return formatDateInSlash(value) || MISSING_DATE
   const parsed = dayjs(value)
@@ -342,9 +339,7 @@ const ModalLyLichCanBo = () => {
           </div>
           <div className="w-[40%]">
             , Ngày chính thức:{" "}
-            {initialData?.officialCPVDate
-              ? formatDateInSlash(initialData?.officialCPVDate)
-              : null}
+            {initialData?.officialCPVDate ? formatDateInSlash(initialData?.officialCPVDate) : null}
           </div>
         </div>
         <span>
@@ -374,15 +369,11 @@ const ModalLyLichCanBo = () => {
         <div className="flex w-full">
           <div className="w-[33.3%]">
             18) Ngày nhập ngũ:{" "}
-            {initialData?.enlistmentDate
-              ? formatDateInSlash(initialData?.enlistmentDate)
-              : null}
+            {initialData?.enlistmentDate ? formatDateInSlash(initialData?.enlistmentDate) : null}
           </div>
           <div className="w-[33.3%]">
             Ngày xuất ngũ:{" "}
-            {initialData?.dischargeDate
-              ? formatDateInSlash(initialData?.dischargeDate)
-              : null}
+            {initialData?.dischargeDate ? formatDateInSlash(initialData?.dischargeDate) : null}
           </div>
           <div className="w-[33.3%]">
             Quân hàm cao nhất: {initialData?.capBac?.[0]?.capBac?.sTen}{" "}
@@ -515,9 +506,7 @@ const ModalLyLichCanBo = () => {
                     item.chucDanh,
                     item.chucVuDangDoan,
                     item.soQuyetDinh,
-                    item.ngayNhanQuyetDinh
-                      ? formatDateInSlash(item.ngayNhanQuyetDinh)
-                      : null,
+                    item.ngayNhanQuyetDinh ? formatDateInSlash(item.ngayNhanQuyetDinh) : null,
                     item.chucVu?.sTen,
                   ]
                     .filter(Boolean)
@@ -647,9 +636,7 @@ const ModalLyLichCanBo = () => {
                   if (salaryData) {
                     switch (headerIndex) {
                       case 0: // Tháng/năm
-                        cellContent = salaryData.tuNgay
-                          ? formatThangNamIn(salaryData.tuNgay)
-                          : ""
+                        cellContent = salaryData.tuNgay ? formatThangNamIn(salaryData.tuNgay) : ""
                         break
                       case 1: // Mã ngạch/bậc
                         cellContent = [salaryData.maNgach, salaryData.bacLuong?.name]

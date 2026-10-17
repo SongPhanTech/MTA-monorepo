@@ -10,9 +10,9 @@ Khi hiển thị ngày giờ trên UI nên dùng:
 ```ts
 import { formatDateVn, formatDateTimeVn, toVnStartOfDay } from "@workspace/libs/timezone"
 
-formatDateVn(record.createdAt)           // DD/MM/YYYY
-formatDateTimeVn(record.createdAt)      // DD/MM/YYYY HH:mm
-toVnStartOfDay(pickerValue)              // lưu đầu ngày theo giờ VN
+formatDateVn(record.createdAt) // DD/MM/YYYY
+formatDateTimeVn(record.createdAt) // DD/MM/YYYY HH:mm
+toVnStartOfDay(pickerValue) // lưu đầu ngày theo giờ VN
 ```
 
 ## Đã xong

@@ -107,17 +107,13 @@ const ModalPrintDanhSachDoiTuong = () => {
             {dataTable.map((record: any, index: number) => (
               <tr className="border border-black text-center" key={record.id}>
                 <td className="border border-black text-center">{index + 1}</td>
-                <td className="border border-black text-center">
-                  {record?.code || ""}
-                </td>
+                <td className="border border-black text-center">{record?.code || ""}</td>
                 <td className="border border-black text-center">
                   {record?.lastName || ""} {record?.firstName || ""}
                 </td>
                 <td className="border border-black text-center">{record?.idCardNumber || ""}</td>
                 <td className="border border-black text-center">{record?.phoneNumber || ""}</td>
-                <td className="border border-black text-center">
-                  {record?.donVi?.sMa || ""}
-                </td>
+                <td className="border border-black text-center">{record?.donVi?.sMa || ""}</td>
                 <td className="border border-black text-center">
                   {record?.educationAndTraining?.[0]?.fixedClass?.code || ""}
                 </td>

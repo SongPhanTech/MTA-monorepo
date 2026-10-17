@@ -336,8 +336,7 @@ export default function SubjectList() {
       hideSpinner()
     }
   }
-  const handleLogHistory = (record: any) => {
-  }
+  const handleLogHistory = (record: any) => {}
 
   async function handleDeleteSubject(id: string) {
     try {
@@ -805,16 +804,16 @@ export default function SubjectList() {
                         QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
                         "SUA"
                       ) && ( */}
-                        <EditIcon
-                          onClick={() => {
-                            onOpenSubjectVersion({
-                              subjectId,
-                              subjectVersionId,
-                              isLocked,
-                            })
-                          }}
-                          className="textß-blue-700 cursor-pointer"
-                        />
+                      <EditIcon
+                        onClick={() => {
+                          onOpenSubjectVersion({
+                            subjectId,
+                            subjectVersionId,
+                            isLocked,
+                          })
+                        }}
+                        className="textß-blue-700 cursor-pointer"
+                      />
                       {/* // )} */}
                       {can(
                         QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,

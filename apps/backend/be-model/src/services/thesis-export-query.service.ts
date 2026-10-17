@@ -31,7 +31,14 @@ const expertVersionSelect = {
               rank: { select: { sMa: true, sTen: true } },
               position: { select: { sTen: true } },
               donVi: {
-                select: { Id: true, sMa: true, sTen: true, sParentId: true, iCapDonVi: true, iLoaiDonVi: true },
+                select: {
+                  Id: true,
+                  sMa: true,
+                  sTen: true,
+                  sParentId: true,
+                  iCapDonVi: true,
+                  iLoaiDonVi: true,
+                },
               },
             },
           },
@@ -64,7 +71,9 @@ export const thesisProjectExportSelect = {
   supervisorName: true,
   coSupervisorName: true,
   organizationId: true,
-  organization: { select: { Id: true, sMa: true, sTen: true, sParentId: true, iLoaiDonVi: true, iCapDonVi: true } },
+  organization: {
+    select: { Id: true, sMa: true, sTen: true, sParentId: true, iLoaiDonVi: true, iCapDonVi: true },
+  },
   thesisSession: {
     select: {
       id: true,
@@ -152,14 +161,30 @@ export const thesisProjectExportSelect = {
               curriculum: {
                 select: {
                   managementOrganization: {
-                    select: { Id: true, sMa: true, sTen: true, sParentId: true, iLoaiDonVi: true, iCapDonVi: true },
+                    select: {
+                      Id: true,
+                      sMa: true,
+                      sTen: true,
+                      sParentId: true,
+                      iLoaiDonVi: true,
+                      iCapDonVi: true,
+                    },
                   },
                   trainingField: { select: { name: true } },
                   trainingMajor: {
                     select: {
                       name: true,
                       shortName: true,
-                      organization: { select: { Id: true, sMa: true, sTen: true, sParentId: true, iLoaiDonVi: true, iCapDonVi: true } },
+                      organization: {
+                        select: {
+                          Id: true,
+                          sMa: true,
+                          sTen: true,
+                          sParentId: true,
+                          iLoaiDonVi: true,
+                          iCapDonVi: true,
+                        },
+                      },
                       trainingField: { select: { name: true } },
                     },
                   },
@@ -186,14 +211,30 @@ export const thesisProjectExportSelect = {
                   curriculum: {
                     select: {
                       managementOrganization: {
-                        select: { Id: true, sMa: true, sTen: true, sParentId: true, iLoaiDonVi: true, iCapDonVi: true },
+                        select: {
+                          Id: true,
+                          sMa: true,
+                          sTen: true,
+                          sParentId: true,
+                          iLoaiDonVi: true,
+                          iCapDonVi: true,
+                        },
                       },
                       trainingField: { select: { name: true } },
                       trainingMajor: {
                         select: {
                           name: true,
                           shortName: true,
-                          organization: { select: { Id: true, sMa: true, sTen: true, sParentId: true, iLoaiDonVi: true, iCapDonVi: true } },
+                          organization: {
+                            select: {
+                              Id: true,
+                              sMa: true,
+                              sTen: true,
+                              sParentId: true,
+                              iLoaiDonVi: true,
+                              iCapDonVi: true,
+                            },
+                          },
                           trainingField: { select: { name: true } },
                         },
                       },

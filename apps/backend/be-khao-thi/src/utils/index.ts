@@ -219,7 +219,8 @@ export const buildCurriculumMapOrThrow = async (
         (version) =>
           version.name === curriculum &&
           (!trainingMajor || trainingMajor === version?.curriculum?.trainingMajor?.name) &&
-          (!trainingField || trainingField === version?.curriculum?.trainingMajor?.trainingField?.name)
+          (!trainingField ||
+            trainingField === version?.curriculum?.trainingMajor?.trainingField?.name)
       )
   )
 

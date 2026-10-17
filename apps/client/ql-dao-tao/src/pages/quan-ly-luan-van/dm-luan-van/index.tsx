@@ -58,7 +58,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import TreeSelect from "@/components/commons/tree-select"
 import type { FilterProps } from "@constants/type"
-import { flattenExpertForSelect, versionInAcademy, versionToPersonLike } from "@/utils/expert-select"
+import {
+  flattenExpertForSelect,
+  versionInAcademy,
+  versionToPersonLike,
+} from "@/utils/expert-select"
 import type { ExpertProfileLike, PersonLike } from "@/utils/thesis-profile"
 
 export function formatDefenseSessionClock(startTime: Date | string | null | undefined): string {
@@ -238,8 +242,7 @@ function resolveExpertWorkplace(
   profile?: { workplace?: string | null } | null
 ): string {
   if (!person && !profile) return ""
-  const organization =
-    typeof person?.organization === "string" ? person.organization.trim() : ""
+  const organization = typeof person?.organization === "string" ? person.organization.trim() : ""
   return person?.workplace?.trim() || profile?.workplace?.trim() || organization || ""
 }
 
@@ -322,7 +325,13 @@ const thesisProjectTableSelect = {
         select: {
           id: true,
           userProfile: {
-            select: { code: true, fullname: true, firstName: true, lastName: true, dateOfBirth: true },
+            select: {
+              code: true,
+              fullname: true,
+              firstName: true,
+              lastName: true,
+              dateOfBirth: true,
+            },
           },
           fixedClass: {
             select: {
@@ -393,7 +402,13 @@ const thesisProjectExportSelect = {
         select: {
           id: true,
           userProfile: {
-            select: { code: true, fullname: true, firstName: true, lastName: true, dateOfBirth: true },
+            select: {
+              code: true,
+              fullname: true,
+              firstName: true,
+              lastName: true,
+              dateOfBirth: true,
+            },
           },
           curriculumVersion: {
             select: {
@@ -519,8 +534,7 @@ export function formatPersonNameWithWorkplace(
 
   const expertPerson = (versionToPersonLike(person as ExpertProfileLike) ??
     person) as ExpertProfileLike
-  const profile =
-    expertPerson?.lecturer?.userProfile ?? expertPerson?.expert?.lecturer?.userProfile
+  const profile = expertPerson?.lecturer?.userProfile ?? expertPerson?.expert?.lecturer?.userProfile
   const rank = profile?.academicRankType?.sMa || expertPerson?.academicRankType?.sMa || ""
   const degree = profile?.academicDegreeType?.sMa || expertPerson?.academicDegreeType?.sMa || ""
   const title = [rank, degree].filter(Boolean).join(".")
@@ -605,8 +619,7 @@ export function getSupervisorName(
   if (!record) return ""
 
   // Version đã gán / flatten catalog → PersonLike có inAcademy tường minh
-  const person =
-    versionToPersonLike(record as ExpertProfileLike) ?? (record as ExpertProfileLike)
+  const person = versionToPersonLike(record as ExpertProfileLike) ?? (record as ExpertProfileLike)
 
   const { textWithWorkplace, inAcademy } = formatPersonNameWithWorkplace(person, allExperts)
 
@@ -621,7 +634,8 @@ export function getSupervisorName(
       person.academicDegreeType?.sMa || person.lecturer?.userProfile?.academicDegreeType?.sMa || ""
     const title = [rank, degree].filter(Boolean).join(".")
     const fullname = person.name || person.lecturer?.userProfile?.fullname || ""
-    displayText = [title, fullname].filter(Boolean).join(" ").trim() || fullname || textWithWorkplace
+    displayText =
+      [title, fullname].filter(Boolean).join(" ").trim() || fullname || textWithWorkplace
   }
 
   if (!htmlRender) return displayText
@@ -896,9 +910,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         ? searchParams.fixedClassId
         : fixedClasses?.map((f) => f.id)
 
-    const studentAnd: Record<string, unknown>[] = [
-      { fixedClassId: { in: fixedClassIds ?? [] } },
-    ]
+    const studentAnd: Record<string, unknown>[] = [{ fixedClassId: { in: fixedClassIds ?? [] } }]
     if (filters.code) {
       studentAnd.push({
         userProfile: { code: { contains: filters.code, mode: "insensitive" } },
@@ -1728,7 +1740,11 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   }
 
   const runThesisExport = useCallback(
-    async (kind: string, fallbackFileName: string, payload?: SignerPayload & { recreateAllPayments?: boolean }) => {
+    async (
+      kind: string,
+      fallbackFileName: string,
+      payload?: SignerPayload & { recreateAllPayments?: boolean }
+    ) => {
       const filters = getThesisExportFilters(payload)
       if (!filters.thesisSessionId) {
         message.warning("Vui lòng chọn đợt xét luận văn trước khi xuất.")
@@ -2594,8 +2610,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           disabled={!isWithinGvhdSupervisorEditWindow()}
                           options={buildExpertSelectOptions(
                             expertProfileData,
-                            (item) =>
-                              !coSupervisorPeerId || item.id !== String(coSupervisorPeerId),
+                            (item) => !coSupervisorPeerId || item.id !== String(coSupervisorPeerId),
                             {
                               id: currentValue,
                               person: versionToPersonLike(

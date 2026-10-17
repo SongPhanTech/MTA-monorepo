@@ -83,9 +83,13 @@ export default function PaymentRecordPage() {
           }
         : {}),
     }
-  },
-    [filters.name, filters.transactionCode, filters.paymentStatus, filters.paymentDate, semesterId]
-  )
+  }, [
+    filters.name,
+    filters.transactionCode,
+    filters.paymentStatus,
+    filters.paymentDate,
+    semesterId,
+  ])
 
   const { data: paymentRecordData } = useFindManyPaymentRecord({
     where: {

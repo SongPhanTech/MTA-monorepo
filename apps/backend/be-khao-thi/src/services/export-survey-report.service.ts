@@ -7,7 +7,7 @@ import {
 } from "../lib/survey-audience"
 
 function buildSheetData(survey: any, answerCountMap: Record<string, number>) {
-  const groupsMap = new Map<string, { id: string, name?: string, questions: any[] }>()
+  const groupsMap = new Map<string, { id: string; name?: string; questions: any[] }>()
 
   groupsMap.set("ungrouped", {
     id: "ungrouped",
@@ -57,15 +57,30 @@ function buildSheetData(survey: any, answerCountMap: Record<string, number>) {
     })
 }
 
-const appendDataToSheet = (worksheet: ExcelJS.Worksheet, rowIndex: number, tData: any, surveyName: string, majorName: string = "", majorOrg: string = "") => {
+const appendDataToSheet = (
+  worksheet: ExcelJS.Worksheet,
+  rowIndex: number,
+  tData: any,
+  surveyName: string,
+  majorName: string = "",
+  majorOrg: string = ""
+) => {
   const titleStyle = {
     font: { name: "Times New Roman", bold: true, size: 14 },
-    alignment: { horizontal: "left" as const, vertical: "middle" as const, wrapText: true as const },
+    alignment: {
+      horizontal: "left" as const,
+      vertical: "middle" as const,
+      wrapText: true as const,
+    },
   }
 
   const centerBoldStyle = {
     font: { name: "Times New Roman", bold: true, size: 12 },
-    alignment: { horizontal: "center" as const, vertical: "middle" as const, wrapText: true as const },
+    alignment: {
+      horizontal: "center" as const,
+      vertical: "middle" as const,
+      wrapText: true as const,
+    },
   }
 
   const answerHeaders = tData?.[0]?.answers || tData?.[0]?.questions?.[0]?.answers || []
@@ -74,73 +89,110 @@ const appendDataToSheet = (worksheet: ExcelJS.Worksheet, rowIndex: number, tData
   if (rowIndex === 1) {
     worksheet.columns = [
       { width: 60 },
-      ...Array.from({ length: numAnswers * 2 }).map(() => ({ width: 8 }))
+      ...Array.from({ length: numAnswers * 2 }).map(() => ({ width: 8 })),
     ]
   }
 
   const lastCol = 1 + numAnswers * 2
   const lastColLetter = worksheet.getColumn(lastCol).letter
 
-
   worksheet.mergeCells(`A${rowIndex}:${lastColLetter}${rowIndex}`)
-  worksheet.getCell(`A${rowIndex}`).value = surveyName ? surveyName.toUpperCase() : `BẢNG TỔNG HỢP KẾT QUẢ KHẢO SÁT`
-  worksheet.getCell(`A${rowIndex}`).style = { ...titleStyle, alignment: { horizontal: "center" as const, vertical: "middle" as const } }
+  worksheet.getCell(`A${rowIndex}`).value = surveyName
+    ? surveyName.toUpperCase()
+    : `BẢNG TỔNG HỢP KẾT QUẢ KHẢO SÁT`
+  worksheet.getCell(`A${rowIndex}`).style = {
+    ...titleStyle,
+    alignment: { horizontal: "center" as const, vertical: "middle" as const },
+  }
   rowIndex++
 
   if (majorOrg) {
     worksheet.mergeCells(`A${rowIndex}:${lastColLetter}${rowIndex}`)
     worksheet.getCell(`A${rowIndex}`).value = majorOrg.toUpperCase()
-    worksheet.getCell(`A${rowIndex}`).style = { ...titleStyle, alignment: { horizontal: "center" as const, vertical: "middle" as const } }
+    worksheet.getCell(`A${rowIndex}`).style = {
+      ...titleStyle,
+      alignment: { horizontal: "center" as const, vertical: "middle" as const },
+    }
     rowIndex++
   }
 
   if (majorName) {
     worksheet.mergeCells(`A${rowIndex}:${lastColLetter}${rowIndex}`)
     worksheet.getCell(`A${rowIndex}`).value = `CHUYÊN NGÀNH HỌC: ${majorName.toUpperCase()}`
-    worksheet.getCell(`A${rowIndex}`).style = { ...titleStyle, alignment: { horizontal: "center" as const, vertical: "middle" as const } }
+    worksheet.getCell(`A${rowIndex}`).style = {
+      ...titleStyle,
+      alignment: { horizontal: "center" as const, vertical: "middle" as const },
+    }
     rowIndex++
   }
 
-  rowIndex++ 
+  rowIndex++
 
   if (tData && tData.length > 0) {
     let qIndex = 1
     tData.forEach((group: any, gIndex: number) => {
       const romanize = (num: number) => {
-        const lookup: any = { M: 1000, CM: 900, D: 500, CD: 400, C: 100, XC: 90, L: 50, XL: 40, X: 10, IX: 9, V: 5, IV: 4, I: 1 }
-        let roman = ''
+        const lookup: any = {
+          M: 1000,
+          CM: 900,
+          D: 500,
+          CD: 400,
+          C: 100,
+          XC: 90,
+          L: 50,
+          XL: 40,
+          X: 10,
+          IX: 9,
+          V: 5,
+          IV: 4,
+          I: 1,
+        }
+        let roman = ""
         for (const i in lookup) {
-          while (num >= lookup[i]) { roman += i; num -= lookup[i] }
+          while (num >= lookup[i]) {
+            roman += i
+            num -= lookup[i]
+          }
         }
         return roman
       }
 
-      const groupTitle = `${romanize(gIndex + 1)}. ${group.groupName || "NHẬN XÉT ĐÁNH GIÁ"}`.toUpperCase()
+      const groupTitle =
+        `${romanize(gIndex + 1)}. ${group.groupName || "NHẬN XÉT ĐÁNH GIÁ"}`.toUpperCase()
 
       worksheet.mergeCells(`A${rowIndex}:${lastColLetter}${rowIndex}`)
       worksheet.getCell(`A${rowIndex}`).value = groupTitle
       worksheet.getCell(`A${rowIndex}`).style = {
         font: { name: "Times New Roman", bold: true, italic: true, size: 12 },
-        alignment: { horizontal: "left" as const, vertical: "middle" as const }
+        alignment: { horizontal: "left" as const, vertical: "middle" as const },
       }
       rowIndex++
 
       const currentAnswerHeaders = group.questions?.[0]?.answers || answerHeaders
 
       if (currentAnswerHeaders.length > 0) {
-        const legendText = currentAnswerHeaders.map((a: any, idx: number) => `${idx + 1}. ${a.description}`).join("          ")
+        const legendText = currentAnswerHeaders
+          .map((a: any, idx: number) => `${idx + 1}. ${a.description}`)
+          .join("          ")
         worksheet.mergeCells(`A${rowIndex}:${lastColLetter}${rowIndex}`)
         worksheet.getCell(`A${rowIndex}`).value = legendText
-        worksheet.getCell(`A${rowIndex}`).style = { font: { name: "Times New Roman", size: 11 }, alignment: { horizontal: "left" as const, wrapText: true as const } }
+        worksheet.getCell(`A${rowIndex}`).style = {
+          font: { name: "Times New Roman", size: 11 },
+          alignment: { horizontal: "left" as const, wrapText: true as const },
+        }
         rowIndex++
       }
 
-      rowIndex++ 
+      rowIndex++
 
       const tableHeaderStyle = {
         font: { name: "Times New Roman", bold: true, size: 14, color: { argb: "FF000000" } },
         fill: { type: "pattern", pattern: "none" } as ExcelJS.Fill,
-        alignment: { horizontal: "center" as const, vertical: "middle" as const, wrapText: true as const },
+        alignment: {
+          horizontal: "center" as const,
+          vertical: "middle" as const,
+          wrapText: true as const,
+        },
         border: {
           top: { style: "thin" as ExcelJS.BorderStyle, color: { argb: "FF000000" } },
           left: { style: "thin" as ExcelJS.BorderStyle, color: { argb: "FF000000" } },
@@ -197,7 +249,7 @@ const appendDataToSheet = (worksheet: ExcelJS.Worksheet, rowIndex: number, tData
           for (let i = 0; i < numAnswers; i++) {
             const currCol = worksheet.getColumn(2 + i).letter
             row.getCell(2 + numAnswers + i).value = {
-              formula: `IFERROR(${currCol}${rowIndex}/SUM(${colStart}${rowIndex}:${colEnd}${rowIndex})*100, 0)`
+              formula: `IFERROR(${currCol}${rowIndex}/SUM(${colStart}${rowIndex}:${colEnd}${rowIndex})*100, 0)`,
             } as any
           }
         }
@@ -207,7 +259,12 @@ const appendDataToSheet = (worksheet: ExcelJS.Worksheet, rowIndex: number, tData
           cell.border = tableHeaderStyle.border
           cell.font = { name: "Times New Roman", size: 11 }
           if (c > 1) cell.alignment = { horizontal: "center" as const, vertical: "middle" as const }
-          else cell.alignment = { horizontal: "left" as const, vertical: "middle" as const, wrapText: true as const }
+          else
+            cell.alignment = {
+              horizontal: "left" as const,
+              vertical: "middle" as const,
+              wrapText: true as const,
+            }
         }
 
         rowIndex++
@@ -220,7 +277,6 @@ const appendDataToSheet = (worksheet: ExcelJS.Worksheet, rowIndex: number, tData
 }
 
 export async function exportSurveyExcelReportService(prisma: PrismaClient, surveyId: string) {
-
   const survey = await prisma.survey.findUnique({
     where: { id: surveyId },
     include: {
@@ -237,8 +293,7 @@ export async function exportSurveyExcelReportService(prisma: PrismaClient, surve
 
   // Đơn vị từ thiết lập đối tượng: chuyên ngành đã chọn, hoặc chuyên ngành của lớp QL
   const configOrgByMajor = resolveMajorOrgFromSurveyObjectTypes(survey.surveyObjectType)
-  const singleConfigOrg =
-    configOrgByMajor.size === 1 ? [...configOrgByMajor.values()][0] : ""
+  const singleConfigOrg = configOrgByMajor.size === 1 ? [...configOrgByMajor.values()][0] : ""
 
   let allProfiles: any[] = []
   for (const surveyObjectType of survey.surveyObjectType) {
@@ -260,25 +315,25 @@ export async function exportSurveyExcelReportService(prisma: PrismaClient, surve
                           select: {
                             name: true,
                             organization: { select: { sTen: true } },
-                            trainingField: { select: { name: true } }
-                          }
+                            trainingField: { select: { name: true } },
+                          },
                         },
-                        trainingField: { select: { name: true } }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
+                        trainingField: { select: { name: true } },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
       },
       where: { deletedAt: null, active: true, OR: orClauses },
     })
     allProfiles = [...allProfiles, ...objectTypeProfiles]
   }
 
-  const profileToMajorMap = new Map<string, { majorName: string, orgName: string }>()
+  const profileToMajorMap = new Map<string, { majorName: string; orgName: string }>()
   for (const p of allProfiles) {
     if (profileToMajorMap.has(p.id)) continue
 
@@ -305,14 +360,14 @@ export async function exportSurveyExcelReportService(prisma: PrismaClient, surve
   })
 
   const sessionToMajorMap = new Map<string, string>()
-  sessions.forEach(session => {
+  sessions.forEach((session) => {
     if (session.profileId && profileToMajorMap.has(session.profileId)) {
       const { majorName } = profileToMajorMap.get(session.profileId)!
       sessionToMajorMap.set(session.id, majorName)
     }
   })
 
-  const questionIds = survey.surveyQuestion.map(q => q.id)
+  const questionIds = survey.surveyQuestion.map((q) => q.id)
   const responses = await prisma.surveyResponse.findMany({
     where: {
       surveySession: { surveyId },
@@ -323,7 +378,7 @@ export async function exportSurveyExcelReportService(prisma: PrismaClient, surve
       surveySessionId: true,
       surveyQuestionId: true,
       surveyChoiceId: true,
-    }
+    },
   })
 
   const globalAnswerCountMap: Record<string, number> = {}
@@ -377,7 +432,14 @@ export async function exportSurveyExcelReportService(prisma: PrismaClient, surve
     const majorData = buildSheetData(survey, mCountMap)
     if (majorData.length > 0) {
       const orgName = majorsInfo.get(majorName) || ""
-      currentRowIndex = appendDataToSheet(worksheet, currentRowIndex, majorData, survey.name, majorName, orgName)
+      currentRowIndex = appendDataToSheet(
+        worksheet,
+        currentRowIndex,
+        majorData,
+        survey.name,
+        majorName,
+        orgName
+      )
       currentRowIndex += 3
     }
   }

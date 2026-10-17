@@ -39,7 +39,10 @@ export function formatLsbError(extra?: ErrorExtra, fallback?: string): string {
 
   if (extra?.data) {
     if (Array.isArray(extra.data)) {
-      const fields = extra.data.filter(Boolean).map((field) => formatLsbField(field)).join(", ")
+      const fields = extra.data
+        .filter(Boolean)
+        .map((field) => formatLsbField(field))
+        .join(", ")
       if (code === "require" || code === "required") {
         return `Thiếu trường bắt buộc: ${fields || "không xác định"}`
       }
@@ -59,7 +62,9 @@ export function formatLsbError(extra?: ErrorExtra, fallback?: string): string {
       if (code === "duplicate") {
         return `Đã tồn tại trên hệ thống hồ sơ nhân sự (LSB): ${fields.join(", ") || "không xác định"}`
       }
-      return extra.code ? `${extra.code}: ${JSON.stringify(extra.data)}` : JSON.stringify(extra.data)
+      return extra.code
+        ? `${extra.code}: ${JSON.stringify(extra.data)}`
+        : JSON.stringify(extra.data)
     }
 
     return extra.code ? `${extra.code}: ${JSON.stringify(extra.data)}` : JSON.stringify(extra.data)

@@ -40,7 +40,12 @@ import {
   exportPhuLucVanBangCaoHoc,
   exportPhuLucVanBangNganHan,
 } from "@workspace/libs/api/training"
-import { exportFromTemplate, TableRow, type SheetExportOptions, type TableCell } from "@workspace/libs/template-excel"
+import {
+  exportFromTemplate,
+  TableRow,
+  type SheetExportOptions,
+  type TableCell,
+} from "@workspace/libs/template-excel"
 import { formatPlaceOfBirth, getMinioUrl } from "@workspace/libs/utils"
 import { docxTemplate } from "../../../utils/docx-template"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
@@ -63,6 +68,7 @@ import type React from "react"
 import { useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import type { ModalPrintPhuLucVbInput } from "../../../utils/phu-luc-van-bang/plvb-print-types"
+import type { ModalPrintPhoiBangInput } from "../../../components/modal/modal-print-phoi-bang"
 import type { PlvbPrintVariant } from "../../../utils/phu-luc-van-bang/plvb-print-settings"
 import {
   PLVB_BODY_ROW_HEIGHT_1,
@@ -109,7 +115,8 @@ function getDiplomaAppendixSubjectName(item: {
   } | null
   studentResearchTopic?: { name?: string | null } | null
 }) {
-  const subjectName = item.subjectVersion?.name?.trim() || item.subjectVersion?.subject?.name?.trim() || ""
+  const subjectName =
+    item.subjectVersion?.name?.trim() || item.subjectVersion?.subject?.name?.trim() || ""
   if (item.subjectVersion?.type !== SubjectVersionType.Research) return subjectName
   return formatResearchTopicPrintName(item.studentResearchTopic?.name, subjectName)
 }
@@ -503,8 +510,7 @@ function getDiplomaAppendixHeaderData(student: TStudentWithSemesters) {
   const curriculum = student.curriculumVersion || classCurriculum
   const major =
     student.graduationDecision?.trainingMajor || classCurriculum?.curriculum?.trainingMajor
-  const language =
-    curriculum?.trainingLanguage?.name || course?.trainingLanguage?.name || ""
+  const language = curriculum?.trainingLanguage?.name || course?.trainingLanguage?.name || ""
   const loaiBang =
     student.graduationDecision?.diplomaType?.name || curriculum?.diplomaType?.name || ""
   return {
@@ -584,6 +590,8 @@ export default function StudentGradeSystem() {
   const [signModalOpen, setSignModalOpen] = useState(false)
   const [signRole, setSignRole] = useState<"chief" | "deputy">("deputy")
   const [signingDate, setSigningDate] = useState<Dayjs>(dayjs())
+  const [signChiefName, setSignChiefName] = useState("")
+  const [signDeputyName, setSignDeputyName] = useState("")
   const [pendingSignKind, setPendingSignKind] = useState<
     "quyetDinhCongNhan" | "phuLucVanBangCaoHoc" | "phuLucVanBangNganHan" | null
   >(null)
@@ -654,9 +662,7 @@ export default function StudentGradeSystem() {
 
   const selectedPostgraduateSession = useMemo(() => {
     const selectedIds = thesisSessionIds ?? []
-    return (
-      postgraduateSessions.find((s) => selectedIds.includes(s.id)) || postgraduateSessions[0]
-    )
+    return postgraduateSessions.find((s) => selectedIds.includes(s.id)) || postgraduateSessions[0]
   }, [postgraduateSessions, thesisSessionIds])
 
   const where = {
@@ -877,8 +883,7 @@ export default function StudentGradeSystem() {
       ) => {
         const scoreValue = getSubjectScoreValue(item)
         const scoreConvert = scoreConverts?.find(
-          (s) =>
-            scoreValue != null && s.base10Min <= scoreValue && s.base10Max >= scoreValue
+          (s) => scoreValue != null && s.base10Min <= scoreValue && s.base10Max >= scoreValue
         )
         semesterGroup.subjects.push({
           id: item.id,
@@ -900,10 +905,11 @@ export default function StudentGradeSystem() {
           return
         }
 
-        const semester = item.subjectClass?.semester || item.semester || {
-          id: `phien-diem-${student.id}`,
-          name: "Phiên điểm",
-        }
+        const semester = item.subjectClass?.semester ||
+          item.semester || {
+            id: `phien-diem-${student.id}`,
+            name: "Phiên điểm",
+          }
 
         if (!semesterMap.has(semester.id)) {
           semesterMap.set(semester.id, {
@@ -1019,8 +1025,7 @@ export default function StudentGradeSystem() {
       const min = mark(item.base10Min, 1)
       if (item.base10Max == null) return min
       const maxNum = Number(item.base10Max)
-      const max =
-        Number.isFinite(maxNum) && maxNum === 10 ? "10" : mark(item.base10Max, 1)
+      const max = Number.isFinite(maxNum) && maxNum === 10 ? "10" : mark(item.base10Max, 1)
       return `${min}-${max}`
     }
 
@@ -1191,6 +1196,36 @@ export default function StudentGradeSystem() {
   const { onOpen: openPrintPhuLucVb } = useDisclosure<ModalPrintPhuLucVbInput>({
     tag: "ModalPrintPhuLucVb",
   })
+  const { onOpen: openPrintPhoiBang } = useDisclosure<ModalPrintPhoiBangInput>({
+    tag: "ModalPrintPhoiBang",
+  })
+
+  const handleOpenPrintPhoiBang = () => {
+    if (!trainingObjectTypeId) {
+      message.warning("Vui lòng chọn loại đối tượng đào tạo")
+      return
+    }
+
+    const selectedObjectType = trainingObjectTypes.find((e) => e.id === trainingObjectTypeId)
+    const firstStudent = studentsWithSemesters?.[0]
+    const fieldEn =
+      firstStudent?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField
+        ?.englishName ||
+      firstStudent?.graduationDecision?.trainingMajor?.trainingField?.englishName ||
+      ""
+
+    openPrintPhoiBang({
+      trainingObjectTypeId,
+      trainingCourseIds,
+      thesisSessionIds,
+      printDate,
+      signerName: signerName ?? "",
+      courseTextEn1: "FOR COMPLETING THE COURSE FOR TECHNICAL AND LOGISTICS",
+      courseTextEn2: fieldEn.toUpperCase(),
+      courseTextVi1: "ĐÀO TẠO",
+      courseTextVi2: (selectedObjectType?.name || "").toUpperCase(),
+    })
+  }
 
   const handlePrintPLVBHtml = (variant: PlvbPrintVariant, columns: 1 | 2 = 2) => {
     if (!studentsWithSemesters?.length) {
@@ -1456,10 +1491,7 @@ export default function StudentGradeSystem() {
         cells: [
           {
             value: {
-              richText: [
-                { text: "Xếp loại: " },
-                { text: xepLoai, font: { bold: true } },
-              ],
+              richText: [{ text: "Xếp loại: " }, { text: xepLoai, font: { bold: true } }],
             },
             colSpan: TOTAL_COLUMNS,
             fontSize: 12,
@@ -1680,8 +1712,11 @@ export default function StudentGradeSystem() {
     }
     const session = selectedPostgraduateSession
     const chiefName = session?.chief?.trim() || ""
+    const deputyName = session?.deputy?.trim() || ""
     setPendingSignKind(kind)
     setSignRole(chiefName ? "chief" : "deputy")
+    setSignChiefName(chiefName)
+    setSignDeputyName(deputyName)
     const sidebarDate = form.getFieldValue("date")
     setSigningDate(sidebarDate ? dayjs(sidebarDate) : dayjs())
     setSignModalOpen(true)
@@ -1689,13 +1724,12 @@ export default function StudentGradeSystem() {
 
   const handleConfirmSignExport = async () => {
     if (pendingSignKind === "phuLucVanBangCaoHoc" || pendingSignKind === "phuLucVanBangNganHan") {
-      const session = selectedPostgraduateSession
-      const chiefName = session?.chief?.trim() || ""
-      const deputyName = session?.deputy?.trim() || ""
+      const chiefName = signChiefName.trim()
+      const deputyName = signDeputyName.trim()
       const signerNameTS = signRole === "chief" ? chiefName : deputyName
-      if (!signerNameTS.trim()) {
+      if (!signerNameTS) {
         message.warning(
-          `Chưa có họ tên ${signRole === "chief" ? "Trưởng phòng" : "Phó trưởng phòng"} sau đại học trong đợt xét.`
+          `Vui lòng nhập họ tên ${signRole === "chief" ? "Trưởng phòng" : "Phó trưởng phòng"} sau đại học.`
         )
         return
       }
@@ -1878,8 +1912,8 @@ export default function StudentGradeSystem() {
 
   const subjects: {
     daiHoc: { id: number; name: string; onClick?: () => void; dropdown?: boolean }[]
-    nganHan: { id: number; name: string; onClick?: () => Promise<void> }[]
-    caoHoc: { id: number; name: string; onClick?: () => Promise<void> }[]
+    nganHan: { id: number; name: string; onClick?: () => void | Promise<void> }[]
+    caoHoc: { id: number; name: string; onClick?: () => void | Promise<void> }[]
   } = {
     daiHoc: [
       { id: 1, name: "Phụ lục văn bằng", dropdown: true },
@@ -1890,7 +1924,8 @@ export default function StudentGradeSystem() {
       // { id: 5, name: "Bảng điểm ngắn hạn SDH" },
       {
         id: 6,
-        name: "In phôi bằng ngắn hạn SĐH",
+        name: "In phôi bằng sau đại học",
+        onClick: handleOpenPrintPhoiBang,
       },
       {
         id: 7,
@@ -1917,6 +1952,7 @@ export default function StudentGradeSystem() {
       {
         id: 20,
         name: "In phôi bằng CAO HỌC",
+        onClick: () => handleCommonExport(exportHandlers.phoiBangCaoHoc),
       },
       {
         id: 21,
@@ -2123,100 +2159,32 @@ export default function StudentGradeSystem() {
             II. Ngắn hạn - Dài hạn sau đại học
           </h3>
           <div className="grid grid-cols-4 gap-3">
-            {subjects.nganHan.map((subject, index) =>
-              subject.id === 6 ? (
-                <Dropdown
-                  key={subject.id}
-                  trigger={["click"]}
-                  menu={{
-                    items: [
-                      {
-                        key: "civilian",
-                        label: "DÂN SỰ",
-                        onClick: () =>
-                          handleCommonExport(exportHandlers.phoiBangNganHan, {
-                            includeNamePrefix: true,
-                          }),
-                      },
-                      {
-                        key: "military",
-                        label: "QUÂN SỰ",
-                        onClick: () =>
-                          handleCommonExport(exportHandlers.phoiBangNganHan, {
-                            includeNamePrefix: false,
-                          }),
-                      },
-                    ],
-                  }}
-                >
-                  <Button
-                    type="primary"
-                    className="h-auto w-full py-2 px-3 text-xs justify-start text-white"
-                  >
-                    {index + 1}. {subject.name} <DownOutlined />
-                  </Button>
-                </Dropdown>
-              ) : (
-                <Button
-                  key={subject.id}
-                  onClick={subject?.onClick}
-                  type="primary"
-                  className="h-auto py-2 px-3 text-xs justify-start text-white"
-                >
-                  {index + 1}. {subject.name}
-                </Button>
-              )
-            )}
+            {subjects.nganHan.map((subject, index) => (
+              <Button
+                key={subject.id}
+                onClick={subject?.onClick}
+                type="primary"
+                className="h-auto py-2 px-3 text-xs justify-start text-white"
+              >
+                {index + 1}. {subject.name}
+              </Button>
+            ))}
           </div>
         </div>
 
         <div className="mb-6">
           <h3 className="text-sm font-bold color text-primary mb-3">III. Cao học</h3>
           <div className="grid grid-cols-4 gap-3">
-            {subjects.caoHoc.map((subject, index) =>
-              subject.id === 20 ? (
-                <Dropdown
-                  key={subject.id}
-                  trigger={["click"]}
-                  menu={{
-                    items: [
-                      {
-                        key: "civilian",
-                        label: "DÂN SỰ",
-                        onClick: () =>
-                          handleCommonExport(exportHandlers.phoiBangCaoHoc, {
-                            includeNamePrefix: true,
-                          }),
-                      },
-                      {
-                        key: "military",
-                        label: "QUÂN SỰ",
-                        onClick: () =>
-                          handleCommonExport(exportHandlers.phoiBangCaoHoc, {
-                            includeNamePrefix: false,
-                          }),
-                      },
-                    ],
-                  }}
-                >
-                  <Button
-                    type="primary"
-                    className="h-auto w-full py-2 px-3 text-xs justify-start text-white"
-                  >
-                    {index + 1}. {subject.name} <DownOutlined />
-                  </Button>
-                </Dropdown>
-              ) : (
-                <Button
-                  key={subject.id}
-                  onClick={subject?.onClick}
-                  type="primary"
-                  className="h-auto py-2 px-3 text-xs justify-start text-white"
-                >
-                  {index + 1}. {subject.name}
-                </Button>
-              )
-            )}
+            {subjects.caoHoc.map((subject, index) => (
+              <Button
+                key={subject.id}
+                onClick={subject?.onClick}
+                type="primary"
+                className="h-auto py-2 px-3 text-xs justify-start text-white"
+              >
+                {index + 1}. {subject.name}
+              </Button>
+            ))}
           </div>
         </div>
 
@@ -2287,7 +2255,8 @@ export default function StudentGradeSystem() {
         {selectedStudent && (
           <div>
             <h3 className="text-md font-semibold mb-2">
-              Bảng điểm: {selectedStudent.userProfile?.fullname} - {selectedStudent.userProfile?.code}
+              Bảng điểm: {selectedStudent.userProfile?.fullname} -{" "}
+              {selectedStudent.userProfile?.code}
             </h3>
             <TableCollapse
               data={selectedStudentGradeData}
@@ -2372,25 +2341,53 @@ export default function StudentGradeSystem() {
           className="flex flex-col gap-3"
         >
           <Radio value="chief">
-            Trưởng phòng sau đại học:{" "}
-            <strong>
+            <span className="inline-flex flex-wrap items-center gap-2">
+              <span>Trưởng phòng sau đại học:</span>
               {pendingSignKind === "phuLucVanBangCaoHoc" ||
-              pendingSignKind === "phuLucVanBangNganHan"
-                ? selectedPostgraduateSession?.chief?.trim() || "(chưa nhập)"
-                : (selectedThesisSession as SessionSignerInfo | undefined)?.chief?.trim() ||
-                  selectedThesisSession?.graduationDecisionSigner?.trim() ||
-                  "(chưa nhập)"}
-            </strong>
+              pendingSignKind === "phuLucVanBangNganHan" ? (
+                <Input
+                  size="small"
+                  className="w-56"
+                  value={signChiefName}
+                  placeholder="Nhập họ tên"
+                  onClick={(e) => e.stopPropagation()}
+                  onChange={(e) => {
+                    setSignChiefName(e.target.value)
+                    setSignRole("chief")
+                  }}
+                />
+              ) : (
+                <strong>
+                  {(selectedThesisSession as SessionSignerInfo | undefined)?.chief?.trim() ||
+                    selectedThesisSession?.graduationDecisionSigner?.trim() ||
+                    "(chưa nhập)"}
+                </strong>
+              )}
+            </span>
           </Radio>
           <Radio value="deputy">
-            Phó trưởng phòng sau đại học:{" "}
-            <strong>
+            <span className="inline-flex flex-wrap items-center gap-2">
+              <span>Phó trưởng phòng sau đại học:</span>
               {pendingSignKind === "phuLucVanBangCaoHoc" ||
-              pendingSignKind === "phuLucVanBangNganHan"
-                ? selectedPostgraduateSession?.deputy?.trim() || "(chưa nhập)"
-                : (selectedThesisSession as SessionSignerInfo | undefined)?.deputy?.trim() ||
-                  "(chưa nhập)"}
-            </strong>
+              pendingSignKind === "phuLucVanBangNganHan" ? (
+                <Input
+                  size="small"
+                  className="w-56"
+                  value={signDeputyName}
+                  placeholder="Nhập họ tên"
+                  onClick={(e) => e.stopPropagation()}
+                  onChange={(e) => {
+                    setSignDeputyName(e.target.value)
+                    setSignRole("deputy")
+                  }}
+                />
+              ) : (
+                <strong>
+                  {(selectedThesisSession as SessionSignerInfo | undefined)?.deputy?.trim() ||
+                    "(chưa nhập)"}
+                </strong>
+              )}
+            </span>
           </Radio>
         </Radio.Group>
         <div className="mt-4">

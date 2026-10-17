@@ -1,10 +1,6 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import type { Prisma } from "@workspace/db"
-import {
-  postDMNhanViens,
-  postDMNhanViensList,
-  putDMNhanViens,
-} from "@workspace/libs/api/system"
+import { postDMNhanViens, postDMNhanViensList, putDMNhanViens } from "@workspace/libs/api/system"
 import {
   parseSheetGuestLecturer,
   parseSheetHeQuanSu,
@@ -86,7 +82,13 @@ const lsbRows = (data: unknown): Record<string, unknown>[] => {
 
 const extractLsbId = (data: unknown): string | undefined => {
   if (typeof data === "string" && data) return data
-  if (data && typeof data === "object" && "data" in data && typeof data.data === "string" && data.data) {
+  if (
+    data &&
+    typeof data === "object" &&
+    "data" in data &&
+    typeof data.data === "string" &&
+    data.data
+  ) {
     return data.data
   }
   return lsbRowId(lsbRows(data)[0] ?? {})
@@ -125,9 +127,7 @@ const isLsbPhoneRequired = (extra?: ErrorExtra, raw?: unknown) => {
   if (code === "require" || code === "required") {
     return /số điện thoại|ssdtdidong/i.test(text) || !extra?.data
   }
-  return /số điện thoại.*(bắt buộc|required|không được để trống)|required.*phone/i.test(
-    text
-  )
+  return /số điện thoại.*(bắt buộc|required|không được để trống)|required.*phone/i.test(text)
 }
 
 const parseImportNumber = (value: string | undefined, integer = false): number | null => {
@@ -1530,15 +1530,9 @@ app.openapi(importStudent, async (c) => {
         lsbRes.status !== 200 &&
         !phoneNumber &&
         !lsbProfileId &&
-        isLsbPhoneRequired(
-          (lsbRes.data as { extra?: ErrorExtra } | undefined)?.extra,
-          lsbRes.data
-        )
+        isLsbPhoneRequired((lsbRes.data as { extra?: ErrorExtra } | undefined)?.extra, lsbRes.data)
       ) {
-        const placeholder = studentLsbPhonePlaceholder(
-          student.idCardNumber,
-          student.profileCode
-        )
+        const placeholder = studentLsbPhonePlaceholder(student.idCardNumber, student.profileCode)
         lsbRes = await sendLsb(placeholder)
         if (
           lsbRes.status !== 200 &&

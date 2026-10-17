@@ -8,8 +8,7 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 const showAllMenus = () =>
   process.env.NODE_ENV === "development" ||
   (typeof window !== "undefined" &&
-    (window.location.host.startsWith("localhost") ||
-      window.contextData?.userName === "superadmin"))
+    (window.location.host.startsWith("localhost") || window.contextData?.userName === "superadmin"))
 
 const useMenuList = () => {
   const isUpdateAbility = useStoreState((actions) => actions.appState.isUpdateAbility)

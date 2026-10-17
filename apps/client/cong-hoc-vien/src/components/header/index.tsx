@@ -14,8 +14,7 @@ const HeaderApp: React.FC<{ className?: string }> = ({ className }) => {
         tenantCode: window.tenantCode || "dev",
         appCode: getRuntimeEnv("NEXT_PUBLIC_APP_CODE") || "dangkyhoc",
       })
-    } catch (error) {
-    }
+    } catch (error) {}
   }, [])
 
   return <div id="pluginContainer" className={className} />

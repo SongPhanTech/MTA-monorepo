@@ -1,8 +1,4 @@
-export type SurveyFormFieldBindKey =
-  | "lecturerName"
-  | "subjectClass"
-  | "organization"
-  | "semester"
+export type SurveyFormFieldBindKey = "lecturerName" | "subjectClass" | "organization" | "semester"
 
 export type SurveyFormInfoField = {
   label: string

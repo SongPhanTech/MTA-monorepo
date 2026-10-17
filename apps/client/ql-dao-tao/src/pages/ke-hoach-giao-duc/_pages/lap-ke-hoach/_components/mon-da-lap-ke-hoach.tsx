@@ -419,8 +419,8 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
                   }}
                   className="text-left hover:text-primary cursor-pointer"
                 >
-                  {record?.trainingBlockSubject?.trainingBlockOnCurriculumVersion?.curriculumVersion
-                    ?.fixedClasses?.map((fc: { code?: string | null }) => fc?.code)
+                  {record?.trainingBlockSubject?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses
+                    ?.map((fc: { code?: string | null }) => fc?.code)
                     .filter(Boolean)
                     .join(", ") || ""}
                 </div>

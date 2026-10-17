@@ -151,9 +151,7 @@ async function main() {
 
   console.log(`==> Đang tải (concurrency=${CONCURRENCY})...`)
   await mapPool(objects, CONCURRENCY, async (obj) => {
-    const rel = obj.name.startsWith(`${PREFIX}/`)
-      ? obj.name.slice(PREFIX.length + 1)
-      : obj.name
+    const rel = obj.name.startsWith(`${PREFIX}/`) ? obj.name.slice(PREFIX.length + 1) : obj.name
     const dest = path.join(rawDir, rel)
     await mkdir(path.dirname(dest), { recursive: true })
     await client.fGetObject(BUCKET, obj.name, dest)

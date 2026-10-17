@@ -250,7 +250,6 @@ export default function CaNhanThiLai() {
       if (studentsData.length > 0) {
         // biome-ignore lint/suspicious/useIterableCallbackReturn: <>
         studentsData?.map((student: any) => {
-
           operations.push({
             model: "StudentSubjectScore",
             operation: "create",

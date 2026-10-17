@@ -7,7 +7,9 @@ export const ThesisExportFilterSchema = z
     trainingCourseIds: z
       .array(z.string())
       .optional()
-      .openapi({ description: "Danh sách ID khóa đào tạo (để suy lớp nếu không gửi fixedClassIds)." }),
+      .openapi({
+        description: "Danh sách ID khóa đào tạo (để suy lớp nếu không gửi fixedClassIds).",
+      }),
     fixedClassIds: z
       .array(z.string())
       .optional()

@@ -90,4 +90,11 @@ export type ExportPhoiBangNganHanBody = {
   printDate?: string;
   signerName?: string;
   includeNamePrefix?: boolean;
+  courseTextEn1?: string;
+  courseTextEn2?: string;
+  courseTextVi1?: string;
+  courseTextVi2?: string;
+  fontFamily?: string;
+  fontSize?: number;
+  rowHeight?: number;
 };

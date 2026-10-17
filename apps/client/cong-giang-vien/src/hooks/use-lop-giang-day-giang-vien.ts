@@ -168,7 +168,9 @@ const useLopGiangDayGiangVien = () => {
           trangThaiNhapDiem: trangThai.label,
           trangThaiNhapDiemColor: trangThai.color,
           monMotDauDiem: item.subject?.onePoint ?? false,
-          ngayNdqt: item.scoreDeadLineStart ? formatDateVn(item.scoreDeadLineStart, "DD/MM/YYYY") : "",
+          ngayNdqt: item.scoreDeadLineStart
+            ? formatDateVn(item.scoreDeadLineStart, "DD/MM/YYYY")
+            : "",
           hanNdqt: item.scoreDeadline ? formatDateVn(item.scoreDeadline, "DD/MM/YYYY") : "",
           hanDqt: layHanConLai(item.scoreDeadline, item.isLockScore),
           ngayThi: item.examDate ? dayjs(item.examDate).toISOString() : null,

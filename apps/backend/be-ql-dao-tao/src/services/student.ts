@@ -621,88 +621,83 @@ export async function _generateStudentImportTemplate(
 
   const orgSelect = { sTen: true, bActive: true, bDeleted: true } as const
 
-  const [
-    fixedClasses,
-    curricula,
-    majorsByObjectType,
-    fieldsByObjectType,
-    trainingObjectType,
-  ] = await Promise.all([
-    prisma.fixedClass.findMany({
-      where: {
-        active: true,
-        deletedAt: null,
-        trainingCourse: {
-          trainingObjectTypeId,
+  const [fixedClasses, curricula, majorsByObjectType, fieldsByObjectType, trainingObjectType] =
+    await Promise.all([
+      prisma.fixedClass.findMany({
+        where: {
           active: true,
           deletedAt: null,
+          trainingCourse: {
+            trainingObjectTypeId,
+            active: true,
+            deletedAt: null,
+          },
         },
-      },
-      select: { code: true, name: true },
-      orderBy: { name: "asc" },
-    }),
-    prisma.curriculumVersion.findMany({
-      where: curriculumVersionWhere,
-      select: {
-        name: true,
-        curriculum: {
-          select: {
-            trainingField: {
-              select: {
-                name: true,
-                organization: { select: orgSelect },
+        select: { code: true, name: true },
+        orderBy: { name: "asc" },
+      }),
+      prisma.curriculumVersion.findMany({
+        where: curriculumVersionWhere,
+        select: {
+          name: true,
+          curriculum: {
+            select: {
+              trainingField: {
+                select: {
+                  name: true,
+                  organization: { select: orgSelect },
+                },
               },
-            },
-            trainingMajor: {
-              select: {
-                name: true,
-                trainingField: { select: { name: true } },
-                organization: { select: orgSelect },
-                secondOrganization: { select: orgSelect },
-                thirdOrganization: { select: orgSelect },
+              trainingMajor: {
+                select: {
+                  name: true,
+                  trainingField: { select: { name: true } },
+                  organization: { select: orgSelect },
+                  secondOrganization: { select: orgSelect },
+                  thirdOrganization: { select: orgSelect },
+                },
               },
             },
           },
         },
-      },
-      orderBy: { name: "asc" },
-    }),
-    prisma.trainingMajor.findMany({
-      where: {
-        trainingObjectTypes: {
-          some: { trainingObjectTypeId, deletedAt: null },
+        orderBy: { name: "asc" },
+      }),
+      prisma.trainingMajor.findMany({
+        where: {
+          trainingObjectTypes: {
+            some: { trainingObjectTypeId, deletedAt: null },
+          },
+          deletedAt: null,
+          active: true,
         },
-        deletedAt: null,
-        active: true,
-      },
-      select: {
-        name: true,
-        organization: { select: orgSelect },
-        secondOrganization: { select: orgSelect },
-        thirdOrganization: { select: orgSelect },
-        trainingField: { select: { name: true } },
-      },
-      orderBy: { name: "asc" },
-    }),
-    prisma.trainingField.findMany({
-      where: {
-        trainingObjectTypes: {
-          some: { trainingObjectTypeId, deletedAt: null },
+        select: {
+          name: true,
+          organization: { select: orgSelect },
+          secondOrganization: { select: orgSelect },
+          thirdOrganization: { select: orgSelect },
+          trainingField: { select: { name: true } },
         },
-        deletedAt: null,
-        active: true,
-      },
-      select: {
-        name: true,
-        organization: { select: orgSelect },
-      },
-      orderBy: { name: "asc" },
-    }),
-    prisma.trainingObjectType.findUniqueOrThrow({
-      where: { id: trainingObjectTypeId },
-      select: { name: true },
-    }),
-  ])
+        orderBy: { name: "asc" },
+      }),
+      prisma.trainingField.findMany({
+        where: {
+          trainingObjectTypes: {
+            some: { trainingObjectTypeId, deletedAt: null },
+          },
+          deletedAt: null,
+          active: true,
+        },
+        select: {
+          name: true,
+          organization: { select: orgSelect },
+        },
+        orderBy: { name: "asc" },
+      }),
+      prisma.trainingObjectType.findUniqueOrThrow({
+        where: { id: trainingObjectTypeId },
+        select: { name: true },
+      }),
+    ])
 
   const majorNamesFromCurricula = new Set<string>()
   const fieldNamesFromCurricula = new Set<string>()
@@ -839,16 +834,12 @@ function getWorkbookSheetPath(zip: InstanceType<typeof PizZip>, sheetName: strin
   if (!target) return null
 
   const normalized = target.replace(/^\.\//, "").replace(/^\//, "")
-  const candidates = [
-    normalized.startsWith("xl/") ? normalized : `xl/${normalized}`,
-    normalized,
-  ]
+  const candidates = [normalized.startsWith("xl/") ? normalized : `xl/${normalized}`, normalized]
   for (const path of candidates) {
     if (zip.file(path)) return path
   }
   return candidates[0]
 }
-
 
 function catalogLastRow(valueCount: number, hasHeader: boolean): number {
   const dataStartRow = hasHeader ? 2 : 1
@@ -902,7 +893,11 @@ function rewriteCatalogSheetData(
     rowsXml.push(`<row r="${dataStartRow}">${cells}</row>`)
   }
 
-  const lastCol = columns.map((c) => c.col).sort().slice(-1)[0] || "A"
+  const lastCol =
+    columns
+      .map((c) => c.col)
+      .sort()
+      .slice(-1)[0] || "A"
   const sheetData = `<sheetData>${rowsXml.join("")}</sheetData>`
   let xml = zip.file(sheetPath)!.asText()
   if (/<sheetData\b[^>]*\/>/.test(xml)) {
@@ -958,7 +953,10 @@ function finalizeStudentImportWorkbook(
     if (file.dir) continue
     let xml = file.asText()
     xml = xml.replace(/<selection\b[^>]*\/>/g, '<selection activeCell="A1" sqref="A1"/>')
-    xml = xml.replace(/<selection\b[^>]*>\s*<\/selection>/g, '<selection activeCell="A1" sqref="A1"/>')
+    xml = xml.replace(
+      /<selection\b[^>]*>\s*<\/selection>/g,
+      '<selection activeCell="A1" sqref="A1"/>'
+    )
     xml = xml.replace(/\s+topLeftCell="[^"]*"/g, "")
     zip.file(file.name, xml)
   }
@@ -1045,10 +1043,7 @@ function finalizeStudentImportWorkbook(
           lastRowBySheet.DanhMucChuongTrinhDaoTao ?? 1
         ),
       ],
-      [
-        "U",
-        sheetRange("DanhMucDonViQuanLi", "A", 1, lastRowBySheet.DanhMucDonViQuanLi ?? 1),
-      ],
+      ["U", sheetRange("DanhMucDonViQuanLi", "A", 1, lastRowBySheet.DanhMucDonViQuanLi ?? 1)],
     ].map(([col, formula], idx) => {
       const sqref = `${col}${STUDENT_IMPORT_DATA_START_ROW}:${col}${STUDENT_IMPORT_DATA_END_ROW}`
       return `<dataValidation type="list" allowBlank="1" showErrorMessage="1" sqref="${sqref}" xr:uid="{00000000-0001-0000-0000-${String(idx + 1).padStart(12, "0")}}"><formula1>${formula}</formula1></dataValidation>`
@@ -1157,7 +1152,10 @@ function sanitizeStudentImportWorkbook(
     if (file.dir) continue
     let xml = file.asText()
     xml = xml.replace(/<selection\b[^>]*\/>/g, '<selection activeCell="A1" sqref="A1"/>')
-    xml = xml.replace(/<selection\b[^>]*>\s*<\/selection>/g, '<selection activeCell="A1" sqref="A1"/>')
+    xml = xml.replace(
+      /<selection\b[^>]*>\s*<\/selection>/g,
+      '<selection activeCell="A1" sqref="A1"/>'
+    )
     xml = xml.replace(/\s+topLeftCell="[^"]*"/g, "")
     zip.file(file.name, xml)
   }
@@ -1309,9 +1307,7 @@ export const exportArchivedCertificate = async ({
     return {
       no: idx + 1,
       studentName: userProfile?.fullname || "",
-      dateOfBirth: userProfile?.dateOfBirth
-        ? `'${formatDateVn(userProfile.dateOfBirth)}`
-        : "",
+      dateOfBirth: userProfile?.dateOfBirth ? `'${formatDateVn(userProfile.dateOfBirth)}` : "",
       placeOfBirth: formatPlaceOfBirth(userProfile),
       idCardNumber: userProfile?.idCardNumber || "",
       fixedClass: fixedClass?.name || "",
@@ -1323,9 +1319,7 @@ export const exportArchivedCertificate = async ({
       reading: item.readingScore || "",
       writing: item.writingScore || "",
       score: item.score ?? "",
-      issuedDate: item.issuedDate
-        ? `'${formatDateVn(item.issuedDate)}`
-        : "",
+      issuedDate: item.issuedDate ? `'${formatDateVn(item.issuedDate)}` : "",
       issuedBy: item.issuedBy || "",
     }
   })
@@ -1481,17 +1475,13 @@ export const exportArchivedCertificateMulti = async ({
     return {
       no: idx + 1,
       studentName: userProfile?.fullname || "",
-      dateOfBirth: userProfile?.dateOfBirth
-        ? `'${formatDateVn(userProfile.dateOfBirth)}`
-        : "",
+      dateOfBirth: userProfile?.dateOfBirth ? `'${formatDateVn(userProfile.dateOfBirth)}` : "",
       placeOfBirth: formatPlaceOfBirth(userProfile),
       idCardNumber: userProfile?.idCardNumber || "",
       fixedClass: fixedClass?.name || "",
       trainingCourse: fixedClass?.trainingCourse?.name || "",
       trainingMajorName: trainingMajor?.name || "",
-      issuedDate: archivedState?.issuedDate
-        ? `'${formatDateVn(archivedState.issuedDate)}`
-        : "",
+      issuedDate: archivedState?.issuedDate ? `'${formatDateVn(archivedState.issuedDate)}` : "",
       issuedBy: archivedState?.issuedBy || "",
       scores: scoresArray,
     }
@@ -1603,9 +1593,7 @@ export const exportStudentsMissingCertificate = async ({
       no: idx + 1,
       studentCode: userProfile?.code || "",
       studentName: userProfile?.fullname || "",
-      dateOfBirth: userProfile?.dateOfBirth
-        ? `'${formatDateVn(userProfile.dateOfBirth)}`
-        : "",
+      dateOfBirth: userProfile?.dateOfBirth ? `'${formatDateVn(userProfile.dateOfBirth)}` : "",
       fixedClass: fixedClass?.name || "",
       trainingCourse: fixedClass?.trainingCourse?.name || "",
       trainingField: trainingMajor?.trainingField?.name || "",

@@ -5,10 +5,7 @@ import DeleteIcon from "@components/icons/delete"
 import EditIcon from "@components/icons/edit"
 import useSpinner from "@hooks/spinner"
 import { DownloadOutlined, EyeOutlined, PaperClipOutlined, SearchOutlined } from "@ant-design/icons"
-import {
-  useFindManyEvaluationPeriod,
-  useUpdateEvidenceCategory,
-} from "@workspace/db/hooks"
+import { useFindManyEvaluationPeriod, useUpdateEvidenceCategory } from "@workspace/db/hooks"
 import type { Evidence, EvidenceFile } from "@workspace/db"
 import type { Prisma } from "@workspace/db/client"
 import type { XemBangChungFilesInput } from "@components/modal/xem-bang-chung-files-modal"
@@ -231,11 +228,16 @@ export default function PeriodEvidenceRepositoryTab() {
           loading={isLoading}
           rowKey="id"
           headerTitleKey={(record) => {
-            const schoolYear = record.schoolYear?.name ? ` - Năm học: ${record.schoolYear.name}` : ""
+            const schoolYear = record.schoolYear?.name
+              ? ` - Năm học: ${record.schoolYear.name}`
+              : ""
             const count = record.evidenceItems?.length || 0
             return (
               <span className="font-semibold">
-                {record.name} {schoolYear} <Tag color="blue" className="ml-2">{count} minh chứng</Tag>
+                {record.name} {schoolYear}{" "}
+                <Tag color="blue" className="ml-2">
+                  {count} minh chứng
+                </Tag>
               </span>
             )
           }}
@@ -277,7 +279,8 @@ export default function PeriodEvidenceRepositoryTab() {
               width: 240,
               align: "left",
               type: "input",
-              sorter: (a, b) => (a.name || "").toLowerCase().localeCompare((b.name || "").toLowerCase()),
+              sorter: (a, b) =>
+                (a.name || "").toLowerCase().localeCompare((b.name || "").toLowerCase()),
               showSorterTooltip: false,
               render: (_, record) => record?.name || "",
             },

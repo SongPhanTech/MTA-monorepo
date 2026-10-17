@@ -21,10 +21,7 @@ type CatalogColumn = {
 
 const isLeaf = (item: MenuItem) => !item.children?.length
 
-const canViewItem = (
-  item: MenuItem,
-  can: ReturnType<typeof useAbility>["can"]
-) => {
+const canViewItem = (item: MenuItem, can: ReturnType<typeof useAbility>["can"]) => {
   if (item.hidden || !item.path) return false
   return can(item.id as QL_DAO_TAO_PERMISSION, "XEM")
 }

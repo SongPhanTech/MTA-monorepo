@@ -2,7 +2,11 @@ import DefaultLayout from "@layouts/default-layout"
 import { useSession } from "@workspace/auth/react"
 import { useFindManyUserProfile } from "@workspace/db/hooks"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
-import type { GrantedRole, UserPermissionItem, UserPermissionRole } from "@workspace/libs/api/schemas"
+import type {
+  GrantedRole,
+  UserPermissionItem,
+  UserPermissionRole,
+} from "@workspace/libs/api/schemas"
 import {
   getListGrantedRolesQueryKey,
   getUserPermissions,
@@ -121,7 +125,9 @@ export default function UyQuyenTruyCapPage() {
   const [selectedRoleKeys, setSelectedRoleKeys] = useState<string[]>([])
   const [bitMasks, setBitMasks] = useState<Record<string, Record<string, number>>>({})
   const [detailRole, setDetailRole] = useState<SystemRole | null>(null)
-  const [dropdownOrder, setDropdownOrder] = useState<{ formName: string; bits: number[] } | null>(null)
+  const [dropdownOrder, setDropdownOrder] = useState<{ formName: string; bits: number[] } | null>(
+    null
+  )
   const [selectedGrantIds, setSelectedGrantIds] = useState<string[]>([])
   const [grantSearch, setGrantSearch] = useState("")
   const [grantBits, setGrantBits] = useState<number[]>([])
@@ -170,7 +176,7 @@ export default function UyQuyenTruyCapPage() {
   })
   const currentUser =
     currentRes?.status === 200
-      ? currentRes.data.find((item) => item.UserId === currentUserId) ?? currentRes.data[0]
+      ? (currentRes.data.find((item) => item.UserId === currentUserId) ?? currentRes.data[0])
       : undefined
   const currentError = currentRes && currentRes.status !== 200 ? currentRes.data.message : undefined
   const currentRoles = currentUser?.Roles ?? []
@@ -376,7 +382,12 @@ export default function UyQuyenTruyCapPage() {
                 {menu}
               </>
             )}
-            onChange={(bits) => setPermissionMask(row, bits.reduce((mask, bit) => mask | bit, 0))}
+            onChange={(bits) =>
+              setPermissionMask(
+                row,
+                bits.reduce((mask, bit) => mask | bit, 0)
+              )
+            }
           />
         )
       },
@@ -638,7 +649,9 @@ export default function UyQuyenTruyCapPage() {
           </Popconfirm>
         }
       >
-        {grantsError ? <Alert type="error" showIcon message={grantsError} className="mb-3" /> : null}
+        {grantsError ? (
+          <Alert type="error" showIcon message={grantsError} className="mb-3" />
+        ) : null}
         <Flex gap={8} className="mb-3">
           <Input.Search
             allowClear
@@ -691,8 +704,9 @@ export default function UyQuyenTruyCapPage() {
         footer={
           <Flex justify="space-between" align="center" gap={8} wrap="wrap">
             <Typography.Text type="secondary">
-              Đã chọn <Typography.Text strong>{detailSummary.permissionCount}</Typography.Text> quyền trên{" "}
-              <Typography.Text strong>{detailSummary.formCount}</Typography.Text> chức năng
+              Đã chọn <Typography.Text strong>{detailSummary.permissionCount}</Typography.Text>{" "}
+              quyền trên <Typography.Text strong>{detailSummary.formCount}</Typography.Text> chức
+              năng
             </Typography.Text>
             <Button type="primary" onClick={closeDetail}>
               Xong

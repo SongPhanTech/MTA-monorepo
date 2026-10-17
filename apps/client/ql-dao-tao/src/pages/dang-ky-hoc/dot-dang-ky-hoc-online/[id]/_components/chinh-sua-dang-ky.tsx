@@ -161,9 +161,7 @@ export default function ChinhSuaDangKy({ sessionId, semesterId }: Props) {
         active: true,
         cancelled: false,
         ...(semesterId ? { semesterId } : {}),
-        ...(registeredSubjectClassIds.length
-          ? { id: { notIn: registeredSubjectClassIds } }
-          : {}),
+        ...(registeredSubjectClassIds.length ? { id: { notIn: registeredSubjectClassIds } } : {}),
       },
       include: { subject: true },
       orderBy: [{ code: "asc" }],
@@ -182,9 +180,7 @@ export default function ChinhSuaDangKy({ sessionId, semesterId }: Props) {
         cancelled: false,
         ...(semesterId ? { semesterId } : {}),
         ...(changeSubjectVersionId ? { subjectId: changeSubjectVersionId } : {}),
-        ...(changeSourceLog?.subjectClassId
-          ? { id: { not: changeSourceLog.subjectClassId } }
-          : {}),
+        ...(changeSourceLog?.subjectClassId ? { id: { not: changeSourceLog.subjectClassId } } : {}),
       },
       include: { subject: true },
       orderBy: [{ code: "asc" }],

@@ -220,8 +220,7 @@ export function buildProgressRows(orgs: Org[], lecturers: ClusterLecturer[]): Pr
 
       return {
         key: `lecturer-${lecturer.id}`,
-        parentKey:
-          organization?.iLoaiDonVi === 7 ? `department-${donViId}` : `faculty-${donViId}`,
+        parentKey: organization?.iLoaiDonVi === 7 ? `department-${donViId}` : `faculty-${donViId}`,
         type: "lecturer" as const,
         name,
         completed: stats[lecturer.id]?.completed ?? 0,

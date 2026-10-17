@@ -171,6 +171,7 @@ const SinhDeThuCongModal = () => {
     return KnowledgeBlockData.map((item) => ({
       value: item.id,
       title: item.name,
+      label: item.name,
       isParent: true,
       children: item.questions.map((question) => ({
         value: question.id,

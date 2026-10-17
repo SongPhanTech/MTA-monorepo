@@ -117,10 +117,7 @@ export async function processRegistration(
       where: {
         studentId,
         subjectVersionId: { in: allPrerequisiteIds },
-        OR: [
-          { finalScore: { gte: scoreToPass } },
-          { manualFinalScore: { gte: scoreToPass } },
-        ],
+        OR: [{ finalScore: { gte: scoreToPass } }, { manualFinalScore: { gte: scoreToPass } }],
       },
       select: { subjectVersionId: true },
     })

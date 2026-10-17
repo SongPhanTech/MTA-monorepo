@@ -506,31 +506,28 @@ function TabDotKhaoSatCum({
                         </Tooltip>
                       )}
 
-                      <Tooltip title="Chỉnh sửa nội dung form khảo sát" placement="top">
-                        <FilePenLine
-                          size={16}
-                          className="cursor-pointer text-emerald-700"
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            onOpenEditFormContent({ clusterSurveyId: id, name })
-                          }}
-                        />
-                      </Tooltip>
-                    
-
-                    
-                      <EditIcon
-                        disabled={surveys?.some(
-                          (item: { surveySessions?: unknown[] }) =>
-                            (item?.surveySessions?.length ?? 0) > 0
-                        )}
+                    <Tooltip title="Chỉnh sửa nội dung form khảo sát" placement="top">
+                      <FilePenLine
+                        size={16}
+                        className="cursor-pointer text-emerald-700"
                         onClick={(e) => {
                           e.stopPropagation()
-                          onOpen({ id, type: "multiple" })
+                          onOpenEditFormContent({ clusterSurveyId: id, name })
                         }}
-                        className="text-sm text-blue-700 cursor-pointer"
                       />
-                    
+                    </Tooltip>
+
+                    <EditIcon
+                      disabled={surveys?.some(
+                        (item: { surveySessions?: unknown[] }) =>
+                          (item?.surveySessions?.length ?? 0) > 0
+                      )}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        onOpen({ id, type: "multiple" })
+                      }}
+                      className="text-sm text-blue-700 cursor-pointer"
+                    />
 
                     {can(KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT, "XOA") && (
                       <DeleteIcon

@@ -12,7 +12,11 @@ const { Text } = Typography
 export type TaoDuLieuMauStudentRow = {
   id: string
   code?: string | null
-  userProfile?: { code?: string | null; fullname?: string | null; dateOfBirth?: string | Date | null } | null
+  userProfile?: {
+    code?: string | null
+    fullname?: string | null
+    dateOfBirth?: string | Date | null
+  } | null
   fixedClass?: { name?: string | null } | null
   thesisRegistrations?: Array<{
     deletedAt?: Date | string | null

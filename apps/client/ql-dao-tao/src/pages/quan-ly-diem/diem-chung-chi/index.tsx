@@ -388,7 +388,9 @@ export default function ArchivedCertificate() {
       }
       message.error(res?.data?.message || "Không thể xóa chứng chỉ")
     } catch (error: any) {
-      message.error(error?.info?.message || error?.data?.message || "Đã xảy ra lỗi, vui lòng kiểm tra lại")
+      message.error(
+        error?.info?.message || error?.data?.message || "Đã xảy ra lỗi, vui lòng kiểm tra lại"
+      )
     } finally {
       hideSpinner()
     }
@@ -948,9 +950,7 @@ export default function ArchivedCertificate() {
                   <div className="flex flex-col gap-0.5 text-xs">
                     {scores.map((s: any) => (
                       <div key={s.id}>
-                        {s.subjectVersion?.code
-                          ? `${s.subjectVersion.code} - `
-                          : ""}
+                        {s.subjectVersion?.code ? `${s.subjectVersion.code} - ` : ""}
                         {s.subjectVersion?.name || "?"}: <b>{s.finalScore}</b>
                       </div>
                     ))}

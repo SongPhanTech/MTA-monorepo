@@ -167,7 +167,9 @@ export const DEFAULT_PLVB_PRINT_SETTINGS_INTERNATIONAL: PlvbPrintSettings = {
   ...DEFAULT_PLVB_PRINT_SETTINGS,
 }
 
-export function getDefaultPlvbPrintSettings(variant: PlvbPrintVariant = "military"): PlvbPrintSettings {
+export function getDefaultPlvbPrintSettings(
+  variant: PlvbPrintVariant = "military"
+): PlvbPrintSettings {
   return variant === "international"
     ? { ...DEFAULT_PLVB_PRINT_SETTINGS_INTERNATIONAL }
     : { ...DEFAULT_PLVB_PRINT_SETTINGS }

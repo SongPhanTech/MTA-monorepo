@@ -323,9 +323,7 @@ function createExamSheet(worksheet: ExcelJS.Worksheet, params: CreateExamSheetPa
       index + 1,
       student?.userProfile?.code || "",
       student?.userProfile?.fullname || "",
-      student?.userProfile?.dateOfBirth
-        ? formatDateInSlash(student.userProfile.dateOfBirth)
-        : "",
+      student?.userProfile?.dateOfBirth ? formatDateInSlash(student.userProfile.dateOfBirth) : "",
       student?.fixedClass?.code || "",
       sss?.attendanceScore ?? "",
       sss?.midtermScore ?? "",

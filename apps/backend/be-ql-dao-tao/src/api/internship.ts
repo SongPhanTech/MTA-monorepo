@@ -118,7 +118,9 @@ app.openapi(exportInternshipProfile, async (c) => {
   })
 
   const formatSupervisor = (
-    supervisor: (typeof internships)[number]["supervisor"] | (typeof internships)[number]["coSupervisor"]
+    supervisor:
+      | (typeof internships)[number]["supervisor"]
+      | (typeof internships)[number]["coSupervisor"]
   ) => {
     const userProfile = supervisor?.expert?.lecturer?.userProfile
     return [

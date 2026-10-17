@@ -299,8 +299,7 @@ export default function CriteriaAnalysisPeriodList() {
 
         const blob = await Packer.toBlob(doc)
         saveAs(blob, `bao_cao_dot_danh_gia_${data?.name}.docx`)
-      } catch (error) {
-      }
+      } catch (error) {}
     },
     [data, exportDanhyeuCau]
   )

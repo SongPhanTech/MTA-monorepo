@@ -80,12 +80,10 @@ dayjs.locale("vi")
 
 const { Title } = Typography
 
-const OPTIONAL_SUBJECT_SCORE_HINT =
-  "Không chọn môn: chỉ ghi nhận chứng chỉ."
+const OPTIONAL_SUBJECT_SCORE_HINT = "Không chọn môn: chỉ ghi nhận chứng chỉ."
 
 function getCurriculumSubjects(student: any): CurriculumSubject[] {
-  const curriculumVersion =
-    student?.curriculumVersion || student?.fixedClass?.curriculumVersion
+  const curriculumVersion = student?.curriculumVersion || student?.fixedClass?.curriculumVersion
   if (!curriculumVersion?.trainingBlocks) return []
 
   const map = new Map<string, CurriculumSubject>()
@@ -149,7 +147,10 @@ function getMappedFinalScore(cert: any, subject: CurriculumSubject): number {
   return mapping?.finalScore ?? 0
 }
 
-function getSelectableSubjects(cert: any, curriculumSubjects: CurriculumSubject[]): CurriculumSubject[] {
+function getSelectableSubjects(
+  cert: any,
+  curriculumSubjects: CurriculumSubject[]
+): CurriculumSubject[] {
   const configured = getConvertibleSubjects(cert, curriculumSubjects)
   if (configured.length) return configured
   return curriculumSubjects
@@ -396,8 +397,7 @@ const PutCertificateArchivedModal = () => {
     [form, setSubjectScores]
   )
 
-  const getSubjectScores = (rowId: string): SubjectScoreItem[] =>
-    subjectScoresByRow[rowId] || []
+  const getSubjectScores = (rowId: string): SubjectScoreItem[] => subjectScoresByRow[rowId] || []
 
   async function onOk({ ...rest }: PutArchivedCertificate) {
     try {
@@ -667,7 +667,9 @@ const PutCertificateArchivedModal = () => {
                   align: "left",
                   render: (_, record: SelectedStudentRow) => {
                     const selectedCertificateId = studentFormData?.[record.rowId]?.certificateId
-                    const selectedCertificate = certificate.find((c) => c.id === selectedCertificateId)
+                    const selectedCertificate = certificate.find(
+                      (c) => c.id === selectedCertificateId
+                    )
                     const subjectOptions = getSelectableSubjects(
                       selectedCertificate,
                       getCurriculumSubjectsForStudent(record.curriculumVersionId)
@@ -692,7 +694,9 @@ const PutCertificateArchivedModal = () => {
                           <span className="text-orange-500 text-xs">
                             SV chưa có CTĐT / không có môn
                           </span>
-                          <span className="text-gray-500 text-xs">{OPTIONAL_SUBJECT_SCORE_HINT}</span>
+                          <span className="text-gray-500 text-xs">
+                            {OPTIONAL_SUBJECT_SCORE_HINT}
+                          </span>
                         </div>
                       )
                     }
@@ -700,7 +704,9 @@ const PutCertificateArchivedModal = () => {
                     return (
                       <div className="flex flex-col gap-1 py-1">
                         {!scores.length && (
-                          <span className="text-gray-500 text-xs">{OPTIONAL_SUBJECT_SCORE_HINT}</span>
+                          <span className="text-gray-500 text-xs">
+                            {OPTIONAL_SUBJECT_SCORE_HINT}
+                          </span>
                         )}
                         {scores.map((item, idx) => {
                           return (

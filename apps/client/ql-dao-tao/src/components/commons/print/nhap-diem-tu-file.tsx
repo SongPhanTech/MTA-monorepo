@@ -123,7 +123,9 @@ const ImportScoreModal = ({
 
     selectedData.forEach((item) => {
       // Kiểm tra mã định danh
-      const existingStudent = existingStudents.find((s) => s.student?.userProfile?.code === item.studentCode)
+      const existingStudent = existingStudents.find(
+        (s) => s.student?.userProfile?.code === item.studentCode
+      )
 
       if (!existingStudent) {
         errors.push(`Mã sinh viên ${item.studentCode} không tồn tại trong lớp`)

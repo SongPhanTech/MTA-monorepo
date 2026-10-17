@@ -467,7 +467,9 @@ function SelectLecturer({
                 dataIndex: "organizationName",
                 width: 80,
                 type: "input",
-                render: (__, record: any) => <>{record?.mainLecturer?.userProfile?.donVi?.sMa || ""}</>,
+                render: (__, record: any) => (
+                  <>{record?.mainLecturer?.userProfile?.donVi?.sMa || ""}</>
+                ),
               },
               {
                 title: "Lớp môn học",

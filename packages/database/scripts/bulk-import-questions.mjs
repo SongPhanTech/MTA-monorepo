@@ -57,8 +57,7 @@ const CATALOG_PATH =
     ? process.argv[catalogArg + 1]
     : join(import.meta.dir || ".", "import-catalog.json")
 const errorsOutArg = process.argv.indexOf("--errors-out")
-const ERRORS_OUT_PATH =
-  errorsOutArg !== -1 ? process.argv[errorsOutArg + 1] : null
+const ERRORS_OUT_PATH = errorsOutArg !== -1 ? process.argv[errorsOutArg + 1] : null
 
 const url = process.env.DATABASE_URL
 if (!url) {
@@ -442,7 +441,9 @@ function parseStandardHeader(line) {
 }
 
 function isJunkLine(line) {
-  const t = String(line || "").replace(/\s+/g, " ").trim()
+  const t = String(line || "")
+    .replace(/\s+/g, " ")
+    .trim()
   if (!t) return true
   if (/MERGEFORMAT|PAGEREF|HYPERLINK|TOC \\/i.test(t)) return true
   if (/^PAGE\b/i.test(t)) return true
@@ -451,7 +452,9 @@ function isJunkLine(line) {
 }
 
 function isJunkQuestion(content) {
-  const t = String(content || "").replace(/\s+/g, " ").trim()
+  const t = String(content || "")
+    .replace(/\s+/g, " ")
+    .trim()
   if (/\{img_\d+\}|<img\s/i.test(t) && t.length >= 7) return false
   if (t.length < 8) return true
   if (isJunkLine(t)) return true
@@ -489,7 +492,9 @@ function parsePointToken(token) {
 
 /** Tách đề / điểm / đáp án cho dạng NHCH tự luận: "Câu hỏi: …? 2 <đáp án>" */
 function parseEssayStemAndAnswer(raw, defaultPoint) {
-  let text = stripWordNoise(raw).replace(/\u00A0/g, " ").trim()
+  let text = stripWordNoise(raw)
+    .replace(/\u00A0/g, " ")
+    .trim()
   text = text.replace(/^Câu hỏi\s*:\s*/i, "")
   const keptLines = text
     .split("\n")
@@ -504,7 +509,11 @@ function parseEssayStemAndAnswer(raw, defaultPoint) {
       .join(" ")
       .replace(/\?+\s*$/, "")
       .trim()
-    const explanation = keptLines.slice(pointLineIdx + 1).join("\n").trim() || null
+    const explanation =
+      keptLines
+        .slice(pointLineIdx + 1)
+        .join("\n")
+        .trim() || null
     if (stem) return { content: stem, point: point ?? defaultPoint ?? 1, explanation }
   }
 
@@ -785,10 +794,13 @@ const bankLocks = new Map()
 function withBankLock(bankId, fn) {
   const prev = bankLocks.get(bankId) || Promise.resolve()
   const next = prev.then(fn, fn)
-  bankLocks.set(bankId, next.then(
-    () => {},
-    () => {}
-  ))
+  bankLocks.set(
+    bankId,
+    next.then(
+      () => {},
+      () => {}
+    )
+  )
   return next
 }
 
@@ -991,10 +1003,7 @@ async function main() {
   if (results.errors.length > 0) {
     const errPath =
       ERRORS_OUT_PATH ||
-      join(
-        import.meta.dir || ".",
-        errorsOnly ? "import-errors-word.json" : "import-errors.json"
-      )
+      join(import.meta.dir || ".", errorsOnly ? "import-errors-word.json" : "import-errors.json")
     writeFileSync(errPath, JSON.stringify(results.errors, null, 2), "utf8")
     console.log(`Errors saved to ${errPath}`)
   } else if (ERRORS_OUT_PATH) {

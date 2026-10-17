@@ -23,7 +23,6 @@ const PutBoTieuChuanModal = () => {
     },
   })
 
-
   const { data: initialValue } = useFindUniqueEvaluationStandardSet(
     {
       where: {

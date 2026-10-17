@@ -187,8 +187,7 @@ const ReviewCriteriaEvaluationAdvisorySubpage = ({
 
   const hasApprovableItems = data.criteria.some(
     (c) =>
-      c.evaluationCriterion &&
-      c.evaluationCriterion.status === $Enums.EvaluationStatus.APPROVED
+      c.evaluationCriterion && c.evaluationCriterion.status === $Enums.EvaluationStatus.APPROVED
   )
 
   return (
@@ -277,7 +276,8 @@ const ReviewCriteriaEvaluationAdvisorySubpage = ({
                                               }
                                             }}
                                           >
-                                            {showCommentsCriterionId === item.evaluationCriterion?.id
+                                            {showCommentsCriterionId ===
+                                            item.evaluationCriterion?.id
                                               ? "Đóng"
                                               : "Gửi ý kiến phản biện"}
                                           </Button>

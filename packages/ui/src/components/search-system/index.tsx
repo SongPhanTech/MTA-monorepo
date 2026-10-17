@@ -31,8 +31,7 @@ const options: SearchSystemOptionType[] = Object.entries(NAVIGATION).map(([key, 
   children: navigationToOptions(value.menus),
 }))
 
-const onChange: CascaderProps<SearchSystemOptionType>["onChange"] = (value, selectedOptions) => {
-}
+const onChange: CascaderProps<SearchSystemOptionType>["onChange"] = (value, selectedOptions) => {}
 const filter = (inputValue: string, path: SearchSystemOptionType[]) =>
   path.some(
     (option) => (option.label as string).toLowerCase().indexOf(inputValue.toLowerCase()) > -1
