@@ -1,6 +1,8 @@
 import { OpenAPIHono } from "@hono/zod-openapi"
 import { jwtAuth } from "@workspace/auth/hono"
 import { enhance, Prisma, type PrismaClient } from "@workspace/db"
+import { modelApiAppCodes } from "@workspace/db/model-api-app-codes"
+import { modelPolicyUser } from "@workspace/db/model-policy-user"
 import { createHonoHandler } from "@workspace/db/hono"
 import { setupAppTimezone } from "@workspace/libs/timezone"
 import type { Context } from "hono"
@@ -157,15 +159,6 @@ app.all("/api/system/:appcode/*", async (c) => {
 app.route("/api/minio", MinIOApp)
 app.route("/api/sql", SqlTransactionApp)
 
-const mockProfileId = process.env.MOCK_USER_PROFILE_ID?.trim()
-const nv = mockProfileId
-  ? await prisma.userProfile.findUniqueOrThrow({ where: { id: mockProfileId } })
-  : await prisma.userProfile.findFirstOrThrow({})
-
-if (mockProfileId) {
-  console.log(`[be-model] Using mock user profile: ${nv.fullname} (${nv.id})`)
-}
-
 const TargetMap = {
   name: "Tên",
   englishName: "Tên tiếng Anh",
@@ -217,12 +210,12 @@ const errorTransformer = (err: unknown) => {
   return err
 }
 
+app.use("/api/model/*", jwtAuth(modelApiAppCodes()))
 app.use(
   "/api/model/*",
   createHonoHandler({
     getPrisma: async (ctx: Context) => {
-      return enhance(prisma, { user: nv }, { errorTransformer })
-      // return enhance(prisma, { user: ctx.get('user') })
+      return enhance(prisma, { user: modelPolicyUser(ctx.get("user")) }, { errorTransformer })
     },
   })
 )

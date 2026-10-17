@@ -23,6 +23,7 @@ enum NotificationType {
   SURVEY_DEADLINE   // Hạn điền khảo sát
   INDIVIDUAL_SCHEDULE // Lịch cá nhân
   CLASS_REMINDER    // Nhắc trước buổi học (StudentPortal tạo)
+  CHAT              // Tin nhắn chat
   @@schema("ql-danh-muc")
 }
 
@@ -64,9 +65,22 @@ model Notification extends Base {
   pushExpiresAt  DateTime?            @db.Timestamptz(6)
   reminderData   Json?
 
+  // Profile id of the original CHAT recipient, written once with the row.
+  // Reads compare this column to auth().id. Student.userProfileId stays writable
+  // so existing profile flows keep working; reassigning a student cannot expose
+  // another user's CHAT rows. auth().mock is the shared dev profile.
+  recipientProfileId String? @db.Uuid
+
+  @@deny('read', type == CHAT && (auth() == null || auth().mock == true || recipientProfileId != auth().id))
+  @@deny('create', type == CHAT)
+  @@deny('update', type == CHAT)
+  @@deny('update', future().type == CHAT)
+  @@deny('delete', type == CHAT)
+
   @@index([lecturerId])
   @@index([type, publishedAt])
   @@index([targetDeviceId])
+  @@index([recipientProfileId])
   @@schema("ql-danh-muc")
 }
 

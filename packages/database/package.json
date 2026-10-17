@@ -21,6 +21,8 @@
         "./zod/schemas": "./src/zod-schemas.ts",
         "./hooks": "./generated/hooks/index.ts",
         "./hono": "./src/hono/index.ts",
+        "./model-policy-user": "./src/model-policy-user.ts",
+        "./model-api-app-codes": "./src/model-api-app-codes.ts",
         "./openapi": "./src/openapi.ts"
     },
     "dependencies": {

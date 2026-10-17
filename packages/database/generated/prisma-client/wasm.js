@@ -192,6 +192,7 @@ exports.Prisma.UserProfileScalarFieldEnum = {
   dNgaySua: 'dNgaySua',
   sThietBiTao: 'sThietBiTao',
   sThietBiSua: 'sThietBiSua',
+  mock: 'mock',
   bLaNguoiDung: 'bLaNguoiDung',
   bLaGiangVien: 'bLaGiangVien',
   bLaCanBoNhanVien: 'bLaCanBoNhanVien',
@@ -3195,7 +3196,8 @@ exports.Prisma.NotificationScalarFieldEnum = {
   lecturerId: 'lecturerId',
   targetDeviceId: 'targetDeviceId',
   pushExpiresAt: 'pushExpiresAt',
-  reminderData: 'reminderData'
+  reminderData: 'reminderData',
+  recipientProfileId: 'recipientProfileId'
 };
 
 exports.Prisma.PersonalWorkTagScalarFieldEnum = {
@@ -8684,7 +8686,8 @@ exports.Prisma.NotificationOrderByRelevanceFieldEnum = {
   title: 'title',
   content: 'content',
   lecturerId: 'lecturerId',
-  targetDeviceId: 'targetDeviceId'
+  targetDeviceId: 'targetDeviceId',
+  recipientProfileId: 'recipientProfileId'
 };
 
 exports.Prisma.PersonalWorkTagOrderByRelevanceFieldEnum = {
@@ -11175,7 +11178,8 @@ exports.NotificationType = exports.$Enums.NotificationType = {
   EXAM_DEADLINE: 'EXAM_DEADLINE',
   SURVEY_DEADLINE: 'SURVEY_DEADLINE',
   INDIVIDUAL_SCHEDULE: 'INDIVIDUAL_SCHEDULE',
-  CLASS_REMINDER: 'CLASS_REMINDER'
+  CLASS_REMINDER: 'CLASS_REMINDER',
+  CHAT: 'CHAT'
 };
 
 exports.NotificationPriority = exports.$Enums.NotificationPriority = {

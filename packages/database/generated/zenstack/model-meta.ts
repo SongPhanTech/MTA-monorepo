@@ -328,6 +328,11 @@ const metadata: ModelMeta = {
                     name: "sThietBiSua",
                     type: "String",
                     isOptional: true,
+                }, mock: {
+                    name: "mock",
+                    type: "Boolean",
+                    isOptional: true,
+                    attributes: [{ "name": "@omit", "args": [] }, { "name": "@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition", "value": true }] }, { "name": "@deny", "args": [{ "name": "operation", "value": "update" }, { "name": "condition", "value": true }] }],
                 }, bLaNguoiDung: {
                     name: "bLaNguoiDung",
                     type: "Boolean",
@@ -17783,6 +17788,11 @@ const metadata: ModelMeta = {
                     name: "reminderData",
                     type: "Json",
                     isOptional: true,
+                }, recipientProfileId: {
+                    name: "recipientProfileId",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -17793,7 +17803,7 @@ const metadata: ModelMeta = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-danh-muc" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "create" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "update" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "update" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "delete" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-danh-muc" }] }],
         },
         personalWorkTag: {
             name: 'PersonalWorkTag', fields: {
