@@ -23,8 +23,6 @@ import { exportSurveyDocxTemplate } from "@/utils/export-survey-docx-template"
 
 const { Title } = Typography
 
-const DEPARTMENT_CAP = 3
-
 export interface CriteriaItem {
   id: string
   name: string
@@ -492,7 +490,7 @@ function SurveyOrganizationReport({
                   menu={{
                     items: [
                       selectedItem?.iCapDonVi != null &&
-                        selectedItem.iCapDonVi !== DEPARTMENT_CAP && {
+                        selectedItem.iCapDonVi !== 3 && {
                           key: "export-summary-docx",
                           icon: <FileWordOutlined />,
                           label: "Tổng kết Khoa/Viện",
