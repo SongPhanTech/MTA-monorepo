@@ -34,6 +34,7 @@ function TabChuDeKhaoSat({
 
   const where = useMemo(
     () => ({
+      deletedAt: null,
       ...(filters.code && filters.code !== ""
         ? {
             code: {
@@ -75,7 +76,7 @@ function TabChuDeKhaoSat({
     skip: (currentPage - 1) * numberOfPages,
   })
 
-  const { data: count } = useCountSurveyTopic({ where: { ...where, deletedAt: null } })
+  const { data: count } = useCountSurveyTopic({ where })
 
   const { onOpen, onClose } = useDisclosure<string>({
     tag: "PutSurveyTopicModal",

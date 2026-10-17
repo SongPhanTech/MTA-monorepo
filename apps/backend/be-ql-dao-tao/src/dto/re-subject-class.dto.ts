@@ -36,8 +36,9 @@ export const RetakeStudentItemSchema = z
       })
       .openapi(fieldDesc("Lớp niên chế.")),
     studentId: z.string().openapi(fieldDesc("ID học viên (Student).")),
-    thuong_xuyen: z.number().openapi(fieldDesc("Điểm thường xuyên.")),
-    dinh_ky: z.number().openapi(fieldDesc("Điểm định kỳ / giữa kỳ.")),
+    thuong_xuyen: z.number().nullable().openapi(fieldDesc("Điểm thường xuyên.")),
+    dinh_ky: z.number().nullable().openapi(fieldDesc("Điểm định kỳ / giữa kỳ.")),
+    diem_thi: z.number().nullable().optional().openapi(fieldDesc("Điểm thi kết thúc HP.")),
     diem_cuoi: z.number().nullable().openapi(fieldDesc("Điểm cuối kỳ (nếu có).")),
     withdrew: z.boolean().openapi(fieldDesc("true = rút học phần.")),
     mien_thi: z.boolean().openapi(fieldDesc("true = miễn thi.")),
@@ -72,11 +73,19 @@ export const ReExamStudentItemSchema = z
       })
       .openapi(fieldDesc("Lớp niên chế.")),
     studentId: z.string().openapi(fieldDesc("ID học viên.")),
+    thuong_xuyen: z.number().nullable().optional().openapi(fieldDesc("Điểm thường xuyên.")),
+    dinh_ky: z.number().nullable().optional().openapi(fieldDesc("Điểm định kỳ.")),
+    diem_thi: z.number().nullable().optional().openapi(fieldDesc("Điểm thi kết thúc HP.")),
     diem_cuoi: z.number().nullable().openapi(fieldDesc("Điểm cuối kỳ.")),
     withdrew: z.boolean().openapi(fieldDesc("Rút học phần.")),
     mien_thi: z.boolean().openapi(fieldDesc("Miễn thi.")),
     hoan_thi: z.boolean().openapi(fieldDesc("Hoãn thi.")),
     ly_do_hoan_thi: z.string().nullable().openapi(fieldDesc("Lý do hoãn thi.")),
+    cam_thi: z.boolean().optional().openapi(fieldDesc("Cấm thi.")),
+    ly_do_cam_thi: z.string().nullable().optional().openapi(fieldDesc("Lý do cấm thi.")),
+    dinh_chi: z.boolean().optional().openapi(fieldDesc("Đình chỉ thi.")),
+    ly_do_dinh_chi: z.string().nullable().optional().openapi(fieldDesc("Lý do đình chỉ.")),
+    reason: z.string().nullable().optional().openapi(fieldDesc("Lý do thi lại.")),
     truot_mon: z.boolean().openapi(fieldDesc("Trượt môn.")),
   })
   .openapi("ReExamStudentItem")

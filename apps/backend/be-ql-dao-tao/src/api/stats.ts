@@ -4702,11 +4702,11 @@ RetestStudent AS (
     WHERE
         SC.cancelled = false
         AND SSS."finalScore" IS NOT NULL
-        AND SSS."examBanned" = false
-        AND SSS.suspended = false
-        AND SSS.withdrew = false
-        AND SSS.exempted = false
-        AND SSS."examPostponed" = false
+        AND SSS."examBanned" IS NOT TRUE
+        AND SSS.suspended IS NOT TRUE
+        AND SSS.withdrew IS NOT TRUE
+        AND SSS.exempted IS NOT TRUE
+        AND SSS."examPostponed" IS NOT TRUE
         AND (
             SSS."finalScore" < TC."scoreToPass"
         )
@@ -5025,8 +5025,8 @@ RelearnStudent AS (
             OR SSS.suspended = true
             OR SSS.withdrew = true
         )
-        AND SSS.exempted = false
-        AND SSS."examPostponed" = false
+        AND SSS.exempted IS NOT TRUE
+        AND SSS."examPostponed" IS NOT TRUE
 ),
 
 TotalStudent AS (

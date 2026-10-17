@@ -621,83 +621,94 @@ export async function _generateStudentImportTemplate(
 
   const orgSelect = { sTen: true, bActive: true, bDeleted: true } as const
 
-  const [fixedClasses, curricula, majorsByObjectType, fieldsByObjectType, trainingObjectType] =
-    await Promise.all([
-      prisma.fixedClass.findMany({
-        where: {
+  const [
+    fixedClasses,
+    curricula,
+    majorsByObjectType,
+    fieldsByObjectType,
+    trainingObjectType,
+  ] = await Promise.all([
+    prisma.fixedClass.findMany({
+      where: {
+        active: true,
+        deletedAt: null,
+        trainingCourse: {
+          trainingObjectTypeId,
           active: true,
           deletedAt: null,
-          trainingCourse: {
-            trainingObjectTypeId,
-            active: true,
-            deletedAt: null,
-          },
         },
-        select: { code: true, name: true },
-        orderBy: { name: "asc" },
-      }),
-      prisma.curriculumVersion.findMany({
-        where: curriculumVersionWhere,
-        select: {
-          name: true,
-          curriculum: {
-            select: {
-              trainingField: {
-                select: {
-                  name: true,
-                  organization: { select: orgSelect },
-                },
+      },
+      select: {
+        code: true,
+        name: true,
+        curriculumVersion: {
+        select: { name: true },
+        },
+      },
+      orderBy: { name: "asc" },
+    }),
+    prisma.curriculumVersion.findMany({
+      where: curriculumVersionWhere,
+      select: {
+        name: true,
+        curriculum: {
+          select: {
+            trainingField: {
+              select: {
+                name: true,
+                organization: { select: orgSelect },
               },
-              trainingMajor: {
-                select: {
-                  name: true,
-                  trainingField: { select: { name: true } },
-                  organization: { select: orgSelect },
-                  secondOrganization: { select: orgSelect },
-                  thirdOrganization: { select: orgSelect },
-                },
+            },
+            trainingMajor: {
+              select: {
+                name: true,
+                trainingField: { select: { name: true } },
+                organization: { select: orgSelect },
+                secondOrganization: { select: orgSelect },
+                thirdOrganization: { select: orgSelect },
               },
             },
           },
         },
-        orderBy: { name: "asc" },
-      }),
-      prisma.trainingMajor.findMany({
-        where: {
-          trainingObjectTypes: {
-            some: { trainingObjectTypeId, deletedAt: null },
-          },
-          deletedAt: null,
-          active: true,
+      },
+      orderBy: { name: "asc" },
+    }),
+    prisma.trainingMajor.findMany({
+      where: {
+        trainingObjectTypes: {
+          some: { trainingObjectTypeId, deletedAt: null },
         },
-        select: {
-          name: true,
-          organization: { select: orgSelect },
-          secondOrganization: { select: orgSelect },
-          thirdOrganization: { select: orgSelect },
-          trainingField: { select: { name: true } },
+        deletedAt: null,
+        active: true,
+      },
+      select: {
+        name: true,
+        organization: { select: orgSelect },
+        secondOrganization: { select: orgSelect },
+        thirdOrganization: { select: orgSelect },
+        trainingField: { select: { name: true } },
+      },
+      orderBy: { name: "asc" },
+    }),
+    prisma.trainingField.findMany({
+      where: {
+        trainingObjectTypes: {
+          some: { trainingObjectTypeId, deletedAt: null },
         },
-        orderBy: { name: "asc" },
-      }),
-      prisma.trainingField.findMany({
-        where: {
-          trainingObjectTypes: {
-            some: { trainingObjectTypeId, deletedAt: null },
-          },
-          deletedAt: null,
-          active: true,
-        },
-        select: {
-          name: true,
-          organization: { select: orgSelect },
-        },
-        orderBy: { name: "asc" },
-      }),
-      prisma.trainingObjectType.findUniqueOrThrow({
-        where: { id: trainingObjectTypeId },
-        select: { name: true },
-      }),
-    ])
+        deletedAt: null,
+        active: true,
+      },
+      select: {
+        name: true,
+        organization: { select: orgSelect },
+      },
+      orderBy: { name: "asc" },
+    }),
+    prisma.trainingObjectType.findUniqueOrThrow({
+      where: { id: trainingObjectTypeId },
+      select: { name: true },
+    }),
+  ])
 
   const majorNamesFromCurricula = new Set<string>()
   const fieldNamesFromCurricula = new Set<string>()
@@ -755,6 +766,43 @@ export async function _generateStudentImportTemplate(
     fieldsByObjectType.map((f) => f.name),
     fieldNamesFromCurricula
   )
+
+  const majorNameToFieldName = new Map<string, string>()
+  for (const major of majorsByObjectType) {
+    const mName = major.name?.trim()
+    const fName = major.trainingField?.name?.trim()
+    if (mName && fName && !majorNameToFieldName.has(mName)) {
+      majorNameToFieldName.set(mName, fName)
+    }
+  }
+  for (const cv of curricula) {
+    const major = cv.curriculum?.trainingMajor
+    const field = cv.curriculum?.trainingField
+    const mName = major?.name?.trim()
+    const fName = major?.trainingField?.name?.trim() || field?.name?.trim()
+    if (mName && fName && !majorNameToFieldName.has(mName)) {
+      majorNameToFieldName.set(mName, fName)
+    }
+  }
+  if (trainingMajors.some((m) => !majorNameToFieldName.has(m))) {
+    const allMajors = await prisma.trainingMajor.findMany({
+      where: { deletedAt: null, active: true },
+      select: { name: true, trainingField: { select: { name: true } } },
+    })
+    for (const m of allMajors) {
+      const mName = m.name?.trim()
+      const fName = m.trainingField?.name?.trim()
+      if (mName && fName && !majorNameToFieldName.has(mName)) {
+        majorNameToFieldName.set(mName, fName)
+      }
+    }
+  }
+
+  const chuyenNganhRows = trainingMajors.map((ten) => ({
+    ten,
+    nganh: majorNameToFieldName.get(ten) || "",
+  }))
+
   let organizationNames = mergeNames(orgNamesFromObjectType, orgNamesFromCurricula)
   if (organizationNames.length === 0) {
     const allOrgs = await prisma.dM_DonVi.findMany({
@@ -769,6 +817,7 @@ export async function _generateStudentImportTemplate(
   const fixedClassRows = fixedClasses.map((fc) => ({
     ma: (fc.code || "").trim(),
     ten: (fc.name || "").trim(),
+    ctdt: (fc.curriculumVersion?.name || "").trim(),
   }))
 
   const buffer = await getTemplateBuffer(prisma, "MauImportDSHV_v5.xlsx")
@@ -779,7 +828,7 @@ export async function _generateStudentImportTemplate(
     trainingCourseName: "",
     catalogs: {
       nganh: trainingFields,
-      chuyenNganh: trainingMajors,
+      chuyenNganh: chuyenNganhRows,
       chuongTrinhDaoTao: curriculumNames,
       donViQuanLi: organizationNames,
       lopQuanLi: fixedClassRows,
@@ -808,6 +857,39 @@ function setWorksheetInlineCell(xml: string, cellRef: string, value: string): st
     const styleAttr = styleMatch ? ` s="${styleMatch[1]}"` : ""
     return `<c r="${cellRef}"${styleAttr} t="inlineStr"><is><t>${escaped}</t></is></c>`
   })
+}
+
+function escapeFormulaXml(formula: string): string {
+  return formula.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+}
+
+function setWorksheetFormulaCell(
+  xml: string,
+  cellRef: string,
+  formula: string,
+  defaultStyle = "26"
+): string {
+  const escaped = escapeFormulaXml(formula)
+  const re = new RegExp(`<c r="${cellRef}"([^>]*)/>|<c r="${cellRef}"([^>]*)>[\\s\\S]*?</c>`)
+  if (re.test(xml)) {
+    return xml.replace(re, (_full, attrsA?: string, attrsB?: string) => {
+      const attrs = attrsA || attrsB || ""
+      const styleMatch = attrs.match(/\ss="([^"]+)"/)
+      const styleAttr = styleMatch ? ` s="${styleMatch[1]}"` : ` s="${defaultStyle}"`
+      return `<c r="${cellRef}"${styleAttr}><f>${escaped}</f></c>`
+    })
+  }
+
+  const rowMatch = cellRef.match(/\d+$/)
+  if (!rowMatch) return xml
+  const rowNum = rowMatch[0]
+  const rowRe = new RegExp(`(<row\\b[^>]*\\br="${rowNum}"[^>]*>)([\\s\\S]*?)(<\\/row>)`)
+  if (rowRe.test(xml)) {
+    return xml.replace(rowRe, (_full, openTag, content, closeTag) => {
+      return `${openTag}${content}<c r="${cellRef}" s="${defaultStyle}"><f>${escaped}</f></c>${closeTag}`
+    })
+  }
+  return xml
 }
 
 function getWorkbookSheetPath(zip: InstanceType<typeof PizZip>, sheetName: string): string | null {
@@ -938,10 +1020,10 @@ function finalizeStudentImportWorkbook(
     trainingCourseName: string
     catalogs: {
       nganh: string[]
-      chuyenNganh: string[]
+      chuyenNganh: Array<{ ten: string; nganh: string }>
       chuongTrinhDaoTao: string[]
       donViQuanLi: string[]
-      lopQuanLi: Array<{ ma: string; ten: string }>
+      lopQuanLi: Array<{ ma: string; ten: string; ctdt: string }>
     }
   }
 ): Buffer {
@@ -967,7 +1049,8 @@ function finalizeStudentImportWorkbook(
       { col: "A", header: "Tên", values: catalogs.nganh },
     ]),
     DanhMucChuyenNganh: rewriteCatalogSheetData(zip, "DanhMucChuyenNganh", [
-      { col: "A", header: "Tên", values: catalogs.chuyenNganh },
+      { col: "A", header: "Tên", values: catalogs.chuyenNganh.map((x) => x.ten) },
+      { col: "B", header: "Ngành", values: catalogs.chuyenNganh.map((x) => x.nganh) },
     ]),
     DanhMucChuongTrinhDaoTao: rewriteCatalogSheetData(zip, "DanhMucChuongTrinhDaoTao", [
       { col: "A", values: catalogs.chuongTrinhDaoTao },
@@ -978,6 +1061,7 @@ function finalizeStudentImportWorkbook(
     DanhMucLopQuanLi: rewriteCatalogSheetData(zip, "DanhMucLopQuanLi", [
       { col: "A", values: catalogs.lopQuanLi.map((x) => x.ma) },
       { col: "B", values: catalogs.lopQuanLi.map((x) => x.ten) },
+      { col: "C", values: catalogs.lopQuanLi.map((x) => x.ctdt) },
     ]),
     DanhMucGioiTinh: 3,
     DanhMucDanToc: 56,
@@ -1007,6 +1091,20 @@ function finalizeStudentImportWorkbook(
     mainXml = setWorksheetInlineCell(mainXml, "J6", opts.trainingObjectTypeName)
     mainXml = setWorksheetInlineCell(mainXml, "J7", opts.trainingCourseName)
 
+    // Tự động map công thức cho từng dòng dữ liệu từ dòng 13 đến dòng 177:
+    // - Cột Q (Lớp quản lý): lấy theo Mã lớp ở cột P từ DanhMucLopQuanLi!$A:$C cột 2
+    // - Cột R (Ngành): lấy theo Chuyên ngành ở cột S từ DanhMucChuyenNganh!$A:$B cột 2
+    // - Cột T (Chương trình đào tạo): lấy theo Mã lớp ở cột P từ DanhMucLopQuanLi!$A:$C cột 3
+    for (let r = STUDENT_IMPORT_DATA_START_ROW; r <= 177; r++) {
+      const formulaQ = `IF(P${r}="","",IFERROR(VLOOKUP(P${r},DanhMucLopQuanLi!$A:$C,2,FALSE),"Mã lớp không hợp lệ"))`
+      const formulaR = `IF(S${r}="","",IFERROR(IF(VLOOKUP(S${r},DanhMucChuyenNganh!$A:$B,2,FALSE)="","Không xác định ngành",VLOOKUP(S${r},DanhMucChuyenNganh!$A:$B,2,FALSE)),"Không xác định ngành"))`
+      const formulaT = `IF(P${r}="","",IFERROR(IF(VLOOKUP(P${r},DanhMucLopQuanLi!$A:$C,3,FALSE)="","Không có CTĐT phù hợp",VLOOKUP(P${r},DanhMucLopQuanLi!$A:$C,3,FALSE)),"Mã lớp không hợp lệ"))`
+
+      mainXml = setWorksheetFormulaCell(mainXml, `Q${r}`, formulaQ, "26")
+      mainXml = setWorksheetFormulaCell(mainXml, `R${r}`, formulaR, "31")
+      mainXml = setWorksheetFormulaCell(mainXml, `T${r}`, formulaT, "21")
+    }
+
     // Excel ưu tiên x14:dataValidations (thường lệch/hỏng) → gỡ trước khi gắn lại classic.
     mainXml = mainXml.replace(/<x14:dataValidations\b[\s\S]*?<\/x14:dataValidations>/g, "")
     mainXml = mainXml.replace(
@@ -1025,6 +1123,9 @@ function finalizeStudentImportWorkbook(
       return `${quoteSheet(sheet)}!$${col}$${startRow}:$${col}$${end}`
     }
 
+    // Dropdown validation:
+    // P (Mã lớp) và S (Chuyên ngành) có dropdown cho người dùng chọn.
+    // Q, R, T tự động tính bằng công thức nên không gắn dropdown để tránh xung đột formula.
     const listValidations = [
       ["G", sheetRange("DanhMucGioiTinh", "A", 2, lastRowBySheet.DanhMucGioiTinh ?? 3)],
       ["H", sheetRange("DanhMucDanToc", "A", 2, lastRowBySheet.DanhMucDanToc ?? 56)],
@@ -1043,7 +1144,10 @@ function finalizeStudentImportWorkbook(
           lastRowBySheet.DanhMucChuongTrinhDaoTao ?? 1
         ),
       ],
-      ["U", sheetRange("DanhMucDonViQuanLi", "A", 1, lastRowBySheet.DanhMucDonViQuanLi ?? 1)],
+      [
+        "U",
+        sheetRange("DanhMucDonViQuanLi", "A", 1, lastRowBySheet.DanhMucDonViQuanLi ?? 1),
+      ],
     ].map(([col, formula], idx) => {
       const sqref = `${col}${STUDENT_IMPORT_DATA_START_ROW}:${col}${STUDENT_IMPORT_DATA_END_ROW}`
       return `<dataValidation type="list" allowBlank="1" showErrorMessage="1" sqref="${sqref}" xr:uid="{00000000-0001-0000-0000-${String(idx + 1).padStart(12, "0")}}"><formula1>${formula}</formula1></dataValidation>`
@@ -1123,8 +1227,8 @@ function finalizeStudentImportWorkbook(
   )
 
   const requiredXml = Object.entries(requiredNames)
-    .map(([name, ref]) => `<definedName name="${name}">${ref}</definedName>`)
-    .join("")
+  .map(([name, ref]) => `<definedName name="${name}">${ref}</definedName>`)
+  .join("")
 
   if (/<definedNames>[\s\S]*?<\/definedNames>/.test(next)) {
     next = next.replace(
@@ -1136,6 +1240,16 @@ function finalizeStudentImportWorkbook(
   }
 
   next = next.replace(/<definedNames>\s*<\/definedNames>/, "")
+
+  // Đảm bảo Excel tự động tính lại công thức khi mở file (Full calculation on load)
+  if (/<calcPr\b[^>]*\/>/.test(next)) {
+    next = next.replace(/<calcPr\b[^>]*\/>/, '<calcPr calcId="191028" fullCalcOnLoad="1"/>')
+  } else if (/<calcPr\b[\s\S]*?<\/calcPr>/.test(next)) {
+    next = next.replace(/<calcPr\b[\s\S]*?<\/calcPr>/, '<calcPr calcId="191028" fullCalcOnLoad="1"/>')
+  } else {
+    next = next.replace("</workbook>", '<calcPr calcId="191028" fullCalcOnLoad="1"/></workbook>')
+  }
+
   zip.file(workbookPath, next)
   return zip.generate({ type: "nodebuffer" }) as Buffer
 }
