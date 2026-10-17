@@ -1,5 +1,5 @@
 import { toRoman } from "@lib/utils"
-import { getClusterSurveyStatisticsForLecturer } from "@workspace/libs/api/exam"
+import { customExamFetch } from "@workspace/libs/api/custom-instance"
 import { message } from "antd"
 import {
   AlignmentType,
@@ -26,60 +26,49 @@ import {
 } from "@/utils/buildOrgLecturerTree"
 import { saveFile } from "@/utils/saveFile"
 
-export const TRAINING_COURSE_SELECT = {
-  id: true,
-  code: true,
-  name: true,
-  startYear: true,
-} as const
+export type TrainingCourseForTitle = {
+  id: string
+  name?: string | null
+  startYear?: number | null
+}
 
-const FIXED_CLASS_COURSE_SELECT = {
-  id: true,
-  name: true,
-  startYear: true,
-  trainingCourse: { select: TRAINING_COURSE_SELECT },
-} as const
-
-export const SURVEY_OBJECT_TYPE_COURSE_INCLUDE = {
-  trainingCourses: { select: TRAINING_COURSE_SELECT },
-  fixedClasses: { select: FIXED_CLASS_COURSE_SELECT },
-  subjectClasses: {
-    select: {
-      id: true,
-      fixedClasses: { select: FIXED_CLASS_COURSE_SELECT },
+/** Khóa gắn đợt khảo sát GV: qua lớp HP của survey + đối tượng khảo sát của cụm. */
+export const clusterTrainingCourseWhere = (clusterId: string) => ({
+  OR: [
+    {
+      surveyObjectTypes: {
+        some: { clusterSurvey: { some: { id: clusterId } } },
+      },
     },
-  },
-} as const
-
-type TrainingCourseLike = {
-  id?: string
-  code?: string | null
-  name?: string | null
-  startYear?: number | null
-}
-
-type FixedClassLike = {
-  id?: string
-  name?: string | null
-  startYear?: number | null
-  trainingCourse?: TrainingCourseLike | null
-}
-
-type SurveyObjectTypeLike = {
-  trainingCourses?: TrainingCourseLike[]
-  fixedClasses?: FixedClassLike[]
-  subjectClasses?: Array<{ fixedClasses?: FixedClassLike[] }>
-}
-
-export type ClusterForSectionTitle = {
-  surveyObjectType?: SurveyObjectTypeLike[]
-  surveys?: Array<{
-    surveyObjectType?: SurveyObjectTypeLike[]
-    subjectClass?: {
-      fixedClasses?: FixedClassLike[]
-    } | null
-  }>
-}
+    {
+      fixedClass: {
+        some: {
+          OR: [
+            {
+              surveyObjectTypes: {
+                some: { clusterSurvey: { some: { id: clusterId } } },
+              },
+            },
+            {
+              subjectClasses: {
+                some: {
+                  OR: [
+                    { survey: { some: { clusterSurveyId: clusterId } } },
+                    {
+                      surveyObjectTypes: {
+                        some: { clusterSurvey: { some: { id: clusterId } } },
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
+      },
+    },
+  ],
+})
 
 export type ExportFacultySurveySummaryInput = {
   clusterId: string
@@ -161,16 +150,20 @@ const addCounts = (a: Counts, b: Counts): Counts => [
   a[4] + b[4],
 ]
 
+/** 0–2: ý kiến khác | 3: đồng ý | 4: rất đồng ý. Không nhận ra → ý kiến khác (2). */
 const levelIndex = (answer?: string | null, description?: string | null) => {
-  const n = Number(answer)
-  if (n >= 1 && n <= 5) return n - 1
-
   const d = (description || "").toLocaleLowerCase("vi-VN")
+
   if (d.includes("rất không")) return 0
   if (d.includes("không đồng ý") || d.includes("không hài lòng")) return 1
   if (d.includes("phân vân")) return 2
   if (d.includes("rất đồng ý") || d.includes("rất hài lòng")) return 4
   if (d.includes("đồng ý") || d.includes("hài lòng")) return 3
+
+  const n = Number(answer)
+  if (n >= 1 && n <= 5) return n - 1
+
+  // Đáp án không nhận ra → ý kiến khác
   return 2
 }
 
@@ -197,77 +190,34 @@ const withBoMonPrefix = (name: string) => {
 const stripBoMonPrefix = (name: string) =>
   name.trim().replace(/^bộ\s*môn\s*/i, "").trim() || name.trim()
 
-function parseCourseNumber(value?: string | null): number | null {
-  if (!value?.trim()) return null
-  const text = value.trim().toLocaleLowerCase("vi-VN")
-  const match =
-    text.match(/(?:khóa|khoa)\s*(\d+)/i) ||
-    text.match(/^k\s*(\d{2,3})$/i) ||
-    text.match(/\bk\s*(\d{2,3})\b/i) ||
-    text.match(/clc\s*[_-]?\s*(\d{2,3})/i) ||
-    text.match(/^(\d{2,3})$/) ||
-    text.match(/(?:^|[^\d])(\d{2,3})(?:[^\d]|$)/)
-  const n = match?.[1] ? Number(match[1]) : NaN
-  // Số khóa thường 2–3 chữ số (vd 57, 61); loại năm 4 chữ số nếu lọt regex
-  if (!Number.isFinite(n) || n < 1 || n > 999) return null
-  return n
+
+/** Dùng đúng name từ DB; chỉ bổ sung tiền tố khi name là số thuần (vd. "57"). */
+const formatCourseLabel = (course: TrainingCourseForTitle): string => {
+  const name = (course.name || "").trim()
+  if (!name) return ""
+  if (/^kho[áa]\b/i.test(name)) return name
+  if (/^\d{1,3}$/.test(name)) return `Khóa ${name}`
+  return name
 }
 
-function courseNumberFromSource(source?: {
-  name?: string | null
-  code?: string | null
-  startYear?: number | null
-} | null): number | null {
-  if (!source) return null
-  return (
-    parseCourseNumber(source.name) ??
-    parseCourseNumber(source.code) ??
-    (source.startYear != null && source.startYear < 1000 ? source.startYear : null)
-  )
-}
-
-function collectCourseNumbers(cluster?: ClusterForSectionTitle | null): number[] {
-  if (!cluster) return []
-  const numbers = new Set<number>()
-
-  const addCourse = (course?: TrainingCourseLike | null) => {
-    const n = courseNumberFromSource(course)
-    if (n != null) numbers.add(n)
-  }
-  const addFixedClass = (fixedClass?: FixedClassLike | null) => {
-    if (!fixedClass) return
-    addCourse(fixedClass.trainingCourse)
-    const n = courseNumberFromSource(fixedClass)
-    if (n != null) numbers.add(n)
-  }
-  const addObjectTypes = (objectTypes?: SurveyObjectTypeLike[]) => {
-    for (const objectType of objectTypes || []) {
-      objectType.trainingCourses?.forEach(addCourse)
-      objectType.fixedClasses?.forEach(addFixedClass)
-      objectType.subjectClasses?.forEach((subjectClass) =>
-        subjectClass.fixedClasses?.forEach(addFixedClass)
-      )
-    }
-  }
-
-  addObjectTypes(cluster.surveyObjectType)
-  for (const survey of cluster.surveys || []) {
-    addObjectTypes(survey.surveyObjectType)
-    survey.subjectClass?.fixedClasses?.forEach(addFixedClass)
-  }
-
-  return [...numbers].sort((a, b) => a - b)
-}
-
-export function buildFacultySummarySectionTitle(
+export const buildFacultySummarySectionTitle = (
   baseName: string | undefined,
-  cluster?: ClusterForSectionTitle | null
-): string {
+  courses?: TrainingCourseForTitle[] | null
+): string => {
   const base = baseName?.trim() || "Kết quả khảo sát"
-  const numbers = collectCourseNumbers(cluster)
-  if (!numbers.length) return `A. ${base}`
-  if (numbers.length === 1) return `A. ${base} Khóa ${numbers[0]}`
-  return `A. ${base} Khóa ${numbers[0]} đến Khóa ${numbers[numbers.length - 1]}`
+  const labels = (courses || [])
+    .slice()
+    .sort((a, b) => {
+      const ay = a.startYear ?? Number.MAX_SAFE_INTEGER
+      const by = b.startYear ?? Number.MAX_SAFE_INTEGER
+      if (ay !== by) return ay - by
+      return (a.name || "").localeCompare(b.name || "", "vi")
+    })
+    .map(formatCourseLabel)
+    .filter(Boolean)
+  if (!labels.length) return `A. ${base}`
+  if (labels.length === 1) return `A. ${base} ${labels[0]}`
+  return `A. ${base} ${labels[0]} đến ${labels[labels.length - 1]}`
 }
 
 const collectLecturers = (node: ReportTreeNode): LecturerTreeNode[] => {
@@ -292,23 +242,47 @@ const getDepartmentGroups = (facultyNode: OrgTreeNode) => {
   return groups.filter((group) => group.lecturers.length)
 }
 
-const fetchAnswers = async (clusterId: string, lectureId: string) => {
-  try {
-    const res = await getClusterSurveyStatisticsForLecturer(clusterId, { lectureId })
-    if (res?.status !== 200) return []
-    return (res.data?.data?.questions || []).flatMap((q) => q.answers || [])
-  } catch (error) {
-    console.error(`Không lấy được thống kê giảng viên ${lectureId}`, error)
-    return []
-  }
+type LecturerChoiceAnswer = {
+  id: string
+  answer?: string | null
+  description?: string | null
+  count?: number
 }
 
-const buildLecturerRow = async (
-  clusterId: string,
-  node: LecturerTreeNode
-): Promise<LecturerRow> => {
+const fetchChoiceCountsByLecturer = async (clusterId: string, lectureIds: string[]) => {
+  const map = new Map<string, LecturerChoiceAnswer[]>()
+  if (!lectureIds.length) return map
+
+  const res = await customExamFetch<{
+    status: number
+    data?: {
+      message?: string
+      lecturers?: Array<{ lectureId: string; answers: LecturerChoiceAnswer[] }>
+    }
+  }>(`/api/cluster-survey/${clusterId}/choice-counts-for-lecturers`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ lectureIds }),
+  })
+
+  if (res?.status !== 200) {
+    throw new Error(
+      res?.data?.message || "Không lấy được thống kê khảo sát giảng viên. Vui lòng thử lại."
+    )
+  }
+
+  for (const item of res.data?.lecturers || []) {
+    map.set(item.lectureId, item.answers || [])
+  }
+  return map
+}
+
+const buildLecturerRow = (
+  node: LecturerTreeNode,
+  answersByLecturer: Map<string, LecturerChoiceAnswer[]>
+): LecturerRow => {
   const stats = getLecturerSurveyStats(node.lecturer)
-  const counts = countsFromAnswers(await fetchAnswers(clusterId, node.lecturer.id))
+  const counts = countsFromAnswers(answersByLecturer.get(node.lecturer.id) || [])
   const total = sumCounts(counts)
   return {
     name: lecturerTitle(node.lecturer),
@@ -320,11 +294,15 @@ const buildLecturerRow = async (
 }
 
 const buildDepartments = async (clusterId: string, facultyNode: OrgTreeNode) => {
-  const departments = await Promise.all(
-    getDepartmentGroups(facultyNode).map(async (group) => {
-      const lecturers = await Promise.all(
-        group.lecturers.map((node) => buildLecturerRow(clusterId, node))
-      )
+  const groups = getDepartmentGroups(facultyNode)
+  const allLectureIds = groups.flatMap((group) =>
+    group.lecturers.map((node) => node.lecturer.id)
+  )
+  const answersByLecturer = await fetchChoiceCountsByLecturer(clusterId, allLectureIds)
+
+  return groups
+    .map((group) => {
+      const lecturers = group.lecturers.map((node) => buildLecturerRow(node, answersByLecturer))
       const withData = lecturers.filter((lecturer) => lecturer.hasData)
       const counts = withData.reduce(
         (acc, lecturer) => addCounts(acc, lecturer.counts),
@@ -338,8 +316,7 @@ const buildDepartments = async (clusterId: string, facultyNode: OrgTreeNode) => 
         total: sumCounts(counts),
       } satisfies DepartmentRow
     })
-  )
-  return departments.filter((dept) => dept.lecturers.length)
+    .filter((dept) => dept.lecturers.length)
 }
 
 const resultSentence = (counts: Counts, total: number) => {
@@ -564,6 +541,6 @@ export async function exportFacultySurveySummaryDocx(input: ExportFacultySurveyS
     message.success("Xuất báo cáo tổng hợp thành công")
   } catch (error) {
     console.error(error)
-    message.error("Xuất file thất bại")
+    message.error(error instanceof Error ? error.message : "Xuất file thất bại")
   }
 }

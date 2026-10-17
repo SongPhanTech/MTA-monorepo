@@ -7,6 +7,7 @@ import {
   useFindManyClusterSurvey,
   useFindManyDM_DonVi,
   useFindManyLecturer,
+  useFindManyTrainingCourse,
   useFindUniqueSemester,
   useFindUniqueTrainingObjectType,
 } from "@workspace/db/hooks"
@@ -31,8 +32,7 @@ import {
 } from "@/utils/buildOrgLecturerTree"
 import {
   buildFacultySummarySectionTitle,
-  SURVEY_OBJECT_TYPE_COURSE_INCLUDE,
-  TRAINING_COURSE_SELECT,
+  clusterTrainingCourseWhere,
 } from "@/utils/export-faculty-survey-summary-docx"
 
 function trainingSystemNameFromDbType(type: $Enums.TrainingObjectTypes | undefined): string {
@@ -71,48 +71,32 @@ export default function BaoCaoGiangVien() {
     { enabled: !!trainingObjectTypeId }
   )
 
-  const { data: clusters = [] } = useFindManyClusterSurvey({
-    where: {
-      surveys: {
-        some: { semesterId, trainingObjectTypeId },
-      },
-    },
-    include: {
-      surveyObjectType: {
-        include: SURVEY_OBJECT_TYPE_COURSE_INCLUDE,
-      },
-      surveyTopic: true,
-      surveyQuestion: true,
-      surveys: {
-        include: {
-          surveySessions: true,
-          surveyObjectType: {
-            include: SURVEY_OBJECT_TYPE_COURSE_INCLUDE,
-          },
-          subjectClass: {
-            select: {
-              id: true,
-              semester: true,
-              fixedClasses: {
-                select: {
-                  id: true,
-                  name: true,
-                  startYear: true,
-                  trainingCourse: { select: TRAINING_COURSE_SELECT },
-                },
-              },
-            },
-          },
+  const { data: clusters = [] } = useFindManyClusterSurvey(
+    {
+      where: {
+        surveys: {
+          some: { semesterId, trainingObjectTypeId },
         },
       },
+      select: { id: true, name: true },
+      orderBy: { createdAt: "desc" },
     },
-    orderBy: { createdAt: "desc" },
-  })
+    { enabled: !!semesterId && !!trainingObjectTypeId }
+  )
 
-  const sectionTitle = useMemo(() => {
-    const cluster = clusters.find((item) => item.id === clusterId)
-    return buildFacultySummarySectionTitle(trainingObjectType?.name, cluster)
-  }, [clusters, clusterId, trainingObjectType?.name])
+  const { data: clusterCourses = [] } = useFindManyTrainingCourse(
+    {
+      where: clusterTrainingCourseWhere(clusterId as string),
+      select: { id: true, name: true, startYear: true },
+      orderBy: [{ startYear: "asc" }, { name: "asc" }],
+    },
+    { enabled: !!clusterId }
+  )
+
+  const sectionTitle = useMemo(
+    () => buildFacultySummarySectionTitle(trainingObjectType?.name, clusterCourses),
+    [clusterCourses, trainingObjectType?.name]
+  )
 
   const { data: organizations = [], isFetching } = useFindManyDM_DonVi(
     {
