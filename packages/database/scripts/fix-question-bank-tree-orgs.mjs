@@ -174,9 +174,7 @@ async function main() {
     if (org.iLoaiDonVi != null && org.iLoaiDonVi !== 0) continue
     const inferred = inferLoaiDonVi(org.sTen)
     if (!inferred) continue
-    console.log(
-      `  ${org.sMa || "-"} | ${org.sTen} | iLoaiDonVi ${org.iLoaiDonVi} → ${inferred}`
-    )
+    console.log(`  ${org.sMa || "-"} | ${org.sTen} | iLoaiDonVi ${org.iLoaiDonVi} → ${inferred}`)
     if (!dryRun) {
       await prisma.dM_DonVi.update({
         where: { Id: org.Id },
@@ -212,9 +210,7 @@ async function main() {
       const bankKey = normalizeAscii(entry.bankName)
       if (bankKey && !catalogByBank.has(bankKey)) catalogByBank.set(bankKey, entry.bmName)
     }
-    console.log(
-      `Catalog BM hints: subjects=${catalogBySubject.size} banks=${catalogByBank.size}\n`
-    )
+    console.log(`Catalog BM hints: subjects=${catalogBySubject.size} banks=${catalogByBank.size}\n`)
   } else {
     console.warn(`Catalog not found at ${CATALOG_PATH} — BM matching will be weaker\n`)
   }

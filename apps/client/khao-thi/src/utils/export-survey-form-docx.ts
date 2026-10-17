@@ -201,9 +201,7 @@ const infoBlock = (input: ExportSurveyFormDocxInput) => {
 }
 
 /** Đáp án đặc biệt: nhãn trên, ô tick dưới, xếp ngang để tiết kiệm diện tích. */
-const specificChoiceOptionsTable = (
-  choices: readonly { description?: string | null }[]
-) => {
+const specificChoiceOptionsTable = (choices: readonly { description?: string | null }[]) => {
   const columnWidth = Math.floor(100 / choices.length)
 
   return new Table({
@@ -429,7 +427,9 @@ export const exportSurveyFormDocx = async (input: ExportSurveyFormDocxInput) => 
 }
 
 /** Build DOCX blob without triggering browser download (for MinIO upload). */
-export const buildSurveyFormDocxBlob = async (input: Omit<ExportSurveyFormDocxInput, "fileName">) => {
+export const buildSurveyFormDocxBlob = async (
+  input: Omit<ExportSurveyFormDocxInput, "fileName">
+) => {
   return Packer.toBlob(buildSurveyFormDocx({ ...input, fileName: "survey.docx" }))
 }
 

@@ -127,7 +127,9 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
         const payload = (res?.data ?? {}) as {
           message?: string
           failed?: { code?: string; name?: string; error?: string }[]
-          errors?: Array<string | { cellRef?: string | null; code?: string; message?: string; error?: string }>
+          errors?: Array<
+            string | { cellRef?: string | null; code?: string; message?: string; error?: string }
+          >
         }
         const importErrors = [
           ...(Array.isArray(payload.failed)

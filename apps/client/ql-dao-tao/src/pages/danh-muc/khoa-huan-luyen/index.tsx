@@ -53,7 +53,6 @@ export default function TrainingCoursePage() {
     { enabled: !!idTrainingCourse.current }
   )
 
-
   const where = useMemo(
     () => ({
       ...(filters.code && filters.code !== ""

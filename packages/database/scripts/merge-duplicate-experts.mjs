@@ -353,10 +353,10 @@ async function main() {
 
       for (const dup of group.duplicates) {
         try {
-          const s = await prisma.$transaction(
-            (tx) => mergeOneDuplicate(tx, group.canonical, dup),
-            { maxWait: TX_MAX_WAIT_MS, timeout: TX_TIMEOUT_MS }
-          )
+          const s = await prisma.$transaction((tx) => mergeOneDuplicate(tx, group.canonical, dup), {
+            maxWait: TX_MAX_WAIT_MS,
+            timeout: TX_TIMEOUT_MS,
+          })
           totals.versionsCreated += s.versionsCreated
           totals.expertsRemoved += s.expertsRemoved
           totals.councilExpertUpdates += s.councilExpertUpdates

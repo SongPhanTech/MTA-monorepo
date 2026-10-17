@@ -496,7 +496,10 @@ async function main() {
         _subjectId: sc.subjectId,
       }
     })
-    .sort((a, b) => b.registered - a.registered || String(a.classCode).localeCompare(String(b.classCode)))
+    .sort(
+      (a, b) =>
+        b.registered - a.registered || String(a.classCode).localeCompare(String(b.classCode))
+    )
 
   classRows.forEach((row, idx) => {
     s7.addRow({

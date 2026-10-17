@@ -49,13 +49,9 @@ function toTableExpert(
     ...flat,
     specialization: expert.currentVersion?.specialization,
     academicRank:
-      flat.academicRankType?.sMa ??
-      expert.lecturer?.userProfile?.academicRankType?.sMa ??
-      "",
+      flat.academicRankType?.sMa ?? expert.lecturer?.userProfile?.academicRankType?.sMa ?? "",
     academicDegree:
-      flat.academicDegreeType?.sMa ??
-      expert.lecturer?.userProfile?.academicDegreeType?.sMa ??
-      "",
+      flat.academicDegreeType?.sMa ?? expert.lecturer?.userProfile?.academicDegreeType?.sMa ?? "",
   }
 }
 
@@ -250,9 +246,7 @@ export default function SettingCouncil() {
     if (experts.length) {
       setRightData(experts)
 
-      const filtered = flattenedCatalog.filter(
-        (item) => !experts.some((exp) => exp.id === item.id)
-      )
+      const filtered = flattenedCatalog.filter((item) => !experts.some((exp) => exp.id === item.id))
       setLeftData(filtered)
     } else {
       setLeftData(flattenedCatalog)

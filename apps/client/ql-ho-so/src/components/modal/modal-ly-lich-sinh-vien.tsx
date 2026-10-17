@@ -13,10 +13,7 @@ dayjs.locale("vi")
 
 const MISSING_DATE = "- -"
 
-function formatDateOrPlaceholder(
-  value: Date | string | null | undefined,
-  format: string
-) {
+function formatDateOrPlaceholder(value: Date | string | null | undefined, format: string) {
   if (!value) return MISSING_DATE
   if (format === "DD/M/YYYY") return formatDateInSlash(value) || MISSING_DATE
   const parsed = dayjs(value)
@@ -263,9 +260,7 @@ const ModalTomTatLyLich = () => {
               {
                 key: "dob",
                 content: (
-                  <>
-                    Sinh ngày: {formatDateOrPlaceholder(initialData?.dateOfBirth, "DD/M/YYYY")}
-                  </>
+                  <>Sinh ngày: {formatDateOrPlaceholder(initialData?.dateOfBirth, "DD/M/YYYY")}</>
                 ),
               },
               {
@@ -354,9 +349,7 @@ const ModalTomTatLyLich = () => {
                 content: (
                   <>
                     Ngày vào Đảng:{" "}
-                    {initialData?.CPVJoinDate
-                      ? formatDateInSlash(initialData?.CPVJoinDate)
-                      : ""}
+                    {initialData?.CPVJoinDate ? formatDateInSlash(initialData?.CPVJoinDate) : ""}
                   </>
                 ),
               },
@@ -662,9 +655,7 @@ const ModalTomTatLyLich = () => {
                               {item.tuThangNam ? formatThangNamIn(item.tuThangNam) : ""}
                             </td>
                             <td className="border border-black p-1 text-center">
-                              {item.denThangNam
-                                ? formatThangNamIn(item.denThangNam)
-                                : "Hiện tại"}
+                              {item.denThangNam ? formatThangNamIn(item.denThangNam) : "Hiện tại"}
                             </td>
                             <td className="border border-black p-1">
                               <div>

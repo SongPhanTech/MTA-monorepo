@@ -262,7 +262,9 @@ export async function parseImportJsonFile(file: File): Promise<ImportJsonPreview
     const fixedClass = fixedClassById.get(str(row, "fixedClassId") || "")
     return {
       code: str(row, "code"),
-      fullName: str(profile, "fullname") || [str(profile, "lastName"), str(profile, "firstName")].filter(Boolean).join(" "),
+      fullName:
+        str(profile, "fullname") ||
+        [str(profile, "lastName"), str(profile, "firstName")].filter(Boolean).join(" "),
       fixedClass: str(fixedClass, "code") || str(fixedClass, "name"),
       status: str(row, "status"),
     }
@@ -270,7 +272,26 @@ export async function parseImportJsonFile(file: File): Promise<ImportJsonPreview
 
   const catalogs = Object.entries(json.counts ?? {})
     .filter(([key, count]) => (key.startsWith("DM_") || key in CATALOG_LABELS) && count > 0)
-    .filter(([key]) => !["ClassRegisterSession", "ClassRegisterSessionCredit", "Student", "UserProfile", "SubjectClass", "ClassSchedule", "SubjectClassTime", "Curriculum", "CurriculumVersion", "Subject", "SubjectVersion", "TrainingCourse", "FixedClass", "Lecturer", "Staff"].includes(key))
+    .filter(
+      ([key]) =>
+        ![
+          "ClassRegisterSession",
+          "ClassRegisterSessionCredit",
+          "Student",
+          "UserProfile",
+          "SubjectClass",
+          "ClassSchedule",
+          "SubjectClassTime",
+          "Curriculum",
+          "CurriculumVersion",
+          "Subject",
+          "SubjectVersion",
+          "TrainingCourse",
+          "FixedClass",
+          "Lecturer",
+          "Staff",
+        ].includes(key)
+    )
     .map(([key, count]) => ({
       key,
       label: CATALOG_LABELS[key] || key,

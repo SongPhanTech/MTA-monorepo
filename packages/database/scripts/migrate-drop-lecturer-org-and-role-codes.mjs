@@ -30,7 +30,7 @@ function getUrl() {
   const url = process.env.POSTGRES_URL || process.env.DATABASE_URL
   if (!url) {
     throw new Error(
-      'Cần POSTGRES_URL hoặc DATABASE_URL, ví dụ:\n' +
+      "Cần POSTGRES_URL hoặc DATABASE_URL, ví dụ:\n" +
         '  DATABASE_URL="postgres://..." bun scripts/migrate-drop-lecturer-org-and-role-codes.mjs --apply'
     )
   }
@@ -74,9 +74,7 @@ async function dropRoleCodeColumn(prisma, table) {
     `ALTER TABLE "ql-dao-tao"."${table}" DROP CONSTRAINT IF EXISTS "${table}_code_key"`
   )
   await prisma.$executeRawUnsafe(`DROP INDEX IF EXISTS "ql-dao-tao"."${table}_code_key"`)
-  await prisma.$executeRawUnsafe(
-    `ALTER TABLE "ql-dao-tao"."${table}" DROP COLUMN IF EXISTS "code"`
-  )
+  await prisma.$executeRawUnsafe(`ALTER TABLE "ql-dao-tao"."${table}" DROP COLUMN IF EXISTS "code"`)
   console.log(`[drop] ${table}.code`)
 }
 

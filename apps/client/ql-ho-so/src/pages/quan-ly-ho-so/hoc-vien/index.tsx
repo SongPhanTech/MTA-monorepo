@@ -51,12 +51,8 @@ export default function StudentProfilePageDs() {
   const router = useRouter()
   const where = useMemo(() => {
     const userProfile: Prisma.UserProfileWhereInput = {
-      ...(filters.code
-        ? { code: { contains: filters.code, mode: "insensitive" } }
-        : {}),
-      ...(filters.name
-        ? { fullname: { contains: filters.name, mode: "insensitive" } }
-        : {}),
+      ...(filters.code ? { code: { contains: filters.code, mode: "insensitive" } } : {}),
+      ...(filters.name ? { fullname: { contains: filters.name, mode: "insensitive" } } : {}),
       ...(filters.idCardNumber
         ? { idCardNumber: { contains: filters.idCardNumber, mode: "insensitive" } }
         : {}),
@@ -343,30 +339,31 @@ export default function StudentProfilePageDs() {
                 hidden: !canSome(QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO, "IN", "XOA", "SUA"),
                 render: (_, record) => (
                   <Row className="justify-center gap-2">
-                    {can(QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO, "IN") && record.userProfileId && (
-                      <Dropdown
-                        overlay={
-                          <Menu>
-                            {printActions.map((item) => (
-                              <Menu.Item
-                                key={item.key}
-                                onClick={() => item.onClick({ id: record.userProfileId })}
-                              >
-                                {item.label}
-                              </Menu.Item>
-                            ))}
-                          </Menu>
-                        }
-                        trigger={["click"]}
-                      >
-                        <Button
-                          className="w-fit"
-                          type="link"
-                          icon={<Printer className="text-[#212121]" />}
-                          size="large"
-                        />
-                      </Dropdown>
-                    )}
+                    {can(QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO, "IN") &&
+                      record.userProfileId && (
+                        <Dropdown
+                          overlay={
+                            <Menu>
+                              {printActions.map((item) => (
+                                <Menu.Item
+                                  key={item.key}
+                                  onClick={() => item.onClick({ id: record.userProfileId })}
+                                >
+                                  {item.label}
+                                </Menu.Item>
+                              ))}
+                            </Menu>
+                          }
+                          trigger={["click"]}
+                        >
+                          <Button
+                            className="w-fit"
+                            type="link"
+                            icon={<Printer className="text-[#212121]" />}
+                            size="large"
+                          />
+                        </Dropdown>
+                      )}
                     {can(QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO, "SUA") &&
                       record.userProfileId && (
                         <EditIcon

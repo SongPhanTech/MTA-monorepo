@@ -78,9 +78,7 @@ const fromTemplateRequestSchema = z
     templatePath: z
       .string()
       .openapi(
-        fieldDesc(
-          "Đường dẫn template trên MinIO. Ví dụ: /mta/template/BangDiemQuaTrinh.xlsx"
-        )
+        fieldDesc("Đường dẫn template trên MinIO. Ví dụ: /mta/template/BangDiemQuaTrinh.xlsx")
       ),
     fileName: z.string().openapi(fieldDesc("Tên file tải về.")),
     extension: z

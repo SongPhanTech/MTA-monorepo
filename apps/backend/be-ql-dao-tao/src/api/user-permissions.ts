@@ -131,7 +131,11 @@ const AssignDelegationBodySchema = z
       .min(1)
       .max(50)
       .openapi(fieldDesc("Id hồ sơ cán bộ hoặc giảng viên nhận ủy quyền")),
-    grants: z.array(AssignGrantSchema).min(1).max(50).openapi(fieldDesc("Vai trò và bit quyền được giao")),
+    grants: z
+      .array(AssignGrantSchema)
+      .min(1)
+      .max(50)
+      .openapi(fieldDesc("Vai trò và bit quyền được giao")),
     granterId: z
       .string()
       .min(1)
@@ -278,7 +282,10 @@ const listGrantedRolesRoute = createRoute({
   description: "Chỉ các AccessRoleGrant còn hiệu lực do người giao này tạo.",
   request: {
     query: z.object({
-      granterId: z.string().optional().openapi(fieldDesc("Id hồ sơ người giao. Dùng khi request chưa gắn jwt.")),
+      granterId: z
+        .string()
+        .optional()
+        .openapi(fieldDesc("Id hồ sơ người giao. Dùng khi request chưa gắn jwt.")),
     }),
   },
   responses: {
@@ -298,7 +305,11 @@ const listGrantedRolesRoute = createRoute({
 
 const RevokeGrantsBodySchema = z
   .object({
-    grantIds: z.array(z.string().min(1)).min(1).max(50).openapi(fieldDesc("Id các lần giao cần thu hồi")),
+    grantIds: z
+      .array(z.string().min(1))
+      .min(1)
+      .max(50)
+      .openapi(fieldDesc("Id các lần giao cần thu hồi")),
     granterId: z
       .string()
       .min(1)

@@ -97,7 +97,9 @@ function DongBoDuLieuPage() {
   } = useGetDataSyncHistory(50, {
     refetchOnWindowFocus: false,
     refetchInterval: (query) => {
-      const res = query.state.data as { status?: number; data?: Array<{ status: string }> } | undefined
+      const res = query.state.data as
+        | { status?: number; data?: Array<{ status: string }> }
+        | undefined
       const items = res?.status === 200 ? res.data : undefined
       const hasPending = items?.some((h) => h.status === "PENDING")
       return hasPending ? 3000 : false

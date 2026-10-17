@@ -446,7 +446,8 @@ function SurveylecturerReport({
               <div>
                 <Title level={4}>Thống kê theo từng Câu hỏi</Title>
                 <div className="text-gray-500 font-medium">
-                  Số lượt tham gia khảo sát: <span className="text-primary">{completed || 0}</span> / {total || 0}
+                  Số lượt tham gia khảo sát: <span className="text-primary">{completed || 0}</span>{" "}
+                  / {total || 0}
                 </div>
               </div>
               {dataLevel?.status === 200 && (

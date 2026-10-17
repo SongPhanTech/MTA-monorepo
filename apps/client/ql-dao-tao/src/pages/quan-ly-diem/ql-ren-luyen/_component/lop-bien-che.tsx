@@ -69,9 +69,7 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
       name: className ? { contains: className } : undefined,
     }
 
-    const orConditions: Array<
-      { lecturerManagementId: string } | { staffManagementId: string }
-    > = []
+    const orConditions: Array<{ lecturerManagementId: string } | { staffManagementId: string }> = []
 
     if (currentLecturer?.id) {
       orConditions.push({ lecturerManagementId: currentLecturer.id })

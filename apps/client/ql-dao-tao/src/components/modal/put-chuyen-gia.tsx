@@ -200,8 +200,7 @@ const PutExpert = () => {
   const isThesisDomain = input?.thesisExpert !== false
   const isEdit = !!input?.id
   const councilHistoryEnabled = isOpen && isEdit && activeTab === "council" && !!input?.id
-  const supervisorHistoryEnabled =
-    isOpen && isEdit && activeTab === "supervisor" && !!input?.id
+  const supervisorHistoryEnabled = isOpen && isEdit && activeTab === "supervisor" && !!input?.id
 
   const { data: expert, refetch: refetchExpert } = useFindUniqueExpert(
     {
@@ -252,10 +251,7 @@ const PutExpert = () => {
   // Chỉ hiển thị Giáo sư/Phó giáo sư và Tiến sĩ(sỹ)/Thạc sĩ(sỹ) trên màn chỉnh sửa chuyên gia
   const { data: academicRankTypeRaw } = useFindManyDM_HocHam({
     where: {
-      OR: [
-        { sTen: { contains: "giáo sư", mode: "insensitive" } },
-        { sMa: { in: ["GS", "PGS"] } },
-      ],
+      OR: [{ sTen: { contains: "giáo sư", mode: "insensitive" } }, { sMa: { in: ["GS", "PGS"] } }],
     },
   })
   const { data: academicDegreeTypeRaw } = useFindManyDM_HocVi({
@@ -672,10 +668,7 @@ const PutExpert = () => {
     const target = versions.find((v) => v.id === versionId)
     if (!target) return
     setEditingVersionId(versionId)
-    fillFormFromVersion(
-      target,
-      target.inAcademy ? expert?.lecturerId : null
-    )
+    fillFormFromVersion(target, target.inAcademy ? expert?.lecturerId : null)
     message.info("Đã nạp phiên bản vào form. Chỉnh rồi bấm «Cập nhật phiên bản» để sửa đè.")
   }
 
@@ -742,12 +735,7 @@ const PutExpert = () => {
       if (!validateFormValues(output)) return
 
       showSpinner()
-      await reviseExpertVersion(
-        expert.id,
-        expert.currentVersionId,
-        output,
-        expert.currentVersion
-      )
+      await reviseExpertVersion(expert.id, expert.currentVersionId, output, expert.currentVersion)
       await refetchExpert()
       message.success(
         "Đã lưu phiên bản mới và áp dụng cho các gán mới. Đợt/HĐ đã gán trước đó vẫn giữ hồ sơ cũ."
@@ -811,9 +799,7 @@ const PutExpert = () => {
           title: project.title || "—",
           sessionName: project.thesisSession?.name || "—",
           organization: project.organization?.sTen || "—",
-          defenseDate: project.defenseDate
-            ? dayjs(project.defenseDate).format("DD/MM/YYYY")
-            : "—",
+          defenseDate: project.defenseDate ? dayjs(project.defenseDate).format("DD/MM/YYYY") : "—",
           room: project.room?.name || "—",
         })
       }
@@ -828,8 +814,7 @@ const PutExpert = () => {
       const student = project.registrations?.[0]?.student
       const isGvhd1 = project.supervisor?.expertId === expertId
       const isGvhd2 = project.coSupervisor?.expertId === expertId
-      const role =
-        isGvhd1 && isGvhd2 ? "GVHD1, GVHD2" : isGvhd1 ? "GVHD1" : isGvhd2 ? "GVHD2" : "—"
+      const role = isGvhd1 && isGvhd2 ? "GVHD1, GVHD2" : isGvhd1 ? "GVHD1" : isGvhd2 ? "GVHD2" : "—"
       return {
         key: project.id,
         role,
@@ -892,7 +877,11 @@ const PutExpert = () => {
               searchValue={search}
               onSearch={setSearch}
               options={lecturer.map((item) => ({
-                label: [item.userProfile?.code, item?.userProfile?.fullname, item?.userProfile?.donVi?.sTen]
+                label: [
+                  item.userProfile?.code,
+                  item?.userProfile?.fullname,
+                  item?.userProfile?.donVi?.sTen,
+                ]
                   .filter(Boolean)
                   .join(" - "),
                 value: item.id,
@@ -1060,10 +1049,7 @@ const PutExpert = () => {
                 width: 100,
                 align: "center",
                 render: (_: unknown, record: (typeof versions)[number]) =>
-                  [
-                    record.eligiblePresident ? "CT" : null,
-                    record.eligibleSecretary ? "TK" : null,
-                  ]
+                  [record.eligiblePresident ? "CT" : null, record.eligibleSecretary ? "TK" : null]
                     .filter(Boolean)
                     .join(", ") || "—",
               },

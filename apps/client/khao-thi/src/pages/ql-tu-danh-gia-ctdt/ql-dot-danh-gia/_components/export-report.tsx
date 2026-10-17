@@ -718,7 +718,11 @@ export default function ExportReport({
         indent: { firstLine: 720 },
         children: [
           new TextRun({ text: "Tự đánh giá CTĐT: ", bold: true, size: 24 }),
-          new TextRun({ text: `${evaluationResult || "..."} `, bold: !!evaluationResult, size: 24 }),
+          new TextRun({
+            text: `${evaluationResult || "..."} `,
+            bold: !!evaluationResult,
+            size: 24,
+          }),
           new TextRun({ text: "(Đạt/Đạt có điều kiện/Không đạt).", italics: true, size: 24 }),
         ],
       }),

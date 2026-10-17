@@ -24,7 +24,19 @@ import {
 } from "./utils/check-certificate-expiration"
 import { generatePresignedUrl } from "@workspace/libs/api/model"
 import { getMinioUrl } from "@workspace/libs/utils"
-import { Button, Flex, Input, InputNumber, Modal, Select, Switch, Tag, Tooltip, Upload, message } from "antd"
+import {
+  Button,
+  Flex,
+  Input,
+  InputNumber,
+  Modal,
+  Select,
+  Switch,
+  Tag,
+  Tooltip,
+  Upload,
+  message,
+} from "antd"
 import axios from "axios"
 import { saveAs } from "file-saver"
 import dayjs from "dayjs"
@@ -59,8 +71,7 @@ type SubjectScoreDraft = {
   finalScore: number
 }
 
-const OPTIONAL_SUBJECT_SCORE_HINT =
-  "Không chọn môn: chỉ ghi nhận chứng chỉ"
+const OPTIONAL_SUBJECT_SCORE_HINT = "Không chọn môn: chỉ ghi nhận chứng chỉ"
 
 type DocFileItem = {
   id?: string
@@ -111,8 +122,7 @@ const initializeSubjectScoreDrafts = (certificates: any[]): Record<string, Subje
 
 function getCurriculumSubjects(cert: any): CurriculumSubject[] {
   const student = cert?.student
-  const curriculumVersion =
-    student?.curriculumVersion || student?.fixedClass?.curriculumVersion
+  const curriculumVersion = student?.curriculumVersion || student?.fixedClass?.curriculumVersion
   if (!curriculumVersion?.trainingBlocks) return []
 
   const map = new Map<string, CurriculumSubject>()
@@ -338,21 +348,21 @@ const ModalDanhSachChungChi = () => {
         prev.map((c) =>
           c.id === certId
             ? {
-              ...c,
-              ...saveData,
-              issuedDate: draft.issuedDate ? draft.issuedDate.toISOString() : null,
-              expiredDate: draft.expiredDate ? draft.expiredDate.toISOString() : null,
-              documentFiles: savedDocumentFiles,
-              subjectScores: subjectScores.map((s, idx) => ({
-                id: `temp-${idx}`,
-                subjectVersionId: s.subjectVersionId,
-                finalScore: s.finalScore,
-                subjectVersion: subjectMap.get(s.subjectVersionId) || {
-                  id: s.subjectVersionId,
-                  name: s.subjectVersionId,
-                },
-              })),
-            }
+                ...c,
+                ...saveData,
+                issuedDate: draft.issuedDate ? draft.issuedDate.toISOString() : null,
+                expiredDate: draft.expiredDate ? draft.expiredDate.toISOString() : null,
+                documentFiles: savedDocumentFiles,
+                subjectScores: subjectScores.map((s, idx) => ({
+                  id: `temp-${idx}`,
+                  subjectVersionId: s.subjectVersionId,
+                  finalScore: s.finalScore,
+                  subjectVersion: subjectMap.get(s.subjectVersionId) || {
+                    id: s.subjectVersionId,
+                    name: s.subjectVersionId,
+                  },
+                })),
+              }
             : c
         )
       )
@@ -381,7 +391,9 @@ const ModalDanhSachChungChi = () => {
       queryClient.invalidateQueries({ queryKey: ["ArchivedCertificate"] })
       message.success("Xóa chứng chỉ thành công")
     } catch (error: any) {
-      message.error(error?.info?.message || error?.data?.message || "Đã xảy ra lỗi, vui lòng kiểm tra lại")
+      message.error(
+        error?.info?.message || error?.data?.message || "Đã xảy ra lỗi, vui lòng kiểm tra lại"
+      )
     } finally {
       hideSpinner()
     }
@@ -586,35 +598,35 @@ const ModalDanhSachChungChi = () => {
           },
           ...((showLanguageScoreColumns
             ? [
-              {
-                title: "Nghe",
-                align: "center",
-                width: 100,
-                render: (_: any, cert: any) =>
-                  renderEditableNumber(cert?.listeningScore, cert, "listeningScore"),
-              },
-              {
-                title: "Nói",
-                align: "center",
-                width: 100,
-                render: (_: any, cert: any) =>
-                  renderEditableNumber(cert?.speakingScore, cert, "speakingScore"),
-              },
-              {
-                title: "Đọc",
-                align: "center",
-                width: 100,
-                render: (_: any, cert: any) =>
-                  renderEditableNumber(cert?.readingScore, cert, "readingScore"),
-              },
-              {
-                title: "Viết",
-                align: "center",
-                width: 100,
-                render: (_: any, cert: any) =>
-                  renderEditableNumber(cert?.writingScore, cert, "writingScore"),
-              },
-            ]
+                {
+                  title: "Nghe",
+                  align: "center",
+                  width: 100,
+                  render: (_: any, cert: any) =>
+                    renderEditableNumber(cert?.listeningScore, cert, "listeningScore"),
+                },
+                {
+                  title: "Nói",
+                  align: "center",
+                  width: 100,
+                  render: (_: any, cert: any) =>
+                    renderEditableNumber(cert?.speakingScore, cert, "speakingScore"),
+                },
+                {
+                  title: "Đọc",
+                  align: "center",
+                  width: 100,
+                  render: (_: any, cert: any) =>
+                    renderEditableNumber(cert?.readingScore, cert, "readingScore"),
+                },
+                {
+                  title: "Viết",
+                  align: "center",
+                  width: 100,
+                  render: (_: any, cert: any) =>
+                    renderEditableNumber(cert?.writingScore, cert, "writingScore"),
+                },
+              ]
             : []) as any[]),
           {
             title: "Ngày cấp",

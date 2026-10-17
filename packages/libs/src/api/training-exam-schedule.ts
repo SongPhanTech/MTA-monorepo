@@ -49,9 +49,7 @@ type LecturerExamScheduleError = {
   headers: Headers
 }
 
-export type LecturerExamScheduleResponse =
-  | LecturerExamScheduleSuccess
-  | LecturerExamScheduleError
+export type LecturerExamScheduleResponse = LecturerExamScheduleSuccess | LecturerExamScheduleError
 
 const buildQuery = (params?: LecturerExamScheduleParams) => {
   const search = new URLSearchParams()

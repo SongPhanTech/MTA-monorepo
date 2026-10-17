@@ -115,7 +115,10 @@ export type SurveyAudienceQueryFilters = {
   studentCode?: string
   lecturerCode?: string
   staffCode?: string
+  /** UUID đơn vị (tree select) */
   organizationId?: string[]
+  /** Mã/tên đơn vị (ô filter text ĐVQL) */
+  organizationCode?: string
   fixedClassIds?: string[]
   trainingCourseIds?: string[]
   isStudent?: SurveyAudienceScope
@@ -202,22 +205,45 @@ export function buildSurveyObjectTypeProfileOrClauses(
 
   const clauses: Prisma.UserProfileWhereInput[] = []
 
+  const organizationCodeFilter: Prisma.UserProfileWhereInput = q.organizationCode
+    ? {
+        donVi: {
+          OR: [
+            { sMa: { contains: q.organizationCode, mode: "insensitive" } },
+            { sTen: { contains: q.organizationCode, mode: "insensitive" } },
+          ],
+        },
+      }
+    : {}
+
   if (scope !== "student") {
     const organizationIds = q.organizationId?.length
       ? q.organizationId
       : objectType.organizations.map((org) => org.Id)
+    const hasOrgIds = organizationIds.length > 0
 
     clauses.push({
-      sDM_DonViId: { in: organizationIds },
+      ...(hasOrgIds ? { sDM_DonViId: { in: organizationIds } } : {}),
+      ...organizationCodeFilter,
       lecturer: { isNot: null },
       ...(q.lecturerCode ? { code: { contains: q.lecturerCode, mode: "insensitive" } } : {}),
     })
+    const staffWhere: Prisma.StaffWhereInput = {
+      ...(hasOrgIds ? { organizationId: { in: organizationIds } } : {}),
+      ...(q.organizationCode
+        ? {
+            organization: {
+              OR: [
+                { sMa: { contains: q.organizationCode, mode: "insensitive" } },
+                { sTen: { contains: q.organizationCode, mode: "insensitive" } },
+              ],
+            },
+          }
+        : {}),
+    }
     clauses.push({
-      staffs: {
-        some: {
-          organizationId: { in: organizationIds },
-        },
-      },
+      staffs:
+        Object.keys(staffWhere).length > 0 ? { is: staffWhere } : { isNot: null },
       ...(q.staffCode ? { code: { contains: q.staffCode, mode: "insensitive" } } : {}),
     })
   }
@@ -236,11 +262,10 @@ export function buildSurveyObjectTypeProfileOrClauses(
     }
 
     clauses.push({
+      ...(q.studentCode ? { code: { contains: q.studentCode, mode: "insensitive" } } : {}),
+      ...organizationCodeFilter,
       educationAndTraining: {
         some: {
-          ...(q.studentCode
-            ? { userProfile: { code: { contains: q.studentCode, mode: "insensitive" } } }
-            : {}),
           // Chỉ ràng buộc quan hệ khi thật sự có điều kiện lọc: `fixedClass: {}` bị Prisma
           // dịch thành EXISTS(...) nên sẽ loại hết HV chưa được gán lớp quản lý.
           ...(Object.keys(fixedClassFilter).length ? { fixedClass: fixedClassFilter } : {}),

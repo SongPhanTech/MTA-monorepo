@@ -234,7 +234,10 @@ export async function exportBangDiemNganDaiHan({ studentIds }: { studentIds: str
     const ctdtSemesterBySubject = new Map<string, number | null>()
     for (const block of trainingBlockSubjects) {
       if (block.trainingBlockOnCurriculumVersion.curriculumVersionId !== cvId) continue
-      if (!ctdtSemesterBySubject.has(block.subjectId) || ctdtSemesterBySubject.get(block.subjectId) == null) {
+      if (
+        !ctdtSemesterBySubject.has(block.subjectId) ||
+        ctdtSemesterBySubject.get(block.subjectId) == null
+      ) {
         ctdtSemesterBySubject.set(block.subjectId, block.semester)
       }
     }
@@ -320,8 +323,7 @@ export async function exportBangDiemNganDaiHan({ studentIds }: { studentIds: str
       },
       { tongDiemCoTrongSo: 0, tongTrongSo: 0 }
     )
-    const diemTB =
-      tongTrongSo > 0 ? Math.round((tongDiemCoTrongSo / tongTrongSo) * 100) / 100 : 0
+    const diemTB = tongTrongSo > 0 ? Math.round((tongDiemCoTrongSo / tongTrongSo) * 100) / 100 : 0
     const hang = hangTotNghiep(diemTB)
 
     const gapRow: TableRow = { cells: [{ value: null, colSpan: 18, border: false }] }

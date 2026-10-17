@@ -38,7 +38,10 @@ const formatVnPct = (value: number) => {
 
 const formatCount = (value: number) => (value < 10 ? String(value).padStart(2, "0") : String(value))
 
-const choiceLabel = (choices: { id: string; description: string; answer: string }[], ids: string[]) =>
+const choiceLabel = (
+  choices: { id: string; description: string; answer: string }[],
+  ids: string[]
+) =>
   choices
     .filter((c) => ids.includes(c.id))
     .map((c) => `"${c.description || c.answer}"`)
@@ -84,13 +87,8 @@ export async function buildClusterSurveySummaryReport(
   clusterSurveyId: string,
   input: ClusterSurveySummaryReportInput
 ) {
-  const {
-    positiveChoiceIds,
-    highChoiceIds,
-    highThreshold,
-    concernChoiceIds,
-    concernThreshold,
-  } = input
+  const { positiveChoiceIds, highChoiceIds, highThreshold, concernChoiceIds, concernThreshold } =
+    input
 
   if (!positiveChoiceIds.length || !highChoiceIds.length || !concernChoiceIds.length) {
     throw new Error("Vui lòng chọn đủ các mức đánh giá cho thống kê")
@@ -221,8 +219,10 @@ export async function buildClusterSurveySummaryReport(
 
   const tongGiangVien = lecturerIds.length
   const tongPhieu =
-    cluster.surveys.reduce((acc, s) => acc + (s.subjectClass?.subjectClassStudent?.length || 0), 0) ||
-    sessions.length
+    cluster.surveys.reduce(
+      (acc, s) => acc + (s.subjectClass?.subjectClassStudent?.length || 0),
+      0
+    ) || sessions.length
   const tyLeHaiLong = totalAnswers === 0 ? 0 : (positiveAnswers / totalAnswers) * 100
   // Scale positive count to "phiếu" denominator for display like sample
   const soPhieuHaiLong =
@@ -250,7 +250,8 @@ export async function buildClusterSurveySummaryReport(
 
   const objectTypeNames = cluster.surveyObjectType.map((o) => o.name).filter(Boolean)
   const trainingName = sampleSurvey?.trainingObjectType?.name || ""
-  const defaultDoiTuong = [...objectTypeNames, trainingName].filter(Boolean).join(" - ") || "học viên"
+  const defaultDoiTuong =
+    [...objectTypeNames, trainingName].filter(Boolean).join(" - ") || "học viên"
 
   const today = getCurrentDateForReport()
 

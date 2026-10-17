@@ -4,17 +4,17 @@ Kiểm tra ngày 30/09/2026 trên cùng PostgreSQL host, dùng thông tin kết 
 
 ## Kết quả catalog thực tế
 
-| Hạng mục | Kết quả |
-| --- | --- |
-| Bảng có trong mobile nhưng thiếu production | `ql-dao-tao.StudentPersonalEvent` |
-| Bảng production có thêm | `ql-dao-tao.AccessRoleGrant`, `ql-dao-tao.AccessPermissionGrant` |
-| Cột audit thiếu trên bảng chung | 1.784 cột trên 298 bảng |
-| Phần audit khai báo được trong ZModel | 257 model chung hiện có; trong đó UserProfile đã có 4 cột String audit, chỉ thiếu 2 ngày audit |
-| Phần audit của bảng nối implicit | 41 bảng, 246 cột; cần SQL riêng |
-| Cột nghiệp vụ khác biệt | `Student.code`, `Lecturer.code`, `Staff.code`, `Lecturer.organizationId` |
-| Định nghĩa cột chung | Không khác kiểu, nullable, default, identity, generated |
-| Enum | 69 enum ở mỗi DB, tên/thứ tự giá trị giống nhau |
-| Function/trigger tự viết | 2 function và 2 trigger, giống nhau |
+| Hạng mục                                    | Kết quả                                                                                        |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Bảng có trong mobile nhưng thiếu production | `ql-dao-tao.StudentPersonalEvent`                                                              |
+| Bảng production có thêm                     | `ql-dao-tao.AccessRoleGrant`, `ql-dao-tao.AccessPermissionGrant`                               |
+| Cột audit thiếu trên bảng chung             | 1.784 cột trên 298 bảng                                                                        |
+| Phần audit khai báo được trong ZModel       | 257 model chung hiện có; trong đó UserProfile đã có 4 cột String audit, chỉ thiếu 2 ngày audit |
+| Phần audit của bảng nối implicit            | 41 bảng, 246 cột; cần SQL riêng                                                                |
+| Cột nghiệp vụ khác biệt                     | `Student.code`, `Lecturer.code`, `Staff.code`, `Lecturer.organizationId`                       |
+| Định nghĩa cột chung                        | Không khác kiểu, nullable, default, identity, generated                                        |
+| Enum                                        | 69 enum ở mỗi DB, tên/thứ tự giá trị giống nhau                                                |
+| Function/trigger tự viết                    | 2 function và 2 trigger, giống nhau                                                            |
 
 Chi tiết từng schema/table/column/FK/index được lưu ở `packages/database/prisma/student-portal-db-diff-20260930.json`, chỉ chứa cấu trúc và không có mật khẩu/connection string.
 
@@ -69,6 +69,7 @@ Production có 11 bản ghi migration; một bản chưa hoàn tất và chưa r
 Log lỗi: `ERROR: type "DataSyncType" already exists` (PostgreSQL 42710). Enum và bảng DataSyncHistory hiện đã tồn tại trong catalog. Không retry migration cũ hoặc reset DB.
 
 Các migration local chưa có bản ghi completed trong production:
+
 - `20260714163000_data_sync_history`
 - `20260715140000_class_register_logs_unique`
 - `20260731160000_subject_class_optimistic_lock`

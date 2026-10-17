@@ -110,11 +110,7 @@ const toDiemRenLuyenRow = (
   }
 }
 
-const useDiemRenLuyenLopQuanLy = (
-  fixedClassId: string,
-  enabled: boolean,
-  coQuyenNhap = false
-) => {
+const useDiemRenLuyenLopQuanLy = (fixedClassId: string, enabled: boolean, coQuyenNhap = false) => {
   const { id: semesterMacDinh } = useSemesterStore()
   const [schoolYearApDung, setSchoolYearApDung] = useState<string>("")
   const [semesterApDung, setSemesterApDung] = useState<string | undefined>(semesterMacDinh)
@@ -197,7 +193,8 @@ const useDiemRenLuyenLopQuanLy = (
   )
 
   const tatCaDanhSach: DiemRenLuyenRow[] = useMemo(
-    () => tatCaSinhVien.map((sv) => toDiemRenLuyenRow(sv as SinhVienDiemRenLuyen, theoKy, coQuyenNhap)),
+    () =>
+      tatCaSinhVien.map((sv) => toDiemRenLuyenRow(sv as SinhVienDiemRenLuyen, theoKy, coQuyenNhap)),
     [tatCaSinhVien, theoKy, coQuyenNhap]
   )
 
@@ -241,9 +238,7 @@ const useDiemRenLuyenLopQuanLy = (
       const batDau = (trang - 1) * soTrang
       return danhSachLoc.slice(batDau, batDau + soTrang)
     }
-    return trangData.map((sv) =>
-      toDiemRenLuyenRow(sv as SinhVienDiemRenLuyen, theoKy, coQuyenNhap)
-    )
+    return trangData.map((sv) => toDiemRenLuyenRow(sv as SinhVienDiemRenLuyen, theoKy, coQuyenNhap))
   }, [danhSachLoc, trang, soTrang, trangData, theoKy, coQuyenNhap])
 
   const tongSo = danhSachLoc ? danhSachLoc.length : tongSoGoc

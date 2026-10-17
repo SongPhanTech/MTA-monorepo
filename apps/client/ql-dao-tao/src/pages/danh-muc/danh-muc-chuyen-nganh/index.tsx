@@ -75,9 +75,7 @@ export default function TrainingMajorPage() {
 
     if (uniqueItems.length === 0) return ""
 
-    return uniqueItems.map((item) => (
-      <div key={item.id}>- {item.trainingObjectType.name}</div>
-    ))
+    return uniqueItems.map((item) => <div key={item.id}>- {item.trainingObjectType.name}</div>)
   }
 
   useEffect(() => {

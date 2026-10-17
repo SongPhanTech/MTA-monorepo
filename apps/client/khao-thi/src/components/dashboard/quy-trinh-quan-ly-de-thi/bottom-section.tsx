@@ -1,13 +1,6 @@
-import {
-  CalendarRange,
-  BookOpen,
-  GraduationCap,
-  User,
-  Users,
-  ArrowDown,
-} from "lucide-react"
+import { CalendarRange, BookOpen, GraduationCap, User, Users, ArrowDown } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
-import { QuyTrinhDeThiView } from "./type";
+import { QuyTrinhDeThiView } from "./type"
 
 interface BottomSectionProps {
   view?: QuyTrinhDeThiView

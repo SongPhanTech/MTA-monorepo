@@ -182,7 +182,10 @@ export function normalizeVietnamese(str: string): string {
 /** Bỏ khoảng trắng đầu/cuối và gom khoảng trắng thừa (kể cả NBSP từ Excel). */
 export function normalizeCatalogName(value?: string | null) {
   if (value == null) return ""
-  return String(value).replace(/\u00a0/g, " ").replace(/\s+/g, " ").trim()
+  return String(value)
+    .replace(/\u00a0/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
 }
 
 export function filterOption(input: any, option: any) {
@@ -551,13 +554,15 @@ function normalizeScoreLookup(value?: string | null) {
 }
 
 /** Đại học dân sự: type CIVILIAN + bậc Đại học (không gồm thạc sĩ/tiến sĩ dân sự). */
-export function isUndergraduateCivilian(course?: {
-  trainingObjectType?: {
-    type?: string | null
-    name?: string | null
-    trainingLevel?: { code?: string | null; name?: string | null } | null
+export function isUndergraduateCivilian(
+  course?: {
+    trainingObjectType?: {
+      type?: string | null
+      name?: string | null
+      trainingLevel?: { code?: string | null; name?: string | null } | null
+    } | null
   } | null
-} | null): boolean {
+): boolean {
   const objectType = course?.trainingObjectType
   if (objectType?.type !== $Enums.TrainingObjectTypes.CIVILIAN) return false
 
@@ -636,8 +641,8 @@ export const calcFinalScore = (
   // 1. Find max certificate final score
   const maxCertFinalScore = subjectScore.certificates?.length
     ? Decimal.max(
-      ...subjectScore.certificates.map((cert) => cert?.archivedCertificate?.finalScore)
-    ).toDecimalPlaces(1)
+        ...subjectScore.certificates.map((cert) => cert?.archivedCertificate?.finalScore)
+      ).toDecimalPlaces(1)
     : null
 
   // 2. Check if any score is null

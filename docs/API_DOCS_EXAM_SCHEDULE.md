@@ -1,11 +1,13 @@
 # API LỊCH THI & LỊCH COI THI (MTA)
 
 ### 1. Header bắt buộc (Gửi kèm mọi request)
+
 ```http
 x-clientid: <CLIENT_ID>
 x-clientsecret: <CLIENT_SECRET>
 Content-Type: application/json
 ```
+
 - **Base URL Prod:** `https://daotao.swantech.vn/api/system/public`
 - **Base URL Local:** `http://localhost:6083`
 
@@ -17,20 +19,23 @@ Content-Type: application/json
 - **Endpoint:** `/ExamSchedules/student`
 
 #### Đầu vào (Params / JSON Body):
-| Tham số | Kiểu | Bắt buộc | Mô tả |
-| :--- | :---: | :---: | :--- |
+
+| Tham số         |  Kiểu  |    Bắt buộc     | Mô tả                            |
+| :-------------- | :----: | :-------------: | :------------------------------- |
 | `userProfileId` | string | **Khuyên dùng** | ID UserProfile SSO của sinh viên |
-| `semesterId` | uuid | Không | ID kỳ học |
-| `schoolYearId` | uuid | Không | ID năm học |
-| `fromDate` | date | Không | Từ ngày (VD: `2026-09-01`) |
-| `toDate` | date | Không | Đến ngày (VD: `2026-09-30`) |
+| `semesterId`    |  uuid  |      Không      | ID kỳ học                        |
+| `schoolYearId`  |  uuid  |      Không      | ID năm học                       |
+| `fromDate`      |  date  |      Không      | Từ ngày (VD: `2026-09-01`)       |
+| `toDate`        |  date  |      Không      | Đến ngày (VD: `2026-09-30`)      |
 
 #### Ví dụ gọi (GET):
+
 ```http
 GET https://daotao.swantech.vn/api/system/public/ExamSchedules/student?userProfileId=USER_123&fromDate=2026-09-01&toDate=2026-09-30
 ```
 
 #### Dữ liệu trả về (200 OK):
+
 ```json
 {
   "Total": 1,
@@ -69,20 +74,23 @@ GET https://daotao.swantech.vn/api/system/public/ExamSchedules/student?userProfi
 - **Endpoint:** `/ExamSchedules/lecturer`
 
 #### Đầu vào (Params / JSON Body):
-| Tham số | Kiểu | Bắt buộc | Mô tả |
-| :--- | :---: | :---: | :--- |
+
+| Tham số         |  Kiểu  |    Bắt buộc     | Mô tả                             |
+| :-------------- | :----: | :-------------: | :-------------------------------- |
 | `userProfileId` | string | **Khuyên dùng** | ID UserProfile SSO của giảng viên |
-| `semesterId` | uuid | Không | ID kỳ học |
-| `schoolYearId` | uuid | Không | ID năm học |
-| `fromDate` | date | Không | Từ ngày (VD: `2026-09-01`) |
-| `toDate` | date | Không | Đến ngày (VD: `2026-09-30`) |
+| `semesterId`    |  uuid  |      Không      | ID kỳ học                         |
+| `schoolYearId`  |  uuid  |      Không      | ID năm học                        |
+| `fromDate`      |  date  |      Không      | Từ ngày (VD: `2026-09-01`)        |
+| `toDate`        |  date  |      Không      | Đến ngày (VD: `2026-09-30`)       |
 
 #### Ví dụ gọi (GET):
+
 ```http
 GET https://daotao.swantech.vn/api/system/public/ExamSchedules/lecturer?userProfileId=GV_456&fromDate=2026-09-01&toDate=2026-09-30
 ```
 
 #### Dữ liệu trả về (200 OK):
+
 ```json
 {
   "Total": 1,

@@ -25,7 +25,11 @@ interface FilterProps {
   searchText: string | null
 }
 
-function mergePageSelection(previousIds: React.Key[], pageIds: React.Key[], selectedOnPage: React.Key[]) {
+function mergePageSelection(
+  previousIds: React.Key[],
+  pageIds: React.Key[],
+  selectedOnPage: React.Key[]
+) {
   const pageIdSet = new Set(pageIds.map(String))
   const preserved = previousIds.filter((id) => !pageIdSet.has(String(id)))
   return [...new Set([...preserved, ...selectedOnPage].map(String))]
@@ -322,8 +326,10 @@ export default function MonHocLai() {
                   subjectClass.subject.studentSubjectScore[0]?.finalScore !== null
                     ? subjectClass.subject.studentSubjectScore[0].student?.fixedClass?.trainingCourse?.scoreConverts?.some(
                         (sc: ScoreConvert) =>
-                          sc?.base10Min <= subjectClass.subject.studentSubjectScore[0]?.finalScore &&
-                          subjectClass.subject.studentSubjectScore[0]?.finalScore <= sc?.base10Max &&
+                          sc?.base10Min <=
+                            subjectClass.subject.studentSubjectScore[0]?.finalScore &&
+                          subjectClass.subject.studentSubjectScore[0]?.finalScore <=
+                            sc?.base10Max &&
                           sc?.improvementRegister
                       )
                     : false,

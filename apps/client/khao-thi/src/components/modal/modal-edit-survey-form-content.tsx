@@ -9,7 +9,12 @@ import {
   parseSurveyFormDisplayContent,
   type SurveyFormDisplayContent,
 } from "@workspace/libs/survey-form-content"
-import { useFindManySurvey, useFindUniqueSurvey, useUpdateManySurvey, useUpdateSurvey } from "@workspace/db/hooks"
+import {
+  useFindManySurvey,
+  useFindUniqueSurvey,
+  useUpdateManySurvey,
+  useUpdateSurvey,
+} from "@workspace/db/hooks"
 import { Button, Checkbox, Col, Form, Input, Select, message } from "antd"
 import { useEffect, useMemo } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -61,9 +66,7 @@ const ModalEditSurveyFormContent = () => {
   const defaultContent = useMemo(
     () =>
       cloneSurveyFormDisplayContent(
-        isLecturerSurvey
-          ? LECTURER_SURVEY_PRINT_FORM_CONTENT
-          : DEFAULT_SURVEY_PRINT_FORM_CONTENT
+        isLecturerSurvey ? LECTURER_SURVEY_PRINT_FORM_CONTENT : DEFAULT_SURVEY_PRINT_FORM_CONTENT
       ),
     [isLecturerSurvey]
   )
@@ -75,7 +78,7 @@ const ModalEditSurveyFormContent = () => {
       ...content,
       footerNotes: content.footerNotes?.length
         ? content.footerNotes
-        : defaultContent.footerNotes ?? [],
+        : (defaultContent.footerNotes ?? []),
     })
   }, [isOpen, sourceSurvey?.formContent, defaultContent, form])
 

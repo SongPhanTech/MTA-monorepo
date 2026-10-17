@@ -92,12 +92,8 @@ export default function KyThi({ setActiveKey }: { setActiveKey: (key: string) =>
       ...(code || name
         ? {
             subjectVersion: {
-              ...(code
-                ? { code: { contains: code, mode: "insensitive" as const } }
-                : {}),
-              ...(name
-                ? { name: { contains: name, mode: "insensitive" as const } }
-                : {}),
+              ...(code ? { code: { contains: code, mode: "insensitive" as const } } : {}),
+              ...(name ? { name: { contains: name, mode: "insensitive" as const } } : {}),
             },
           }
         : {}),

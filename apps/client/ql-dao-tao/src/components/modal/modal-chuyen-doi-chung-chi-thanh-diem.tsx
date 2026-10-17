@@ -97,7 +97,6 @@ const ModalChuyenDoiChungChiThanhDiem = () => {
       return
     }
 
-
     // if (selectedSubjectClassIds.length === 0) {
     //     message.warning('Vui lòng chọn ít nhất một lớp môn học để phiên điểm')
     //     return

@@ -78,7 +78,9 @@ app.openapi(getListTeacher, async (c) => {
     },
   })
 
-  const orgIds = [...new Set(res.map((item) => item.userProfile?.sDM_DonViId).filter(Boolean))] as string[]
+  const orgIds = [
+    ...new Set(res.map((item) => item.userProfile?.sDM_DonViId).filter(Boolean)),
+  ] as string[]
   const orgs = orgIds.length
     ? await prisma.dM_DonVi.findMany({
         where: { Id: { in: orgIds } },

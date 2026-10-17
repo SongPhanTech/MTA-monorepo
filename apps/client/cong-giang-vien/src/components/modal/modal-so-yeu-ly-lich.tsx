@@ -13,10 +13,7 @@ dayjs.locale("vi")
 
 const MISSING_DATE = "- -"
 
-function formatDateOrPlaceholder(
-  value: Date | string | null | undefined,
-  format: string
-) {
+function formatDateOrPlaceholder(value: Date | string | null | undefined, format: string) {
   if (!value) return MISSING_DATE
   if (format === "DD/M/YYYY") return formatDateInSlash(value) || MISSING_DATE
   const parsed = dayjs(value)
@@ -374,14 +371,10 @@ const ModalSoYeuLyLich = () => {
             </p>
             <p className="flex w-full leading-[12px] mb-4">
               16. Ngày vào đảng CSVN:{" "}
-              {initialData?.CPVJoinDate
-                ? formatDateInSlash(initialData.CPVJoinDate)
-                : null}
+              {initialData?.CPVJoinDate ? formatDateInSlash(initialData.CPVJoinDate) : null}
               <span className="inline-block w-40 flex-1" />
               Chính thức:{" "}
-              {initialData?.officialCPVDate
-                ? formatDateInSlash(initialData.officialCPVDate)
-                : null}
+              {initialData?.officialCPVDate ? formatDateInSlash(initialData.officialCPVDate) : null}
               <span className="inline-block w-40 flex-1" />
             </p>
             <p className="flex w-full leading-[12px] mb-4">

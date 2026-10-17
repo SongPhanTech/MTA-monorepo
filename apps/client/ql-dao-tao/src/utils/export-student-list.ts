@@ -25,9 +25,17 @@ export const exportStudentList = async ({
 
   const FONT_NORMAL = { name: "Times New Roman", size: 12 }
   const FONT_BOLD = { name: "Times New Roman", size: 12, bold: true }
-  
-  const ALIGN_CENTER: Partial<ExcelJS.Alignment> = { horizontal: "center", vertical: "middle", wrapText: true }
-  const ALIGN_LEFT: Partial<ExcelJS.Alignment> = { horizontal: "left", vertical: "middle", wrapText: true }
+
+  const ALIGN_CENTER: Partial<ExcelJS.Alignment> = {
+    horizontal: "center",
+    vertical: "middle",
+    wrapText: true,
+  }
+  const ALIGN_LEFT: Partial<ExcelJS.Alignment> = {
+    horizontal: "left",
+    vertical: "middle",
+    wrapText: true,
+  }
 
   const THIN_BORDER: Partial<ExcelJS.Borders> = {
     top: { style: "thin" },
@@ -37,7 +45,7 @@ export const exportStudentList = async ({
   }
 
   worksheet.columns = [
-    { width: 8 },  // STT
+    { width: 8 }, // STT
     { width: 15 }, // Mã định danh
     { width: 30 }, // Họ và tên
     { width: 15 }, // Ngày sinh
@@ -85,10 +93,7 @@ export const exportStudentList = async ({
   worksheet.getCell("A6").alignment = ALIGN_LEFT
 
   worksheet.getCell("B6").value = {
-    richText: [
-      { text: " " },
-      { font: FONT_BOLD, text: subjectName }
-    ]
+    richText: [{ text: " " }, { font: FONT_BOLD, text: subjectName }],
   }
   worksheet.getCell("B6").alignment = ALIGN_LEFT
 
@@ -97,10 +102,7 @@ export const exportStudentList = async ({
   worksheet.getCell("C6").alignment = ALIGN_LEFT
 
   worksheet.getCell("D6").value = {
-    richText: [
-      { text: " " },
-      { font: FONT_BOLD, text: subjectClassCode }
-    ]
+    richText: [{ text: " " }, { font: FONT_BOLD, text: subjectClassCode }],
   }
   worksheet.getCell("D6").alignment = ALIGN_LEFT
 
@@ -116,8 +118,8 @@ export const exportStudentList = async ({
   worksheet.getCell("A7").value = {
     richText: [
       { text: " Thứ - Tiết:  ", font: FONT_NORMAL },
-      { text: scheduleText, font: FONT_BOLD }
-    ]
+      { text: scheduleText, font: FONT_BOLD },
+    ],
   }
   worksheet.getCell("A7").alignment = ALIGN_LEFT
 
@@ -165,7 +167,7 @@ export const exportStudentList = async ({
       cell.font = FONT_NORMAL
       cell.border = THIN_BORDER
     })
-    
+
     currentRow++
   })
 
@@ -181,7 +183,8 @@ export const exportStudentList = async ({
 
   currentRow += 1
   worksheet.mergeCells(`D${currentRow}:F${currentRow}`)
-  worksheet.getCell(`D${currentRow}`).value = `ngày ${dayjs().format("DD")} tháng ${formatThangIn(dayjs().month() + 1)} năm ${dayjs().format("YYYY")}`
+  worksheet.getCell(`D${currentRow}`).value =
+    `ngày ${dayjs().format("DD")} tháng ${formatThangIn(dayjs().month() + 1)} năm ${dayjs().format("YYYY")}`
   worksheet.getCell(`D${currentRow}`).font = { ...FONT_NORMAL, italic: true }
   worksheet.getCell(`D${currentRow}`).alignment = ALIGN_CENTER
 
@@ -192,7 +195,7 @@ export const exportStudentList = async ({
   worksheet.getCell(`D${currentRow}`).alignment = ALIGN_CENTER
 
   const buffer = await workbook.xlsx.writeBuffer()
-  const safeSubjectName = subjectName.replace(/[/\\?%*:|"<>]/g, '-')
+  const safeSubjectName = subjectName.replace(/[/\\?%*:|"<>]/g, "-")
   const fileName = `Danh_sach_SV_${safeSubjectName}_${subjectClassCode}.xlsx`
   saveAs(new Blob([buffer]), fileName)
 }

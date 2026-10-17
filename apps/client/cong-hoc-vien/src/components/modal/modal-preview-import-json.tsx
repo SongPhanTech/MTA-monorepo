@@ -59,13 +59,21 @@ export default function ModalPreviewImportJson({
       <Descriptions size="small" bordered column={{ xs: 1, sm: 2, lg: 3 }} className="mb-4">
         <Descriptions.Item label="File">{fileName || "—"}</Descriptions.Item>
         <Descriptions.Item label="Phiên bản">{preview.version}</Descriptions.Item>
-        <Descriptions.Item label="Thời điểm xuất">{fmtDateTime(preview.exportedAt)}</Descriptions.Item>
-        <Descriptions.Item label="Lớp học phần">{preview.summary.subjectClassCount}</Descriptions.Item>
-        <Descriptions.Item label="Thời khóa biểu">{preview.summary.scheduleCount}</Descriptions.Item>
+        <Descriptions.Item label="Thời điểm xuất">
+          {fmtDateTime(preview.exportedAt)}
+        </Descriptions.Item>
+        <Descriptions.Item label="Lớp học phần">
+          {preview.summary.subjectClassCount}
+        </Descriptions.Item>
+        <Descriptions.Item label="Thời khóa biểu">
+          {preview.summary.scheduleCount}
+        </Descriptions.Item>
         <Descriptions.Item label="Học viên">{preview.summary.studentCount}</Descriptions.Item>
         <Descriptions.Item label="CTĐT">{preview.summary.curriculumCount}</Descriptions.Item>
         <Descriptions.Item label="Môn học">{preview.summary.subjectCount}</Descriptions.Item>
-        <Descriptions.Item label="Danh mục hệ thống">{preview.catalogs.length} loại</Descriptions.Item>
+        <Descriptions.Item label="Danh mục hệ thống">
+          {preview.catalogs.length} loại
+        </Descriptions.Item>
       </Descriptions>
 
       <Tabs
@@ -79,8 +87,12 @@ export default function ModalPreviewImportJson({
                   <Descriptions.Item label="Tên đợt">
                     <Text strong>{preview.sessionName}</Text>
                   </Descriptions.Item>
-                  <Descriptions.Item label="Học kỳ">{preview.semesterName || "—"}</Descriptions.Item>
-                  <Descriptions.Item label="Năm học">{preview.schoolYearName || "—"}</Descriptions.Item>
+                  <Descriptions.Item label="Học kỳ">
+                    {preview.semesterName || "—"}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Năm học">
+                    {preview.schoolYearName || "—"}
+                  </Descriptions.Item>
                   <Descriptions.Item label="Thời gian đăng ký">
                     {preview.startDate && preview.endDate
                       ? `${fmtDateTime(preview.startDate)} → ${fmtDateTime(preview.endDate)}`
@@ -158,11 +170,26 @@ export default function ModalPreviewImportJson({
                         columns={[
                           { title: "Mã lớp", dataIndex: "code", width: 120 },
                           { title: "Tên lớp / môn", dataIndex: "name" },
-                          { title: "Loại", dataIndex: "type", width: 110, render: (v: string) => enumLabel(v) },
-                          { title: "Trạng thái", dataIndex: "status", width: 120, render: (v: string) => enumLabel(v) },
+                          {
+                            title: "Loại",
+                            dataIndex: "type",
+                            width: 110,
+                            render: (v: string) => enumLabel(v),
+                          },
+                          {
+                            title: "Trạng thái",
+                            dataIndex: "status",
+                            width: 120,
+                            render: (v: string) => enumLabel(v),
+                          },
                           { title: "Sĩ số max", dataIndex: "maxStudent", width: 100 },
                           { title: "Phòng", dataIndex: "roomId", width: 100 },
-                          { title: "Buổi", dataIndex: "schedule", width: 90, render: (v: string) => enumLabel(v) },
+                          {
+                            title: "Buổi",
+                            dataIndex: "schedule",
+                            width: 90,
+                            render: (v: string) => enumLabel(v),
+                          },
                         ]}
                       />
                     ),
@@ -213,9 +240,18 @@ export default function ModalPreviewImportJson({
                             width: 120,
                             render: (v: string) => fmtDate(v),
                           },
-                          { title: "Tiết", width: 90, render: (_, r) => `${r.startPeriod ?? "?"}–${r.endPeriod ?? "?"}` },
+                          {
+                            title: "Tiết",
+                            width: 90,
+                            render: (_, r) => `${r.startPeriod ?? "?"}–${r.endPeriod ?? "?"}`,
+                          },
                           { title: "Phòng", dataIndex: "roomId", width: 100 },
-                          { title: "Loại tiết", dataIndex: "periodType", width: 120, render: (v: string) => enumLabel(v) },
+                          {
+                            title: "Loại tiết",
+                            dataIndex: "periodType",
+                            width: 120,
+                            render: (v: string) => enumLabel(v),
+                          },
                         ]}
                       />
                     ),
@@ -230,11 +266,15 @@ export default function ModalPreviewImportJson({
             children: (
               <>
                 <Descriptions size="small" bordered column={{ xs: 1, sm: 3 }} className="mb-4">
-                  <Descriptions.Item label="Học viên">{preview.summary.studentCount}</Descriptions.Item>
+                  <Descriptions.Item label="Học viên">
+                    {preview.summary.studentCount}
+                  </Descriptions.Item>
                   <Descriptions.Item label="Hồ sơ UserProfile">
                     {preview.summary.userProfileCount}
                   </Descriptions.Item>
-                  <Descriptions.Item label="Lớp quản lý">{preview.fixedClasses.length}</Descriptions.Item>
+                  <Descriptions.Item label="Lớp quản lý">
+                    {preview.fixedClasses.length}
+                  </Descriptions.Item>
                 </Descriptions>
                 <Table
                   size="small"
@@ -334,7 +374,12 @@ export default function ModalPreviewImportJson({
                           { title: "Mã môn", dataIndex: "code", width: 120 },
                           { title: "Tên môn", dataIndex: "name" },
                           { title: "Tín chỉ", dataIndex: "credit", width: 90 },
-                          { title: "Loại", dataIndex: "type", width: 120, render: (v: string) => enumLabel(v) },
+                          {
+                            title: "Loại",
+                            dataIndex: "type",
+                            width: 120,
+                            render: (v: string) => enumLabel(v),
+                          },
                         ]}
                       />
                     ),

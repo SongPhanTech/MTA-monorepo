@@ -181,10 +181,10 @@ export default function BaoCaoGiangVien() {
           trainingObjectTypeName={trainingObjectTypeName}
           semesterName={semesterName}
           trainingSystemName={trainingSystemName}
-          organizationName={isDepartment ? parentOrg?.sTen ?? "" : org.sTen ?? ""}
-          organizationCode={isDepartment ? parentOrg?.sMa ?? "" : org.sMa ?? ""}
-          departmentName={isDepartment ? org.sTen ?? "" : ""}
-          departmentCode={isDepartment ? org.sMa ?? "" : ""}
+          organizationName={isDepartment ? (parentOrg?.sTen ?? "") : (org.sTen ?? "")}
+          organizationCode={isDepartment ? (parentOrg?.sMa ?? "") : (org.sMa ?? "")}
+          departmentName={isDepartment ? (org.sTen ?? "") : ""}
+          departmentCode={isDepartment ? (org.sMa ?? "") : ""}
           selectedItem={org}
         />
       )
@@ -213,8 +213,8 @@ export default function BaoCaoGiangVien() {
           organizationCode={(isDepartment ? parentOrg?.sMa : org?.sMa) ?? undefined}
           lecturerName={lecturerTitle(lecturer)}
           lecturerCode={lecturer.userProfile?.code ?? undefined}
-          departmentName={isDepartment ? org?.sTen ?? "" : ""}
-          departmentCode={isDepartment ? org?.sMa ?? "" : ""}
+          departmentName={isDepartment ? (org?.sTen ?? "") : ""}
+          departmentCode={isDepartment ? (org?.sMa ?? "") : ""}
         />
       )
     }
@@ -276,7 +276,9 @@ export default function BaoCaoGiangVien() {
               onSelect={(keys, info) => {
                 setSelectedKeys(keys)
                 const key = keys[0]
-                setSelectedNode((key != null ? findTreeNode(treeData, key) : undefined) ?? info.node)
+                setSelectedNode(
+                  (key != null ? findTreeNode(treeData, key) : undefined) ?? info.node
+                )
               }}
             />
             <div className="mb-3 text-xs text-gray-500">

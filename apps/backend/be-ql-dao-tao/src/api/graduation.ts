@@ -21,7 +21,15 @@ import {
 } from "@workspace/db/zod/models"
 import { getFilesEmployeeUserIdImage } from "@workspace/libs/api/system-share"
 import { getLuanVanTemplateBuffer, getTemplateBuffer } from "@workspace/libs/server"
-import { APP_TIMEZONE, formatDateVn, formatNgayIn, formatThangIn, nowVn, setupAppTimezone, toVnDayjs } from "@workspace/libs/timezone"
+import {
+  APP_TIMEZONE,
+  formatDateVn,
+  formatNgayIn,
+  formatThangIn,
+  nowVn,
+  setupAppTimezone,
+  toVnDayjs,
+} from "@workspace/libs/timezone"
 import {
   chunk,
   convertScoreWithCourseConfig,
@@ -57,6 +65,7 @@ import {
   stripLeadingCommaBeforeSignerName,
   generateExcelFromTemplate,
   fixPhoiBangNganHanEndDateEnDisplay,
+  applyPhoiBangNganHanCourseLabelStyles,
   getScoreClassification,
   getReportDateParts,
   formatScore,
@@ -359,8 +368,12 @@ function sortDiplomaAppendixSubjects<
 
     const semesterA = a.subjectClass?.semester || a.semester
     const semesterB = b.subjectClass?.semester || b.semester
-    const startA = semesterA?.startDate ? new Date(semesterA.startDate).getTime() : Number.MAX_SAFE_INTEGER
-    const startB = semesterB?.startDate ? new Date(semesterB.startDate).getTime() : Number.MAX_SAFE_INTEGER
+    const startA = semesterA?.startDate
+      ? new Date(semesterA.startDate).getTime()
+      : Number.MAX_SAFE_INTEGER
+    const startB = semesterB?.startDate
+      ? new Date(semesterB.startDate).getTime()
+      : Number.MAX_SAFE_INTEGER
     if (startA !== startB) return startA - startB
 
     const nameCompare = (semesterA?.name || "").localeCompare(semesterB?.name || "", "vi")
@@ -705,7 +718,11 @@ app.openapi(graduationCheck, async (c) => {
           take: 1,
           orderBy: { semester: { startDate: "desc" } },
         },
-        studentSemesterResult: { where: { deletedAt: null }, take: 1, orderBy: { createdAt: "desc" } },
+        studentSemesterResult: {
+          where: { deletedAt: null },
+          take: 1,
+          orderBy: { createdAt: "desc" },
+        },
         studentYearResult: { where: { deletedAt: null }, take: 1, orderBy: { createdAt: "desc" } },
         archivedCertificate: {
           where: { deletedAt: null, status: ArchivedCertificateStatus.APPROVED },
@@ -1991,13 +2008,8 @@ const exportGraduationRegisterMaster = createRoute({
 })
 
 app.openapi(exportGraduationRegisterMaster, async (c) => {
-  const {
-    trainingObjectTypeId,
-    trainingCourseIds,
-    thesisSessionIds,
-    printDate,
-    signerName,
-  } = c.req.valid("json")
+  const { trainingObjectTypeId, trainingCourseIds, thesisSessionIds, printDate, signerName } =
+    c.req.valid("json")
 
   const students = await prisma.student.findMany({
     where: buildApprovedGraduateStudentWhere({
@@ -2035,7 +2047,15 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
           managementOrganization: true,
         },
       },
-      graduationDecision: true,
+      graduationDecision: {
+        include: {
+          trainingMajor: {
+            include: {
+              trainingField: true,
+            },
+          },
+        },
+      },
       graduationApplications: true,
       thesisRegistrations: {
         where: {
@@ -2073,7 +2093,7 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
             select: { type: true },
           },
           subjectVersion: {
-            select: { credit: true },
+            select: { credit: true, type: true },
           },
         },
       },
@@ -2083,31 +2103,53 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
     return c.json({ message: "Không tìm thấy dữ liệu sinh viên phù hợp" }, 404)
   }
 
-  const [courses, sessions] = await Promise.all([
+  const [courses, sessions, trainingObjectType] = await Promise.all([
     prisma.trainingCourse.findMany({
       where: { id: { in: trainingCourseIds || [] } },
       select: { name: true },
     }),
     prisma.thesisSession.findMany({
       where: { id: { in: thesisSessionIds || [] } },
-      select: { id: true, name: true },
+      select: {
+        id: true,
+        name: true,
+        graduationNumber: true,
+        graduationDecisionDate: true,
+        defenseDecisionNumber: true,
+      },
+    }),
+    prisma.trainingObjectType.findUnique({
+      where: { id: trainingObjectTypeId },
+      include: { trainingForm: true },
     }),
   ])
 
   const courseNames = courses.map((e) => e.name).join(", ")
-  const trainingType = [
-    ...new Set(
-      students
-        .map((s) => s.fixedClass?.curriculumVersion?.trainingType?.name)
-        .filter((name): name is string => Boolean(name))
-    ),
-  ].join(", ")
+  const trainingType =
+    [
+      ...new Set(
+        students
+          .map((s) => s.fixedClass?.curriculumVersion?.trainingType?.name)
+          .filter((name): name is string => Boolean(name))
+      ),
+    ].join(", ") ||
+    trainingObjectType?.trainingForm?.name ||
+    ""
   setupAppTimezone()
   let selectedDate = printDate ? dayjs.tz(printDate, "DD/MM/YYYY", APP_TIMEZONE) : nowVn()
   if (!selectedDate.isValid()) {
     selectedDate = nowVn()
   }
   const ngayInText = `ngày ${formatNgayIn(selectedDate.date())} tháng ${formatThangIn(selectedDate.month() + 1)} năm ${selectedDate.year()}`
+
+  const formatDecisionText = (code?: string | null, date?: Date | string | null) => {
+    const trimmed = (code || "").trim()
+    const dateParts = getReportDateParts(date)
+    if (!trimmed && !dateParts) return ""
+    if (!dateParts) return trimmed
+    if (!trimmed) return dateParts.fullVi
+    return `${trimmed} ${dateParts.fullVi}`
+  }
 
   const signerInfo = parseSignerInfo(signerName || "")
 
@@ -2137,11 +2179,31 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
     return totalCredit > 0 ? totalScore / totalCredit : 0
   }
 
+  /** Điểm học phần tốt nghiệp (thi); để trống nếu chỉ bảo vệ luận văn / đề án. */
+  const getGraduationExamScore = (
+    subjectClassStudent: (typeof students)[number]["subjectClassStudent"]
+  ) => {
+    if (!subjectClassStudent?.length) return ""
+    let best: number | null = null
+    for (const record of subjectClassStudent) {
+      if (record.subjectVersion?.type !== SubjectVersionType.Graduation) continue
+      const score = getDiplomaAppendixScore(record)
+      if (score == null) continue
+      if (best == null || score > best) best = score
+    }
+    return best != null ? formatScore(best, 2) : ""
+  }
+
   const buildRow = (student: (typeof students)[number], index: number) => {
     const gD = student.graduationDecision
     const tR = student.thesisRegistrations?.[0]
     const user = student.userProfile
-    const thesisSession = tR?.thesisProject?.thesisSession
+    const thesisProject = tR?.thesisProject
+    const thesisSession = thesisProject?.thesisSession
+    const course = student.fixedClass?.trainingCourse
+    const major =
+      gD?.trainingMajor || student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
+    const defenseDate = thesisProject?.defenseDate || thesisSession?.startDate
     const calculatedTBC = calcTBC(student.subjectClassStudent)
     const tbcFinal = gD?.finalGpa
       ? formatScore(gD.finalGpa, 2)
@@ -2153,26 +2215,29 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
       hoTen: user?.fullname || "",
       ngaySinh: user?.dateOfBirth ? formatDateVn(user.dateOfBirth) : "",
       soDinhDanh: user?.idCardNumber || "",
-      khoa: student.fixedClass?.trainingCourse?.name || "",
+      khoa: course?.name || "",
       noiSinh: formatPlaceOfBirth(user),
       gioiTinh: user?.gender?.sTen || "",
       danToc: user?.ethnicity?.sTen || "",
-      quyetDinhTrungTuyen: student?.fixedClass?.trainingCourse?.admissionDecision || "",
+      quyetDinhTrungTuyen: course?.admissionDecision || course?.admissionDecisionNumber || "",
       quocTich: user?.nationality?.sTen || "",
       "quyetDinhHDDGLV/ĐATN": thesisSession?.defenseDecisionNumber || "",
-      ngayBaoVe: thesisSession?.startDate
-        ? formatDateVn(thesisSession.startDate)
-        : "",
-      quyetDinhTotNghiep: gD?.code || "",
+      ngayBaoVe: defenseDate ? formatDateVn(defenseDate) : "",
+      quyetDinhTotNghiep: gD?.code || thesisSession?.graduationNumber || "",
       namTN: student.universityGraduationYear || "",
-      nganhDaoTao:
-        student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name || "",
-      chuyenNganh: student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
+      nganhDaoTao: major?.trainingField?.name || "",
+      chuyenNganh: major?.name || "",
       soHieuVanBang: gD?.diplomaNumber || "",
       soVaoSoGoc: gD?.originalDiplomaNumber || "",
-      coQuanDonVi: student.fixedClass?.managementOrganization?.sTenVietTat || "",
-      diemLVDATN: formatScore(tR?.thesisProject?.defenseRecord?.finalScore, 2),
+      coQuanDonVi:
+        student.department ||
+        student.fixedClass?.managementOrganization?.sTenVietTat ||
+        student.fixedClass?.managementOrganization?.sTen ||
+        "",
+      diemLVDATN: formatScore(thesisProject?.defenseRecord?.finalScore, 2),
+      diemHocPhanTotNghiep: getGraduationExamScore(student.subjectClassStudent),
       diemTBC: tbcFinal || "",
+      soDienThoai: user?.phoneNumber || "",
       nguoiNhanVanBang: "",
       ghiChu: "",
     }
@@ -2180,16 +2245,32 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
 
   const renderSheet = async (
     sessionName: string,
-    sessionStudents: typeof students
+    sessionStudents: typeof students,
+    sessionMeta?: {
+      graduationNumber?: string | null
+      graduationDecisionDate?: Date | null
+    }
   ): Promise<Buffer> => {
-    const buf = await getLuanVanTemplateBuffer(prisma, "SoGocCapPhatVanBangCaoHoc_v6.xlsx")
+    const buf = await getLuanVanTemplateBuffer(prisma, "SoGocCapPhatVanBangCaoHoc_v7.xlsx")
     const tpl = new XlsxTemplate(buf)
     const rows = sessionStudents.map((s, i) => buildRow(s, i))
+    const first = sessionStudents[0]
+    const firstSession = first?.thesisRegistrations?.[0]?.thesisProject?.thesisSession
+    const decisionCode =
+      sessionMeta?.graduationNumber ||
+      firstSession?.graduationNumber ||
+      first?.graduationDecision?.code ||
+      ""
+    const decisionDate =
+      sessionMeta?.graduationDecisionDate ||
+      firstSession?.graduationDecisionDate ||
+      first?.graduationDecision?.decisionDate ||
+      null
     tpl.substitute("PD", {
       khoa: courseNames,
       dot_xet: sessionName,
       hinh_thuc_dao_tao: trainingType,
-      so_van_ban: sessionStudents[0]?.graduationDecision?.code || "",
+      so_van_ban: formatDecisionText(decisionCode, decisionDate),
       ngay_in: ngayInText,
       ...signerInfo,
       data: rows,
@@ -2197,7 +2278,13 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
     return tpl.generate({ type: "nodebuffer" }) as any
   }
 
-  let sessionGroups: { id: string; name: string; students: typeof students }[]
+  let sessionGroups: {
+    id: string
+    name: string
+    students: typeof students
+    graduationNumber?: string | null
+    graduationDecisionDate?: Date | null
+  }[]
 
   if (sessions.length > 0) {
     const studentsBySession = new Map<string, typeof students>()
@@ -2214,6 +2301,8 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
       id: s.id,
       name: s.name,
       students: studentsBySession.get(s.id) || [],
+      graduationNumber: s.graduationNumber,
+      graduationDecisionDate: s.graduationDecisionDate,
     }))
   } else {
     sessionGroups = [{ id: "all", name: "Tất cả", students }]
@@ -2224,7 +2313,10 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
   for (const group of sessionGroups) {
     if (!group.students.length) continue
 
-    const sheetBuffer = await renderSheet(group.name, group.students)
+    const sheetBuffer = await renderSheet(group.name, group.students, {
+      graduationNumber: group.graduationNumber,
+      graduationDecisionDate: group.graduationDecisionDate,
+    })
 
     const tmpWorkbook = new ExcelJS.Workbook()
     await tmpWorkbook.xlsx.load(sheetBuffer as any)
@@ -2498,6 +2590,17 @@ const exportPhoiBangNganHan = createRoute({
             printDate: z.string().optional(),
             signerName: z.string().optional(),
             includeNamePrefix: z.boolean().optional(),
+            /** Cụm trái (English) — dòng 1 */
+            courseTextEn1: z.string().optional(),
+            /** Cụm trái (English) — dòng 2 (tên ngành EN) */
+            courseTextEn2: z.string().optional(),
+            /** Cụm phải (Việt) — dòng 1, mặc định ĐÀO TẠO */
+            courseTextVi1: z.string().optional(),
+            /** Cụm phải (Việt) — dòng 2 (tên ĐTĐT) */
+            courseTextVi2: z.string().optional(),
+            fontFamily: z.string().optional(),
+            fontSize: z.number().optional(),
+            rowHeight: z.number().optional(),
           }),
         },
       },
@@ -2532,6 +2635,13 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
     printDate,
     signerName,
     includeNamePrefix,
+    courseTextEn1,
+    courseTextEn2,
+    courseTextVi1,
+    courseTextVi2,
+    fontFamily,
+    fontSize,
+    rowHeight,
   } = c.req.valid("json")
 
   const students = await prisma.student.findMany({
@@ -2555,7 +2665,11 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
             include: {
               curriculum: {
                 include: {
-                  trainingMajor: true,
+                  trainingMajor: {
+                    include: {
+                      trainingField: true,
+                    },
+                  },
                 },
               },
             },
@@ -2585,11 +2699,21 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
   }
 
   const signerInfo = parseSignerInfo(signerName || "")
+  const DEFAULT_COURSE_TEXT_VI_1 = "ĐÀO TẠO"
+  const DEFAULT_COURSE_TEXT_EN_1 = "FOR COMPLETING THE COURSE FOR TECHNICAL AND LOGISTICS"
 
   const payload = students.map((student) => {
     const user = student.userProfile
     const gD = student.graduationDecision
     const course = student.fixedClass?.trainingCourse
+    const major = student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
+    const trainingObjectTypeName = course?.trainingObjectType?.name?.toUpperCase() || ""
+    const fieldNameEn = major?.trainingField?.englishName?.toUpperCase() || ""
+
+    const en1 = (courseTextEn1 ?? DEFAULT_COURSE_TEXT_EN_1).trim().toUpperCase()
+    const en2 = (courseTextEn2 ?? fieldNameEn).trim().toUpperCase()
+    const vi1 = (courseTextVi1 ?? DEFAULT_COURSE_TEXT_VI_1).trim().toUpperCase()
+    const vi2 = (courseTextVi2 ?? trainingObjectTypeName).trim().toUpperCase()
 
     const dobParts = getReportDateParts(user?.dateOfBirth)
     const startDateParts = getReportDateParts(
@@ -2607,8 +2731,7 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
     )
     const totalPoints = subjectScores.reduce((acc, item) => {
       // Ưu tiên điểm phiên / điểm chuyển trường
-      const score =
-        item.manualFinalScore ?? (item.finalScore != null ? Number(item.finalScore) : 0)
+      const score = item.manualFinalScore ?? (item.finalScore != null ? Number(item.finalScore) : 0)
       return acc + score * (item.subjectVersion?.credit || 0)
     }, 0)
     const gpa = totalCredits > 0 ? totalPoints / totalCredits : 0
@@ -2645,12 +2768,16 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
         }`,
         ngay_sinh_vi: dobParts?.day ? `${dobParts.day}/${dobParts.monthVi}/${dobParts.year}` : "",
         ngay_sinh_en: dobParts?.day ? `${dobParts.day} ${dobParts.monthEn} ${dobParts.year}` : "",
-        chuyen_nganh_vi:
-          student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name?.toUpperCase() ||
-          "",
-        chuyen_nganh_en:
-          student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.englishName?.toUpperCase() ||
-          "",
+        // 4 dòng cụm ngành / ĐTĐT (template có thể dùng từng dòng hoặc alias cũ)
+        chuyen_nganh_en_1: en1,
+        chuyen_nganh_en_2: en2,
+        chuyen_nganh_vi_1: vi1,
+        chuyen_nganh_vi_2: vi2,
+        doi_tuong_dao_tao_vi: vi2,
+        nganh_hoc_en: en2,
+        // Alias template cũ ${chuyen_nganh_*} → dòng 2 từng cụm
+        chuyen_nganh_vi: vi2,
+        chuyen_nganh_en: en2,
         ngay_bat_dau_vi: startDateParts?.day
           ? `${startDateParts.day}/${startDateParts.monthVi}/${startDateParts.year}`
           : "",
@@ -2690,11 +2817,40 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
 
   try {
     const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhoiBangNganHan_v4.xlsx")
-    const rawResult = await generateExcelFromTemplate(templateBuffer, payload, {
-      showGridLines: true,
-      wrapText: true,
+    const toNodeBuffer = (data: ArrayBuffer | Uint8Array | Buffer) =>
+      Buffer.from(data instanceof ArrayBuffer ? new Uint8Array(data) : data)
+    const rawResult = toNodeBuffer(
+      await generateExcelFromTemplate(templateBuffer, payload, {
+        showGridLines: true,
+        wrapText: true,
+      })
+    )
+    const withEndDateFix = toNodeBuffer(await fixPhoiBangNganHanEndDateEnDisplay(rawResult))
+
+    const first = payload[0]?.data
+    const styleTexts = [
+      first?.chuyen_nganh_en_1,
+      first?.chuyen_nganh_en_2,
+      first?.chuyen_nganh_vi_1,
+      first?.chuyen_nganh_vi_2,
+    ].filter(Boolean) as string[]
+
+    const result = await applyPhoiBangNganHanCourseLabelStyles(withEndDateFix, {
+      texts: styleTexts,
+      replacements: [
+        {
+          from: DEFAULT_COURSE_TEXT_VI_1,
+          to: first?.chuyen_nganh_vi_1 || DEFAULT_COURSE_TEXT_VI_1,
+        },
+        {
+          from: DEFAULT_COURSE_TEXT_EN_1,
+          to: first?.chuyen_nganh_en_1 || DEFAULT_COURSE_TEXT_EN_1,
+        },
+      ],
+      fontFamily,
+      fontSize,
+      rowHeight,
     })
-    const result = await fixPhoiBangNganHanEndDateEnDisplay(rawResult as Buffer)
 
     const fileName = "PhoiBangNganHan.xlsx"
     const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
@@ -2776,97 +2932,98 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
         trainingCourseIds,
         thesisSessionIds,
       }),
-    include: {
-      userProfile: {
-        include: {
-          gender: true,
-          newProvinceOfBirth: true,
-          provinceOfBirth: true,
-        },
-      },
-      graduationDecision: true,
-      fixedClass: {
-        include: {
-          trainingCourse: {
-            include: {
-              trainingObjectType: true,
-              scoreConverts: true,
-            },
+      include: {
+        userProfile: {
+          include: {
+            gender: true,
+            newProvinceOfBirth: true,
+            provinceOfBirth: true,
           },
-          curriculumVersion: {
-            include: {
-              trainingType: true,
-              trainingTime: true,
-              trainingBlocks: {
-                include: {
-                  subjects: {
-                    include: {
-                      subject: {
-                        select: { id: true, name: true, type: true, subjectId: true },
+        },
+        graduationDecision: true,
+        fixedClass: {
+          include: {
+            trainingCourse: {
+              include: {
+                trainingObjectType: true,
+                scoreConverts: true,
+              },
+            },
+            curriculumVersion: {
+              include: {
+                trainingType: true,
+                trainingTime: true,
+                trainingBlocks: {
+                  include: {
+                    subjects: {
+                      include: {
+                        subject: {
+                          select: { id: true, name: true, type: true, subjectId: true },
+                        },
+                      },
+                    },
+                  },
+                },
+                curriculum: {
+                  include: {
+                    trainingMajor: {
+                      include: {
+                        trainingField: true,
                       },
                     },
                   },
                 },
               },
-              curriculum: {
-                include: {
-                  trainingMajor: {
-                    include: {
-                      trainingField: true,
-                    },
-                  },
-                },
-              },
             },
           },
         },
-      },
-      thesisRegistrations: {
-        where: { deletedAt: null },
-        include: {
-          studentSubjectScore: {
-            include: {
-              subjectVersion: { include: { subject: true } },
+        thesisRegistrations: {
+          where: { deletedAt: null },
+          include: {
+            studentSubjectScore: {
+              include: {
+                subjectVersion: { include: { subject: true } },
+              },
             },
-          },
-          thesisProject: {
-            include: {
-              supervisor: {
-                include: {
-                  academicDegreeType: true,
-                  academicRankType: true,
+            thesisProject: {
+              include: {
+                supervisor: {
+                  include: {
+                    academicDegreeType: true,
+                    academicRankType: true,
+                  },
                 },
-              },
-              coSupervisor: {
-                include: {
-                  academicDegreeType: true,
-                  academicRankType: true,
+                coSupervisor: {
+                  include: {
+                    academicDegreeType: true,
+                    academicRankType: true,
+                  },
                 },
-              },
-              defenseRecord: true,
-              subjectClass: { include: { subject: true } },
-              thesisSession: true,
-              council: {
-                include: {
-                  members: {
-                    include: {
-                      expertProfileVersion: {
-                        include: {
-                          academicDegreeType: true,
-                          academicRankType: true,
-                          expert: {
-                            include: {
-                              lecturer: {
-                                include: { userProfile: { include: { donVi: true } } },
+                defenseRecord: true,
+                subjectClass: { include: { subject: true } },
+                thesisSession: true,
+                council: {
+                  include: {
+                    members: {
+                      include: {
+                        expertProfileVersion: {
+                          include: {
+                            academicDegreeType: true,
+                            academicRankType: true,
+                            expert: {
+                              include: {
+                                lecturer: {
+                                  include: { userProfile: { include: { donVi: true } } },
+                                },
                               },
                             },
                           },
                         },
-                      },
-                      expert: {
-                        include: {
-                          lecturer: {
-                            include: { userProfile: { include: { donVi: true } } },
+                        expert: {
+                          include: {
+                            lecturer: {
+                              include: { userProfile: { include: { donVi: true } } },
+                            },
                           },
                         },
                       },
@@ -2876,42 +3033,41 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
               },
             },
           },
+          orderBy: { createdAt: "desc" },
+          take: 1,
         },
-        orderBy: { createdAt: "desc" },
-        take: 1,
-      },
-      subjectClassStudent: {
-        where: { deletedAt: null, active: true },
-        include: {
-          semester: true,
-          subjectClass: {
-            include: {
-              semester: true,
+        subjectClassStudent: {
+          where: { deletedAt: null, active: true },
+          include: {
+            semester: true,
+            subjectClass: {
+              include: {
+                semester: true,
+              },
             },
-          },
-          subjectVersion: {
-            include: {
-              subject: true,
-              trainingBlocks: {
-                select: {
-                  semester: true,
-                  trainingBlockOnCurriculumVersion: {
-                    select: { curriculumVersionId: true },
+            subjectVersion: {
+              include: {
+                subject: true,
+                trainingBlocks: {
+                  select: {
+                    semester: true,
+                    trainingBlockOnCurriculumVersion: {
+                      select: { curriculumVersionId: true },
+                    },
                   },
                 },
               },
             },
-          },
-          studentResearchTopic: {
-            select: { name: true },
+            studentResearchTopic: {
+              select: { name: true },
+            },
           },
         },
+        studentYearResult: {
+          where: { deletedAt: null },
+          orderBy: { studyYear: "desc" },
+        },
       },
-      studentYearResult: {
-        where: { deletedAt: null },
-        orderBy: { studyYear: "desc" },
-      },
-    },
     }),
     prisma.dM_DonVi.findMany({
       where: { bDeleted: { not: true } },
@@ -2966,13 +3122,18 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
     return Number(val)
   }
 
-  const formatExpertWithTitles = (expert?: {
-    name?: string | null
-    academicRankType?: { sMa?: string | null } | null
-    academicDegreeType?: { sMa?: string | null } | null
-  } | null) => {
+  const formatExpertWithTitles = (
+    expert?: {
+      name?: string | null
+      academicRankType?: { sMa?: string | null } | null
+      academicDegreeType?: { sMa?: string | null } | null
+    } | null
+  ) => {
     if (!expert) return ""
-    const title = [safeString(expert.academicRankType?.sMa), safeString(expert.academicDegreeType?.sMa)]
+    const title = [
+      safeString(expert.academicRankType?.sMa),
+      safeString(expert.academicDegreeType?.sMa),
+    ]
       .filter(Boolean)
       .join(".")
     return [title, safeString(expert.name)].filter(Boolean).join(" ").trim()
@@ -3002,36 +3163,35 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
         pickHighestSubjectScores(student.subjectClassStudent || []),
         curriculumVersion?.id
       ).map((record, idx) => {
-          const rawScore = getDiplomaAppendixScore(record)
-          const score = safeNumber(rawScore)
-          const credits = safeNumber(record.subjectVersion?.credit)
+        const rawScore = getDiplomaAppendixScore(record)
+        const score = safeNumber(rawScore)
+        const credits = safeNumber(record.subjectVersion?.credit)
 
-          const scoreConverts = course?.scoreConverts || []
-          const conversion = convertScoreWithCourseConfig(
-            score,
-            scoreConverts,
-            courseScoreConfigFrom(course, record)
-          )
+        const scoreConverts = course?.scoreConverts || []
+        const conversion = convertScoreWithCourseConfig(
+          score,
+          scoreConverts,
+          courseScoreConfigFrom(course, record)
+        )
 
-          if (credits) {
-            totalCredits += credits
-            totalPoints10 += score * credits
-            if (conversion.base4 != null) {
-              totalPoints4 += safeNumber(conversion.base4) * credits
-            }
-          }
-          const tenHocPhan = safeString(getDiplomaAppendixSubjectName(record, curriculumVersion))
-          return {
-            stt: idx + 1,
-            ten_hoc_phan: tenHocPhan,
-            stc: credits,
-            diem_he_10: formatScore(score, 1) || "0,0",
-            diem_he_4: formatScore(conversion?.base4 || 0, 1) || "0,0",
-            diem_he_chu: conversion?.letter,
-            is_graduation_subject: isGraduationSubjectType(record.subjectVersion?.type),
+        if (credits) {
+          totalCredits += credits
+          totalPoints10 += score * credits
+          if (conversion.base4 != null) {
+            totalPoints4 += safeNumber(conversion.base4) * credits
           }
         }
-      )
+        const tenHocPhan = safeString(getDiplomaAppendixSubjectName(record, curriculumVersion))
+        return {
+          stt: idx + 1,
+          ten_hoc_phan: tenHocPhan,
+          stc: credits,
+          diem_he_10: formatScore(score, 1) || "0,0",
+          diem_he_4: formatScore(conversion?.base4 || 0, 1) || "0,0",
+          diem_he_chu: conversion?.letter,
+          is_graduation_subject: isGraduationSubjectType(record.subjectVersion?.type),
+        }
+      })
 
       const lastYearResult = student.studentYearResult?.find((r) => r.isLastStudyYear)
       const rawGpa10 = lastYearResult
@@ -3096,7 +3256,10 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
             vai_tro_hoi_dong: vaiTroByRole[m.role] ?? "",
           }
         })
-      const supervisors = [formatExpertWithTitles(tP?.supervisor), formatExpertWithTitles(tP?.coSupervisor)]
+      const supervisors = [
+        formatExpertWithTitles(tP?.supervisor),
+        formatExpertWithTitles(tP?.coSupervisor),
+      ]
         .filter(Boolean)
         .join("; ")
       const isApplicationProgram = isApplicationOrientation(
@@ -3442,23 +3605,22 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
         pickHighestSubjectScores(student.subjectClassStudent || []),
         curriculumVersion?.id
       ).map((record, idx) => {
-          const rawScore = getDiplomaAppendixScore(record)
-          const score = safeNumber(rawScore)
-          const credits = safeNumber(record.subjectVersion?.credit)
+        const rawScore = getDiplomaAppendixScore(record)
+        const score = safeNumber(rawScore)
+        const credits = safeNumber(record.subjectVersion?.credit)
 
-          if (credits) {
-            totalCredits += credits
-            totalPoints10 += score * credits
-          }
-          return {
-            stt: idx + 1,
-            ten_hoc_phan: safeString(getDiplomaAppendixSubjectName(record, curriculumVersion)),
-            stc: credits,
-            diem_he_10: formatScore(score, 1) || "0,0",
-            type: record.subjectVersion?.type,
-          }
+        if (credits) {
+          totalCredits += credits
+          totalPoints10 += score * credits
         }
-      )
+        return {
+          stt: idx + 1,
+          ten_hoc_phan: safeString(getDiplomaAppendixSubjectName(record, curriculumVersion)),
+          stc: credits,
+          diem_he_10: formatScore(score, 1) || "0,0",
+          type: record.subjectVersion?.type,
+        }
+      })
 
       const gradTypes = ["Graduation", "Thesis", "Project"]
       const normalSubjectsRaw = allSubjects.filter((s) => !gradTypes.includes(s.type || ""))
@@ -3640,7 +3802,12 @@ app.openapi(getPhuLucIXData, async (c) => {
             },
           },
           userProfile: {
-            include: { gender: true, ethnicity: true, newProvinceOfBirth: true, provinceOfBirth: true },
+            include: {
+              gender: true,
+              ethnicity: true,
+              newProvinceOfBirth: true,
+              provinceOfBirth: true,
+            },
           },
         },
       },
@@ -3668,8 +3835,7 @@ app.openapi(getPhuLucIXData, async (c) => {
   const scoreMap = new Map<string, Map<string, number>>()
   for (const s of allScores) {
     // Ưu tiên điểm phiên / điểm chuyển trường
-    const score =
-      s.manualFinalScore ?? (s.finalScore != null ? Number(s.finalScore) : null)
+    const score = s.manualFinalScore ?? (s.finalScore != null ? Number(s.finalScore) : null)
     if (score == null) continue
     let inner = scoreMap.get(s.studentId)
     if (!inner) {
@@ -3864,7 +4030,12 @@ app.openapi(getDanhSachTotNghiepData, async (c) => {
         include: {
           fixedClass: { include: { trainingCourse: true } },
           userProfile: {
-            include: { gender: true, ethnicity: true, newProvinceOfBirth: true, provinceOfBirth: true },
+            include: {
+              gender: true,
+              ethnicity: true,
+              newProvinceOfBirth: true,
+              provinceOfBirth: true,
+            },
           },
         },
       },
@@ -4033,7 +4204,12 @@ app.openapi(getDanhSachHVChuaTotNghiepTA, async (c) => {
             },
           },
           userProfile: {
-            include: { gender: true, ethnicity: true, newProvinceOfBirth: true, provinceOfBirth: true },
+            include: {
+              gender: true,
+              ethnicity: true,
+              newProvinceOfBirth: true,
+              provinceOfBirth: true,
+            },
           },
         },
       },
@@ -4061,8 +4237,7 @@ app.openapi(getDanhSachHVChuaTotNghiepTA, async (c) => {
   const scoreMap = new Map<string, Map<string, number>>()
   for (const s of allScores) {
     // Ưu tiên điểm phiên / điểm chuyển trường
-    const score =
-      s.manualFinalScore ?? (s.finalScore != null ? Number(s.finalScore) : null)
+    const score = s.manualFinalScore ?? (s.finalScore != null ? Number(s.finalScore) : null)
     if (score == null) continue
     let inner = scoreMap.get(s.studentId)
     if (!inner) {

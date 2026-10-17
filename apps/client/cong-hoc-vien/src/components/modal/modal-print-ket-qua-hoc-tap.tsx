@@ -224,10 +224,11 @@ const ModalPrintToKQHT = () => {
 
       if (score) {
         const score10 = Number(score.manualFinalScore ?? score.finalScore ?? 0) || 0
-        const score4 = quyDoiMon(score10, score, {
-          isGraduation: subjectItem.graduation,
-          isConditional: !subjectItem.useForFinalScore,
-        }).base4 || 0
+        const score4 =
+          quyDoiMon(score10, score, {
+            isGraduation: subjectItem.graduation,
+            isConditional: !subjectItem.useForFinalScore,
+          }).base4 || 0
 
         const finalScore = baseScore === "Base10" ? score10 : score4
 
@@ -558,8 +559,7 @@ const ModalPrintToKQHT = () => {
           <p className="mt-2">
             - Phân hạng tốt nghiệp theo thang điểm {baseScore === "Base10" ? "10" : "4"}:{" "}
             {(() => {
-              const rankingData =
-                trainingCourseFromFixedClass?.academicRankingConvert || []
+              const rankingData = trainingCourseFromFixedClass?.academicRankingConvert || []
 
               const sortedRankings = rankingData
                 .filter((item: any) => item.graduated)

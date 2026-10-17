@@ -1,8 +1,4 @@
-import {
-  AcademicRankingBaseType,
-  type AcademicRankingConvert,
-  RankingContext,
-} from "@workspace/db"
+import { AcademicRankingBaseType, type AcademicRankingConvert, RankingContext } from "@workspace/db"
 import { getTemplateBuffer } from "@workspace/libs/server"
 import { formatDateVn } from "@workspace/libs/timezone"
 import type { Borders, Font, Alignment } from "exceljs"
@@ -734,8 +730,7 @@ const emptyCounts = (): RankCounts => ({
 })
 
 const fmtCount = (n: number) => (n ? n : "")
-const fmtPct = (n: number, total: number) =>
-  n && total ? Math.round((n / total) * 1000) / 10 : ""
+const fmtPct = (n: number, total: number) => (n && total ? Math.round((n / total) * 1000) / 10 : "")
 
 const toRankOutput = (counts: RankCounts) => ({
   soSV: counts.soSV,

@@ -673,9 +673,7 @@ export default function SettingClass() {
     if (experts.length) {
       setRightData(experts)
 
-      const filtered = flattenedCatalog.filter(
-        (item) => !experts.some((exp) => exp.id === item.id)
-      )
+      const filtered = flattenedCatalog.filter((item) => !experts.some((exp) => exp.id === item.id))
       setLeftData(filtered)
     } else {
       setLeftData(flattenedCatalog)

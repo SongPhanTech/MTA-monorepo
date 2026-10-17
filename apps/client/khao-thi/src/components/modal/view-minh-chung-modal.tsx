@@ -51,7 +51,6 @@ const ViewMinhChungModal = () => {
     where: evidenceWhere,
   })
 
-
   const treeData = useMemo(() => {
     return listEvidenceCategory.map((cat) => ({
       title: cat.name,

@@ -12,8 +12,7 @@ export type BuildFromTemplateInput = Omit<BuildExcelFromTemplateOptions, "templa
 
 export async function buildFromTemplate(prisma: PrismaClient, input: BuildFromTemplateInput) {
   const templateBuffer = await loadTemplateBuffer(prisma, input.templatePath, input.prefix)
-  const extension =
-    input.extension ?? input.templatePath.split(".").pop()?.toLowerCase() ?? "xlsx"
+  const extension = input.extension ?? input.templatePath.split(".").pop()?.toLowerCase() ?? "xlsx"
 
   return buildExcelFromTemplate({
     templateBuffer,

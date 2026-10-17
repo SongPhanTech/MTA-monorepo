@@ -75,6 +75,18 @@ export type PaginatedDataItemDataItem = {
   /** @nullable */
   createdBy?: string | null;
   /** @nullable */
+  sNguoiTao?: string | null;
+  /** @nullable */
+  sNguoiSua?: string | null;
+  /** @nullable */
+  dNgayTao?: string | null;
+  /** @nullable */
+  dNgaySua?: string | null;
+  /** @nullable */
+  sThietBiTao?: string | null;
+  /** @nullable */
+  sThietBiSua?: string | null;
+  /** @nullable */
   bLaNguoiDung?: boolean | null;
   /** @nullable */
   bLaGiangVien?: boolean | null;
@@ -90,14 +102,6 @@ export type PaginatedDataItemDataItem = {
   iDictionaryKey?: number | null;
   /** @nullable */
   bSystem?: boolean | null;
-  /** @nullable */
-  sNguoiTao?: string | null;
-  /** @nullable */
-  sNguoiSua?: string | null;
-  /** @nullable */
-  sThietBiTao?: string | null;
-  /** @nullable */
-  sThietBiSua?: string | null;
   /** @nullable */
   avatar?: string | null;
   /** @nullable */

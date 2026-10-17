@@ -329,7 +329,6 @@ function TakeTestPage() {
                         width: 200,
                         align: "center",
                         render: (_, record, qIndex) => {
-
                           return record?.type === "SINGLE_CHOICE" ? (
                             <Form.Item
                               name={["responses", record?.id, "surveyChoiceId"]}

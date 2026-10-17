@@ -61,9 +61,7 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
         ? {
             student: {
               userProfile: {
-                ...(filters.code
-                  ? { code: { contains: filters.code, mode: "insensitive" } }
-                  : {}),
+                ...(filters.code ? { code: { contains: filters.code, mode: "insensitive" } } : {}),
                 ...(filters.name
                   ? { fullname: { contains: filters.name, mode: "insensitive" } }
                   : {}),

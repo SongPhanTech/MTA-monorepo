@@ -115,7 +115,9 @@ function capRolesToHeld(
     const roleId = role.sRoleId ?? ""
     if (roleId) seenRoleIds.add(roleId)
     const grant = roleId ? receivedByRole.get(roleId) : undefined
-    const grantByForm = new Map((grant?.permissions ?? []).map((permission) => [permission.sFormName, permission]))
+    const grantByForm = new Map(
+      (grant?.permissions ?? []).map((permission) => [permission.sFormName, permission])
+    )
     const seenForms = new Set<string>()
     const permissions: SystemPermission[] = []
 
@@ -179,7 +181,9 @@ function capRolesToHeld(
 
   if (!held || held.size === 0) return capped
 
-  const hadPermissions = roles.some((role) => role.Permissions.some((permission) => permission.sFormName))
+  const hadPermissions = roles.some((role) =>
+    role.Permissions.some((permission) => permission.sFormName)
+  )
   const overlap = roles.some((role) =>
     role.Permissions.some((permission) => permission.sFormName && held.has(permission.sFormName))
   )
@@ -187,7 +191,8 @@ function capRolesToHeld(
   return capped
 }
 
-const APP_CODE = process.env.NEXT_PUBLIC_APP_CODE?.trim() || process.env.MTA_APP_CODE?.trim() || "lms"
+const APP_CODE =
+  process.env.NEXT_PUBLIC_APP_CODE?.trim() || process.env.MTA_APP_CODE?.trim() || "lms"
 const MAX_USER_IDS = 100
 
 const systemRequest = () => ({
@@ -209,7 +214,9 @@ export async function fetchUserPermissions(userIds: string[]): Promise<UserPermi
   const res = await postUserPermissionsPermissions(ids, systemRequest())
   if (res.status !== 200) {
     const data = res.data as { message?: string; title?: string }
-    const error = new Error(data?.message || data?.title || "Không lấy được quyền người dùng") as Error & {
+    const error = new Error(
+      data?.message || data?.title || "Không lấy được quyền người dùng"
+    ) as Error & {
       response?: { status: number; data: unknown }
     }
     error.response = { status: res.status, data: res.data }
@@ -227,7 +234,9 @@ export async function fetchUserPermissions(userIds: string[]): Promise<UserPermi
         sFormName: permission.sFormName ?? null,
         sTen: permission.sTen ?? null,
         lPermission: permission.lPermission ?? null,
-        PermissionNames: Array.isArray(permission.PermissionNames) ? permission.PermissionNames : [],
+        PermissionNames: Array.isArray(permission.PermissionNames)
+          ? permission.PermissionNames
+          : [],
       })),
     })),
   }))
@@ -291,7 +300,9 @@ async function loadReceivedGrants(userIds: string[]): Promise<Map<string, Stored
   return byUser
 }
 
-export async function applyActualRolePermissions(users: UserPermissionItem[]): Promise<UserPermissionItem[]> {
+export async function applyActualRolePermissions(
+  users: UserPermissionItem[]
+): Promise<UserPermissionItem[]> {
   const userIds = [...new Set(users.map((user) => user.UserId).filter(Boolean))]
   const receivedByUser = await loadReceivedGrants(userIds)
 
@@ -357,9 +368,9 @@ export async function assignDelegation(
   recipientIds: string[],
   requestedGrants: DelegationGrantInput[]
 ): Promise<AssignDelegationResult> {
-  const uniqueRecipientIds = [...new Set(recipientIds.map((id) => id.trim()).filter(Boolean))].filter(
-    (id) => id !== granterId
-  )
+  const uniqueRecipientIds = [
+    ...new Set(recipientIds.map((id) => id.trim()).filter(Boolean)),
+  ].filter((id) => id !== granterId)
   if (uniqueRecipientIds.length === 0) {
     throw new Error("Chọn cán bộ hoặc giảng viên nhận ủy quyền")
   }
@@ -488,7 +499,10 @@ export async function listGrantedRoles(granterId: string): Promise<GrantedRole[]
   })
 }
 
-export async function revokeGrants(granterId: string, grantIds: string[]): Promise<RevokeGrantsResult> {
+export async function revokeGrants(
+  granterId: string,
+  grantIds: string[]
+): Promise<RevokeGrantsResult> {
   const uniqueIds = [...new Set(grantIds.map((id) => id.trim()).filter(Boolean))]
   if (uniqueIds.length === 0) {
     throw new Error("Chọn quyền cần thu hồi")
@@ -518,7 +532,9 @@ export async function revokeGrants(granterId: string, grantIds: string[]): Promi
   return { revoked: ids.length }
 }
 
-export async function listDelegatedPermissions(recipientId: string): Promise<DelegatedPermission[]> {
+export async function listDelegatedPermissions(
+  recipientId: string
+): Promise<DelegatedPermission[]> {
   const grants = await prisma.accessRoleGrant.findMany({
     where: { recipientId, active: true, deletedAt: null },
     select: {
@@ -533,7 +549,10 @@ export async function listDelegatedPermissions(recipientId: string): Promise<Del
   for (const grant of grants) {
     for (const permission of grant.permissions) {
       if (!permission.sFormName) continue
-      merged.set(permission.sFormName, (merged.get(permission.sFormName) ?? 0) | permission.lPermission)
+      merged.set(
+        permission.sFormName,
+        (merged.get(permission.sFormName) ?? 0) | permission.lPermission
+      )
     }
   }
 

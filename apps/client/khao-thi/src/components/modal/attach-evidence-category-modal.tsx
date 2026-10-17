@@ -3,10 +3,7 @@ import FormItem from "@components/commons/form-item"
 import PutFormModal from "@components/commons/put-modal"
 import TreeSelect from "@components/commons/tree-select"
 import useSpinner from "@hooks/spinner"
-import {
-  useFindManyEvidenceCategory,
-  useUpdateEvidenceCategory,
-} from "@workspace/db/hooks"
+import { useFindManyEvidenceCategory, useUpdateEvidenceCategory } from "@workspace/db/hooks"
 import { Col, Form, message } from "antd"
 import { useEffect, useMemo } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -90,11 +87,9 @@ const AttachEvidenceCategoryModal = () => {
     try {
       showSpinner()
       const rawSelected = output.categoryIds || []
-      
+
       const selectedCategoryIds = Array.from(
-        new Set(
-          rawSelected.map((val) => (val.includes("___") ? val.split("___")[0] : val))
-        )
+        new Set(rawSelected.map((val) => (val.includes("___") ? val.split("___")[0] : val)))
       )
 
       const toConnect = selectedCategoryIds.filter((id) => !currentlyAttachedIds.includes(id))
@@ -154,12 +149,7 @@ const AttachEvidenceCategoryModal = () => {
       className="w-[650px]"
     >
       <Col span={24}>
-        <FormItem
-          form={form}
-          label="Danh mục minh chứng"
-          name="categoryIds"
-          required
-        >
+        <FormItem form={form} label="Danh mục minh chứng" name="categoryIds" required>
           <TreeSelect
             treeData={treeData}
             treeCheckable={true}

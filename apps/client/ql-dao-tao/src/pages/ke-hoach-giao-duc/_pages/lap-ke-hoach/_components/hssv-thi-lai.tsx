@@ -28,7 +28,12 @@ export default function HSSVThiLai({ subjectVersionId, viewOnly }: RegisterClass
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
   const { id: trainingCourseId } = useTrainingCourseStore()
 
-  const { data: res, refetch, isLoading, isFetching } = useOpenSubjectClassReExamStudents(
+  const {
+    data: res,
+    refetch,
+    isLoading,
+    isFetching,
+  } = useOpenSubjectClassReExamStudents(
     {
       search: filters.searchText || undefined,
       trainingObjectTypeId: trainingObjectTypeId || "",
@@ -39,7 +44,6 @@ export default function HSSVThiLai({ subjectVersionId, viewOnly }: RegisterClass
     },
     { query: { enabled: !!trainingObjectTypeId && !!subjectVersionId } }
   )
-
 
   // queryKey /api/subject-class/open-subject-class-retake
 

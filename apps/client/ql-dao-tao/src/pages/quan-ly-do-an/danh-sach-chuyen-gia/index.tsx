@@ -304,9 +304,7 @@ export default function DanhSachChuyenGiaDoAn() {
                 align: "center",
                 type: "input",
                 render: (_: unknown, record: any) =>
-                  record.bankAccountNumber ||
-                  record.lecturer?.userProfile?.bankAccountNumber ||
-                  "",
+                  record.bankAccountNumber || record.lecturer?.userProfile?.bankAccountNumber || "",
               },
               {
                 title: "Trạng thái",

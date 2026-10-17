@@ -386,17 +386,21 @@ const mapPermissionResponse = (data?: getUserPermissionsPermissionAppCodeUserIdR
 
 const usePermissionsState = (userId?: string) => {
   const resolvedUserId =
-    userId || (typeof window !== "undefined" ? window.contextData?.userId ?? "" : "")
-  const { data, isFetched, isError, isSuccess: isQuerySuccess } =
-    useGetUserPermissionsPermissionAppCodeUserId(
-      getRuntimeEnv("NEXT_PUBLIC_APP_CODE"),
-      resolvedUserId,
-      {
-        query: {
-          enabled: Boolean(resolvedUserId),
-        },
-      }
-    )
+    userId || (typeof window !== "undefined" ? (window.contextData?.userId ?? "") : "")
+  const {
+    data,
+    isFetched,
+    isError,
+    isSuccess: isQuerySuccess,
+  } = useGetUserPermissionsPermissionAppCodeUserId(
+    getRuntimeEnv("NEXT_PUBLIC_APP_CODE"),
+    resolvedUserId,
+    {
+      query: {
+        enabled: Boolean(resolvedUserId),
+      },
+    }
+  )
 
   const permissions = useMemo(() => mapPermissionResponse(data), [data])
   const hasUserId = Boolean(resolvedUserId)

@@ -7,14 +7,8 @@ import { useGraduationSessionStatusOptions } from "@hooks/graduationSessionStatu
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
 import { queryClient } from "@api/index"
-import {
-  useCountGraduationSession,
-  useFindManyGraduationSession,
-} from "@workspace/db/hooks"
-import {
-  deleteGraduationSession,
-  reclaimStaleGraduation,
-} from "@workspace/libs/api/training"
+import { useCountGraduationSession, useFindManyGraduationSession } from "@workspace/db/hooks"
+import { deleteGraduationSession, reclaimStaleGraduation } from "@workspace/libs/api/training"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from "@workspace/router"
 import { useTrainingObjectTypeStore } from "@workspace/ui"

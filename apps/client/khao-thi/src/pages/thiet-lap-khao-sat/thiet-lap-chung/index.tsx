@@ -11,8 +11,7 @@ import { useMemo, useState } from "react"
 
 function Page() {
   const [topicSlected, setTopicSelected] = useState<SurveyTopic | null>(null)
-  const onChange = (key: string) => {
-  }
+  const onChange = (key: string) => {}
 
   const items: TabsProps["items"] = useMemo(() => {
     return [

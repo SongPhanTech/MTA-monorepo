@@ -118,8 +118,7 @@ const ReviewCriteriaEvaluationSubpage = ({
       showSpinner()
       const approvableItems =
         data.criteria.filter(
-          (i: any) =>
-            i.evaluationCriterion?.status === $Enums.EvaluationStatus.SUBMITTED
+          (i: any) => i.evaluationCriterion?.status === $Enums.EvaluationStatus.SUBMITTED
         ) || []
 
       if (approvableItems.length === 0) {
@@ -180,8 +179,7 @@ const ReviewCriteriaEvaluationSubpage = ({
 
   const hasApprovableItems = data.criteria.some(
     (c) =>
-      c.evaluationCriterion &&
-      c.evaluationCriterion.status === $Enums.EvaluationStatus.SUBMITTED
+      c.evaluationCriterion && c.evaluationCriterion.status === $Enums.EvaluationStatus.SUBMITTED
   )
 
   return (
@@ -280,9 +278,7 @@ const ReviewCriteriaEvaluationSubpage = ({
                                       cancelText="Hủy"
                                       onConfirm={(e) => {
                                         e?.stopPropagation()
-                                        handleApproveSingle(
-                                          item.evaluationCriterion?.id as string
-                                        )
+                                        handleApproveSingle(item.evaluationCriterion?.id as string)
                                       }}
                                       onCancel={(e) => {
                                         e?.stopPropagation()
