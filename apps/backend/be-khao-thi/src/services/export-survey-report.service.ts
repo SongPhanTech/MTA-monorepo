@@ -45,6 +45,7 @@ function buildSheetData(survey: any, answerCountMap: Record<string, number>) {
       id: q.id,
       name: q.name,
       answers: answersForQ,
+      specificChoice: q.specificChoice || [],
       order: questionOrder.get(q.id) ?? 0,
     })
   }
@@ -88,8 +89,10 @@ const appendDataToSheet = (
 
   if (rowIndex === 1) {
     worksheet.columns = [
-      { width: 60 },
-      ...Array.from({ length: numAnswers * 2 }).map(() => ({ width: 8 })),
+      { width: 50 },
+      // Cột phương án rộng hơn để hiện nhãn đáp án đặc biệt giống UI
+      ...Array.from({ length: numAnswers }).map(() => ({ width: 16 })),
+      ...Array.from({ length: numAnswers }).map(() => ({ width: 8 })),
     ]
   }
 
@@ -229,26 +232,62 @@ const appendDataToSheet = (
       rowIndex += 2
 
       group.questions?.forEach((q: any) => {
-        const rowValues: any[] = []
-        rowValues.push(`${qIndex}. ${q.name || ""}`)
-
+        const isSpecial = q.specificChoice?.length > 0
+        const counts: number[] = []
         let total = 0
         for (let i = 0; i < numAnswers; i++) {
           const count = Number(q.answers?.[i]?.count || 0)
-          rowValues.push(count)
+          counts.push(count)
           total += count
         }
 
         const row = worksheet.getRow(rowIndex)
-        row.values = rowValues
 
-        if (numAnswers > 0) {
-          const colStart = worksheet.getColumn(2).letter
-          const colEnd = worksheet.getColumn(1 + numAnswers).letter
+        // Cột nội dung: câu đặc biệt chỉ gắn * đỏ (không dump legend)
+        if (isSpecial) {
+          row.getCell(1).value = {
+            richText: [
+              {
+                text: `${qIndex}. ${q.name || ""}`,
+                font: { name: "Times New Roman", size: 11 },
+              },
+              {
+                text: " *",
+                font: {
+                  name: "Times New Roman",
+                  size: 11,
+                  bold: true,
+                  color: { argb: "FFFF0000" },
+                },
+              },
+            ],
+          }
+          row.height = 42
+        } else {
+          row.getCell(1).value = `${qIndex}. ${q.name || ""}`
+        }
 
-          for (let i = 0; i < numAnswers; i++) {
+        for (let i = 0; i < numAnswers; i++) {
+          const count = counts[i]
+          const percent = total === 0 ? 0 : Number(((count / total) * 100).toFixed(2))
+          const answerCell = row.getCell(2 + i)
+          const percentCell = row.getCell(2 + numAnswers + i)
+
+          if (isSpecial) {
+            // Giống UI: nhãn specificChoice phía trên, số lượng phía dưới
+            const special =
+              q.specificChoice.find(
+                (c: any) => String(c.answer) === String(q.answers?.[i]?.answer)
+              ) || q.specificChoice[i]
+            const label = special?.description?.trim() || special?.answer?.trim() || ""
+            answerCell.value = label ? `${label}\n${count}` : String(count)
+            percentCell.value = percent
+          } else {
+            answerCell.value = count
+            const colStart = worksheet.getColumn(2).letter
+            const colEnd = worksheet.getColumn(1 + numAnswers).letter
             const currCol = worksheet.getColumn(2 + i).letter
-            row.getCell(2 + numAnswers + i).value = {
+            percentCell.value = {
               formula: `IFERROR(${currCol}${rowIndex}/SUM(${colStart}${rowIndex}:${colEnd}${rowIndex})*100, 0)`,
             } as any
           }
@@ -257,14 +296,21 @@ const appendDataToSheet = (
         for (let c = 1; c <= 1 + numAnswers * 2; c++) {
           const cell = row.getCell(c)
           cell.border = tableHeaderStyle.border
-          cell.font = { name: "Times New Roman", size: 11 }
-          if (c > 1) cell.alignment = { horizontal: "center" as const, vertical: "middle" as const }
-          else
+          if (c > 1) {
+            cell.font = { name: "Times New Roman", size: 11 }
+            cell.alignment = {
+              horizontal: "center" as const,
+              vertical: "middle" as const,
+              wrapText: true as const,
+            }
+          } else {
+            if (!isSpecial) cell.font = { name: "Times New Roman", size: 11 }
             cell.alignment = {
               horizontal: "left" as const,
               vertical: "middle" as const,
               wrapText: true as const,
             }
+          }
         }
 
         rowIndex++
@@ -282,7 +328,10 @@ export async function exportSurveyExcelReportService(prisma: PrismaClient, surve
     include: {
       surveyQuestion: {
         where: { type: "SINGLE_CHOICE" },
-        include: { surveyQuestionGroup: true },
+        include: {
+          surveyQuestionGroup: true,
+          specificChoice: { orderBy: { createdAt: "asc" } },
+        },
       },
       surveyChoice: { orderBy: { answer: "asc" } },
       surveyObjectType: { include: SURVEY_OBJECT_TYPE_REPORT_INCLUDE },

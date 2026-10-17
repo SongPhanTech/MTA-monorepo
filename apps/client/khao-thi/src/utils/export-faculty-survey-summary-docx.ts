@@ -121,19 +121,24 @@ const LEVEL_LABELS = [
   "rất đồng ý",
 ] as const
 
-const LEVEL_HEADERS = [
-  "RẤT KHÔNG\nĐỒNG Ý",
-  "KHÔNG\nĐỒNG Ý",
-  "PHÂN VÂN",
-  "ĐỒNG Ý",
-  "RẤT\nĐỒNG Ý",
-] as const
+/** Cột bảng: Rất đồng ý | Đồng ý | Ý kiến khác (gộp 3 mức còn lại) */
+const DISPLAY_HEADERS = ["RẤT ĐỒNG Ý", "ĐỒNG Ý", "Ý KIẾN KHÁC"] as const
 
 const TABLE_WIDTH = 8930
 const TABLE_INDENT = 250
 const COL_NAME = 2400
-const COL_LEVEL = 1306
-const COL_WIDTHS = [COL_NAME, COL_LEVEL, COL_LEVEL, COL_LEVEL, COL_LEVEL, COL_LEVEL]
+const COL_LEVEL = 2176
+const COL_WIDTHS = [COL_NAME, COL_LEVEL, COL_LEVEL, COL_LEVEL]
+const COL_COUNT = COL_WIDTHS.length
+
+/** [rất đồng ý, đồng ý, ý kiến khác] */
+type DisplayCounts = [number, number, number]
+
+const toDisplayCounts = (counts: Counts): DisplayCounts => [
+  counts[4],
+  counts[3],
+  counts[0] + counts[1] + counts[2],
+]
 
 const border = { style: BorderStyle.SINGLE, size: 4, color: "000000" }
 const borders = { top: border, bottom: border, left: border, right: border }
@@ -339,10 +344,9 @@ const buildDepartments = async (clusterId: string, facultyNode: OrgTreeNode) => 
 
 const resultSentence = (counts: Counts, total: number) => {
   if (!total) return "Chưa có dữ liệu đánh giá."
-  const parts = LEVEL_LABELS.map(
-    (label, index) => `${formatPct((counts[index] / total) * 100)}% học viên ${label}`
-  )
-  return `Kết quả xử lý phiếu: ${parts.slice(0, -1).join(" và ")} và ${parts[parts.length - 1]} về giảng viên.`
+  const dongY = formatPct((counts[3] / total) * 100)
+  const ratDongY = formatPct((counts[4] / total) * 100)
+  return `Kết quả xử lý phiếu: ${ratDongY}% học viên ${LEVEL_LABELS[4]} và ${dongY}% học viên ${LEVEL_LABELS[3]} về giảng viên.`
 }
 
 const paragraph = (
@@ -408,13 +412,13 @@ const buildTable = (departments: DepartmentRow[]) => {
         cell("KẾT QUẢ ĐÁNH GIÁ (%)", {
           bold: true,
           center: true,
-          width: COL_LEVEL * 5,
-          columnSpan: 5,
+          width: COL_LEVEL * 3,
+          columnSpan: 3,
         }),
       ],
     }),
     new TableRow({
-      children: LEVEL_HEADERS.map((header) =>
+      children: DISPLAY_HEADERS.map((header) =>
         cell(header, { bold: true, center: true, width: COL_LEVEL })
       ),
     }),
@@ -424,16 +428,21 @@ const buildTable = (departments: DepartmentRow[]) => {
     rows.push(
       new TableRow({
         children: [
-          cell(stripBoMonPrefix(dept.name), { bold: true, width: TABLE_WIDTH, columnSpan: 6 }),
+          cell(stripBoMonPrefix(dept.name), {
+            bold: true,
+            width: TABLE_WIDTH,
+            columnSpan: COL_COUNT,
+          }),
         ],
       })
     )
     for (const lecturer of dept.lecturers) {
+      const displayCounts = toDisplayCounts(lecturer.counts)
       rows.push(
         new TableRow({
           children: [
             cell(lecturer.name, { both: true, width: COL_NAME }),
-            ...lecturer.counts.map((count) =>
+            ...displayCounts.map((count) =>
               cell(lecturer.hasData ? pctCell(count, lecturer.total) : "0", {
                 center: true,
                 width: COL_LEVEL,

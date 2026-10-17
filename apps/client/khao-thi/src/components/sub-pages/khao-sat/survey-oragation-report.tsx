@@ -7,9 +7,10 @@ import {
 import HtmlTruncate from "@components/commons/html-truncate"
 import Table from "@components/commons/table"
 import useSpinner from "@hooks/spinner"
+import { useFindUniqueClusterSurvey } from "@workspace/db/hooks"
 import { useGetClusterSurveyStatisticsForOrganization } from "@workspace/libs/api/exam"
 import type { GetSurveyStatistics200QuestionsItemAnswersItem } from "@workspace/libs/api/schemas"
-import { Button, Col, Dropdown, Empty, Row, Typography, message } from "antd"
+import { Button, Col, Dropdown, Empty, Row, Tag, Typography, message } from "antd"
 // @ts-nocheck
 import ReactECharts from "echarts-for-react"
 import ExcelJS from "exceljs"
@@ -20,6 +21,11 @@ import { useDisclosure } from "react-hook-disclosure-modal"
 import type { Org, OrgTreeNode } from "@/utils/buildOrgLecturerTree"
 import { exportFacultySurveySummaryDocx } from "@/utils/export-faculty-survey-summary-docx"
 import { exportSurveyDocxTemplate } from "@/utils/export-survey-docx-template"
+import {
+  buildSpecificChoiceMap,
+  formatSpecialAnswerCell,
+  getSpecialChoiceLabel,
+} from "@/utils/survey-specific-choice"
 
 const { Title } = Typography
 
@@ -73,6 +79,33 @@ function SurveyOrganizationReport({
   const { data: dataLevel } = useGetClusterSurveyStatisticsForOrganization(selectedId as string, {
     organizationId,
   })
+
+  const { data: clusterDetail } = useFindUniqueClusterSurvey(
+    {
+      where: { id: selectedId },
+      include: {
+        surveyQuestion: {
+          include: {
+            specificChoice: { orderBy: { createdAt: "asc" } },
+          },
+        },
+      },
+    },
+    { enabled: !!selectedId }
+  )
+
+  const specificChoiceByQuestionId = useMemo(
+    () => buildSpecificChoiceMap(clusterDetail?.surveyQuestion),
+    [clusterDetail]
+  )
+
+  const questionsWithSpecific = useMemo(() => {
+    const questions = dataLevel?.data?.data?.questions || []
+    return questions.map((q: any) => ({
+      ...q,
+      specificChoice: specificChoiceByQuestionId[q.id] || [],
+    }))
+  }, [dataLevel, specificChoiceByQuestionId])
 
   function convertToStackChartData(
     data: CriteriaItem[],
@@ -330,15 +363,42 @@ function SurveyOrganizationReport({
     ]
     if (dataTable?.length > 0) {
       dataTable.forEach((i: any, index: number) => {
+        const isSpecial = !!specificChoiceByQuestionId[i.id]?.length
         const headerRowValue: any = worksheet.getRow(rowIndex + 3 + index)
-        headerRowValue.values = [
-          index + 1,
-          `Câu hỏi ${index + 1}`,
-          i?.name,
-          ...calculatePercent(i?.answers).map(
-            (a: any) => `${a.percent || 0}% (${a?.count || 0}/${a?.total || 0})`
-          ),
-        ]
+        if (isSpecial) headerRowValue.height = 36
+
+        headerRowValue.getCell(1).value = index + 1
+        if (isSpecial) {
+          headerRowValue.getCell(2).value = {
+            richText: [
+              { text: `Câu hỏi ${index + 1}`, font: { name: "Times New Roman", size: 11 } },
+              {
+                text: " *",
+                font: {
+                  name: "Times New Roman",
+                  size: 11,
+                  bold: true,
+                  color: { argb: "FFFF0000" },
+                },
+              },
+            ],
+          }
+        } else {
+          headerRowValue.getCell(2).value = `Câu hỏi ${index + 1}`
+        }
+        headerRowValue.getCell(3).value = i?.name
+
+        calculatePercent(i?.answers).forEach((a: any, answerIndex: number) => {
+          const percentText = `${a.percent || 0}% (${a?.count || 0}/${a?.total || 0})`
+          const label = isSpecial
+            ? getSpecialChoiceLabel(specificChoiceByQuestionId[i.id], answerIndex, a?.answer)
+            : null
+          headerRowValue.getCell(4 + answerIndex).value = formatSpecialAnswerCell(
+            label,
+            percentText
+          )
+        })
+
         headerRowValue.eachCell((cell: any, colNumber: number) => {
           cell.alignment = {
             horizontal: colNumber === 3 ? "left" : "center",
@@ -400,11 +460,15 @@ function SurveyOrganizationReport({
       })
     })
     const datarender = [
-      ...dataTable,
+      ...dataTable.map((q: any) => ({
+        ...q,
+        isSpecial: !!specificChoiceByQuestionId[q.id]?.length,
+      })),
       {
         name: "Trung bình",
         answers: average,
         id: "average",
+        isSpecial: false,
       },
     ]
 
@@ -424,9 +488,19 @@ function SurveyOrganizationReport({
                 {
                   title: "Câu hỏi",
                   align: "center",
-                  width: 100,
+                  width: 120,
                   render: (_, record, index) => {
-                    return index === datarender.length - 1 ? "ĐGTB" : `Câu hỏi ${index + 1}`
+                    if (index === datarender.length - 1) return "ĐGTB"
+                    return (
+                      <div className="flex flex-col items-center gap-1">
+                        <span>{`Câu hỏi ${index + 1}`}</span>
+                        {record.isSpecial && (
+                          <Tag color="blue" className="m-0">
+                            Đặc biệt
+                          </Tag>
+                        )}
+                      </div>
+                    )
                   },
                 },
                 {
@@ -441,16 +515,34 @@ function SurveyOrganizationReport({
                   },
                 },
                 // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
-                ...dataTable[0]?.answers?.map((i: any) => ({
+                ...dataTable[0]?.answers?.map((i: any, answerIndex: number) => ({
                   title: i?.description,
                   id: i?.id,
                   dataIndex: i?.id,
-                  width: 130,
+                  width: 140,
                   align: "center",
                   render: (__: any, record: any) => {
                     const count = calculatePercent(record?.answers).find((a) => a.id === i?.id)
+                    const percentText =
+                      `${count?.percent || 0}% (${count?.count || 0}/${count?.total})` || "0"
 
-                    return `${count?.percent || 0}% (${count?.count || 0}/${count?.total})` || "0"
+                    if (record.id === "average" || !record.isSpecial) return percentText
+
+                    const specialLabel = getSpecialChoiceLabel(
+                      specificChoiceByQuestionId[record.id],
+                      answerIndex,
+                      i?.answer
+                    )
+                    return (
+                      <div className="leading-tight">
+                        {specialLabel && (
+                          <div className="mb-1 text-xs font-semibold text-[#1677ff]">
+                            {specialLabel}
+                          </div>
+                        )}
+                        <div>{percentText}</div>
+                      </div>
+                    )
                   },
                 })),
               ]
@@ -510,7 +602,7 @@ function SurveyOrganizationReport({
                         onClick: () => {
                           exportTemplate(
                             `Bao_cao_khao_sat_${surveyName}`,
-                            dataLevel?.data?.data?.questions,
+                            questionsWithSpecific,
                             dataLevel?.data?.data
                           )
                         },
@@ -532,7 +624,7 @@ function SurveyOrganizationReport({
                               organizationCode,
                               departmentName,
                               departmentCode,
-                              questions: dataLevel?.data?.data?.questions || [],
+                              questions: questionsWithSpecific,
                             })
                           } finally {
                             hideSpinner()
@@ -547,7 +639,7 @@ function SurveyOrganizationReport({
                           onOpen({
                             surveyName,
                             trainingObjectTypeName,
-                            questions: dataLevel?.data?.data?.questions,
+                            questions: questionsWithSpecific,
                             chartOption: dataBarchart,
                             organizationCode,
                             organizationName,
