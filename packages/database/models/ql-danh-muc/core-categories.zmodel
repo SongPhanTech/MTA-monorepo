@@ -223,6 +223,7 @@ model DM_NhanVien extends CoreBase {
 }
 
 model DM_PhanCap_ChatLuong_TrangThietBi extends CoreBase {
+  @@map("DM_PhanCap_ChatLuong_TTB")
   @@schema("mta")
 }
 

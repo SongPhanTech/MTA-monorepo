@@ -2541,6 +2541,7 @@ model DM_PhanCap_ChatLuong_TrangThietBi {
   sThietBiTao    String?
   sThietBiSua    String?
 
+  @@map("DM_PhanCap_ChatLuong_TTB")
   @@schema("mta")
 }
 
