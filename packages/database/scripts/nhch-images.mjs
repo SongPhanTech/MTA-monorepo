@@ -16,8 +16,9 @@ import {
 import { join, basename, dirname, extname } from "node:path"
 import { execFileSync, execSync } from "node:child_process"
 import { createHash, createHmac, randomUUID } from "node:crypto"
+import { NHCH_TMP_CONVERT } from "./nhch-paths.mjs"
 
-const TMP_DIR = "/tmp/nhch-convert"
+const TMP_DIR = NHCH_TMP_CONVERT
 const WORD_HTML_SCRIPT = join(import.meta.dir || ".", "word-extract-html.applescript")
 const IMG_TOKEN = (n) => `{img_${n}}`
 
@@ -131,7 +132,20 @@ export function extractDocxTextAndImages(docPath) {
     let imgIndex = 0
     const fileCache = new Map()
 
-    const pushImage = (relId) => {
+    const emuToPx = (emu) => {
+      const n = Number(emu)
+      if (!Number.isFinite(n) || n <= 0) return null
+      return Math.max(1, Math.round((n * 96) / 914400))
+    }
+
+    const parseDrawingSize = (drawingXml) => {
+      const m1 = drawingXml.match(/\bcx="(\d+)"/)
+      const m2 = drawingXml.match(/\bcy="(\d+)"/)
+      if (m1 && m2) return { widthPx: emuToPx(m1[1]), heightPx: emuToPx(m2[1]) }
+      return { widthPx: null, heightPx: null }
+    }
+
+    const pushImage = (relId, size = {}) => {
       const target = rels.get(relId)
       if (!target) return
       const abs = join(tmp, "word", target)
@@ -146,6 +160,8 @@ export function extractDocxTextAndImages(docPath) {
         name,
         buffer: fileCache.get(abs),
         ext: extname(target).replace(".", "").toLowerCase() || "png",
+        widthPx: size.widthPx || null,
+        heightPx: size.heightPx || null,
       })
     }
 
@@ -166,7 +182,7 @@ export function extractDocxTextAndImages(docPath) {
       }
       if (part.startsWith("<w:drawing") || part.startsWith("<w:pict")) {
         const embed = part.match(/r:embed="([^"]+)"/) || part.match(/r:id="([^"]+)"/)
-        if (embed) pushImage(embed[1])
+        if (embed) pushImage(embed[1], parseDrawingSize(part))
       }
     }
 
@@ -205,10 +221,16 @@ function htmlToTextAndImages(html, htmlPath) {
     if (!existsSync(abs)) return ""
     imgIndex += 1
     const name = IMG_TOKEN(imgIndex)
+    const wAttr = tag.match(/\bwidth=["']?(\d+)/i)?.[1]
+    const hAttr = tag.match(/\bheight=["']?(\d+)/i)?.[1]
+    const wStyle = tag.match(/width\s*:\s*([\d.]+)px/i)?.[1]
+    const hStyle = tag.match(/height\s*:\s*([\d.]+)px/i)?.[1]
     images.push({
       name,
       buffer: readFileSync(abs),
       ext: extname(abs).replace(".", "").toLowerCase() || "png",
+      widthPx: Number(wAttr || wStyle) || null,
+      heightPx: Number(hAttr || hStyle) || null,
     })
     return `\n${name}\n`
   })
@@ -411,21 +433,38 @@ function toPngIfNeeded(img) {
 
 let warnedNoMinio = false
 
-export async function uploadImageList(images) {
+/** When true (or NHCH_REQUIRE_MINIO=1), refuse data-URL fallback. */
+export function requireMinioOrThrow() {
+  const hasMinio =
+    process.env.MINIO_ENDPOINT && process.env.MINIO_ACCESS_KEY && process.env.MINIO_SECRET_KEY
+  if (!hasMinio) {
+    throw new Error(
+      "MINIO_ENDPOINT / MINIO_ACCESS_KEY / MINIO_SECRET_KEY required (data URL fallback disabled)"
+    )
+  }
+}
+
+export async function uploadImageList(images, { requireMinio = false } = {}) {
   const urlByName = {}
   if (!images?.length) return urlByName
 
+  const forceMinio = requireMinio || process.env.NHCH_REQUIRE_MINIO === "1"
   const hasMinio =
     process.env.MINIO_ENDPOINT && process.env.MINIO_ACCESS_KEY && process.env.MINIO_SECRET_KEY
-  if (!hasMinio && !warnedNoMinio) {
-    warnedNoMinio = true
-    console.warn(
-      "MINIO_ENDPOINT / MINIO_ACCESS_KEY / MINIO_SECRET_KEY chưa set — nhúng ảnh dạng data URL. Muốn URL MinIO thì export các biến này rồi chạy lại."
-    )
+  if (!hasMinio) {
+    if (forceMinio) requireMinioOrThrow()
+    if (!warnedNoMinio) {
+      warnedNoMinio = true
+      console.warn(
+        "MINIO_ENDPOINT / MINIO_ACCESS_KEY / MINIO_SECRET_KEY chưa set — nhúng ảnh dạng data URL. Muốn URL MinIO thì export các biến này rồi chạy lại."
+      )
+    }
   }
 
   const day = new Date().toISOString().slice(0, 10)
   const uploadedByHash = new Map()
+  /** Keep display size from original image object keyed by token name */
+  const metaByName = new Map(images.map((i) => [i.name, i]))
 
   for (const raw of images) {
     const img = toPngIfNeeded(raw)
@@ -447,14 +486,25 @@ export async function uploadImageList(images) {
     uploadedByHash.set(hash, url)
     urlByName[img.name] = url
   }
+
+  // Attach size meta onto urlByName via side map for replaceImgTokens
+  urlByName.__meta = metaByName
   return urlByName
 }
 
 export function replaceImgTokens(text, urlByName) {
   if (!text || !urlByName || Object.keys(urlByName).length === 0) return text
+  const meta = urlByName.__meta
   return String(text).replace(/\{img_\d+\}/g, (token) => {
     const url = urlByName[token]
-    if (!url) return token
+    if (!url || typeof url !== "string") return token
+    const m = meta?.get?.(token)
+    const w = m?.widthPx
+    if (w && Number.isFinite(w) && w > 0) {
+      const h = m?.heightPx && Number.isFinite(m.heightPx) ? m.heightPx : null
+      const wh = h ? ` width="${w}" height="${h}"` : ` width="${w}"`
+      return `<img src="${url}"${wh} style="width: ${w}px; height: auto; max-width: 100%;" />`
+    }
     return `<img src="${url}" style="max-width: 100%;" />`
   })
 }

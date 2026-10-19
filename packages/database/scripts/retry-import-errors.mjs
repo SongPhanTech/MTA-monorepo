@@ -27,11 +27,12 @@ import {
 } from "node:fs"
 import { join, basename, dirname } from "node:path"
 import { execFileSync, execSync, spawnSync } from "node:child_process"
+import { NHCH_TMP_REPAIRED } from "./nhch-paths.mjs"
 
 const SCRIPT_DIR = import.meta.dir || dirname(new URL(import.meta.url).pathname)
 const RESAVE_SCRIPT = join(SCRIPT_DIR, "word-resave-docx.applescript")
 const CATALOG_PATH = join(SCRIPT_DIR, "import-catalog.json")
-const TMP_DIR = "/tmp/nhch-repaired"
+const TMP_DIR = NHCH_TMP_REPAIRED
 const MANIFEST_PATH = join(SCRIPT_DIR, "import-errors-repaired.json")
 const PATCHED_CATALOG = join(TMP_DIR, "import-catalog-repaired.json")
 

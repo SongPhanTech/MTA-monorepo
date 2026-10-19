@@ -13,10 +13,23 @@ type LsbNhanVienInput = {
   officerNumber?: string | null
   nationalityId?: string | null
   currentAddress?: string | null
+  newCurrentAddress?: string | null
+  viTriCongViecId?: string | null
+  quanLyTrucTiepId?: string | null
+  provinceCurrentAddressId?: string | null
+  districtCurrentAddressId?: string | null
+  communeCurrentAddressId?: string | null
+  newProvinceCurrentAddressId?: string | null
+  newCommuneCurrentAddressId?: string | null
   bLaHocVien?: boolean | null
+  bLaSinhVien?: boolean | null
   bLaCanBoNhanVien?: boolean | null
   bLaGiangVien?: boolean | null
+  bLaNguoiDung?: boolean | null
+  active?: boolean | null
 }
+
+const toBool = (value?: boolean | null) => !!value
 
 export function buildLsbNhanVienPayload(input: LsbNhanVienInput) {
   const lastName = input.lastName?.trim() || ""
@@ -36,10 +49,23 @@ export function buildLsbNhanVienPayload(input: LsbNhanVienInput) {
     sAvatarId: input.avatar || undefined,
     sSoHieuSQ: input.officerNumber || undefined,
     sDM_QuocGiaId: input.nationalityId || null,
+    sDM_ViTriCongViecId: input.viTriCongViecId || null,
+    sQuanlyTrucTiepId: input.quanLyTrucTiepId || null,
+    sDM_TinhId: input.provinceCurrentAddressId || null,
+    sDM_QuanHuyenId: input.districtCurrentAddressId || null,
+    sDM_XaPhuongId: input.communeCurrentAddressId || null,
     sDiaChi: input.currentAddress || undefined,
-    bLaHocVien: input.bLaHocVien || undefined,
-    bLaCanBoNhanVien: input.bLaCanBoNhanVien || undefined,
-    bLaGiangVien: input.bLaGiangVien || undefined,
+    sDM_TinhId_New: input.newProvinceCurrentAddressId || null,
+    sDM_XaPhuongId_New: input.newCommuneCurrentAddressId || null,
+    sDiaChi_New: input.newCurrentAddress || undefined,
+    // Gửi true/false rõ ràng để bỏ tick cũng đồng bộ về LSB.
+    bLaHocVien: toBool(input.bLaHocVien),
+    bLaSinhVien: toBool(input.bLaSinhVien),
+    bLaCanBoNhanVien: toBool(input.bLaCanBoNhanVien),
+    bLaGiangVien: toBool(input.bLaGiangVien),
+    // LSB dùng bLaTaiKhoan tương ứng checkbox bLaNguoiDung trên hồ sơ.
+    bLaTaiKhoan: toBool(input.bLaNguoiDung),
+    bActive: input.active ?? true,
   }
 }
 

@@ -28,7 +28,9 @@ import {
   docToHtmlViaWord,
   uploadImageList,
   applyImgTokensToQuestions,
+  requireMinioOrThrow,
 } from "./nhch-images.mjs"
+import { NHCH_TMP_CONVERT } from "./nhch-paths.mjs"
 
 const dryRun = process.argv.includes("--dry-run")
 const errorsOnly = process.argv.includes("--errors-only")
@@ -75,7 +77,7 @@ const prisma = new PrismaClient({
   },
 })
 
-const TMP_DIR = "/tmp/nhch-convert"
+const TMP_DIR = NHCH_TMP_CONVERT
 
 const TYPE_MAP = {
   TL: "ESSAY",
@@ -102,6 +104,32 @@ function extractPointHint(name) {
 
 function sanitizeText(text) {
   return String(text ?? "").replace(/\u0000/g, "")
+}
+
+/**
+ * UI renders content via dangerouslySetInnerHTML — plain \\n collapses to spaces.
+ * Match import-word-modal: turn newlines into <br /> (keep existing <img> / HTML).
+ * Also drop bare rubric score lines (0.5 / 0.75) and stray "Câu N" headers in answers.
+ */
+function toDisplayHtml(text) {
+  if (text == null || text === "") return text
+  let s = sanitizeText(text).replace(/\r\n/g, "\n").replace(/\r/g, "\n")
+  s = s
+    .split("\n")
+    .map((l) => l.trimEnd())
+    .filter((l) => {
+      const t = l.trim()
+      if (!t) return true // keep blank lines as visual gaps
+      if (parsePointToken(t) != null && t.length <= 6) return false
+      if (/^Câu\s+\d+\s*[.:]?\s*$/i.test(t)) return false
+      return true
+    })
+    .join("\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim()
+  if (!s) return s
+  if (/<br\s*\/?>/i.test(s)) return s
+  return s.replace(/\n/g, "<br />")
 }
 
 function questionCode(questionBankId, num) {
@@ -252,18 +280,19 @@ function docToTextViaWord(docPath) {
 
 async function convertDocument(docPath) {
   if (withImages) {
+    requireMinioOrThrow()
     const zip = isZipContainer(docPath)
     if (zip && zipHasMedia(docPath)) {
       const { text, images } = extractDocxTextAndImages(docPath)
       if (text.trim().length >= 10 || images.length) {
-        const urlByName = dryRun ? {} : await uploadImageList(images)
+        const urlByName = dryRun ? {} : await uploadImageList(images, { requireMinio: true })
         return { text, urlByName, imageCount: images.length }
       }
     }
     if (!zip && (viaWord || oleMayHavePictures(docPath))) {
       try {
         const { text, images } = await docToHtmlViaWord(docPath)
-        const urlByName = dryRun ? {} : await uploadImageList(images)
+        const urlByName = dryRun ? {} : await uploadImageList(images, { requireMinio: true })
         return { text, urlByName, imageCount: images.length }
       } catch (e) {
         console.warn(`    Word HTML fallback to text: ${e.message}`)
@@ -806,10 +835,10 @@ function withBankLock(bankId, fn) {
 
 async function upsertQuestion(q) {
   const data = {
-    content: sanitizeText(q.content),
+    content: toDisplayHtml(q.content),
     type: q.type || "ESSAY",
     point: finitePoint(q.point),
-    explanation: q.explanation ? sanitizeText(q.explanation) : null,
+    explanation: q.explanation ? toDisplayHtml(q.explanation) : null,
     difficult: ["D1", "D2", "D3", "D4"].includes(q.difficult) ? q.difficult : "D3",
     isAutoGraded: !!q.isAutoGraded,
     questionBankId: q.questionBankId,
@@ -841,7 +870,7 @@ async function upsertQuestion(q) {
       await prisma.multipleChoiceOption.createMany({
         data: q.options.map((o, idx) => ({
           questionId: row.id,
-          content: sanitizeText(`${o.label}. ${o.content}`),
+          content: toDisplayHtml(`${o.label}. ${o.content}`),
           isCorrect: !!o.isCorrect,
           order: idx + 1,
           active: true,
