@@ -54,16 +54,8 @@ const policy = {
                 delete: { guard: UserProfile_delete, }
             },
             fieldLevel: {
-                read: {
-                    mock: {
-                        guard: UserProfile$mock_read, entityChecker: { func: $check_UserProfile$mock_read, selector: {} },
-                    },
-                },
-                update: {
-                    mock: {
-                        guard: UserProfile$mock_update,
-                    },
-                },
+                read: {},
+                update: {},
             },
         },
         hocHam: {
@@ -4037,7 +4029,7 @@ const policy = {
         accessPermissionGrant: { hasValidation: false },
         blockedIp: { hasValidation: true },
     },
-    authSelector: { "mock": true, "id": true },
+    authSelector: { "id": true },
 };
 function Config_read(context, db) {
     var _a;
@@ -4305,30 +4297,6 @@ function $check_UserProfile_delete(input, context) {
         return true;
     }
     return false;
-}
-function UserProfile$mock_read(context, db) {
-    if (true) {
-        return { OR: [] };
-    }
-    return { AND: [] };
-}
-function $check_UserProfile$mock_read(input, context) {
-    if (true) {
-        return false;
-    }
-    return true;
-}
-function UserProfile$mock_update(context, db) {
-    if (true) {
-        return { OR: [] };
-    }
-    return { AND: [] };
-}
-function $check_UserProfile$mock_update(input, context) {
-    if (true) {
-        return false;
-    }
-    return true;
 }
 function HocHam_read(context, db) {
     var _a;
@@ -13691,9 +13659,9 @@ function $check_StudentYearResult_delete(input, context) {
     return false;
 }
 function Notification_read(context, db) {
-    var _a, _b, _c;
+    var _a, _b;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { NOT: { AND: [{ type: { equals: prisma_client_1.NotificationType.CHAT } }, { OR: [{ OR: [(user == null) ? { AND: [] } : { OR: [] }, (((_b = user === null || user === void 0 ? void 0 : user.mock) !== null && _b !== void 0 ? _b : null) == true) ? { AND: [] } : { OR: [] }] }, { recipientProfileId: { not: { equals: ((_c = user === null || user === void 0 ? void 0 : user.id) !== null && _c !== void 0 ? _c : null) } } }] }] } }] }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+    return { AND: [{ AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { NOT: { AND: [{ type: { equals: prisma_client_1.NotificationType.CHAT } }, { OR: [(user == null) ? { AND: [] } : { OR: [] }, { recipientProfileId: { not: { equals: ((_b = user === null || user === void 0 ? void 0 : user.id) !== null && _b !== void 0 ? _b : null) } } }] }] } }] }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 function $check_Notification_read(input, context) {
     var _a;
@@ -13701,7 +13669,7 @@ function $check_Notification_read(input, context) {
     if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
         return false;
     }
-    if ((((input === null || input === void 0 ? void 0 : input.type) == prisma_client_1.NotificationType.CHAT) && (((user == null) || ((user === null || user === void 0 ? void 0 : user.mock) == true)) || ((input === null || input === void 0 ? void 0 : input.recipientProfileId) != (user === null || user === void 0 ? void 0 : user.id))))) {
+    if ((((input === null || input === void 0 ? void 0 : input.type) == prisma_client_1.NotificationType.CHAT) && ((user == null) || ((input === null || input === void 0 ? void 0 : input.recipientProfileId) != (user === null || user === void 0 ? void 0 : user.id))))) {
         return false;
     }
     if ((user != null)) {

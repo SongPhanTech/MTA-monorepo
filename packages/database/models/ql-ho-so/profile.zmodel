@@ -51,9 +51,6 @@ abstract model BaseUuid {
 }
 
 model UserProfile extends BaseUuid {
-  /// Set on the auth user by modelPolicyUser for the shared dev profile.
-  /// The database value stays null. CHAT reads treat auth().mock == true as closed.
-  mock                                 Boolean?                         @omit @deny('read', true) @deny('update', true)
   bLaNguoiDung                         Boolean?
   bLaGiangVien                         Boolean?
   bLaCanBoNhanVien                     Boolean?

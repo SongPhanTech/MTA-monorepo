@@ -68,10 +68,10 @@ model Notification extends Base {
   // Profile id of the original CHAT recipient, written once with the row.
   // Reads compare this column to auth().id. Student.userProfileId stays writable
   // so existing profile flows keep working; reassigning a student cannot expose
-  // another user's CHAT rows. auth().mock is the shared dev profile.
+  // another user's CHAT rows.
   recipientProfileId String? @db.Uuid
 
-  @@deny('read', type == CHAT && (auth() == null || auth().mock == true || recipientProfileId != auth().id))
+  @@deny('read', type == CHAT && (auth() == null || recipientProfileId != auth().id))
   @@deny('create', type == CHAT)
   @@deny('update', type == CHAT)
   @@deny('update', future().type == CHAT)

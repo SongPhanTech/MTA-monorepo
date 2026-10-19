@@ -16832,6 +16832,10 @@ const metadata: ModelMeta = {
                     name: "reminderData",
                     type: "Json",
                     isOptional: true,
+                }, recipientProfileId: {
+                    name: "recipientProfileId",
+                    type: "String",
+                    isOptional: true,
                 },
             }, uniqueConstraints: {
                 id: {
