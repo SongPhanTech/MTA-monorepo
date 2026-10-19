@@ -100,7 +100,8 @@ function SurveyOrganizationReport({
   )
 
   const questionsWithSpecific = useMemo(() => {
-    const questions = dataLevel?.data?.data?.questions || []
+    const questions =
+      dataLevel?.status === 200 ? dataLevel.data.data?.questions || [] : []
     return questions.map((q: any) => ({
       ...q,
       specificChoice: specificChoiceByQuestionId[q.id] || [],
