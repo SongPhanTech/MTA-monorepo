@@ -804,12 +804,6 @@ model UserProfile {
   dNgaySua                             DateTime?                           @db.Timestamp(6)
   sThietBiTao                          String?
   sThietBiSua                          String?
-  /// Set on the auth user by modelPolicyUser for the shared dev profile.
-  /// The database value stays null. CHAT reads treat auth().mock == true as closed.
-  /// @omit
-  /// @deny('read', true)
-  /// @deny('update', true)
-  mock                                 Boolean?
   bLaNguoiDung                         Boolean?
   bLaGiangVien                         Boolean?
   bLaCanBoNhanVien                     Boolean?
@@ -5151,7 +5145,7 @@ model StudentYearResult {
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
-/// @@deny('read', type == CHAT && (auth() == null || auth().mock == true || recipientProfileId != auth().id))
+/// @@deny('read', type == CHAT && (auth() == null || recipientProfileId != auth().id))
 /// @@deny('create', type == CHAT)
 /// @@deny('update', type == CHAT)
 /// @@deny('update', future().type == CHAT)

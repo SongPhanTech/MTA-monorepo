@@ -30,10 +30,10 @@ const baseSchema = z.object({
     publishedAt: z.coerce.date().default(() => new Date()),
     expiresAt: z.coerce.date().nullish(),
     targetAll: z.boolean().default(false),
-    recipientProfileId: z.string().uuid().nullish(),
     targetDeviceId: z.string().nullish(),
     pushExpiresAt: z.coerce.date().nullish(),
     reminderData: z.any().nullish(),
+    recipientProfileId: z.string().uuid().nullish(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -58,10 +58,10 @@ const baseSchemaWithoutDefaults = z.object({
     publishedAt: z.coerce.date(),
     expiresAt: z.coerce.date().nullish(),
     targetAll: z.boolean(),
-    recipientProfileId: z.string().uuid().nullish(),
     targetDeviceId: z.string().nullish(),
     pushExpiresAt: z.coerce.date().nullish(),
     reminderData: z.any().nullish(),
+    recipientProfileId: z.string().uuid().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -122,10 +122,10 @@ export const NotificationPrismaUpdateSchema = z.object({
     publishedAt: z.coerce.date(),
     expiresAt: z.coerce.date().nullish(),
     targetAll: z.boolean(),
-    recipientProfileId: z.string().uuid().nullish(),
     targetDeviceId: z.string().nullish(),
     pushExpiresAt: z.coerce.date().nullish(),
-    reminderData: z.any().nullish()
+    reminderData: z.any().nullish(),
+    recipientProfileId: z.string().uuid().nullish()
 }).partial().passthrough();
 
 

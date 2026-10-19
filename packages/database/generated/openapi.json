@@ -17608,11 +17608,6 @@
               "$ref": "#/components/schemas/DocumentFile"
             }
           },
-          "recipientProfileId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
           "targetDeviceId": {
             "type": "string",
             "nullable": true
@@ -17623,6 +17618,10 @@
             "nullable": true
           },
           "reminderData": {
+            "nullable": true
+          },
+          "recipientProfileId": {
+            "type": "string",
             "nullable": true
           }
         },
@@ -56094,11 +56093,6 @@
             "type": "string",
             "nullable": true
           },
-          "recipientProfileId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
           "targetDeviceId": {
             "type": "string",
             "nullable": true
@@ -56109,6 +56103,10 @@
             "nullable": true
           },
           "reminderData": {
+            "nullable": true
+          },
+          "recipientProfileId": {
+            "type": "string",
             "nullable": true
           },
           "_count": {
@@ -120398,10 +120396,6 @@
           "lecturerId": {
             "type": "integer"
           },
-          "recipientProfileId": {
-            "type": "string",
-            "nullable": true
-          },
           "targetDeviceId": {
             "type": "integer"
           },
@@ -120409,6 +120403,9 @@
             "type": "integer"
           },
           "reminderData": {
+            "type": "integer"
+          },
+          "recipientProfileId": {
             "type": "integer"
           },
           "_all": {
@@ -120441,6 +120438,7 @@
           "targetDeviceId",
           "pushExpiresAt",
           "reminderData",
+          "recipientProfileId",
           "_all"
         ]
       },
@@ -120550,11 +120548,6 @@
             "type": "string",
             "nullable": true
           },
-          "recipientProfileId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
           "targetDeviceId": {
             "type": "string",
             "nullable": true
@@ -120562,6 +120555,10 @@
           "pushExpiresAt": {
             "type": "string",
             "format": "date-time",
+            "nullable": true
+          },
+          "recipientProfileId": {
+            "type": "string",
             "nullable": true
           }
         }
@@ -120672,11 +120669,6 @@
             "type": "string",
             "nullable": true
           },
-          "recipientProfileId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
           "targetDeviceId": {
             "type": "string",
             "nullable": true
@@ -120684,6 +120676,10 @@
           "pushExpiresAt": {
             "type": "string",
             "format": "date-time",
+            "nullable": true
+          },
+          "recipientProfileId": {
+            "type": "string",
             "nullable": true
           }
         }

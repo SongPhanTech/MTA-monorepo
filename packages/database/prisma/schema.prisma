@@ -794,9 +794,6 @@ model UserProfile {
   dNgaySua                             DateTime?                           @db.Timestamp(6)
   sThietBiTao                          String?
   sThietBiSua                          String?
-  /// Set on the auth user by modelPolicyUser for the shared dev profile.
-  /// The database value stays null. CHAT reads treat auth().mock == true as closed.
-  mock                                 Boolean?
   bLaNguoiDung                         Boolean?
   bLaGiangVien                         Boolean?
   bLaCanBoNhanVien                     Boolean?

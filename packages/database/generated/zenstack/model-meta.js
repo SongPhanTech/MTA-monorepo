@@ -325,11 +325,6 @@ const metadata = {
                     name: "sThietBiSua",
                     type: "String",
                     isOptional: true,
-                }, mock: {
-                    name: "mock",
-                    type: "Boolean",
-                    isOptional: true,
-                    attributes: [{ "name": "@omit", "args": [] }, { "name": "@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition", "value": true }] }, { "name": "@deny", "args": [{ "name": "operation", "value": "update" }, { "name": "condition", "value": true }] }],
                 }, bLaNguoiDung: {
                     name: "bLaNguoiDung",
                     type: "Boolean",

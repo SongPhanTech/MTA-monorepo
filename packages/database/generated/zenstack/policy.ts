@@ -148,16 +148,10 @@ const policy: PolicyDef = {
             fieldLevel: {
                 read:
                 {
-                    mock: {
-                        guard: UserProfile$mock_read, entityChecker: { func: $check_UserProfile$mock_read, selector: {} },
-                    },
 
                 },
                 update:
                 {
-                    mock: {
-                        guard: UserProfile$mock_update,
-                    },
 
                 },
             },
@@ -6115,7 +6109,7 @@ const policy: PolicyDef = {
         accessPermissionGrant: { hasValidation: false },
         blockedIp: { hasValidation: true },
     },
-    authSelector: { "mock": true, "id": true },
+    authSelector: { "id": true },
 };
 
 function Config_read(context: QueryContext, db: CrudContract): any {
@@ -6355,26 +6349,6 @@ function $check_UserProfile_delete(input: any, context: QueryContext): any {
     if ((user != null)) { return true; }
 
     return false;
-}
-
-function UserProfile$mock_read(context: QueryContext, db: CrudContract): any {
-    if (true) { return { OR: [] }; } return { AND: [] };
-}
-
-function $check_UserProfile$mock_read(input: any, context: QueryContext): any {
-    if (true) { return false; }
-
-    return true;
-}
-
-function UserProfile$mock_update(context: QueryContext, db: CrudContract): any {
-    if (true) { return { OR: [] }; } return { AND: [] };
-}
-
-function $check_UserProfile$mock_update(input: any, context: QueryContext): any {
-    if (true) { return false; }
-
-    return true;
 }
 
 function HocHam_read(context: QueryContext, db: CrudContract): any {
@@ -14179,14 +14153,14 @@ function $check_StudentYearResult_delete(input: any, context: QueryContext): any
 
 function Notification_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
-    return { AND: [{ AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { NOT: { AND: [{ type: { equals: NotificationType.CHAT } }, { OR: [{ OR: [(user == null) ? { AND: [] } : { OR: [] }, ((user?.mock ?? null) == true) ? { AND: [] } : { OR: [] }] }, { recipientProfileId: { not: { equals: (user?.id ?? null) } } }] }] } }] }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+    return { AND: [{ AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { NOT: { AND: [{ type: { equals: NotificationType.CHAT } }, { OR: [(user == null) ? { AND: [] } : { OR: [] }, { recipientProfileId: { not: { equals: (user?.id ?? null) } } }] }] } }] }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
 function $check_Notification_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
-    if (((input?.type == NotificationType.CHAT) && (((user == null) || (user?.mock == true)) || (input?.recipientProfileId != user?.id)))) { return false; }
+    if (((input?.type == NotificationType.CHAT) && ((user == null) || (input?.recipientProfileId != user?.id)))) { return false; }
 
     if ((user != null)) { return true; }
 

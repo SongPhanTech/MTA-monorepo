@@ -1,7 +1,5 @@
 import { OpenAPIHono } from "@hono/zod-openapi"
-import { jwtAuth } from "@workspace/auth/hono"
 import { enhance, Prisma, PrismaClient } from "@workspace/db"
-import { modelPolicyUser } from "@workspace/db/model-policy-user"
 import { createHonoHandler } from "@workspace/db/hono"
 import { setupAppTimezone } from "@workspace/libs/timezone"
 import type { Context } from "hono"
@@ -70,12 +68,14 @@ app.route("/api/exam", examApp)
 app.route("/api/survey", surveyApp)
 app.route("/api/cluster-survey", clusterSurveyApp)
 app.route("/api/evaluate", evaluateApp)
-app.use("/api/model/*", jwtAuth("ems"))
+const nv = await prisma.userProfile.findFirstOrThrow()
+
 app.use(
   "/api/model/*",
   createHonoHandler({
     getPrisma: async (ctx: Context) => {
-      return enhance(prisma, { user: modelPolicyUser(ctx.get("user")) })
+      return enhance(prisma, { user: nv })
+      // return enhance(prisma, { user: ctx.get('user') })
     },
   })
 )

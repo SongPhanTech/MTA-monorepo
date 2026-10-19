@@ -192,7 +192,6 @@ exports.Prisma.UserProfileScalarFieldEnum = {
   dNgaySua: 'dNgaySua',
   sThietBiTao: 'sThietBiTao',
   sThietBiSua: 'sThietBiSua',
-  mock: 'mock',
   bLaNguoiDung: 'bLaNguoiDung',
   bLaGiangVien: 'bLaGiangVien',
   bLaCanBoNhanVien: 'bLaCanBoNhanVien',

@@ -1,5 +1,4 @@
 -- Original CHAT recipient, stored on the row so Student.userProfileId can still change.
--- auth().mock is request-only; the column stays null and is omitted from CRUD output.
 ALTER TABLE "ql-danh-muc"."Notification"
   ADD COLUMN "recipientProfileId" UUID;
 
@@ -12,6 +11,3 @@ ALTER TABLE "ql-danh-muc"."Notification"
     (type::text = 'CHAT' AND "recipientProfileId" IS NOT NULL)
     OR (type::text <> 'CHAT' AND "recipientProfileId" IS NULL)
   );
-
-ALTER TABLE "ql-nguoi-dung"."UserProfile"
-  ADD COLUMN "mock" BOOLEAN;
