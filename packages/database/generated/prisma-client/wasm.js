@@ -5713,7 +5713,6 @@ exports.Prisma.SurveyObjectTypeScalarFieldEnum = {
 
 exports.Prisma.SurveyTopicScalarFieldEnum = {
   id: 'id',
-  code: 'code',
   active: 'active',
   description: 'description',
   deletedAt: 'deletedAt',
@@ -5726,6 +5725,7 @@ exports.Prisma.SurveyTopicScalarFieldEnum = {
   dNgaySua: 'dNgaySua',
   sThietBiTao: 'sThietBiTao',
   sThietBiSua: 'sThietBiSua',
+  code: 'code',
   name: 'name',
   type: 'type'
 };
@@ -10282,13 +10282,13 @@ exports.Prisma.SurveyObjectTypeOrderByRelevanceFieldEnum = {
 
 exports.Prisma.SurveyTopicOrderByRelevanceFieldEnum = {
   id: 'id',
-  code: 'code',
   description: 'description',
   createdBy: 'createdBy',
   sNguoiTao: 'sNguoiTao',
   sNguoiSua: 'sNguoiSua',
   sThietBiTao: 'sThietBiTao',
   sThietBiSua: 'sThietBiSua',
+  code: 'code',
   name: 'name'
 };
 

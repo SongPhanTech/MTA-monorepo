@@ -358360,7 +358360,6 @@ export namespace Prisma {
 
   export type SurveyTopicMinAggregateOutputType = {
     id: string | null
-    code: string | null
     active: boolean | null
     description: string | null
     deletedAt: Date | null
@@ -358373,13 +358372,13 @@ export namespace Prisma {
     dNgaySua: Date | null
     sThietBiTao: string | null
     sThietBiSua: string | null
+    code: string | null
     name: string | null
     type: $Enums.SurveyType | null
   }
 
   export type SurveyTopicMaxAggregateOutputType = {
     id: string | null
-    code: string | null
     active: boolean | null
     description: string | null
     deletedAt: Date | null
@@ -358392,13 +358391,13 @@ export namespace Prisma {
     dNgaySua: Date | null
     sThietBiTao: string | null
     sThietBiSua: string | null
+    code: string | null
     name: string | null
     type: $Enums.SurveyType | null
   }
 
   export type SurveyTopicCountAggregateOutputType = {
     id: number
-    code: number
     active: number
     description: number
     deletedAt: number
@@ -358411,6 +358410,7 @@ export namespace Prisma {
     dNgaySua: number
     sThietBiTao: number
     sThietBiSua: number
+    code: number
     name: number
     type: number
     _all: number
@@ -358419,7 +358419,6 @@ export namespace Prisma {
 
   export type SurveyTopicMinAggregateInputType = {
     id?: true
-    code?: true
     active?: true
     description?: true
     deletedAt?: true
@@ -358432,13 +358431,13 @@ export namespace Prisma {
     dNgaySua?: true
     sThietBiTao?: true
     sThietBiSua?: true
+    code?: true
     name?: true
     type?: true
   }
 
   export type SurveyTopicMaxAggregateInputType = {
     id?: true
-    code?: true
     active?: true
     description?: true
     deletedAt?: true
@@ -358451,13 +358450,13 @@ export namespace Prisma {
     dNgaySua?: true
     sThietBiTao?: true
     sThietBiSua?: true
+    code?: true
     name?: true
     type?: true
   }
 
   export type SurveyTopicCountAggregateInputType = {
     id?: true
-    code?: true
     active?: true
     description?: true
     deletedAt?: true
@@ -358470,6 +358469,7 @@ export namespace Prisma {
     dNgaySua?: true
     sThietBiTao?: true
     sThietBiSua?: true
+    code?: true
     name?: true
     type?: true
     _all?: true
@@ -358549,7 +358549,6 @@ export namespace Prisma {
 
   export type SurveyTopicGroupByOutputType = {
     id: string
-    code: string | null
     active: boolean
     description: string | null
     deletedAt: Date | null
@@ -358562,6 +358561,7 @@ export namespace Prisma {
     dNgaySua: Date | null
     sThietBiTao: string | null
     sThietBiSua: string | null
+    code: string | null
     name: string
     type: $Enums.SurveyType | null
     _count: SurveyTopicCountAggregateOutputType | null
@@ -358585,7 +358585,6 @@ export namespace Prisma {
 
   export type SurveyTopicSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    code?: boolean
     active?: boolean
     description?: boolean
     deletedAt?: boolean
@@ -358598,6 +358597,7 @@ export namespace Prisma {
     dNgaySua?: boolean
     sThietBiTao?: boolean
     sThietBiSua?: boolean
+    code?: boolean
     name?: boolean
     type?: boolean
     clusterSurvey?: boolean | SurveyTopic$clusterSurveyArgs<ExtArgs>
@@ -358608,7 +358608,6 @@ export namespace Prisma {
 
   export type SurveyTopicSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    code?: boolean
     active?: boolean
     description?: boolean
     deletedAt?: boolean
@@ -358621,13 +358620,13 @@ export namespace Prisma {
     dNgaySua?: boolean
     sThietBiTao?: boolean
     sThietBiSua?: boolean
+    code?: boolean
     name?: boolean
     type?: boolean
   }, ExtArgs["result"]["surveyTopic"]>
 
   export type SurveyTopicSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    code?: boolean
     active?: boolean
     description?: boolean
     deletedAt?: boolean
@@ -358640,13 +358639,13 @@ export namespace Prisma {
     dNgaySua?: boolean
     sThietBiTao?: boolean
     sThietBiSua?: boolean
+    code?: boolean
     name?: boolean
     type?: boolean
   }, ExtArgs["result"]["surveyTopic"]>
 
   export type SurveyTopicSelectScalar = {
     id?: boolean
-    code?: boolean
     active?: boolean
     description?: boolean
     deletedAt?: boolean
@@ -358659,11 +358658,12 @@ export namespace Prisma {
     dNgaySua?: boolean
     sThietBiTao?: boolean
     sThietBiSua?: boolean
+    code?: boolean
     name?: boolean
     type?: boolean
   }
 
-  export type SurveyTopicOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "sNguoiTao" | "sNguoiSua" | "dNgayTao" | "dNgaySua" | "sThietBiTao" | "sThietBiSua" | "name" | "type", ExtArgs["result"]["surveyTopic"]>
+  export type SurveyTopicOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "sNguoiTao" | "sNguoiSua" | "dNgayTao" | "dNgaySua" | "sThietBiTao" | "sThietBiSua" | "code" | "name" | "type", ExtArgs["result"]["surveyTopic"]>
   export type SurveyTopicInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     clusterSurvey?: boolean | SurveyTopic$clusterSurveyArgs<ExtArgs>
     survey?: boolean | SurveyTopic$surveyArgs<ExtArgs>
@@ -358682,7 +358682,6 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      code: string | null
       active: boolean
       description: string | null
       deletedAt: Date | null
@@ -358695,6 +358694,7 @@ export namespace Prisma {
       dNgaySua: Date | null
       sThietBiTao: string | null
       sThietBiSua: string | null
+      code: string | null
       name: string
       type: $Enums.SurveyType | null
     }, ExtArgs["result"]["surveyTopic"]>
@@ -359124,7 +359124,6 @@ export namespace Prisma {
    */
   interface SurveyTopicFieldRefs {
     readonly id: FieldRef<"SurveyTopic", 'String'>
-    readonly code: FieldRef<"SurveyTopic", 'String'>
     readonly active: FieldRef<"SurveyTopic", 'Boolean'>
     readonly description: FieldRef<"SurveyTopic", 'String'>
     readonly deletedAt: FieldRef<"SurveyTopic", 'DateTime'>
@@ -359137,6 +359136,7 @@ export namespace Prisma {
     readonly dNgaySua: FieldRef<"SurveyTopic", 'DateTime'>
     readonly sThietBiTao: FieldRef<"SurveyTopic", 'String'>
     readonly sThietBiSua: FieldRef<"SurveyTopic", 'String'>
+    readonly code: FieldRef<"SurveyTopic", 'String'>
     readonly name: FieldRef<"SurveyTopic", 'String'>
     readonly type: FieldRef<"SurveyTopic", 'SurveyType'>
   }
@@ -429370,7 +429370,6 @@ export namespace Prisma {
 
   export const SurveyTopicScalarFieldEnum: {
     id: 'id',
-    code: 'code',
     active: 'active',
     description: 'description',
     deletedAt: 'deletedAt',
@@ -429383,6 +429382,7 @@ export namespace Prisma {
     dNgaySua: 'dNgaySua',
     sThietBiTao: 'sThietBiTao',
     sThietBiSua: 'sThietBiSua',
+    code: 'code',
     name: 'name',
     type: 'type'
   };
@@ -434815,13 +434815,13 @@ export namespace Prisma {
 
   export const SurveyTopicOrderByRelevanceFieldEnum: {
     id: 'id',
-    code: 'code',
     description: 'description',
     createdBy: 'createdBy',
     sNguoiTao: 'sNguoiTao',
     sNguoiSua: 'sNguoiSua',
     sThietBiTao: 'sThietBiTao',
     sThietBiSua: 'sThietBiSua',
+    code: 'code',
     name: 'name'
   };
 
@@ -470868,7 +470868,6 @@ export namespace Prisma {
     OR?: SurveyTopicWhereInput[]
     NOT?: SurveyTopicWhereInput | SurveyTopicWhereInput[]
     id?: StringFilter<"SurveyTopic"> | string
-    code?: StringNullableFilter<"SurveyTopic"> | string | null
     active?: BoolFilter<"SurveyTopic"> | boolean
     description?: StringNullableFilter<"SurveyTopic"> | string | null
     deletedAt?: DateTimeNullableFilter<"SurveyTopic"> | Date | string | null
@@ -470881,6 +470880,7 @@ export namespace Prisma {
     dNgaySua?: DateTimeNullableFilter<"SurveyTopic"> | Date | string | null
     sThietBiTao?: StringNullableFilter<"SurveyTopic"> | string | null
     sThietBiSua?: StringNullableFilter<"SurveyTopic"> | string | null
+    code?: StringNullableFilter<"SurveyTopic"> | string | null
     name?: StringFilter<"SurveyTopic"> | string
     type?: EnumSurveyTypeNullableFilter<"SurveyTopic"> | $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyListRelationFilter
@@ -470890,7 +470890,6 @@ export namespace Prisma {
 
   export type SurveyTopicOrderByWithRelationInput = {
     id?: SortOrder
-    code?: SortOrderInput | SortOrder
     active?: SortOrder
     description?: SortOrderInput | SortOrder
     deletedAt?: SortOrderInput | SortOrder
@@ -470903,6 +470902,7 @@ export namespace Prisma {
     dNgaySua?: SortOrderInput | SortOrder
     sThietBiTao?: SortOrderInput | SortOrder
     sThietBiSua?: SortOrderInput | SortOrder
+    code?: SortOrderInput | SortOrder
     name?: SortOrder
     type?: SortOrderInput | SortOrder
     clusterSurvey?: ClusterSurveyOrderByRelationAggregateInput
@@ -470913,7 +470913,6 @@ export namespace Prisma {
 
   export type SurveyTopicWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    code?: string
     AND?: SurveyTopicWhereInput | SurveyTopicWhereInput[]
     OR?: SurveyTopicWhereInput[]
     NOT?: SurveyTopicWhereInput | SurveyTopicWhereInput[]
@@ -470929,16 +470928,16 @@ export namespace Prisma {
     dNgaySua?: DateTimeNullableFilter<"SurveyTopic"> | Date | string | null
     sThietBiTao?: StringNullableFilter<"SurveyTopic"> | string | null
     sThietBiSua?: StringNullableFilter<"SurveyTopic"> | string | null
+    code?: StringNullableFilter<"SurveyTopic"> | string | null
     name?: StringFilter<"SurveyTopic"> | string
     type?: EnumSurveyTypeNullableFilter<"SurveyTopic"> | $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyListRelationFilter
     survey?: SurveyListRelationFilter
     surveyQuestionGroup?: SurveyQuestionGroupListRelationFilter
-  }, "id" | "code">
+  }, "id">
 
   export type SurveyTopicOrderByWithAggregationInput = {
     id?: SortOrder
-    code?: SortOrderInput | SortOrder
     active?: SortOrder
     description?: SortOrderInput | SortOrder
     deletedAt?: SortOrderInput | SortOrder
@@ -470951,6 +470950,7 @@ export namespace Prisma {
     dNgaySua?: SortOrderInput | SortOrder
     sThietBiTao?: SortOrderInput | SortOrder
     sThietBiSua?: SortOrderInput | SortOrder
+    code?: SortOrderInput | SortOrder
     name?: SortOrder
     type?: SortOrderInput | SortOrder
     _count?: SurveyTopicCountOrderByAggregateInput
@@ -470963,7 +470963,6 @@ export namespace Prisma {
     OR?: SurveyTopicScalarWhereWithAggregatesInput[]
     NOT?: SurveyTopicScalarWhereWithAggregatesInput | SurveyTopicScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"SurveyTopic"> | string
-    code?: StringNullableWithAggregatesFilter<"SurveyTopic"> | string | null
     active?: BoolWithAggregatesFilter<"SurveyTopic"> | boolean
     description?: StringNullableWithAggregatesFilter<"SurveyTopic"> | string | null
     deletedAt?: DateTimeNullableWithAggregatesFilter<"SurveyTopic"> | Date | string | null
@@ -470976,6 +470975,7 @@ export namespace Prisma {
     dNgaySua?: DateTimeNullableWithAggregatesFilter<"SurveyTopic"> | Date | string | null
     sThietBiTao?: StringNullableWithAggregatesFilter<"SurveyTopic"> | string | null
     sThietBiSua?: StringNullableWithAggregatesFilter<"SurveyTopic"> | string | null
+    code?: StringNullableWithAggregatesFilter<"SurveyTopic"> | string | null
     name?: StringWithAggregatesFilter<"SurveyTopic"> | string
     type?: EnumSurveyTypeNullableWithAggregatesFilter<"SurveyTopic"> | $Enums.SurveyType | null
   }
@@ -517738,7 +517738,6 @@ export namespace Prisma {
 
   export type SurveyTopicCreateInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
@@ -517751,6 +517750,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    code?: string | null
     name: string
     type?: $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyCreateNestedManyWithoutSurveyTopicInput
@@ -517760,7 +517760,6 @@ export namespace Prisma {
 
   export type SurveyTopicUncheckedCreateInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
@@ -517773,6 +517772,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    code?: string | null
     name: string
     type?: $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutSurveyTopicInput
@@ -517782,7 +517782,6 @@ export namespace Prisma {
 
   export type SurveyTopicUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -517795,6 +517794,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyUpdateManyWithoutSurveyTopicNestedInput
@@ -517804,7 +517804,6 @@ export namespace Prisma {
 
   export type SurveyTopicUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -517817,6 +517816,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutSurveyTopicNestedInput
@@ -517826,7 +517826,6 @@ export namespace Prisma {
 
   export type SurveyTopicCreateManyInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
@@ -517839,13 +517838,13 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    code?: string | null
     name: string
     type?: $Enums.SurveyType | null
   }
 
   export type SurveyTopicUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -517858,13 +517857,13 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
   }
 
   export type SurveyTopicUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -517877,6 +517876,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
   }
@@ -549400,7 +549400,6 @@ export namespace Prisma {
 
   export type SurveyTopicCountOrderByAggregateInput = {
     id?: SortOrder
-    code?: SortOrder
     active?: SortOrder
     description?: SortOrder
     deletedAt?: SortOrder
@@ -549413,13 +549412,13 @@ export namespace Prisma {
     dNgaySua?: SortOrder
     sThietBiTao?: SortOrder
     sThietBiSua?: SortOrder
+    code?: SortOrder
     name?: SortOrder
     type?: SortOrder
   }
 
   export type SurveyTopicMaxOrderByAggregateInput = {
     id?: SortOrder
-    code?: SortOrder
     active?: SortOrder
     description?: SortOrder
     deletedAt?: SortOrder
@@ -549432,13 +549431,13 @@ export namespace Prisma {
     dNgaySua?: SortOrder
     sThietBiTao?: SortOrder
     sThietBiSua?: SortOrder
+    code?: SortOrder
     name?: SortOrder
     type?: SortOrder
   }
 
   export type SurveyTopicMinOrderByAggregateInput = {
     id?: SortOrder
-    code?: SortOrder
     active?: SortOrder
     description?: SortOrder
     deletedAt?: SortOrder
@@ -549451,6 +549450,7 @@ export namespace Prisma {
     dNgaySua?: SortOrder
     sThietBiTao?: SortOrder
     sThietBiSua?: SortOrder
+    code?: SortOrder
     name?: SortOrder
     type?: SortOrder
   }
@@ -744080,7 +744080,6 @@ export namespace Prisma {
 
   export type SurveyTopicCreateWithoutSurveyQuestionGroupInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
@@ -744093,6 +744092,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    code?: string | null
     name: string
     type?: $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyCreateNestedManyWithoutSurveyTopicInput
@@ -744101,7 +744101,6 @@ export namespace Prisma {
 
   export type SurveyTopicUncheckedCreateWithoutSurveyQuestionGroupInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
@@ -744114,6 +744113,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    code?: string | null
     name: string
     type?: $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutSurveyTopicInput
@@ -744185,7 +744185,6 @@ export namespace Prisma {
     OR?: SurveyTopicScalarWhereInput[]
     NOT?: SurveyTopicScalarWhereInput | SurveyTopicScalarWhereInput[]
     id?: StringFilter<"SurveyTopic"> | string
-    code?: StringNullableFilter<"SurveyTopic"> | string | null
     active?: BoolFilter<"SurveyTopic"> | boolean
     description?: StringNullableFilter<"SurveyTopic"> | string | null
     deletedAt?: DateTimeNullableFilter<"SurveyTopic"> | Date | string | null
@@ -744198,13 +744197,13 @@ export namespace Prisma {
     dNgaySua?: DateTimeNullableFilter<"SurveyTopic"> | Date | string | null
     sThietBiTao?: StringNullableFilter<"SurveyTopic"> | string | null
     sThietBiSua?: StringNullableFilter<"SurveyTopic"> | string | null
+    code?: StringNullableFilter<"SurveyTopic"> | string | null
     name?: StringFilter<"SurveyTopic"> | string
     type?: EnumSurveyTypeNullableFilter<"SurveyTopic"> | $Enums.SurveyType | null
   }
 
   export type SurveyTopicCreateWithoutClusterSurveyInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
@@ -744217,6 +744216,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    code?: string | null
     name: string
     type?: $Enums.SurveyType | null
     survey?: SurveyCreateNestedManyWithoutSurveyTopicInput
@@ -744225,7 +744225,6 @@ export namespace Prisma {
 
   export type SurveyTopicUncheckedCreateWithoutClusterSurveyInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
@@ -744238,6 +744237,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    code?: string | null
     name: string
     type?: $Enums.SurveyType | null
     survey?: SurveyUncheckedCreateNestedManyWithoutSurveyTopicInput
@@ -744597,7 +744597,6 @@ export namespace Prisma {
 
   export type SurveyTopicUpdateWithoutClusterSurveyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -744610,6 +744609,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
     survey?: SurveyUpdateManyWithoutSurveyTopicNestedInput
@@ -744618,7 +744618,6 @@ export namespace Prisma {
 
   export type SurveyTopicUncheckedUpdateWithoutClusterSurveyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -744631,6 +744630,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
     survey?: SurveyUncheckedUpdateManyWithoutSurveyTopicNestedInput
@@ -745120,7 +745120,6 @@ export namespace Prisma {
 
   export type SurveyTopicCreateWithoutSurveyInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
@@ -745133,6 +745132,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    code?: string | null
     name: string
     type?: $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyCreateNestedManyWithoutSurveyTopicInput
@@ -745141,7 +745141,6 @@ export namespace Prisma {
 
   export type SurveyTopicUncheckedCreateWithoutSurveyInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
@@ -745154,6 +745153,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    code?: string | null
     name: string
     type?: $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutSurveyTopicInput
@@ -745831,7 +745831,6 @@ export namespace Prisma {
 
   export type SurveyTopicUpdateWithoutSurveyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -745844,6 +745843,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyUpdateManyWithoutSurveyTopicNestedInput
@@ -745852,7 +745852,6 @@ export namespace Prisma {
 
   export type SurveyTopicUncheckedUpdateWithoutSurveyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -745865,6 +745864,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutSurveyTopicNestedInput
@@ -835577,7 +835577,6 @@ export namespace Prisma {
 
   export type SurveyTopicUpdateWithoutSurveyQuestionGroupInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -835590,6 +835589,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyUpdateManyWithoutSurveyTopicNestedInput
@@ -835598,7 +835598,6 @@ export namespace Prisma {
 
   export type SurveyTopicUncheckedUpdateWithoutSurveyQuestionGroupInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -835611,6 +835610,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutSurveyTopicNestedInput
@@ -835619,7 +835619,6 @@ export namespace Prisma {
 
   export type SurveyTopicUncheckedUpdateManyWithoutSurveyQuestionGroupInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -835632,6 +835631,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
   }
