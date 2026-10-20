@@ -471,6 +471,7 @@ export const ModalPhuLucThacSi = () => {
           unit: resolveCouncilMemberUnitName({
             inAcademy: versionInAcademy(expert),
             lecturerOrg: lecturerOrg?.Id ? lecturerOrg : undefined,
+            workplace: typeof expert?.workplace === "string" ? expert.workplace : undefined,
             organization:
               typeof expert?.organization === "string" ? expert.organization : undefined,
             orgById,

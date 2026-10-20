@@ -3249,6 +3249,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
               resolveCouncilMemberUnitName({
                 inAcademy,
                 lecturerOrg: lecturer?.userProfile?.donVi,
+                workplace: version?.workplace,
                 organization: version?.organization,
                 orgById,
               })
