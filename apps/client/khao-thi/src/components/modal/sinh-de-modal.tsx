@@ -12,6 +12,7 @@ import {
   useFindUniqueExam,
 } from "@workspace/db/hooks"
 import { automaticTopicGeneration } from "@workspace/libs/api/exam"
+import type { AutomaticTopicGenerationBodyExamType } from "@workspace/libs/api/schemas/automaticTopicGenerationBodyExamType"
 import { Checkbox, Col, Form, Input, InputNumber, message, Row } from "antd"
 import dayjs from "dayjs"
 import { examTypeOptions } from "@workspace/libs/constants"
@@ -130,7 +131,7 @@ const SinhDeModal = () => {
         examCode: values.examCode,
         explain: values.explain,
         examDay: values.examDay ? new Date(values.examDay).toISOString() : null,
-        examType: values.examType,
+        examType: values.examType as AutomaticTopicGenerationBodyExamType,
         isLock: values.isLock,
         isNote: values.isNote || false,
         isGroup: values.isGroup || true,

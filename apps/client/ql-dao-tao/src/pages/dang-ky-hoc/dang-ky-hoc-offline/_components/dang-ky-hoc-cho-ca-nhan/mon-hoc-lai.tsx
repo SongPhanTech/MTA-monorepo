@@ -25,16 +25,6 @@ interface FilterProps {
   searchText: string | null
 }
 
-function mergePageSelection(
-  previousIds: React.Key[],
-  pageIds: React.Key[],
-  selectedOnPage: React.Key[]
-) {
-  const pageIdSet = new Set(pageIds.map(String))
-  const preserved = previousIds.filter((id) => !pageIdSet.has(String(id)))
-  return [...new Set([...preserved, ...selectedOnPage].map(String))]
-}
-
 export default function MonHocLai() {
   const { can } = useAbility()
   const [currentPage, setCurrentPage] = useState(1)
@@ -439,13 +429,26 @@ export default function MonHocLai() {
           rowSelection={{
             selectedRowKeys: selectedSubjectClassRowKeys,
             preserveSelectedRowKeys: true,
-            onChange: (selectedRowKeys) => {
+            onSelect: (record, selected) => {
+              if (selected) {
+                applySubjectClassSelection([...selectedSubjectClassRowKeys, record.id])
+                return
+              }
               applySubjectClassSelection(
-                mergePageSelection(
-                  selectedSubjectClassRowKeys,
-                  subjectClassData.map((row) => row.id),
-                  selectedRowKeys
-                )
+                selectedSubjectClassRowKeys.filter((key) => key !== record.id)
+              )
+            },
+            onSelectAll: (selected, _selectedRows, changeRows) => {
+              const changeIds = new Set(changeRows.map((row) => String(row.id)))
+              if (selected) {
+                applySubjectClassSelection([
+                  ...selectedSubjectClassRowKeys,
+                  ...changeRows.map((row) => row.id),
+                ])
+                return
+              }
+              applySubjectClassSelection(
+                selectedSubjectClassRowKeys.filter((key) => !changeIds.has(String(key)))
               )
             },
             getCheckboxProps: (record) => ({

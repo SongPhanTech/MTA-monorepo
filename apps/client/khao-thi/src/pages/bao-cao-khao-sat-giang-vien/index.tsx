@@ -139,11 +139,23 @@ export default function BaoCaoGiangVien() {
     () => buildOrgLecturerTree(orgs, clusterLecturers),
     [orgs, clusterLecturers]
   )
-  const orgKeys = useMemo(() => orgs.map((org) => org.Id), [orgs])
+  const expandedToFacultyKeys = useMemo(() => {
+    const byId = new Map(orgs.map((org) => [org.Id, org]))
+    const keys = new Set<string>()
+    for (const org of orgs) {
+      if (org.iLoaiDonVi !== 5 && org.iLoaiDonVi !== 6) continue
+      let parentId = org.sParentId
+      while (parentId && byId.has(parentId)) {
+        keys.add(parentId)
+        parentId = byId.get(parentId)?.sParentId ?? null
+      }
+    }
+    return [...keys]
+  }, [orgs])
 
   useEffect(() => {
-    setExpandedKeys(orgKeys)
-  }, [orgKeys])
+    setExpandedKeys(expandedToFacultyKeys)
+  }, [expandedToFacultyKeys])
 
   const findTreeNode = (nodes: ReportTreeNode[], key: Key): ReportTreeNode | undefined => {
     for (const node of nodes) {

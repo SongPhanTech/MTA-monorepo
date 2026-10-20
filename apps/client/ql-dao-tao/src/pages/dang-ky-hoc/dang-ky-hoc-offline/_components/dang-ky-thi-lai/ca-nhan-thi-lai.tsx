@@ -1,6 +1,7 @@
 import { queryClient } from "@api/index"
 import Table from "@components/commons/table"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
+import { mergePageSelection } from "@/utils/dang-ky-hoc/merge-page-selection"
 import { useStore } from "@tanstack/react-store"
 import type { Prisma } from "@workspace/db/client"
 import {
@@ -17,7 +18,7 @@ import { useTrainingObjectTypeStore } from "@workspace/ui"
 import { Button, Checkbox, Col, Flex, Form, Input, message, Row, Select, Tooltip } from "antd"
 import _ from "lodash"
 import { CircleX, Search } from "lucide-react"
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { dangKyThiLaiStore } from "../.."
 
 interface FilterProps {
@@ -37,6 +38,7 @@ export default function CaNhanThiLai() {
   })
 
   const { subjectClassId, studentIds = [] } = useStore(dangKyThiLaiStore)
+  const initializedSubjectClassIdRef = useRef<string | undefined>()
   const { mutateAsync: deleteStudentSubjectScore } = useDeleteStudentSubjectScore()
   const { data: subjectClassData } = useFindUniqueSubjectClass(
     {
@@ -44,6 +46,7 @@ export default function CaNhanThiLai() {
         id: subjectClassId,
       },
       select: {
+        id: true,
         subjectId: true,
         subjectClassStudent: {
           where: {
@@ -146,7 +149,7 @@ export default function CaNhanThiLai() {
 
   const handleSaveStudentClass = async () => {
     try {
-      if (!subjectClassData) return
+      if (!subjectClassData || subjectClassData.id !== subjectClassId) return
 
       // Lấy danh sách students hiện có trong database
       const existingStudents = subjectClassData.subjectClassStudent.map((s) => ({
@@ -305,13 +308,22 @@ export default function CaNhanThiLai() {
   )
 
   useEffect(() => {
-    if (subjectClassData) {
+    if (!subjectClassId) {
+      initializedSubjectClassIdRef.current = undefined
       dangKyThiLaiStore.setState((prev) => ({
         ...prev,
-        studentIds: subjectClassData.subjectClassStudent.map((s) => s.studentId),
+        studentIds: [],
       }))
+      return
     }
-  }, [subjectClassData])
+    if (!subjectClassData || subjectClassData.id !== subjectClassId) return
+    if (initializedSubjectClassIdRef.current === subjectClassId) return
+    initializedSubjectClassIdRef.current = subjectClassId
+    dangKyThiLaiStore.setState((prev) => ({
+      ...prev,
+      studentIds: subjectClassData.subjectClassStudent.map((s) => s.studentId),
+    }))
+  }, [subjectClassId, subjectClassData])
 
   const handleFilterChange = (key: string, value: string) => {
     setFilters((prev) => {
@@ -411,7 +423,9 @@ export default function CaNhanThiLai() {
           className="mt-0"
           data={data}
           onRow={(record) => ({
-            onClick: () => {
+            onClick: (event) => {
+              const target = event.target as HTMLElement
+              if (target.closest(".ant-checkbox-wrapper, .ant-checkbox")) return
               const isSelected = studentIds.includes(record.id)
               if (isSelected) {
                 handleRowSelection(studentIds.filter((key) => key !== record.id))
@@ -424,8 +438,15 @@ export default function CaNhanThiLai() {
           })}
           rowSelection={{
             selectedRowKeys: studentIds,
+            preserveSelectedRowKeys: true,
             onChange: (selectedRowKeys) => {
-              handleRowSelection(selectedRowKeys as string[])
+              handleRowSelection(
+                mergePageSelection(
+                  studentIds,
+                  data.map((student) => student.id),
+                  selectedRowKeys
+                )
+              )
             },
             type: "checkbox",
             columnWidth: 35,

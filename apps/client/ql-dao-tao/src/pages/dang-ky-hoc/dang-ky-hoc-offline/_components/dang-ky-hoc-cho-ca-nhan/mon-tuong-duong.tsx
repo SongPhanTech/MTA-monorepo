@@ -1,6 +1,7 @@
 import { queryClient } from "@api/index"
 import Table from "@components/commons/table"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
+import { usePersistedSubjectClassSelection } from "@/utils/dang-ky-hoc/use-persisted-subject-class-selection"
 import { useStore } from "@tanstack/react-store"
 import { $Enums, type ScoreConvert } from "@workspace/db/client"
 import {
@@ -16,8 +17,7 @@ import { cn } from "@workspace/ui/lib/utils"
 import { Button, Checkbox, Col, Form, Input, message, Row } from "antd"
 import _ from "lodash"
 import { Search } from "lucide-react"
-import type React from "react"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useState } from "react"
 import { dangKyHocChoCaNhanStore } from "../.."
 
 interface FilterProps {
@@ -28,8 +28,6 @@ export default function MonTuongDuong() {
   const { can } = useAbility()
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(20)
-  const [selectedSubjectClassRowKeys, setSelectedSubjectClassRowKeys] = useState<React.Key[]>([])
-  const [subjectVersionIds, setSubjectVersionIds] = useState<string[]>([])
   const [filters, setFilters] = useState<FilterProps>({
     searchText: "",
   })
@@ -181,6 +179,20 @@ export default function MonTuongDuong() {
     }
   )
 
+  const {
+    selectedSubjectClassRowKeys,
+    subjectVersionIds,
+    selectionReady,
+    onSelectRow,
+    onSelectRows,
+  } = usePersistedSubjectClassSelection({
+    studentId,
+    semesterId,
+    trainingObjectTypeId,
+    type: $Enums.SubjectClassType.NORMAL,
+    pageRows: subjectClassData,
+  })
+
   const debouncedRefetch = useCallback(
     _.debounce(() => {
       refetch()
@@ -197,7 +209,7 @@ export default function MonTuongDuong() {
   }
 
   const handleSaveStudentClass = async () => {
-    if (!studentId) return
+    if (!studentId || !selectionReady) return
     try {
       const allSubjectClassInfo = await sqlTransaction(
         selectedSubjectClassRowKeys.map((subjectClassId) => ({
@@ -296,21 +308,6 @@ export default function MonTuongDuong() {
     }
   }
 
-  useEffect(() => {
-    if (subjectClassData && studentId) {
-      setSubjectVersionIds(
-        subjectClassData
-          .filter((item) => item.subjectClassStudent.length > 0)
-          .map((item) => item.subject.id)
-      )
-      setSelectedSubjectClassRowKeys(
-        subjectClassData
-          .filter((item) => item.subjectClassStudent.length > 0)
-          .map((item) => item.id)
-      )
-    }
-  }, [subjectClassData, studentId])
-
   return (
     <Row>
       <Col span={20}>
@@ -338,7 +335,7 @@ export default function MonTuongDuong() {
             type="primary"
             className="h-[32px] px-4"
             onClick={handleSaveStudentClass}
-            disabled={!studentId || !semesterId}
+            disabled={!studentId || !semesterId || !selectionReady}
           >
             Lưu
           </Button>
@@ -355,15 +352,11 @@ export default function MonTuongDuong() {
               !selectedSubjectClassRowKeys.includes(record.id)
 
             return {
-              onClick: () => {
+              onClick: (event) => {
+                const target = event.target as HTMLElement
+                if (target.closest(".ant-checkbox-wrapper, .ant-checkbox")) return
                 if (notAllowSelect) return
-                if (selectedSubjectClassRowKeys.includes(record.id)) {
-                  setSelectedSubjectClassRowKeys((prev) => prev.filter((key) => key !== record.id))
-                  setSubjectVersionIds((prev) => prev.filter((id) => id !== record.subject.id))
-                  return
-                }
-                setSelectedSubjectClassRowKeys((prev) => [...prev, record.id])
-                setSubjectVersionIds((prev) => [...prev, record.subject.id])
+                onSelectRow(record.id, !selectedSubjectClassRowKeys.includes(record.id))
               },
               className: cn(notAllowSelect && "bg-yellow-100 cursor-not-allowed"),
               columnWidth: 35,
@@ -371,8 +364,15 @@ export default function MonTuongDuong() {
           }}
           rowSelection={{
             selectedRowKeys: selectedSubjectClassRowKeys,
-            onChange: (selectedRowKeys) => {
-              setSelectedSubjectClassRowKeys(selectedRowKeys)
+            preserveSelectedRowKeys: true,
+            onSelect: (record, selected) => {
+              onSelectRow(record.id, selected)
+            },
+            onSelectAll: (selected, _selectedRows, changeRows) => {
+              onSelectRows(
+                changeRows.map((row) => row.id),
+                selected
+              )
             },
             getCheckboxProps: (record) => ({
               disabled:
