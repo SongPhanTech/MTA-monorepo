@@ -11,6 +11,7 @@ import {
   formatAppendixScoreDisplay,
   getAppendixSubjectRowHeight,
   getDefaultPlvbPrintSettings,
+  isTwoLineAppendixName,
   loadPlvbPrintSettings,
   plvbSubjectSelectKey,
   renderUnderlinedSegment,
@@ -371,6 +372,7 @@ function SubjectScoreCells({
   }
 
   const name = wrapAppendixSubjectName(subject.tenHocPhan, settings.nameOneLineMax)
+  const twoLineName = isTwoLineAppendixName(subject.tenHocPhan, settings.nameOneLineMax)
   let scoreIdx = 0
   return (
     <>
@@ -389,7 +391,16 @@ function SubjectScoreCells({
       >
         {stt ?? ""}
       </td>
-      <td style={{ ...bodyCellStyle({ textAlign: "left" }), whiteSpace: "pre-line" }}>{name}</td>
+      <td
+        className="plvb-subject-name"
+        style={{
+          ...bodyCellStyle({ textAlign: "left" }),
+          whiteSpace: "pre-line",
+          lineHeight: twoLineName ? settings.nameLineHeight || 1.1 : 1.1,
+        }}
+      >
+        {name}
+      </td>
       <td
         style={bodyCellStyle({
           textAlign: "center",
@@ -634,6 +645,26 @@ function ScoreTableWrap({ children, className }: { children: ReactNode; classNam
   )
 }
 
+/** Đáy đậm lặp lại mỗi khi bảng bị ngắt trang (thead/tfoot không giữ được border-collapse). */
+function PageBreakFoot({
+  settings,
+  columns,
+}: {
+  settings: PlvbPrintSettings
+  columns: 1 | 2
+}) {
+  const count = (columns === 2 ? 2 : 1) * halfColCount(settings)
+  return (
+    <tfoot className="plvb-page-rule">
+      <tr>
+        {Array.from({ length: count }, (_, index) => (
+          <td key={index} />
+        ))}
+      </tr>
+    </tfoot>
+  )
+}
+
 function GraduationBannerCells({
   settings,
   columns,
@@ -732,6 +763,7 @@ function SubjectOneColumnTable({
             </tr>
           ))}
         </tbody>
+        <PageBreakFoot settings={settings} columns={1} />
       </table>
     </ScoreTableWrap>
   )
@@ -839,6 +871,7 @@ function SubjectTwoColumnTable({
             )
           })}
         </tbody>
+        <PageBreakFoot settings={settings} columns={2} />
       </table>
     </ScoreTableWrap>
   )
@@ -1222,7 +1255,7 @@ function StudentAppendixPage({
           <col style={{ width: "38%" }} />
         </colgroup>
         <tbody>
-          <tr style={{ height: "24.75pt" }}>
+          <tr style={{ height: "15.75pt" }}>
             <td className="align-middle">
               Tổng số tín chỉ: <strong>{tongTinChi}</strong>
             </td>
@@ -1474,6 +1507,48 @@ const ModalPrintPhuLucVb = () => {
         .plvb-print-root .plvb-score-table thead {
           display: table-header-group !important;
         }
+        /* Một nét 0.5pt: bỏ border gốc kẻ đè với ::after / tfoot */
+        .plvb-print-root .plvb-score-table thead .plvb-thead-bottom th,
+        .plvb-print-root .plvb-score-table thead th[rowspan] {
+          position: relative;
+          border-bottom-width: 0 !important;
+        }
+        .plvb-print-root .plvb-score-table thead .plvb-thead-bottom th::after,
+        .plvb-print-root .plvb-score-table thead th[rowspan]::after {
+          content: "";
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          height: ${RULE_EMPH_PT};
+          background: #000;
+          pointer-events: none;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+        .plvb-print-root .plvb-score-table tbody td {
+          border-top-width: 0 !important;
+        }
+        /* Trang cuối: khung bảng + hàng cuối + tfoot chồng thành nét đậm. Chỉ giữ tfoot. */
+        .plvb-print-root .plvb-score-table {
+          border-bottom: none !important;
+        }
+        .plvb-print-root .plvb-score-table tbody tr:last-child > * {
+          border-bottom: none !important;
+        }
+        .plvb-print-root .plvb-score-table tfoot.plvb-page-rule {
+          display: table-footer-group;
+        }
+        .plvb-print-root .plvb-score-table tfoot.plvb-page-rule td {
+          border: none !important;
+          border-top: ${RULE_EMPH_PT} solid #000 !important;
+          padding: 0 !important;
+          height: 0 !important;
+          line-height: 0 !important;
+          font-size: 0 !important;
+          color: transparent !important;
+          box-shadow: none !important;
+        }
         .page-break { page-break-after: always; break-after: page; }
         table { page-break-inside: auto; }
         tr { page-break-inside: avoid; }
@@ -1697,6 +1772,17 @@ const ModalPrintPhuLucVb = () => {
                   step={0.1}
                   value={settings.rowHeight2}
                   onChange={(v) => updateSetting("rowHeight2", Number(v) || 25.5)}
+                />
+              </div>
+              <div>
+                <div className="mb-1 text-xs text-gray-500">Khoảng cách 2 dòng tên môn</div>
+                <InputNumber
+                  className="w-full"
+                  min={0.8}
+                  max={2}
+                  step={0.05}
+                  value={settings.nameLineHeight}
+                  onChange={(v) => updateSetting("nameLineHeight", Number(v) || 1.1)}
                 />
               </div>
               <div>
@@ -2082,6 +2168,58 @@ const ModalPrintPhuLucVb = () => {
                   }
                   .plvb-print-root .plvb-score-table tbody tr:last-child > * {
                     border-bottom: ${RULE_EMPH_PT} solid #000 !important;
+                  }
+                  @media screen {
+                    .plvb-print-root .plvb-score-table tfoot.plvb-page-rule td {
+                      border: none !important;
+                      padding: 0 !important;
+                      height: 0 !important;
+                      line-height: 0 !important;
+                      font-size: 0 !important;
+                      color: transparent !important;
+                    }
+                  }
+                  @media print {
+                    .plvb-print-root .plvb-score-table thead .plvb-thead-bottom th,
+                    .plvb-print-root .plvb-score-table thead th[rowspan] {
+                      position: relative;
+                      border-bottom-width: 0 !important;
+                    }
+                    .plvb-print-root .plvb-score-table thead .plvb-thead-bottom th::after,
+                    .plvb-print-root .plvb-score-table thead th[rowspan]::after {
+                      content: "";
+                      position: absolute;
+                      left: 0;
+                      right: 0;
+                      bottom: 0;
+                      height: ${RULE_EMPH_PT};
+                      background: #000;
+                      pointer-events: none;
+                      -webkit-print-color-adjust: exact;
+                      print-color-adjust: exact;
+                    }
+                    .plvb-print-root .plvb-score-table tbody td {
+                      border-top-width: 0 !important;
+                    }
+                    .plvb-print-root .plvb-score-table {
+                      border-bottom: none !important;
+                    }
+                    .plvb-print-root .plvb-score-table tbody tr:last-child > * {
+                      border-bottom: none !important;
+                    }
+                    .plvb-print-root .plvb-score-table tfoot.plvb-page-rule {
+                      display: table-footer-group;
+                    }
+                    .plvb-print-root .plvb-score-table tfoot.plvb-page-rule td {
+                      border: none !important;
+                      border-top: ${RULE_EMPH_PT} solid #000 !important;
+                      padding: 0 !important;
+                      height: 0 !important;
+                      line-height: 0 !important;
+                      font-size: 0 !important;
+                      color: transparent !important;
+                      box-shadow: none !important;
+                    }
                   }
                 `}</style>
                 {summaries.map((summary, index) => (

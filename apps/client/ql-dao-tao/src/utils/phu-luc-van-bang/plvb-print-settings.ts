@@ -4,9 +4,10 @@ export type PlvbPrintVariant = "military" | "international"
 
 /** Mặc định theo mẫu "MẪU PLVB HỆ QS.xls" / mẫu hệ quốc tế. */
 export const PLVB_PRINT_SETTINGS_KEYS: Record<PlvbPrintVariant, string> = {
-  military: "plvb-html-print-settings-v8-qs",
-  /** v2: mặc định giống hệ QS (trước đó EN). */
-  international: "plvb-html-print-settings-v2-qt",
+  /** v9: lề mặc định trên 12 / dưới 10 / trái 6 / phải 3 mm. */
+  military: "plvb-html-print-settings-v9-qs",
+  /** v3: lề mặc định giống hệ QS. */
+  international: "plvb-html-print-settings-v3-qt",
 }
 
 /** @deprecated dùng PLVB_PRINT_SETTINGS_KEYS.military */
@@ -16,6 +17,8 @@ export const PLVB_PRINT_SETTINGS_KEY = PLVB_PRINT_SETTINGS_KEYS.military
 export const PLVB_NAME_ONE_LINE_MAX = 34
 export const PLVB_BODY_ROW_HEIGHT_1 = 15.6
 export const PLVB_BODY_ROW_HEIGHT_2 = 25.5
+/** Khoảng cách giữa 2 dòng tên môn (hệ số line-height). */
+export const PLVB_NAME_LINE_HEIGHT = 1.2
 export const PLVB_NOTE_FONT = 10
 export const PLVB_BODY_FONT = 10
 export const PLVB_HEADER_FONT = 9
@@ -34,6 +37,8 @@ export type PlvbPrintSettings = {
   nameOneLineMax: number
   rowHeight1: number
   rowHeight2: number
+  /** Khoảng cách giữa 2 dòng khi tên môn xuống dòng. */
+  nameLineHeight: number
   marginTopMm: number
   marginBottomMm: number
   marginLeftMm: number
@@ -111,11 +116,11 @@ const SHARED_LAYOUT_DEFAULTS: Omit<
   nameOneLineMax: PLVB_NAME_ONE_LINE_MAX,
   rowHeight1: PLVB_BODY_ROW_HEIGHT_1,
   rowHeight2: PLVB_BODY_ROW_HEIGHT_2,
-  marginTopMm: 6,
+  nameLineHeight: PLVB_NAME_LINE_HEIGHT,
+  marginTopMm: 12,
   marginBottomMm: 10,
-  /** 0.6" / 0.3" như mẫu Excel PLVB. */
-  marginLeftMm: 15.24,
-  marginRightMm: 7.62,
+  marginLeftMm: 6,
+  marginRightMm: 3,
   showScore10: true,
   showScore4: true,
   showLetterGrade: true,
