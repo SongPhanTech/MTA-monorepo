@@ -95,6 +95,21 @@ export interface ReExamStudentItem {
   /** ID học viên. */
   studentId: string;
   /**
+   * Điểm thường xuyên.
+   * @nullable
+   */
+  thuong_xuyen?: number | null;
+  /**
+   * Điểm định kỳ.
+   * @nullable
+   */
+  dinh_ky?: number | null;
+  /**
+   * Điểm thi kết thúc HP.
+   * @nullable
+   */
+  diem_thi?: number | null;
+  /**
    * Điểm cuối kỳ.
    * @nullable
    */
@@ -110,6 +125,25 @@ export interface ReExamStudentItem {
    * @nullable
    */
   ly_do_hoan_thi: string | null;
+  /** Cấm thi. */
+  cam_thi?: boolean;
+  /**
+   * Lý do cấm thi.
+   * @nullable
+   */
+  ly_do_cam_thi?: string | null;
+  /** Đình chỉ thi. */
+  dinh_chi?: boolean;
+  /**
+   * Lý do đình chỉ.
+   * @nullable
+   */
+  ly_do_dinh_chi?: string | null;
+  /**
+   * Lý do thi lại.
+   * @nullable
+   */
+  reason?: string | null;
   /** Trượt môn. */
   truot_mon: boolean;
 }

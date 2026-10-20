@@ -11045,6 +11045,15 @@ exports.ExamType = exports.$Enums.ExamType = {
   Oral: 'Oral',
   Practice: 'Practice',
   Project: 'Project',
+  MultipleChoice: 'MultipleChoice',
+  PracticeExercise: 'PracticeExercise',
+  ProjectDefense: 'ProjectDefense',
+  Report: 'Report',
+  ListeningSpeakingReadingWriting: 'ListeningSpeakingReadingWriting',
+  ReadingWriting: 'ReadingWriting',
+  ListeningSpeaking: 'ListeningSpeaking',
+  ListeningReadingWriting: 'ListeningReadingWriting',
+  Unspecified: 'Unspecified',
   Other: 'Other'
 };
 

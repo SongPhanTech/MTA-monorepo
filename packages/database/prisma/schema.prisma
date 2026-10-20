@@ -141,6 +141,15 @@ enum ExamType {
   Oral
   Practice
   Project
+  MultipleChoice
+  PracticeExercise
+  ProjectDefense
+  Report
+  ListeningSpeakingReadingWriting
+  ReadingWriting
+  ListeningSpeaking
+  ListeningReadingWriting
+  Unspecified
   Other
 
   @@schema("ql-dao-tao")

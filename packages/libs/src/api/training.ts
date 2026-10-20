@@ -17266,11 +17266,12 @@ export const useExportStudentSemesterResultV3 = <TError = ErrorMessageResponse,
     }
     
 /**
- * Xuất file Excel bảng điểm cá nhân (mẫu quatrinh.xlsx / BDCN).
+ * Xuất file Excel bảng điểm cá nhân theo mẫu BangDiemCaNhan(P2).xlsx.
+Khi truyền plannedSemesters (ví dụ [1, 2] đối tượng dự khoá), xuất theo mẫu KetQuaHocTapDuKhoa.xlsx: chỉ lấy môn học kỳ dự kiến thuộc danh sách, tín chỉ và GPA = tổng (điểm × tín chỉ) / tổng tín chỉ, xếp hạng theo bảng chuyển đổi khóa học.
 
-**Bảng dữ liệu nguồn:** Student, StudentSubjectScore, SubjectVersion, Semester, ScoreConvert.
+**Bảng dữ liệu nguồn:** Student, StudentSubjectScore, SubjectVersion, Semester, ScoreConvert, TrainingBlockSubject, AcademicRankingConvert.
 
-**Tham số:** studentIds — danh sách ID học viên cần xuất (theo thứ tự bảng).
+**Tham số:** studentIds — danh sách ID học viên cần xuất (theo thứ tự bảng). plannedSemesters — nếu truyền, xuất mẫu dự khoá với lọc học kỳ dự kiến.
  * @summary Xuất bảng điểm cá nhân
  */
 export type exportBangDiemCaNhanResponse200 = {

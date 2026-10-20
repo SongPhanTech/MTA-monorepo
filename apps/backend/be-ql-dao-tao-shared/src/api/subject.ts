@@ -73,6 +73,15 @@ app.openapi(getListSubject, async (c) => {
     Practice: "Thực hành",
     Project: "Đồ án",
     OnlineWritten: "Thi viết trực tuyến",
+    MultipleChoice: "Trắc nghiệm",
+    PracticeExercise: "Bài tập thực hành",
+    ProjectDefense: "Bảo vệ đồ án",
+    Report: "Báo cáo",
+    ListeningSpeakingReadingWriting: "Nghe nói đọc viết",
+    ReadingWriting: "Đọc viết",
+    ListeningSpeaking: "Nghe nói",
+    ListeningReadingWriting: "Nghe đọc viết",
+    Unspecified: "Chưa xác định",
   }
 
   return c.json(

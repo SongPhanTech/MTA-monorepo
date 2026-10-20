@@ -87,4 +87,6 @@ export interface ExportBangDiemCaNhanRequest {
    * @minItems 1
    */
   studentIds: string[];
+  /** Chỉ lấy môn có học kỳ dự kiến thuộc danh sách. Ví dụ [1, 2] cho bảng điểm đối tượng dự khoá. */
+  plannedSemesters?: number[];
 }

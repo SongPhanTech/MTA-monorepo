@@ -183,6 +183,15 @@ const EXAMTYPECOLOR: Record<$Enums.ExamType, string> = {
   [$Enums.ExamType.Oral]: "#fa8c16",
   [$Enums.ExamType.Practice]: "#52c41a",
   [$Enums.ExamType.Project]: "#13c2c2",
+  [$Enums.ExamType.MultipleChoice]: "#eb2f96",
+  [$Enums.ExamType.PracticeExercise]: "#2f54eb",
+  [$Enums.ExamType.ProjectDefense]: "#fa541c",
+  [$Enums.ExamType.Report]: "#faad14",
+  [$Enums.ExamType.ListeningSpeakingReadingWriting]: "#a0d911",
+  [$Enums.ExamType.ReadingWriting]: "#1890ff",
+  [$Enums.ExamType.ListeningSpeaking]: "#f759ab",
+  [$Enums.ExamType.ListeningReadingWriting]: "#36cfc9",
+  [$Enums.ExamType.Unspecified]: "#bfbfbf",
   [$Enums.ExamType.Other]: "#8c8c8c",
 }
 

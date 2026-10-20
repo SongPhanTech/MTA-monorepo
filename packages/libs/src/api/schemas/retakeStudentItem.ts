@@ -94,10 +94,21 @@ export interface RetakeStudentItem {
   fixedClass: RetakeStudentItemFixedClass;
   /** ID học viên (Student). */
   studentId: string;
-  /** Điểm thường xuyên. */
-  thuong_xuyen: number;
-  /** Điểm định kỳ / giữa kỳ. */
-  dinh_ky: number;
+  /**
+   * Điểm thường xuyên.
+   * @nullable
+   */
+  thuong_xuyen: number | null;
+  /**
+   * Điểm định kỳ / giữa kỳ.
+   * @nullable
+   */
+  dinh_ky: number | null;
+  /**
+   * Điểm thi kết thúc HP.
+   * @nullable
+   */
+  diem_thi?: number | null;
   /**
    * Điểm cuối kỳ (nếu có).
    * @nullable
