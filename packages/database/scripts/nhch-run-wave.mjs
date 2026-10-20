@@ -12,9 +12,11 @@
  *   bun --env-file=.env scripts/nhch-run-wave.mjs --wave 0 --skip-resave
  *   bun --env-file=.env scripts/nhch-run-wave.mjs --wave 0 --skip-soft-delete
  *   bun --env-file=.env scripts/nhch-run-wave.mjs --wave 0 --limit-files 5
+ *   bun --env-file=.env scripts/nhch-run-wave.mjs --wave 2 --as-of 2026-10-19
  *
- * Wave windows (from today):
+ * Wave windows (from today, or --as-of YYYY-MM-DD):
  *   0 = 0–14 days, 1 = 15–30, 2 = 31–end of schedule, 3 = all matched catalog
+ * Docx already written under /tmp/nhch-repaired/wN are reused (resume).
  */
 import {
   copyFileSync,
@@ -51,6 +53,23 @@ const skipImport = process.argv.includes("--skip-import")
 const limitFilesArg = process.argv.indexOf("--limit-files")
 const LIMIT_FILES = limitFilesArg !== -1 ? Number(process.argv[limitFilesArg + 1]) : Infinity
 const SKIP_LARGE_MB = 80
+const asOfArg = process.argv.indexOf("--as-of")
+const AS_OF = asOfArg !== -1 ? parseAsOf(process.argv[asOfArg + 1]) : new Date()
+
+function parseAsOf(s) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(s || ""))
+  if (!m) throw new Error(`--as-of expects YYYY-MM-DD, got ${s}`)
+  return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]))
+}
+
+function isOoxml(filePath) {
+  try {
+    const fd = readFileSync(filePath)
+    return fd.length > 200 && fd[0] === 0x50 && fd[1] === 0x4b
+  } catch {
+    return false
+  }
+}
 
 function norm(s) {
   return String(s || "")
@@ -325,8 +344,10 @@ async function main() {
   console.log(`Remapped catalog paths: ok=${ok} missing=${miss}`)
   writeFileSync(CATALOG_PATH, JSON.stringify(catalog), "utf8")
 
-  const win = waveWindow(WAVE)
-  console.log(`Wave ${WAVE} (${win.label})`)
+  const win = waveWindow(WAVE, AS_OF)
+  console.log(
+    `Wave ${WAVE} (${win.label}) as-of ${AS_OF.getFullYear()}-${String(AS_OF.getMonth() + 1).padStart(2, "0")}-${String(AS_OF.getDate()).padStart(2, "0")}`
+  )
 
   let scheduleRows = []
   if (WAVE !== 3) {
@@ -370,6 +391,13 @@ async function main() {
     if (!skipResave && needsResave(filePath)) {
       const safe = `${String(i).padStart(4, "0")}_${basename(filePath).replace(/[^\w.-]+/g, "_").slice(0, 40)}.docx`
       const out = join(repairedDir, safe)
+      if (!dryRun && isOoxml(out)) {
+        console.log(`[${i + 1}/${matched.length}] reuse repaired ${e.relativePath}`)
+        filePath = out
+        resaveSkip++
+        patched.push({ ...e, filePath, resaved: true })
+        continue
+      }
       if (dryRun) {
         console.log(`[${i + 1}/${matched.length}] dry-run resave ${e.relativePath}`)
         patched.push({ ...e, filePath, resaved: false })

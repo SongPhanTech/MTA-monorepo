@@ -232,7 +232,7 @@ function htmlToTextAndImages(html, htmlPath) {
       widthPx: Number(wAttr || wStyle) || null,
       heightPx: Number(hAttr || hStyle) || null,
     })
-    return `\n${name}\n`
+    return ` ${name} `
   })
 
   s = s

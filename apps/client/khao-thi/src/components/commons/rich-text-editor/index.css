@@ -12,6 +12,15 @@
   height: auto;
 }
 
+.qa-inline img,
+img.qa-inline-img {
+  display: inline-block;
+  vertical-align: middle;
+  max-width: 100%;
+  height: auto;
+  margin: 0 0.2em;
+}
+
 .ProseMirror img.ProseMirror-selectednode {
   outline: 3px solid #68cef8;
 }

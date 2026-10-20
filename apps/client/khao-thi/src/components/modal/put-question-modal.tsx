@@ -2,7 +2,7 @@ import { queryClient } from "@api/index"
 import FormItem from "@components/commons/form-item"
 import PutFormModal from "@components/commons/put-modal"
 import { RichTextEditor } from "@components/commons/rich-text-editor"
-import { renderWithMath } from "@components/commons/rich-text-editor/renderWithMath"
+import { flowImagesInline, renderWithMath } from "@components/commons/rich-text-editor/renderWithMath"
 import Select from "@components/commons/select"
 import Table from "@components/commons/table"
 import ClusterSubQuestionsForm, {
@@ -30,6 +30,45 @@ import { Button, Checkbox, Col, Form, Input, InputNumber, message, Radio, Row, T
 import { Trash2 } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+
+const HTML_ANSWER = /<(img|br|p|div|span|sub|sup|strong|em|u|table)\b/i
+
+function answerPreviewHtml(content?: string) {
+  if (!content) return ""
+  const html = flowImagesInline(content)
+  if (HTML_ANSWER.test(html)) return renderWithMath(html)
+  return renderWithMath(
+    content
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/\n/g, "<br />")
+  )
+}
+
+function AnswerContentField({
+  value,
+  onChange,
+}: {
+  value?: string
+  onChange?: (value: string) => void
+}) {
+  if (HTML_ANSWER.test(value || "")) {
+    return (
+      <div
+        className="qa-inline text-left text-sm text-gray-800 py-1"
+        dangerouslySetInnerHTML={{ __html: answerPreviewHtml(value) }}
+      />
+    )
+  }
+  return (
+    <Input
+      placeholder="Nhập đáp án"
+      value={value}
+      onChange={(e) => onChange?.(e.target.value)}
+    />
+  )
+}
 
 export type PutQuestionType = Prisma.QuestionGetPayload<{
   include: {
@@ -503,7 +542,7 @@ const PutQuestionModal = () => {
             ?.sort((a, b) => a.order - b.order)
             .map((i) => ({
               key: String(i.order),
-              content: i.content,
+              content: flowImagesInline(i.content),
               isCorrect: i.isCorrect,
               id: i.id,
             })) || []
@@ -545,6 +584,8 @@ const PutQuestionModal = () => {
       const { subQuestions: _subs, ...rest } = initialValue
       form.setFieldsValue({
         ...rest,
+        content: flowImagesInline(rest.content),
+        explanation: rest.explanation ? flowImagesInline(rest.explanation) : rest.explanation,
         multipleChoiceOptions: [],
         subQuestions: initialValue.subQuestions?.map((sub) => ({
           ...mapSubQuestionFromDb(sub),
@@ -559,6 +600,8 @@ const PutQuestionModal = () => {
     const { subQuestions: _subs, ...rest } = initialValue
     form.setFieldsValue({
       ...rest,
+      content: flowImagesInline(rest.content),
+      explanation: rest.explanation ? flowImagesInline(rest.explanation) : rest.explanation,
       multipleChoiceOptions: options,
     })
   }, [initialValue, form])
@@ -688,7 +731,7 @@ const PutQuestionModal = () => {
                     },
                   ]}
                 >
-                  <RichTextEditor />
+                  <RichTextEditor inlineImages className="qa-inline" />
                 </FormItem>
               </Col>
               {typeQuestion === CLUSTER_QUESTION_TYPE && <ClusterSubQuestionsForm />}
@@ -696,7 +739,7 @@ const PutQuestionModal = () => {
               <Col span={24}>
                 {(typeQuestion === QuestionType.ESSAY || typeQuestion === QuestionType.ORAL) && (
                   <FormItem form={form} label="Giải thích đáp án" name={"explanation"}>
-                    <RichTextEditor />
+                    <RichTextEditor inlineImages className="qa-inline" />
                   </FormItem>
                 )}
                 {(typeQuestion === QuestionType.SINGLE_CHOICE ||
@@ -728,8 +771,7 @@ const PutQuestionModal = () => {
                                   label=""
                                   required
                                 >
-                                  <Input placeholder="Nhập đáp án" />
-                                  {/* <EditorContent editor={editor} {...editorProps} /> */}
+                                  <AnswerContentField />
                                 </Form.Item>
                               )
                             },
@@ -918,7 +960,7 @@ const PutQuestionModal = () => {
                     <p className="font-medium text-sm text-[#111827]">Câu hỏi</p>
                     <div className="bg-[#FAFAFA] rounded-xl p-4">
                       <div
-                        className="prose max-w-none text-sm text-gray-800"
+                        className="qa-inline max-w-none text-sm text-gray-800"
                         dangerouslySetInnerHTML={{
                           __html: fixedHtmlContent
                             ? renderWithMath(fixedHtmlContent)
@@ -933,7 +975,7 @@ const PutQuestionModal = () => {
                       <p className="font-medium text-sm text-[#111827]">Giải thích đáp án</p>
                       <div className="bg-white p-2 rounded-lg border border-[#D1D5DB] min-h-[164px]">
                         <div
-                          className="prose max-w-none text-sm text-gray-800"
+                          className="qa-inline max-w-none text-sm text-gray-800"
                           dangerouslySetInnerHTML={{
                             __html: fixedHtmlExplanation
                               ? renderWithMath(fixedHtmlExplanation)
@@ -955,7 +997,12 @@ const PutQuestionModal = () => {
                               className={`flex items-center gap-3 border-solid border-[1px] p-3 mb-3 rounded-[8px] ${i?.isCorrect ? "border-green-500 bg-green-100" : ""}`}
                             >
                               <Checkbox checked={i?.isCorrect} />
-                              <div>{i.content}</div>
+                              <div
+                                className="qa-inline max-w-none text-sm text-gray-800"
+                                dangerouslySetInnerHTML={{
+                                  __html: answerPreviewHtml(i.content),
+                                }}
+                              />
                             </div>
                           )
                         })}
@@ -987,7 +1034,12 @@ const PutQuestionModal = () => {
                           <div className="w-6 h-6 flex items-center justify-center rounded-full bg-gray-400 text-white text-sm">
                             {index + 1}
                           </div>
-                          <div>{i.content}</div>
+                          <div
+                            className="qa-inline max-w-none text-sm text-gray-800"
+                            dangerouslySetInnerHTML={{
+                              __html: answerPreviewHtml(i.content),
+                            }}
+                          />
                         </div>
                       ))}
                     </div>

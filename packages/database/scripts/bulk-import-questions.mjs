@@ -6,6 +6,8 @@
  *
  * Usage:
  *   bun scripts/bulk-import-questions.mjs --with-images
+ *   bun scripts/bulk-import-questions.mjs --top V4 --limit 1 --dry-run --with-images --via-word
+ *   bun scripts/bulk-import-questions.mjs --top V4 --with-images --via-word
  *   bun scripts/bulk-import-questions.mjs --errors-only --via-word --with-images
  *   bun scripts/retry-import-errors.mjs   # Word Save As .docx rồi import lại 105 file lỗi
  *
@@ -31,6 +33,7 @@ import {
   requireMinioOrThrow,
 } from "./nhch-images.mjs"
 import { NHCH_TMP_CONVERT } from "./nhch-paths.mjs"
+import { extractLinedMc, parsePointToken, splitAnswerSection, toDisplayHtml } from "./nhch-qa-format.mjs"
 
 const dryRun = process.argv.includes("--dry-run")
 const errorsOnly = process.argv.includes("--errors-only")
@@ -60,6 +63,8 @@ const CATALOG_PATH =
     : join(import.meta.dir || ".", "import-catalog.json")
 const errorsOutArg = process.argv.indexOf("--errors-out")
 const ERRORS_OUT_PATH = errorsOutArg !== -1 ? process.argv[errorsOutArg + 1] : null
+const topArg = process.argv.indexOf("--top")
+const TOP = topArg !== -1 ? String(process.argv[topArg + 1] || "").trim() : ""
 
 const url = process.env.DATABASE_URL
 if (!url) {
@@ -104,32 +109,6 @@ function extractPointHint(name) {
 
 function sanitizeText(text) {
   return String(text ?? "").replace(/\u0000/g, "")
-}
-
-/**
- * UI renders content via dangerouslySetInnerHTML — plain \\n collapses to spaces.
- * Match import-word-modal: turn newlines into <br /> (keep existing <img> / HTML).
- * Also drop bare rubric score lines (0.5 / 0.75) and stray "Câu N" headers in answers.
- */
-function toDisplayHtml(text) {
-  if (text == null || text === "") return text
-  let s = sanitizeText(text).replace(/\r\n/g, "\n").replace(/\r/g, "\n")
-  s = s
-    .split("\n")
-    .map((l) => l.trimEnd())
-    .filter((l) => {
-      const t = l.trim()
-      if (!t) return true // keep blank lines as visual gaps
-      if (parsePointToken(t) != null && t.length <= 6) return false
-      if (/^Câu\s+\d+\s*[.:]?\s*$/i.test(t)) return false
-      return true
-    })
-    .join("\n")
-    .replace(/\n{3,}/g, "\n\n")
-    .trim()
-  if (!s) return s
-  if (/<br\s*\/?>/i.test(s)) return s
-  return s.replace(/\n/g, "<br />")
 }
 
 function questionCode(questionBankId, num) {
@@ -328,18 +307,6 @@ function docToText(docPath) {
   }
 }
 
-function splitAnswerSection(body) {
-  const idx = body.search(/\n?\s*\*?\s*Đáp\s*án\s*:/i)
-  if (idx < 0) return { body, answerText: "" }
-  return {
-    body: body.slice(0, idx).trim(),
-    answerText: body
-      .slice(idx)
-      .replace(/^\s*\*?\s*Đáp\s*án\s*:\s*/i, "")
-      .trim(),
-  }
-}
-
 function parseOptionBlock(optionLines) {
   const options = []
   let i = 0
@@ -351,8 +318,15 @@ function parseOptionBlock(optionLines) {
     const labelSpace = line.match(/^([A-D])\s+(.+)$/i)
 
     if (sameLine) {
-      options.push({ label: sameLine[1].toUpperCase(), content: sameLine[2].trim() })
+      const contentParts = [sameLine[2].trim()]
       i++
+      while (i < optionLines.length && !/^([A-D])(?:\.?\s*$|\.\s+\S)/i.test(optionLines[i])) {
+        if (/^Câu(?:\s*hỏi)?\s*\d+/i.test(optionLines[i])) break
+        if (/^(Đáp\s*án|Trả\s*lời|Lời\s*giải)/i.test(optionLines[i])) break
+        contentParts.push(optionLines[i])
+        i++
+      }
+      options.push({ label: sameLine[1].toUpperCase(), content: contentParts.join("\n").trim() })
       continue
     }
     if (labelOnly) {
@@ -365,7 +339,7 @@ function parseOptionBlock(optionLines) {
         contentParts.push(optionLines[i])
         i++
       }
-      options.push({ label, content: contentParts.join(" ").trim() })
+      options.push({ label, content: contentParts.join("\n").trim() })
       continue
     }
     // Only accept "A content" form when content is short-ish option text
@@ -436,6 +410,21 @@ function extractMcOptions(rawBody) {
   // 1) As-is (label on its own line — common after textutil)
   let result = tryExtractOptionsFromLines(main0, answerText)
   if (result.isMc) return result
+
+  const lined = extractLinedMc(main0)
+  if (lined) {
+    if (answerText) {
+      const correct = new Set()
+      for (const m of answerText.matchAll(/\b([A-D])\b/gi)) correct.add(m[1].toUpperCase())
+      for (const o of lined.options) o.isCorrect = correct.has(o.label)
+    }
+    return {
+      content: lined.stem,
+      options: lined.options,
+      answerText: answerText || lined.answerText,
+      isMc: true,
+    }
+  }
 
   // 2) Split inline "A. … B. …" onto separate lines (do NOT split bare "C" in prose)
   const withDots = main0.replace(/([^\n])([A-D])\.\s+/g, "$1\n$2. ")
@@ -511,39 +500,46 @@ function stripWordNoise(text) {
     .replace(/\n{3,}/g, "\n\n")
 }
 
-function parsePointToken(token) {
-  const m = String(token || "").match(/^(\d+[.,]?\d*)\s*(?:đ|điểm)?$/i)
-  if (!m) return null
-  const n = Number.parseFloat(m[1].replace(",", "."))
-  if (!Number.isFinite(n) || n <= 0 || n > 10) return null
-  return n
-}
-
 /** Tách đề / điểm / đáp án cho dạng NHCH tự luận: "Câu hỏi: …? 2 <đáp án>" */
 function parseEssayStemAndAnswer(raw, defaultPoint) {
   let text = stripWordNoise(raw)
     .replace(/\u00A0/g, " ")
     .trim()
   text = text.replace(/^Câu hỏi\s*:\s*/i, "")
+  const headed = splitAnswerSection(text)
+  text = headed.body
   const keptLines = text
     .split("\n")
     .map((l) => l.trim())
-    .filter((l) => l && !isJunkLine(l))
+    .filter((l) => l === "" || !isJunkLine(l))
 
-  const pointLineIdx = keptLines.findIndex((l) => parsePointToken(l) != null)
+  const pointLineIdx = keptLines.findIndex((l) => l && parsePointToken(l) != null && l.length <= 8)
   if (pointLineIdx >= 0) {
     const point = parsePointToken(keptLines[pointLineIdx])
     const stem = keptLines
       .slice(0, pointLineIdx)
-      .join(" ")
+      .join("\n")
       .replace(/\?+\s*$/, "")
       .trim()
-    const explanation =
+    const afterPoint =
       keptLines
         .slice(pointLineIdx + 1)
         .join("\n")
         .trim() || null
+    const explanation = headed.answerText || afterPoint
     if (stem) return { content: stem, point: point ?? defaultPoint ?? 1, explanation }
+  }
+
+  if (headed.answerText) {
+    return {
+      content: keptLines.join("\n").trim(),
+      point: defaultPoint ?? 1,
+      explanation: headed.answerText,
+    }
+  }
+
+  if (text.includes("\n")) {
+    return { content: keptLines.join("\n").trim(), point: defaultPoint ?? 1, explanation: null }
   }
 
   const collapsed = keptLines.join(" ").replace(/\s+/g, " ").trim()
@@ -988,6 +984,13 @@ async function main() {
     console.log(`--errors-only: ${entries.length} files from import-errors.json`)
   }
 
+  if (TOP) {
+    entries = entries.filter(
+      (e) => e.topFolder === TOP || String(e.relativePath || "").startsWith(`${TOP}/`)
+    )
+    console.log(`--top ${TOP}: ${entries.length} files`)
+  }
+
   if (offset > 0) entries = entries.slice(offset)
   if (Number.isFinite(limit)) entries = entries.slice(0, limit)
 
@@ -1069,7 +1072,58 @@ Câu hỏi: Công dụng và cấu tạo của hệ thống lội ngầm? 2 Hệ
     console.error("FAIL: explanation missing", lnm)
     process.exit(1)
   }
-  console.log("self-test ok", qs.length)
+
+  const shaped = `
+Câu hỏi: Hãy tính các đại lượng sau:
+• Giá trị trung bình số học
+• Các độ lệch khỏi giá trị trung bình
+4,0 đ
+Đáp án:
+Giá trị trung bình số học được tính như sau
+1 đ
+Độ lệch khỏi giá trị trung bình
+
+Câu hỏi: Yêu cầu chọn áp tô mát bảo vệ máy bơm?
+A.
+Uđm = 600V; 2 cực
+B.
+Uđm = 250V; 2 cực
+C.
+Uđm = 220V; 3 cực
+D.
+Uđm = 110V; 3 cực
+Đáp án: B
+`
+  const shapedQs = parseQuestions(shaped, "test", "bank")
+  const essay = shapedQs.find((q) => /đại lượng/.test(q.content))
+  const mc = shapedQs.find((q) => q.type === "SINGLE_CHOICE")
+  const essayHtml = toDisplayHtml(essay?.content || "")
+  const answerHtml = toDisplayHtml(essay?.explanation || "")
+  if (!essay || /Đáp án|được tính như sau/.test(essay.content)) {
+    console.error("FAIL: essay stem still contains answer", essay)
+    process.exit(1)
+  }
+  if (!essay.explanation || !/được tính như sau/.test(essay.explanation)) {
+    console.error("FAIL: essay answer not separated", essay)
+    process.exit(1)
+  }
+  if (!essayHtml.includes("<br />") || !essayHtml.includes("•")) {
+    console.error("FAIL: essay items not broken", essayHtml)
+    process.exit(1)
+  }
+  if (/^1 đ|<br \/>1 đ/i.test(answerHtml) || answerHtml.trim() === "1 đ") {
+    console.error("FAIL: score line left in answer", answerHtml)
+    process.exit(1)
+  }
+  if (!mc || mc.options?.length !== 4 || mc.options[1]?.isCorrect !== true) {
+    console.error("FAIL: MC options", mc)
+    process.exit(1)
+  }
+  if (/Uđm/.test(mc.content)) {
+    console.error("FAIL: options left in stem", mc.content)
+    process.exit(1)
+  }
+  console.log("self-test ok", qs.length, "shaped", shapedQs.length)
   process.exit(0)
 }
 
