@@ -23,6 +23,7 @@
     "docxtemplater": "catalog:",
     "exceljs": "catalog:",
     "hono": "catalog:",
+    "kafkajs": "^2.2.4",
     "p-map": "^7.0.4",
     "pizzip": "catalog:",
     "pptx-automizer": "catalog:",

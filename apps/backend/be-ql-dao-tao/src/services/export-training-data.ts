@@ -45,17 +45,30 @@ async function queryJoinTable(table: string) {
  * Xuất toàn bộ dữ liệu phục vụ đồng bộ nội bộ → internet:
  * đợt đăng ký, lớp HP, TKB, SV + hồ sơ, danh mục, CTĐT/môn, điểm mọi kỳ.
  */
-export async function exportTrainingData(_params: ExportTrainingDataParams = {}) {
+export async function exportTrainingData(params: ExportTrainingDataParams = {}) {
+  const { classRegisterSessionId } = params
+
+  const targetSession = classRegisterSessionId
+    ? await prisma.classRegisterSession.findFirst({
+        where: { id: classRegisterSessionId, deletedAt: null },
+        include: {
+          trainingCourses: { where: notDeleted },
+          creditLimit: { where: notDeleted },
+          semester: { include: { schoolYear: true } },
+        },
+      })
+    : null
+
+  if (classRegisterSessionId && !targetSession) {
+    throw new Error(`Không tìm thấy đợt đăng ký học với ID: ${classRegisterSessionId}`)
+  }
+
+  const targetSemesterId = targetSession?.semesterId
+  const targetCourseIds = targetSession?.trainingCourses?.map((tc) => tc.id) ?? []
+
   const [
     catalogs,
-    classRegisterSessions,
-    classRegisterSessionCredits,
-    sessionToTrainingCourse,
     trainingObjectTypes,
-    schoolYears,
-    semesters,
-    trainingCourses,
-    trainingCourseRegulations,
     trainingLocations,
     buildings,
     rooms,
@@ -71,27 +84,9 @@ export async function exportTrainingData(_params: ExportTrainingDataParams = {})
     subjectInGroups,
     prerequisiteJoins,
     coRequisiteJoins,
-    lecturers,
-    staff,
-    fixedClasses,
-    students,
-    exams,
-    subjectClasses,
-    subjectClassTimes,
-    classSchedules,
-    studentSubjectScores,
-    studentSemesterResults,
-    fixedClassToSubjectClass,
   ] = await Promise.all([
     loadAllCatalogs(),
-    prisma.classRegisterSession.findMany({ where: notDeleted }),
-    prisma.classRegisterSessionCredit.findMany({ where: notDeleted }),
-    queryJoinTable("_ClassRegisterSessionToTrainingCourse"),
     prisma.trainingObjectType.findMany({ where: notDeleted }),
-    prisma.schoolYear.findMany({ where: notDeleted }),
-    prisma.semester.findMany({ where: notDeleted }),
-    prisma.trainingCourse.findMany({ where: notDeleted }),
-    prisma.trainingCourseRegulation.findMany({ where: notDeleted }),
     prisma.trainingLocation.findMany({ where: notDeleted }),
     prisma.building.findMany({ where: notDeleted }),
     prisma.room.findMany({ where: notDeleted }),
@@ -107,17 +102,143 @@ export async function exportTrainingData(_params: ExportTrainingDataParams = {})
     prisma.subjectInGroup.findMany({ where: notDeleted }),
     queryJoinTable("_PrerequisiteSubject"),
     queryJoinTable("_CoRequisiteSubject"),
-    prisma.lecturer.findMany({ where: notDeleted }),
-    prisma.staff.findMany({ where: notDeleted }),
-    prisma.fixedClass.findMany({ where: notDeleted }),
-    prisma.student.findMany({ where: notDeleted }),
-    prisma.exam.findMany({ where: notDeleted }),
-    prisma.subjectClass.findMany({ where: notDeleted }),
-    prisma.subjectClassTime.findMany({ where: notDeleted }),
-    prisma.classSchedule.findMany({ where: notDeleted }),
-    prisma.studentSubjectScore.findMany({ where: notDeleted }),
-    prisma.studentSemesterResult.findMany({ where: notDeleted }),
+  ])
+
+  const cleanSession = targetSession
+    ? (() => {
+        const { trainingCourses: _tc, creditLimit: _cl, semester: _sem, ...rest } = targetSession
+        return rest
+      })()
+    : null
+
+  const classRegisterSessions = cleanSession
+    ? [cleanSession]
+    : await prisma.classRegisterSession.findMany({ where: notDeleted })
+
+  const classRegisterSessionCredits = targetSession
+    ? targetSession.creditLimit
+    : await prisma.classRegisterSessionCredit.findMany({ where: notDeleted })
+
+  const allSessionToCourses = await queryJoinTable("_ClassRegisterSessionToTrainingCourse")
+  const sessionToTrainingCourse = classRegisterSessionId
+    ? allSessionToCourses.filter((r) => r.A === classRegisterSessionId)
+    : allSessionToCourses
+
+  const subjectClasses = targetSemesterId
+    ? await prisma.subjectClass.findMany({
+        where: { semesterId: targetSemesterId, deletedAt: null },
+      })
+    : await prisma.subjectClass.findMany({ where: notDeleted })
+
+  const subjectClassIds = subjectClasses.map((sc) => sc.id)
+
+  const [subjectClassTimes, classSchedules, allFixedClassToSubjectClass, exams] = await Promise.all([
+    targetSemesterId
+      ? (subjectClassIds.length > 0
+          ? prisma.subjectClassTime.findMany({
+              where: { subjectClassId: { in: subjectClassIds }, deletedAt: null },
+            })
+          : Promise.resolve([]))
+      : prisma.subjectClassTime.findMany({ where: notDeleted }),
+    targetSemesterId
+      ? (subjectClassIds.length > 0
+          ? prisma.classSchedule.findMany({
+              where: { subjectClassId: { in: subjectClassIds }, deletedAt: null },
+            })
+          : Promise.resolve([]))
+      : prisma.classSchedule.findMany({ where: notDeleted }),
     queryJoinTable("_FixedClassToSubjectClass"),
+    (() => {
+      if (!targetSemesterId) return prisma.exam.findMany({ where: notDeleted })
+      const examIds = uniqueIds(subjectClasses.map((sc) => sc.examId))
+      return examIds.length > 0
+        ? prisma.exam.findMany({ where: { id: { in: examIds }, deletedAt: null } })
+        : Promise.resolve([])
+    })(),
+  ])
+
+  const fixedClassToSubjectClass = targetSemesterId
+    ? allFixedClassToSubjectClass.filter((r) => subjectClassIds.includes(r.B))
+    : allFixedClassToSubjectClass
+
+  // Học kỳ và năm học (toàn bộ danh mục học kỳ/năm học để đảm bảo khóa ngoại cho bảng điểm và kết quả học tập)
+  const [semesters, schoolYears] = await Promise.all([
+    prisma.semester.findMany({ where: notDeleted }),
+    prisma.schoolYear.findMany({ where: notDeleted }),
+  ])
+
+  const trainingCourses = targetCourseIds.length > 0
+    ? targetSession.trainingCourses
+    : await prisma.trainingCourse.findMany({ where: notDeleted })
+
+  const trainingCourseRegulations = targetCourseIds.length > 0
+    ? await prisma.trainingCourseRegulation.findMany({
+        where: { trainingCourseId: { in: targetCourseIds }, deletedAt: null },
+      })
+    : await prisma.trainingCourseRegulation.findMany({ where: notDeleted })
+
+  const linkedFixedClassIds = uniqueIds(fixedClassToSubjectClass.map((r) => r.A))
+  const fixedClassOrConditions = [
+    ...(targetCourseIds.length > 0 ? [{ trainingCourseId: { in: targetCourseIds } }] : []),
+    ...(linkedFixedClassIds.length > 0 ? [{ id: { in: linkedFixedClassIds } }] : []),
+  ]
+  const fixedClasses = targetSession
+    ? (fixedClassOrConditions.length > 0
+        ? await prisma.fixedClass.findMany({
+            where: {
+              deletedAt: null,
+              OR: fixedClassOrConditions,
+            },
+          })
+        : [])
+    : await prisma.fixedClass.findMany({ where: notDeleted })
+
+  const fixedClassIds = fixedClasses.map((fc) => fc.id)
+  const studentOrConditions = [
+    ...(fixedClassIds.length > 0 ? [{ fixedClassId: { in: fixedClassIds } }] : []),
+    ...(targetCourseIds.length > 0
+      ? [{ fixedClass: { trainingCourseId: { in: targetCourseIds } } }]
+      : []),
+  ]
+  const students = targetSession
+    ? (studentOrConditions.length > 0
+        ? await prisma.student.findMany({
+            where: {
+              deletedAt: null,
+              OR: studentOrConditions,
+            },
+          })
+        : [])
+    : await prisma.student.findMany({ where: notDeleted })
+
+  const targetLecturerIds = targetSession
+    ? uniqueIds([
+        ...subjectClasses.map((sc) => sc.lecturerId),
+        ...subjectClasses.map((sc) => sc.extraLecturerId),
+        ...subjectClasses.map((sc) => sc.enterGradeLecturerId),
+        ...fixedClasses.map((fc) => fc.lecturerManagementId),
+      ])
+    : []
+
+  const targetStaffIds = targetSession
+    ? uniqueIds([...fixedClasses.map((fc) => fc.staffManagementId)])
+    : []
+
+  const [lecturers, staff] = await Promise.all([
+    targetSession
+      ? (targetLecturerIds.length > 0
+          ? prisma.lecturer.findMany({
+              where: { id: { in: targetLecturerIds }, deletedAt: null },
+            })
+          : Promise.resolve([]))
+      : prisma.lecturer.findMany({ where: notDeleted }),
+    targetSession
+      ? (targetStaffIds.length > 0
+          ? prisma.staff.findMany({
+              where: { id: { in: targetStaffIds }, deletedAt: null },
+            })
+          : Promise.resolve([]))
+      : prisma.staff.findMany({ where: notDeleted }),
   ])
 
   const userProfileIds = uniqueIds([
@@ -135,6 +256,24 @@ export async function exportTrainingData(_params: ExportTrainingDataParams = {})
     })
     userProfiles.push(...rows)
   }
+
+  const studentIds = uniqueIds(students.map((s) => s.id))
+  const [studentSubjectScores, studentSemesterResults] = await Promise.all([
+    targetSession
+      ? (studentIds.length > 0
+          ? prisma.studentSubjectScore.findMany({
+              where: { studentId: { in: studentIds }, deletedAt: null },
+            })
+          : Promise.resolve([]))
+      : prisma.studentSubjectScore.findMany({ where: notDeleted }),
+    targetSession
+      ? (studentIds.length > 0
+          ? prisma.studentSemesterResult.findMany({
+              where: { studentId: { in: studentIds }, deletedAt: null },
+            })
+          : Promise.resolve([]))
+      : prisma.studentSemesterResult.findMany({ where: notDeleted }),
+  ])
 
   const subjectClassRecordsNormalized = subjectClasses.map((sc) => ({
     ...sc,
@@ -184,14 +323,19 @@ export async function exportTrainingData(_params: ExportTrainingDataParams = {})
     Object.entries(data).map(([key, rows]) => [key, Array.isArray(rows) ? rows.length : 0])
   )
 
+  const finalSession = targetSession || classRegisterSessions[0]
   return serializeForJson({
     version: EXPORT_TRAINING_DATA_VERSION,
     exportedAt: new Date().toISOString(),
     filters: {
-      scope: "full",
+      scope: classRegisterSessionId ? "session" : "full",
       classRegisterSessionIds: classRegisterSessions.map((s) => s.id),
-      semesterIds: semesters.map((s) => s.id),
-      trainingCourseIds: trainingCourses.map((tc) => tc.id),
+      semesterIds: classRegisterSessionId && finalSession
+        ? [finalSession.semesterId]
+        : semesters.map((s) => s.id),
+      trainingCourseIds: classRegisterSessionId
+        ? sessionToTrainingCourse.map((tc) => tc.B)
+        : trainingCourses.map((tc) => tc.id),
     },
     counts,
     data,
@@ -199,7 +343,7 @@ export async function exportTrainingData(_params: ExportTrainingDataParams = {})
     version: string
     exportedAt: string
     filters: {
-      scope: "full"
+      scope: "full" | "session"
       classRegisterSessionIds: string[]
       semesterIds: string[]
       trainingCourseIds: string[]

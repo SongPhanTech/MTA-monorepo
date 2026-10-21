@@ -191,7 +191,17 @@ const TRAINING_CATALOG_LOADERS: CatalogEntry[] = [
 export async function loadAllCatalogs(): Promise<Record<string, unknown[]>> {
   const loaders = [...DM_CATALOG_LOADERS, ...TRAINING_CATALOG_LOADERS]
   const entries = await Promise.all(
-    loaders.map(async (loader) => [loader.key, await loader.load()] as const)
+    loaders.map(async (loader) => {
+      try {
+        return [loader.key, await loader.load()] as const
+      } catch (e) {
+        console.warn(
+          `[export-all-catalogs] Bỏ qua catalog ${loader.key}:`,
+          e instanceof Error ? e.message : e
+        )
+        return [loader.key, []] as const
+      }
+    })
   )
   return Object.fromEntries(entries)
 }

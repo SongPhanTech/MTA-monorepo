@@ -281,7 +281,7 @@ export default function UyQuyenTruyCapPage() {
     setBitMasks((current) => ({
       ...current,
       [detailRoleKey]: {
-        ...(current[detailRoleKey] ?? {}),
+        ...current[detailRoleKey],
         [formName]: withViewBit(mask, owned),
       },
     }))
