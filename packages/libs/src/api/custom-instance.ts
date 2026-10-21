@@ -60,12 +60,9 @@ const getBody = <T>(c: Response | Request): Promise<T> => {
 }
 
 export const getUrl = (baseUrl: string, contextUrl: string): string => {
-  if (!baseUrl.startsWith("http")) {
-    return `${baseUrl}${contextUrl}`
-  }
-  const requestUrl = new URL(`${baseUrl}${contextUrl}`)
-
-  return requestUrl.toString()
+  const cleanBase = (baseUrl || "").trim().replace(/^["']+|["'/]+$/g, "")
+  const cleanContext = contextUrl.startsWith("/") ? contextUrl : `/${contextUrl}`
+  return `${cleanBase}${cleanContext}`
 }
 
 export const customModelFetch = async <T>(url: string, options: RequestInit): Promise<T> => {

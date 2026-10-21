@@ -19,7 +19,9 @@ const getRegisterState = (args: GetRegisterStateParams) => {
     registeredSubjectCodes,
     isRowPending = false,
   } = args
-  const isMaxed = (record?.maxStudent || 0) <= (record?._count?.subjectClassStudent || 0)
+  const isMaxed =
+    Boolean(record?.maxStudent && record.maxStudent > 0) &&
+    record.maxStudent <= (record?._count?.subjectClassStudent || 0)
 
   const isRegistered = record?.classRegisterLogs?.length > 0
 

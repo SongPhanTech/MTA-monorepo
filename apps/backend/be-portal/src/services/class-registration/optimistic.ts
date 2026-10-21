@@ -58,7 +58,7 @@ async function attemptRegister(prisma: PrismaClient, params: RegisterParams): Pr
         const info = params.classLookup.get(classId)!
 
         // Hết chỗ ngay từ lúc đọc → lỗi nghiệp vụ, không retry
-        if (!cls || cls.enrolledCount >= cls.maxStudent) {
+        if (!cls || (cls.maxStudent > 0 && cls.enrolledCount >= cls.maxStudent)) {
           throw new ClassFullError(info.subjectName)
         }
 

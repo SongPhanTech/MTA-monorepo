@@ -8,7 +8,13 @@ import DefaultLayout from "@layouts/default-layout"
 import { $Enums, type Prisma } from "@workspace/db/client"
 import { useFindManySubjectVersion } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
-import { useSemesterStore, useTrainingCourseStore, useTrainingObjectTypeStore } from "@workspace/ui"
+import {
+  useFixedClassStore,
+  useSemesterStore,
+  useTrainingCourseStore,
+  useTrainingMajorStore,
+  useTrainingObjectTypeStore,
+} from "@workspace/ui"
 import { cn } from "@workspace/ui/lib/utils"
 import { Button, Col, Flex, Form, Input, InputNumber, message, Popover, Row, Switch } from "antd"
 import _ from "lodash"
@@ -49,6 +55,8 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
   const { id: trainingCourseId } = useTrainingCourseStore()
   const subjectVersions = Form.useWatch("subjectVersions", form) || {}
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+  const { id: trainingMajorId } = useTrainingMajorStore()
+  const { id: fixedClassId } = useFixedClassStore()
   const { data: subjects, refetch } = useFindManySubjectVersion({
     where: {
       trainingBlocks: {
@@ -63,6 +71,27 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
               subjectClassType: type,
             },
           },
+          ...(fixedClassId
+            ? {
+                trainingBlockOnCurriculumVersion: {
+                  curriculumVersion: {
+                    fixedClasses: {
+                      some: { id: fixedClassId },
+                    },
+                  },
+                },
+              }
+            : trainingMajorId
+            ? {
+                trainingBlockOnCurriculumVersion: {
+                  curriculumVersion: {
+                    curriculum: {
+                      trainingMajorId,
+                    },
+                  },
+                },
+              }
+            : {}),
         },
       },
       ...(searchText
@@ -91,6 +120,27 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
               subjectClassType: type,
             },
           },
+          ...(fixedClassId
+            ? {
+                trainingBlockOnCurriculumVersion: {
+                  curriculumVersion: {
+                    fixedClasses: {
+                      some: { id: fixedClassId },
+                    },
+                  },
+                },
+              }
+            : trainingMajorId
+            ? {
+                trainingBlockOnCurriculumVersion: {
+                  curriculumVersion: {
+                    curriculum: {
+                      trainingMajorId,
+                    },
+                  },
+                },
+              }
+            : {}),
         },
         select: {
           planTrainingSubjects: {
