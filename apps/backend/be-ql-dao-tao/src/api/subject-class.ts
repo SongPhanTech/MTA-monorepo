@@ -670,11 +670,48 @@ app.openapi(enrollFixedClassOnSubjectClass, async (c) => {
   return c.json({ data: res, success: true }, 200)
 })
 
+// Các cột DateTime lưu UTC (timestamp không múi giờ); hạn được tính theo ngày giờ VN.
+const vnDateOf = (col: Prisma.Sql) =>
+  Prisma.sql`((${col} AT TIME ZONE 'UTC') AT TIME ZONE 'Asia/Ho_Chi_Minh')::date`
+
+const vnStartOfDaySql = (d: Prisma.Sql) =>
+  Prisma.sql`((((${d})::timestamp) AT TIME ZONE 'Asia/Ho_Chi_Minh') AT TIME ZONE 'UTC')`
+
+const vnEndOfDaySql = (d: Prisma.Sql) =>
+  Prisma.sql`((((${d})::timestamp + INTERVAL '1 day' - INTERVAL '1 millisecond') AT TIME ZONE 'Asia/Ho_Chi_Minh') AT TIME ZONE 'UTC')`
+
+const examDateVn = vnDateOf(Prisma.sql`"examDate"`)
+
+const deadlineCaseSql = (
+  padding: number | null | undefined,
+  fixedDate: string | null | undefined,
+  byPadding: (padding: number) => Prisma.Sql,
+  byDate: (date: string) => Prisma.Sql
+) => {
+  const fallback = fixedDate ? byDate(fixedDate) : Prisma.sql`NULL`
+  if (!padding) return fallback
+  return Prisma.sql`CASE WHEN "examDate" IS NOT NULL THEN ${byPadding(padding)} ELSE ${fallback} END`
+}
+
+const deadlineScopeSql = (
+  scope: { trainingObjectTypeId: string; semesterId?: string | null; classIds?: string[] | null },
+  extra?: Prisma.Sql
+) => {
+  const conds = [Prisma.sql`"trainingObjectTypeId" = ${scope.trainingObjectTypeId}`]
+  if (scope.semesterId) conds.push(Prisma.sql`"semesterId" = ${scope.semesterId}`)
+  if (scope.classIds?.length) conds.push(Prisma.sql`"id" IN (${Prisma.join(scope.classIds)})`)
+  if (extra) conds.push(extra)
+  return Prisma.join(conds, " AND ")
+}
+
+const setUpdatedBySql = (updatedById: string | null | undefined) =>
+  Prisma.sql`SELECT set_config('app.updated_by_id', ${updatedById ?? null}::text, true)`
+
 app.openapi(setScoreDeadLine, async (c) => {
   const {
     classIds,
-    startPadding = 0,
-    endPadding = 0,
+    startPadding,
+    endPadding,
     startDate,
     endDate,
     trainingObjectTypeId,
@@ -682,53 +719,38 @@ app.openapi(setScoreDeadLine, async (c) => {
     overwrite,
   } = c.req.valid("json")
 
+  if (!trainingObjectTypeId) {
+    return c.json({ message: "Thiếu hệ đào tạo" }, 400)
+  }
+
   const user = c.get("user")
-  const updatedById = user?.id
 
-  // Build WHERE clause dynamically
-  const whereClauses: string[] = []
-  whereClauses.push(`"trainingObjectTypeId" = '${trainingObjectTypeId}'`)
-  if (semesterId) {
-    whereClauses.push(`"semesterId" = '${semesterId}'`)
-  }
-  if (classIds?.length) {
-    whereClauses.push(`"id" = ANY(ARRAY[${classIds.map((id) => `'${id}'`).join(",")}])`)
-  }
-  if (!overwrite) {
-    whereClauses.push(`("scoreDeadLineStart" IS NULL OR "scoreDeadline" IS NULL)`)
-  }
+  const where = deadlineScopeSql(
+    { trainingObjectTypeId, semesterId, classIds },
+    overwrite ? undefined : Prisma.sql`("scoreDeadLineStart" IS NULL OR "scoreDeadline" IS NULL)`
+  )
 
-  const whereSQL = whereClauses.length ? `WHERE ${whereClauses.join(" AND ")}` : ""
-
-  const placeholder = new Date().toISOString()
+  const startSql = deadlineCaseSql(
+    startPadding,
+    startDate,
+    (padding) => vnStartOfDaySql(Prisma.sql`${examDateVn} - ${padding}::int`),
+    (date) => vnStartOfDaySql(Prisma.sql`${date}::date`)
+  )
+  const endSql = deadlineCaseSql(
+    endPadding,
+    endDate,
+    (padding) => vnEndOfDaySql(Prisma.sql`${examDateVn} - ${padding}::int`),
+    (date) => vnEndOfDaySql(Prisma.sql`${date}::date`)
+  )
 
   await prisma.$transaction(async (tx) => {
-    if (updatedById) {
-      await tx.$executeRawUnsafe(`
-                SELECT set_config('app.updated_by_id', '${updatedById}', true);
-                `)
-    } else {
-      await tx.$executeRawUnsafe(`
-                SELECT set_config('app.updated_by_id', NULL, true);
-                `)
-    }
-
-    await tx.$executeRawUnsafe(`
-            UPDATE "ql-dao-tao"."SubjectClass"
-            SET "scoreDeadLineStart" = CASE
-                                           WHEN "examDate" IS NOT NULL AND ${startPadding ? "TRUE" : "FALSE"}
-                                               THEN "examDate" - (${startPadding} * INTERVAL '1 day')
-                                           WHEN ${startDate ? "TRUE" : "FALSE"} THEN DATE '${startDate || placeholder}'
-                                           ELSE NULL
-                END,
-                "scoreDeadline"      = CASE
-                                           WHEN "examDate" IS NOT NULL AND ${endPadding ? "TRUE" : "FALSE"}
-                                               THEN "examDate" - (${endPadding} * INTERVAL '1 day')
-                                           WHEN ${endDate ? "TRUE" : "FALSE"} THEN DATE '${endDate || placeholder}'
-                                           ELSE NULL
-                    END
-                ${whereSQL};
-        `)
+    await tx.$executeRaw(setUpdatedBySql(user?.id))
+    await tx.$executeRaw`
+      UPDATE "ql-dao-tao"."SubjectClass"
+      SET "scoreDeadLineStart" = ${startSql},
+          "scoreDeadline"      = ${endSql}
+      WHERE ${where}
+    `
   })
 
   const lopDaCapNhat = await prisma.subjectClass.findMany({
@@ -745,45 +767,45 @@ app.openapi(setScoreDeadLine, async (c) => {
     lopDaCapNhat.map((item) => item.id)
   )
 
-  return c.json({ message: "Success" })
+  return c.json({ message: "Success" }, 200)
 })
 
 app.openapi(setExamScoreDeadLine, async (c) => {
   const {
     classIds,
-    endPadding = 0,
+    endPadding,
     endDate,
     trainingObjectTypeId,
     semesterId,
     overwrite,
   } = c.req.valid("json")
 
-  const whereClauses: string[] = []
-  whereClauses.push(`"trainingObjectTypeId" = '${trainingObjectTypeId}'`)
-  if (semesterId) {
-    whereClauses.push(`"semesterId" = '${semesterId}'`)
-  }
-  if (classIds?.length) {
-    whereClauses.push(`"id" = ANY(ARRAY[${classIds.map((id) => `'${id}'`).join(",")}])`)
-  }
-  if (!overwrite) {
-    whereClauses.push(`("examScoreDeadline" IS NULL)`)
+  if (!trainingObjectTypeId) {
+    return c.json({ message: "Thiếu hệ đào tạo" }, 400)
   }
 
-  const whereSQL = whereClauses.length ? `WHERE ${whereClauses.join(" AND ")}` : ""
+  const user = c.get("user")
 
-  const placeholder = new Date().toISOString()
+  const where = deadlineScopeSql(
+    { trainingObjectTypeId, semesterId, classIds },
+    overwrite ? undefined : Prisma.sql`"examScoreDeadline" IS NULL`
+  )
 
-  await prisma.$executeRawUnsafe(`
-        UPDATE "ql-dao-tao"."SubjectClass"
-        SET "examScoreDeadline" = CASE
-                                      WHEN "examDate" IS NOT NULL AND ${endPadding ? "TRUE" : "FALSE"}
-                                          THEN "examDate" + (${endPadding} * INTERVAL '1 day')
-                                      WHEN ${endDate ? "TRUE" : "FALSE"} THEN DATE '${endDate || placeholder}'
-                                      ELSE NULL
-            END
-            ${whereSQL};
-    `)
+  const endSql = deadlineCaseSql(
+    endPadding,
+    endDate,
+    (padding) => vnEndOfDaySql(Prisma.sql`${examDateVn} + ${padding}::int`),
+    (date) => vnEndOfDaySql(Prisma.sql`${date}::date`)
+  )
+
+  await prisma.$transaction(async (tx) => {
+    await tx.$executeRaw(setUpdatedBySql(user?.id))
+    await tx.$executeRaw`
+      UPDATE "ql-dao-tao"."SubjectClass"
+      SET "examScoreDeadline" = ${endSql}
+      WHERE ${where}
+    `
+  })
 
   const lopDaCapNhat = await prisma.subjectClass.findMany({
     where: {
@@ -799,7 +821,7 @@ app.openapi(setExamScoreDeadLine, async (c) => {
     lopDaCapNhat.map((item) => item.id)
   )
 
-  return c.json({ message: "Success" })
+  return c.json({ message: "Success" }, 200)
 })
 
 app.openapi(uploadExcelImportScore, async (c) => {

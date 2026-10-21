@@ -16,7 +16,12 @@ import {
 } from "./kafka-queue"
 import { getKafka } from "../class-registration/kafka-queue"
 import { processImportFromFile } from "../import-training-data"
-import { markDataSyncHistoryFailed, markDataSyncHistorySuccess } from "../data-sync-history"
+import {
+  cleanupPendingImportsOnBoot,
+  markDataSyncHistoryFailed,
+  markDataSyncHistoryProcessing,
+  markDataSyncHistorySuccess,
+} from "../data-sync-history"
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max)
@@ -54,7 +59,13 @@ async function handleMessage(value: Buffer | null): Promise<void> {
   )
 
   try {
-    const result = await processImportFromFile(job.filePath)
+    await markDataSyncHistoryProcessing(
+      job.syncHistoryId,
+      `Đang xử lý file${job.fileName ? ` ${job.fileName}` : ""}: đọc dữ liệu và cập nhật cơ sở dữ liệu...`
+    )
+    const result = await processImportFromFile(job.filePath, async (msg) => {
+      await markDataSyncHistoryProcessing(job.syncHistoryId, msg).catch(() => undefined)
+    })
     const description =
       result.warnings.length > 0
         ? result.warnings.slice(0, 80).join("\n")
@@ -91,6 +102,10 @@ async function handleMessage(value: Buffer | null): Promise<void> {
 }
 
 export function startDataSyncWorker(_prisma?: PrismaClient): void {
+  void cleanupPendingImportsOnBoot().catch((err) =>
+    console.error("[data-sync-worker] lỗi dọn dẹp import dở dang:", err)
+  )
+
   if (!DATA_SYNC_KAFKA_ENABLED) {
     console.log("[data-sync-worker] Kafka chưa cấu hình → import fallback in-process")
     return

@@ -1,6 +1,10 @@
 import { Prisma, type PrismaClient } from "@workspace/db"
 import { prisma } from "../prisma"
-import { markDataSyncHistoryFailed, markDataSyncHistorySuccess } from "./data-sync-history"
+import {
+  markDataSyncHistoryFailed,
+  markDataSyncHistoryProcessing,
+  markDataSyncHistorySuccess,
+} from "./data-sync-history"
 
 export const SUPPORTED_IMPORT_VERSIONS = ["1.3.0", "1.3.1", "1.3.2", "1.3.3", "1.4.0"] as const
 
@@ -46,18 +50,20 @@ const NULLABLE_RISKY_FIELDS: Record<string, string[]> = {
   FixedClass: ["staffManagementId", "lecturerManagementId", ...FIXED_CLASS_ROLE_FIELDS],
   Student: ["trainingFieldId", "curriculumVersionParallelId"],
   ClassSchedule: ["originalScheduleId"],
-  StudentSubjectScore: ["examId"],
+  StudentSubjectScore: ["examId", "subjectClassId", "semesterId"],
+  StudentSemesterResult: ["rankId"],
   Staff: [],
   Lecturer: [],
 }
 
 /** FK không được ghi đè thành null khi update — chỉ insert/gán khi giá trị hợp lệ */
 const PRESERVE_ON_UPDATE_FIELDS: Record<string, string[]> = {
-  StudentSubjectScore: ["subjectClassId"],
+  StudentSubjectScore: ["subjectClassId", "semesterId"],
 }
 
 const PRESERVE_FK_MODEL: Record<string, string> = {
   subjectClassId: "SubjectClass",
+  semesterId: "Semester",
 }
 
 const DM_IMPORT_ORDER = [
@@ -332,7 +338,10 @@ async function importUpsert(
   modelName: string,
   rows: JsonRecord[],
   warnings: string[],
-  options?: { nullFields?: string[] }
+  options?: {
+    nullFields?: string[]
+    onProgress?: (message: string) => Promise<void> | void
+  }
 ): Promise<number> {
   if (rows.length === 0) return 0
   const pk = pkField(modelName)
@@ -349,7 +358,8 @@ async function importUpsert(
     existingPreserveFks[field] = await existingIdsOf(fkModel, ids)
   }
 
-  let imported = 0
+  const preparedRows: JsonRecord[] = []
+  const rawMap = new Map<string, JsonRecord>()
 
   for (const raw of rows) {
     let prepared = prepareRow(modelName, raw, options)
@@ -367,43 +377,102 @@ async function importUpsert(
       }
     }
 
-    const { [pk]: _id, ...updateRaw } = prepared
-    const updateData = omitNullPreserveFields(modelName, updateRaw)
+    preparedRows.push(prepared)
+    rawMap.set(String(id), raw)
+  }
+
+  const CHUNK_SIZE = 500
+  const CONCURRENCY = 4
+  let imported = 0
+
+  for (let c = 0; c < preparedRows.length; c += CHUNK_SIZE) {
+    // Nhường event loop để các request HTTP và Kafka heartbeat không bị nghẽn
+    if (c > 0 && c % 1000 === 0) {
+      await new Promise((resolve) => setTimeout(resolve, 25))
+    }
+    if (options?.onProgress && c > 0 && c % 2500 === 0) {
+      await options.onProgress(`Đang nhập ${modelName} (${c}/${preparedRows.length} dòng)...`)
+    }
+    const chunk = preparedRows.slice(c, c + CHUNK_SIZE)
+    const chunkIds = chunk.map((r) => String(r[pk]))
+
+    let existingSet = new Set<string>()
     try {
-      await delegate.upsert({
-        where: { [pk]: id },
-        create: prepared,
-        update: updateData,
-      })
-      imported += 1
-    } catch (error) {
-      // Retry: null FK tùy chọn; không xoá FK cần giữ (chỉ bỏ khỏi update, null khi create)
+      existingSet = await existingIdsOf(modelName, chunkIds)
+    } catch {
+      existingSet = new Set()
+    }
+
+    const toInsert = chunk.filter((r) => !existingSet.has(String(r[pk])))
+    const toUpdate = chunk.filter((r) => existingSet.has(String(r[pk])))
+
+    // 1. Chèn hàng loạt các bản ghi mới bằng createMany (skipDuplicates)
+    if (toInsert.length > 0) {
       try {
-        const retry = prepareRow(modelName, raw, {
-          nullFields: [...(options?.nullFields ?? []), ...(NULLABLE_RISKY_FIELDS[modelName] ?? [])],
+        const res = await delegate.createMany({
+          data: toInsert,
+          skipDuplicates: true,
         })
-        const retryCreate = { ...retry }
-        for (const field of preserveFields) {
-          retryCreate[field] = null
-        }
-        const { [pk]: __id, ...retryUpdateRaw } = retryCreate
-        const retryUpdate = omitPreserveFields(modelName, retryUpdateRaw)
-        await delegate.upsert({
-          where: { [pk]: id },
-          create: retryCreate,
-          update: retryUpdate,
-        })
-        imported += 1
-        warnings.push(
-          `${modelName}/${String(id)}: upsert lại sau khi null FK tùy chọn (${
-            error instanceof Error ? error.message : "lỗi"
-          })`
-        )
-      } catch (retryError) {
-        warnings.push(
-          `${modelName}/${String(id)}: ${
-            retryError instanceof Error ? retryError.message : "upsert thất bại"
-          }`
+        imported += res.count
+      } catch {
+        // Fallback: nếu createMany lỗi ràng buộc, chuyển các bản ghi này vào hàng chờ upsert song song
+        toUpdate.push(...toInsert)
+      }
+    }
+
+    // 2. Cập nhật các bản ghi đã tồn tại song song theo nhóm CONCURRENCY
+    if (toUpdate.length > 0) {
+      for (let i = 0; i < toUpdate.length; i += CONCURRENCY) {
+        const subChunk = toUpdate.slice(i, i + CONCURRENCY)
+        await Promise.all(
+          subChunk.map(async (prepared) => {
+            const id = prepared[pk]
+            const { [pk]: _id, ...updateRaw } = prepared
+            const updateData = omitNullPreserveFields(modelName, updateRaw)
+            try {
+              await delegate.upsert({
+                where: { [pk]: id },
+                create: prepared,
+                update: updateData,
+              })
+              imported += 1
+            } catch (error) {
+              // Retry: null FK tùy chọn; không xoá FK cần giữ
+              try {
+                const raw = rawMap.get(String(id))
+                if (!raw) return
+                const retry = prepareRow(modelName, raw, {
+                  nullFields: [
+                    ...(options?.nullFields ?? []),
+                    ...(NULLABLE_RISKY_FIELDS[modelName] ?? []),
+                  ],
+                })
+                const retryCreate = { ...retry }
+                for (const field of preserveFields) {
+                  retryCreate[field] = null
+                }
+                const { [pk]: __id, ...retryUpdateRaw } = retryCreate
+                const retryUpdate = omitPreserveFields(modelName, retryUpdateRaw)
+                await delegate.upsert({
+                  where: { [pk]: id },
+                  create: retryCreate,
+                  update: retryUpdate,
+                })
+                imported += 1
+                warnings.push(
+                  `${modelName}/${String(id)}: upsert lại sau khi null FK tùy chọn (${
+                    error instanceof Error ? error.message : "lỗi"
+                  })`
+                )
+              } catch (retryError) {
+                warnings.push(
+                  `${modelName}/${String(id)}: ${
+                    retryError instanceof Error ? retryError.message : "upsert thất bại"
+                  }`
+                )
+              }
+            }
+          })
         )
       }
     }
@@ -468,22 +537,29 @@ async function ensureMissingTrainingFields(
 
 async function patchFixedClassRoles(rows: JsonRecord[], warnings: string[]): Promise<number> {
   let updated = 0
-  for (const raw of rows) {
-    const id = raw.id
-    if (typeof id !== "string") continue
-    const data: JsonRecord = {}
-    for (const field of FIXED_CLASS_ROLE_FIELDS) {
-      if (raw[field] != null) data[field] = raw[field]
-    }
-    if (Object.keys(data).length === 0) continue
-    try {
-      await prisma.fixedClass.update({ where: { id }, data })
-      updated += 1
-    } catch (error) {
-      warnings.push(
-        `FixedClass/${id} roles: ${error instanceof Error ? error.message : "update thất bại"}`
-      )
-    }
+  const valid = rows.filter((r) => typeof r.id === "string")
+  const CONCURRENCY = 15
+
+  for (let i = 0; i < valid.length; i += CONCURRENCY) {
+    const chunk = valid.slice(i, i + CONCURRENCY)
+    await Promise.all(
+      chunk.map(async (raw) => {
+        const id = raw.id as string
+        const data: JsonRecord = {}
+        for (const field of FIXED_CLASS_ROLE_FIELDS) {
+          if (raw[field] != null) data[field] = raw[field]
+        }
+        if (Object.keys(data).length === 0) return
+        try {
+          await prisma.fixedClass.update({ where: { id }, data })
+          updated += 1
+        } catch (error) {
+          warnings.push(
+            `FixedClass/${id} roles: ${error instanceof Error ? error.message : "update thất bại"}`
+          )
+        }
+      })
+    )
   }
   return updated
 }
@@ -497,30 +573,61 @@ async function importJoinTable(
   rows: Array<{ A?: string; B?: string }>,
   warnings: string[]
 ): Promise<number> {
-  if (rows.length === 0) return 0
+  const valid = rows.filter((r): r is { A: string; B: string } => Boolean(r.A && r.B))
+  if (valid.length === 0) return 0
+
+  const CHUNK_SIZE = 500
   let imported = 0
-  for (const row of rows) {
-    if (!row.A || !row.B) continue
+
+  for (let i = 0; i < valid.length; i += CHUNK_SIZE) {
+    const chunk = valid.slice(i, i + CHUNK_SIZE)
+    const valuesPlaceholders: string[] = []
+    const params: unknown[] = []
+
+    chunk.forEach((row, idx) => {
+      valuesPlaceholders.push(`($${idx * 2 + 1}, $${idx * 2 + 2})`)
+      params.push(row.A, row.B)
+    })
+
+    const sql = `INSERT INTO "ql-dao-tao"."${table}" ("A", "B") VALUES ${valuesPlaceholders.join(
+      ", "
+    )} ON CONFLICT DO NOTHING`
+
     try {
-      await prisma.$executeRawUnsafe(
-        `INSERT INTO "ql-dao-tao"."${table}" ("A", "B") VALUES ($1, $2) ON CONFLICT DO NOTHING`,
-        row.A,
-        row.B
-      )
-      imported += 1
-    } catch (error) {
-      warnings.push(
-        `${table}/${row.A}-${row.B}: ${error instanceof Error ? error.message : "import thất bại"}`
-      )
+      const count = (await prisma.$executeRawUnsafe(sql, ...params)) as number
+      imported += count
+    } catch {
+      // Fallback chèn từng dòng nếu batch gặp lỗi
+      for (const row of chunk) {
+        try {
+          await prisma.$executeRawUnsafe(
+            `INSERT INTO "ql-dao-tao"."${table}" ("A", "B") VALUES ($1, $2) ON CONFLICT DO NOTHING`,
+            row.A,
+            row.B
+          )
+          imported += 1
+        } catch (rowError) {
+          warnings.push(
+            `${table}/${row.A}-${row.B}: ${rowError instanceof Error ? rowError.message : "import thất bại"}`
+          )
+        }
+      }
     }
   }
+
   return imported
 }
 
+export type ProgressCallback = (message: string) => Promise<void> | void
+
 export async function importTrainingDataFromJson(
   payload: unknown,
-  _db: PrismaClient = prisma
+  onProgressOrDb?: ProgressCallback | PrismaClient,
+  onProgress?: ProgressCallback
 ): Promise<ImportTrainingDataResult> {
+  const progressCb: ProgressCallback | undefined =
+    typeof onProgressOrDb === "function" ? onProgressOrDb : onProgress
+
   const json = payload as ExportPayload
   if (!json?.data || typeof json.data !== "object") {
     throw new Error("File JSON thiếu khối data")
@@ -544,9 +651,17 @@ export async function importTrainingDataFromJson(
   const warnings: string[] = []
   const steps: ImportStepResult[] = []
 
+  const totalTables =
+    DM_IMPORT_ORDER.length + TRAINING_CATALOG_ORDER.length + BUSINESS_UPSERT_ORDER.length + 5
+  let currentTableIndex = 0
+
   // 1) DM catalogs (Đơn vị: insert không cha trước, rồi cập nhật sParentId)
   for (const table of DM_IMPORT_ORDER) {
+    currentTableIndex++
     const rows = asRows(data, table)
+    if (rows.length > 0 && progressCb) {
+      await progressCb(`Đang nhập ${table} (${rows.length} dòng)... [${currentTableIndex}/${totalTables}]`)
+    }
     if (table === "DM_DonVi" && rows.length > 0) {
       const withoutParent = rows.map((row) => ({ ...row, sParentId: null, sTruongDonVi: null }))
       const count1 = await importCreateMany(table, withoutParent, warnings)
@@ -562,8 +677,13 @@ export async function importTrainingDataFromJson(
 
   // 2) Training catalogs
   for (const table of TRAINING_CATALOG_ORDER) {
-    const count = await importUpsert(table, asRows(data, table), warnings)
-    if (count > 0 || asRows(data, table).length > 0) {
+    currentTableIndex++
+    const rows = asRows(data, table)
+    if (rows.length > 0 && progressCb) {
+      await progressCb(`Đang nhập ${table} (${rows.length} dòng)... [${currentTableIndex}/${totalTables}]`)
+    }
+    const count = await importUpsert(table, rows, warnings)
+    if (count > 0 || rows.length > 0) {
       steps.push({ table, count })
     }
   }
@@ -576,49 +696,74 @@ export async function importTrainingDataFromJson(
 
   // 4) Business tables (FixedClass with null roles first)
   for (const table of BUSINESS_UPSERT_ORDER) {
+    currentTableIndex++
     const rows = asRows(data, table)
+    if (rows.length > 0) {
+      console.log(`[data-sync] bắt đầu ${table} (${rows.length} dòng) [${currentTableIndex}/${totalTables}]...`)
+      if (progressCb) {
+        await progressCb(`Đang nhập ${table} (${rows.length} dòng)... [${currentTableIndex}/${totalTables}]`)
+      }
+    }
     const nullFields =
       table === "FixedClass"
         ? [...FIXED_CLASS_ROLE_FIELDS]
         : table === "ClassSchedule"
           ? ["originalScheduleId"]
           : []
-    const count = await importUpsert(table, rows, warnings, { nullFields })
+    const count = await importUpsert(table, rows, warnings, {
+      nullFields,
+      onProgress: progressCb
+        ? async (subMsg) => {
+            await progressCb(`${subMsg} [${currentTableIndex}/${totalTables}]`)
+          }
+        : undefined,
+    })
     if (count > 0 || rows.length > 0) {
       steps.push({ table, count })
+      console.log(`[data-sync] xong ${table}: ${count} bản ghi`)
     }
   }
 
   // 5) Patch FixedClass roles after students exist
+  if (progressCb) await progressCb("Đang đồng bộ vai trò lớp cố định...")
   const roleCount = await patchFixedClassRoles(asRows(data, "FixedClass"), warnings)
   if (roleCount > 0) {
     steps.push({ table: "FixedClass(roles)", count: roleCount })
   }
 
   // 6) Patch ClassSchedule self-FK
-  const schedules = asRows(data, "ClassSchedule").filter((s) => s.originalScheduleId)
+  if (progressCb) await progressCb("Đang liên kết thời khóa biểu...")
+  const schedules = asRows(data, "ClassSchedule").filter(
+    (s) => s.originalScheduleId && typeof s.id === "string" && typeof s.originalScheduleId === "string"
+  )
   let scheduleLinks = 0
-  for (const row of schedules) {
-    if (typeof row.id !== "string" || typeof row.originalScheduleId !== "string") continue
-    try {
-      await prisma.classSchedule.update({
-        where: { id: row.id },
-        data: { originalScheduleId: row.originalScheduleId },
+  const CONCURRENCY = 15
+  for (let i = 0; i < schedules.length; i += CONCURRENCY) {
+    const chunk = schedules.slice(i, i + CONCURRENCY)
+    await Promise.all(
+      chunk.map(async (row) => {
+        try {
+          await prisma.classSchedule.update({
+            where: { id: row.id as string },
+            data: { originalScheduleId: row.originalScheduleId as string },
+          })
+          scheduleLinks += 1
+        } catch (error) {
+          warnings.push(
+            `ClassSchedule/${row.id} original: ${
+              error instanceof Error ? error.message : "update thất bại"
+            }`
+          )
+        }
       })
-      scheduleLinks += 1
-    } catch (error) {
-      warnings.push(
-        `ClassSchedule/${row.id} original: ${
-          error instanceof Error ? error.message : "update thất bại"
-        }`
-      )
-    }
+    )
   }
   if (scheduleLinks > 0) {
     steps.push({ table: "ClassSchedule(links)", count: scheduleLinks })
   }
 
   // 7) M2M joins
+  if (progressCb) await progressCb("Đang đồng bộ quan hệ liên kết bảng (M2M)...")
   const sessionJoin = await importJoinTable(
     "_ClassRegisterSessionToTrainingCourse",
     asRows(data, "_ClassRegisterSessionToTrainingCourse") as Array<{ A?: string; B?: string }>,
@@ -662,10 +807,14 @@ export async function importTrainingDataFromJson(
 }
 
 /** Parse file JSON (không xóa file — caller tự cleanup). */
-export async function processImportFromFile(filePath: string): Promise<ImportTrainingDataResult> {
+export async function processImportFromFile(
+  filePath: string,
+  onProgress?: ProgressCallback
+): Promise<ImportTrainingDataResult> {
   const { readImportJson } = await import("./data-sync/import-file-store")
+  if (onProgress) await onProgress("Đang đọc và phân tích file JSON...")
   const payload = await readImportJson(filePath)
-  return importTrainingDataFromJson(payload)
+  return importTrainingDataFromJson(payload, onProgress)
 }
 
 async function finishImportJob(syncHistoryId: string, result: ImportTrainingDataResult) {
@@ -682,11 +831,21 @@ async function finishImportJob(syncHistoryId: string, result: ImportTrainingData
   )
 }
 
+/** Đánh dấu bản ghi DataSyncHistory khi file bắt đầu được tiếp nhận để xử lý. */
+export async function markImportJobProcessing(syncHistoryId: string, fileName?: string | null) {
+  return markDataSyncHistoryProcessing(
+    syncHistoryId,
+    `Đã nhận file${fileName ? ` ${fileName}` : ""}, đang chờ xử lý...`
+  )
+}
+
 /** Chạy import nền từ payload đã parse — fallback khi không dùng file/Kafka. */
 export function runImportTrainingDataJob(syncHistoryId: string, payload: unknown) {
   void (async () => {
     try {
-      const result = await importTrainingDataFromJson(payload)
+      const result = await importTrainingDataFromJson(payload, async (msg) => {
+        await markDataSyncHistoryProcessing(syncHistoryId, msg).catch(() => undefined)
+      })
       await finishImportJob(syncHistoryId, result)
     } catch (error) {
       const message = error instanceof Error ? error.message : "Nhập dữ liệu thất bại"
@@ -702,7 +861,14 @@ export function runImportTrainingDataJob(syncHistoryId: string, payload: unknown
 export function runImportTrainingDataJobFromFile(syncHistoryId: string, filePath: string) {
   void (async () => {
     try {
-      const result = await processImportFromFile(filePath)
+      console.log(`[data-sync] fallback đang xử lý history=${syncHistoryId}`)
+      await markDataSyncHistoryProcessing(
+        syncHistoryId,
+        "Đang đọc dữ liệu và cập nhật cơ sở dữ liệu..."
+      )
+      const result = await processImportFromFile(filePath, async (msg) => {
+        await markDataSyncHistoryProcessing(syncHistoryId, msg).catch(() => undefined)
+      })
       await finishImportJob(syncHistoryId, result)
     } catch (error) {
       const message = error instanceof Error ? error.message : "Nhập dữ liệu thất bại"

@@ -57,7 +57,7 @@ export async function registerWithPessimisticLock(
       for (const classId of params.classIds) {
         const info = params.classLookup.get(classId)!
         const currentEnrolled = enrolledMap.get(classId) || 0
-        if (info.maxStudent <= currentEnrolled) {
+        if (info.maxStudent > 0 && info.maxStudent <= currentEnrolled) {
           throw new ClassFullError(info.subjectName)
         }
       }

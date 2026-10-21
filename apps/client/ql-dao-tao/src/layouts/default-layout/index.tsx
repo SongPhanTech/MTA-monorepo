@@ -15,6 +15,7 @@ import { useRouter } from "next/router"
 import { type ReactNode, useMemo } from "react"
 import { IdleTimerProvider } from "react-idle-timer"
 import HeaderApp from "@/components/header"
+import ExportTaskFloatingWidget from "@components/commons/export-task-floating-widget"
 import packageInfo from "../../../package.json"
 
 const { Header, Content, Footer } = Layout
@@ -138,6 +139,7 @@ const DefaultLayout = ({
           </div>
           <div className="ml-auto">Phiên bản: {packageInfo.version}</div>
         </Footer>
+        <ExportTaskFloatingWidget />
       </Layout>
     </IdleTimerProvider>
   )

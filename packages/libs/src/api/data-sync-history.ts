@@ -9,8 +9,10 @@ export type DataSyncHistoryItem = {
   sessionName: string
   fileName: string | null
   fileVersion: string | null
+  description?: string | null
   errorMessage: string | null
   createdAt: string
+  updatedAt?: string
   classRegisterSessionId: string | null
 }
 

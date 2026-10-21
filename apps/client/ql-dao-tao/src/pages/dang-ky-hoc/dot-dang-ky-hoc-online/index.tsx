@@ -1,4 +1,11 @@
-import { DownloadOutlined, EyeOutlined, UploadOutlined } from "@ant-design/icons"
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  DownloadOutlined,
+  EyeOutlined,
+  LoadingOutlined,
+  UploadOutlined,
+} from "@ant-design/icons"
 import Table from "@components/commons/table"
 import DeleteIcon from "@components/icons/delete"
 import EditIcon from "@components/icons/edit"
@@ -13,7 +20,11 @@ import {
   useFindManyTrainingCourse,
   useUpdateClassRegisterSession,
 } from "@workspace/db/hooks"
-import { useExportTrainingData } from "@workspace/libs/api/export-training-data"
+import {
+  getExportStatus,
+  useExportTrainingData,
+  useExportTrainingDataAsync,
+} from "@workspace/libs/api/export-training-data"
 import { useImportTrainingData } from "@workspace/libs/api/import-training-data"
 import { invalidateRegistrationCaches } from "@workspace/libs/api/invalidate-class-register-cache"
 import { useAbility } from "@workspace/permissions/hooks"
@@ -24,8 +35,13 @@ import dayjs from "dayjs"
 import { saveAs } from "file-saver"
 import { BookPlus } from "lucide-react"
 import { useRouter } from "next/router"
-import { useMemo, useRef, useState, type ChangeEvent } from "react"
+import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+import {
+  downloadExportedFile,
+  trackNewExportJob,
+  useExportTrainingStore,
+} from "@/stores/export-training-store"
 
 export default function ClassRegisterSession() {
   const { can } = useAbility()
@@ -174,33 +190,35 @@ export default function ClassRegisterSession() {
     }
   }
 
-  async function handleExportRawData() {
+  const { mutateAsync: exportRawDataAsync } = useExportTrainingDataAsync()
+  const exportJobState = useExportTrainingStore()
+
+  async function handleExportRawData(sessionId?: string, sessionName?: string) {
     try {
-      showSpinner()
-      const res = await exportRawData({})
+      const isSingle = Boolean(sessionId)
+      message.loading({
+        content: isSingle
+          ? `Đã kích hoạt xuất dữ liệu cho đợt "${sessionName || sessionId}". Bạn có thể tiếp tục làm việc bình thường!`
+          : "Đã kích hoạt xuất toàn bộ dữ liệu ngầm. Bạn có thể tiếp tục làm việc bình thường!",
+        key: "global-export-task",
+        duration: 3,
+      })
 
-      if (res.status === 200 && "counts" in res.data) {
-        const blob = new Blob([JSON.stringify(res.data)], {
-          type: "application/json;charset=utf-8",
+      const res = await exportRawDataAsync((sessionId ? { classRegisterSessionId: sessionId } : {}))
+      if (res.status === 202 && res.data.jobId) {
+        trackNewExportJob(res.data.jobId, sessionId, sessionName)
+      } else {
+        message.error({
+          content: "Không thể khởi tạo tiến trình xuất dữ liệu",
+          key: "global-export-task",
         })
-        const stamp = dayjs().format("YYYYMMDD-HHmm")
-        saveAs(blob, `export-toan-bo-du-lieu-${stamp}.json`)
-        const sessionCount = res.data.counts?.ClassRegisterSession ?? 0
-        const studentCount = res.data.counts?.Student ?? 0
-        const scoreCount = res.data.counts?.StudentSubjectScore ?? 0
-        message.success(
-          `Đã xuất toàn bộ dữ liệu (đợt ${sessionCount}, SV ${studentCount}, điểm ${scoreCount})`
-        )
-        return
       }
-
-      message.error(
-        ("message" in res.data ? res.data.message : undefined) || "Xuất dữ liệu thô thất bại"
-      )
-    } catch {
-      message.error("Đã xảy ra lỗi khi xuất dữ liệu thô")
-    } finally {
-      hideSpinner()
+    } catch (err: any) {
+      console.error(err)
+      message.error({
+        content: "Đã xảy ra lỗi khi khởi tạo xuất dữ liệu",
+        key: "global-export-task",
+      })
     }
   }
 
@@ -287,9 +305,88 @@ export default function ClassRegisterSession() {
             </Col>
             <Col span={12}>
               <Flex justify="end" gap={4} wrap="wrap">
-                <Button icon={<DownloadOutlined />} onClick={() => void handleExportRawData()}>
-                  Xuất toàn bộ dữ liệu ra internet
-                </Button>
+                {(() => {
+                  const isGlobalJob = !exportJobState.sessionId
+                  const isGlobalProcessing =
+                    isGlobalJob && (exportJobState.status === "PENDING" || exportJobState.status === "PROCESSING")
+                  const isGlobalSuccess = isGlobalJob && exportJobState.status === "SUCCESS"
+                  const isGlobalFailed = isGlobalJob && exportJobState.status === "FAILED"
+
+                  return (
+                    <Tooltip
+                      title={
+                        isGlobalProcessing
+                          ? `Đang chạy ngầm (${exportJobState.progress}%): ${exportJobState.message}. Bạn vẫn có thể thao tác song song bình thường.`
+                          : isGlobalSuccess
+                            ? `Đã xuất xong (${((exportJobState.fileSize || 0) / (1024 * 1024)).toFixed(1)} MB). Bấm để tải lại file.`
+                            : isGlobalFailed
+                              ? `Lỗi xuất: ${exportJobState.error}. Bấm để thử lại.`
+                              : "Xuất toàn bộ dữ liệu ra file JSON để đồng bộ sang internet"
+                      }
+                    >
+                      <Button
+                        style={
+                          isGlobalProcessing
+                            ? {
+                                position: "relative",
+                                overflow: "hidden",
+                                borderColor: "#1890ff",
+                                color: "#096dd9",
+                                fontWeight: 600,
+                                background: `linear-gradient(to right, rgba(24, 144, 255, 0.22) ${exportJobState.progress}%, #ffffff ${exportJobState.progress}%)`,
+                                transition: "background 0.3s ease",
+                              }
+                            : isGlobalSuccess
+                              ? {
+                                  borderColor: "#52c41a",
+                                  color: "#389e0d",
+                                  background: "#f6ffed",
+                                  fontWeight: 600,
+                                }
+                              : isGlobalFailed
+                                ? {
+                                    borderColor: "#ff4d4f",
+                                    color: "#cf1322",
+                                    background: "#fff1f0",
+                                  }
+                                : undefined
+                        }
+                        icon={
+                          isGlobalProcessing ? (
+                            <LoadingOutlined spin />
+                          ) : isGlobalSuccess ? (
+                            <CheckCircleOutlined style={{ color: "#52c41a" }} />
+                          ) : isGlobalFailed ? (
+                            <CloseCircleOutlined style={{ color: "#ff4d4f" }} />
+                          ) : (
+                            <DownloadOutlined />
+                          )
+                        }
+                        onClick={() => {
+                          if (exportJobState.status === "PENDING" || exportJobState.status === "PROCESSING") {
+                            message.info(
+                              `Tiến trình xuất đang chạy ngầm (${exportJobState.progress}%). Bạn vẫn có thể làm việc khác song song!`
+                            )
+                            return
+                          }
+                          if (isGlobalSuccess && exportJobState.downloadUrl) {
+                            downloadExportedFile(exportJobState.downloadUrl, exportJobState.fileName)
+                            return
+                          }
+                          void handleExportRawData()
+                        }}
+                      >
+                        {isGlobalProcessing
+                          ? `Đang xuất dữ liệu (${exportJobState.progress}%)`
+                          : isGlobalSuccess
+                            ? `Hoàn tất (100%) - Bấm để tải lại`
+                            : isGlobalFailed
+                              ? `Lỗi xuất dữ liệu (Thử lại)`
+                              : "Xuất toàn bộ dữ liệu ra internet"}
+                      </Button>
+                    </Tooltip>
+                  )
+                })()}
                 {can(
                   QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANG_KY_HOC_DOT_DANG_KY_HOC_ONLINE,
                   "THEM"
@@ -411,11 +508,11 @@ export default function ClassRegisterSession() {
               },
               {
                 title: "Thao tác",
-                width: 160,
+                width: 170,
                 align: "center",
                 fixed: "right",
                 render: (_, record) => (
-                  <Row className="justify-center gap-2">
+                  <div className="flex items-center justify-center gap-2 flex-nowrap">
                     <Tooltip title="Nhập dữ liệu đăng ký từ internet" placement="top">
                       <UploadOutlined
                         onClick={(e) => {
@@ -425,15 +522,89 @@ export default function ClassRegisterSession() {
                         className="text-sm cursor-pointer"
                       />
                     </Tooltip>
-                    <Tooltip title="Xuất toàn bộ dữ liệu ra internet" placement="top">
-                      <DownloadOutlined
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          void handleExportRawData()
-                        }}
-                        className="text-sm cursor-pointer"
-                      />
-                    </Tooltip>
+                    {(() => {
+                      const isThisRowExporting =
+                        exportJobState.sessionId === record.id &&
+                        (exportJobState.status === "PENDING" || exportJobState.status === "PROCESSING")
+                      const isThisRowSuccess =
+                        exportJobState.sessionId === record.id && exportJobState.status === "SUCCESS"
+                      const isThisRowFailed =
+                        exportJobState.sessionId === record.id && exportJobState.status === "FAILED"
+
+                      if (isThisRowExporting) {
+                        return (
+                          <Tooltip
+                            title={`Đang xuất dữ liệu (${exportJobState.progress}%): ${exportJobState.message}`}
+                            placement="top"
+                          >
+                            <span
+                              className="inline-flex items-center gap-1 font-semibold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-300 cursor-wait select-none"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <LoadingOutlined spin className="text-xs" />
+                              <span className="text-xs">{exportJobState.progress}%</span>
+                            </span>
+                          </Tooltip>
+                        )
+                      }
+
+                      if (isThisRowSuccess) {
+                        return (
+                          <Tooltip title="Xuất thành công! Bấm để tải lại file" placement="top">
+                            <span
+                              className="inline-flex items-center gap-1 font-medium text-green-700 bg-green-50 px-1.5 py-0.5 rounded border border-green-300 cursor-pointer select-none hover:bg-green-100"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                if (exportJobState.downloadUrl) {
+                                  downloadExportedFile(exportJobState.downloadUrl, exportJobState.fileName)
+                                }
+                              }}
+                            >
+                              <CheckCircleOutlined className="text-xs text-green-600" />
+                              <span className="text-xs">Tải lại</span>
+                            </span>
+                          </Tooltip>
+                        )
+                      }
+
+                      if (isThisRowFailed) {
+                        return (
+                          <Tooltip title={`Lỗi xuất: ${exportJobState.error}. Bấm để thử lại`} placement="top">
+                            <span
+                              className="inline-flex items-center gap-1 font-medium text-red-600 bg-red-50 px-1.5 py-0.5 rounded border border-red-300 cursor-pointer select-none hover:bg-red-100"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                void handleExportRawData(record.id, record.name)
+                              }}
+                            >
+                              <CloseCircleOutlined className="text-xs text-red-600" />
+                              <span className="text-xs">Thử lại</span>
+                            </span>
+                          </Tooltip>
+                        )
+                      }
+
+                      return (
+                        <Tooltip title="Xuất dữ liệu đợt này ra internet" placement="top">
+                          <DownloadOutlined
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              if (
+                                exportJobState.status === "PENDING" ||
+                                exportJobState.status === "PROCESSING"
+                              ) {
+                                message.info(
+                                  `Tiến trình xuất đang chạy ngầm (${exportJobState.progress}%). Vui lòng đợi hoàn tất!`
+                                )
+                                return
+                              }
+                              void handleExportRawData(record.id, record.name)
+                            }}
+                            className="text-sm cursor-pointer"
+                          />
+                        </Tooltip>
+                      )
+                    })()}
                     {can(
                       QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANG_KY_HOC_DOT_DANG_KY_HOC_ONLINE,
                       "XEM_CHI_TIET"
@@ -481,7 +652,7 @@ export default function ClassRegisterSession() {
                         onClick={(e) => e.stopPropagation()}
                       />
                     )}
-                  </Row>
+                  </div>
                 ),
               },
             ]}

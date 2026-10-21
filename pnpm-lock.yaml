@@ -745,6 +745,9 @@ importers:
       hono:
         specifier: 'catalog:'
         version: 4.10.6
+      kafkajs:
+        specifier: ^2.2.4
+        version: 2.2.4
       p-map:
         specifier: ^7.0.4
         version: 7.0.4
@@ -2673,7 +2676,7 @@ importers:
     devDependencies:
       '@paralleldrive/cuid2':
         specifier: github:paralleldrive/cuid2
-        version: https://codeload.github.com/paralleldrive/cuid2/tar.gz/dc67bdceff837057dc91bdc59d6beffee5eb1db0
+        version: https://codeload.github.com/paralleldrive/cuid2/tar.gz/f9c0cda7bde460eaeeb5b3f0e625da24823e5ecb
       '@tanstack/react-query':
         specifier: 'catalog:'
         version: 5.90.5(react@18.3.1)
@@ -4249,8 +4252,8 @@ packages:
   '@paralleldrive/cuid2@2.3.1':
     resolution: {integrity: sha512-XO7cAxhnTZl0Yggq6jOgjiOHhbgcO4NqFqwSmQpjK3b6TEE6Uj/jfSk6wzYyemh3+I0sHirKSetjQwn5cZktFw==}
 
-  '@paralleldrive/cuid2@https://codeload.github.com/paralleldrive/cuid2/tar.gz/dc67bdceff837057dc91bdc59d6beffee5eb1db0':
-    resolution: {tarball: https://codeload.github.com/paralleldrive/cuid2/tar.gz/dc67bdceff837057dc91bdc59d6beffee5eb1db0}
+  '@paralleldrive/cuid2@https://codeload.github.com/paralleldrive/cuid2/tar.gz/f9c0cda7bde460eaeeb5b3f0e625da24823e5ecb':
+    resolution: {tarball: https://codeload.github.com/paralleldrive/cuid2/tar.gz/f9c0cda7bde460eaeeb5b3f0e625da24823e5ecb}
     version: 3.3.0
     hasBin: true
 
@@ -11583,7 +11586,7 @@ snapshots:
     dependencies:
       '@noble/hashes': 1.8.0
 
-  '@paralleldrive/cuid2@https://codeload.github.com/paralleldrive/cuid2/tar.gz/dc67bdceff837057dc91bdc59d6beffee5eb1db0':
+  '@paralleldrive/cuid2@https://codeload.github.com/paralleldrive/cuid2/tar.gz/f9c0cda7bde460eaeeb5b3f0e625da24823e5ecb':
     dependencies:
       '@noble/hashes': 2.0.1
       bignumber.js: 9.3.1
