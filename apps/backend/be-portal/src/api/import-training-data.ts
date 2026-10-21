@@ -9,7 +9,7 @@ import {
   DATA_SYNC_KAFKA_ENABLED,
   enqueueDataSyncImport,
 } from "../services/data-sync/kafka-queue"
-import { runImportTrainingDataJobFromFile } from "../services/import-training-data"
+import { markImportJobProcessing, runImportTrainingDataJobFromFile } from "../services/import-training-data"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -126,6 +126,7 @@ app.openapi(importFromInternal, async (c) => {
 
   const historyId = syncHistoryId
   const filePath = await saveImportFile(historyId, Buffer.from(await file.arrayBuffer()))
+  await markImportJobProcessing(historyId, file.name)
 
   if (DATA_SYNC_KAFKA_ENABLED) {
     const enqueued = await enqueueDataSyncImport({
@@ -149,6 +150,9 @@ app.openapi(importFromInternal, async (c) => {
   }
 
   setTimeout(() => {
+    console.log(
+      `[data-sync] fallback bắt đầu history=${historyId} file=${filePath}`
+    )
     runImportTrainingDataJobFromFile(historyId, filePath)
   }, 50)
 

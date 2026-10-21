@@ -40,8 +40,10 @@ const getDataSyncHistory = createRoute({
               sessionName: z.string(),
               fileName: z.string().nullable(),
               fileVersion: z.string().nullable(),
+              description: z.string().nullable().optional(),
               errorMessage: z.string().nullable(),
               createdAt: z.coerce.date(),
+              updatedAt: z.coerce.date().optional(),
               classRegisterSessionId: z.string().nullable(),
             })
           ),
