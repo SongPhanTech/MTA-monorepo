@@ -382,11 +382,7 @@ const NhapDiemThiGiangDayPage = () => {
                 },
                 r.subjectClass?.type ?? $Enums.SubjectClassType.NORMAL
               )
-        const finalScore = r.examBanned
-          ? 0
-          : computed != null
-            ? Number(computed)
-            : storedHp
+        const finalScore = r.examBanned ? 0 : computed != null ? Number(computed) : storedHp
         const convert =
           finalScore != null
             ? scoreConvert(
@@ -578,9 +574,7 @@ const NhapDiemThiGiangDayPage = () => {
               where: { id: r.id },
               data: {
                 // Môn 1 đầu điểm: lưu TX/ĐK = điểm thi cùng lúc với điểm thi/HP
-                ...(isOnePoint
-                  ? { attendanceScore: r.examScore, midtermScore: r.examScore }
-                  : {}),
+                ...(isOnePoint ? { attendanceScore: r.examScore, midtermScore: r.examScore } : {}),
                 examScore: r.examScore,
                 finalScore: r.finalScore,
                 description: r.description || null,
@@ -851,25 +845,13 @@ const NhapDiemThiGiangDayPage = () => {
             >
               In phiếu điểm
             </Button>
-            <Button
-              icon={<Printer size={14} />}
-              disabled={!lopId}
-              onClick={handleInPhieuDiemNhap}
-            >
+            <Button icon={<Printer size={14} />} disabled={!lopId} onClick={handleInPhieuDiemNhap}>
               In phiếu điểm nháp
             </Button>
-            <Button
-              type="primary"
-              icon={<Save size={14} />}
-              onClick={luu}
-              disabled={khoaNhapDiem}
-            >
+            <Button type="primary" icon={<Save size={14} />} onClick={luu} disabled={khoaNhapDiem}>
               Lưu
             </Button>
-            <XuatDanhSachThiButton
-              subjectClassId={lopId}
-              disabled={!coTheXuatDanhSachThi}
-            />
+            <XuatDanhSachThiButton subjectClassId={lopId} disabled={!coTheXuatDanhSachThi} />
           </div>
         </div>
         <div ref={vungBangRef} className="min-h-0 flex-1 overflow-hidden">

@@ -252,7 +252,9 @@ function useThinBorders(worksheet: ExcelJS.Worksheet, minRow = 1) {
 const TABLE_FRAME_COLOR = { argb: "FF000000" }
 
 function cellHasGridBorder(border?: Partial<ExcelJS.Borders> | null) {
-  return Boolean(border?.left?.style || border?.right?.style || border?.top?.style || border?.bottom?.style)
+  return Boolean(
+    border?.left?.style || border?.right?.style || border?.top?.style || border?.bottom?.style
+  )
 }
 
 /** Viền ngoài và đường kẻ giữa của bảng điểm. Không kẻ lại phần đầu trang. */
@@ -299,8 +301,7 @@ function emphasizeDiplomaTableFrame(worksheet: ExcelJS.Worksheet, minRow = 1) {
       top: box.top === frameTop ? strong : grid,
       bottom: box.bottom === maxRow ? strong : grid,
       left: box.left === 1 ? strong : grid,
-      right:
-        box.right === maxCol || (!crossesCenter && box.right === midCol) ? strong : grid,
+      right: box.right === maxCol || (!crossesCenter && box.right === midCol) ? strong : grid,
     }
     if (!crossesCenter && box.left === midCol + 1) border.left = strong
     setCellBorder(cell, border)
@@ -516,11 +517,9 @@ function applyTableFrameBorder(worksheet: ExcelJS.Worksheet, opts: TableFrameBor
       // Cạnh của CẢ vùng gộp (ô gốc) — STT/Tên HP rowSpan mới giữ được nét đậm trên/dưới
       const isAccent = accentTops.has(box.t)
       const topBorder = box.t === top || isAccent ? strong : inner
-      const bottomBorder =
-        box.b === bottom || box.b === headerBottom || isAccent ? strong : inner
+      const bottomBorder = box.b === bottom || box.b === headerBottom || isAccent ? strong : inner
       const leftBorder = box.l === left ? strong : inner
-      const rightBorder =
-        box.r === right || (midCol != null && box.r === midCol) ? strong : inner
+      const rightBorder = box.r === right || (midCol != null && box.r === midCol) ? strong : inner
 
       for (let r = box.t; r <= box.b; r++) {
         for (let c = box.l; c <= box.r; c++) {
@@ -596,7 +595,11 @@ function applyWorkbookFontFamily(workbook: ExcelJS.Workbook, fontFamily: string)
  * - Bỏ scheme theme
  * - Ép family=1 cho font serif (quan trọng khi in)
  */
-function rewriteXlsxFontFamily(buffer: Buffer, fontFamily: string, preserveTemplateStyle = false): Buffer {
+function rewriteXlsxFontFamily(
+  buffer: Buffer,
+  fontFamily: string,
+  preserveTemplateStyle = false
+): Buffer {
   const zip = new PizZip(buffer)
   const serifFamily = isSerifExportFont(fontFamily) ? "1" : "2"
   const stylesEntry = zip.file("xl/styles.xml")
@@ -613,7 +616,9 @@ function rewriteXlsxFontFamily(buffer: Buffer, fontFamily: string, preserveTempl
       // Thêm family cho font chưa có (ExcelJS thường bỏ)
       styles = styles.replace(/<font>([\s\S]*?)<\/font>/g, (_m, inner: string) => {
         if (/<family\s/i.test(inner)) return `<font>${inner}</font>`
-        if (new RegExp(`name val="${fontFamily.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`).test(inner)) {
+        if (
+          new RegExp(`name val="${fontFamily.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`).test(inner)
+        ) {
           return `<font>${inner}<family val="1"/></font>`
         }
         return `<font>${inner}</font>`
@@ -709,7 +714,9 @@ function replaceXmlTag(xml: string, tag: string, replacement: string | null): st
  * DPI 4294967295 là giá trị hỏng của ExcelJS.
  */
 function fitPageSetupForPrint(pageSetupTag: string, pagesTall: number): string {
-  let tag = pageSetupTag.replace(/\s+horizontalDpi="4294967295"/g, "").replace(/\s+verticalDpi="4294967295"/g, "")
+  let tag = pageSetupTag
+    .replace(/\s+horizontalDpi="4294967295"/g, "")
+    .replace(/\s+verticalDpi="4294967295"/g, "")
   if (pagesTall <= 1) return tag
   tag = tag.replace(/\s+fitToHeight="[^"]*"/g, "")
   return tag.replace("<pageSetup", '<pageSetup fitToHeight="0"')
@@ -803,7 +810,9 @@ function rewritePrintAreas(zip: PizZip) {
     const relId = tag.match(/\br:id="([^"]+)"/)?.[1]
     if (!name || !relId) return
     const target = rels.match(new RegExp(`Id="${relId}"[^>]*Target="([^"]+)"`))?.[1]
-    const sheetPath = target ? `xl/${target.replace(/^\//, "")}` : `xl/worksheets/sheet${index + 1}.xml`
+    const sheetPath = target
+      ? `xl/${target.replace(/^\//, "")}`
+      : `xl/worksheets/sheet${index + 1}.xml`
     const sheetXml = zip.file(sheetPath)?.asText() ?? ""
     const dimension = sheetXml.match(/<dimension\b[^>]*ref="([A-Z]+\d+:[A-Z]+\d+)"/i)?.[1]
     const lastRow = [...sheetXml.matchAll(/<row\b[^>]*\br="(\d+)"/g)].reduce(
@@ -811,18 +820,26 @@ function rewritePrintAreas(zip: PizZip) {
       0
     )
     const usedRef = dimension
-      ? dimension.replace(/(\d+)$/, String(Math.max(lastRow, Number(dimension.match(/(\d+)$/)?.[1] ?? 0))))
+      ? dimension.replace(
+          /(\d+)$/,
+          String(Math.max(lastRow, Number(dimension.match(/(\d+)$/)?.[1] ?? 0)))
+        )
       : `A1:L${lastRow || 33}`
     areas.push(
       `<definedName name="_xlnm.Print_Area" localSheetId="${index}">${quoteSheetName(name)}!${absoluteCellRef(usedRef)}</definedName>`
     )
   })
   if (!areas.length) return
-  let workbook = workbookEntry.asText().replace(/<definedName\b[^>]*name="_xlnm\.Print_Area"[\s\S]*?<\/definedName>/g, "")
+  let workbook = workbookEntry
+    .asText()
+    .replace(/<definedName\b[^>]*name="_xlnm\.Print_Area"[\s\S]*?<\/definedName>/g, "")
   if (/<definedNames>/.test(workbook)) {
     workbook = workbook.replace("</definedNames>", `${areas.join("")}</definedNames>`)
   } else {
-    workbook = workbook.replace("</workbook>", `<definedNames>${areas.join("")}</definedNames></workbook>`)
+    workbook = workbook.replace(
+      "</workbook>",
+      `<definedNames>${areas.join("")}</definedNames></workbook>`
+    )
   }
   zip.file("xl/workbook.xml", workbook)
 }
@@ -841,8 +858,10 @@ function restoreUploadedTemplateChrome(original: Buffer, output: Buffer): Buffer
   }
 
   const drawingOverrides =
-    src.file("[Content_Types].xml")?.asText().match(/<Override[^>]*PartName="\/xl\/drawings\/[^"]+"[^>]*\/>/g) ??
-    []
+    src
+      .file("[Content_Types].xml")
+      ?.asText()
+      .match(/<Override[^>]*PartName="\/xl\/drawings\/[^"]+"[^>]*\/>/g) ?? []
   const typesEntry = dst.file("[Content_Types].xml")
   if (typesEntry && drawingOverrides.length) {
     let types = typesEntry.asText()
@@ -852,7 +871,9 @@ function restoreUploadedTemplateChrome(original: Buffer, output: Buffer): Buffer
     dst.file("[Content_Types].xml", types)
   }
 
-  const sheetXmlNames = Object.keys(dst.files).filter((name) => /^xl\/worksheets\/sheet\d+\.xml$/i.test(name))
+  const sheetXmlNames = Object.keys(dst.files).filter((name) =>
+    /^xl\/worksheets\/sheet\d+\.xml$/i.test(name)
+  )
   const stackedName =
     sheetXmlNames.find((name) => /<brk\b/.test(dst.file(name)?.asText() ?? "")) ?? sheetXmlNames[0]
   const stackedSheet = stackedName ? (dst.file(stackedName)?.asText() ?? "") : ""
@@ -878,7 +899,9 @@ function restoreUploadedTemplateChrome(original: Buffer, output: Buffer): Buffer
     let xml = entry.asText()
     xml = xml.replace(/x14ac:dyDescent="[^"]*"/g, `x14ac:dyDescent="${rowDyDescent}"`)
     if (pageMargins) xml = replaceXmlTag(xml, "pageMargins", pageMargins)
-    const fittedPageSetup = pageSetup ? fitPageSetupForPrint(pageSetup, blockStartRows(xml).length) : null
+    const fittedPageSetup = pageSetup
+      ? fitPageSetupForPrint(pageSetup, blockStartRows(xml).length)
+      : null
     if (fittedPageSetup) xml = replaceXmlTag(xml, "pageSetup", fittedPageSetup)
     xml = ensureFitToPage(xml)
     xml = replaceXmlTag(xml, "printOptions", printOptions)
@@ -925,7 +948,12 @@ function enforceWorksheetFontFamily(worksheet: ExcelJS.Worksheet, fontFamily: st
     row.eachCell({ includeEmpty: true }, (cell) => {
       cell.font = { ...withoutScheme(cell.font), ...base }
       const value = cell.value
-      if (value && typeof value === "object" && "richText" in value && Array.isArray(value.richText)) {
+      if (
+        value &&
+        typeof value === "object" &&
+        "richText" in value &&
+        Array.isArray(value.richText)
+      ) {
         cell.value = {
           richText: value.richText.map((part) => ({
             text: part.text,
@@ -1000,7 +1028,12 @@ function applyDynamicCellStyle(
       color: { argb: cellData.color },
     }
   }
-  if (cell.value && typeof cell.value === "object" && "richText" in cell.value && Array.isArray(cell.value.richText)) {
+  if (
+    cell.value &&
+    typeof cell.value === "object" &&
+    "richText" in cell.value &&
+    Array.isArray(cell.value.richText)
+  ) {
     const baseFont = cell.font || {}
     const richFontBase = exportFontProps(fontFamily)
     cell.value = {
@@ -1433,7 +1466,10 @@ function writeDynamicRows(
 
 function toArrayBuffer(buffer: Buffer | ArrayBuffer): ArrayBuffer {
   if (buffer instanceof ArrayBuffer) return buffer
-  return buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength) as ArrayBuffer
+  return buffer.buffer.slice(
+    buffer.byteOffset,
+    buffer.byteOffset + buffer.byteLength
+  ) as ArrayBuffer
 }
 
 /** ──────────────── Main ──────────────── */

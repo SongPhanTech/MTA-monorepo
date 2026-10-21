@@ -227,7 +227,14 @@ function buildIdMap(sourceOrgs, targetOrgs) {
     }
   }
 
-  return { map, targetOnly, matchedSameId, sourceById, targetById, unmapped: targetOnly.filter((t) => !map.has(t.Id)) }
+  return {
+    map,
+    targetOnly,
+    matchedSameId,
+    sourceById,
+    targetById,
+    unmapped: targetOnly.filter((t) => !map.has(t.Id)),
+  }
 }
 
 async function remapId(prisma, fks, fromId, toId) {
@@ -261,7 +268,10 @@ async function hardDeleteOrg(prisma, id) {
       id
     )
   }
-  await prisma.$executeRawUnsafe(`DELETE FROM "${TARGET_SCHEMA}"."DM_DonVi" WHERE "Id" = $1::uuid`, id)
+  await prisma.$executeRawUnsafe(
+    `DELETE FROM "${TARGET_SCHEMA}"."DM_DonVi" WHERE "Id" = $1::uuid`,
+    id
+  )
 }
 
 async function getTargetColumns(prisma) {
@@ -274,7 +284,9 @@ function sqlPlaceholder(col, i) {
 }
 
 async function upsertSourceOrg(prisma, org, targetCols) {
-  const cols = ORG_COLS.filter((c) => targetCols.has(c) && c !== "sParentId" && c !== "sTruongDonVi")
+  const cols = ORG_COLS.filter(
+    (c) => targetCols.has(c) && c !== "sParentId" && c !== "sTruongDonVi"
+  )
   const exists = await prisma.$queryRawUnsafe(
     `SELECT 1 FROM "${TARGET_SCHEMA}"."DM_DonVi" WHERE "Id" = $1::uuid`,
     org.Id
@@ -283,7 +295,8 @@ async function upsertSourceOrg(prisma, org, targetCols) {
   const valueOf = (c) => {
     let v = org[c] ?? null
     // coredb: sMa/sTen NOT NULL
-    if ((c === "sMa" || c === "sTen") && (v === null || v === undefined)) v = c === "sTen" ? "Unknown" : ""
+    if ((c === "sMa" || c === "sTen") && (v === null || v === undefined))
+      v = c === "sTen" ? "Unknown" : ""
     if ((c === "bActive" || c === "bDeleted" || c === "bSystem") && v === null) {
       v = c === "bActive"
     }
@@ -444,7 +457,9 @@ async function main() {
       sourceOrgs.find((o) => normName(o.sTen) === "học viện kỹ thuật quân sự")?.Id ||
       sourceOrgs.find((o) => !o.sParentId)?.Id
 
-    console.log(`[3/4] Unmapped target-only (${unmapped.length}), fallback=${fallbackRoot?.slice(0, 8)}…`)
+    console.log(
+      `[3/4] Unmapped target-only (${unmapped.length}), fallback=${fallbackRoot?.slice(0, 8)}…`
+    )
     for (const u of unmapped) {
       try {
         const refs = await countRefs(target, fks, u.Id)

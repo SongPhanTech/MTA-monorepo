@@ -22,6 +22,7 @@ import { store } from "@/pages/thiet-lap-de-thi/danh-sach-de"
 import { renderQuestionPreviewHtml } from "@/utils/cluster-question-utils"
 import { examTypeOptions } from "@workspace/libs/constants"
 import { useSingleTopicGeneration } from "@workspace/libs/api/exam"
+import type { SingleTopicGenerationBodyExamType } from "@workspace/libs/api/schemas/singleTopicGenerationBodyExamType"
 
 type PutMaTranDeInputType = ExamBank & {
   questions: string[]
@@ -171,6 +172,7 @@ const SinhDeThuCongModal = () => {
     return KnowledgeBlockData.map((item) => ({
       value: item.id,
       title: item.name,
+      label: item.name,
       isParent: true,
       children: item.questions.map((question) => ({
         value: question.id,
@@ -210,7 +212,7 @@ const SinhDeThuCongModal = () => {
           explain: values.explain,
           examDay: values.examDay ? dayjs(values.examDay).toISOString() : null,
           examId: selectedExamId,
-          examType: values.examType,
+          examType: values.examType as SingleTopicGenerationBodyExamType,
           subjectClassId: values.subjectClassId ?? "",
           isGroup: values.isGroup ?? true,
           isNote: values.isNote ?? false,

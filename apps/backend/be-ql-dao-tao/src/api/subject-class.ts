@@ -1,8 +1,19 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { $Enums, Prisma, type ScoreConvert } from "@workspace/db"
 import { examTypeOptions } from "@workspace/libs/constants"
-import { formatDateTimeIn, formatDateVn, formatNgayIn, formatThangIn, nowVn } from "@workspace/libs/timezone"
-import { fetchMinio, getScoreStatistics, convertScoreWithCourseConfig, courseScoreConfigFrom } from "@workspace/libs/utils"
+import {
+  formatDateTimeIn,
+  formatDateVn,
+  formatNgayIn,
+  formatThangIn,
+  nowVn,
+} from "@workspace/libs/timezone"
+import {
+  fetchMinio,
+  getScoreStatistics,
+  convertScoreWithCourseConfig,
+  courseScoreConfigFrom,
+} from "@workspace/libs/utils"
 import { read, utils } from "xlsx"
 import XlsxTemplate from "xlsx-template"
 import ExcelJS from "exceljs"
@@ -1718,10 +1729,7 @@ function addStudentPageBreaks(
     return total
   }
 
-  if (
-    titleHeight + headerHeight + sumRange(0, studentCount) + signatureHeight <=
-    printable
-  ) {
+  if (titleHeight + headerHeight + sumRange(0, studentCount) + signatureHeight <= printable) {
     worksheet.pageSetup.printTitlesRow = undefined
     return
   }
@@ -1741,7 +1749,6 @@ function addStudentPageBreaks(
 
   const breakAfterCounts: number[] = []
   let consumed = 0
-
 
   {
     const budget = printable - titleHeight - headerHeight
@@ -1765,7 +1772,10 @@ function addStudentPageBreaks(
     }
 
     const budget = printable - headerHeight
-    const take = Math.max(1, Math.min(studentCount - consumed, countFitting(consumed, studentCount, budget)))
+    const take = Math.max(
+      1,
+      Math.min(studentCount - consumed, countFitting(consumed, studentCount, budget))
+    )
     consumed += take
     if (consumed < studentCount) breakAfterCounts.push(consumed)
     else break

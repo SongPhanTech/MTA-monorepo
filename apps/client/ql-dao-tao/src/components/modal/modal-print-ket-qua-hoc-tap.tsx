@@ -157,8 +157,7 @@ const ModalPrintToKQHT = () => {
       examScore?: number | null
     },
     flags?: { isGraduation?: boolean; isConditional?: boolean }
-  ) =>
-    convertScore(score10, courseScoreConfigFrom(trainingCourseFromFixedClass, score, flags))
+  ) => convertScore(score10, courseScoreConfigFrom(trainingCourseFromFixedClass, score, flags))
 
   const { convertAcademicRanking } = useAcademicRankingConverter(
     graduationRankingData,
@@ -561,9 +560,9 @@ const ModalPrintToKQHT = () => {
 
           <div className="mt-2 text-sm">
             {(() => {
-              const sortedData = [
-                ...(trainingCourseFromFixedClass?.scoreConverts ?? []),
-              ].sort((a, b) => b.base4 - a.base4)
+              const sortedData = [...(trainingCourseFromFixedClass?.scoreConverts ?? [])].sort(
+                (a, b) => b.base4 - a.base4
+              )
 
               return (
                 <>

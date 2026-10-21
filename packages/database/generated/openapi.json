@@ -1283,6 +1283,15 @@
           "Oral",
           "Practice",
           "Project",
+          "MultipleChoice",
+          "PracticeExercise",
+          "ProjectDefense",
+          "Report",
+          "ListeningSpeakingReadingWriting",
+          "ReadingWriting",
+          "ListeningSpeaking",
+          "ListeningReadingWriting",
+          "Unspecified",
           "Other"
         ]
       },
@@ -1449,7 +1458,8 @@
           "EXAM_DEADLINE",
           "SURVEY_DEADLINE",
           "INDIVIDUAL_SCHEDULE",
-          "CLASS_REMINDER"
+          "CLASS_REMINDER",
+          "CHAT"
         ]
       },
       "NotificationPriority": {
@@ -17617,6 +17627,10 @@
             "nullable": true
           },
           "reminderData": {
+            "nullable": true
+          },
+          "recipientProfileId": {
+            "type": "string",
             "nullable": true
           }
         },
@@ -56098,6 +56112,10 @@
             "nullable": true
           },
           "reminderData": {
+            "nullable": true
+          },
+          "recipientProfileId": {
+            "type": "string",
             "nullable": true
           },
           "_count": {
@@ -120396,6 +120414,9 @@
           "reminderData": {
             "type": "integer"
           },
+          "recipientProfileId": {
+            "type": "integer"
+          },
           "_all": {
             "type": "integer"
           }
@@ -120426,6 +120447,7 @@
           "targetDeviceId",
           "pushExpiresAt",
           "reminderData",
+          "recipientProfileId",
           "_all"
         ]
       },
@@ -120543,6 +120565,10 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
+          },
+          "recipientProfileId": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -120659,6 +120685,10 @@
           "pushExpiresAt": {
             "type": "string",
             "format": "date-time",
+            "nullable": true
+          },
+          "recipientProfileId": {
+            "type": "string",
             "nullable": true
           }
         }

@@ -2,14 +2,15 @@ import Select from "@components/commons/select"
 import SurveylecturerReport from "@components/sub-pages/khao-sat/survey-lecturer-report"
 import SurveyOrganizationReport from "@components/sub-pages/khao-sat/survey-oragation-report"
 import DefaultLayout from "@layouts/default-layout"
+import { $Enums } from "@workspace/db/client"
 import {
   useFindManyClusterSurvey,
   useFindManyDM_DonVi,
   useFindManyLecturer,
+  useFindManyTrainingCourse,
   useFindUniqueSemester,
   useFindUniqueTrainingObjectType,
 } from "@workspace/db/hooks"
-import { $Enums } from "@workspace/db/client"
 import { getRuntimeEnv } from "@workspace/libs"
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import { Col, Flex, Row, Skeleton, Tree } from "antd"
@@ -19,7 +20,6 @@ import { useEffect, useMemo, useState, type Key } from "react"
 import OrganizationSurveyReport from "@/components/sub-pages/khao-sat/bao-cao-don-vi"
 import {
   buildOrgLecturerTree,
-  buildProgressRows,
   CLUSTER_LECTURER_INCLUDE,
   CLUSTER_LECTURER_SURVEY_INCLUDE,
   getLecturerSurveyStats,
@@ -30,6 +30,10 @@ import {
   ORG_SELECT,
   type ReportTreeNode,
 } from "@/utils/buildOrgLecturerTree"
+import {
+  buildFacultySummarySectionTitle,
+  clusterTrainingCourseWhere,
+} from "@/utils/export-faculty-survey-summary-docx"
 
 function trainingSystemNameFromDbType(type: $Enums.TrainingObjectTypes | undefined): string {
   if (type === $Enums.TrainingObjectTypes.MILITARY) return "Quân sự"
@@ -67,25 +71,32 @@ export default function BaoCaoGiangVien() {
     { enabled: !!trainingObjectTypeId }
   )
 
-  const { data: clusters = [] } = useFindManyClusterSurvey({
-    where: {
-      surveys: {
-        some: { semesterId, trainingObjectTypeId },
-      },
-    },
-    include: {
-      surveyObjectType: true,
-      surveyTopic: true,
-      surveyQuestion: true,
-      surveys: {
-        include: {
-          surveySessions: true,
-          subjectClass: { include: { semester: true } },
+  const { data: clusters = [] } = useFindManyClusterSurvey(
+    {
+      where: {
+        surveys: {
+          some: { semesterId, trainingObjectTypeId },
         },
       },
+      select: { id: true, name: true },
+      orderBy: { createdAt: "desc" },
     },
-    orderBy: { createdAt: "desc" },
-  })
+    { enabled: !!semesterId && !!trainingObjectTypeId }
+  )
+
+  const { data: clusterCourses = [] } = useFindManyTrainingCourse(
+    {
+      where: clusterTrainingCourseWhere(clusterId as string),
+      select: { id: true, name: true, startYear: true },
+      orderBy: [{ startYear: "asc" }, { name: "asc" }],
+    },
+    { enabled: !!clusterId }
+  )
+
+  const sectionTitle = useMemo(
+    () => buildFacultySummarySectionTitle(trainingObjectType?.name, clusterCourses),
+    [clusterCourses, trainingObjectType?.name]
+  )
 
   const { data: organizations = [], isFetching } = useFindManyDM_DonVi(
     {
@@ -128,10 +139,23 @@ export default function BaoCaoGiangVien() {
     () => buildOrgLecturerTree(orgs, clusterLecturers),
     [orgs, clusterLecturers]
   )
-  const progressData = useMemo(
-    () => buildProgressRows(orgs, clusterLecturers),
-    [orgs, clusterLecturers]
-  )
+  const expandedToFacultyKeys = useMemo(() => {
+    const byId = new Map(orgs.map((org) => [org.Id, org]))
+    const keys = new Set<string>()
+    for (const org of orgs) {
+      if (org.iLoaiDonVi !== 5 && org.iLoaiDonVi !== 6) continue
+      let parentId = org.sParentId
+      while (parentId && byId.has(parentId)) {
+        keys.add(parentId)
+        parentId = byId.get(parentId)?.sParentId ?? null
+      }
+    }
+    return [...keys]
+  }, [orgs])
+
+  useEffect(() => {
+    setExpandedKeys(expandedToFacultyKeys)
+  }, [expandedToFacultyKeys])
 
   const findTreeNode = (nodes: ReportTreeNode[], key: Key): ReportTreeNode | undefined => {
     for (const node of nodes) {
@@ -181,11 +205,13 @@ export default function BaoCaoGiangVien() {
           trainingObjectTypeName={trainingObjectTypeName}
           semesterName={semesterName}
           trainingSystemName={trainingSystemName}
-          organizationName={isDepartment ? parentOrg?.sTen ?? "" : org.sTen ?? ""}
-          organizationCode={isDepartment ? parentOrg?.sMa ?? "" : org.sMa ?? ""}
-          departmentName={isDepartment ? org.sTen ?? "" : ""}
-          departmentCode={isDepartment ? org.sMa ?? "" : ""}
+          organizationName={isDepartment ? (parentOrg?.sTen ?? "") : (org.sTen ?? "")}
+          organizationCode={isDepartment ? (parentOrg?.sMa ?? "") : (org.sMa ?? "")}
+          departmentName={isDepartment ? (org.sTen ?? "") : ""}
+          departmentCode={isDepartment ? (org.sMa ?? "") : ""}
           selectedItem={org}
+          selectedOrgNode={selectedNode}
+          sectionTitle={sectionTitle}
         />
       )
     }
@@ -213,8 +239,8 @@ export default function BaoCaoGiangVien() {
           organizationCode={(isDepartment ? parentOrg?.sMa : org?.sMa) ?? undefined}
           lecturerName={lecturerTitle(lecturer)}
           lecturerCode={lecturer.userProfile?.code ?? undefined}
-          departmentName={isDepartment ? org?.sTen ?? "" : ""}
-          departmentCode={isDepartment ? org?.sMa ?? "" : ""}
+          departmentName={isDepartment ? (org?.sTen ?? "") : ""}
+          departmentCode={isDepartment ? (org?.sMa ?? "") : ""}
         />
       )
     }
@@ -229,7 +255,7 @@ export default function BaoCaoGiangVien() {
     semesterId,
     trainingObjectTypeId,
     organizations,
-    progressData,
+    sectionTitle,
   ])
 
   return (
@@ -276,7 +302,9 @@ export default function BaoCaoGiangVien() {
               onSelect={(keys, info) => {
                 setSelectedKeys(keys)
                 const key = keys[0]
-                setSelectedNode((key != null ? findTreeNode(treeData, key) : undefined) ?? info.node)
+                setSelectedNode(
+                  (key != null ? findTreeNode(treeData, key) : undefined) ?? info.node
+                )
               }}
             />
             <div className="mb-3 text-xs text-gray-500">

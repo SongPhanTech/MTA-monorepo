@@ -69,12 +69,7 @@ const TabDiemRenLuyen = ({ fixedClassId, enabled, coQuyenNhap = false }: TabDiem
               ? "Nhập điểm rèn luyện theo học kỳ đã chọn"
               : "Nhập điểm rèn luyện theo năm học (bỏ chọn học kỳ để nhập theo năm)"}
           </Typography.Text>
-          <Button
-            type="primary"
-            icon={<Save size={14} />}
-            loading={dangLuu}
-            onClick={handleLuu}
-          >
+          <Button type="primary" icon={<Save size={14} />} loading={dangLuu} onClick={handleLuu}>
             Lưu điểm rèn luyện
           </Button>
         </Flex>

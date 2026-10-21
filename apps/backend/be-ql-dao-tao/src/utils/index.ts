@@ -364,10 +364,7 @@ export const buildCurriculumMapOrThrow = async (
           },
         })
 
-  const versionMatchesTuple = (
-    version: (typeof existing)[number],
-    tuple: CurriculumData
-  ) => {
+  const versionMatchesTuple = (version: (typeof existing)[number], tuple: CurriculumData) => {
     const curriculumName = normalize(tuple.curriculum)
     if (!catalogValueMatches(curriculumName, version)) return false
 
@@ -468,120 +465,120 @@ ${missingRecordIds
 
     if (options?.write !== false) {
       const applyCreates = async (tx: Prisma.TransactionClient) => {
-      const course = await tx.trainingCourse.findFirst({
-        where: {
-          id: trainingCourseId,
-          trainingObjectTypeId,
-          active: true,
-          deletedAt: null,
-        },
-      })
-
-      if (!course) {
-        throw new HTTPException(400, {
-          message: `Khoá đào tạo không tồn tại: ${trainingCourseId}`,
-        })
-      }
-
-      for (const item of missing) {
-        const majorKey = normalize(item.trainingMajor)
-        const curriculumName = `${item.trainingMajor} - ${course.name}`
-        let curriculum = await tx.curriculum.findFirst({
+        const course = await tx.trainingCourse.findFirst({
           where: {
-            name: curriculumName,
+            id: trainingCourseId,
             trainingObjectTypeId,
-            ...(majorKey
-              ? {
-                  trainingMajor: {
-                    OR: [
-                      { name: { equals: majorKey, mode: "insensitive" as const } },
-                      { code: { equals: majorKey, mode: "insensitive" as const } },
-                      { id: majorKey },
-                    ],
-                  },
-                }
-              : {}),
+            active: true,
+            deletedAt: null,
           },
         })
 
-        const generateUniqueCode = (text: string) => {
-          const initials = text
-            .split(" ")
-            .map((w) => w[0])
-            .join("")
-            .toUpperCase()
-          const year = new Date().getFullYear().toString().slice(-2)
-          const random = Math.random().toString(36).substring(2, 5).toUpperCase()
-          return `${initials}${year}_${random}`
+        if (!course) {
+          throw new HTTPException(400, {
+            message: `Khoá đào tạo không tồn tại: ${trainingCourseId}`,
+          })
         }
 
-        if (!curriculum) {
-          if (!item.trainingMajor) {
-            throw new HTTPException(400, {
-              message: `Không thể tạo CTĐT ${item.curriculum} vì thiếu thông tin Chuyên ngành`,
-            })
-          }
-
-          if (!item.managementOrganization) {
-            throw new HTTPException(400, {
-              message: `Không thể tạo CTĐT ${item.curriculum} vì thiếu thông tin Đơn vị quản lý`,
-            })
-          }
-
-          const targetOrgId = managementOrganizationMap.get(item.managementOrganization)
-
-          if (!targetOrgId) {
-            throw new HTTPException(400, {
-              message: `Đơn vị quản lý không tồn tại: ${item.managementOrganization}`,
-            })
-          }
-
-          const major = await tx.trainingMajor.findFirst({
+        for (const item of missing) {
+          const majorKey = normalize(item.trainingMajor)
+          const curriculumName = `${item.trainingMajor} - ${course.name}`
+          let curriculum = await tx.curriculum.findFirst({
             where: {
-              trainingObjectTypes: { some: { trainingObjectTypeId } },
-              OR: [
-                { name: { equals: normalize(item.trainingMajor), mode: "insensitive" } },
-                { code: { equals: normalize(item.trainingMajor), mode: "insensitive" } },
-                { id: normalize(item.trainingMajor) },
-              ],
+              name: curriculumName,
+              trainingObjectTypeId,
+              ...(majorKey
+                ? {
+                    trainingMajor: {
+                      OR: [
+                        { name: { equals: majorKey, mode: "insensitive" as const } },
+                        { code: { equals: majorKey, mode: "insensitive" as const } },
+                        { id: majorKey },
+                      ],
+                    },
+                  }
+                : {}),
             },
           })
 
-          if (!major) {
-            throw new HTTPException(400, {
-              message: `Chuyên ngành không tồn tại: ${item.trainingMajor}`,
+          const generateUniqueCode = (text: string) => {
+            const initials = text
+              .split(" ")
+              .map((w) => w[0])
+              .join("")
+              .toUpperCase()
+            const year = new Date().getFullYear().toString().slice(-2)
+            const random = Math.random().toString(36).substring(2, 5).toUpperCase()
+            return `${initials}${year}_${random}`
+          }
+
+          if (!curriculum) {
+            if (!item.trainingMajor) {
+              throw new HTTPException(400, {
+                message: `Không thể tạo CTĐT ${item.curriculum} vì thiếu thông tin Chuyên ngành`,
+              })
+            }
+
+            if (!item.managementOrganization) {
+              throw new HTTPException(400, {
+                message: `Không thể tạo CTĐT ${item.curriculum} vì thiếu thông tin Đơn vị quản lý`,
+              })
+            }
+
+            const targetOrgId = managementOrganizationMap.get(item.managementOrganization)
+
+            if (!targetOrgId) {
+              throw new HTTPException(400, {
+                message: `Đơn vị quản lý không tồn tại: ${item.managementOrganization}`,
+              })
+            }
+
+            const major = await tx.trainingMajor.findFirst({
+              where: {
+                trainingObjectTypes: { some: { trainingObjectTypeId } },
+                OR: [
+                  { name: { equals: normalize(item.trainingMajor), mode: "insensitive" } },
+                  { code: { equals: normalize(item.trainingMajor), mode: "insensitive" } },
+                  { id: normalize(item.trainingMajor) },
+                ],
+              },
+            })
+
+            if (!major) {
+              throw new HTTPException(400, {
+                message: `Chuyên ngành không tồn tại: ${item.trainingMajor}`,
+              })
+            }
+
+            const curriculumCode = item.trainingMajor
+              .split(" ")
+              .map((w) => w[0])
+              .join("")
+              .toUpperCase()
+
+            curriculum = await tx.curriculum.create({
+              data: {
+                name: curriculumName,
+                code: curriculumCode,
+                trainingMajorId: major.id,
+                trainingObjectTypeId,
+                managementOrganizationId: targetOrgId,
+              },
             })
           }
 
-          const curriculumCode = item.trainingMajor
-            .split(" ")
-            .map((w) => w[0])
-            .join("")
-            .toUpperCase()
-
-          curriculum = await tx.curriculum.create({
+          const created = await tx.curriculumVersion.create({
             data: {
-              name: curriculumName,
-              code: curriculumCode,
-              trainingMajorId: major.id,
+              name: item.curriculum,
+              code: generateUniqueCode(item.curriculum),
+              curriculumId: curriculum.id,
               trainingObjectTypeId,
-              managementOrganizationId: targetOrgId,
             },
+            select: { id: true, name: true },
           })
+
+          createdItems.push({ ...created, trainingMajor: item.trainingMajor })
         }
-
-        const created = await tx.curriculumVersion.create({
-          data: {
-            name: item.curriculum,
-            code: generateUniqueCode(item.curriculum),
-            curriculumId: curriculum.id,
-            trainingObjectTypeId,
-          },
-          select: { id: true, name: true },
-        })
-
-        createdItems.push({ ...created, trainingMajor: item.trainingMajor })
-      }
       }
 
       if (options?.joinTransaction) {
@@ -845,9 +842,7 @@ export const buildSubjectMapOrThrow = async (
 
   const missing = subjectsWithCode.filter(({ code }) => !resolved.has(code))
   // Tránh tạo nhiều SubjectVersion cùng mã trong một lần import
-  const missingUnique = [
-    ...new Map(missing.map((s) => [normalizeSubjectCode(s.code), s])).values(),
-  ]
+  const missingUnique = [...new Map(missing.map((s) => [normalizeSubjectCode(s.code), s])).values()]
 
   if (missingUnique.length && createNewSubject) {
     const newSubjects = await prisma.$transaction(async (tx) => {
@@ -901,9 +896,7 @@ export const buildSubjectMapOrThrow = async (
       })
     })
 
-    const newByNorm = new Map(
-      newSubjects.map((row) => [normalizeSubjectCode(row.code), row.id])
-    )
+    const newByNorm = new Map(newSubjects.map((row) => [normalizeSubjectCode(row.code), row.id]))
     for (const s of subjectsWithCode) {
       if (resolved.has(s.code)) continue
       const id = newByNorm.get(normalizeSubjectCode(s.code))
@@ -957,9 +950,7 @@ export const buildOrgLookupMapOrThrow = async (
 ) => {
   const uniqValues = Array.from(
     new Set(
-      values
-        .filter((value): value is string => Boolean(value?.trim()))
-        .map((value) => value.trim())
+      values.filter((value): value is string => Boolean(value?.trim())).map((value) => value.trim())
     )
   )
 
@@ -1138,10 +1129,8 @@ export const buildRankMapOrThrow = async (prisma: PrismaClient, names: (string |
   return new Map(existing.map(({ sTen, Id }) => [sTen, Id]))
 }
 
-const positionMatchScore = (
-  row: { sTen: string | null; bActive?: boolean | null },
-  key: string
-) => (row.sTen === key ? 2 : 0) + (row.bActive !== false ? 1 : 0)
+const positionMatchScore = (row: { sTen: string | null; bActive?: boolean | null }, key: string) =>
+  (row.sTen === key ? 2 : 0) + (row.bActive !== false ? 1 : 0)
 
 export const buildPositionMapOrThrow = async (
   prisma: PrismaClient,
@@ -1162,7 +1151,10 @@ export const buildPositionMapOrThrow = async (
     select: { Id: true, sTen: true, bActive: true, iSTT: true },
   })
 
-  const byNormalized = new Map<string, { Id: string; sTen: string | null; bActive?: boolean | null }>()
+  const byNormalized = new Map<
+    string,
+    { Id: string; sTen: string | null; bActive?: boolean | null }
+  >()
   for (const row of existing) {
     const key = normalizeCatalogName(row.sTen)
     if (!key) continue
@@ -1655,6 +1647,86 @@ export const fixPhoiBangNganHanEndDateEnDisplay = async (
       horizontal: "center",
       vertical: master.alignment?.vertical || "middle",
       wrapText: false,
+    }
+  }
+
+  return workbook.xlsx.writeBuffer()
+}
+
+const getExcelCellPlainText = (value: ExcelJS.CellValue | null | undefined): string => {
+  if (value === null || value === undefined) return ""
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+    return String(value)
+  }
+  if (typeof value === "object") {
+    if ("richText" in value && Array.isArray(value.richText)) {
+      return value.richText.map((part) => part.text).join("")
+    }
+    if ("text" in value && typeof value.text === "string") {
+      return value.text
+    }
+    if ("result" in value && value.result !== undefined && value.result !== null) {
+      return String(value.result)
+    }
+  }
+  return ""
+}
+
+/** Áp font / cỡ chữ / rowHeight cho các ô chứa dung cụm ngành / ĐTĐT trên phôi bằng ngắn hạn. */
+export const applyPhoiBangNganHanCourseLabelStyles = async (
+  buffer: Buffer | ArrayBuffer | Uint8Array,
+  options: {
+    texts: string[]
+    replacements?: Array<{ from: string; to: string }>
+    fontFamily?: string
+    fontSize?: number
+    rowHeight?: number
+  }
+) => {
+  const workbook = new ExcelJS.Workbook()
+  await workbook.xlsx.load(buffer as any)
+  const sheet = workbook.worksheets[0]
+  if (!sheet) return buffer
+
+  const targets = options.texts.map((t) => t.trim()).filter(Boolean)
+  const targetUpper = new Set(targets.map((t) => t.toUpperCase()))
+  const replacements = (options.replacements || []).filter((r) => r.from && r.to && r.from !== r.to)
+  const touchedRows = new Set<number>()
+
+  sheet.eachRow((row, rowNumber) => {
+    row.eachCell({ includeEmpty: false }, (cell) => {
+      let text = getExcelCellPlainText(cell.value).trim()
+      if (!text) return
+
+      for (const { from, to } of replacements) {
+        if (text === from || text.toUpperCase() === from.toUpperCase()) {
+          cell.value = to
+          text = to
+          break
+        }
+      }
+
+      if (!targetUpper.has(text.toUpperCase())) return
+
+      touchedRows.add(rowNumber)
+      cell.font = {
+        ...(cell.font || {}),
+        bold: cell.font?.bold ?? true,
+        ...(options.fontFamily ? { name: options.fontFamily } : {}),
+        ...(options.fontSize != null ? { size: options.fontSize } : {}),
+      }
+      cell.alignment = {
+        ...(cell.alignment || {}),
+        wrapText: true,
+        horizontal: cell.alignment?.horizontal || "center",
+        vertical: cell.alignment?.vertical || "middle",
+      }
+    })
+  })
+
+  if (options.rowHeight != null && options.rowHeight > 0) {
+    for (const rowNumber of touchedRows) {
+      sheet.getRow(rowNumber).height = options.rowHeight
     }
   }
 

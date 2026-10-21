@@ -7,12 +7,27 @@ import {
 import HtmlTruncate from "@components/commons/html-truncate"
 import Table from "@components/commons/table"
 import useSpinner from "@hooks/spinner"
-import { useGetSurveyObjectCount, useGetSurveyStatistics, useGetSurveyStatisticsToField } from "@workspace/libs/api/exam"
+import {
+  useGetSurveyObjectCount,
+  useGetSurveyStatistics,
+  useGetSurveyStatisticsToField,
+} from "@workspace/libs/api/exam"
 import { customExamFetch } from "@workspace/libs/api/custom-instance"
 import { useQuery } from "@tanstack/react-query"
 import type { GetSurveyStatistics200QuestionsItemAnswersItem } from "@workspace/libs/api/schemas"
-import { Button, Col, Dropdown, Empty, Row, Typography } from "antd"
-import { AlignmentType, Document, Table as DocxTable, Packer, Paragraph, TableCell, TableRow, TextRun, VerticalAlign } from "docx"
+import { useFindUniqueSurvey } from "@workspace/db/hooks"
+import { Button, Col, Dropdown, Empty, Row, Tag, Typography } from "antd"
+import {
+  AlignmentType,
+  Document,
+  Table as DocxTable,
+  Packer,
+  Paragraph,
+  TableCell,
+  TableRow,
+  TextRun,
+  VerticalAlign,
+} from "docx"
 // @ts-nocheck
 import ReactECharts from "echarts-for-react"
 import ExcelJS from "exceljs"
@@ -20,6 +35,10 @@ import { saveAs } from "file-saver"
 import { useRouter } from "next/router"
 import { useMemo } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+import {
+  buildSpecificChoiceMap,
+  getSpecialChoiceLabel,
+} from "@/utils/survey-specific-choice"
 
 const { Title } = Typography
 
@@ -39,9 +58,11 @@ type AnswerWithPercent = AnswerItem & { percent: number; total: number }
 
 export const useGetSurveyMajorCount = (id: string) => {
   return useQuery({
-    queryKey: ['/api/survey/objects/count-by-major', id],
+    queryKey: ["/api/survey/objects/count-by-major", id],
     queryFn: async () => {
-      const res = await customExamFetch<any>(`/api/survey/objects/count-by-major?id=${id}`, { method: 'GET' })
+      const res = await customExamFetch<any>(`/api/survey/objects/count-by-major?id=${id}`, {
+        method: "GET",
+      })
       return res?.data || res
     },
     enabled: !!id,
@@ -57,7 +78,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
   const { data } = useGetSurveyObjectCount({
     id: selectedId as string,
   })
-  
+
   const { data: dataMajorCount } = useGetSurveyMajorCount(selectedId as string)
 
   const dataInfo = useMemo(() => {
@@ -127,7 +148,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
         },
         yAxis: {
           type: "category",
-          data: dataMajorCount.map((i:any) => i.name),
+          data: dataMajorCount.map((i: any) => i.name),
         },
         series: [
           {
@@ -137,7 +158,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
             itemStyle: {
               borderRadius: 0,
             },
-            data: dataMajorCount.map((i:any) => i.taken),
+            data: dataMajorCount.map((i: any) => i.taken),
           },
           {
             name: "Tổng",
@@ -146,7 +167,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
             itemStyle: {
               borderRadius: 0,
             },
-            data: dataMajorCount.map((i:any) => i.total),
+            data: dataMajorCount.map((i: any) => i.total),
           },
         ],
       }
@@ -155,6 +176,27 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
   }, [dataMajorCount])
 
   const { data: dataLevel } = useGetSurveyStatisticsToField(selectedId as string)
+
+  const { data: surveyDetail } = useFindUniqueSurvey(
+    {
+      where: { id: selectedId },
+      include: {
+        surveyQuestion: {
+          include: {
+            specificChoice: {
+              orderBy: { createdAt: "asc" },
+            },
+          },
+        },
+      },
+    },
+    { enabled: !!selectedId }
+  )
+
+  const specificChoiceByQuestionId = useMemo(
+    () => buildSpecificChoiceMap(surveyDetail?.surveyQuestion),
+    [surveyDetail]
+  )
 
   const allQuestions = useMemo(() => {
     if (dataLevel?.status === 200) {
@@ -236,18 +278,18 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
       const res = await customExamFetch<any>(`/api/survey/${selectedId}/export-report-excel`, {
         method: "GET",
       })
-      
+
       if (res.status && res.status !== 200) {
         let msg = "Lỗi khi tải file báo cáo Excel"
         try {
           const text = await (res.data as Blob).text()
           const json = JSON.parse(text)
           msg = json.message || msg
-        } catch(e) {}
+        } catch (e) {}
         throw new Error(msg)
       }
 
-      const blob = res.data as Blob || res as any as Blob
+      const blob = (res.data as Blob) || (res as any as Blob)
       saveAs(blob, `Bao_cao_khao_sat_${name || ""}.xlsx`)
     } catch (e) {
       console.error(e)
@@ -255,7 +297,6 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
       hideSpinner()
     }
   }
-
 
   function calculatePercent(items: AnswerItem[]): AnswerWithPercent[] {
     const total = items.reduce((sum, item) => sum + item.count, 0)
@@ -281,6 +322,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
         flatData.push({
           ...q,
           isGroup: false,
+          isSpecial: !!specificChoiceByQuestionId[q.id]?.length,
           questionIndex: questionIndex++,
           rowKey: `question-${q.id}`,
         })
@@ -305,9 +347,19 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                 {
                   title: "Câu hỏi",
                   align: "center",
-                  width: 100,
+                  width: 120,
                   render: (_, record) => {
-                    return record.isGroup ? <strong>ĐGTB</strong> : `Câu hỏi ${record.questionIndex}`
+                    if (record.isGroup) return <strong>ĐGTB</strong>
+                    return (
+                      <div className="flex flex-col items-center gap-1">
+                        <span>{`Câu hỏi ${record.questionIndex}`}</span>
+                        {record.isSpecial && (
+                          <Tag color="blue" className="m-0">
+                            Đặc biệt
+                          </Tag>
+                        )}
+                      </div>
+                    )
                   },
                 },
                 {
@@ -324,15 +376,39 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                 {
                   title: "Phương án trả lời",
                   align: "center",
-                  children: answerHeaders.map((i: any) => ({
+                  children: answerHeaders.map((i: any, answerIndex: number) => ({
+                    // Câu thường: giữ header chung (surveyChoice.description)
                     title: i?.description,
                     id: i?.id,
                     dataIndex: i?.id,
-                    width: 130,
+                    width: 140,
                     align: "center",
                     render: (__: any, record: any) => {
-                      const count = calculatePercent(record?.answers || []).find((a) => a.id === i?.id)
-                      return count ? `${count.percent || 0}% (${count.count || 0}/${count.total})` : "0"
+                      const count = calculatePercent(record?.answers || []).find(
+                        (a) => a.id === i?.id
+                      )
+                      const percentText = count
+                        ? `${count.percent || 0}% (${count.count || 0}/${count.total})`
+                        : "0"
+
+                      if (record.isGroup || !record.isSpecial) return percentText
+
+                      // Câu đặc biệt: hiện nhãn specificChoice ngay trên ô % để tránh nhầm với header chung
+                      const specialLabel = getSpecialChoiceLabel(
+                        specificChoiceByQuestionId[record.id],
+                        answerIndex,
+                        i?.answer
+                      )
+                      return (
+                        <div className="leading-tight">
+                          {specialLabel && (
+                            <div className="mb-1 text-xs font-semibold text-[#1677ff]">
+                              {specialLabel}
+                            </div>
+                          )}
+                          <div>{percentText}</div>
+                        </div>
+                      )
                     },
                   })),
                 },
@@ -349,7 +425,17 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                   title: "Câu hỏi",
                   align: "center",
                   render: (_, record) => {
-                    return record.isGroup ? <strong>ĐGTB</strong> : `Câu hỏi ${record.questionIndex}`
+                    if (record.isGroup) return <strong>ĐGTB</strong>
+                    return (
+                      <div className="flex flex-col items-center gap-1">
+                        <span>{`Câu hỏi ${record.questionIndex}`}</span>
+                        {record.isSpecial && (
+                          <Tag color="blue" className="m-0">
+                            Đặc biệt
+                          </Tag>
+                        )}
+                      </div>
+                    )
                   },
                 },
                 {
@@ -371,7 +457,12 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
     )
   }
 
-  const exportWordReport = async (name: string, dataTable: any, dataTableInfo: any, dataMajorCount: any) => {
+  const exportWordReport = async (
+    name: string,
+    dataTable: any,
+    dataTableInfo: any,
+    dataMajorCount: any
+  ) => {
     showSpinner()
     try {
       const centerCell = (text = "") =>
@@ -381,6 +472,20 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
             new Paragraph({
               alignment: AlignmentType.CENTER,
               children: [new TextRun(text)],
+            }),
+          ],
+        })
+      const specialAnswerCell = (label: string, percentText: string) =>
+        new TableCell({
+          verticalAlign: VerticalAlign.CENTER,
+          children: [
+            new Paragraph({
+              alignment: AlignmentType.CENTER,
+              children: [new TextRun({ text: label, bold: true, size: 18 })],
+            }),
+            new Paragraph({
+              alignment: AlignmentType.CENTER,
+              children: [new TextRun(percentText)],
             }),
           ],
         })
@@ -398,9 +503,9 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
         })
 
       const buildQuestionTable = (tData: any) => {
-        const answerHeaders = tData?.[0]?.answers?.map((a: any) => a.description) 
-          || tData?.[0]?.questions?.[0]?.answers?.map((a: any) => a.description) 
-          || []
+        const answerHeaderItems =
+          tData?.[0]?.answers || tData?.[0]?.questions?.[0]?.answers || []
+        const answerHeaders = answerHeaderItems.map((a: any) => a.description)
 
         const answerRows: any[] = []
         if (tData?.length > 0) {
@@ -409,7 +514,12 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
           tData.forEach((group: any) => {
             flatData.push({ ...group, isGroup: true })
             group.questions?.forEach((q: any) => {
-              flatData.push({ ...q, isGroup: false, questionIndex: qIndex++ })
+              flatData.push({
+                ...q,
+                isGroup: false,
+                isSpecial: !!specificChoiceByQuestionId[q.id]?.length,
+                questionIndex: qIndex++,
+              })
             })
           })
 
@@ -419,11 +529,47 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
               new TableRow({
                 children: [
                   centerCell(i.isGroup ? "" : String(i.questionIndex)),
-                  centerCell(i.isGroup ? "ĐGTB" : `Câu hỏi ${i.questionIndex}`),
+                  i.isGroup
+                    ? centerCell("ĐGTB")
+                    : i.isSpecial
+                      ? new TableCell({
+                          verticalAlign: VerticalAlign.CENTER,
+                          children: [
+                            new Paragraph({
+                              alignment: AlignmentType.CENTER,
+                              children: [
+                                new TextRun(`Câu hỏi ${i.questionIndex}`),
+                                new TextRun({ text: " *", bold: true, color: "FF0000" }),
+                              ],
+                            }),
+                          ],
+                        })
+                      : centerCell(`Câu hỏi ${i.questionIndex}`),
                   new TableCell({
-                    children: [new Paragraph({ children: [new TextRun({ text: (i.isGroup ? i.groupName : i?.name) || "", bold: i.isGroup })] })],
+                    children: [
+                      new Paragraph({
+                        children: [
+                          new TextRun({
+                            text: (i.isGroup ? i.groupName : i?.name) || "",
+                            bold: i.isGroup,
+                          }),
+                        ],
+                      }),
+                    ],
                   }),
-                  ...percents.map((a: any) => centerCell(`${a.percent || 0}% (${a?.count || 0}/${a?.total || 0})`)),
+                  ...percents.map((a: any, answerIndex: number) => {
+                    const percentText = `${a.percent || 0}% (${a?.count || 0}/${a?.total || 0})`
+                    if (i.isGroup || !i.isSpecial) return centerCell(percentText)
+
+                    const specialLabel = getSpecialChoiceLabel(
+                      specificChoiceByQuestionId[i.id],
+                      answerIndex,
+                      a?.answer
+                    )
+                    return specialLabel
+                      ? specialAnswerCell(specialLabel, percentText)
+                      : centerCell(percentText)
+                  }),
                 ],
               })
             )
@@ -442,7 +588,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                   ],
                 }),
                 new TableRow({
-                  children: answerHeaders.map((h: string) => headerCell(h)),
+                  children: answerHeaders.map((h: string) => headerCell(h || "")),
                 }),
               ]
             : [
@@ -457,13 +603,16 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
         })
       }
 
-      const buildSection = (title: string, tData: any, majorName: string = "", majorOrg: string = "") => {
+      const buildSection = (
+        title: string,
+        tData: any,
+        majorName: string = "",
+        majorOrg: string = ""
+      ) => {
         const headerParagraphs = [
           new Paragraph({
             alignment: "center",
-            children: [
-              new TextRun({ text: `Báo cáo khảo sát: ${name}`, bold: true, size: 28 }),
-            ],
+            children: [new TextRun({ text: `Tổng hợp số liệu: ${name}`, bold: true, size: 28 })],
           }),
           ...(majorOrg
             ? [
@@ -502,7 +651,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
           new Paragraph({
             children: [new TextRun({ text: "Thống kê theo từng Câu hỏi", bold: true, size: 24 })],
           }),
-          buildQuestionTable(tData)
+          buildQuestionTable(tData),
         ]
       }
 
@@ -526,16 +675,19 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
       if (dataMajorCount && dataMajorCount.length > 0) {
         for (const major of dataMajorCount) {
           try {
-            const res = await customExamFetch<any>(`/api/survey/${selectedId}/statistics-to-Field?majorName=${encodeURIComponent(major.name)}`, { method: 'GET' })
+            const res = await customExamFetch<any>(
+              `/api/survey/${selectedId}/statistics-to-Field?majorName=${encodeURIComponent(major.name)}`,
+              { method: "GET" }
+            )
             const tData = res?.data?.data || res?.data || res
             if (tData) {
               sections.push({
                 properties: {},
-                children: buildSection(`CN ${major.name}`, tData, major.name, major.organization)
+                children: buildSection(`CN ${major.name}`, tData, major.name, major.organization),
               })
             }
-          } catch(e) {
-             console.error(e)
+          } catch (e) {
+            console.error(e)
           }
         }
       }
@@ -645,7 +797,10 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                         onClick: () =>
                           onOpen({
                             surveyName: dataLevel?.data?.surveyName,
-                            questions: allQuestions,
+                            questions: allQuestions.map((q: any) => ({
+                              ...q,
+                              specificChoice: specificChoiceByQuestionId[q.id] || [],
+                            })),
                             summaryInfo: data?.data,
                             chartOption: dataBarchart,
                           }),
@@ -666,8 +821,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                         key: "excel",
                         label: "Xuất Excel",
                         icon: <FileExcelOutlined />,
-                        onClick: () =>
-                          exportTemplate(dataLevel?.data?.surveyName),
+                        onClick: () => exportTemplate(dataLevel?.data?.surveyName),
                       },
                     ],
                   }}

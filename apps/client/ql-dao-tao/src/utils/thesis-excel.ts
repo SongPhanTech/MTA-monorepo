@@ -11,7 +11,12 @@ import PizZip from "pizzip"
 import { excelTemplate } from "@workspace/libs/api/model"
 import type { ExcelTemplateBody } from "@workspace/libs/api/schemas"
 import { exportFromTemplate, type TableRow } from "@workspace/libs/template-excel"
-import { getMinioUrl, getRuntimeEnv, resolveCouncilMemberUnitName, type OrgUnitNode } from "@workspace/libs/utils"
+import {
+  getMinioUrl,
+  getRuntimeEnv,
+  resolveCouncilMemberUnitName,
+  type OrgUnitNode,
+} from "@workspace/libs/utils"
 import { fetchInstance } from "@api/index"
 import { dayjs } from "@workspace/ui"
 import { toRoman } from "./romans"
@@ -3370,10 +3375,12 @@ const councilAppendixUnit = (expert: any, orgById: Map<string, OrgUnitNode>) => 
   const workplace = typeof expert?.workplace === "string" ? expert.workplace.trim() : ""
   const organization = typeof expert?.organization === "string" ? expert.organization.trim() : ""
   if (!versionInAcademy(expert)) return workplace || organization
-  const lecturerOrg = expert?.lecturer?.userProfile?.donVi ?? expert?.expert?.lecturer?.userProfile?.donVi
+  const lecturerOrg =
+    expert?.lecturer?.userProfile?.donVi ?? expert?.expert?.lecturer?.userProfile?.donVi
   return resolveCouncilMemberUnitName({
     inAcademy: true,
     lecturerOrg: lecturerOrg?.Id ? lecturerOrg : undefined,
+    workplace: typeof expert?.workplace === "string" ? expert.workplace : undefined,
     organization: typeof expert?.organization === "string" ? expert.organization : undefined,
     orgById,
   })
@@ -3423,17 +3430,14 @@ const convertToPhuLucQdhdTemplateData = (
       khoa: firstStudent?.fixedClass?.trainingCourse?.name || "",
       dotXet: session?.name || "",
       soQd: session?.defenseDecisionNumber || "",
-      ngayQd: session?.defenseDecisionDate
-        ? formatDateInSlash(session.defenseDecisionDate)
-        : "",
+      ngayQd: session?.defenseDecisionDate ? formatDateInSlash(session.defenseDecisionDate) : "",
     },
   }
 
   const majorMap = new Map<string, { label: string; students: any[] }>()
   allStudentsInClasses.forEach((student) => {
     if (!student?.thesisRegistrations?.[0]?.thesisProject) return
-    const majorName =
-      student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || ""
+    const majorName = student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || ""
     const trainingField =
       student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name || ""
     const label = (trainingField || majorName || "Chưa xác định").trim()
@@ -4225,8 +4229,7 @@ export const exportPhuLucHuongDanDoAn = async ({
         return {
           supervisor: prefix + formattedName,
           position: profile?.positionCPV?.sTen || "",
-          unit:
-            supervisor.userProfile?.donVi?.sTen || supervisor.userProfile?.donVi?.sCode || "",
+          unit: supervisor.userProfile?.donVi?.sTen || supervisor.userProfile?.donVi?.sCode || "",
         }
       }
 

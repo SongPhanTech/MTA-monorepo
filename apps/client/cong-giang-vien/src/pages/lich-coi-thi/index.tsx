@@ -49,9 +49,7 @@ export default function LichCoiThiPage() {
   })
 
   const semesterOptions = useMemo(() => {
-    const years = schoolYearId
-      ? schoolYears.filter((y) => y.id === schoolYearId)
-      : schoolYears
+    const years = schoolYearId ? schoolYears.filter((y) => y.id === schoolYearId) : schoolYears
     return years.flatMap((y) =>
       (y.semesters ?? []).map((s) => ({
         value: s.id,
@@ -77,7 +75,12 @@ export default function LichCoiThiPage() {
     [userProfileId, schoolYearId, semesterId, dateRange]
   )
 
-  const { data: response, isLoading, isFetching, isError } = useLecturerExamSchedule(queryParams, {
+  const {
+    data: response,
+    isLoading,
+    isFetching,
+    isError,
+  } = useLecturerExamSchedule(queryParams, {
     enabled: !!userProfileId,
   })
 

@@ -57,15 +57,19 @@ type SubjectExport = {
   subject: { id: string; name: string; credit: number | null }
 }
 
-function displayScore(scoreData: {
-  subjectClassId: string | null
-  exempted: boolean | null
-  examPostponed: boolean | null
-  examBanned: boolean | null
-  suspended: boolean | null
-  manualFinalScore: unknown
-  finalScore: unknown
-} | undefined): ScoreValue {
+function displayScore(
+  scoreData:
+    | {
+        subjectClassId: string | null
+        exempted: boolean | null
+        examPostponed: boolean | null
+        examBanned: boolean | null
+        suspended: boolean | null
+        manualFinalScore: unknown
+        finalScore: unknown
+      }
+    | undefined
+): ScoreValue {
   if (!scoreData) return " "
   if (scoreData.exempted) return "Miễn"
   if (scoreData.examPostponed) return "HT"

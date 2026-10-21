@@ -181,8 +181,7 @@ const TableCollapse = <
         return order >= 0
           ? order +
               1 +
-              (((typeof pagination !== "boolean" && pagination?.current) || currentPage || 1) -
-                1) *
+              (((typeof pagination !== "boolean" && pagination?.current) || currentPage || 1) - 1) *
                 DEFAULT_PAGINATE_SIZE
           : ""
       },

@@ -50,9 +50,7 @@ const XLSX = loadXlsx()
 const dryRun = process.argv.includes("--dry-run")
 const excelArg = process.argv.indexOf("--excel")
 const EXCEL =
-  excelArg !== -1
-    ? process.argv[excelArg + 1]
-    : join(__dirname, "Danh sách map lại môn học.xlsx")
+  excelArg !== -1 ? process.argv[excelArg + 1] : join(__dirname, "Danh sách map lại môn học.xlsx")
 const CATALOG_PATH = join(__dirname, "import-catalog.json")
 
 function stripDiacritics(s) {
@@ -387,7 +385,8 @@ async function main() {
       continue
     }
 
-    const tot = resolveTrainingType(typeNameExcel) ||
+    const tot =
+      resolveTrainingType(typeNameExcel) ||
       (entry.trainingTypeId ? types.find((t) => t.id === entry.trainingTypeId) : null)
     if (!tot) {
       skipNoType++
@@ -405,10 +404,7 @@ async function main() {
     const subject = findSubject(subjectNameExcel)
     if (!subject) {
       skipNoSubject++
-      skipNoSubjectNames.set(
-        subjectNameExcel,
-        (skipNoSubjectNames.get(subjectNameExcel) || 0) + 1
-      )
+      skipNoSubjectNames.set(subjectNameExcel, (skipNoSubjectNames.get(subjectNameExcel) || 0) + 1)
       stillUnmatched.push({
         ...entry,
         reason: `Remap: No matching Subject found for "${subjectNameExcel}"`,

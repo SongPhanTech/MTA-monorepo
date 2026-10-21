@@ -46,29 +46,28 @@ export default function DetailSurveyPage({
           },
         },
       },
-      ...(filters.name && filters.name !== ""
+      ...(filters.name
         ? {
             OR: [
               {
-                code: {
-                  contains: filters.name,
-                  mode: "insensitive" as const,
+                userProfile: {
+                  code: {
+                    contains: filters.name,
+                    mode: "insensitive" as const,
+                  },
                 },
               },
               {
-                userProfile: filters.name
-                  ? {
-                      fullname: {
-                        contains: filters.name,
-                        mode: "insensitive" as const,
-                      },
-                    }
-                  : {},
+                userProfile: {
+                  fullname: {
+                    contains: filters.name,
+                    mode: "insensitive" as const,
+                  },
+                },
               },
             ],
           }
         : {}),
-
       ...(filters.subjectClassName && filters.subjectClassName !== ""
         ? ({
             survey: {
@@ -76,7 +75,6 @@ export default function DetailSurveyPage({
                 // BẮT BUỘC: Phải lặp lại điều kiện này để không bị mất lọc theo đợt
                 clusterSurveyId: selectedId,
                 subjectClass: {
-                  // LOGIC CŨ
                   OR: [
                     {
                       code: {
@@ -94,47 +92,55 @@ export default function DetailSurveyPage({
                 },
               },
             },
-          } as any) // 'as any' ở đây để fix lỗi Union Type (lỗi survey lặp lại)
+          } as any)
         : {}),
-      ...(filters.idCardNumber && filters.idCardNumber !== ""
+      ...(filters.code || filters.idCardNumber || filters.phoneNumber || filters.organizationId
         ? {
             userProfile: {
-              idCardNumber: {
-                contains: filters.idCardNumber,
-                mode: "insensitive" as const,
-              },
-            },
-          }
-        : {}),
-      ...(filters.phoneNumber && filters.phoneNumber !== ""
-        ? {
-            userProfile: {
-              phoneNumber: {
-                contains: filters.phoneNumber,
-                mode: "insensitive" as const,
-              },
-            },
-          }
-        : {}),
-      ...(filters.organizationId && filters.organizationId !== ""
-        ? {
-            userProfile: {
-              donVi: {
-                OR: [
-                  {
-                    sMa: {
-                      contains: filters.organizationId,
+              ...(filters.code
+                ? {
+                    code: {
+                      contains: filters.code,
                       mode: "insensitive" as const,
                     },
-                  },
-                  {
-                    sTen: {
-                      contains: filters.organizationId,
+                  }
+                : {}),
+              ...(filters.idCardNumber
+                ? {
+                    idCardNumber: {
+                      contains: filters.idCardNumber,
                       mode: "insensitive" as const,
                     },
-                  },
-                ],
-              },
+                  }
+                : {}),
+              ...(filters.phoneNumber
+                ? {
+                    phoneNumber: {
+                      contains: filters.phoneNumber,
+                      mode: "insensitive" as const,
+                    },
+                  }
+                : {}),
+              ...(filters.organizationId
+                ? {
+                    donVi: {
+                      OR: [
+                        {
+                          sMa: {
+                            contains: filters.organizationId,
+                            mode: "insensitive" as const,
+                          },
+                        },
+                        {
+                          sTen: {
+                            contains: filters.organizationId,
+                            mode: "insensitive" as const,
+                          },
+                        },
+                      ],
+                    },
+                  }
+                : {}),
             },
           }
         : {}),

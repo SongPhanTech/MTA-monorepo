@@ -10,8 +10,14 @@ import { Col, Pagination, Row, Tag, Tooltip, Tabs } from "antd"
 import dayjs from "dayjs"
 import { ArrowRight } from "lucide-react"
 import { useRouter } from "next/router"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+
+type SurveyListTab = "SINGLE" | "CLUSTER"
+
+function parseSurveyListTab(value: unknown): SurveyListTab | undefined {
+  return value === "CLUSTER" || value === "SINGLE" ? value : undefined
+}
 
 export default function DetailSurveyPage() {
   const { showSpinner, hideSpinner } = useSpinner()
@@ -22,7 +28,8 @@ export default function DetailSurveyPage() {
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
   const { id: semesterId } = useSemesterStore()
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
-  const [surveyType, setSurveyType] = useState<"SINGLE" | "CLUSTER">("SINGLE")
+  const [surveyType, setSurveyType] = useState<SurveyListTab>("SINGLE")
+  const [tabResolved, setTabResolved] = useState(false)
   const [filters, setFilters] = useState<FilterProps>({
     code: "",
     name: "",
@@ -93,6 +100,13 @@ export default function DetailSurveyPage() {
   //     }
   // )
 
+  useEffect(() => {
+    if (!router.isReady) return
+    const tab = parseSurveyListTab(router.query.type)
+    if (tab) setSurveyType(tab)
+    setTabResolved(true)
+  }, [router.isReady, router.query.type])
+
   const filterParams = {
     name: filters.name,
     code: filters.code,
@@ -103,16 +117,20 @@ export default function DetailSurveyPage() {
     type: surveyType,
   }
 
-  const { data } = useGetSurveysOfProfile(profileId as string, {
-    page: currentPage,
-    limit: numberOfPages,
-    ...filterParams,
-  })
+  const { data } = useGetSurveysOfProfile(
+    profileId as string,
+    {
+      page: currentPage,
+      limit: numberOfPages,
+      ...filterParams,
+    },
+    { query: { enabled: !!profileId && tabResolved } }
+  )
 
   const { data: statsData } = useGetSurveysOfProfile(
     profileId as string,
     { page: 1, limit: 100, ...filterParams },
-    { query: { enabled: !!profileId } }
+    { query: { enabled: !!profileId && tabResolved } }
   )
 
   const { onOpen } = useDisclosure<{ userId: string; surveyId: string }>({
@@ -141,8 +159,17 @@ export default function DetailSurveyPage() {
         <Tabs
           activeKey={surveyType}
           onChange={(key) => {
-            setSurveyType(key as "SINGLE" | "CLUSTER")
+            const tab = parseSurveyListTab(key) ?? "SINGLE"
+            setSurveyType(tab)
             setCurrentPage(1)
+            router.replace(
+              {
+                pathname: "/thiet-lap-khao-sat/danh-sach-khao-sat",
+                query: { type: tab },
+              },
+              undefined,
+              { shallow: true }
+            )
           }}
           items={[
             { key: "SINGLE", label: "Khảo sát chung" },
@@ -258,11 +285,10 @@ export default function DetailSurveyPage() {
                             })
                             return
                           }
-                          if (!isPublic) {
-                            router.push(`/lam-khao-sat/private/${id}`)
-                          } else {
-                            router.push(`/lam-khao-sat/${id}`)
-                          }
+                          const path = !isPublic
+                            ? `/lam-khao-sat/private/${id}`
+                            : `/lam-khao-sat/${id}`
+                          router.push(`${path}?type=${surveyType}`)
                         }}
                       >
                         <ArrowRight style={{ fontSize: "16px" }} />

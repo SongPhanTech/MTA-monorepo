@@ -26,15 +26,7 @@ import {
 } from "antd"
 import ExcelJS from "exceljs"
 import { saveAs } from "file-saver"
-import {
-  BookOpen,
-  ClipboardList,
-  Download,
-  Layers,
-  UserCheck,
-  UserX,
-  Users,
-} from "lucide-react"
+import { BookOpen, ClipboardList, Download, Layers, UserCheck, UserX, Users } from "lucide-react"
 import { useMemo, useState } from "react"
 
 type Props = {
@@ -77,13 +69,15 @@ type LogRow = {
   } | null
 }
 
-function studentName(s?: {
-  userProfile?: {
-    fullname?: string | null
-    lastName?: string | null
-    firstName?: string | null
+function studentName(
+  s?: {
+    userProfile?: {
+      fullname?: string | null
+      lastName?: string | null
+      firstName?: string | null
+    } | null
   } | null
-} | null) {
+) {
   if (!s?.userProfile) return ""
   return (
     s.userProfile.fullname ||
@@ -277,7 +271,9 @@ export default function ThongKeDangKy({ sessionId }: Props) {
         const credit = sc?.subject?.credit || 0
         if (existingSt) {
           existingSt.logCount += 1
-          if (!existingSt.classes.some((c) => c.code === classInfo.code && c.name === classInfo.name)) {
+          if (
+            !existingSt.classes.some((c) => c.code === classInfo.code && c.name === classInfo.name)
+          ) {
             existingSt.classes.push(classInfo)
             existingSt.totalCredits += credit
           }
@@ -345,9 +341,7 @@ export default function ThongKeDangKy({ sessionId }: Props) {
       registeredInCourse,
       notRegisteredCount: Math.max(totalCourseStudents - registeredInCourse, 0),
       registeredRate:
-        totalCourseStudents > 0
-          ? Math.round((registeredInCourse / totalCourseStudents) * 100)
-          : 0,
+        totalCourseStudents > 0 ? Math.round((registeredInCourse / totalCourseStudents) * 100) : 0,
       registeredStudents,
       notRegisteredStudents,
       subjectClassRows,
@@ -372,12 +366,18 @@ export default function ThongKeDangKy({ sessionId }: Props) {
 
   const loading = loadingLogs || loadingStudents
 
-  async function exportExcel(kind: "full" | "registered" | "not-registered" | "classes" | "subjects") {
+  async function exportExcel(
+    kind: "full" | "registered" | "not-registered" | "classes" | "subjects"
+  ) {
     try {
       showSpinner()
       const workbook = new ExcelJS.Workbook()
       workbook.creator = "QL Đào tạo"
-      const sessionTitle = [session?.name, session?.semester?.name, session?.semester?.schoolYear?.name]
+      const sessionTitle = [
+        session?.name,
+        session?.semester?.name,
+        session?.semester?.schoolYear?.name,
+      ]
         .filter(Boolean)
         .join(" - ")
 
@@ -436,8 +436,7 @@ export default function ThongKeDangKy({ sessionId }: Props) {
               idx + 1,
               s.code,
               s.name,
-              s.dateOfBirth ? formatDateInSlash(s.dateOfBirth)
-                : "",
+              s.dateOfBirth ? formatDateInSlash(s.dateOfBirth) : "",
               s.fixedClassCode,
               s.logCount,
               s.classes.length,
@@ -465,14 +464,7 @@ export default function ThongKeDangKy({ sessionId }: Props) {
 
       if (kind === "full" || kind === "subjects") {
         const ws = workbook.addWorksheet("Theo mon hoc")
-        ws.addRow([
-          "STT",
-          "Mã MH",
-          "Tên môn học",
-          "Số lớp MH",
-          "Số đơn ĐK",
-          "Số SV ĐK",
-        ])
+        ws.addRow(["STT", "Mã MH", "Tên môn học", "Số lớp MH", "Số đơn ĐK", "Số SV ĐK"])
         styleHeader(ws, 6)
         stats.subjectRows.forEach((r, idx) => {
           ws.addRow([idx + 1, r.code, r.name, r.classCount, r.count, r.studentCount])
@@ -1020,11 +1012,7 @@ export default function ThongKeDangKy({ sessionId }: Props) {
                         align: "center",
                         width: 160,
                         render: (_, r) =>
-                          `${
-                            stats.totalLogs
-                              ? Math.round((r.value / stats.totalLogs) * 100)
-                              : 0
-                          }%`,
+                          `${stats.totalLogs ? Math.round((r.value / stats.totalLogs) * 100) : 0}%`,
                       },
                     ]}
                   />

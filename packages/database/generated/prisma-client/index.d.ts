@@ -1591,6 +1591,15 @@ export const ExamType: {
   Oral: 'Oral',
   Practice: 'Practice',
   Project: 'Project',
+  MultipleChoice: 'MultipleChoice',
+  PracticeExercise: 'PracticeExercise',
+  ProjectDefense: 'ProjectDefense',
+  Report: 'Report',
+  ListeningSpeakingReadingWriting: 'ListeningSpeakingReadingWriting',
+  ReadingWriting: 'ReadingWriting',
+  ListeningSpeaking: 'ListeningSpeaking',
+  ListeningReadingWriting: 'ListeningReadingWriting',
+  Unspecified: 'Unspecified',
   Other: 'Other'
 };
 
@@ -1762,7 +1771,8 @@ export const NotificationType: {
   EXAM_DEADLINE: 'EXAM_DEADLINE',
   SURVEY_DEADLINE: 'SURVEY_DEADLINE',
   INDIVIDUAL_SCHEDULE: 'INDIVIDUAL_SCHEDULE',
-  CLASS_REMINDER: 'CLASS_REMINDER'
+  CLASS_REMINDER: 'CLASS_REMINDER',
+  CHAT: 'CHAT'
 };
 
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
@@ -208741,6 +208751,7 @@ export namespace Prisma {
     lecturerId: string | null
     targetDeviceId: string | null
     pushExpiresAt: Date | null
+    recipientProfileId: string | null
   }
 
   export type NotificationMaxAggregateOutputType = {
@@ -208768,6 +208779,7 @@ export namespace Prisma {
     lecturerId: string | null
     targetDeviceId: string | null
     pushExpiresAt: Date | null
+    recipientProfileId: string | null
   }
 
   export type NotificationCountAggregateOutputType = {
@@ -208796,6 +208808,7 @@ export namespace Prisma {
     targetDeviceId: number
     pushExpiresAt: number
     reminderData: number
+    recipientProfileId: number
     _all: number
   }
 
@@ -208825,6 +208838,7 @@ export namespace Prisma {
     lecturerId?: true
     targetDeviceId?: true
     pushExpiresAt?: true
+    recipientProfileId?: true
   }
 
   export type NotificationMaxAggregateInputType = {
@@ -208852,6 +208866,7 @@ export namespace Prisma {
     lecturerId?: true
     targetDeviceId?: true
     pushExpiresAt?: true
+    recipientProfileId?: true
   }
 
   export type NotificationCountAggregateInputType = {
@@ -208880,6 +208895,7 @@ export namespace Prisma {
     targetDeviceId?: true
     pushExpiresAt?: true
     reminderData?: true
+    recipientProfileId?: true
     _all?: true
   }
 
@@ -208981,6 +208997,7 @@ export namespace Prisma {
     targetDeviceId: string | null
     pushExpiresAt: Date | null
     reminderData: JsonValue | null
+    recipientProfileId: string | null
     _count: NotificationCountAggregateOutputType | null
     _min: NotificationMinAggregateOutputType | null
     _max: NotificationMaxAggregateOutputType | null
@@ -209026,6 +209043,7 @@ export namespace Prisma {
     targetDeviceId?: boolean
     pushExpiresAt?: boolean
     reminderData?: boolean
+    recipientProfileId?: boolean
     targetCourses?: boolean | Notification$targetCoursesArgs<ExtArgs>
     targetClasses?: boolean | Notification$targetClassesArgs<ExtArgs>
     targetStudents?: boolean | Notification$targetStudentsArgs<ExtArgs>
@@ -209060,6 +209078,7 @@ export namespace Prisma {
     targetDeviceId?: boolean
     pushExpiresAt?: boolean
     reminderData?: boolean
+    recipientProfileId?: boolean
     lecturer?: boolean | Notification$lecturerArgs<ExtArgs>
   }, ExtArgs["result"]["notification"]>
 
@@ -209089,6 +209108,7 @@ export namespace Prisma {
     targetDeviceId?: boolean
     pushExpiresAt?: boolean
     reminderData?: boolean
+    recipientProfileId?: boolean
     lecturer?: boolean | Notification$lecturerArgs<ExtArgs>
   }, ExtArgs["result"]["notification"]>
 
@@ -209118,9 +209138,10 @@ export namespace Prisma {
     targetDeviceId?: boolean
     pushExpiresAt?: boolean
     reminderData?: boolean
+    recipientProfileId?: boolean
   }
 
-  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "sNguoiTao" | "sNguoiSua" | "dNgayTao" | "dNgaySua" | "sThietBiTao" | "sThietBiSua" | "title" | "content" | "type" | "priority" | "publishedAt" | "expiresAt" | "targetAll" | "lecturerId" | "targetDeviceId" | "pushExpiresAt" | "reminderData", ExtArgs["result"]["notification"]>
+  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "sNguoiTao" | "sNguoiSua" | "dNgayTao" | "dNgaySua" | "sThietBiTao" | "sThietBiSua" | "title" | "content" | "type" | "priority" | "publishedAt" | "expiresAt" | "targetAll" | "lecturerId" | "targetDeviceId" | "pushExpiresAt" | "reminderData" | "recipientProfileId", ExtArgs["result"]["notification"]>
   export type NotificationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     targetCourses?: boolean | Notification$targetCoursesArgs<ExtArgs>
     targetClasses?: boolean | Notification$targetClassesArgs<ExtArgs>
@@ -209171,6 +209192,7 @@ export namespace Prisma {
       targetDeviceId: string | null
       pushExpiresAt: Date | null
       reminderData: Prisma.JsonValue | null
+      recipientProfileId: string | null
     }, ExtArgs["result"]["notification"]>
     composites: {}
   }
@@ -209624,6 +209646,7 @@ export namespace Prisma {
     readonly targetDeviceId: FieldRef<"Notification", 'String'>
     readonly pushExpiresAt: FieldRef<"Notification", 'DateTime'>
     readonly reminderData: FieldRef<"Notification", 'Json'>
+    readonly recipientProfileId: FieldRef<"Notification", 'String'>
   }
     
 
@@ -358346,7 +358369,6 @@ export namespace Prisma {
 
   export type SurveyTopicMinAggregateOutputType = {
     id: string | null
-    code: string | null
     active: boolean | null
     description: string | null
     deletedAt: Date | null
@@ -358359,13 +358381,13 @@ export namespace Prisma {
     dNgaySua: Date | null
     sThietBiTao: string | null
     sThietBiSua: string | null
+    code: string | null
     name: string | null
     type: $Enums.SurveyType | null
   }
 
   export type SurveyTopicMaxAggregateOutputType = {
     id: string | null
-    code: string | null
     active: boolean | null
     description: string | null
     deletedAt: Date | null
@@ -358378,13 +358400,13 @@ export namespace Prisma {
     dNgaySua: Date | null
     sThietBiTao: string | null
     sThietBiSua: string | null
+    code: string | null
     name: string | null
     type: $Enums.SurveyType | null
   }
 
   export type SurveyTopicCountAggregateOutputType = {
     id: number
-    code: number
     active: number
     description: number
     deletedAt: number
@@ -358397,6 +358419,7 @@ export namespace Prisma {
     dNgaySua: number
     sThietBiTao: number
     sThietBiSua: number
+    code: number
     name: number
     type: number
     _all: number
@@ -358405,7 +358428,6 @@ export namespace Prisma {
 
   export type SurveyTopicMinAggregateInputType = {
     id?: true
-    code?: true
     active?: true
     description?: true
     deletedAt?: true
@@ -358418,13 +358440,13 @@ export namespace Prisma {
     dNgaySua?: true
     sThietBiTao?: true
     sThietBiSua?: true
+    code?: true
     name?: true
     type?: true
   }
 
   export type SurveyTopicMaxAggregateInputType = {
     id?: true
-    code?: true
     active?: true
     description?: true
     deletedAt?: true
@@ -358437,13 +358459,13 @@ export namespace Prisma {
     dNgaySua?: true
     sThietBiTao?: true
     sThietBiSua?: true
+    code?: true
     name?: true
     type?: true
   }
 
   export type SurveyTopicCountAggregateInputType = {
     id?: true
-    code?: true
     active?: true
     description?: true
     deletedAt?: true
@@ -358456,6 +358478,7 @@ export namespace Prisma {
     dNgaySua?: true
     sThietBiTao?: true
     sThietBiSua?: true
+    code?: true
     name?: true
     type?: true
     _all?: true
@@ -358535,7 +358558,6 @@ export namespace Prisma {
 
   export type SurveyTopicGroupByOutputType = {
     id: string
-    code: string | null
     active: boolean
     description: string | null
     deletedAt: Date | null
@@ -358548,6 +358570,7 @@ export namespace Prisma {
     dNgaySua: Date | null
     sThietBiTao: string | null
     sThietBiSua: string | null
+    code: string | null
     name: string
     type: $Enums.SurveyType | null
     _count: SurveyTopicCountAggregateOutputType | null
@@ -358571,7 +358594,6 @@ export namespace Prisma {
 
   export type SurveyTopicSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    code?: boolean
     active?: boolean
     description?: boolean
     deletedAt?: boolean
@@ -358584,6 +358606,7 @@ export namespace Prisma {
     dNgaySua?: boolean
     sThietBiTao?: boolean
     sThietBiSua?: boolean
+    code?: boolean
     name?: boolean
     type?: boolean
     clusterSurvey?: boolean | SurveyTopic$clusterSurveyArgs<ExtArgs>
@@ -358594,7 +358617,6 @@ export namespace Prisma {
 
   export type SurveyTopicSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    code?: boolean
     active?: boolean
     description?: boolean
     deletedAt?: boolean
@@ -358607,13 +358629,13 @@ export namespace Prisma {
     dNgaySua?: boolean
     sThietBiTao?: boolean
     sThietBiSua?: boolean
+    code?: boolean
     name?: boolean
     type?: boolean
   }, ExtArgs["result"]["surveyTopic"]>
 
   export type SurveyTopicSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    code?: boolean
     active?: boolean
     description?: boolean
     deletedAt?: boolean
@@ -358626,13 +358648,13 @@ export namespace Prisma {
     dNgaySua?: boolean
     sThietBiTao?: boolean
     sThietBiSua?: boolean
+    code?: boolean
     name?: boolean
     type?: boolean
   }, ExtArgs["result"]["surveyTopic"]>
 
   export type SurveyTopicSelectScalar = {
     id?: boolean
-    code?: boolean
     active?: boolean
     description?: boolean
     deletedAt?: boolean
@@ -358645,11 +358667,12 @@ export namespace Prisma {
     dNgaySua?: boolean
     sThietBiTao?: boolean
     sThietBiSua?: boolean
+    code?: boolean
     name?: boolean
     type?: boolean
   }
 
-  export type SurveyTopicOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "sNguoiTao" | "sNguoiSua" | "dNgayTao" | "dNgaySua" | "sThietBiTao" | "sThietBiSua" | "name" | "type", ExtArgs["result"]["surveyTopic"]>
+  export type SurveyTopicOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "sNguoiTao" | "sNguoiSua" | "dNgayTao" | "dNgaySua" | "sThietBiTao" | "sThietBiSua" | "code" | "name" | "type", ExtArgs["result"]["surveyTopic"]>
   export type SurveyTopicInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     clusterSurvey?: boolean | SurveyTopic$clusterSurveyArgs<ExtArgs>
     survey?: boolean | SurveyTopic$surveyArgs<ExtArgs>
@@ -358668,7 +358691,6 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      code: string | null
       active: boolean
       description: string | null
       deletedAt: Date | null
@@ -358681,6 +358703,7 @@ export namespace Prisma {
       dNgaySua: Date | null
       sThietBiTao: string | null
       sThietBiSua: string | null
+      code: string | null
       name: string
       type: $Enums.SurveyType | null
     }, ExtArgs["result"]["surveyTopic"]>
@@ -359110,7 +359133,6 @@ export namespace Prisma {
    */
   interface SurveyTopicFieldRefs {
     readonly id: FieldRef<"SurveyTopic", 'String'>
-    readonly code: FieldRef<"SurveyTopic", 'String'>
     readonly active: FieldRef<"SurveyTopic", 'Boolean'>
     readonly description: FieldRef<"SurveyTopic", 'String'>
     readonly deletedAt: FieldRef<"SurveyTopic", 'DateTime'>
@@ -359123,6 +359145,7 @@ export namespace Prisma {
     readonly dNgaySua: FieldRef<"SurveyTopic", 'DateTime'>
     readonly sThietBiTao: FieldRef<"SurveyTopic", 'String'>
     readonly sThietBiSua: FieldRef<"SurveyTopic", 'String'>
+    readonly code: FieldRef<"SurveyTopic", 'String'>
     readonly name: FieldRef<"SurveyTopic", 'String'>
     readonly type: FieldRef<"SurveyTopic", 'SurveyType'>
   }
@@ -426505,7 +426528,8 @@ export namespace Prisma {
     lecturerId: 'lecturerId',
     targetDeviceId: 'targetDeviceId',
     pushExpiresAt: 'pushExpiresAt',
-    reminderData: 'reminderData'
+    reminderData: 'reminderData',
+    recipientProfileId: 'recipientProfileId'
   };
 
   export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
@@ -429355,7 +429379,6 @@ export namespace Prisma {
 
   export const SurveyTopicScalarFieldEnum: {
     id: 'id',
-    code: 'code',
     active: 'active',
     description: 'description',
     deletedAt: 'deletedAt',
@@ -429368,6 +429391,7 @@ export namespace Prisma {
     dNgaySua: 'dNgaySua',
     sThietBiTao: 'sThietBiTao',
     sThietBiSua: 'sThietBiSua',
+    code: 'code',
     name: 'name',
     type: 'type'
   };
@@ -432870,7 +432894,8 @@ export namespace Prisma {
     title: 'title',
     content: 'content',
     lecturerId: 'lecturerId',
-    targetDeviceId: 'targetDeviceId'
+    targetDeviceId: 'targetDeviceId',
+    recipientProfileId: 'recipientProfileId'
   };
 
   export type NotificationOrderByRelevanceFieldEnum = (typeof NotificationOrderByRelevanceFieldEnum)[keyof typeof NotificationOrderByRelevanceFieldEnum]
@@ -434799,13 +434824,13 @@ export namespace Prisma {
 
   export const SurveyTopicOrderByRelevanceFieldEnum: {
     id: 'id',
-    code: 'code',
     description: 'description',
     createdBy: 'createdBy',
     sNguoiTao: 'sNguoiTao',
     sNguoiSua: 'sNguoiSua',
     sThietBiTao: 'sThietBiTao',
     sThietBiSua: 'sThietBiSua',
+    code: 'code',
     name: 'name'
   };
 
@@ -455328,6 +455353,7 @@ export namespace Prisma {
     targetDeviceId?: StringNullableFilter<"Notification"> | string | null
     pushExpiresAt?: DateTimeNullableFilter<"Notification"> | Date | string | null
     reminderData?: JsonNullableFilter<"Notification">
+    recipientProfileId?: UuidNullableFilter<"Notification"> | string | null
     targetCourses?: TrainingCourseListRelationFilter
     targetClasses?: FixedClassListRelationFilter
     targetStudents?: StudentListRelationFilter
@@ -455361,6 +455387,7 @@ export namespace Prisma {
     targetDeviceId?: SortOrderInput | SortOrder
     pushExpiresAt?: SortOrderInput | SortOrder
     reminderData?: SortOrderInput | SortOrder
+    recipientProfileId?: SortOrderInput | SortOrder
     targetCourses?: TrainingCourseOrderByRelationAggregateInput
     targetClasses?: FixedClassOrderByRelationAggregateInput
     targetStudents?: StudentOrderByRelationAggregateInput
@@ -455398,6 +455425,7 @@ export namespace Prisma {
     targetDeviceId?: StringNullableFilter<"Notification"> | string | null
     pushExpiresAt?: DateTimeNullableFilter<"Notification"> | Date | string | null
     reminderData?: JsonNullableFilter<"Notification">
+    recipientProfileId?: UuidNullableFilter<"Notification"> | string | null
     targetCourses?: TrainingCourseListRelationFilter
     targetClasses?: FixedClassListRelationFilter
     targetStudents?: StudentListRelationFilter
@@ -455431,6 +455459,7 @@ export namespace Prisma {
     targetDeviceId?: SortOrderInput | SortOrder
     pushExpiresAt?: SortOrderInput | SortOrder
     reminderData?: SortOrderInput | SortOrder
+    recipientProfileId?: SortOrderInput | SortOrder
     _count?: NotificationCountOrderByAggregateInput
     _max?: NotificationMaxOrderByAggregateInput
     _min?: NotificationMinOrderByAggregateInput
@@ -455465,6 +455494,7 @@ export namespace Prisma {
     targetDeviceId?: StringNullableWithAggregatesFilter<"Notification"> | string | null
     pushExpiresAt?: DateTimeNullableWithAggregatesFilter<"Notification"> | Date | string | null
     reminderData?: JsonNullableWithAggregatesFilter<"Notification">
+    recipientProfileId?: UuidNullableWithAggregatesFilter<"Notification"> | string | null
   }
 
   export type PersonalWorkTagWhereInput = {
@@ -470847,7 +470877,6 @@ export namespace Prisma {
     OR?: SurveyTopicWhereInput[]
     NOT?: SurveyTopicWhereInput | SurveyTopicWhereInput[]
     id?: StringFilter<"SurveyTopic"> | string
-    code?: StringNullableFilter<"SurveyTopic"> | string | null
     active?: BoolFilter<"SurveyTopic"> | boolean
     description?: StringNullableFilter<"SurveyTopic"> | string | null
     deletedAt?: DateTimeNullableFilter<"SurveyTopic"> | Date | string | null
@@ -470860,6 +470889,7 @@ export namespace Prisma {
     dNgaySua?: DateTimeNullableFilter<"SurveyTopic"> | Date | string | null
     sThietBiTao?: StringNullableFilter<"SurveyTopic"> | string | null
     sThietBiSua?: StringNullableFilter<"SurveyTopic"> | string | null
+    code?: StringNullableFilter<"SurveyTopic"> | string | null
     name?: StringFilter<"SurveyTopic"> | string
     type?: EnumSurveyTypeNullableFilter<"SurveyTopic"> | $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyListRelationFilter
@@ -470869,7 +470899,6 @@ export namespace Prisma {
 
   export type SurveyTopicOrderByWithRelationInput = {
     id?: SortOrder
-    code?: SortOrderInput | SortOrder
     active?: SortOrder
     description?: SortOrderInput | SortOrder
     deletedAt?: SortOrderInput | SortOrder
@@ -470882,6 +470911,7 @@ export namespace Prisma {
     dNgaySua?: SortOrderInput | SortOrder
     sThietBiTao?: SortOrderInput | SortOrder
     sThietBiSua?: SortOrderInput | SortOrder
+    code?: SortOrderInput | SortOrder
     name?: SortOrder
     type?: SortOrderInput | SortOrder
     clusterSurvey?: ClusterSurveyOrderByRelationAggregateInput
@@ -470892,7 +470922,6 @@ export namespace Prisma {
 
   export type SurveyTopicWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    code?: string
     AND?: SurveyTopicWhereInput | SurveyTopicWhereInput[]
     OR?: SurveyTopicWhereInput[]
     NOT?: SurveyTopicWhereInput | SurveyTopicWhereInput[]
@@ -470908,16 +470937,16 @@ export namespace Prisma {
     dNgaySua?: DateTimeNullableFilter<"SurveyTopic"> | Date | string | null
     sThietBiTao?: StringNullableFilter<"SurveyTopic"> | string | null
     sThietBiSua?: StringNullableFilter<"SurveyTopic"> | string | null
+    code?: StringNullableFilter<"SurveyTopic"> | string | null
     name?: StringFilter<"SurveyTopic"> | string
     type?: EnumSurveyTypeNullableFilter<"SurveyTopic"> | $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyListRelationFilter
     survey?: SurveyListRelationFilter
     surveyQuestionGroup?: SurveyQuestionGroupListRelationFilter
-  }, "id" | "code">
+  }, "id">
 
   export type SurveyTopicOrderByWithAggregationInput = {
     id?: SortOrder
-    code?: SortOrderInput | SortOrder
     active?: SortOrder
     description?: SortOrderInput | SortOrder
     deletedAt?: SortOrderInput | SortOrder
@@ -470930,6 +470959,7 @@ export namespace Prisma {
     dNgaySua?: SortOrderInput | SortOrder
     sThietBiTao?: SortOrderInput | SortOrder
     sThietBiSua?: SortOrderInput | SortOrder
+    code?: SortOrderInput | SortOrder
     name?: SortOrder
     type?: SortOrderInput | SortOrder
     _count?: SurveyTopicCountOrderByAggregateInput
@@ -470942,7 +470972,6 @@ export namespace Prisma {
     OR?: SurveyTopicScalarWhereWithAggregatesInput[]
     NOT?: SurveyTopicScalarWhereWithAggregatesInput | SurveyTopicScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"SurveyTopic"> | string
-    code?: StringNullableWithAggregatesFilter<"SurveyTopic"> | string | null
     active?: BoolWithAggregatesFilter<"SurveyTopic"> | boolean
     description?: StringNullableWithAggregatesFilter<"SurveyTopic"> | string | null
     deletedAt?: DateTimeNullableWithAggregatesFilter<"SurveyTopic"> | Date | string | null
@@ -470955,6 +470984,7 @@ export namespace Prisma {
     dNgaySua?: DateTimeNullableWithAggregatesFilter<"SurveyTopic"> | Date | string | null
     sThietBiTao?: StringNullableWithAggregatesFilter<"SurveyTopic"> | string | null
     sThietBiSua?: StringNullableWithAggregatesFilter<"SurveyTopic"> | string | null
+    code?: StringNullableWithAggregatesFilter<"SurveyTopic"> | string | null
     name?: StringWithAggregatesFilter<"SurveyTopic"> | string
     type?: EnumSurveyTypeNullableWithAggregatesFilter<"SurveyTopic"> | $Enums.SurveyType | null
   }
@@ -499289,6 +499319,7 @@ export namespace Prisma {
     targetDeviceId?: string | null
     pushExpiresAt?: Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: string | null
     targetCourses?: TrainingCourseCreateNestedManyWithoutNotificationsInput
     targetClasses?: FixedClassCreateNestedManyWithoutNotificationsInput
     targetStudents?: StudentCreateNestedManyWithoutNotificationsInput
@@ -499322,6 +499353,7 @@ export namespace Prisma {
     targetDeviceId?: string | null
     pushExpiresAt?: Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: string | null
     targetCourses?: TrainingCourseUncheckedCreateNestedManyWithoutNotificationsInput
     targetClasses?: FixedClassUncheckedCreateNestedManyWithoutNotificationsInput
     targetStudents?: StudentUncheckedCreateNestedManyWithoutNotificationsInput
@@ -499353,6 +499385,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     targetCourses?: TrainingCourseUpdateManyWithoutNotificationsNestedInput
     targetClasses?: FixedClassUpdateManyWithoutNotificationsNestedInput
     targetStudents?: StudentUpdateManyWithoutNotificationsNestedInput
@@ -499386,6 +499419,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     targetCourses?: TrainingCourseUncheckedUpdateManyWithoutNotificationsNestedInput
     targetClasses?: FixedClassUncheckedUpdateManyWithoutNotificationsNestedInput
     targetStudents?: StudentUncheckedUpdateManyWithoutNotificationsNestedInput
@@ -499418,6 +499452,7 @@ export namespace Prisma {
     targetDeviceId?: string | null
     pushExpiresAt?: Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: string | null
   }
 
   export type NotificationUpdateManyMutationInput = {
@@ -499445,6 +499480,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type NotificationUncheckedUpdateManyInput = {
@@ -499473,6 +499509,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PersonalWorkTagCreateInput = {
@@ -517710,7 +517747,6 @@ export namespace Prisma {
 
   export type SurveyTopicCreateInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
@@ -517723,6 +517759,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    code?: string | null
     name: string
     type?: $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyCreateNestedManyWithoutSurveyTopicInput
@@ -517732,7 +517769,6 @@ export namespace Prisma {
 
   export type SurveyTopicUncheckedCreateInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
@@ -517745,6 +517781,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    code?: string | null
     name: string
     type?: $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutSurveyTopicInput
@@ -517754,7 +517791,6 @@ export namespace Prisma {
 
   export type SurveyTopicUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -517767,6 +517803,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyUpdateManyWithoutSurveyTopicNestedInput
@@ -517776,7 +517813,6 @@ export namespace Prisma {
 
   export type SurveyTopicUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -517789,6 +517825,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutSurveyTopicNestedInput
@@ -517798,7 +517835,6 @@ export namespace Prisma {
 
   export type SurveyTopicCreateManyInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
@@ -517811,13 +517847,13 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    code?: string | null
     name: string
     type?: $Enums.SurveyType | null
   }
 
   export type SurveyTopicUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -517830,13 +517866,13 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
   }
 
   export type SurveyTopicUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -517849,6 +517885,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
   }
@@ -538880,6 +538917,7 @@ export namespace Prisma {
     targetDeviceId?: SortOrder
     pushExpiresAt?: SortOrder
     reminderData?: SortOrder
+    recipientProfileId?: SortOrder
   }
 
   export type NotificationMaxOrderByAggregateInput = {
@@ -538907,6 +538945,7 @@ export namespace Prisma {
     lecturerId?: SortOrder
     targetDeviceId?: SortOrder
     pushExpiresAt?: SortOrder
+    recipientProfileId?: SortOrder
   }
 
   export type NotificationMinOrderByAggregateInput = {
@@ -538934,6 +538973,7 @@ export namespace Prisma {
     lecturerId?: SortOrder
     targetDeviceId?: SortOrder
     pushExpiresAt?: SortOrder
+    recipientProfileId?: SortOrder
   }
 
   export type EnumNotificationTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -549369,7 +549409,6 @@ export namespace Prisma {
 
   export type SurveyTopicCountOrderByAggregateInput = {
     id?: SortOrder
-    code?: SortOrder
     active?: SortOrder
     description?: SortOrder
     deletedAt?: SortOrder
@@ -549382,13 +549421,13 @@ export namespace Prisma {
     dNgaySua?: SortOrder
     sThietBiTao?: SortOrder
     sThietBiSua?: SortOrder
+    code?: SortOrder
     name?: SortOrder
     type?: SortOrder
   }
 
   export type SurveyTopicMaxOrderByAggregateInput = {
     id?: SortOrder
-    code?: SortOrder
     active?: SortOrder
     description?: SortOrder
     deletedAt?: SortOrder
@@ -549401,13 +549440,13 @@ export namespace Prisma {
     dNgaySua?: SortOrder
     sThietBiTao?: SortOrder
     sThietBiSua?: SortOrder
+    code?: SortOrder
     name?: SortOrder
     type?: SortOrder
   }
 
   export type SurveyTopicMinOrderByAggregateInput = {
     id?: SortOrder
-    code?: SortOrder
     active?: SortOrder
     description?: SortOrder
     deletedAt?: SortOrder
@@ -549420,6 +549459,7 @@ export namespace Prisma {
     dNgaySua?: SortOrder
     sThietBiTao?: SortOrder
     sThietBiSua?: SortOrder
+    code?: SortOrder
     name?: SortOrder
     type?: SortOrder
   }
@@ -654441,6 +654481,7 @@ export namespace Prisma {
     targetDeviceId?: string | null
     pushExpiresAt?: Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: string | null
     targetClasses?: FixedClassCreateNestedManyWithoutNotificationsInput
     targetStudents?: StudentCreateNestedManyWithoutNotificationsInput
     lecturer?: LecturerCreateNestedOneWithoutNotificationsInput
@@ -654473,6 +654514,7 @@ export namespace Prisma {
     targetDeviceId?: string | null
     pushExpiresAt?: Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: string | null
     targetClasses?: FixedClassUncheckedCreateNestedManyWithoutNotificationsInput
     targetStudents?: StudentUncheckedCreateNestedManyWithoutNotificationsInput
     attachments?: DocumentFileUncheckedCreateNestedManyWithoutNotificationInput
@@ -655539,6 +655581,7 @@ export namespace Prisma {
     targetDeviceId?: StringNullableFilter<"Notification"> | string | null
     pushExpiresAt?: DateTimeNullableFilter<"Notification"> | Date | string | null
     reminderData?: JsonNullableFilter<"Notification">
+    recipientProfileId?: UuidNullableFilter<"Notification"> | string | null
   }
 
   export type SurveyObjectTypeUpsertWithWhereUniqueWithoutTrainingCoursesInput = {
@@ -657537,6 +657580,7 @@ export namespace Prisma {
     targetDeviceId?: string | null
     pushExpiresAt?: Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: string | null
     targetCourses?: TrainingCourseCreateNestedManyWithoutNotificationsInput
     targetStudents?: StudentCreateNestedManyWithoutNotificationsInput
     lecturer?: LecturerCreateNestedOneWithoutNotificationsInput
@@ -657569,6 +657613,7 @@ export namespace Prisma {
     targetDeviceId?: string | null
     pushExpiresAt?: Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: string | null
     targetCourses?: TrainingCourseUncheckedCreateNestedManyWithoutNotificationsInput
     targetStudents?: StudentUncheckedCreateNestedManyWithoutNotificationsInput
     attachments?: DocumentFileUncheckedCreateNestedManyWithoutNotificationInput
@@ -682189,6 +682234,7 @@ export namespace Prisma {
     targetDeviceId?: string | null
     pushExpiresAt?: Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: string | null
     targetCourses?: TrainingCourseCreateNestedManyWithoutNotificationsInput
     targetClasses?: FixedClassCreateNestedManyWithoutNotificationsInput
     lecturer?: LecturerCreateNestedOneWithoutNotificationsInput
@@ -682221,6 +682267,7 @@ export namespace Prisma {
     targetDeviceId?: string | null
     pushExpiresAt?: Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: string | null
     targetCourses?: TrainingCourseUncheckedCreateNestedManyWithoutNotificationsInput
     targetClasses?: FixedClassUncheckedCreateNestedManyWithoutNotificationsInput
     attachments?: DocumentFileUncheckedCreateNestedManyWithoutNotificationInput
@@ -690196,6 +690243,7 @@ export namespace Prisma {
     targetDeviceId?: string | null
     pushExpiresAt?: Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: string | null
     targetCourses?: TrainingCourseCreateNestedManyWithoutNotificationsInput
     targetClasses?: FixedClassCreateNestedManyWithoutNotificationsInput
     targetStudents?: StudentCreateNestedManyWithoutNotificationsInput
@@ -690227,6 +690275,7 @@ export namespace Prisma {
     targetDeviceId?: string | null
     pushExpiresAt?: Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: string | null
     targetCourses?: TrainingCourseUncheckedCreateNestedManyWithoutNotificationsInput
     targetClasses?: FixedClassUncheckedCreateNestedManyWithoutNotificationsInput
     targetStudents?: StudentUncheckedCreateNestedManyWithoutNotificationsInput
@@ -713276,6 +713325,7 @@ export namespace Prisma {
     targetDeviceId?: string | null
     pushExpiresAt?: Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: string | null
     targetCourses?: TrainingCourseCreateNestedManyWithoutNotificationsInput
     targetClasses?: FixedClassCreateNestedManyWithoutNotificationsInput
     targetStudents?: StudentCreateNestedManyWithoutNotificationsInput
@@ -713308,6 +713358,7 @@ export namespace Prisma {
     targetDeviceId?: string | null
     pushExpiresAt?: Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: string | null
     targetCourses?: TrainingCourseUncheckedCreateNestedManyWithoutNotificationsInput
     targetClasses?: FixedClassUncheckedCreateNestedManyWithoutNotificationsInput
     targetStudents?: StudentUncheckedCreateNestedManyWithoutNotificationsInput
@@ -714874,6 +714925,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     targetCourses?: TrainingCourseUpdateManyWithoutNotificationsNestedInput
     targetClasses?: FixedClassUpdateManyWithoutNotificationsNestedInput
     targetStudents?: StudentUpdateManyWithoutNotificationsNestedInput
@@ -714906,6 +714958,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     targetCourses?: TrainingCourseUncheckedUpdateManyWithoutNotificationsNestedInput
     targetClasses?: FixedClassUncheckedUpdateManyWithoutNotificationsNestedInput
     targetStudents?: StudentUncheckedUpdateManyWithoutNotificationsNestedInput
@@ -744036,7 +744089,6 @@ export namespace Prisma {
 
   export type SurveyTopicCreateWithoutSurveyQuestionGroupInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
@@ -744049,6 +744101,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    code?: string | null
     name: string
     type?: $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyCreateNestedManyWithoutSurveyTopicInput
@@ -744057,7 +744110,6 @@ export namespace Prisma {
 
   export type SurveyTopicUncheckedCreateWithoutSurveyQuestionGroupInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
@@ -744070,6 +744122,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    code?: string | null
     name: string
     type?: $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutSurveyTopicInput
@@ -744141,7 +744194,6 @@ export namespace Prisma {
     OR?: SurveyTopicScalarWhereInput[]
     NOT?: SurveyTopicScalarWhereInput | SurveyTopicScalarWhereInput[]
     id?: StringFilter<"SurveyTopic"> | string
-    code?: StringNullableFilter<"SurveyTopic"> | string | null
     active?: BoolFilter<"SurveyTopic"> | boolean
     description?: StringNullableFilter<"SurveyTopic"> | string | null
     deletedAt?: DateTimeNullableFilter<"SurveyTopic"> | Date | string | null
@@ -744154,13 +744206,13 @@ export namespace Prisma {
     dNgaySua?: DateTimeNullableFilter<"SurveyTopic"> | Date | string | null
     sThietBiTao?: StringNullableFilter<"SurveyTopic"> | string | null
     sThietBiSua?: StringNullableFilter<"SurveyTopic"> | string | null
+    code?: StringNullableFilter<"SurveyTopic"> | string | null
     name?: StringFilter<"SurveyTopic"> | string
     type?: EnumSurveyTypeNullableFilter<"SurveyTopic"> | $Enums.SurveyType | null
   }
 
   export type SurveyTopicCreateWithoutClusterSurveyInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
@@ -744173,6 +744225,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    code?: string | null
     name: string
     type?: $Enums.SurveyType | null
     survey?: SurveyCreateNestedManyWithoutSurveyTopicInput
@@ -744181,7 +744234,6 @@ export namespace Prisma {
 
   export type SurveyTopicUncheckedCreateWithoutClusterSurveyInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
@@ -744194,6 +744246,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    code?: string | null
     name: string
     type?: $Enums.SurveyType | null
     survey?: SurveyUncheckedCreateNestedManyWithoutSurveyTopicInput
@@ -744553,7 +744606,6 @@ export namespace Prisma {
 
   export type SurveyTopicUpdateWithoutClusterSurveyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -744566,6 +744618,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
     survey?: SurveyUpdateManyWithoutSurveyTopicNestedInput
@@ -744574,7 +744627,6 @@ export namespace Prisma {
 
   export type SurveyTopicUncheckedUpdateWithoutClusterSurveyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -744587,6 +744639,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
     survey?: SurveyUncheckedUpdateManyWithoutSurveyTopicNestedInput
@@ -745076,7 +745129,6 @@ export namespace Prisma {
 
   export type SurveyTopicCreateWithoutSurveyInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
@@ -745089,6 +745141,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    code?: string | null
     name: string
     type?: $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyCreateNestedManyWithoutSurveyTopicInput
@@ -745097,7 +745150,6 @@ export namespace Prisma {
 
   export type SurveyTopicUncheckedCreateWithoutSurveyInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
@@ -745110,6 +745162,7 @@ export namespace Prisma {
     dNgaySua?: Date | string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
+    code?: string | null
     name: string
     type?: $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutSurveyTopicInput
@@ -745787,7 +745840,6 @@ export namespace Prisma {
 
   export type SurveyTopicUpdateWithoutSurveyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -745800,6 +745852,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyUpdateManyWithoutSurveyTopicNestedInput
@@ -745808,7 +745861,6 @@ export namespace Prisma {
 
   export type SurveyTopicUncheckedUpdateWithoutSurveyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -745821,6 +745873,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutSurveyTopicNestedInput
@@ -796716,6 +796769,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     targetClasses?: FixedClassUpdateManyWithoutNotificationsNestedInput
     targetStudents?: StudentUpdateManyWithoutNotificationsNestedInput
     lecturer?: LecturerUpdateOneWithoutNotificationsNestedInput
@@ -796748,6 +796802,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     targetClasses?: FixedClassUncheckedUpdateManyWithoutNotificationsNestedInput
     targetStudents?: StudentUncheckedUpdateManyWithoutNotificationsNestedInput
     attachments?: DocumentFileUncheckedUpdateManyWithoutNotificationNestedInput
@@ -796779,6 +796834,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SurveyObjectTypeUpdateWithoutTrainingCoursesInput = {
@@ -797931,6 +797987,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     targetCourses?: TrainingCourseUpdateManyWithoutNotificationsNestedInput
     targetStudents?: StudentUpdateManyWithoutNotificationsNestedInput
     lecturer?: LecturerUpdateOneWithoutNotificationsNestedInput
@@ -797963,6 +798020,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     targetCourses?: TrainingCourseUncheckedUpdateManyWithoutNotificationsNestedInput
     targetStudents?: StudentUncheckedUpdateManyWithoutNotificationsNestedInput
     attachments?: DocumentFileUncheckedUpdateManyWithoutNotificationNestedInput
@@ -797994,6 +798052,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SurveyObjectTypeUpdateWithoutFixedClassesInput = {
@@ -808297,6 +808356,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     targetCourses?: TrainingCourseUpdateManyWithoutNotificationsNestedInput
     targetClasses?: FixedClassUpdateManyWithoutNotificationsNestedInput
     lecturer?: LecturerUpdateOneWithoutNotificationsNestedInput
@@ -808329,6 +808389,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     targetCourses?: TrainingCourseUncheckedUpdateManyWithoutNotificationsNestedInput
     targetClasses?: FixedClassUncheckedUpdateManyWithoutNotificationsNestedInput
     attachments?: DocumentFileUncheckedUpdateManyWithoutNotificationNestedInput
@@ -808360,6 +808421,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StudentResearchRegistrationUpdateWithoutStudentInput = {
@@ -811313,6 +811375,7 @@ export namespace Prisma {
     targetDeviceId?: string | null
     pushExpiresAt?: Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: string | null
   }
 
   export type PersonalWorkTagCreateManyLecturerInput = {
@@ -813633,6 +813696,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     targetCourses?: TrainingCourseUpdateManyWithoutNotificationsNestedInput
     targetClasses?: FixedClassUpdateManyWithoutNotificationsNestedInput
     targetStudents?: StudentUpdateManyWithoutNotificationsNestedInput
@@ -813664,6 +813728,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     targetCourses?: TrainingCourseUncheckedUpdateManyWithoutNotificationsNestedInput
     targetClasses?: FixedClassUncheckedUpdateManyWithoutNotificationsNestedInput
     targetStudents?: StudentUncheckedUpdateManyWithoutNotificationsNestedInput
@@ -813695,6 +813760,7 @@ export namespace Prisma {
     targetDeviceId?: NullableStringFieldUpdateOperationsInput | string | null
     pushExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reminderData?: NullableJsonNullValueInput | InputJsonValue
+    recipientProfileId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PersonalWorkTagUpdateWithoutLecturerInput = {
@@ -835520,7 +835586,6 @@ export namespace Prisma {
 
   export type SurveyTopicUpdateWithoutSurveyQuestionGroupInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -835533,6 +835598,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyUpdateManyWithoutSurveyTopicNestedInput
@@ -835541,7 +835607,6 @@ export namespace Prisma {
 
   export type SurveyTopicUncheckedUpdateWithoutSurveyQuestionGroupInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -835554,6 +835619,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutSurveyTopicNestedInput
@@ -835562,7 +835628,6 @@ export namespace Prisma {
 
   export type SurveyTopicUncheckedUpdateManyWithoutSurveyQuestionGroupInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -835575,6 +835640,7 @@ export namespace Prisma {
     dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
   }

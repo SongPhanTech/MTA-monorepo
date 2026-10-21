@@ -76,7 +76,6 @@ function FileItem({
 }
 
 export default function EvidenceCategory() {
-
   const { can, canSome } = useAbility()
   const { data: session } = useSession()
 
@@ -124,7 +123,6 @@ export default function EvidenceCategory() {
         : {}),
     }
   }, [filters.evidenceName, filters.issuer, session?.sDM_NhanVienId, session?.userId])
-
 
   const { data } = useFindManyEvidenceCategory({
     where: categoryWhere,

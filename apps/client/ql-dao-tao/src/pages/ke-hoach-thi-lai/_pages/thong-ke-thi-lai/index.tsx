@@ -81,7 +81,11 @@ export default function ThongKeNoThiLai() {
     }
   }
 
-  const { data: res, isLoading, isFetching } = useOpenSubjectClassReExam(
+  const {
+    data: res,
+    isLoading,
+    isFetching,
+  } = useOpenSubjectClassReExam(
     {
       search: searchText || undefined,
       trainingCourseId: trainingCourseId as string,

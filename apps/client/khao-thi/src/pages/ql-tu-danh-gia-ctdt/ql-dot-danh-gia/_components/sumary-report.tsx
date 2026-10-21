@@ -1,15 +1,4 @@
-import {
-  Alert,
-  Button,
-  Form,
-  Input,
-  Modal,
-  Radio,
-  Tabs,
-  Tag,
-  Typography,
-  message,
-} from "antd"
+import { Alert, Button, Form, Input, Modal, Radio, Tabs, Tag, Typography, message } from "antd"
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
@@ -176,16 +165,9 @@ const SumaryReport = () => {
     }
   )
 
-  const isHeadSecretary = councilMember?.role?.includes(
-    $Enums.EvaluationMemberRole.HEAD_SECRETARY
-  )
-  const isAdvisoryBoard = councilMember?.role?.includes(
-    $Enums.EvaluationMemberRole.ADVISORY_BOARD
-  )
-  const isAdmin = can(
-    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
-    "THEM"
-  )
+  const isHeadSecretary = councilMember?.role?.includes($Enums.EvaluationMemberRole.HEAD_SECRETARY)
+  const isAdvisoryBoard = councilMember?.role?.includes($Enums.EvaluationMemberRole.ADVISORY_BOARD)
+  const isAdmin = can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA, "THEM")
 
   const canEdit = isHeadSecretary || isAdmin
 
@@ -281,8 +263,7 @@ const SumaryReport = () => {
     }
   )
 
-  const isCouncilApproval =
-    data?.status === $Enums.EvaluationPeriodStatus.COUNCIL_APPROVAL
+  const isCouncilApproval = data?.status === $Enums.EvaluationPeriodStatus.COUNCIL_APPROVAL
   const isCompleted = data?.status === $Enums.EvaluationPeriodStatus.COMPLETED
   const isReadOnly = isCouncilApproval || isCompleted || !canEdit
 
@@ -405,8 +386,7 @@ const SumaryReport = () => {
   const confirmSubmitForApproval = () => {
     Modal.confirm({
       title: "Xác nhận gửi duyệt báo cáo",
-      content:
-        "Bạn có chắc chắn muốn hoàn thành và gửi báo cáo cho Ban tư vấn phê duyệt không?",
+      content: "Bạn có chắc chắn muốn hoàn thành và gửi báo cáo cho Ban tư vấn phê duyệt không?",
       okText: "Gửi duyệt",
       cancelText: "Hủy",
       centered: true,
@@ -558,15 +538,9 @@ const SumaryReport = () => {
             <Typography.Title level={4} className="!mb-0">
               Báo cáo {data?.name}
             </Typography.Title>
-            {isCompleted && (
-              <Tag color="success">Đã phê duyệt</Tag>
-            )}
-            {isCouncilApproval && (
-              <Tag color="processing">Chờ Ban tư vấn phê duyệt</Tag>
-            )}
-            {!isCompleted && !isCouncilApproval && (
-              <Tag color="warning">Đang soạn thảo</Tag>
-            )}
+            {isCompleted && <Tag color="success">Đã phê duyệt</Tag>}
+            {isCouncilApproval && <Tag color="processing">Chờ Ban tư vấn phê duyệt</Tag>}
+            {!isCompleted && !isCouncilApproval && <Tag color="warning">Đang soạn thảo</Tag>}
           </div>
 
           <div className="flex items-center gap-2 mr-3">
@@ -576,10 +550,7 @@ const SumaryReport = () => {
 
             {!isReadOnly && canEdit && (
               <>
-                <Button
-                  icon={<SaveOutlined />}
-                  onClick={() => form.submit()}
-                >
+                <Button icon={<SaveOutlined />} onClick={() => form.submit()}>
                   Lưu báo cáo
                 </Button>
                 <Button
@@ -632,21 +603,19 @@ const SumaryReport = () => {
             className="mb-4"
           />
         )}
-        {!isCompleted &&
-          !isCouncilApproval &&
-          parseDescription(data?.description).feedback && (
-            <Alert
-              type="warning"
-              showIcon
-              message="Ý kiến nhận xét từ Ban tư vấn (Yêu cầu chỉnh sửa)"
-              description={
-                <div className="whitespace-pre-wrap font-medium">
-                  {parseDescription(data?.description).feedback}
-                </div>
-              }
-              className="mb-4"
-            />
-          )}
+        {!isCompleted && !isCouncilApproval && parseDescription(data?.description).feedback && (
+          <Alert
+            type="warning"
+            showIcon
+            message="Ý kiến nhận xét từ Ban tư vấn (Yêu cầu chỉnh sửa)"
+            description={
+              <div className="whitespace-pre-wrap font-medium">
+                {parseDescription(data?.description).feedback}
+              </div>
+            }
+            className="mb-4"
+          />
+        )}
 
         <Typography.Title level={5}>Phần Ⅰ. KHÁI QUÁT </Typography.Title>
         <Form.Item label="1. Đặt vấn đề" name="overviewProblem">
@@ -724,20 +693,14 @@ const SumaryReport = () => {
               name="conclusionProgramName"
               className="!mb-0"
             >
-              <Input
-                placeholder="Nhập tên chương trình đào tạo..."
-                disabled={isReadOnly}
-              />
+              <Input placeholder="Nhập tên chương trình đào tạo..." disabled={isReadOnly} />
             </Form.Item>
             <Form.Item
               label={<span className="font-semibold text-gray-700">Mã CTĐT:</span>}
               name="conclusionProgramCode"
               className="!mb-0"
             >
-              <Input
-                placeholder="Nhập mã chương trình đào tạo..."
-                disabled={isReadOnly}
-              />
+              <Input placeholder="Nhập mã chương trình đào tạo..." disabled={isReadOnly} />
             </Form.Item>
           </div>
 
@@ -903,9 +866,7 @@ const SumaryReport = () => {
           </div>
 
           <div className="mt-4 flex flex-wrap items-center gap-3 bg-gray-50/80 p-3 rounded-lg border border-gray-200">
-            <span className="font-bold text-gray-800 text-sm">
-              Tự đánh giá CTĐT:
-            </span>
+            <span className="font-bold text-gray-800 text-sm">Tự đánh giá CTĐT:</span>
             <Form.Item name="conclusionEvaluationResult" className="!mb-0">
               <Radio.Group disabled={isReadOnly}>
                 <Radio value="Đạt">
@@ -927,39 +888,39 @@ const SumaryReport = () => {
             <div className="flex justify-center">
               <div className="w-full max-w-sm bg-gray-50/70 p-4 rounded-lg border border-gray-200 space-y-2">
                 <Form.Item name="conclusionSignDate" className="!mb-2">
-                <Input
-                  placeholder="Hà Nội, ngày    tháng    năm 20..."
-                  className="text-center italic"
-                  disabled={isReadOnly}
-                />
-              </Form.Item>
-              <Form.Item name="conclusionSignTitle" className="!mb-2">
-                <Input
-                  placeholder="CHỦ TỊCH HỘI ĐỒNG"
-                  className="text-center font-bold uppercase"
-                  disabled={isReadOnly}
-                />
-              </Form.Item>
-              <div className="py-6 text-center text-xs text-gray-400 italic border border-dashed border-gray-200 rounded my-2 bg-white">
-                (Ký, ghi rõ họ tên)
+                  <Input
+                    placeholder="Hà Nội, ngày    tháng    năm 20..."
+                    className="text-center italic"
+                    disabled={isReadOnly}
+                  />
+                </Form.Item>
+                <Form.Item name="conclusionSignTitle" className="!mb-2">
+                  <Input
+                    placeholder="CHỦ TỊCH HỘI ĐỒNG"
+                    className="text-center font-bold uppercase"
+                    disabled={isReadOnly}
+                  />
+                </Form.Item>
+                <div className="py-6 text-center text-xs text-gray-400 italic border border-dashed border-gray-200 rounded my-2 bg-white">
+                  (Ký, ghi rõ họ tên)
+                </div>
+                <Form.Item name="conclusionSignPosition" className="!mb-2">
+                  <Input
+                    placeholder="PHÓ GIÁM ĐỐC"
+                    className="text-center font-bold uppercase"
+                    disabled={isReadOnly}
+                  />
+                </Form.Item>
+                <Form.Item name="conclusionSignerName" className="!mb-0">
+                  <Input
+                    className="text-center font-bold text-base text-gray-900"
+                    disabled={isReadOnly}
+                  />
+                </Form.Item>
               </div>
-              <Form.Item name="conclusionSignPosition" className="!mb-2">
-                <Input
-                  placeholder="PHÓ GIÁM ĐỐC"
-                  className="text-center font-bold uppercase"
-                  disabled={isReadOnly}
-                />
-              </Form.Item>
-              <Form.Item name="conclusionSignerName" className="!mb-0">
-                <Input
-                  className="text-center font-bold text-base text-gray-900"
-                  disabled={isReadOnly}
-                />
-              </Form.Item>
             </div>
           </div>
         </div>
-      </div>
 
         <Typography.Title level={5}>Phần Ⅳ. PHỤ LỤC</Typography.Title>
         <Form.Item
@@ -977,9 +938,7 @@ const SumaryReport = () => {
         </Form.Item>
         <Form.Item
           label={
-            <span className="font-semibold text-gray-800">
-              2. Các tư liệu, tài liệu liên quan
-            </span>
+            <span className="font-semibold text-gray-800">2. Các tư liệu, tài liệu liên quan</span>
           }
           name="appendixDocuments"
         >

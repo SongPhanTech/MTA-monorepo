@@ -1,4 +1,5 @@
 import Table from "@components/commons/table"
+import { mergePageSelection } from "@/utils/dang-ky-hoc/merge-page-selection"
 import { useStore } from "@tanstack/react-store"
 import {
   useCountFixedClass,
@@ -10,7 +11,7 @@ import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import { Col, Form, Input, Row } from "antd"
 import { Search } from "lucide-react"
 import type React from "react"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { dangKyHocChoLopQuanLyStore } from "../.."
 
 interface FilterProps {
@@ -23,6 +24,7 @@ export default function LopQuanLyDaGhep() {
   const [numberOfPages, setNumberOfPages] = useState(20)
   const { id: semesterId } = useSemesterStore()
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+  const initializedSubjectClassIdRef = useRef<string | undefined>()
   const [filters, setFilters] = useState<FilterProps>({
     searchText: "",
   })
@@ -37,6 +39,7 @@ export default function LopQuanLyDaGhep() {
         id: subjectClassId as string,
       },
       select: {
+        id: true,
         subjectId: true,
         fixedClasses: {
           select: {
@@ -133,25 +136,29 @@ export default function LopQuanLyDaGhep() {
     }
   )
 
+  const syncFixedClassSelection = (selectedKeys: React.Key[]) => {
+    setSelectedRowKeys(selectedKeys)
+    dangKyHocChoLopQuanLyStore.setState((prev) => ({
+      ...prev,
+      fixedClassesIds: selectedKeys as string[],
+    }))
+  }
+
   useEffect(() => {
-    if (fixedClasses && selectedSubjectClass) {
-      const selectedSubjectClassFixedClassIds = selectedSubjectClass?.fixedClasses.map(
-        (fc) => fc.id
-      )
-      const selectedKeys = fixedClasses
-        .filter((item) => selectedSubjectClassFixedClassIds?.includes(item.id))
-        .map((item) => item.id)
-      setSelectedRowKeys(selectedKeys)
-      if (
-        !dangKyHocChoLopQuanLyStore.state.fixedClassesIds.compare(selectedKeys, (a, b) => a === b)
-      ) {
-        dangKyHocChoLopQuanLyStore.setState((prev) => ({
-          ...prev,
-          fixedClassesIds: selectedKeys as string[],
-        }))
-      }
+    if (!subjectClassId) {
+      initializedSubjectClassIdRef.current = undefined
+      syncFixedClassSelection([])
+      return
     }
-  }, [fixedClasses, selectedSubjectClass])
+    if (initializedSubjectClassIdRef.current === subjectClassId) return
+    if (!selectedSubjectClass?.id || selectedSubjectClass.id !== subjectClassId) {
+      syncFixedClassSelection([])
+      return
+    }
+
+    initializedSubjectClassIdRef.current = subjectClassId
+    syncFixedClassSelection(selectedSubjectClass.fixedClasses.map((fc) => fc.id))
+  }, [subjectClassId, selectedSubjectClass])
 
   const handleFilterChange = (key: string, value: string) => {
     setFilters((prev) => {
@@ -188,12 +195,15 @@ export default function LopQuanLyDaGhep() {
         rowKey="id"
         rowSelection={{
           selectedRowKeys,
+          preserveSelectedRowKeys: true,
           onChange: (selectedKeys) => {
-            setSelectedRowKeys(selectedKeys)
-            dangKyHocChoLopQuanLyStore.setState((prev) => ({
-              ...prev,
-              fixedClassesIds: selectedKeys as string[],
-            }))
+            syncFixedClassSelection(
+              mergePageSelection(
+                selectedRowKeys,
+                fixedClasses.map((item) => item.id),
+                selectedKeys
+              )
+            )
           },
           getCheckboxProps: (record) => ({
             disabled:
@@ -207,7 +217,9 @@ export default function LopQuanLyDaGhep() {
             : ""
         }
         onRow={(record) => ({
-          onClick: () => {
+          onClick: (event) => {
+            const target = event.target as HTMLElement
+            if (target.closest(".ant-checkbox-wrapper, .ant-checkbox")) return
             if (
               record.subjectClasses.length > 0 &&
               record.subjectClasses?.[0].id !== subjectClassId
@@ -220,18 +232,14 @@ export default function LopQuanLyDaGhep() {
             } else {
               selectedKeys.push(record?.id)
             }
-            setSelectedRowKeys(selectedKeys)
-            dangKyHocChoLopQuanLyStore.setState((prev) => ({
-              ...prev,
-              fixedClassesIds: selectedKeys as string[],
-            }))
+            syncFixedClassSelection(selectedKeys)
           },
         })}
         data={fixedClasses}
         columns={[
           {
             title: "TT",
-            width: 35,
+            width: 50,
             align: "center",
             render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
           },

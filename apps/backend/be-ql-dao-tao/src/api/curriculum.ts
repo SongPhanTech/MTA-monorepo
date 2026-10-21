@@ -89,10 +89,10 @@ app.openapi(importCurriculumVersion, async (c) => {
     return c.json({ message: "Lỗi khi đọc file", errors: data.errors }, 400)
   }
 
-  if (data.trainingMajor !== curriculum.trainingMajor.name) {
+  if (data.trainingMajor !== curriculum?.trainingMajor?.name) {
     return c.json(
       {
-        message: `Chuyên ngành đào tạo không khớp: ${data.trainingMajor} vs ${curriculum.trainingMajor.name}`,
+        message: `Chuyên ngành đào tạo không khớp: ${data.trainingMajor} vs ${curriculum?.trainingMajor?.name ?? ""}`,
       },
       400
     )
@@ -305,6 +305,33 @@ app.openapi(exportCurriculumVersion, async (c) => {
         case $Enums.ExamType.Project:
           examTypeLabel = "Đồ án"
           break
+        case $Enums.ExamType.MultipleChoice:
+          examTypeLabel = "Trắc nghiệm"
+          break
+        case $Enums.ExamType.PracticeExercise:
+          examTypeLabel = "Bài tập TH"
+          break
+        case $Enums.ExamType.ProjectDefense:
+          examTypeLabel = "Bảo vệ đồ án"
+          break
+        case $Enums.ExamType.Report:
+          examTypeLabel = "Báo cáo"
+          break
+        case $Enums.ExamType.ListeningSpeakingReadingWriting:
+          examTypeLabel = "Nghe nói đọc viết"
+          break
+        case $Enums.ExamType.ReadingWriting:
+          examTypeLabel = "Đọc viết"
+          break
+        case $Enums.ExamType.ListeningSpeaking:
+          examTypeLabel = "Nghe nói"
+          break
+        case $Enums.ExamType.ListeningReadingWriting:
+          examTypeLabel = "Nghe đọc viết"
+          break
+        case $Enums.ExamType.Unspecified:
+          examTypeLabel = "Chưa xác định"
+          break
         case $Enums.ExamType.Other:
           examTypeLabel = "Khác"
           break
@@ -345,7 +372,7 @@ app.openapi(exportCurriculumVersion, async (c) => {
   template.substitute(1, {
     curriculumName: data.name,
     code: data.code,
-    trainingMajor: data.curriculum.trainingMajor.name,
+    trainingMajor: data.curriculum?.trainingMajor?.name ?? "",
     managementOrganization: data.curriculum.managementOrganization.sTen,
     subjects,
   })
@@ -371,7 +398,7 @@ app.openapi(exportCurriculumVersion, async (c) => {
 
   const result = (await template.generate({ type: "arraybuffer" })) as ArrayBuffer
 
-  const fileName = `CTDT-${data.curriculum.trainingMajor.name}-${data.name}.xlsx`
+  const fileName = `CTDT-${data.curriculum?.trainingMajor?.name ?? ""}-${data.name}.xlsx`
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
   return c.body(result, 200, {

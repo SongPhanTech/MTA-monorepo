@@ -181,7 +181,8 @@ APP_URL_SUFFIX_cong-hoc-vien = /conghocvien/home
 # Targets
 .PHONY: all clean push deploy release all-be build-all-be build-all-fe ship-fe \
 	build-% all-% save-docker-images package-cdn _package-fe-cdn-copy \
-	build-backup deploy-backup all-backup
+	build-backup deploy-backup all-backup all-mta-online \
+	recreate-portal-data-sync-worker
 
 help:
 	@echo "Available targets:"
@@ -195,6 +196,7 @@ help:
 	@echo "  all-$(PKG_PORTAL)"
 	@echo "  all-$(PKG_BE_DAO_TAO_SHARED)"
 	@echo "  all-be"
+	@echo "  all-mta-online   (model, ql-dao-tao, portal, shared, cong-sinh-vien → mta_online)"
 	@echo "  build-all-be"
 	@echo "  build-all-fe"
 	@echo "  all-clients"
@@ -242,6 +244,20 @@ all-clients:
 	@for pkg in $(FE_PKGS); do \
 		$(MAKE) all-$$pkg; \
 	done
+
+# Build + deploy bộ đang chạy trên mta_online.
+# BE: model, ql-dao-tao, portal, shared. FE: cong-sinh-vien-cdn + router-cong-sinh-vien-api.
+# Worker import dùng chung image portal; recreate sau khi image mới đã được load.
+all-mta-online:
+	$(MAKE) all-be-model SERVER_PROFILE=mta_online
+	$(MAKE) all-be-ql-dao-tao SERVER_PROFILE=mta_online
+	$(MAKE) all-be-portal SERVER_PROFILE=mta_online
+	$(MAKE) recreate-portal-data-sync-worker SERVER_PROFILE=mta_online
+	$(MAKE) all-be-ql-dao-tao-shared SERVER_PROFILE=mta_online
+	$(MAKE) all-cong-sinh-vien SERVER_PROFILE=mta_online
+
+recreate-portal-data-sync-worker:
+	$(SSH) $(SERVER_HOST) "cd $(BE_APP_DIR) && docker compose up -d --force-recreate mta-be-portal-data-sync-worker"
 
 save-docker-images:
 	@mkdir -p docker-images

@@ -642,7 +642,7 @@ export async function _generateStudentImportTemplate(
         code: true,
         name: true,
         curriculumVersion: {
-          select: { name: true },
+        select: { name: true },
         },
       },
       orderBy: { name: "asc" },
@@ -916,16 +916,12 @@ function getWorkbookSheetPath(zip: InstanceType<typeof PizZip>, sheetName: strin
   if (!target) return null
 
   const normalized = target.replace(/^\.\//, "").replace(/^\//, "")
-  const candidates = [
-    normalized.startsWith("xl/") ? normalized : `xl/${normalized}`,
-    normalized,
-  ]
+  const candidates = [normalized.startsWith("xl/") ? normalized : `xl/${normalized}`, normalized]
   for (const path of candidates) {
     if (zip.file(path)) return path
   }
   return candidates[0]
 }
-
 
 function catalogLastRow(valueCount: number, hasHeader: boolean): number {
   const dataStartRow = hasHeader ? 2 : 1
@@ -979,7 +975,11 @@ function rewriteCatalogSheetData(
     rowsXml.push(`<row r="${dataStartRow}">${cells}</row>`)
   }
 
-  const lastCol = columns.map((c) => c.col).sort().slice(-1)[0] || "A"
+  const lastCol =
+    columns
+      .map((c) => c.col)
+      .sort()
+      .slice(-1)[0] || "A"
   const sheetData = `<sheetData>${rowsXml.join("")}</sheetData>`
   let xml = zip.file(sheetPath)!.asText()
   if (/<sheetData\b[^>]*\/>/.test(xml)) {
@@ -1035,7 +1035,10 @@ function finalizeStudentImportWorkbook(
     if (file.dir) continue
     let xml = file.asText()
     xml = xml.replace(/<selection\b[^>]*\/>/g, '<selection activeCell="A1" sqref="A1"/>')
-    xml = xml.replace(/<selection\b[^>]*>\s*<\/selection>/g, '<selection activeCell="A1" sqref="A1"/>')
+    xml = xml.replace(
+      /<selection\b[^>]*>\s*<\/selection>/g,
+      '<selection activeCell="A1" sqref="A1"/>'
+    )
     xml = xml.replace(/\s+topLeftCell="[^"]*"/g, "")
     zip.file(file.name, xml)
   }
@@ -1129,7 +1132,18 @@ function finalizeStudentImportWorkbook(
       ["I", sheetRange("DanhMucQuocTich", "A", 2, lastRowBySheet.DanhMucQuocTich ?? 231)],
       ["J", sheetRange("DanhMucTinh", "A", 2, lastRowBySheet.DanhMucTinh ?? 35)],
       ["P", sheetRange("DanhMucLopQuanLi", "A", 1, lastRowBySheet.DanhMucLopQuanLi ?? 1)],
+      ["Q", sheetRange("DanhMucLopQuanLi", "B", 1, lastRowBySheet.DanhMucLopQuanLi ?? 1)],
+      ["R", sheetRange("DanhMucNganh", "A", 2, lastRowBySheet.DanhMucNganh ?? 2)],
       ["S", sheetRange("DanhMucChuyenNganh", "A", 2, lastRowBySheet.DanhMucChuyenNganh ?? 2)],
+      [
+        "T",
+        sheetRange(
+          "DanhMucChuongTrinhDaoTao",
+          "A",
+          1,
+          lastRowBySheet.DanhMucChuongTrinhDaoTao ?? 1
+        ),
+      ],
       [
         "U",
         sheetRange("DanhMucDonViQuanLi", "A", 1, lastRowBySheet.DanhMucDonViQuanLi ?? 1),
@@ -1252,7 +1266,10 @@ function sanitizeStudentImportWorkbook(
     if (file.dir) continue
     let xml = file.asText()
     xml = xml.replace(/<selection\b[^>]*\/>/g, '<selection activeCell="A1" sqref="A1"/>')
-    xml = xml.replace(/<selection\b[^>]*>\s*<\/selection>/g, '<selection activeCell="A1" sqref="A1"/>')
+    xml = xml.replace(
+      /<selection\b[^>]*>\s*<\/selection>/g,
+      '<selection activeCell="A1" sqref="A1"/>'
+    )
     xml = xml.replace(/\s+topLeftCell="[^"]*"/g, "")
     zip.file(file.name, xml)
   }
@@ -1404,9 +1421,7 @@ export const exportArchivedCertificate = async ({
     return {
       no: idx + 1,
       studentName: userProfile?.fullname || "",
-      dateOfBirth: userProfile?.dateOfBirth
-        ? `'${formatDateVn(userProfile.dateOfBirth)}`
-        : "",
+      dateOfBirth: userProfile?.dateOfBirth ? `'${formatDateVn(userProfile.dateOfBirth)}` : "",
       placeOfBirth: formatPlaceOfBirth(userProfile),
       idCardNumber: userProfile?.idCardNumber || "",
       fixedClass: fixedClass?.name || "",
@@ -1418,9 +1433,7 @@ export const exportArchivedCertificate = async ({
       reading: item.readingScore || "",
       writing: item.writingScore || "",
       score: item.score ?? "",
-      issuedDate: item.issuedDate
-        ? `'${formatDateVn(item.issuedDate)}`
-        : "",
+      issuedDate: item.issuedDate ? `'${formatDateVn(item.issuedDate)}` : "",
       issuedBy: item.issuedBy || "",
     }
   })
@@ -1576,17 +1589,13 @@ export const exportArchivedCertificateMulti = async ({
     return {
       no: idx + 1,
       studentName: userProfile?.fullname || "",
-      dateOfBirth: userProfile?.dateOfBirth
-        ? `'${formatDateVn(userProfile.dateOfBirth)}`
-        : "",
+      dateOfBirth: userProfile?.dateOfBirth ? `'${formatDateVn(userProfile.dateOfBirth)}` : "",
       placeOfBirth: formatPlaceOfBirth(userProfile),
       idCardNumber: userProfile?.idCardNumber || "",
       fixedClass: fixedClass?.name || "",
       trainingCourse: fixedClass?.trainingCourse?.name || "",
       trainingMajorName: trainingMajor?.name || "",
-      issuedDate: archivedState?.issuedDate
-        ? `'${formatDateVn(archivedState.issuedDate)}`
-        : "",
+      issuedDate: archivedState?.issuedDate ? `'${formatDateVn(archivedState.issuedDate)}` : "",
       issuedBy: archivedState?.issuedBy || "",
       scores: scoresArray,
     }
@@ -1698,9 +1707,7 @@ export const exportStudentsMissingCertificate = async ({
       no: idx + 1,
       studentCode: userProfile?.code || "",
       studentName: userProfile?.fullname || "",
-      dateOfBirth: userProfile?.dateOfBirth
-        ? `'${formatDateVn(userProfile.dateOfBirth)}`
-        : "",
+      dateOfBirth: userProfile?.dateOfBirth ? `'${formatDateVn(userProfile.dateOfBirth)}` : "",
       fixedClass: fixedClass?.name || "",
       trainingCourse: fixedClass?.trainingCourse?.name || "",
       trainingField: trainingMajor?.trainingField?.name || "",

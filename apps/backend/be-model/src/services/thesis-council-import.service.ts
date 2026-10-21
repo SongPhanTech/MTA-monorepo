@@ -506,9 +506,7 @@ export async function importCouncilFromExcel(
         where: { id: project.id },
         data: {
           title: item.title,
-          supervisorVersionId: item.supervisorId
-            ? versionByExpertId.get(item.supervisorId)!
-            : null,
+          supervisorVersionId: item.supervisorId ? versionByExpertId.get(item.supervisorId)! : null,
           coSupervisorVersionId: item.coSupervisorId
             ? versionByExpertId.get(item.coSupervisorId)!
             : null,

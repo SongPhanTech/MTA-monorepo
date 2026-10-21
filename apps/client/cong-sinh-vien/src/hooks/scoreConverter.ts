@@ -1,8 +1,5 @@
 import type { ScoreConvert } from "@workspace/db/client"
-import {
-  convertScoreWithCourseConfig,
-  type CourseScoreConfig,
-} from "@workspace/libs/utils"
+import { convertScoreWithCourseConfig, type CourseScoreConfig } from "@workspace/libs/utils"
 import { useCallback, useMemo } from "react"
 
 export function useScoreConverter(scoreRanges: ScoreConvert[] = []) {

@@ -278,7 +278,6 @@ export default function PhanCongGiangDay({
     ]
   )
 
-
   const { data: dmDonViIds = [] } = useFindManyDM_DonVi(
     {
       select: { Id: true, sParentId: true },
@@ -2041,11 +2040,7 @@ export default function PhanCongGiangDay({
                   title: "Số SV",
                   width: 50,
                   align: "center",
-                  render: (_, record) => (
-                    <p>
-                      {record?.subjectClassStudent?.length ?? 0}
-                    </p>
-                  ),
+                  render: (_, record) => <p>{record?.subjectClassStudent?.length ?? 0}</p>,
                 },
                 {
                   title: "Khóa GV",

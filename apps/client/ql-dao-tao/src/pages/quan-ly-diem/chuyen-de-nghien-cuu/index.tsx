@@ -382,9 +382,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
               student: {
                 active: true,
                 deletedAt: null,
-                ...(trainingCourseId
-                  ? { fixedClass: { trainingCourseId } }
-                  : {}),
+                ...(trainingCourseId ? { fixedClass: { trainingCourseId } } : {}),
               },
             },
           },
@@ -396,9 +394,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
       const studentSubjectScoreData = subjectStudent
         .data[0] as Prisma.StudentSubjectScoreGetPayload<{}>[]
       if (studentSubjectScoreData.length === 0) {
-        return message.error(
-          "Lớp môn học này không có sinh viên thuộc khóa đã chọn."
-        )
+        return message.error("Lớp môn học này không có sinh viên thuộc khóa đã chọn.")
       }
       const scoreIds = studentSubjectScoreData.map((record) => record.id)
       await createManyStudentResearchTopic({
@@ -560,11 +556,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
         const supervisorVersionId = toVersionId(item.data.update.supervisorId)
         const coSupervisorVersionId = toVersionId(item.data.update.coSupervisorId)
         const { supervisorId: _s, coSupervisorId: _c, ...updateRest } = item.data.update
-        const {
-          supervisorId: _s2,
-          coSupervisorId: _c2,
-          ...createRest
-        } = item.data.create
+        const { supervisorId: _s2, coSupervisorId: _c2, ...createRest } = item.data.create
 
         return {
           ...item,
@@ -672,8 +664,6 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                   Lấy dữ liệu
                 </Button>
               </Form.Item>
-          
-         
             </Flex>
             {role === "P7" && (
               <Flex gap={6} wrap="wrap" align="center">
@@ -687,612 +677,357 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                 </Form.Item>
                 <Form.Item className="mb-0">
                   <div className="flex gap-2">
-                  <Button
-                    type="primary"
-                    icon={<FileOutlined />}
-                    onClick={async () => {
-                      if (!trainingCourseId) {
-                        return message.warning("Vui lòng chọn khoá học trước khi xuất phụ lục!")
-                      }
+                    <Button
+                      type="primary"
+                      icon={<FileOutlined />}
+                      onClick={async () => {
+                        if (!trainingCourseId) {
+                          return message.warning("Vui lòng chọn khoá học trước khi xuất phụ lục!")
+                        }
 
-                      if (!semesterId) {
-                        return message.warning("Vui lòng chọn kỳ học trước khi xuất phụ lục!")
-                      }
-                      const khoaVaKy = await sqlTransaction([
-                        {
-                          model: "TrainingCourse",
-                          operation: "findUnique",
-                          data: {
-                            where: { id: trainingCourseId },
-                            select: {
-                              name: true,
-                            },
-                          },
-                        },
-                        {
-                          model: "Semester",
-                          operation: "findUnique",
-                          data: {
-                            where: { id: semesterId },
-                            select: {
-                              name: true,
-                            },
-                          },
-                        },
-                      ])
-                      const khoaVaKyData = khoaVaKy.data as [{ name: string }, { name: string }]
-
-                      const res = await previewExcelTemplate({
-                        previewKey: `cdnc-qd-giao-${trainingCourseId}-${semesterId}`,
-                        fileName: "QD_GiaoChuyenDe.xlsx",
-                        path: "QD_GiaoChuyenDe.xlsx",
-                        showGridLines: true,
-                        wrapText: true,
-                        prefix: "mta/luan-van",
-                        payload: [
+                        if (!semesterId) {
+                          return message.warning("Vui lòng chọn kỳ học trước khi xuất phụ lục!")
+                        }
+                        const khoaVaKy = await sqlTransaction([
                           {
+                            model: "TrainingCourse",
+                            operation: "findUnique",
                             data: {
-                              khoa: khoaVaKyData?.[0]?.name?.firstCase?.(),
-                              hoc_ky: khoaVaKyData?.[1]?.name?.toLowerCase?.(),
-                              so_hv: studentResearchTopicData.length,
-                              so_hv_chu: studentResearchTopicData.length.toVndWord("", false),
+                              where: { id: trainingCourseId },
+                              select: {
+                                name: true,
+                              },
                             },
                           },
-                        ],
-                      })
-                      openXemTaiLieu({
-                        uri: res.data.path,
-                        name: "QD_GiaoChuyenDe.xlsx",
-                        mimeType: "xlsx",
-                      })
-                    }}
-                  >
-                    QĐ giao chuyên đề nghiên cứu
-                  </Button>
-                  <Button
-                    type="primary"
-                    icon={<FileOutlined />}
-                    onClick={async () => {
-                      if (!trainingCourseId) {
-                        return message.warning("Vui lòng chọn khoá học trước khi xuất phụ lục!")
-                      }
-
-                      if (!semesterId) {
-                        return message.warning("Vui lòng chọn kỳ học trước khi xuất phụ lục!")
-                      }
-
-                      let globalIndex = 0
-
-                      const khoaVaKy = await sqlTransaction([
-                        {
-                          model: "TrainingCourse",
-                          operation: "findUnique",
-                          data: {
-                            where: { id: trainingCourseId },
-                            select: {
-                              name: true,
+                          {
+                            model: "Semester",
+                            operation: "findUnique",
+                            data: {
+                              where: { id: semesterId },
+                              select: {
+                                name: true,
+                              },
                             },
                           },
-                        },
-                        {
-                          model: "Semester",
-                          operation: "findUnique",
-                          data: {
-                            where: { id: semesterId },
-                            select: {
-                              name: true,
+                        ])
+                        const khoaVaKyData = khoaVaKy.data as [{ name: string }, { name: string }]
+
+                        const res = await previewExcelTemplate({
+                          previewKey: `cdnc-qd-giao-${trainingCourseId}-${semesterId}`,
+                          fileName: "QD_GiaoChuyenDe.xlsx",
+                          path: "QD_GiaoChuyenDe.xlsx",
+                          showGridLines: true,
+                          wrapText: true,
+                          prefix: "mta/luan-van",
+                          payload: [
+                            {
+                              data: {
+                                khoa: khoaVaKyData?.[0]?.name?.firstCase?.(),
+                                hoc_ky: khoaVaKyData?.[1]?.name?.toLowerCase?.(),
+                                so_hv: studentResearchTopicData.length,
+                                so_hv_chu: studentResearchTopicData.length.toVndWord("", false),
+                              },
+                            },
+                          ],
+                        })
+                        openXemTaiLieu({
+                          uri: res.data.path,
+                          name: "QD_GiaoChuyenDe.xlsx",
+                          mimeType: "xlsx",
+                        })
+                      }}
+                    >
+                      QĐ giao chuyên đề nghiên cứu
+                    </Button>
+                    <Button
+                      type="primary"
+                      icon={<FileOutlined />}
+                      onClick={async () => {
+                        if (!trainingCourseId) {
+                          return message.warning("Vui lòng chọn khoá học trước khi xuất phụ lục!")
+                        }
+
+                        if (!semesterId) {
+                          return message.warning("Vui lòng chọn kỳ học trước khi xuất phụ lục!")
+                        }
+
+                        let globalIndex = 0
+
+                        const khoaVaKy = await sqlTransaction([
+                          {
+                            model: "TrainingCourse",
+                            operation: "findUnique",
+                            data: {
+                              where: { id: trainingCourseId },
+                              select: {
+                                name: true,
+                              },
                             },
                           },
-                        },
-                      ])
-                      const khoaVaKyData = khoaVaKy.data as [{ name: string }, { name: string }]
+                          {
+                            model: "Semester",
+                            operation: "findUnique",
+                            data: {
+                              where: { id: semesterId },
+                              select: {
+                                name: true,
+                              },
+                            },
+                          },
+                        ])
+                        const khoaVaKyData = khoaVaKy.data as [{ name: string }, { name: string }]
 
-                      // Count research topics per student
-                      const researchTopicCountByStudent = studentResearchTopicData.reduce(
-                        (acc, e) => {
-                          const studentCode = e.studentSubjectScore.student?.userProfile?.code
-                          if (studentCode) {
-                            acc[studentCode] = (acc[studentCode] || 0) + 1
-                          }
-                          return acc
-                        },
-                        {} as Record<string, number>
-                      )
-
-                      const payload = Object.values(
-                        studentResearchTopicData.reduce(
+                        // Count research topics per student
+                        const researchTopicCountByStudent = studentResearchTopicData.reduce(
                           (acc, e) => {
-                            const ma_cn =
-                              e.studentSubjectScore.student?.curriculumVersion?.curriculum
-                                ?.trainingMajor?.code
-                            if (!ma_cn) return acc
-
-                            if (!acc[ma_cn]) {
-                              acc[ma_cn] = {
-                                ma_cn,
-                                chuyen_nganh:
-                                  e.studentSubjectScore.student?.curriculumVersion?.curriculum
-                                    ?.trainingMajor?.name,
-                                students: [],
-                              }
-                            }
-
-                            globalIndex++
                             const studentCode = e.studentSubjectScore.student?.userProfile?.code
-                            const supervisorName =
-                              (getSupervisorName(
-                                versionToPersonLike(e.supervisor),
-                                false,
-                                true
-                              ) as string) || ""
-                            const coSupervisorName =
-                              (getSupervisorName(
-                                versionToPersonLike(e.coSupervisor),
-                                false,
-                                true
-                              ) as string) || ""
-                            acc[ma_cn].students.push({
-                              tt: globalIndex,
-                              ten: `${e.studentSubjectScore.student?.userProfile?.fullname}\n${
-                                e.studentSubjectScore.student?.userProfile?.dateOfBirth
-                                  ? formatDateInSlash(
-                                      e.studentSubjectScore.student?.userProfile?.dateOfBirth
-                                    )
-                                  : ""
-                              }`.trim(),
-                              cbhd:
-                                supervisorName && coSupervisorName
-                                  ? [`1.${supervisorName}`, `2.${coSupervisorName}`].join("\n")
-                                  : supervisorName || coSupervisorName || "",
-                              ten_cd: e.name,
-                              macd: e.studentSubjectScore.subjectVersion?.code,
-                              stc: e.studentSubjectScore.subjectVersion?.credit,
-                              ndcd: e.mainContent,
-                              so_cd: studentCode ? researchTopicCountByStudent[studentCode] : 0,
-                            })
-
+                            if (studentCode) {
+                              acc[studentCode] = (acc[studentCode] || 0) + 1
+                            }
                             return acc
                           },
-                          {} as Record<
-                            string,
-                            {
-                              ma_cn: string
-                              chuyen_nganh?: string
-                              students: {
-                                tt: number
-                                ten?: string | null
-                                cbhd: string
-                                ten_cd?: string | null
-                                macd?: string | null
-                                stc: number | null
-                                ndcd?: string | null
-                                so_cd: number
-                              }[]
-                            }
-                          >
+                          {} as Record<string, number>
                         )
-                      )
-                      const res = await previewExcelTemplate({
-                        previewKey: `cdnc-phu-luc-${trainingCourseId}-${semesterId}`,
-                        fileName: "Phu-luc-QD-Chuyen-De-Nghien-Cuu.xlsx",
-                        head: {
-                          data: {
-                            khoa: khoaVaKyData?.[0]?.name?.toUpperCase(),
-                            hoc_ky: khoaVaKyData?.[1]?.name?.toUpperCase(),
-                          },
-                        },
-                        tail: {
-                          data: {
-                            so_hv: payload.flatMap((item) => item.students).length,
-                            so_cd: payload.flatMap((item) => item.students).length,
-                          },
-                        },
-                        path: "PL_ChuyenDeNghienCuu.xlsx",
-                        showGridLines: true,
-                        wrapText: true,
-                        prefix: "mta/luan-van",
-                        payload: payload.map((item, idx) => ({
-                          data: {
-                            chuyen_nganh: `       ${(idx + 1).toRoman()}. ${item.chuyen_nganh}: ${item.students.length} học viên.`,
-                            data: item.students.map((student) => ({
-                              tt: student.tt,
-                              ten: student.ten,
-                              cbhd: student.cbhd,
-                              ten_cd: student.ten_cd,
-                              macd: student.macd,
-                              stc: student.stc,
-                              ndcd: student.ndcd,
-                            })),
-                          },
-                          mergeCells: item.students.map((s, idx, arr) => {
-                            const startRow =
-                              2 + arr.slice(0, idx).reduce((sum, student) => sum + student.so_cd, 0)
-                            const endRow = startRow + s.so_cd - 1
-                            return `B${startRow}:B${endRow}`
-                          }),
-                        })),
-                      })
-                      openXemTaiLieu({
-                        uri: res.data.path,
-                        name: "Phu-luc-QD-Chuyen-De-Nghien-Cuu.xlsx",
-                        mimeType: "xlsx",
-                      })
-                    }}
-                  >
-                    Phụ lục QĐ chuyên đề nghiên cứu
-                  </Button>
-                  <Button
-                    type="primary"
-                    icon={<FileOutlined />}
-                    onClick={async () => {
-                      if (!trainingCourseId) {
-                        return message.warning("Vui lòng chọn khoá học trước khi xuất phụ lục!")
-                      }
 
-                      if (!semesterId) {
-                        return message.warning("Vui lòng chọn kỳ học trước khi xuất phụ lục!")
-                      }
+                        const payload = Object.values(
+                          studentResearchTopicData.reduce(
+                            (acc, e) => {
+                              const ma_cn =
+                                e.studentSubjectScore.student?.curriculumVersion?.curriculum
+                                  ?.trainingMajor?.code
+                              if (!ma_cn) return acc
 
-                      const khoaVaKy = await sqlTransaction([
-                        {
-                          model: "TrainingCourse",
-                          operation: "findUnique",
-                          data: {
-                            where: { id: trainingCourseId },
-                            select: {
-                              name: true,
+                              if (!acc[ma_cn]) {
+                                acc[ma_cn] = {
+                                  ma_cn,
+                                  chuyen_nganh:
+                                    e.studentSubjectScore.student?.curriculumVersion?.curriculum
+                                      ?.trainingMajor?.name,
+                                  students: [],
+                                }
+                              }
+
+                              globalIndex++
+                              const studentCode = e.studentSubjectScore.student?.userProfile?.code
+                              const supervisorName =
+                                (getSupervisorName(
+                                  versionToPersonLike(e.supervisor),
+                                  false,
+                                  true
+                                ) as string) || ""
+                              const coSupervisorName =
+                                (getSupervisorName(
+                                  versionToPersonLike(e.coSupervisor),
+                                  false,
+                                  true
+                                ) as string) || ""
+                              acc[ma_cn].students.push({
+                                tt: globalIndex,
+                                ten: `${e.studentSubjectScore.student?.userProfile?.fullname}\n${
+                                  e.studentSubjectScore.student?.userProfile?.dateOfBirth
+                                    ? formatDateInSlash(
+                                        e.studentSubjectScore.student?.userProfile?.dateOfBirth
+                                      )
+                                    : ""
+                                }`.trim(),
+                                cbhd:
+                                  supervisorName && coSupervisorName
+                                    ? [`1.${supervisorName}`, `2.${coSupervisorName}`].join("\n")
+                                    : supervisorName || coSupervisorName || "",
+                                ten_cd: e.name,
+                                macd: e.studentSubjectScore.subjectVersion?.code,
+                                stc: e.studentSubjectScore.subjectVersion?.credit,
+                                ndcd: e.mainContent,
+                                so_cd: studentCode ? researchTopicCountByStudent[studentCode] : 0,
+                              })
+
+                              return acc
                             },
-                          },
-                        },
-                        {
-                          model: "Semester",
-                          operation: "findUnique",
-                          data: {
-                            where: { id: semesterId },
-                            select: {
-                              name: true,
-                            },
-                          },
-                        },
-                      ])
-                      const khoaVaKyData = khoaVaKy.data as [{ name: string }, { name: string }]
-
-                      const topicScoreFilter = {
-                        subjectClass: {
-                          semesterId,
-                          trainingObjectTypeId,
-                        },
-                        student: {
-                          fixedClass: {
-                            trainingCourseId,
-                          },
-                        },
-                      }
-
-                      const expertProfiles = await sqlTransaction([
-                        {
-                          model: "Expert",
-                          operation: "findMany",
-                          data: {
-                            where: {
-                              deletedAt: null,
-                              OR: [
-                                {
-                                  versions: {
-                                    some: {
-                                      supervisorResearchTopic: {
-                                        some: { studentSubjectScore: topicScoreFilter },
-                                      },
-                                    },
-                                  },
-                                },
-                                {
-                                  versions: {
-                                    some: {
-                                      coSupervisorResearchTopic: {
-                                        some: { studentSubjectScore: topicScoreFilter },
-                                      },
-                                    },
-                                  },
-                                },
-                              ],
-                            },
-                            include: {
-                              currentVersion: {
-                                include: {
-                                  academicDegreeType: true,
-                                  academicRankType: true,
-                                },
-                              },
-                              lecturer: {
-                                select: {
-                                  userProfile: {
-                                    select: {
-                                      fullname: true,
-                                      academicRankType: { select: { sMa: true } },
-                                      academicDegreeType: { select: { sMa: true } },
-                                    },
-                                  },
-                                },
-                              },
-                              versions: {
-                                include: {
-                                  supervisorResearchTopic: {
-                                    where: { studentSubjectScore: topicScoreFilter },
-                                    select: {
-                                      id: true,
-                                      coSupervisorVersionId: true,
-                                      studentSubjectScore: {
-                                        select: {
-                                          subjectVersion: { select: { credit: true } },
-                                        },
-                                      },
-                                    },
-                                  },
-                                  coSupervisorResearchTopic: {
-                                    where: { studentSubjectScore: topicScoreFilter },
-                                    select: {
-                                      id: true,
-                                      supervisorVersionId: true,
-                                      studentSubjectScore: {
-                                        select: {
-                                          subjectVersion: { select: { credit: true } },
-                                        },
-                                      },
-                                    },
-                                  },
-                                },
-                              },
-                            },
-                          },
-                        },
-                      ])
-
-                      if (expertProfiles.status !== 200) {
-                        return message.error("Không thể lấy danh sách chuyên gia")
-                      }
-
-                      type ExpertStatRow = {
-                        id: string
-                        lecturerId: string | null
-                        currentVersion: {
-                          inAcademy?: boolean | null
-                          name?: string | null
-                          academicDegreeType?: { sMa?: string | null } | null
-                          academicRankType?: { sMa?: string | null } | null
-                        } | null
-                        lecturer?: {
-                          userProfile?: {
-                            fullname?: string | null
-                            academicRankType?: { sMa?: string | null } | null
-                            academicDegreeType?: { sMa?: string | null } | null
-                          } | null
-                        } | null
-                        versions: Array<{
-                          supervisorResearchTopic: Array<{
-                            id: string
-                            coSupervisorVersionId: string | null
-                            studentSubjectScore: { subjectVersion: { credit: number } }
-                          }>
-                          coSupervisorResearchTopic: Array<{
-                            id: string
-                            supervisorVersionId: string | null
-                            studentSubjectScore: { subjectVersion: { credit: number } }
-                          }>
-                        }>
-                      }
-
-                      const expertProfilesData = (expertProfiles.data[0] || []) as ExpertStatRow[]
-
-                      const flattenTopics = (profile: ExpertStatRow) => ({
-                        supervisorResearchTopic: profile.versions.flatMap(
-                          (v) => v.supervisorResearchTopic
-                        ),
-                        coSupervisorResearchTopic: profile.versions.flatMap(
-                          (v) => v.coSupervisorResearchTopic
-                        ),
-                      })
-
-                      const inAcademyExperts = expertProfilesData.filter(
-                        (profile) =>
-                          profile.currentVersion?.inAcademy ?? profile.lecturerId != null
-                      )
-                      const outAcademyExperts = expertProfilesData.filter(
-                        (profile) =>
-                          !(profile.currentVersion?.inAcademy ?? profile.lecturerId != null)
-                      )
-
-                      const mapExpertRows = (profiles: ExpertStatRow[]) =>
-                        profiles.map((profile, idx) => {
-                          const topics = flattenTopics(profile)
-                          const person = {
-                            ...profile.currentVersion,
-                            lecturer: profile.lecturer,
-                            lecturerId: profile.lecturerId,
-                            inAcademy:
-                              profile.currentVersion?.inAcademy ?? profile.lecturerId != null,
-                          }
-                          return {
-                          tt: idx + 1,
-                          ho_ten: (getSupervisorName(person, false, true) as string) || "",
-                          cd_dl:
-                            topics.supervisorResearchTopic.filter((t) => !t.coSupervisorVersionId)
-                              .length +
-                            topics.coSupervisorResearchTopic.filter((t) => !t.supervisorVersionId)
-                              .length,
-                          tc_dl:
-                            topics.supervisorResearchTopic
-                              .filter((t) => !t.coSupervisorVersionId)
-                              .map((e) => e.studentSubjectScore.subjectVersion.credit)
-                              .reduce((a, b) => a + b, 0) +
-                            topics.coSupervisorResearchTopic
-                              .filter((t) => !t.supervisorVersionId)
-                              .map((e) => e.studentSubjectScore.subjectVersion.credit)
-                              .reduce((a, b) => a + b, 0),
-                          cd_dhd:
-                            topics.coSupervisorResearchTopic.filter((t) => !!t.supervisorVersionId)
-                              .length +
-                            topics.supervisorResearchTopic.filter((t) => !!t.coSupervisorVersionId)
-                              .length,
-                          tc_dhd:
-                            topics.coSupervisorResearchTopic
-                              .filter((t) => !!t.supervisorVersionId)
-                              .map((e) => e.studentSubjectScore.subjectVersion.credit)
-                              .reduce((a, b) => a + b, 0) +
-                            topics.supervisorResearchTopic
-                              .filter((t) => !!t.coSupervisorVersionId)
-                              .map((e) => e.studentSubjectScore.subjectVersion.credit)
-                              .reduce((a, b) => a + b, 0),
-                          cd_tong: `=E${9 + idx}+C${9 + idx}`,
-                          tai_tong: `=D${9 + idx}*H${9 + idx}+(F${9 + idx}*H${9 + idx}/2)`,
-                          dinh_muc: 3.75,
-                          ghi_chu: "",
-                        }})
-
-                      const sheetHeaderData = {
-                        khoa: khoaVaKyData?.[0]?.name?.toUpperCase?.(),
-                        hoc_ky: khoaVaKyData?.[1]?.name?.toUpperCase?.(),
-                      }
-
-                      const res = await previewExcelTemplate({
-                        previewKey: `cdnc-tk-tai-giang-${trainingCourseId}-${semesterId}`,
-                        fileName: "TK_TaiGiangDayCuaGiangVien.xlsx",
-                        path: "TK_TaiGiangDayCuaGiangVien.xlsx",
-                        showGridLines: true,
-                        wrapText: true,
-                        prefix: "mta/luan-van",
-                        sheets: [
-                          {
-                            sheetName: "Chuyên gia trong HV",
-                            payload: [
+                            {} as Record<
+                              string,
                               {
-                                data: {
-                                  ...sheetHeaderData,
-                                  data: mapExpertRows(inAcademyExperts),
-                                },
+                                ma_cn: string
+                                chuyen_nganh?: string
+                                students: {
+                                  tt: number
+                                  ten?: string | null
+                                  cbhd: string
+                                  ten_cd?: string | null
+                                  macd?: string | null
+                                  stc: number | null
+                                  ndcd?: string | null
+                                  so_cd: number
+                                }[]
+                              }
+                            >
+                          )
+                        )
+                        const res = await previewExcelTemplate({
+                          previewKey: `cdnc-phu-luc-${trainingCourseId}-${semesterId}`,
+                          fileName: "Phu-luc-QD-Chuyen-De-Nghien-Cuu.xlsx",
+                          head: {
+                            data: {
+                              khoa: khoaVaKyData?.[0]?.name?.toUpperCase(),
+                              hoc_ky: khoaVaKyData?.[1]?.name?.toUpperCase(),
+                            },
+                          },
+                          tail: {
+                            data: {
+                              so_hv: payload.flatMap((item) => item.students).length,
+                              so_cd: payload.flatMap((item) => item.students).length,
+                            },
+                          },
+                          path: "PL_ChuyenDeNghienCuu.xlsx",
+                          showGridLines: true,
+                          wrapText: true,
+                          prefix: "mta/luan-van",
+                          payload: payload.map((item, idx) => ({
+                            data: {
+                              chuyen_nganh: `       ${(idx + 1).toRoman()}. ${item.chuyen_nganh}: ${item.students.length} học viên.`,
+                              data: item.students.map((student) => ({
+                                tt: student.tt,
+                                ten: student.ten,
+                                cbhd: student.cbhd,
+                                ten_cd: student.ten_cd,
+                                macd: student.macd,
+                                stc: student.stc,
+                                ndcd: student.ndcd,
+                              })),
+                            },
+                            mergeCells: item.students.map((s, idx, arr) => {
+                              const startRow =
+                                2 +
+                                arr.slice(0, idx).reduce((sum, student) => sum + student.so_cd, 0)
+                              const endRow = startRow + s.so_cd - 1
+                              return `B${startRow}:B${endRow}`
+                            }),
+                          })),
+                        })
+                        openXemTaiLieu({
+                          uri: res.data.path,
+                          name: "Phu-luc-QD-Chuyen-De-Nghien-Cuu.xlsx",
+                          mimeType: "xlsx",
+                        })
+                      }}
+                    >
+                      Phụ lục QĐ chuyên đề nghiên cứu
+                    </Button>
+                    <Button
+                      type="primary"
+                      icon={<FileOutlined />}
+                      onClick={async () => {
+                        if (!trainingCourseId) {
+                          return message.warning("Vui lòng chọn khoá học trước khi xuất phụ lục!")
+                        }
+
+                        if (!semesterId) {
+                          return message.warning("Vui lòng chọn kỳ học trước khi xuất phụ lục!")
+                        }
+
+                        const khoaVaKy = await sqlTransaction([
+                          {
+                            model: "TrainingCourse",
+                            operation: "findUnique",
+                            data: {
+                              where: { id: trainingCourseId },
+                              select: {
+                                name: true,
                               },
-                            ],
+                            },
                           },
                           {
-                            sheetName: "Chuyên gia ngoài HV",
-                            payload: [
-                              {
-                                data: {
-                                  ...sheetHeaderData,
-                                  data: mapExpertRows(outAcademyExperts),
-                                },
+                            model: "Semester",
+                            operation: "findUnique",
+                            data: {
+                              where: { id: semesterId },
+                              select: {
+                                name: true,
                               },
-                            ],
-                          },
-                        ],
-                      })
-                      openXemTaiLieu({
-                        uri: res.data.path,
-                        name: "TK_TaiGiangDayCuaGiangVien.xlsx",
-                        mimeType: "xlsx",
-                      })
-                    }}
-                  >
-                    TK tải giảng GV
-                  </Button>
-                  <Button
-                    type="primary"
-                    icon={<FileOutlined />}
-                    onClick={async () => {
-                      if (!trainingCourseId) {
-                        return message.warning("Vui lòng chọn khoá học trước khi xuất phụ lục!")
-                      }
-
-                      if (!semesterId) {
-                        return message.warning("Vui lòng chọn kỳ học trước khi xuất phụ lục!")
-                      }
-
-                      const khoaVaKy = await sqlTransaction([
-                        {
-                          model: "TrainingCourse",
-                          operation: "findUnique",
-                          data: {
-                            where: { id: trainingCourseId },
-                            select: {
-                              name: true,
                             },
                           },
-                        },
-                        {
-                          model: "Semester",
-                          operation: "findUnique",
-                          data: {
-                            where: { id: semesterId },
-                            select: {
-                              name: true,
+                        ])
+                        const khoaVaKyData = khoaVaKy.data as [{ name: string }, { name: string }]
+
+                        const topicScoreFilter = {
+                          subjectClass: {
+                            semesterId,
+                            trainingObjectTypeId,
+                          },
+                          student: {
+                            fixedClass: {
+                              trainingCourseId,
                             },
                           },
-                        },
-                      ])
-                      const khoaVaKyData = khoaVaKy.data as [{ name: string }, { name: string }]
+                        }
 
-                      const students = await sqlTransaction([
-                        {
-                          model: "Student",
-                          operation: "findMany",
-                          data: {
-                            where: {
-                              subjectClassStudent: {
-                                some: {
-                                  subjectClass: {
-                                    semesterId,
-                                    trainingObjectTypeId,
-                                    fixedClasses: {
+                        const expertProfiles = await sqlTransaction([
+                          {
+                            model: "Expert",
+                            operation: "findMany",
+                            data: {
+                              where: {
+                                deletedAt: null,
+                                OR: [
+                                  {
+                                    versions: {
                                       some: {
-                                        trainingCourseId,
-                                      },
-                                    },
-                                    subject: {
-                                      type: $Enums.SubjectVersionType.Research,
-                                    },
-                                  },
-                                },
-                              },
-                            },
-                            include: {
-                              subjectClassStudent: {
-                                select: {
-                                  subjectClass: {
-                                    select: {
-                                      subject: {
-                                        select: {
-                                          credit: true,
+                                        supervisorResearchTopic: {
+                                          some: { studentSubjectScore: topicScoreFilter },
                                         },
                                       },
                                     },
                                   },
-                                },
-                                where: {
-                                  subjectClass: {
-                                    semesterId,
-                                    trainingObjectTypeId,
-                                    fixedClasses: {
+                                  {
+                                    versions: {
                                       some: {
-                                        trainingCourseId,
+                                        coSupervisorResearchTopic: {
+                                          some: { studentSubjectScore: topicScoreFilter },
+                                        },
                                       },
                                     },
-                                    subject: {
-                                      type: $Enums.SubjectVersionType.Research,
+                                  },
+                                ],
+                              },
+                              include: {
+                                currentVersion: {
+                                  include: {
+                                    academicDegreeType: true,
+                                    academicRankType: true,
+                                  },
+                                },
+                                lecturer: {
+                                  select: {
+                                    userProfile: {
+                                      select: {
+                                        fullname: true,
+                                        academicRankType: { select: { sMa: true } },
+                                        academicDegreeType: { select: { sMa: true } },
+                                      },
                                     },
                                   },
                                 },
-                              },
-                              curriculumVersion: {
-                                select: {
-                                  curriculum: {
-                                    select: {
-                                      trainingMajor: {
-                                        select: {
-                                          name: true,
-                                          trainingField: {
-                                            select: {
-                                              name: true,
-                                            },
+                                versions: {
+                                  include: {
+                                    supervisorResearchTopic: {
+                                      where: { studentSubjectScore: topicScoreFilter },
+                                      select: {
+                                        id: true,
+                                        coSupervisorVersionId: true,
+                                        studentSubjectScore: {
+                                          select: {
+                                            subjectVersion: { select: { credit: true } },
+                                          },
+                                        },
+                                      },
+                                    },
+                                    coSupervisorResearchTopic: {
+                                      where: { studentSubjectScore: topicScoreFilter },
+                                      select: {
+                                        id: true,
+                                        supervisorVersionId: true,
+                                        studentSubjectScore: {
+                                          select: {
+                                            subjectVersion: { select: { credit: true } },
                                           },
                                         },
                                       },
@@ -1300,46 +1035,308 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                                   },
                                 },
                               },
-                              userProfile: {
-                                select: {
-                                  dateOfBirth: true,
-                                  fullname: true,
+                            },
+                          },
+                        ])
+
+                        if (expertProfiles.status !== 200) {
+                          return message.error("Không thể lấy danh sách chuyên gia")
+                        }
+
+                        type ExpertStatRow = {
+                          id: string
+                          lecturerId: string | null
+                          currentVersion: {
+                            inAcademy?: boolean | null
+                            name?: string | null
+                            academicDegreeType?: { sMa?: string | null } | null
+                            academicRankType?: { sMa?: string | null } | null
+                          } | null
+                          lecturer?: {
+                            userProfile?: {
+                              fullname?: string | null
+                              academicRankType?: { sMa?: string | null } | null
+                              academicDegreeType?: { sMa?: string | null } | null
+                            } | null
+                          } | null
+                          versions: Array<{
+                            supervisorResearchTopic: Array<{
+                              id: string
+                              coSupervisorVersionId: string | null
+                              studentSubjectScore: { subjectVersion: { credit: number } }
+                            }>
+                            coSupervisorResearchTopic: Array<{
+                              id: string
+                              supervisorVersionId: string | null
+                              studentSubjectScore: { subjectVersion: { credit: number } }
+                            }>
+                          }>
+                        }
+
+                        const expertProfilesData = (expertProfiles.data[0] || []) as ExpertStatRow[]
+
+                        const flattenTopics = (profile: ExpertStatRow) => ({
+                          supervisorResearchTopic: profile.versions.flatMap(
+                            (v) => v.supervisorResearchTopic
+                          ),
+                          coSupervisorResearchTopic: profile.versions.flatMap(
+                            (v) => v.coSupervisorResearchTopic
+                          ),
+                        })
+
+                        const inAcademyExperts = expertProfilesData.filter(
+                          (profile) =>
+                            profile.currentVersion?.inAcademy ?? profile.lecturerId != null
+                        )
+                        const outAcademyExperts = expertProfilesData.filter(
+                          (profile) =>
+                            !(profile.currentVersion?.inAcademy ?? profile.lecturerId != null)
+                        )
+
+                        const mapExpertRows = (profiles: ExpertStatRow[]) =>
+                          profiles.map((profile, idx) => {
+                            const topics = flattenTopics(profile)
+                            const person = {
+                              ...profile.currentVersion,
+                              lecturer: profile.lecturer,
+                              lecturerId: profile.lecturerId,
+                              inAcademy:
+                                profile.currentVersion?.inAcademy ?? profile.lecturerId != null,
+                            }
+                            return {
+                              tt: idx + 1,
+                              ho_ten: (getSupervisorName(person, false, true) as string) || "",
+                              cd_dl:
+                                topics.supervisorResearchTopic.filter(
+                                  (t) => !t.coSupervisorVersionId
+                                ).length +
+                                topics.coSupervisorResearchTopic.filter(
+                                  (t) => !t.supervisorVersionId
+                                ).length,
+                              tc_dl:
+                                topics.supervisorResearchTopic
+                                  .filter((t) => !t.coSupervisorVersionId)
+                                  .map((e) => e.studentSubjectScore.subjectVersion.credit)
+                                  .reduce((a, b) => a + b, 0) +
+                                topics.coSupervisorResearchTopic
+                                  .filter((t) => !t.supervisorVersionId)
+                                  .map((e) => e.studentSubjectScore.subjectVersion.credit)
+                                  .reduce((a, b) => a + b, 0),
+                              cd_dhd:
+                                topics.coSupervisorResearchTopic.filter(
+                                  (t) => !!t.supervisorVersionId
+                                ).length +
+                                topics.supervisorResearchTopic.filter(
+                                  (t) => !!t.coSupervisorVersionId
+                                ).length,
+                              tc_dhd:
+                                topics.coSupervisorResearchTopic
+                                  .filter((t) => !!t.supervisorVersionId)
+                                  .map((e) => e.studentSubjectScore.subjectVersion.credit)
+                                  .reduce((a, b) => a + b, 0) +
+                                topics.supervisorResearchTopic
+                                  .filter((t) => !!t.coSupervisorVersionId)
+                                  .map((e) => e.studentSubjectScore.subjectVersion.credit)
+                                  .reduce((a, b) => a + b, 0),
+                              cd_tong: `=E${9 + idx}+C${9 + idx}`,
+                              tai_tong: `=D${9 + idx}*H${9 + idx}+(F${9 + idx}*H${9 + idx}/2)`,
+                              dinh_muc: 3.75,
+                              ghi_chu: "",
+                            }
+                          })
+
+                        const sheetHeaderData = {
+                          khoa: khoaVaKyData?.[0]?.name?.toUpperCase?.(),
+                          hoc_ky: khoaVaKyData?.[1]?.name?.toUpperCase?.(),
+                        }
+
+                        const res = await previewExcelTemplate({
+                          previewKey: `cdnc-tk-tai-giang-${trainingCourseId}-${semesterId}`,
+                          fileName: "TK_TaiGiangDayCuaGiangVien.xlsx",
+                          path: "TK_TaiGiangDayCuaGiangVien.xlsx",
+                          showGridLines: true,
+                          wrapText: true,
+                          prefix: "mta/luan-van",
+                          sheets: [
+                            {
+                              sheetName: "Chuyên gia trong HV",
+                              payload: [
+                                {
+                                  data: {
+                                    ...sheetHeaderData,
+                                    data: mapExpertRows(inAcademyExperts),
+                                  },
+                                },
+                              ],
+                            },
+                            {
+                              sheetName: "Chuyên gia ngoài HV",
+                              payload: [
+                                {
+                                  data: {
+                                    ...sheetHeaderData,
+                                    data: mapExpertRows(outAcademyExperts),
+                                  },
+                                },
+                              ],
+                            },
+                          ],
+                        })
+                        openXemTaiLieu({
+                          uri: res.data.path,
+                          name: "TK_TaiGiangDayCuaGiangVien.xlsx",
+                          mimeType: "xlsx",
+                        })
+                      }}
+                    >
+                      TK tải giảng GV
+                    </Button>
+                    <Button
+                      type="primary"
+                      icon={<FileOutlined />}
+                      onClick={async () => {
+                        if (!trainingCourseId) {
+                          return message.warning("Vui lòng chọn khoá học trước khi xuất phụ lục!")
+                        }
+
+                        if (!semesterId) {
+                          return message.warning("Vui lòng chọn kỳ học trước khi xuất phụ lục!")
+                        }
+
+                        const khoaVaKy = await sqlTransaction([
+                          {
+                            model: "TrainingCourse",
+                            operation: "findUnique",
+                            data: {
+                              where: { id: trainingCourseId },
+                              select: {
+                                name: true,
+                              },
+                            },
+                          },
+                          {
+                            model: "Semester",
+                            operation: "findUnique",
+                            data: {
+                              where: { id: semesterId },
+                              select: {
+                                name: true,
+                              },
+                            },
+                          },
+                        ])
+                        const khoaVaKyData = khoaVaKy.data as [{ name: string }, { name: string }]
+
+                        const students = await sqlTransaction([
+                          {
+                            model: "Student",
+                            operation: "findMany",
+                            data: {
+                              where: {
+                                subjectClassStudent: {
+                                  some: {
+                                    subjectClass: {
+                                      semesterId,
+                                      trainingObjectTypeId,
+                                      fixedClasses: {
+                                        some: {
+                                          trainingCourseId,
+                                        },
+                                      },
+                                      subject: {
+                                        type: $Enums.SubjectVersionType.Research,
+                                      },
+                                    },
+                                  },
+                                },
+                              },
+                              include: {
+                                subjectClassStudent: {
+                                  select: {
+                                    subjectClass: {
+                                      select: {
+                                        subject: {
+                                          select: {
+                                            credit: true,
+                                          },
+                                        },
+                                      },
+                                    },
+                                  },
+                                  where: {
+                                    subjectClass: {
+                                      semesterId,
+                                      trainingObjectTypeId,
+                                      fixedClasses: {
+                                        some: {
+                                          trainingCourseId,
+                                        },
+                                      },
+                                      subject: {
+                                        type: $Enums.SubjectVersionType.Research,
+                                      },
+                                    },
+                                  },
+                                },
+                                curriculumVersion: {
+                                  select: {
+                                    curriculum: {
+                                      select: {
+                                        trainingMajor: {
+                                          select: {
+                                            name: true,
+                                            trainingField: {
+                                              select: {
+                                                name: true,
+                                              },
+                                            },
+                                          },
+                                        },
+                                      },
+                                    },
+                                  },
+                                },
+                                userProfile: {
+                                  select: {
+                                    dateOfBirth: true,
+                                    fullname: true,
+                                  },
                                 },
                               },
                             },
                           },
-                        },
-                      ])
+                        ])
 
-                      if (students.status !== 200) {
-                        return message.error("Không thể lấy danh sách sinh viên")
-                      }
+                        if (students.status !== 200) {
+                          return message.error("Không thể lấy danh sách sinh viên")
+                        }
 
-                      const studentsData = students.data[0] as Prisma.StudentGetPayload<{
-                        include: {
-                          subjectClassStudent: {
-                            select: {
-                              subjectClass: {
-                                select: {
-                                  subject: {
-                                    select: {
-                                      credit: true
+                        const studentsData = students.data[0] as Prisma.StudentGetPayload<{
+                          include: {
+                            subjectClassStudent: {
+                              select: {
+                                subjectClass: {
+                                  select: {
+                                    subject: {
+                                      select: {
+                                        credit: true
+                                      }
                                     }
                                   }
                                 }
                               }
                             }
-                          }
-                          curriculumVersion: {
-                            select: {
-                              curriculum: {
-                                select: {
-                                  trainingMajor: {
-                                    select: {
-                                      name: true
-                                      trainingField: {
-                                        select: {
-                                          name: true
+                            curriculumVersion: {
+                              select: {
+                                curriculum: {
+                                  select: {
+                                    trainingMajor: {
+                                      select: {
+                                        name: true
+                                        trainingField: {
+                                          select: {
+                                            name: true
+                                          }
                                         }
                                       }
                                     }
@@ -1347,261 +1344,262 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                                 }
                               }
                             }
-                          }
-                          userProfile: {
-                            select: {
-                              dateOfBirth: true
-                              fullname: true
+                            userProfile: {
+                              select: {
+                                dateOfBirth: true
+                                fullname: true
+                              }
                             }
                           }
-                        }
-                      }>[]
+                        }>[]
 
-                      const res = await previewExcelTemplate({
-                        previewKey: `cdnc-tk-so-luong-${trainingCourseId}-${semesterId}`,
-                        fileName: "TK_SoLuongChuyenDeHocVien.xlsx",
-                        path: "TK_SoLuongChuyenDeHocVien.xlsx",
-                        showGridLines: true,
-                        wrapText: true,
-                        prefix: "mta/luan-van",
-                        payload: [
-                          {
-                            data: {
-                              khoa: khoaVaKyData?.[0]?.name?.toUpperCase?.(),
-                              hoc_ky: khoaVaKyData?.[1]?.name?.toUpperCase?.(),
-                              data: studentsData.map((profile, idx) => {
-                                return {
-                                  tt: idx + 1,
-                                  ten: profile?.userProfile?.fullname,
-                                  ngay_sinh: profile?.userProfile?.dateOfBirth
-                                    ? formatDateInSlash(profile?.userProfile?.dateOfBirth)
-                                    : "",
-                                  nganh_chuyen_nganh: `${
-                                    profile?.curriculumVersion?.curriculum.trainingMajor
-                                      ?.trainingField?.name
-                                  } (${
-                                    profile?.curriculumVersion?.curriculum.trainingMajor?.name
-                                  })`,
-                                  so_cd: profile.subjectClassStudent.length,
-                                  tong_tc: profile?.subjectClassStudent?.reduce(
-                                    (a, b) => a + (b?.subjectClass?.subject?.credit || 0),
-                                    0
-                                  ),
-                                }
-                              }),
-                            },
-                          },
-                        ],
-                      })
-                      openXemTaiLieu({
-                        uri: res.data.path,
-                        name: "TK_SoLuongChuyenDeHocVien.xlsx",
-                        mimeType: "xlsx",
-                      })
-                    }}
-                  >
-                    TK Số lượng CĐ HV
-                  </Button>
-                  <Button
-                    type="primary"
-                    icon={<FileOutlined />}
-                    onClick={async () => {
-                      if (!trainingCourseId) {
-                        return message.warning("Vui lòng chọn khoá học trước khi xuất thanh toán!")
-                      }
-
-                      if (!semesterId) {
-                        return message.warning("Vui lòng chọn kỳ học trước khi xuất thanh toán!")
-                      }
-
-                      interface SupervisorPayAmountRecord {
-                        role: string
-                        inAcademy: boolean
-                        amount?: number | string | null
-                      }
-
-                      interface ResearchTopicRecord {
-                        code?: string | null
-                        reportDate?: Date | string | null
-                        decisionNumber?: string | null
-                        decisionDate?: Date | string | null
-                      }
-
-                      const khoaVaKy = await sqlTransaction([
-                        {
-                          model: "TrainingCourse",
-                          operation: "findUnique",
-                          data: {
-                            where: { id: trainingCourseId },
-                            select: { name: true },
-                          },
-                        },
-                        {
-                          model: "Semester",
-                          operation: "findUnique",
-                          data: {
-                            where: { id: semesterId },
-                            select: { name: true },
-                          },
-                        },
-                        {
-                          model: "DefaultSupervisorPayAmount",
-                          operation: "findMany",
-                          data: {},
-                        },
-                        {
-                          model: "ThesisSession",
-                          operation: "findFirst",
-                          data: {
-                            where: {
-                              trainingCourses: {
-                                some: { id: trainingCourseId },
+                        const res = await previewExcelTemplate({
+                          previewKey: `cdnc-tk-so-luong-${trainingCourseId}-${semesterId}`,
+                          fileName: "TK_SoLuongChuyenDeHocVien.xlsx",
+                          path: "TK_SoLuongChuyenDeHocVien.xlsx",
+                          showGridLines: true,
+                          wrapText: true,
+                          prefix: "mta/luan-van",
+                          payload: [
+                            {
+                              data: {
+                                khoa: khoaVaKyData?.[0]?.name?.toUpperCase?.(),
+                                hoc_ky: khoaVaKyData?.[1]?.name?.toUpperCase?.(),
+                                data: studentsData.map((profile, idx) => {
+                                  return {
+                                    tt: idx + 1,
+                                    ten: profile?.userProfile?.fullname,
+                                    ngay_sinh: profile?.userProfile?.dateOfBirth
+                                      ? formatDateInSlash(profile?.userProfile?.dateOfBirth)
+                                      : "",
+                                    nganh_chuyen_nganh: `${
+                                      profile?.curriculumVersion?.curriculum.trainingMajor
+                                        ?.trainingField?.name
+                                    } (${
+                                      profile?.curriculumVersion?.curriculum.trainingMajor?.name
+                                    })`,
+                                    so_cd: profile.subjectClassStudent.length,
+                                    tong_tc: profile?.subjectClassStudent?.reduce(
+                                      (a, b) => a + (b?.subjectClass?.subject?.credit || 0),
+                                      0
+                                    ),
+                                  }
+                                }),
                               },
-                              deletedAt: null,
                             },
-                            select: { chief: true },
-                            orderBy: { createdAt: "desc" },
-                          },
-                        },
-                      ])
-                      const khoaVaKyData = khoaVaKy.data as [
-                        { name: string },
-                        { name: string },
-                        SupervisorPayAmountRecord[],
-                        { chief?: string } | null,
-                      ]
-                      const khoaName = khoaVaKyData?.[0]?.name || ""
-                      const kyName = khoaVaKyData?.[1]?.name || ""
-                      const payAmounts = khoaVaKyData?.[2] || []
-                      const chiefName = khoaVaKyData?.[3]?.chief || "Lê Quốc Long"
-
-                      const getPayAmount = (role: string, inAcademy: boolean) => {
-                        const found = payAmounts.find(
-                          (item: SupervisorPayAmountRecord) =>
-                            item.role === role && item.inAcademy === inAcademy
-                        )
-                        if (found && found.amount) return Number(found.amount)
-                        if (role === "SINGLE" || role === "PRIMARY_SUPERVISOR") return 250000
-                        return 225000
-                      }
-
-                      let totalAmount = 0
-                      const tableRows = studentResearchTopicData.map((e, idx) => {
-                        const studentName =
-                          e.studentSubjectScore.student?.userProfile?.fullname || ""
-                        const studentCourse =
-                          e.studentSubjectScore.student?.fixedClass?.trainingCourse?.name ||
-                          khoaName
-
-                        const supName =
-                          (getSupervisorName(
-                            versionToPersonLike(e.supervisor),
-                            false,
-                            true
-                          ) as string) || ""
-                        const coSupName =
-                          (getSupervisorName(
-                            versionToPersonLike(e.coSupervisor),
-                            false,
-                            true
-                          ) as string) || ""
-
-                        const isDual = !!(supName && coSupName)
-                        const supInAcademy = versionInAcademy(e.supervisor)
-                        const coSupInAcademy = versionInAcademy(e.coSupervisor)
-
-                        let cbhdText = ""
-                        let moneyText = ""
-
-                        if (isDual) {
-                          cbhdText = `1. ${supName}\n2. ${coSupName}`
-                          const supAmt = getPayAmount("PRIMARY_SUPERVISOR", supInAcademy)
-                          const coSupAmt = getPayAmount("CO_SUPERVISOR", coSupInAcademy)
-                          totalAmount += supAmt + coSupAmt
-                          moneyText = `${supAmt.toLocaleString("en-US")}\n${coSupAmt.toLocaleString("en-US")}`
-                        } else if (supName) {
-                          cbhdText = `1. ${supName}`
-                          const supAmt = getPayAmount("SINGLE", supInAcademy)
-                          totalAmount += supAmt
-                          moneyText = `${supAmt.toLocaleString("en-US")}`
-                        } else if (coSupName) {
-                          cbhdText = `1. ${coSupName}`
-                          const coSupAmt = getPayAmount("SINGLE", coSupInAcademy)
-                          totalAmount += coSupAmt
-                          moneyText = `${coSupAmt.toLocaleString("en-US")}`
+                          ],
+                        })
+                        openXemTaiLieu({
+                          uri: res.data.path,
+                          name: "TK_SoLuongChuyenDeHocVien.xlsx",
+                          mimeType: "xlsx",
+                        })
+                      }}
+                    >
+                      TK Số lượng CĐ HV
+                    </Button>
+                    <Button
+                      type="primary"
+                      icon={<FileOutlined />}
+                      onClick={async () => {
+                        if (!trainingCourseId) {
+                          return message.warning(
+                            "Vui lòng chọn khoá học trước khi xuất thanh toán!"
+                          )
                         }
 
-                        const item = e as unknown as ResearchTopicRecord
-                        const decisionNum = item.decisionNumber || item.code || ""
-                        const decisionDate = item.decisionDate
-                          ? formatDateInSlash(item.decisionDate)
-                          : item.reportDate
-                            ? formatDateInSlash(item.reportDate)
-                            : ""
-                        const quyetDinhText = decisionNum
-                          ? `${decisionNum}${decisionDate ? ` ngày ${decisionDate}` : ""}`
-                          : ""
-
-                        return {
-                          stt: idx + 1,
-                          quyet_dinh: quyetDinhText,
-                          cbhd: cbhdText,
-                          hoc_vien: studentName,
-                          khoa: studentCourse,
-                          so_tien: moneyText,
-                          ky_nhan: "",
+                        if (!semesterId) {
+                          return message.warning("Vui lòng chọn kỳ học trước khi xuất thanh toán!")
                         }
-                      })
 
-                      const res = await previewExcelTemplate({
-                        previewKey: `cdnc-thanh-toan-kinh-phi-${trainingCourseId}-${semesterId}`,
-                        fileName: "ThanhToanKinhPhiHuongDanChuyenDe.xlsx",
-                        path: "ThanhToanKinhPhiHuongDanChuyenDe.xlsx",
-                        showGridLines: true,
-                        wrapText: true,
-                        prefix: "mta/luan-van",
-                        payload: [
+                        interface SupervisorPayAmountRecord {
+                          role: string
+                          inAcademy: boolean
+                          amount?: number | string | null
+                        }
+
+                        interface ResearchTopicRecord {
+                          code?: string | null
+                          reportDate?: Date | string | null
+                          decisionNumber?: string | null
+                          decisionDate?: Date | string | null
+                        }
+
+                        const khoaVaKy = await sqlTransaction([
                           {
+                            model: "TrainingCourse",
+                            operation: "findUnique",
                             data: {
-                              ngay: dayjs().format("DD"),
-                              thang: formatThangIn(dayjs().month() + 1),
-                              nam: dayjs().format("YYYY"),
-                              tieu_de: "KINH PHÍ HƯỚNG DẪN CHUYÊN ĐỀ NGHỊÊN CỨU",
-                              dot_bao_ve: `Khoá: ${khoaName} - ${kyName}`,
-                              don_vi: `Chưa có đơn vị (${tableRows.length} học viên)`,
-                              tong_tien: totalAmount.toLocaleString("en-US").replace(/,/g, " "),
-                              tong_tien_chu: totalAmount.toVndWord("", false),
-                              nguoi_ky: chiefName,
-                              data: tableRows,
+                              where: { id: trainingCourseId },
+                              select: { name: true },
                             },
                           },
-                        ],
-                      })
+                          {
+                            model: "Semester",
+                            operation: "findUnique",
+                            data: {
+                              where: { id: semesterId },
+                              select: { name: true },
+                            },
+                          },
+                          {
+                            model: "DefaultSupervisorPayAmount",
+                            operation: "findMany",
+                            data: {},
+                          },
+                          {
+                            model: "ThesisSession",
+                            operation: "findFirst",
+                            data: {
+                              where: {
+                                trainingCourses: {
+                                  some: { id: trainingCourseId },
+                                },
+                                deletedAt: null,
+                              },
+                              select: { chief: true },
+                              orderBy: { createdAt: "desc" },
+                            },
+                          },
+                        ])
+                        const khoaVaKyData = khoaVaKy.data as [
+                          { name: string },
+                          { name: string },
+                          SupervisorPayAmountRecord[],
+                          { chief?: string } | null,
+                        ]
+                        const khoaName = khoaVaKyData?.[0]?.name || ""
+                        const kyName = khoaVaKyData?.[1]?.name || ""
+                        const payAmounts = khoaVaKyData?.[2] || []
+                        const chiefName = khoaVaKyData?.[3]?.chief || "Lê Quốc Long"
 
-                      openXemTaiLieu({
-                        uri: res.data.path,
-                        name: "ThanhToanKinhPhiHuongDanChuyenDe.xlsx",
-                        mimeType: "xlsx",
-                      })
+                        const getPayAmount = (role: string, inAcademy: boolean) => {
+                          const found = payAmounts.find(
+                            (item: SupervisorPayAmountRecord) =>
+                              item.role === role && item.inAcademy === inAcademy
+                          )
+                          if (found && found.amount) return Number(found.amount)
+                          if (role === "SINGLE" || role === "PRIMARY_SUPERVISOR") return 250000
+                          return 225000
+                        }
+
+                        let totalAmount = 0
+                        const tableRows = studentResearchTopicData.map((e, idx) => {
+                          const studentName =
+                            e.studentSubjectScore.student?.userProfile?.fullname || ""
+                          const studentCourse =
+                            e.studentSubjectScore.student?.fixedClass?.trainingCourse?.name ||
+                            khoaName
+
+                          const supName =
+                            (getSupervisorName(
+                              versionToPersonLike(e.supervisor),
+                              false,
+                              true
+                            ) as string) || ""
+                          const coSupName =
+                            (getSupervisorName(
+                              versionToPersonLike(e.coSupervisor),
+                              false,
+                              true
+                            ) as string) || ""
+
+                          const isDual = !!(supName && coSupName)
+                          const supInAcademy = versionInAcademy(e.supervisor)
+                          const coSupInAcademy = versionInAcademy(e.coSupervisor)
+
+                          let cbhdText = ""
+                          let moneyText = ""
+
+                          if (isDual) {
+                            cbhdText = `1. ${supName}\n2. ${coSupName}`
+                            const supAmt = getPayAmount("PRIMARY_SUPERVISOR", supInAcademy)
+                            const coSupAmt = getPayAmount("CO_SUPERVISOR", coSupInAcademy)
+                            totalAmount += supAmt + coSupAmt
+                            moneyText = `${supAmt.toLocaleString("en-US")}\n${coSupAmt.toLocaleString("en-US")}`
+                          } else if (supName) {
+                            cbhdText = `1. ${supName}`
+                            const supAmt = getPayAmount("SINGLE", supInAcademy)
+                            totalAmount += supAmt
+                            moneyText = `${supAmt.toLocaleString("en-US")}`
+                          } else if (coSupName) {
+                            cbhdText = `1. ${coSupName}`
+                            const coSupAmt = getPayAmount("SINGLE", coSupInAcademy)
+                            totalAmount += coSupAmt
+                            moneyText = `${coSupAmt.toLocaleString("en-US")}`
+                          }
+
+                          const item = e as unknown as ResearchTopicRecord
+                          const decisionNum = item.decisionNumber || item.code || ""
+                          const decisionDate = item.decisionDate
+                            ? formatDateInSlash(item.decisionDate)
+                            : item.reportDate
+                              ? formatDateInSlash(item.reportDate)
+                              : ""
+                          const quyetDinhText = decisionNum
+                            ? `${decisionNum}${decisionDate ? ` ngày ${decisionDate}` : ""}`
+                            : ""
+
+                          return {
+                            stt: idx + 1,
+                            quyet_dinh: quyetDinhText,
+                            cbhd: cbhdText,
+                            hoc_vien: studentName,
+                            khoa: studentCourse,
+                            so_tien: moneyText,
+                            ky_nhan: "",
+                          }
+                        })
+
+                        const res = await previewExcelTemplate({
+                          previewKey: `cdnc-thanh-toan-kinh-phi-${trainingCourseId}-${semesterId}`,
+                          fileName: "ThanhToanKinhPhiHuongDanChuyenDe.xlsx",
+                          path: "ThanhToanKinhPhiHuongDanChuyenDe.xlsx",
+                          showGridLines: true,
+                          wrapText: true,
+                          prefix: "mta/luan-van",
+                          payload: [
+                            {
+                              data: {
+                                ngay: dayjs().format("DD"),
+                                thang: formatThangIn(dayjs().month() + 1),
+                                nam: dayjs().format("YYYY"),
+                                tieu_de: "KINH PHÍ HƯỚNG DẪN CHUYÊN ĐỀ NGHỊÊN CỨU",
+                                dot_bao_ve: `Khoá: ${khoaName} - ${kyName}`,
+                                don_vi: `Chưa có đơn vị (${tableRows.length} học viên)`,
+                                tong_tien: totalAmount.toLocaleString("en-US").replace(/,/g, " "),
+                                tong_tien_chu: totalAmount.toVndWord("", false),
+                                nguoi_ky: chiefName,
+                                data: tableRows,
+                              },
+                            },
+                          ],
+                        })
+
+                        openXemTaiLieu({
+                          uri: res.data.path,
+                          name: "ThanhToanKinhPhiHuongDanChuyenDe.xlsx",
+                          mimeType: "xlsx",
+                        })
+                      }}
+                    >
+                      Thanh toán kinh phí HD
+                    </Button>
+                  </div>
+                </Form.Item>
+                <Form.Item className="mb-0">
+                  <Input
+                    className="w-56"
+                    allowClear
+                    placeholder="Tìm theo tên học viên"
+                    prefix={<SearchOutlined className="text-gray-400" />}
+                    value={filters.name}
+                    onChange={(e) => {
+                      setFilters({ ...filters, name: e.target.value })
+                      setCurrentPage(1)
                     }}
-                  >
-                    Thanh toán kinh phí HD
-                  </Button>
-                </div>
-              </Form.Item>
-              <Form.Item className="mb-0" >
-                <Input
-                  className="w-56"
-                  allowClear
-                  placeholder="Tìm theo tên học viên"
-                  prefix={<SearchOutlined className="text-gray-400" />}
-                  value={filters.name}
-                  onChange={(e) => {
-                    setFilters({ ...filters, name: e.target.value })
-                    setCurrentPage(1)
-                  }}
-                />
-              </Form.Item>
+                  />
+                </Form.Item>
               </Flex>
             )}
           </Flex>

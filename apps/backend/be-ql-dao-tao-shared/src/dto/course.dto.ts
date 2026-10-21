@@ -130,6 +130,15 @@ export const EXAM_TYPE = {
   Project: 4,
   Other: 5,
   OnlineWritten: 6,
+  MultipleChoice: 7,
+  PracticeExercise: 8,
+  ProjectDefense: 9,
+  Report: 10,
+  ListeningSpeakingReadingWriting: 11,
+  ReadingWriting: 12,
+  ListeningSpeaking: 13,
+  ListeningReadingWriting: 14,
+  Unspecified: 15,
 } as const satisfies Record<ExamType, number>
 
 export const StudyScheduleItem = z
@@ -161,7 +170,7 @@ export const CoursesDetailResponse = SuccessResponseSchema.extend({
     .nullable()
     .openapi(
       fieldDesc(
-        "Hình thức thi: 1=Vấn đáp, 2=Viết, 3=Trực tuyến/TN, 4=Trắc nghiệm, 5=Khác, 6=Thi viết online."
+        "Hình thức thi: 1=Vấn đáp, 2=Viết, 3=Thực hành, 4=Đồ án, 5=Khác, 6=Trực tuyến, 7=Trắc nghiệm, 8=Bài tập TH, 9=Bảo vệ đồ án, 10=Báo cáo, 11=Nghe nói đọc viết, 12=Đọc viết, 13=Nghe nói, 14=Nghe đọc viết, 15=Chưa xác định."
       )
     ),
   teacher_1: z

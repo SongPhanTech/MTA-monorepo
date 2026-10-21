@@ -262,18 +262,14 @@ app.openapi(
     const { token: _ignored, ...payload } = config
     const token = await signOnlyOfficeJwt(payload)
     if (!token) {
-      return c.json(
-        { message: "ONLYOFFICE_JWT_SECRET chưa được cấu hình trên server" },
-        500
-      )
+      return c.json({ message: "ONLYOFFICE_JWT_SECRET chưa được cấu hình trên server" }, 500)
     }
     return c.json({ token }, 200)
   }
 )
 
 const SURVEY_PRINT_OBJECT_PREFIX = "khao-thi/survey-print/"
-const DOCX_CONTENT_TYPE =
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+const DOCX_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 
 const safeDecodeUri = (raw: string) => {
   try {
@@ -396,9 +392,7 @@ app.put("/survey-print", async (c) => {
     return c.json(
       {
         success: false,
-        message: diskFull
-          ? "MinIO hết dung lượng, không ghi được file phiếu in"
-          : "Upload failed",
+        message: diskFull ? "MinIO hết dung lượng, không ghi được file phiếu in" : "Upload failed",
         detail,
       },
       diskFull ? 507 : 500

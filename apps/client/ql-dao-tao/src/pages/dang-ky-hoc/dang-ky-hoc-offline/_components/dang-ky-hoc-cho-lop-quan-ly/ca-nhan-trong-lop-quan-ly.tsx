@@ -1,6 +1,7 @@
 import { queryClient } from "@api/index"
 import Table from "@components/commons/table"
 import useSpinner from "@hooks/spinner"
+import { mergePageSelection } from "@/utils/dang-ky-hoc/merge-page-selection"
 import { useStore } from "@tanstack/react-store"
 import type { ScoreConvert, Student, StudentSubjectScore } from "@workspace/db/client"
 import {
@@ -11,14 +12,14 @@ import {
   useFindUniqueSubjectClass,
 } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
+import { isNullish } from "@workspace/libs/utils"
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import { InfoCircleOutlined } from "@ant-design/icons"
 import { Button, Checkbox, Col, Form, Input, message, Popover, Row, Select } from "antd"
 import _ from "lodash"
 import { Search } from "lucide-react"
-import { type Key, useCallback, useEffect, useMemo, useState } from "react"
+import { type Key, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { dangKyHocChoLopQuanLyStore } from "../.."
-import { isNullish } from "@workspace/libs/utils"
 
 interface FilterProps {
   searchText: string | null
@@ -45,6 +46,8 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(50)
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
+  const [selectionReady, setSelectionReady] = useState(false)
+  const initializedSubjectClassIdRef = useRef<string | undefined>()
 
   const [filters, setFilters] = useState<FilterProps>({
     searchText: "",
@@ -330,22 +333,31 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
   )
 
   useEffect(() => {
-    if (students && selectedSubjectClass) {
-      const selectedSubjectClassFixedClassIds = selectedSubjectClass?.subjectClassStudent.map(
-        (scs) => scs.studentId
-      )
-      const selectedKeys = students
-        .filter((item) => selectedSubjectClassFixedClassIds?.includes(item.id))
-        .map((item) => item.id)
-      setSelectedRowKeys(selectedKeys)
-      if (!dangKyHocChoLopQuanLyStore.state.studentIds.compare(selectedKeys, (a, b) => a === b)) {
-        dangKyHocChoLopQuanLyStore.setState((prev) => ({
-          ...prev,
-          studentIds: selectedKeys as string[],
-        }))
-      }
+    if (!subjectClassId) {
+      initializedSubjectClassIdRef.current = undefined
+      setSelectionReady(false)
+      setSelectedRowKeys([])
+      dangKyHocChoLopQuanLyStore.setState((prev) => ({
+        ...prev,
+        studentIds: [],
+      }))
+      return
     }
-  }, [students, selectedSubjectClass])
+    if (initializedSubjectClassIdRef.current === subjectClassId) return
+    if (!selectedSubjectClass || selectedSubjectClass.id !== subjectClassId) {
+      setSelectionReady(false)
+      return
+    }
+
+    initializedSubjectClassIdRef.current = subjectClassId
+    const selectedKeys = selectedSubjectClass.subjectClassStudent.map((scs) => scs.studentId)
+    setSelectedRowKeys(selectedKeys)
+    setSelectionReady(true)
+    dangKyHocChoLopQuanLyStore.setState((prev) => ({
+      ...prev,
+      studentIds: selectedKeys,
+    }))
+  }, [subjectClassId, selectedSubjectClass])
 
   const handleFilterChange = (key: string, value: string) => {
     setFilters((prev) => {
@@ -357,6 +369,10 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
 
   const handleRowSelection = (ids: Key[]) => {
     setSelectedRowKeys(ids)
+    dangKyHocChoLopQuanLyStore.setState((prev) => ({
+      ...prev,
+      studentIds: ids as string[],
+    }))
   }
 
   const prerequisiteSubjects = selectedSubjectClass?.subject?.prerequisiteSubject || []
@@ -478,7 +494,7 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
   const { showSpinner, hideSpinner } = useSpinner()
 
   const handleSaveDangKyHoc = async () => {
-    if (!subjectClassId) {
+    if (!subjectClassId || !selectionReady) {
       message.warning("Chưa chọn lớp môn học")
       return
     }
@@ -610,7 +626,7 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
         <Button
           type="primary"
           onClick={handleSaveDangKyHoc}
-          disabled={!subjectClassId || fixedClassesIds.length === 0}
+          disabled={!subjectClassId || fixedClassesIds.length === 0 || !selectionReady}
         >
           Lưu danh sách ĐKH
         </Button>
@@ -622,7 +638,9 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
           // maxHeight={"calc(100vh - 380px)"}
           data={students}
           onRow={(record) => ({
-            onClick: () => {
+            onClick: (event) => {
+              const target = event.target as HTMLElement
+              if (target.closest(".ant-checkbox-wrapper, .ant-checkbox")) return
               const blockedByDebtCredits =
                 !!tcNoToiThieuLamDoAnValue &&
                 record?.studentSemesterResult?.[0]?.totalFailedCredits >= tcNoToiThieuLamDoAnValue
@@ -643,6 +661,7 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
           })}
           rowSelection={{
             selectedRowKeys: selectedRowKeys,
+            preserveSelectedRowKeys: true,
             onChange: (selectedKeys, _, { type }) => {
               if (type === "all") {
                 if (selectedRowKeys.length > 0) {
@@ -650,7 +669,15 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
                 } else {
                   handleRowSelection(allStudentIds.map((i) => i.id))
                 }
-              } else handleRowSelection(selectedKeys)
+              } else {
+                handleRowSelection(
+                  mergePageSelection(
+                    selectedRowKeys,
+                    students.map((student) => student.id),
+                    selectedKeys
+                  )
+                )
+              }
             },
             type: "checkbox",
             fixed: "left",
@@ -667,7 +694,7 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
           columns={[
             {
               title: "TT",
-              width: 35,
+              width: 50,
               fixed: "left",
               align: "center",
               render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,

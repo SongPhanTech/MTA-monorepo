@@ -447,105 +447,106 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
   }
 
   const students = data.flatMap((row) => {
-      const sttText = String(row[cols.stt] ?? "").trim()
-      const sttNumber = Number.parseFloat(sttText)
-      const sttValid = sttText !== "" && Number.isFinite(sttNumber) && Number.isInteger(sttNumber)
-      if (!sttValid) {
-        const hasContent = [
-          cols.code,
-          cols.fullname,
-          cols.idCardNumber,
-          cols.fixedClassCode,
-          cols.fixedClass,
-          cols.curriculum,
-        ].some((col) => String(row[col] ?? "").trim())
-        if (hasContent) {
-          errors.push({
-            sheetRef: sheetName,
-            cellRef: `${cols.stt}${row.__rowNum__ + 1}`,
-            message: "STT phải là số nguyên",
-          })
-        }
-        return []
-      }
-
-      if (!row[cols.code]) {
+    const sttText = String(row[cols.stt] ?? "").trim()
+    const sttNumber = Number.parseFloat(sttText)
+    const sttValid = sttText !== "" && Number.isFinite(sttNumber) && Number.isInteger(sttNumber)
+    if (!sttValid) {
+      const hasContent = [
+        cols.code,
+        cols.fullname,
+        cols.idCardNumber,
+        cols.fixedClassCode,
+        cols.fixedClass,
+        cols.curriculum,
+      ].some((col) => String(row[col] ?? "").trim())
+      if (hasContent) {
         errors.push({
           sheetRef: sheetName,
-          cellRef: `${cols.code}${row.__rowNum__ + 1}`,
-          message: "Mã sinh viên không được để trống",
+          cellRef: `${cols.stt}${row.__rowNum__ + 1}`,
+          message: "STT phải là số nguyên",
         })
       }
+      return []
+    }
 
-      if (!row[cols.fullname]) {
-        errors.push({
-          sheetRef: sheetName,
-          cellRef: `${cols.fullname}${row.__rowNum__ + 1}`,
-          message: "Họ và tên không được để trống",
-        })
-      }
+    if (!row[cols.code]) {
+      errors.push({
+        sheetRef: sheetName,
+        cellRef: `${cols.code}${row.__rowNum__ + 1}`,
+        message: "Mã sinh viên không được để trống",
+      })
+    }
 
-      const idCardNumber = row[cols.idCardNumber]?.trim()
-      if (!idCardNumber || !/^[0-9]{12}$/.test(idCardNumber)) {
-        errors.push({
-          sheetRef: sheetName,
-          cellRef: `${cols.idCardNumber}${row.__rowNum__ + 1}`,
-          message: "CCCD không hợp lệ",
-        })
-      }
+    if (!row[cols.fullname]) {
+      errors.push({
+        sheetRef: sheetName,
+        cellRef: `${cols.fullname}${row.__rowNum__ + 1}`,
+        message: "Họ và tên không được để trống",
+      })
+    }
 
-      if (!row[cols.fixedClassCode]) {
-        errors.push({
-          sheetRef: sheetName,
-          cellRef: `${cols.fixedClassCode}${row.__rowNum__ + 1}`,
-          message: "Mã lớp quản lý không được để trống",
-        })
-      }
+    const idCardNumber = row[cols.idCardNumber]?.trim()
+    if (!idCardNumber || !/^[0-9]{12}$/.test(idCardNumber)) {
+      errors.push({
+        sheetRef: sheetName,
+        cellRef: `${cols.idCardNumber}${row.__rowNum__ + 1}`,
+        message: "CCCD không hợp lệ",
+      })
+    }
 
-      if (!row[cols.fixedClass]) {
-        errors.push({
-          sheetRef: sheetName,
-          cellRef: `${cols.fixedClass}${row.__rowNum__ + 1}`,
-          message: "Lớp quản lý không được để trống",
-        })
-      }
+    if (!row[cols.fixedClassCode]) {
+      errors.push({
+        sheetRef: sheetName,
+        cellRef: `${cols.fixedClassCode}${row.__rowNum__ + 1}`,
+        message: "Mã lớp quản lý không được để trống",
+      })
+    }
 
-      if (!row[cols.curriculum]) {
-        errors.push({
-          sheetRef: sheetName,
-          cellRef: `${cols.curriculum}${row.__rowNum__ + 1}`,
-          message: "Chương trình đào tạo không được để trống",
-        })
-      }
+    if (!row[cols.fixedClass]) {
+      errors.push({
+        sheetRef: sheetName,
+        cellRef: `${cols.fixedClass}${row.__rowNum__ + 1}`,
+        message: "Lớp quản lý không được để trống",
+      })
+    }
 
-      const managementOrganization = row[cols.managementOrganization]?.trim()
-      // if (!managementOrganization) {
-      //   errors.push({
-      //     sheetRef: sheetName,
-      //     cellRef: `${cols.managementOrganization}${row.__rowNum__ + 1}`,
-      //     message: "Đơn vị quản lý không được để trống",
-      //   })
-      // }
+    if (!row[cols.curriculum]) {
+      errors.push({
+        sheetRef: sheetName,
+        cellRef: `${cols.curriculum}${row.__rowNum__ + 1}`,
+        message: "Chương trình đào tạo không được để trống",
+      })
+    }
 
-      const dateOfBirth = parseDateFromCell(cols.dateOfBirth, row.__rowNum__)
-      if (row[cols.dateOfBirth] && !dateOfBirth.isValid()) {
-        errors.push({
-          sheetRef: sheetName,
-          cellRef: `${cols.dateOfBirth}${row.__rowNum__ + 1}`,
-          message: "Ngày sinh không hợp lệ (ngày/tháng/năm)",
-        })
-      }
+    const managementOrganization = row[cols.managementOrganization]?.trim()
+    // if (!managementOrganization) {
+    //   errors.push({
+    //     sheetRef: sheetName,
+    //     cellRef: `${cols.managementOrganization}${row.__rowNum__ + 1}`,
+    //     message: "Đơn vị quản lý không được để trống",
+    //   })
+    // }
 
-      const phoneNumber = row[cols.phoneNumber]?.trim()
-      if (phoneNumber && !/^0\d{9,10}$/.test(phoneNumber)) {
-        errors.push({
-          sheetRef: sheetName,
-          cellRef: `${cols.phoneNumber}${row.__rowNum__ + 1}`,
-          message: "Số điện thoại không hợp lệ",
-        })
-      }
+    const dateOfBirth = parseDateFromCell(cols.dateOfBirth, row.__rowNum__)
+    if (row[cols.dateOfBirth] && !dateOfBirth.isValid()) {
+      errors.push({
+        sheetRef: sheetName,
+        cellRef: `${cols.dateOfBirth}${row.__rowNum__ + 1}`,
+        message: "Ngày sinh không hợp lệ (ngày/tháng/năm)",
+      })
+    }
 
-      return [{
+    const phoneNumber = row[cols.phoneNumber]?.trim()
+    if (phoneNumber && !/^0\d{9,10}$/.test(phoneNumber)) {
+      errors.push({
+        sheetRef: sheetName,
+        cellRef: `${cols.phoneNumber}${row.__rowNum__ + 1}`,
+        message: "Số điện thoại không hợp lệ",
+      })
+    }
+
+    return [
+      {
         stt: row[cols.stt],
         registerNumber: row[cols.registerNumber]?.trim(),
         doctoralCode: row[cols.doctoralCode]?.trim(),
@@ -559,7 +560,12 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
         idCardNumber: idCardNumber as string,
         phoneNumber,
         admissionCombination: row[cols.admissionCombination]?.trim(),
-        entryScore: readNumberText(row[cols.entryScore], cols.entryScore, row.__rowNum__, "Tổng điểm"),
+        entryScore: readNumberText(
+          row[cols.entryScore],
+          cols.entryScore,
+          row.__rowNum__,
+          "Tổng điểm"
+        ),
         competencyScore: readNumberText(
           row[cols.competencyScore],
           cols.competencyScore,
@@ -601,8 +607,9 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
         foreignLanguage: row[cols.foreignLanguage]?.trim(),
         priorityReason: row[cols.priorityReason]?.trim(),
         description: row[cols.description]?.trim(),
-      }]
-    })
+      },
+    ]
+  })
 
   const countDuplicates = (values: (string | undefined)[]) => {
     const counts = new Map<string, number>()

@@ -139,7 +139,6 @@ export default function NhapDiemPhach() {
     }
   }
 
-
   const handlePrint = async () => {
     if (!!subjectClassId && subjectClassId?.length > 0) {
       updateManySubjectClass({

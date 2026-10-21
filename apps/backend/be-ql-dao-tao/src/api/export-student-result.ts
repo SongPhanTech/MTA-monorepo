@@ -18,6 +18,12 @@ import { standardErrorResponses } from "../dto/openapi-route-helpers"
 
 const app = new OpenAPIHono()
 
+/** Hono `c.body` nhận `Uint8Array<ArrayBuffer>`, không nhận Node `Buffer`. */
+function excelBody(data: Buffer | ArrayBuffer | Uint8Array): Uint8Array<ArrayBuffer> {
+  const bytes = data instanceof ArrayBuffer ? new Uint8Array(data) : new Uint8Array(data)
+  return bytes as Uint8Array<ArrayBuffer>
+}
+
 const exportStudentSemesterResultRoute = createRoute({
   operationId: "exportStudentSemesterResult",
   tags: ["Kết quả học tập"],
@@ -87,7 +93,7 @@ app.openapi(exportStudentSemesterResultRoute, async (c) => {
   const fileName = "KET_QUA_HOC_TAP_HK.xlsx"
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
-  return c.body(result, 200, {
+  return c.body(excelBody(result), 200, {
     "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "Content-Disposition": disposition,
   })
@@ -162,7 +168,7 @@ app.openapi(exportStudentSemesterResultV2Route, async (c) => {
   const fileName = "KET_QUA_HOC_TAP_HK_MAU2.xlsx"
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
-  return c.body(result, 200, {
+  return c.body(excelBody(result), 200, {
     "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "Content-Disposition": disposition,
   })
@@ -237,7 +243,7 @@ app.openapi(exportStudentSemesterResultV3Route, async (c) => {
   const fileName = "TK_KQHT_THEO_PHAN_TRAM.xlsx"
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
-  return c.body(result, 200, {
+  return c.body(excelBody(result), 200, {
     "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "Content-Disposition": disposition,
   })
@@ -249,11 +255,12 @@ const exportBangDiemCaNhanRoute = createRoute({
   path: "/export-bang-diem-ca-nhan",
   method: "post",
   summary: "Xuất bảng điểm cá nhân",
-  description: `Xuất file Excel bảng điểm cá nhân (mẫu quatrinh.xlsx / BDCN).
+  description: `Xuất file Excel bảng điểm cá nhân theo mẫu BangDiemCaNhan(P2).xlsx.
+Khi truyền plannedSemesters (ví dụ [1, 2] đối tượng dự khoá), xuất theo mẫu KetQuaHocTapDuKhoa.xlsx: chỉ lấy môn học kỳ dự kiến thuộc danh sách, tín chỉ và GPA = tổng (điểm × tín chỉ) / tổng tín chỉ, xếp hạng theo bảng chuyển đổi khóa học.
 
-**Bảng dữ liệu nguồn:** Student, StudentSubjectScore, SubjectVersion, Semester, ScoreConvert.
+**Bảng dữ liệu nguồn:** Student, StudentSubjectScore, SubjectVersion, Semester, ScoreConvert, TrainingBlockSubject, AcademicRankingConvert.
 
-**Tham số:** studentIds — danh sách ID học viên cần xuất (theo thứ tự bảng).`,
+**Tham số:** studentIds — danh sách ID học viên cần xuất (theo thứ tự bảng). plannedSemesters — nếu truyền, xuất mẫu dự khoá với lọc học kỳ dự kiến.`,
   request: {
     body: {
       content: {
@@ -264,6 +271,14 @@ const exportBangDiemCaNhanRoute = createRoute({
                 .array(z.string())
                 .min(1)
                 .openapi(fieldDesc("Danh sách ID học viên (Student).")),
+              plannedSemesters: z
+                .array(z.number().int())
+                .optional()
+                .openapi(
+                  fieldDesc(
+                    "Chỉ lấy môn có học kỳ dự kiến thuộc danh sách. Ví dụ [1, 2] cho bảng điểm đối tượng dự khoá."
+                  )
+                ),
             })
             .openapi("ExportBangDiemCaNhanRequest"),
         },
@@ -284,14 +299,14 @@ const exportBangDiemCaNhanRoute = createRoute({
 })
 
 app.openapi(exportBangDiemCaNhanRoute, async (c) => {
-  const { studentIds } = c.req.valid("json")
+  const { studentIds, plannedSemesters } = c.req.valid("json")
 
-  const result = await exportBangDiemCaNhan({ studentIds })
+  const result = await exportBangDiemCaNhan({ studentIds, plannedSemesters })
 
   const fileName = "BDCN.xlsx"
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
-  return c.body(result, 200, {
+  return c.body(excelBody(result), 200, {
     "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "Content-Disposition": disposition,
   })
@@ -345,7 +360,7 @@ app.openapi(exportBangDiemQuaTrinhRoute, async (c) => {
   const fileName = "BDQT.xlsx"
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
-  return c.body(result, 200, {
+  return c.body(excelBody(result), 200, {
     "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "Content-Disposition": disposition,
   })
@@ -394,7 +409,7 @@ app.openapi(exportBangDiemCaNhanP2Route, async (c) => {
   const { buffer, fileName } = await exportBangDiemCaNhanP2({ studentId })
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
-  return c.body(buffer, 200, {
+  return c.body(excelBody(buffer), 200, {
     "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "Content-Disposition": disposition,
   })
@@ -443,7 +458,7 @@ app.openapi(exportBangDiemCaNhanP7Route, async (c) => {
   const { buffer, fileName } = await exportBangDiemCaNhanP7({ studentId })
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
-  return c.body(buffer, 200, {
+  return c.body(excelBody(buffer), 200, {
     "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "Content-Disposition": disposition,
   })
@@ -492,7 +507,7 @@ app.openapi(exportBangDiemQuaTrinhHocVienRoute, async (c) => {
   const { buffer, fileName } = await exportBangDiemQuaTrinhHocVien({ studentId })
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
-  return c.body(buffer, 200, {
+  return c.body(excelBody(buffer), 200, {
     "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "Content-Disposition": disposition,
   })
@@ -544,7 +559,7 @@ app.openapi(exportBangDiemNganDaiHanRoute, async (c) => {
   const { buffer, fileName } = await exportBangDiemNganDaiHan({ studentIds })
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
-  return c.body(buffer, 200, {
+  return c.body(excelBody(buffer), 200, {
     "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "Content-Disposition": disposition,
   })
@@ -593,7 +608,7 @@ app.openapi(exportBangDiemTheoLopRoute, async (c) => {
   const { buffer, fileName } = await exportBangDiemTheoLop({ trainingCourseId })
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
-  return c.body(buffer, 200, {
+  return c.body(excelBody(buffer), 200, {
     "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "Content-Disposition": disposition,
   })

@@ -29,10 +29,7 @@ export const BAO_LUU_EXCEL_COLOR = "FF15803D"
 const SOURCE_PREFIX = /^\[nguon:(TRANSFER|EXTERNAL|ABROAD)\]\n?/
 
 export function isBaoLuuScoreDescription(description?: string | null): boolean {
-  if (
-    description === SCORE_DESCRIPTION.EXTERNAL ||
-    description === SCORE_DESCRIPTION.ABROAD
-  ) {
+  if (description === SCORE_DESCRIPTION.EXTERNAL || description === SCORE_DESCRIPTION.ABROAD) {
     return true
   }
   if (!description?.startsWith("[nguon:")) return false

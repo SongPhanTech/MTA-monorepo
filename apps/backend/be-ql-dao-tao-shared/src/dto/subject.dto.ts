@@ -32,7 +32,7 @@ export const GetListSubjectItem = z
       .string()
       .openapi(
         fieldDesc(
-          "Hình thức thi: Thi viết, Thi vấn đáp, Thực hành, Đồ án, Hình thức khác (SubjectVersion.examType).",
+          "Hình thức thi (SubjectVersion.examType): Thi viết, Trực tuyến, Vấn đáp, Thực hành, Đồ án, Trắc nghiệm, Bài tập TH, Bảo vệ đồ án, Báo cáo, Nghe nói đọc viết, Đọc viết, Nghe nói, Nghe đọc viết, Chưa xác định, Hình thức khác.",
           "Thi viết"
         )
       ),

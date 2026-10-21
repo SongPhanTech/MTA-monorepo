@@ -1,4 +1,9 @@
-import { formatDateInSlash, formatDateVn, formatNgayIn, formatThangIn } from "@workspace/libs/timezone"
+import {
+  formatDateInSlash,
+  formatDateVn,
+  formatNgayIn,
+  formatThangIn,
+} from "@workspace/libs/timezone"
 import { normalizeVietnamese } from "@workspace/libs/utils"
 import clsx, { type ClassValue } from "clsx"
 import dayjs, { type Dayjs } from "dayjs"
@@ -106,6 +111,7 @@ function generatePassword(length = 12): string {
 export type OrgTreeItem = {
   value: string
   label: string
+  title: string
   children?: OrgTreeItem[]
 }
 
@@ -115,11 +121,15 @@ function buildOrgTree(
 ): OrgTreeItem[] {
   return list
     .filter((item) => (item.sParentId ?? "0") === parentId)
-    .map((item) => ({
-      label: [item.sMa, item.sTen].filter(Boolean).join(" - ") || "",
-      value: item.Id,
-      children: buildOrgTree(list, item.Id),
-    }))
+    .map((item) => {
+      const label = [item.sMa, item.sTen].filter(Boolean).join(" - ") || ""
+      return {
+        label,
+        title: label,
+        value: item.Id,
+        children: buildOrgTree(list, item.Id),
+      }
+    })
 }
 
 function searchVietnamese(

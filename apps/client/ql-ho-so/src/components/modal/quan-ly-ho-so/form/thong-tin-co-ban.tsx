@@ -1005,11 +1005,26 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
           <Col span={12}>
             <FormItem
               form={form}
-              name="permanentAddress"
+              name="newCurrentAddress"
               label="Nơi cư trú hiện tại"
               className="mb-0"
             >
-              <Input placeholder="Nhập nơi cư trú hiện tại" className="h-9" />
+              <Input placeholder="Nhập nơi cư trú hiện tại (địa bàn mới)" className="h-9" />
+            </FormItem>
+          </Col>
+
+          <Col span={12}>
+            <FormItem
+              form={form}
+              name="currentAddress"
+              label={
+                <span>
+                  Nơi cư trú hiện tại <span className="text-red-600">(cũ)</span>
+                </span>
+              }
+              className="mb-0"
+            >
+              <Input placeholder="Nhập nơi cư trú hiện tại (địa bàn cũ)" className="h-9" />
             </FormItem>
           </Col>
         </Row>

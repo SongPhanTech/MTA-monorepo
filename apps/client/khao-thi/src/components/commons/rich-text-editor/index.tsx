@@ -43,6 +43,7 @@ type TextEditorProps = {
   editable?: boolean
   stickyToolbar?: boolean
   defaultTable?: boolean
+  inlineImages?: boolean
   onEvidenceClick?: (evidenceId: string) => void
 }
 
@@ -56,6 +57,7 @@ export function RichTextEditor({
   editable = true,
   stickyToolbar = false,
   defaultTable = false,
+  inlineImages = false,
   onEvidenceClick,
 }: TextEditorProps) {
   const editor = useEditor({
@@ -81,10 +83,10 @@ export function RichTextEditor({
       CustomFontFamily,
       Color.configure({ types: ["textStyle"] }),
       Image.configure({
-        inline: false,
+        inline: inlineImages,
         allowBase64: false,
         HTMLAttributes: {
-          class: "mx-auto my-2",
+          class: inlineImages ? "qa-inline-img" : "mx-auto my-2",
         },
       }),
       Mention.configure({

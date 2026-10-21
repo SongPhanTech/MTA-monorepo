@@ -437,7 +437,9 @@ export async function exportBangDiemQuaTrinhHocVien({ studentId }: { studentId: 
   }
 
   const scoredMonhocs = (rows: MonHocRow[]) =>
-    rows.filter((monHoc) => monHoc.diemhe10 != null || monHoc.diemhe4 != null || monHoc.diemchu != null)
+    rows.filter(
+      (monHoc) => monHoc.diemhe10 != null || monHoc.diemhe4 != null || monHoc.diemchu != null
+    )
 
   const toMonHocTableRows = (monHocs: MonHocRow[], startStt: number) => {
     let stt = startStt

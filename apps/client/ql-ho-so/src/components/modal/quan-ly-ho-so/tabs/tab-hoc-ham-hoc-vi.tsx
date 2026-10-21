@@ -56,7 +56,6 @@ export default function HocHamHocViTab({
   const { mutateAsync: updateHocVi } = useUpdateHocVi()
   const { mutateAsync: updateHocHam } = useUpdateHocHam()
 
-
   const handleCollapseChange = (collapseId: string) => (key: string | string[]) => {
     if (key && key.length > 0) {
       // Nếu collapse này được mở, đóng các collapse khác

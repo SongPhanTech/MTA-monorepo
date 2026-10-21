@@ -7,14 +7,20 @@ import {
 import HtmlTruncate from "@components/commons/html-truncate"
 import Table from "@components/commons/table"
 import useSpinner from "@hooks/spinner"
+import { useFindUniqueClusterSurvey } from "@workspace/db/hooks"
 import { useGetClusterSurveyStatisticsForLecturer } from "@workspace/libs/api/exam"
 import type { GetSurveyStatistics200QuestionsItemAnswersItem } from "@workspace/libs/api/schemas"
-import { Button, Col, Dropdown, Empty, Row, Typography } from "antd"
+import { Button, Col, Dropdown, Empty, Row, Tag, Typography } from "antd"
 // @ts-nocheck
 import ReactECharts from "echarts-for-react"
 import ExcelJS from "exceljs"
 import { saveAs } from "file-saver"
 import { exportSurveyDocxTemplate } from "@/utils/export-survey-docx-template"
+import {
+  buildSpecificChoiceMap,
+  formatSpecialAnswerCell,
+  getSpecialChoiceLabel,
+} from "@/utils/survey-specific-choice"
 import { useRouter } from "next/router"
 import { useMemo } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -74,7 +80,33 @@ function SurveylecturerReport({
     lectureId,
   })
 
-  // const { data: dataLevel } = useGetSurveyStatistics(selectedId as string)
+  const { data: clusterDetail } = useFindUniqueClusterSurvey(
+    {
+      where: { id: selectedId },
+      include: {
+        surveyQuestion: {
+          include: {
+            specificChoice: { orderBy: { createdAt: "asc" } },
+          },
+        },
+      },
+    },
+    { enabled: !!selectedId }
+  )
+
+  const specificChoiceByQuestionId = useMemo(
+    () => buildSpecificChoiceMap(clusterDetail?.surveyQuestion),
+    [clusterDetail]
+  )
+
+  const questionsWithSpecific = useMemo(() => {
+    const questions =
+      dataLevel?.status === 200 ? dataLevel.data.data?.questions || [] : []
+    return questions.map((q: any) => ({
+      ...q,
+      specificChoice: specificChoiceByQuestionId[q.id] || [],
+    }))
+  }, [dataLevel, specificChoiceByQuestionId])
   function convertToStackChartData(
     data: CriteriaItem[],
     answerDescriptions: GetSurveyStatistics200QuestionsItemAnswersItem[]
@@ -308,15 +340,42 @@ function SurveylecturerReport({
     ]
     if (dataTable?.length > 0) {
       dataTable.forEach((i: any, index: number) => {
+        const isSpecial = !!specificChoiceByQuestionId[i.id]?.length
         const headerRowValue: any = worksheet.getRow(rowIndex + 3 + index)
-        headerRowValue.values = [
-          index + 1,
-          `Câu hỏi ${index + 1}`,
-          i?.name,
-          ...calculatePercent(i?.answers).map(
-            (a: any) => `${a.percent || 0}% (${a?.count || 0}/${a?.total || 0})`
-          ),
-        ]
+        if (isSpecial) headerRowValue.height = 36
+
+        headerRowValue.getCell(1).value = index + 1
+        if (isSpecial) {
+          headerRowValue.getCell(2).value = {
+            richText: [
+              { text: `Câu hỏi ${index + 1}`, font: { name: "Times New Roman", size: 11 } },
+              {
+                text: " *",
+                font: {
+                  name: "Times New Roman",
+                  size: 11,
+                  bold: true,
+                  color: { argb: "FFFF0000" },
+                },
+              },
+            ],
+          }
+        } else {
+          headerRowValue.getCell(2).value = `Câu hỏi ${index + 1}`
+        }
+        headerRowValue.getCell(3).value = i?.name
+
+        calculatePercent(i?.answers).forEach((a: any, answerIndex: number) => {
+          const percentText = `${a.percent || 0}% (${a?.count || 0}/${a?.total || 0})`
+          const label = isSpecial
+            ? getSpecialChoiceLabel(specificChoiceByQuestionId[i.id], answerIndex, a?.answer)
+            : null
+          headerRowValue.getCell(4 + answerIndex).value = formatSpecialAnswerCell(
+            label,
+            percentText
+          )
+        })
+
         headerRowValue.eachCell((cell: any, colNumber: number) => {
           cell.alignment = {
             horizontal: colNumber === 3 ? "left" : "center",
@@ -361,11 +420,15 @@ function SurveylecturerReport({
       })
     })
     const datarender = [
-      ...dataTable,
+      ...dataTable.map((q: any) => ({
+        ...q,
+        isSpecial: !!specificChoiceByQuestionId[q.id]?.length,
+      })),
       {
         name: "Trung bình",
         answers: average,
         id: "average",
+        isSpecial: false,
       },
     ]
     return (
@@ -384,9 +447,19 @@ function SurveylecturerReport({
                 {
                   title: "Câu hỏi",
                   align: "center",
-                  width: 100,
+                  width: 120,
                   render: (_, record, index) => {
-                    return index === datarender.length - 1 ? "ĐGTB" : `Câu hỏi ${index + 1}`
+                    if (index === datarender.length - 1) return "ĐGTB"
+                    return (
+                      <div className="flex flex-col items-center gap-1">
+                        <span>{`Câu hỏi ${index + 1}`}</span>
+                        {record.isSpecial && (
+                          <Tag color="blue" className="m-0">
+                            Đặc biệt
+                          </Tag>
+                        )}
+                      </div>
+                    )
                   },
                 },
                 {
@@ -401,16 +474,34 @@ function SurveylecturerReport({
                   },
                 },
                 // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
-                ...dataTable[0]?.answers?.map((i: any) => ({
+                ...dataTable[0]?.answers?.map((i: any, answerIndex: number) => ({
                   title: i?.description,
                   id: i?.id,
                   dataIndex: i?.id,
-                  width: 130,
+                  width: 140,
                   align: "center",
                   render: (__: any, record: any) => {
                     const count = calculatePercent(record?.answers).find((a) => a.id === i?.id)
+                    const percentText =
+                      `${count?.percent || 0}% (${count?.count || 0}/${count?.total})` || "0"
 
-                    return `${count?.percent || 0}% (${count?.count || 0}/${count?.total})` || "0"
+                    if (record.id === "average" || !record.isSpecial) return percentText
+
+                    const specialLabel = getSpecialChoiceLabel(
+                      specificChoiceByQuestionId[record.id],
+                      answerIndex,
+                      i?.answer
+                    )
+                    return (
+                      <div className="leading-tight">
+                        {specialLabel && (
+                          <div className="mb-1 text-xs font-semibold text-[#1677ff]">
+                            {specialLabel}
+                          </div>
+                        )}
+                        <div>{percentText}</div>
+                      </div>
+                    )
                   },
                 })),
               ]
@@ -446,7 +537,8 @@ function SurveylecturerReport({
               <div>
                 <Title level={4}>Thống kê theo từng Câu hỏi</Title>
                 <div className="text-gray-500 font-medium">
-                  Số lượt tham gia khảo sát: <span className="text-primary">{completed || 0}</span> / {total || 0}
+                  Số lượt tham gia khảo sát: <span className="text-primary">{completed || 0}</span>{" "}
+                  / {total || 0}
                 </div>
               </div>
               {dataLevel?.status === 200 && (
@@ -461,7 +553,7 @@ function SurveylecturerReport({
                         onClick: () => {
                           exportTemplate(
                             surveyName,
-                            dataLevel?.data?.data?.questions,
+                            questionsWithSpecific,
                             dataLevel?.data?.data
                           )
                         },
@@ -485,7 +577,7 @@ function SurveylecturerReport({
                               departmentCode,
                               organizationName,
                               organizationCode,
-                              questions: dataLevel?.data?.data?.questions,
+                              questions: questionsWithSpecific,
                             })
                           } finally {
                             hideSpinner()
@@ -506,7 +598,7 @@ function SurveylecturerReport({
                             departmentCode,
                             organizationName,
                             organizationCode,
-                            questions: dataLevel?.data?.data?.questions,
+                            questions: questionsWithSpecific,
                             chartOption: dataBarchart,
                           })
                         },

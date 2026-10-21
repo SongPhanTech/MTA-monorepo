@@ -170,6 +170,7 @@ import type {
   ExportStudentScholarshipJsonParams,
   ExportStudentSemesterResultRequest,
   ExportStudentSemesterResultV2Request,
+  ExportStudentSemesterResultV3Request,
   ExportStudentYearResultRequest,
   ExportStudentsMissingCertificateExcelParams,
   ExportSubjectClassListExcelParams,
@@ -11046,9 +11047,9 @@ export const useSyncStudentDonViFromFixedClass = <TError = ErrorMessageResponse,
     }
     
 /**
- * Xóa hồ sơ sinh viên trên QL đào tạo.
+ * Xóa hồ sơ sinh viên trên QL đào tạo. Nếu hồ sơ không còn gắn giảng viên, cán bộ hoặc sinh viên khác thì gọi DELETE hồ sơ trên LSB.
 
-**Bảng dữ liệu nguồn:** Student, UserProfile.
+**Bảng dữ liệu nguồn:** Student, UserProfile, DM_NhanVien.
  * @summary Xóa sinh viên
  */
 export type deleteStudentResponse200 = {
@@ -17154,11 +17155,123 @@ export const useExportStudentSemesterResultV2 = <TError = ErrorMessageResponse,
     }
     
 /**
- * Xuất file Excel bảng điểm cá nhân (mẫu quatrinh.xlsx / BDCN).
+ * Xuất file Excel thống kê số lượng và tỷ lệ % sinh viên theo xếp loại học lực của từng lớp, gồm 3 sheet: tích lũy, năm học, học kỳ.
 
-**Bảng dữ liệu nguồn:** Student, StudentSubjectScore, SubjectVersion, Semester, ScoreConvert.
+**Bảng dữ liệu nguồn:** StudentSemesterResult, StudentYearResult, AcademicRankingConvert, FixedClass.
 
-**Tham số:** studentIds — danh sách ID học viên cần xuất (theo thứ tự bảng).
+**Tham số:** semesterId, trainingObjectTypeId.
+ * @summary Xuất thống kê KQHT theo % - Mẫu 3
+ */
+export type exportStudentSemesterResultV3Response200 = {
+  data: Blob
+  status: 200
+}
+
+export type exportStudentSemesterResultV3Response400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type exportStudentSemesterResultV3Response404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type exportStudentSemesterResultV3Response409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type exportStudentSemesterResultV3Response500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type exportStudentSemesterResultV3ResponseSuccess = (exportStudentSemesterResultV3Response200) & {
+  headers: Headers;
+};
+export type exportStudentSemesterResultV3ResponseError = (exportStudentSemesterResultV3Response400 | exportStudentSemesterResultV3Response404 | exportStudentSemesterResultV3Response409 | exportStudentSemesterResultV3Response500) & {
+  headers: Headers;
+};
+
+export type exportStudentSemesterResultV3Response = (exportStudentSemesterResultV3ResponseSuccess | exportStudentSemesterResultV3ResponseError)
+
+export const getExportStudentSemesterResultV3Url = () => {
+
+
+  
+
+  return `/api/student-result/export-student-semester-result-v3`
+}
+
+export const exportStudentSemesterResultV3 = async (exportStudentSemesterResultV3Request: ExportStudentSemesterResultV3Request, options?: RequestInit): Promise<exportStudentSemesterResultV3Response> => {
+  
+  return customTrainingFetch<exportStudentSemesterResultV3Response>(getExportStudentSemesterResultV3Url(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      exportStudentSemesterResultV3Request,)
+  }
+);}
+
+
+
+
+export const getExportStudentSemesterResultV3MutationOptions = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportStudentSemesterResultV3>>, TError,{data: ExportStudentSemesterResultV3Request}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof exportStudentSemesterResultV3>>, TError,{data: ExportStudentSemesterResultV3Request}, TContext> => {
+
+const mutationKey = ['exportStudentSemesterResultV3'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportStudentSemesterResultV3>>, {data: ExportStudentSemesterResultV3Request}> = (props) => {
+          const {data} = props ?? {};
+
+          return  exportStudentSemesterResultV3(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ExportStudentSemesterResultV3MutationResult = NonNullable<Awaited<ReturnType<typeof exportStudentSemesterResultV3>>>
+    export type ExportStudentSemesterResultV3MutationBody = ExportStudentSemesterResultV3Request
+    export type ExportStudentSemesterResultV3MutationError = ErrorMessageResponse
+
+    /**
+ * @summary Xuất thống kê KQHT theo % - Mẫu 3
+ */
+export const useExportStudentSemesterResultV3 = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportStudentSemesterResultV3>>, TError,{data: ExportStudentSemesterResultV3Request}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof exportStudentSemesterResultV3>>,
+        TError,
+        {data: ExportStudentSemesterResultV3Request},
+        TContext
+      > => {
+
+      const mutationOptions = getExportStudentSemesterResultV3MutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * Xuất file Excel bảng điểm cá nhân theo mẫu BangDiemCaNhan(P2).xlsx.
+Khi truyền plannedSemesters (ví dụ [1, 2] đối tượng dự khoá), xuất theo mẫu KetQuaHocTapDuKhoa.xlsx: chỉ lấy môn học kỳ dự kiến thuộc danh sách, tín chỉ và GPA = tổng (điểm × tín chỉ) / tổng tín chỉ, xếp hạng theo bảng chuyển đổi khóa học.
+
+**Bảng dữ liệu nguồn:** Student, StudentSubjectScore, SubjectVersion, Semester, ScoreConvert, TrainingBlockSubject, AcademicRankingConvert.
+
+**Tham số:** studentIds — danh sách ID học viên cần xuất (theo thứ tự bảng). plannedSemesters — nếu truyền, xuất mẫu dự khoá với lọc học kỳ dự kiến.
  * @summary Xuất bảng điểm cá nhân
  */
 export type exportBangDiemCaNhanResponse200 = {

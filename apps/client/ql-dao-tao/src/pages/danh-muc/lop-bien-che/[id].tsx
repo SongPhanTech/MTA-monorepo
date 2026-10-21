@@ -562,7 +562,7 @@ export default function StudentFixedClassPage() {
     }
   }
 
-  const handleExportCaNhan = async () => {
+  const handleExportCaNhan = async (plannedSemesters?: number[]) => {
     if (!data.length) {
       message.warning("Không có học viên để xuất")
       return
@@ -575,10 +575,13 @@ export default function StudentFixedClassPage() {
       }>("/api/student-result/export-bang-diem-ca-nhan", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ studentIds: data.map((item) => item.id) }),
+        body: JSON.stringify({
+          studentIds: data.map((item) => item.id),
+          ...(plannedSemesters ? { plannedSemesters } : {}),
+        }),
       })
       if (res.status === 200 && res.data instanceof Blob) {
-        saveAs(res.data, "BDCN.xlsx")
+        saveAs(res.data, plannedSemesters ? "BDCN-DuKhoa.xlsx" : "BDCN.xlsx")
       } else {
         message.error(res.data?.message || "Xuất file thất bại")
       }
@@ -738,6 +741,11 @@ export default function StudentFixedClassPage() {
                         label: "Bảng điểm cá nhân",
                         key: "export-bang-diem-ca-nhan",
                         onClick: async () => await handleExportCaNhan(),
+                      },
+                      {
+                        label: "Bảng điểm cá nhân (đối tượng dự khoá)",
+                        key: "export-bang-diem-ca-nhan-du-khoa",
+                        onClick: async () => await handleExportCaNhan([1, 2]),
                       },
                       {
                         label: "Bảng điểm ngắn hạn, dài hạn",

@@ -68,12 +68,19 @@ function quyDoiDiemHp(
   flags: { isGraduation?: boolean; isConditional?: boolean }
 ) {
   if (finalScore == null) {
-    return { finalScoreBase4: undefined as number | null | undefined, letter: undefined as string | undefined }
+    return {
+      finalScoreBase4: undefined as number | null | undefined,
+      letter: undefined as string | undefined,
+    }
   }
   const result = convertScoreWithCourseConfig(
     Number(finalScore),
-    (trainingCourse as { scoreConverts?: Parameters<typeof convertScoreWithCourseConfig>[1] } | null | undefined)
-      ?.scoreConverts || [],
+    (
+      trainingCourse as
+        | { scoreConverts?: Parameters<typeof convertScoreWithCourseConfig>[1] }
+        | null
+        | undefined
+    )?.scoreConverts || [],
     courseScoreConfigFrom(trainingCourse, scores, flags)
   )
   return { finalScoreBase4: result.base4, letter: result.letter }
@@ -380,8 +387,7 @@ export default function NhapDiem({
 
       // Flush pending UI updates trước khi đọc rowData (tránh mất TX/ĐK sync onePoint)
       const pending = pendingRowUpdatesRef.current
-      const mergedRowData =
-        Object.keys(pending).length > 0 ? { ...rowData, ...pending } : rowData
+      const mergedRowData = Object.keys(pending).length > 0 ? { ...rowData, ...pending } : rowData
       if (Object.keys(pending).length > 0) {
         pendingRowUpdatesRef.current = {}
         setRowData(mergedRowData)

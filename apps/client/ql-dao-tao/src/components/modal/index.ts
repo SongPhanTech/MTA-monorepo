@@ -31,6 +31,7 @@ import ModalPrintToDSHV from "./modal-print-ds-sinh-vien-lop"
 import ModalPrintInvitation from "./modal-print-giay-moi"
 import ModalPrintToKQHT from "./modal-print-ket-qua-hoc-tap"
 import ModalPrintPhuLucVb from "./modal-print-phu-luc-vb"
+import ModalPrintPhoiBang from "./modal-print-phoi-bang"
 import ModalPrintDecision from "./modal-print-quyet-dinh-hoi-dong"
 import ModalPrintSupervisorGuide from "./modal-print-quyet-dinh-huong-dan"
 import ModalGraduationCriteria from "./modal-tieu-chi-xet-tn"
@@ -166,6 +167,7 @@ export {
   PutRoomModal,
   ModalPrintToKQHT,
   ModalPrintPhuLucVb,
+  ModalPrintPhoiBang,
   PutOneSubjectClassModal,
   AddStudentToFixedClassModal,
   GanCanBoLopModal,

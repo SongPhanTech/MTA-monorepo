@@ -122,9 +122,7 @@ const getStatusEvaluation = (
       return {
         color: "orange",
         label:
-          rejectedBy === "ADVISORY_BOARD"
-            ? "Ban tư vấn yêu cầu sửa đổi"
-            : "Thư ký yêu cầu sửa đổi",
+          rejectedBy === "ADVISORY_BOARD" ? "Ban tư vấn yêu cầu sửa đổi" : "Thư ký yêu cầu sửa đổi",
       }
     case $Enums.EvaluationCriterionStatus.COMPLETED:
       return {

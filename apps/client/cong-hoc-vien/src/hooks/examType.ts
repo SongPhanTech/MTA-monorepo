@@ -14,6 +14,15 @@ export const useExamTypeOptions = () => {
     { value: ExamType.Oral, label: "Vấn đáp" },
     { value: ExamType.Practice, label: "Thực hành - Thí nghiệm" },
     { value: ExamType.Project, label: "Đồ án" },
+    { value: ExamType.MultipleChoice, label: "Trắc nghiệm" },
+    { value: ExamType.PracticeExercise, label: "Bài tập TH" },
+    { value: ExamType.ProjectDefense, label: "Bảo vệ đồ án" },
+    { value: ExamType.Report, label: "Báo cáo" },
+    { value: ExamType.ListeningSpeakingReadingWriting, label: "Nghe nói đọc viết" },
+    { value: ExamType.ReadingWriting, label: "Đọc viết" },
+    { value: ExamType.ListeningSpeaking, label: "Nghe nói" },
+    { value: ExamType.ListeningReadingWriting, label: "Nghe đọc viết" },
+    { value: ExamType.Unspecified, label: "Chưa xác định" },
     { value: ExamType.Other, label: "Loại khác" },
   ]
 

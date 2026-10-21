@@ -33,6 +33,7 @@ const baseSchema = z.object({
     targetDeviceId: z.string().nullish(),
     pushExpiresAt: z.coerce.date().nullish(),
     reminderData: z.any().nullish(),
+    recipientProfileId: z.string().uuid().nullish(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -60,6 +61,7 @@ const baseSchemaWithoutDefaults = z.object({
     targetDeviceId: z.string().nullish(),
     pushExpiresAt: z.coerce.date().nullish(),
     reminderData: z.any().nullish(),
+    recipientProfileId: z.string().uuid().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -122,7 +124,8 @@ export const NotificationPrismaUpdateSchema = z.object({
     targetAll: z.boolean(),
     targetDeviceId: z.string().nullish(),
     pushExpiresAt: z.coerce.date().nullish(),
-    reminderData: z.any().nullish()
+    reminderData: z.any().nullish(),
+    recipientProfileId: z.string().uuid().nullish()
 }).partial().passthrough();
 
 

@@ -7,6 +7,15 @@ export const PaginationQuerySchema = z
   })
   .openapi("PaginationQuery")
 
+/** Query param array: 1 giá trị đến dạng string, nhiều giá trị dạng string[]. */
+export const QueryStringArraySchema = z
+  .union([z.string(), z.array(z.string())])
+  .optional()
+  .transform((val) => {
+    if (val === undefined || val === "") return undefined
+    return Array.isArray(val) ? val : [val]
+  })
+
 /** @deprecated Dùng PaginatedDataResponseSchema cho response body — ListOf kế thừa query params page/limit. */
 export const ListOf = <T extends z.ZodTypeAny>(itemSchema: T) =>
   PaginationQuerySchema.extend({

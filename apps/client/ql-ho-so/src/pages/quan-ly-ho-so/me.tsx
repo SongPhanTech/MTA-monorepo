@@ -469,9 +469,19 @@ export default function UpdateUserPage() {
           officerNumber: values.officerNumber,
           nationalityId,
           currentAddress: values.currentAddress,
+          newCurrentAddress: values.newCurrentAddress,
+          viTriCongViecId: values.sDM_ViTriCongViecId,
+          quanLyTrucTiepId: values.sQuanlyTrucTiepId,
+          provinceCurrentAddressId: values.provinceCurrentAddressId,
+          districtCurrentAddressId: values.districtCurrentAddressId,
+          communeCurrentAddressId: values.communeCurrentAddressId,
+          newProvinceCurrentAddressId: values.newProvinceCurrentAddressId,
+          newCommuneCurrentAddressId: values.newCommuneCurrentAddressId,
           bLaHocVien: values.bLaHocVien,
           bLaCanBoNhanVien: values.bLaCanBoNhanVien,
           bLaGiangVien,
+          bLaNguoiDung: values.bLaNguoiDung,
+          active: values.active,
         })
       )
       if (lsbRes.status !== 200) {
@@ -928,38 +938,24 @@ export default function UpdateUserPage() {
           },
         },
       ]
-      if (cccdUserProfileData?.lecturer && bLaGiangVien && lecturerTypeId) {
-        const lecturerUpdateData: any = {
-          lecturerTypeId,
-        }
-
+      // Upsert theo userProfileId: tránh Unique constraint khi Lecturer đã tồn tại
+      // (kể cả soft-delete — include không đọc được nhưng unique vẫn còn).
+      if (bLaGiangVien && lecturerTypeId) {
         listTransaction = [
           ...listTransaction,
           {
             model: "Lecturer",
-            operation: "update",
+            operation: "upsert",
             data: {
-              where: {
-                id: cccdUserProfileData?.lecturer?.id,
+              where: { userProfileId: id },
+              create: {
+                userProfileId: id,
+                lecturerTypeId,
               },
-              data: lecturerUpdateData,
-            },
-          },
-        ]
-      }
-      if (!cccdUserProfileData?.lecturer && bLaGiangVien && lecturerTypeId) {
-        const lecturerData: any = {
-          userProfileId: id,
-          lecturerTypeId,
-        }
-
-        listTransaction = [
-          ...listTransaction,
-          {
-            model: "Lecturer",
-            operation: "create",
-            data: {
-              data: lecturerData,
+              update: {
+                lecturerTypeId,
+                deletedAt: null,
+              },
             },
           },
         ]
@@ -980,47 +976,25 @@ export default function UpdateUserPage() {
         ]
       }
 
-      if (
-        cccdUserProfileData?.staffs &&
-        values.bLaCanBoNhanVien &&
-        staffTypeId &&
-        staffPositionId
-      ) {
+      if (values.bLaCanBoNhanVien && staffTypeId && staffPositionId) {
         listTransaction = [
           ...listTransaction,
           {
             model: "Staff",
-            operation: "update",
+            operation: "upsert",
             data: {
-              where: {
-                id: cccdUserProfileData?.staffs?.id,
-              },
-              data: {
-                staffPositionId,
-                staffTypeId,
-                organizationId: values?.sDM_DonViId,
-              },
-            },
-          },
-        ]
-      }
-      if (
-        !cccdUserProfileData?.staffs &&
-        values.bLaCanBoNhanVien &&
-        staffTypeId &&
-        staffPositionId
-      ) {
-        listTransaction = [
-          ...listTransaction,
-          {
-            model: "Staff",
-            operation: "create",
-            data: {
-              data: {
+              where: { userProfileId: id },
+              create: {
                 userProfileId: id,
                 staffPositionId,
                 staffTypeId,
                 organizationId: values?.sDM_DonViId,
+              },
+              update: {
+                staffPositionId,
+                staffTypeId,
+                organizationId: values?.sDM_DonViId,
+                deletedAt: null,
               },
             },
           },

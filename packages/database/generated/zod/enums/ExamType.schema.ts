@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const ExamTypeSchema = z.enum(["OfflineWritten", "OnlineWritten", "Oral", "Practice", "Project", "Other"])
+export const ExamTypeSchema = z.enum(["OfflineWritten", "OnlineWritten", "Oral", "Practice", "Project", "MultipleChoice", "PracticeExercise", "ProjectDefense", "Report", "ListeningSpeakingReadingWriting", "ReadingWriting", "ListeningSpeaking", "ListeningReadingWriting", "Unspecified", "Other"])

@@ -7,38 +7,25 @@ import {
 import HtmlTruncate from "@components/commons/html-truncate"
 import Table from "@components/commons/table"
 import useSpinner from "@hooks/spinner"
-import {
-  getClusterSurveyInfoDepartment,
-  getClusterSurveyStatisticsForLecturer,
-  useGetClusterSurveyStatisticsForLecturer,
-  useGetClusterSurveyStatisticsForOrganization,
-} from "@workspace/libs/api/exam"
+import { useFindUniqueClusterSurvey } from "@workspace/db/hooks"
+import { useGetClusterSurveyStatisticsForOrganization } from "@workspace/libs/api/exam"
 import type { GetSurveyStatistics200QuestionsItemAnswersItem } from "@workspace/libs/api/schemas"
-import { Button, Col, Dropdown, Empty, Row, Typography } from "antd"
+import { Button, Col, Dropdown, Empty, Row, Tag, Typography, message } from "antd"
 // @ts-nocheck
 import ReactECharts from "echarts-for-react"
 import ExcelJS from "exceljs"
 import { saveAs } from "file-saver"
-import { exportSurveyDocxTemplate } from "@/utils/export-survey-docx-template"
-import { useRouter } from "next/router"
 import { useMemo } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
-import { getMinioUrl } from "@workspace/libs/utils"
-import { message } from "antd"
-import { TemplateHandler } from "easy-template-x"
+
+import type { Org, OrgTreeNode } from "@/utils/buildOrgLecturerTree"
+import { exportFacultySurveySummaryDocx } from "@/utils/export-faculty-survey-summary-docx"
+import { exportSurveyDocxTemplate } from "@/utils/export-survey-docx-template"
 import {
-  AlignmentType,
-  BorderStyle,
-  Document,
-  Packer,
-  Paragraph,
-  Table as DocxTable,
-  TableCell,
-  TableRow,
-  TextRun,
-  WidthType,
-  VerticalAlign,
-} from "docx"
+  buildSpecificChoiceMap,
+  formatSpecialAnswerCell,
+  getSpecialChoiceLabel,
+} from "@/utils/survey-specific-choice"
 
 const { Title } = Typography
 
@@ -55,6 +42,7 @@ type AnswerItem = {
 }
 
 type AnswerWithPercent = AnswerItem & { percent: number; total: number }
+
 function SurveyOrganizationReport({
   selectedId,
   organizationId,
@@ -67,6 +55,8 @@ function SurveyOrganizationReport({
   departmentName,
   departmentCode,
   selectedItem,
+  selectedOrgNode,
+  sectionTitle,
 }: {
   selectedId: string
   organizationId: string
@@ -78,9 +68,10 @@ function SurveyOrganizationReport({
   organizationName?: string
   departmentName?: string
   departmentCode?: string
-  selectedItem?: any
+  selectedItem?: Org
+  selectedOrgNode?: OrgTreeNode
+  sectionTitle?: string
 }) {
-  const router = useRouter()
   const { showSpinner, hideSpinner } = useSpinner()
   const { onOpen } = useDisclosure({
     tag: "ModalPrintSurveyOrganization",
@@ -89,7 +80,34 @@ function SurveyOrganizationReport({
     organizationId,
   })
 
-  // const { data: dataLevel } = useGetSurveyStatistics(selectedId as string)
+  const { data: clusterDetail } = useFindUniqueClusterSurvey(
+    {
+      where: { id: selectedId },
+      include: {
+        surveyQuestion: {
+          include: {
+            specificChoice: { orderBy: { createdAt: "asc" } },
+          },
+        },
+      },
+    },
+    { enabled: !!selectedId }
+  )
+
+  const specificChoiceByQuestionId = useMemo(
+    () => buildSpecificChoiceMap(clusterDetail?.surveyQuestion),
+    [clusterDetail]
+  )
+
+  const questionsWithSpecific = useMemo(() => {
+    const questions =
+      dataLevel?.status === 200 ? dataLevel.data.data?.questions || [] : []
+    return questions.map((q: any) => ({
+      ...q,
+      specificChoice: specificChoiceByQuestionId[q.id] || [],
+    }))
+  }, [dataLevel, specificChoiceByQuestionId])
+
   function convertToStackChartData(
     data: CriteriaItem[],
     answerDescriptions: GetSurveyStatistics200QuestionsItemAnswersItem[]
@@ -346,15 +364,42 @@ function SurveyOrganizationReport({
     ]
     if (dataTable?.length > 0) {
       dataTable.forEach((i: any, index: number) => {
+        const isSpecial = !!specificChoiceByQuestionId[i.id]?.length
         const headerRowValue: any = worksheet.getRow(rowIndex + 3 + index)
-        headerRowValue.values = [
-          index + 1,
-          `Câu hỏi ${index + 1}`,
-          i?.name,
-          ...calculatePercent(i?.answers).map(
-            (a: any) => `${a.percent || 0}% (${a?.count || 0}/${a?.total || 0})`
-          ),
-        ]
+        if (isSpecial) headerRowValue.height = 36
+
+        headerRowValue.getCell(1).value = index + 1
+        if (isSpecial) {
+          headerRowValue.getCell(2).value = {
+            richText: [
+              { text: `Câu hỏi ${index + 1}`, font: { name: "Times New Roman", size: 11 } },
+              {
+                text: " *",
+                font: {
+                  name: "Times New Roman",
+                  size: 11,
+                  bold: true,
+                  color: { argb: "FFFF0000" },
+                },
+              },
+            ],
+          }
+        } else {
+          headerRowValue.getCell(2).value = `Câu hỏi ${index + 1}`
+        }
+        headerRowValue.getCell(3).value = i?.name
+
+        calculatePercent(i?.answers).forEach((a: any, answerIndex: number) => {
+          const percentText = `${a.percent || 0}% (${a?.count || 0}/${a?.total || 0})`
+          const label = isSpecial
+            ? getSpecialChoiceLabel(specificChoiceByQuestionId[i.id], answerIndex, a?.answer)
+            : null
+          headerRowValue.getCell(4 + answerIndex).value = formatSpecialAnswerCell(
+            label,
+            percentText
+          )
+        })
+
         headerRowValue.eachCell((cell: any, colNumber: number) => {
           cell.alignment = {
             horizontal: colNumber === 3 ? "left" : "center",
@@ -376,369 +421,20 @@ function SurveyOrganizationReport({
     saveAs(new Blob([buffer]), `Bao_cao_khao_sat_${name || ""}.xlsx`)
   }
 
-  // const exportSummaryDocx = async (selectedItem: any) => {
-  //   try {
-  //     const response = await fetch(getMinioUrl("mta/template/TongHopKhoa.docx"))
-
-  //     const templateFile = await response.arrayBuffer()
-  //     const templateData = {
-  //       organizationName: selectedItem?.title || "",
-
-  //       data:
-  //         selectedItem?.children?.map((boMon: any) => ({
-  //           boMon: boMon?.title,
-
-  //           data1:
-  //             boMon?.children?.map((gv: any) => {
-  //               const total =
-  //                 (gv?.muc1 || 0) +
-  //                 (gv?.muc2 || 0) +
-  //                 (gv?.muc3 || 0) +
-  //                 (gv?.muc4 || 0) +
-  //                 (gv?.muc5 || 0)
-
-  //               return {
-  //                 GV: gv?.title,
-
-  //                 muc1: total ? `${(((gv?.muc1 || 0) * 100) / total).toFixed(1)}%` : "0%",
-
-  //                 muc2: total ? `${(((gv?.muc2 || 0) * 100) / total).toFixed(1)}%` : "0%",
-
-  //                 muc3: total ? `${(((gv?.muc3 || 0) * 100) / total).toFixed(1)}%` : "0%",
-
-  //                 muc4: total ? `${(((gv?.muc4 || 0) * 100) / total).toFixed(1)}%` : "0%",
-
-  //                 muc5: total ? `${(((gv?.muc5 || 0) * 100) / total).toFixed(1)}%` : "0%",
-  //               }
-  //             }) || [],
-  //         })) || [],
-  //     }
-  //     const handler = new TemplateHandler()
-  //     const doc = await handler.process(templateFile, templateData)
-
-  //     saveAs(new Blob([doc]), `TongKet_${organizationName || "BaoCao"}.docx`)
-  //   } catch (error) {
-  //     console.error(error)
-  //     message.error("Xuất file thất bại")
-  //   }
-  // }
-  function getAnswerPercent(answers: any[] = []) {
-    const answersWithPercent = calculatePercent(aggregateAnswersByAnswer(answers))
-    const getPercent = (answer: string) =>
-      `${answersWithPercent.find((i) => String(i.answer) === answer)?.percent || 0}%`
-
-    return {
-      muc1: getPercent("1"),
-      muc2: getPercent("2"),
-      muc3: getPercent("3"),
-      muc4: getPercent("4"),
-      muc5: getPercent("5"),
-    }
-  }
-  function aggregateAnswersByAnswer(answers: any[] = []): AnswerItem[] {
-    const answerMap = new Map<string, AnswerItem>()
-
-    answers.forEach((item) => {
-      const answer = String(item?.answer || "")
-      if (!answer) return
-
-      const count = Number(item?.count || 0)
-      const current = answerMap.get(answer)
-      if (current) {
-        current.count += count
-        return
-      }
-
-      answerMap.set(answer, {
-        id: item?.id || answer,
-        answer,
-        description: item?.description || "",
-        count,
-      })
-    })
-
-    return Array.from(answerMap.values()).sort((a, b) => Number(a.answer) - Number(b.answer))
-  }
-
-  function isLecturerNode(item: any) {
-    return Boolean(item?.id && !item?.iCapDonVi)
-  }
-
-  function getLecturerNodes(item: any): any[] {
-    if (!item?.children?.length) return []
-
-    return item.children.flatMap((child: any) => {
-      if (isLecturerNode(child)) return [child]
-      return getLecturerNodes(child)
-    })
-  }
-
-  function getSummaryGroups(item: any) {
-    const children = item?.children || []
-    const organizationChildren = children.filter((child: any) => child?.iCapDonVi)
-    const directLecturers = children.filter(isLecturerNode)
-    const groups = organizationChildren.map((organization: any) => ({
-      title: organization?.title || "",
-      lecturers: getLecturerNodes(organization),
-    }))
-
-    if (directLecturers.length) {
-      groups.unshift({
-        title: item?.title || "",
-        lecturers: directLecturers,
-      })
-    }
-
-    return groups.filter((group: any) => group.lecturers.length)
-  }
-
-  async function getLecturerAnswersForSummary(lecturer: any) {
-    if (lecturer?.answers?.length) return lecturer.answers
-    if (lecturer?.questions?.length) {
-      return lecturer.questions.flatMap((question: any) => question?.answers || [])
-    }
-
-    const response = await getClusterSurveyStatisticsForLecturer(selectedId as string, {
-      lectureId: lecturer.id,
-    })
-
-    if (response?.status !== 200) return []
-
-    return (
-      response?.data?.data?.questions?.flatMap((question: any) => question?.answers || []) || []
-    )
-  }
-
-  const exportSummaryDocx = async (selectedItem: any) => {
-    try {
-      const rows: TableRow[] = []
-      const summaryGroups = getSummaryGroups(selectedItem)
-
-      // HEADER
-      rows.push(
-        new TableRow({
-          children: [
-            new TableCell({
-              rowSpan: 2,
-              width: {
-                size: 2500,
-                type: WidthType.DXA,
-              },
-              verticalAlign: VerticalAlign.CENTER,
-              children: [
-                new Paragraph({
-                  alignment: AlignmentType.CENTER,
-                  children: [
-                    new TextRun({
-                      text: "BỘ MÔN/\nGIẢNG VIÊN",
-                      bold: true,
-                    }),
-                  ],
-                }),
-              ],
-            }),
-
-            new TableCell({
-              columnSpan: 5,
-              verticalAlign: VerticalAlign.CENTER,
-              children: [
-                new Paragraph({
-                  alignment: AlignmentType.CENTER,
-                  children: [
-                    new TextRun({
-                      text: "KẾT QUẢ ĐÁNH GIÁ (%)",
-                      bold: true,
-                    }),
-                  ],
-                }),
-              ],
-            }),
-          ],
-        })
+  const exportSummaryDocx = () => {
+    if (!selectedOrgNode?.children?.length) {
+      message.warning(
+        "Vui lòng chọn Khoa/Viện trên cây đơn vị (có Bộ môn/Giảng viên) để xuất báo cáo tổng hợp"
       )
-
-      rows.push(
-        new TableRow({
-          children: [
-            "RẤT KHÔNG HÀI LÒNG",
-            "KHÔNG HÀI LÒNG",
-            "PHÂN VÂN",
-            "HÀI LÒNG",
-            "RẤT HÀI LÒNG",
-          ].map(
-            (item) =>
-              new TableCell({
-                verticalAlign: VerticalAlign.CENTER,
-                children: [
-                  new Paragraph({
-                    alignment: AlignmentType.CENTER,
-                    children: [
-                      new TextRun({
-                        text: item,
-                        bold: true,
-                      }),
-                    ],
-                  }),
-                ],
-              })
-          ),
-        })
-      )
-
-      // DATA
-      selectedItem?.children?.forEach((boMon: any) => {
-        // DÒNG BỘ MÔN
-        rows.push(
-          new TableRow({
-            children: [
-              new TableCell({
-                verticalAlign: VerticalAlign.CENTER,
-                columnSpan: 6,
-                children: [
-                  new Paragraph({
-                    children: [
-                      new TextRun({
-                        text: boMon?.title || "",
-                        bold: true,
-                      }),
-                    ],
-                  }),
-                ],
-              }),
-            ],
-          })
-        )
-
-        // DÒNG GIẢNG VIÊN
-        boMon?.children?.forEach((gv: any) => {
-          const percentData = getAnswerPercent(gv?.answers || gv?.questions?.[0]?.answers || [])
-
-          rows.push(
-            new TableRow({
-              children: [
-                gv?.title || "",
-                percentData.muc1,
-                percentData.muc2,
-                percentData.muc3,
-                percentData.muc4,
-                percentData.muc5,
-              ].map(
-                (text) =>
-                  new TableCell({
-                    verticalAlign: VerticalAlign.CENTER,
-                    children: [
-                      new Paragraph({
-                        children: [
-                          new TextRun({
-                            text,
-                          }),
-                        ],
-                      }),
-                    ],
-                  })
-              ),
-            })
-          )
-        })
-      })
-
-      const doc = new Document({
-        sections: [
-          {
-            children: [
-              new Paragraph({
-                alignment: AlignmentType.CENTER,
-                spacing: {
-                  after: 200,
-                },
-                children: [
-                  new TextRun({
-                    text: "TỔNG HỢP SỐ LIỆU VỀ HOẠT ĐỘNG GIẢNG DẠY CỦA GIẢNG VIÊN",
-                    bold: true,
-                    size: 28,
-                  }),
-                ],
-              }),
-
-              new Paragraph({
-                alignment: AlignmentType.CENTER,
-                spacing: {
-                  after: 300,
-                },
-                children: [
-                  new TextRun({
-                    text: selectedItem?.title || "",
-                    bold: true,
-                    size: 26,
-                  }),
-                ],
-              }),
-
-              new Paragraph({
-                spacing: {
-                  after: 200,
-                },
-                children: [
-                  new TextRun({
-                    text: "A. Các lớp kỹ sư quân sự",
-                    bold: true,
-                  }),
-                ],
-              }),
-
-              new DocxTable({
-                width: {
-                  size: 100,
-                  type: WidthType.PERCENTAGE,
-                },
-
-                rows,
-
-                borders: {
-                  top: {
-                    style: BorderStyle.SINGLE,
-                    size: 1,
-                    color: "000000",
-                  },
-                  bottom: {
-                    style: BorderStyle.SINGLE,
-                    size: 1,
-                    color: "000000",
-                  },
-                  left: {
-                    style: BorderStyle.SINGLE,
-                    size: 1,
-                    color: "000000",
-                  },
-                  right: {
-                    style: BorderStyle.SINGLE,
-                    size: 1,
-                    color: "000000",
-                  },
-                  insideHorizontal: {
-                    style: BorderStyle.SINGLE,
-                    size: 1,
-                    color: "000000",
-                  },
-                  insideVertical: {
-                    style: BorderStyle.SINGLE,
-                    size: 1,
-                    color: "000000",
-                  },
-                },
-              }),
-            ],
-          },
-        ],
-      })
-
-      const blob = await Packer.toBlob(doc)
-
-      saveAs(blob, `TongKet_${selectedItem?.title || "BaoCao"}.docx`)
-    } catch (error) {
-      console.error(error)
-      message.error("Xuất file thất bại")
+      return
     }
+    return exportFacultySurveySummaryDocx({
+      clusterId: selectedId,
+      facultyNode: selectedOrgNode,
+      trainingObjectTypeName,
+      trainingSystemName,
+      sectionTitle,
+    })
   }
 
   function calculatePercent(items: AnswerItem[]): AnswerWithPercent[] {
@@ -765,11 +461,15 @@ function SurveyOrganizationReport({
       })
     })
     const datarender = [
-      ...dataTable,
+      ...dataTable.map((q: any) => ({
+        ...q,
+        isSpecial: !!specificChoiceByQuestionId[q.id]?.length,
+      })),
       {
         name: "Trung bình",
         answers: average,
         id: "average",
+        isSpecial: false,
       },
     ]
 
@@ -789,9 +489,19 @@ function SurveyOrganizationReport({
                 {
                   title: "Câu hỏi",
                   align: "center",
-                  width: 100,
+                  width: 120,
                   render: (_, record, index) => {
-                    return index === datarender.length - 1 ? "ĐGTB" : `Câu hỏi ${index + 1}`
+                    if (index === datarender.length - 1) return "ĐGTB"
+                    return (
+                      <div className="flex flex-col items-center gap-1">
+                        <span>{`Câu hỏi ${index + 1}`}</span>
+                        {record.isSpecial && (
+                          <Tag color="blue" className="m-0">
+                            Đặc biệt
+                          </Tag>
+                        )}
+                      </div>
+                    )
                   },
                 },
                 {
@@ -806,16 +516,34 @@ function SurveyOrganizationReport({
                   },
                 },
                 // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
-                ...dataTable[0]?.answers?.map((i: any) => ({
+                ...dataTable[0]?.answers?.map((i: any, answerIndex: number) => ({
                   title: i?.description,
                   id: i?.id,
                   dataIndex: i?.id,
-                  width: 130,
+                  width: 140,
                   align: "center",
                   render: (__: any, record: any) => {
                     const count = calculatePercent(record?.answers).find((a) => a.id === i?.id)
+                    const percentText =
+                      `${count?.percent || 0}% (${count?.count || 0}/${count?.total})` || "0"
 
-                    return `${count?.percent || 0}% (${count?.count || 0}/${count?.total})` || "0"
+                    if (record.id === "average" || !record.isSpecial) return percentText
+
+                    const specialLabel = getSpecialChoiceLabel(
+                      specificChoiceByQuestionId[record.id],
+                      answerIndex,
+                      i?.answer
+                    )
+                    return (
+                      <div className="leading-tight">
+                        {specialLabel && (
+                          <div className="mb-1 text-xs font-semibold text-[#1677ff]">
+                            {specialLabel}
+                          </div>
+                        )}
+                        <div>{percentText}</div>
+                      </div>
+                    )
                   },
                 })),
               ]
@@ -854,15 +582,15 @@ function SurveyOrganizationReport({
                   trigger={["click"]}
                   menu={{
                     items: [
-                      selectedItem?.iCapDonVi &&
-                        selectedItem?.iCapDonVi !== 3 && {
+                      selectedItem?.iCapDonVi != null &&
+                        selectedItem.iCapDonVi !== 3 && {
                           key: "export-summary-docx",
                           icon: <FileWordOutlined />,
                           label: "Tổng kết Khoa/Viện",
                           onClick: async () => {
                             showSpinner()
                             try {
-                              await exportSummaryDocx(selectedItem)
+                              await exportSummaryDocx()
                             } finally {
                               hideSpinner()
                             }
@@ -875,7 +603,7 @@ function SurveyOrganizationReport({
                         onClick: () => {
                           exportTemplate(
                             `Bao_cao_khao_sat_${surveyName}`,
-                            dataLevel?.data?.data?.questions,
+                            questionsWithSpecific,
                             dataLevel?.data?.data
                           )
                         },
@@ -885,11 +613,10 @@ function SurveyOrganizationReport({
                         icon: <FileWordOutlined />,
                         label: "Xuất Word",
                         onClick: async () => {
-                          const hasDepartment = Boolean(departmentName)
                           showSpinner()
                           try {
                             await exportSurveyDocxTemplate({
-                              variant: hasDepartment ? "BO_MON" : "KHOA",
+                              variant: departmentName ? "BO_MON" : "KHOA",
                               surveyName,
                               trainingObjectTypeName,
                               semesterName,
@@ -898,7 +625,7 @@ function SurveyOrganizationReport({
                               organizationCode,
                               departmentName,
                               departmentCode,
-                              questions: dataLevel?.data?.data?.questions || [],
+                              questions: questionsWithSpecific,
                             })
                           } finally {
                             hideSpinner()
@@ -913,16 +640,16 @@ function SurveyOrganizationReport({
                           onOpen({
                             surveyName,
                             trainingObjectTypeName,
-                            questions: dataLevel?.data?.data?.questions,
+                            questions: questionsWithSpecific,
                             chartOption: dataBarchart,
-                            organizationCode: organizationCode,
-                            organizationName: organizationName,
-                            departmentName: departmentName,
-                            departmentCode: departmentCode,
+                            organizationCode,
+                            organizationName,
+                            departmentName,
+                            departmentCode,
                           })
                         },
                       },
-                    ],
+                    ].filter(Boolean) as any[],
                   }}
                 >
                   <Button type="primary" size="small">

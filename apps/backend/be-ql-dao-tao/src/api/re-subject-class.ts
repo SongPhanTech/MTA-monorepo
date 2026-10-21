@@ -16,6 +16,8 @@ import { fieldDesc } from "../dto/openapi-helpers"
 import { standardErrorResponses } from "../dto/openapi-route-helpers"
 import {
   attemptCountExpr,
+  duDieuKienDuThiExpr,
+  failedExamOrAbsentExpr,
   firstAttemptExamBannedExpr,
   latestAttemptRnExpr,
   reexamEligibleExpr,
@@ -27,12 +29,7 @@ const app = new OpenAPIHono({ strict: false })
 
 /** Default page/limit — tránh LIMIT/OFFSET NULL khi FE không gửi. */
 const ListPaginationSchema = PaginationQuerySchema.omit({ page: true, limit: true }).extend({
-  page: z
-    .number({ coerce: true })
-    .min(1)
-    .max(1000)
-    .default(1)
-    .openapi(fieldDesc("Số trang.", 1)),
+  page: z.number({ coerce: true }).min(1).max(1000).default(1).openapi(fieldDesc("Số trang.", 1)),
   limit: z
     .number({ coerce: true })
     .min(1)
@@ -345,14 +342,26 @@ app.openapi(openSubjectClassRetake, async (c) => {
                                TB.code                                                                                  as training_block_code,
                                TB."isNationalDefense"                                                                   as is_national_defense,
                                SSS."studentId",
-                               SSS."finalScore" as diem_cuoi,
+                               SSS."attendanceScore"                                                                    as thuong_xuyen,
+                               SSS."midtermScore"                                                                       as dinh_ky,
+                               SSS."examScore"                                                                          as diem_thi,
+                               SSS."finalScore"                                                                         as diem_cuoi,
                                SSS.withdrew,
                                SSS.exempted,
-                               SSS."examPostponed",
-                               SSS."examBanned" as cam_thi,
-                               SSS."examBannedReason" as ly_do_cam_thi,
-                               SSS.suspended as dinh_chi,
-                               SSS."suspendedReason" as ly_do_dinh_chi,
+                               SSS."examPostponed"                                                                      as hoan_thi,
+                               SSS."examPostponedReason"                                                                as ly_do_hoan_thi,
+                               SSS."examBanned"                                                                         as cam_thi,
+                               SSS."examBannedReason"                                                                   as ly_do_cam_thi,
+                               SSS.suspended                                                                            as dinh_chi,
+                               SSS."suspendedReason"                                                                    as ly_do_dinh_chi,
+                               coalesce(sv."onePoint", false)                                                           as is_one_point,
+                               TBS."graduation"                                                                         as is_graduation,
+                               TBS."useForFinalScore"                                                                   as use_for_final_score,
+                               TC."scoreToTakeExam"                                                                     as score_to_take_exam,
+                               TC."examScoreToPass"                                                                     as exam_score_to_pass,
+                               TC."scoreToPass"                                                                         as score_to_pass,
+                               TC."scoreToPassGraduation"                                                               as score_to_pass_graduation,
+                               TC."scoreToPassConditional"                                                              as score_to_pass_conditional,
                                ${truotMonExpr} as truot_mon,
                                TBS.id                         as trainingBlockSubjectId,
                                ${firstAttemptExamBannedExpr} as first_attempt_exam_banned,
@@ -378,14 +387,15 @@ app.openapi(openSubjectClassRetake, async (c) => {
           and (truot_mon = true
             or cam_thi = true
             or dinh_chi = true)
-          and withdrew = false        -- rút khỏi lớp
-          and exempted = false        -- miễn học
-          and "examPostponed" = false -- hoãn thi
+          and withdrew is not true        -- rút khỏi lớp
+          and exempted is not true        -- miễn học
           -- exclude students eligible for ReExam (thi lại)
-          -- only exclude on first attempt: if they already did a ReExam but still fail → belongs in Retake
-          and not (attempt_count = 1 and first_attempt_exam_banned = false
-                   and truot_mon = true and cam_thi = false and dinh_chi = false
-                   and (${reexamEligibleExpr}))
+          and not (
+            attempt_count = 1
+            and (${reexamEligibleExpr})
+            and (${duDieuKienDuThiExpr})
+            and (${failedExamOrAbsentExpr})
+          )
         group by id, code, name
         )
         select grouped.*, (select count(*)::INTEGER from grouped) as "totalCount"
@@ -484,6 +494,14 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
                                SSS."examBannedReason"                                                                            as ly_do_cam_thi,
                                SSS.suspended                                                                                     as dinh_chi,
                                SSS."suspendedReason"                                                                             as ly_do_dinh_chi,
+                               coalesce(sv."onePoint", false)                                                                    as is_one_point,
+                               TBS."graduation"                                                                                  as is_graduation,
+                               TBS."useForFinalScore"                                                                            as use_for_final_score,
+                               TC."scoreToTakeExam"                                                                              as score_to_take_exam,
+                               TC."examScoreToPass"                                                                              as exam_score_to_pass,
+                               TC."scoreToPass"                                                                                  as score_to_pass,
+                               TC."scoreToPassGraduation"                                                                        as score_to_pass_graduation,
+                               TC."scoreToPassConditional"                                                                       as score_to_pass_conditional,
                                ${truotMonExpr} as truot_mon,
                                ${firstAttemptExamBannedExpr} as first_attempt_exam_banned,
                                ${attemptCountExpr} as attempt_count,
@@ -528,12 +546,15 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
           from mon_no
           where rn = 1
             and (truot_mon = true or cam_thi = true or dinh_chi = true)
-            and withdrew = false
-            and mien_thi = false
-            and hoan_thi = false
-            and not (attempt_count = 1 and first_attempt_exam_banned = false
-                     and truot_mon = true and cam_thi = false and dinh_chi = false
-                     and (${reexamEligibleExpr}))
+            and withdrew is not true
+            and mien_thi is not true
+            -- exclude students eligible for ReExam (thi lại)
+            and not (
+              attempt_count = 1
+              and (${reexamEligibleExpr})
+              and (${duDieuKienDuThiExpr})
+              and (${failedExamOrAbsentExpr})
+            )
           order by "studentId", truot_mon DESC NULLS LAST, cam_thi DESC, dinh_chi DESC
         ) t
         limit ${pageSize} offset ${pageSize} * (${page} - 1)
@@ -584,6 +605,10 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
             reason = reasons.join(", ")
           } else if (record.attempt_count >= 2 && record.truot_mon) {
             reason = "Trượt thi lại"
+          } else if (record.thuong_xuyen == null || record.dinh_ky == null) {
+            reason = "Khuyết điểm quá trình"
+          } else if (record.thuong_xuyen < 5 || record.dinh_ky < 5) {
+            reason = "Điểm quá trình không đạt"
           } else if (record.truot_mon) {
             reason = "Trượt môn"
           }
@@ -702,14 +727,24 @@ app.openapi(openSubjectClassReExam, async (c) => {
                                SSS."studentId",
                                SSS."attendanceScore"                                                                    as thuong_xuyen,
                                SSS."midtermScore"                                                                       as dinh_ky,
+                               SSS."examScore"                                                                          as diem_thi,
                                SSS."finalScore"                                                                         as diem_cuoi,
                                SSS.withdrew,
                                SSS.exempted,
-                               SSS."examPostponed",
+                               SSS."examPostponed"                                                                      as hoan_thi,
+                               SSS."examPostponedReason"                                                                as ly_do_hoan_thi,
                                SSS."examBanned"                                                                         as cam_thi,
                                SSS."examBannedReason"                                                                   as ly_do_cam_thi,
                                SSS.suspended                                                                            as dinh_chi,
                                SSS."suspendedReason"                                                                    as ly_do_dinh_chi,
+                               coalesce(sv."onePoint", false)                                                           as is_one_point,
+                               TBS."graduation"                                                                         as is_graduation,
+                               TBS."useForFinalScore"                                                                   as use_for_final_score,
+                               TC."scoreToTakeExam"                                                                     as score_to_take_exam,
+                               TC."examScoreToPass"                                                                     as exam_score_to_pass,
+                               TC."scoreToPass"                                                                         as score_to_pass,
+                               TC."scoreToPassGraduation"                                                               as score_to_pass_graduation,
+                               TC."scoreToPassConditional"                                                              as score_to_pass_conditional,
                                ${truotMonExpr} as truot_mon,
                                TBS.id                         as trainingBlockSubjectId,
                                ${attemptCountExpr} as attempt_count,
@@ -731,13 +766,12 @@ app.openapi(openSubjectClassReExam, async (c) => {
                count(DISTINCT "studentId")::INTEGER as count
         from mon_no
         where rn = 1
-          and (truot_mon = true or "examPostponed" = true)
-          and cam_thi = false
-          and dinh_chi = false
-          and attempt_count = 1      -- only first attempt: if they failed ReExam, they belong in Retake
+          and withdrew = false
+          and exempted = false
+          and attempt_count = 1
           and (${reexamEligibleExpr})
-          and withdrew = false        -- rút khỏi lớp
-          and exempted = false        -- miễn học
+          and (${duDieuKienDuThiExpr})
+          and (${failedExamOrAbsentExpr})
         group by id, code, name
         )
         select grouped.*, (select count(*)::INTEGER from grouped) as "totalCount"
@@ -825,6 +859,14 @@ app.openapi(openSubjectClassReExamStudents, async (c) => {
                                SSS."examBannedReason"                                                                            as ly_do_cam_thi,
                                SSS.suspended                                                                                     as dinh_chi,
                                SSS."suspendedReason"                                                                             as ly_do_dinh_chi,
+                               coalesce(sv."onePoint", false)                                                                    as is_one_point,
+                               TBS."graduation"                                                                                  as is_graduation,
+                               TBS."useForFinalScore"                                                                            as use_for_final_score,
+                               TC."scoreToTakeExam"                                                                              as score_to_take_exam,
+                               TC."examScoreToPass"                                                                              as exam_score_to_pass,
+                               TC."scoreToPass"                                                                                  as score_to_pass,
+                               TC."scoreToPassGraduation"                                                                        as score_to_pass_graduation,
+                               TC."scoreToPassConditional"                                                                       as score_to_pass_conditional,
                                ${truotMonExpr} as truot_mon,
                                SC."code"                                                                                         as ma_lop_mon_hoc,
                                Sem."name"                                                                                        as ky_hoc,
@@ -866,11 +908,12 @@ app.openapi(openSubjectClassReExamStudents, async (c) => {
           select DISTINCT ON ("studentId") *
           from mon_no
           where rn = 1
-            and (truot_mon = true or hoan_thi = true) and cam_thi = false and dinh_chi = false
-            and attempt_count = 1
-            and (${reexamEligibleExpr})
             and withdrew = false
             and mien_thi = false
+            and attempt_count = 1
+            and (${reexamEligibleExpr})
+            and (${duDieuKienDuThiExpr})
+            and (${failedExamOrAbsentExpr})
           order by "studentId", truot_mon DESC NULLS LAST, hoan_thi DESC
         ) t
         limit ${pageSize} offset ${pageSize} * (${page} - 1)
@@ -905,10 +948,24 @@ app.openapi(openSubjectClassReExamStudents, async (c) => {
 
   return c.json(
     {
-      data: students.map((student) => ({
-        ...student,
-        ...res.find((r) => r.studentId === student.id),
-      })),
+      data: students.map((student) => {
+        const record = res.find((r) => r.studentId === student.id)
+        let reason = "Không đạt thi lần 1"
+        if (record) {
+          if (record.hoan_thi) {
+            reason = record.ly_do_hoan_thi ? `Hoãn thi: ${record.ly_do_hoan_thi}` : "Hoãn thi"
+          } else if (record.diem_thi == null) {
+            reason = "Vắng thi kết thúc HP"
+          } else if (record.diem_thi < 5) {
+            reason = "Điểm liệt bài thi cuối kỳ"
+          }
+        }
+        return {
+          ...student,
+          ...record,
+          reason,
+        }
+      }),
     },
     200
   )

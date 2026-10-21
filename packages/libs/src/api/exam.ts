@@ -87,6 +87,8 @@ import type {
   ExportReportSurveyOrganizationalBody,
   GenExamBank,
   GenExamBankResult,
+  GetClusterSurveyChoiceCountsForLecturers200,
+  GetClusterSurveyChoiceCountsForLecturersBody,
   GetClusterSurveyInfo200,
   GetClusterSurveyInfoDepartmentParams,
   GetClusterSurveyInfoParams,
@@ -1869,15 +1871,7 @@ export const getGetSurveyObjectsUrl = (params: GetSurveyObjectsParams,) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
-    const explodeParameters = ["organizationId","fixedClassIds","trainingCourseIds"];
-
-    if (Array.isArray(value) && explodeParameters.includes(key)) {
-      value.forEach((v) => {
-        normalizedParams.append(key, v === null ? 'null' : v.toString());
-      });
-      return;
-    }
-      
+    
     if (value !== undefined) {
       normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
@@ -2024,15 +2018,7 @@ export const getGetSurveyObjectCountUrl = (params: GetSurveyObjectCountParams,) 
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
-    const explodeParameters = ["organizationId","fixedClassIds","trainingCourseIds"];
-
-    if (Array.isArray(value) && explodeParameters.includes(key)) {
-      value.forEach((v) => {
-        normalizedParams.append(key, v === null ? 'null' : v.toString());
-      });
-      return;
-    }
-      
+    
     if (value !== undefined) {
       normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
@@ -3614,6 +3600,118 @@ export function useGetClusterSurveyStatisticsForLecturer<TData = Awaited<ReturnT
 
 
 
+/**
+ * @summary Tổng số phiếu theo mức trả lời cho nhiều giảng viên (batch)
+ */
+export type getClusterSurveyChoiceCountsForLecturersResponse200 = {
+  data: GetClusterSurveyChoiceCountsForLecturers200
+  status: 200
+}
+
+export type getClusterSurveyChoiceCountsForLecturersResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type getClusterSurveyChoiceCountsForLecturersResponse403 = {
+  data: ErrorMessageResponse
+  status: 403
+}
+
+export type getClusterSurveyChoiceCountsForLecturersResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type getClusterSurveyChoiceCountsForLecturersResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type getClusterSurveyChoiceCountsForLecturersResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type getClusterSurveyChoiceCountsForLecturersResponseSuccess = (getClusterSurveyChoiceCountsForLecturersResponse200) & {
+  headers: Headers;
+};
+export type getClusterSurveyChoiceCountsForLecturersResponseError = (getClusterSurveyChoiceCountsForLecturersResponse400 | getClusterSurveyChoiceCountsForLecturersResponse403 | getClusterSurveyChoiceCountsForLecturersResponse404 | getClusterSurveyChoiceCountsForLecturersResponse409 | getClusterSurveyChoiceCountsForLecturersResponse500) & {
+  headers: Headers;
+};
+
+export type getClusterSurveyChoiceCountsForLecturersResponse = (getClusterSurveyChoiceCountsForLecturersResponseSuccess | getClusterSurveyChoiceCountsForLecturersResponseError)
+
+export const getGetClusterSurveyChoiceCountsForLecturersUrl = (id: string,) => {
+
+
+  
+
+  return `/api/cluster-survey/${id}/choice-counts-for-lecturers`
+}
+
+export const getClusterSurveyChoiceCountsForLecturers = async (id: string,
+    getClusterSurveyChoiceCountsForLecturersBody: GetClusterSurveyChoiceCountsForLecturersBody, options?: RequestInit): Promise<getClusterSurveyChoiceCountsForLecturersResponse> => {
+  
+  return customExamFetch<getClusterSurveyChoiceCountsForLecturersResponse>(getGetClusterSurveyChoiceCountsForLecturersUrl(id),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      getClusterSurveyChoiceCountsForLecturersBody,)
+  }
+);}
+
+
+
+
+export const getGetClusterSurveyChoiceCountsForLecturersMutationOptions = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getClusterSurveyChoiceCountsForLecturers>>, TError,{id: string;data: GetClusterSurveyChoiceCountsForLecturersBody}, TContext>, request?: SecondParameter<typeof customExamFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof getClusterSurveyChoiceCountsForLecturers>>, TError,{id: string;data: GetClusterSurveyChoiceCountsForLecturersBody}, TContext> => {
+
+const mutationKey = ['getClusterSurveyChoiceCountsForLecturers'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof getClusterSurveyChoiceCountsForLecturers>>, {id: string;data: GetClusterSurveyChoiceCountsForLecturersBody}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  getClusterSurveyChoiceCountsForLecturers(id,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type GetClusterSurveyChoiceCountsForLecturersMutationResult = NonNullable<Awaited<ReturnType<typeof getClusterSurveyChoiceCountsForLecturers>>>
+    export type GetClusterSurveyChoiceCountsForLecturersMutationBody = GetClusterSurveyChoiceCountsForLecturersBody
+    export type GetClusterSurveyChoiceCountsForLecturersMutationError = ErrorMessageResponse
+
+    /**
+ * @summary Tổng số phiếu theo mức trả lời cho nhiều giảng viên (batch)
+ */
+export const useGetClusterSurveyChoiceCountsForLecturers = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getClusterSurveyChoiceCountsForLecturers>>, TError,{id: string;data: GetClusterSurveyChoiceCountsForLecturersBody}, TContext>, request?: SecondParameter<typeof customExamFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof getClusterSurveyChoiceCountsForLecturers>>,
+        TError,
+        {id: string;data: GetClusterSurveyChoiceCountsForLecturersBody},
+        TContext
+      > => {
+
+      const mutationOptions = getGetClusterSurveyChoiceCountsForLecturersMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * @summary Thống kê câu trả lời cho từng câu hỏi trong một cụm khảo sát của từng đơn vị
  */

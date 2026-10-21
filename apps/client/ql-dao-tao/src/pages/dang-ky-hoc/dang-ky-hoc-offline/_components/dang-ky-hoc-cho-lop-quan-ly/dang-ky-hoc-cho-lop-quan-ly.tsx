@@ -228,7 +228,7 @@ export default function DangKyHocChoLopQuanLy() {
           {
             title: "TT",
             dataIndex: "",
-            width: 35,
+            width: 50,
             align: "center",
             render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
           },

@@ -3195,7 +3195,8 @@ exports.Prisma.NotificationScalarFieldEnum = {
   lecturerId: 'lecturerId',
   targetDeviceId: 'targetDeviceId',
   pushExpiresAt: 'pushExpiresAt',
-  reminderData: 'reminderData'
+  reminderData: 'reminderData',
+  recipientProfileId: 'recipientProfileId'
 };
 
 exports.Prisma.PersonalWorkTagScalarFieldEnum = {
@@ -5712,7 +5713,6 @@ exports.Prisma.SurveyObjectTypeScalarFieldEnum = {
 
 exports.Prisma.SurveyTopicScalarFieldEnum = {
   id: 'id',
-  code: 'code',
   active: 'active',
   description: 'description',
   deletedAt: 'deletedAt',
@@ -5725,6 +5725,7 @@ exports.Prisma.SurveyTopicScalarFieldEnum = {
   dNgaySua: 'dNgaySua',
   sThietBiTao: 'sThietBiTao',
   sThietBiSua: 'sThietBiSua',
+  code: 'code',
   name: 'name',
   type: 'type'
 };
@@ -8684,7 +8685,8 @@ exports.Prisma.NotificationOrderByRelevanceFieldEnum = {
   title: 'title',
   content: 'content',
   lecturerId: 'lecturerId',
-  targetDeviceId: 'targetDeviceId'
+  targetDeviceId: 'targetDeviceId',
+  recipientProfileId: 'recipientProfileId'
 };
 
 exports.Prisma.PersonalWorkTagOrderByRelevanceFieldEnum = {
@@ -10280,13 +10282,13 @@ exports.Prisma.SurveyObjectTypeOrderByRelevanceFieldEnum = {
 
 exports.Prisma.SurveyTopicOrderByRelevanceFieldEnum = {
   id: 'id',
-  code: 'code',
   description: 'description',
   createdBy: 'createdBy',
   sNguoiTao: 'sNguoiTao',
   sNguoiSua: 'sNguoiSua',
   sThietBiTao: 'sThietBiTao',
   sThietBiSua: 'sThietBiSua',
+  code: 'code',
   name: 'name'
 };
 
@@ -11043,6 +11045,15 @@ exports.ExamType = exports.$Enums.ExamType = {
   Oral: 'Oral',
   Practice: 'Practice',
   Project: 'Project',
+  MultipleChoice: 'MultipleChoice',
+  PracticeExercise: 'PracticeExercise',
+  ProjectDefense: 'ProjectDefense',
+  Report: 'Report',
+  ListeningSpeakingReadingWriting: 'ListeningSpeakingReadingWriting',
+  ReadingWriting: 'ReadingWriting',
+  ListeningSpeaking: 'ListeningSpeaking',
+  ListeningReadingWriting: 'ListeningReadingWriting',
+  Unspecified: 'Unspecified',
   Other: 'Other'
 };
 
@@ -11175,7 +11186,8 @@ exports.NotificationType = exports.$Enums.NotificationType = {
   EXAM_DEADLINE: 'EXAM_DEADLINE',
   SURVEY_DEADLINE: 'SURVEY_DEADLINE',
   INDIVIDUAL_SCHEDULE: 'INDIVIDUAL_SCHEDULE',
-  CLASS_REMINDER: 'CLASS_REMINDER'
+  CLASS_REMINDER: 'CLASS_REMINDER',
+  CHAT: 'CHAT'
 };
 
 exports.NotificationPriority = exports.$Enums.NotificationPriority = {

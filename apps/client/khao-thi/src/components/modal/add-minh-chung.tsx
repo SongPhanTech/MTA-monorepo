@@ -178,7 +178,6 @@ const AddEvidenceToPeriod = () => {
   })
   const { data: listEvidenceCategory } = useFindManyEvidenceCategory()
 
-
   const treeData = useMemo(() => {
     if (!listEvidenceCategory || !listEvidence) return []
     return listEvidenceCategory.map((cat) => ({

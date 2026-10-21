@@ -714,7 +714,10 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                     return (
                       <TextTruncate
                         arr={fixedClasses.map((i: any) => {
-                          const count = record?.studentSubjectScore?.filter((sss: any) => sss?.student?.fixedClassId === i?.id)?.length || 0
+                          const count =
+                            record?.studentSubjectScore?.filter(
+                              (sss: any) => sss?.student?.fixedClassId === i?.id
+                            )?.length || 0
                           return {
                             key: i?.id,
                             label: `${i?.code} (${count || 0} SV)`,
@@ -734,7 +737,8 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                         render: (_: any, record: any) => {
                           return (
                             record?.subjectClass?.reduce(
-                              (sum: number, sc: any) => sum + (sc?._count?.subjectClassStudent ?? 0),
+                              (sum: number, sc: any) =>
+                                sum + (sc?._count?.subjectClassStudent ?? 0),
                               0
                             ) || 0
                           )

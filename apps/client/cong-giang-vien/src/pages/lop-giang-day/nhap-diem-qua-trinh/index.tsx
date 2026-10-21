@@ -556,9 +556,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
       (r) => !coDiem(r.attendanceScore) || !coDiem(r.midtermScore)
     ).length
     if (thieuDiemQuaTrinh > 0) {
-      message.warning(
-        `Còn ${thieuDiemQuaTrinh} sinh viên chưa nhập đủ điểm chuyên cần và định kỳ`
-      )
+      message.warning(`Còn ${thieuDiemQuaTrinh} sinh viên chưa nhập đủ điểm chuyên cần và định kỳ`)
       return
     }
 
@@ -787,9 +785,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
             <span className="text-sm font-semibold text-cgv-green-dark">
               BẢNG NHẬP ĐIỂM QUÁ TRÌNH
             </span>
-            {isOnePoint && (
-              <Tag color="orange">Môn 1 đầu điểm</Tag>
-            )}
+            {isOnePoint && <Tag color="orange">Môn 1 đầu điểm</Tag>}
           </div>
           <div className="flex items-center gap-2">
             <Button icon={<Save size={14} />} onClick={luu} disabled={khoaNhapDiemQuaTrinh}>
@@ -809,10 +805,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
               type="TX/ĐK"
               disabled={khoaNhapDiemQuaTrinh}
             />
-            <XuatDanhSachThiButton
-              subjectClassId={lopId}
-              disabled={!coTheXuatDanhSachThi}
-            />
+            <XuatDanhSachThiButton subjectClassId={lopId} disabled={!coTheXuatDanhSachThi} />
           </div>
         </div>
         <div ref={vungBangRef} className="min-h-0 flex-1 overflow-hidden">

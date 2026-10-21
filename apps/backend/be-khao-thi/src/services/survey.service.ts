@@ -402,6 +402,87 @@ export const getSurveyStatsforQuestion = async (
   }
 }
 
+/** Batch counts theo surveyChoice cho nhiều GV; loại câu có specificChoice khỏi thang Likert. */
+export const getSurveyChoiceCountsForLecturers = async (
+  prisma: PrismaClient,
+  clusterSurveyId: string,
+  lectureIds: string[],
+  choices: SurveyChoice[]
+) => {
+  const uniqueLectureIds = [...new Set(lectureIds.filter(Boolean))]
+  if (!uniqueLectureIds.length) return []
+
+  const [sessions, specialQuestions] = await Promise.all([
+    prisma.surveySession.findMany({
+      where: {
+        survey: {
+          clusterSurveyId,
+          lectureId: { in: uniqueLectureIds },
+        },
+      },
+      select: {
+        id: true,
+        survey: { select: { lectureId: true } },
+      },
+    }),
+    prisma.surveyQuestion.findMany({
+      where: {
+        type: "SINGLE_CHOICE",
+        specificChoice: { some: {} },
+        OR: [
+          { clusterSurvey: { some: { id: clusterSurveyId } } },
+          { survey: { some: { clusterSurveyId } } },
+        ],
+      },
+      select: { id: true },
+    }),
+  ])
+
+  const specialQuestionIds = specialQuestions.map((q) => q.id)
+  const sessionToLecture = new Map<string, string>()
+  for (const session of sessions) {
+    const lectureId = session.survey?.lectureId
+    if (lectureId) sessionToLecture.set(session.id, lectureId)
+  }
+  const sessionIds = [...sessionToLecture.keys()]
+
+  const countByLectureChoice = new Map<string, number>()
+  if (sessionIds.length) {
+    const answerCounts = await prisma.surveyResponse.groupBy({
+      by: ["surveySessionId", "surveyChoiceId"],
+      where: {
+        surveySessionId: { in: sessionIds },
+        surveyChoiceId: { not: null },
+        ...(specialQuestionIds.length
+          ? { surveyQuestionId: { notIn: specialQuestionIds } }
+          : {}),
+      },
+      _count: { surveyChoiceId: true },
+    })
+
+    for (const row of answerCounts) {
+      if (!row.surveyChoiceId) continue
+      const lectureId = sessionToLecture.get(row.surveySessionId)
+      if (!lectureId) continue
+      const key = `${lectureId}:${row.surveyChoiceId}`
+      countByLectureChoice.set(
+        key,
+        (countByLectureChoice.get(key) || 0) + row._count.surveyChoiceId
+      )
+    }
+  }
+
+  return uniqueLectureIds.map((lectureId) => ({
+    lectureId,
+    answers: choices.map((choice) => ({
+      id: choice.id,
+      answer: choice.answer,
+      description: choice.description,
+      count: countByLectureChoice.get(`${lectureId}:${choice.id}`) || 0,
+    })),
+  }))
+}
+
 export const getSurveyStatsforDonVi = async (
   prisma: PrismaClient,
   clusterSurveyId: string,

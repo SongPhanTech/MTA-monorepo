@@ -55,10 +55,8 @@ const CriteriaEvaluationSubPage = ({
   const { can } = useAbility()
 
   const canEdit =
-    can(
-      KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
-      "THEM"
-    ) && !readOnly
+    can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA, "THEM") &&
+    !readOnly
 
   const { hideSpinner, showSpinner } = useSpinner()
 

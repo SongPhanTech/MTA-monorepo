@@ -208,10 +208,7 @@ const ModalChiTietGiangVien = () => {
   useSpinner()
 
   const donViId = lecturerData?.userProfile?.sDM_DonViId || ""
-  const { data: donVi } = useFindUniqueDM_DonVi(
-    { where: { Id: donViId } },
-    { enabled: !!donViId }
-  )
+  const { data: donVi } = useFindUniqueDM_DonVi({ where: { Id: donViId } }, { enabled: !!donViId })
 
   if (!lecturerData) return null
   const lecturer = lecturerData

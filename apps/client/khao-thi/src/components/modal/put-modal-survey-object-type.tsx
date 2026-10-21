@@ -26,6 +26,7 @@ import {
   useFindUniqueSurveyObjectType,
   useUpdateSurveyObjectType,
 } from "@workspace/db/hooks"
+import { fuzzyMatch } from "@workspace/libs/utils"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
 import { Col, Form, Input, message, Row, Tabs, TreeSelect as TreeSelectAnt } from "antd"
 import { useEffect, useMemo, useState } from "react"
@@ -342,9 +343,8 @@ const PutSurveyObjectTypeModal = () => {
       semester: true,
     },
   })
-  const filterTreeNode = (input: string, treeNode: any) => {
-    return treeNode?.title?.toLowerCase()?.includes(input?.toLowerCase())
-  }
+  const filterTreeNode = (input: string, treeNode: any) =>
+    fuzzyMatch(input, treeNode?.title?.toString?.() || treeNode?.label?.toString?.() || "")
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <>
   const items = useMemo(() => {

@@ -359,11 +359,11 @@ Mức độ:
 
 **Đã làm gì**
 
-| File | Thay đổi |
-| --- | --- |
-| `ql-dao-tao/.../modal-chi-tiet-giang-vien.tsx` | Include `expert.currentVersion` (+ học hàm/học vị); tab hồ sơ đọc version; thêm cột Trong HV, LV/ĐA |
-| `cong-hoc-vien/.../modal-chi-tiet-giang-vien.tsx` | Như trên |
-| `cong-sinh-vien/.../modal-chi-tiet-giang-vien.tsx` | Như trên |
+| File                                               | Thay đổi                                                                                            |
+| -------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `ql-dao-tao/.../modal-chi-tiet-giang-vien.tsx`     | Include `expert.currentVersion` (+ học hàm/học vị); tab hồ sơ đọc version; thêm cột Trong HV, LV/ĐA |
+| `cong-hoc-vien/.../modal-chi-tiet-giang-vien.tsx`  | Như trên                                                                                            |
+| `cong-sinh-vien/.../modal-chi-tiet-giang-vien.tsx` | Như trên                                                                                            |
 
 **Cách hoạt động:** portal chỉ hiện hồ sơ **current** của Expert gắn Lecturer; không còn quan hệ `expertProfile`.
 
@@ -371,13 +371,13 @@ Mức độ:
 
 **Đã làm gì**
 
-| Hạng mục | Thay đổi |
-| --- | --- |
-| Runtime sót | `delete-subject-class`: `expert` M2M (không còn `expertProfile`); sqlTransaction model enum → `Expert` / `ExpertProfileVersion`; tro-ly-ao union type tương tự |
-| Script | `packages/database/src/script/expert.ts` cập nhật theo `Expert.currentVersion` |
-| Đổi tên FE | Modal `PutExpert` (tag `PutExpert`); alias deprecated `PutExpertProfile`; pages `DanhSachChuyenGia*`; type `ExpertLike` (+ alias `ExpertProfileLike`) |
+| Hạng mục             | Thay đổi                                                                                                                                                                                                   |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Runtime sót          | `delete-subject-class`: `expert` M2M (không còn `expertProfile`); sqlTransaction model enum → `Expert` / `ExpertProfileVersion`; tro-ly-ao union type tương tự                                             |
+| Script               | `packages/database/src/script/expert.ts` cập nhật theo `Expert.currentVersion`                                                                                                                             |
+| Đổi tên FE           | Modal `PutExpert` (tag `PutExpert`); alias deprecated `PutExpertProfile`; pages `DanhSachChuyenGia*`; type `ExpertLike` (+ alias `ExpertProfileLike`)                                                      |
 | Regression in đợt cũ | `put-chuyen-gia` vẫn **revise = đóng version cũ + tạo mới** (không update in-place); helper `assignedExpertProfile` / `versionInAcademy` — in/thanh toán đọc FK version đã gán, không đọc `currentVersion` |
-| SubjectClass | Chốt giữ M:N trên `Expert` |
+| SubjectClass         | Chốt giữ M:N trên `Expert`                                                                                                                                                                                 |
 
 **Cách regression thủ công**
 

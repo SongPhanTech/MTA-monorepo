@@ -24,7 +24,11 @@ import {
 import { getBufferFromUrl } from "../services/template.service"
 import { exportSurveyExcelReportService } from "../services/export-survey-report.service"
 import { getCurrentDateForReport } from "../utils"
-import { PaginatedDataResponseSchema, PaginationQuerySchema } from "../zod/base"
+import {
+  PaginatedDataResponseSchema,
+  PaginationQuerySchema,
+  QueryStringArraySchema,
+} from "../zod/base"
 // import { Hono } from "hono"
 import { HTTPException } from "hono/http-exception"
 
@@ -389,7 +393,7 @@ const getSurveyStatisticsToField = createRoute({
   },
 })
 
-  app.openapi(getSurveyStatisticsToField, async (c) => {
+app.openapi(getSurveyStatisticsToField, async (c) => {
   const { id } = c.req.valid("param")
   const { majorName } = c.req.valid("query")
 
@@ -439,24 +443,24 @@ const getSurveyStatisticsToField = createRoute({
                             select: {
                               name: true,
                               trainingField: {
-                                select: { name: true }
+                                select: { name: true },
                               },
                               organization: {
-                                select: { sTen: true }
-                              }
-                            }
+                                select: { sTen: true },
+                              },
+                            },
                           },
                           trainingField: {
-                            select: { name: true }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
+                            select: { name: true },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
         where: {
           deletedAt: null,
@@ -483,10 +487,11 @@ const getSurveyStatisticsToField = createRoute({
       if (studentInfo) {
         const curriculum = studentInfo.fixedClass?.curriculumVersion?.curriculum
         if (curriculum) {
-          mName = curriculum.trainingMajor?.trainingField?.name
-            || curriculum.trainingMajor?.name
-            || curriculum.trainingField?.name
-            || "Khác"
+          mName =
+            curriculum.trainingMajor?.trainingField?.name ||
+            curriculum.trainingMajor?.name ||
+            curriculum.trainingField?.name ||
+            "Khác"
         }
       }
 
@@ -600,7 +605,8 @@ const getSurveyStatisticsToField = createRoute({
           return {
             ...i,
             totalCount: groupTotalCount,
-            percent: groupTotalCount === 0 ? 0 : Number(((i.count / groupTotalCount) * 100).toFixed(2)),
+            percent:
+              groupTotalCount === 0 ? 0 : Number(((i.count / groupTotalCount) * 100).toFixed(2)),
           }
         }),
         questions: group.questions.map((q: any) => {
@@ -610,10 +616,10 @@ const getSurveyStatisticsToField = createRoute({
             answers: q.answers.map((a: any) => ({
               ...a,
               totalCount: qTotal,
-              percent: qTotal === 0 ? 0 : Number(((a.count / qTotal) * 100).toFixed(2))
-            }))
+              percent: qTotal === 0 ? 0 : Number(((a.count / qTotal) * 100).toFixed(2)),
+            })),
           }
-        })
+        }),
       }
     })
   }
@@ -648,12 +654,15 @@ const getSurveyObjects = createRoute({
     query: PaginationQuerySchema.extend({
       id: z.string(),
       fullname: z.string().optional(),
-      organizationId: z.string().array().optional(),
+      organizationId: QueryStringArraySchema,
+      organizationCode: z.string().optional(),
       lecturerCode: z.string().optional(),
       staffCode: z.string().optional(),
       studentCode: z.string().optional(),
-      fixedClassIds: z.string().array().optional(),
-      trainingCourseIds: z.string().array().optional(),
+      idCardNumber: z.string().optional(),
+      phoneNumber: z.string().optional(),
+      fixedClassIds: QueryStringArraySchema,
+      trainingCourseIds: QueryStringArraySchema,
       taken: z.boolean().optional(),
       isStudent: z.enum(["student", "lecturer", "all"]).optional(),
     }),
@@ -718,6 +727,13 @@ app.openapi(getSurveyObjects, async (c) => {
   }
 
   const profileIds = new Set<string>()
+  const profileTextFilters: Prisma.UserProfileWhereInput = {
+    ...(q.fullname ? { fullname: { contains: q.fullname, mode: "insensitive" } } : {}),
+    ...(q.idCardNumber
+      ? { idCardNumber: { contains: q.idCardNumber, mode: "insensitive" } }
+      : {}),
+    ...(q.phoneNumber ? { phoneNumber: { contains: q.phoneNumber, mode: "insensitive" } } : {}),
+  }
 
   for (const objectType of survey.surveyObjectType) {
     const orClauses = buildSurveyObjectTypeProfileOrClauses(objectType, q)
@@ -728,7 +744,7 @@ app.openapi(getSurveyObjects, async (c) => {
       where: {
         deletedAt: null,
         active: true,
-        ...(q.fullname ? { fullname: { contains: q.fullname, mode: "insensitive" } } : {}),
+        ...profileTextFilters,
         OR: orClauses,
       },
     })
@@ -768,11 +784,7 @@ app.openapi(getSurveyObjects, async (c) => {
     },
     take: limit,
     skip: (page - 1) * limit,
-    orderBy: [
-      { sDM_DonViId: "asc" },
-      { staffs: { organizationId: "asc" } },
-      { firstName: "asc" },
-    ],
+    orderBy: [{ sDM_DonViId: "asc" }, { staffs: { organizationId: "asc" } }, { firstName: "asc" }],
   })
 
   const count = await prisma.userProfile.count({ where })
@@ -795,12 +807,15 @@ const getSurveyObjectCount = createRoute({
     query: z.object({
       id: z.string(),
       fullname: z.string().optional(),
-      organizationId: z.string().array().optional(),
+      organizationId: QueryStringArraySchema,
+      organizationCode: z.string().optional(),
       lecturerCode: z.string().optional(),
       staffCode: z.string().optional(),
       studentCode: z.string().optional(),
-      fixedClassIds: z.string().array().optional(),
-      trainingCourseIds: z.string().array().optional(),
+      idCardNumber: z.string().optional(),
+      phoneNumber: z.string().optional(),
+      fixedClassIds: QueryStringArraySchema,
+      trainingCourseIds: QueryStringArraySchema,
       taken: z.boolean().optional(),
       isStudent: z.enum(["student", "lecturer", "all"]).optional(),
     }),
@@ -845,20 +860,28 @@ app.openapi(getSurveyObjectCount, async (c) => {
     return c.json({ message: "Không tìm thấy khảo sát" }, 404)
   }
 
+  const profileTextFilters: Prisma.UserProfileWhereInput = {
+    ...(q.fullname ? { fullname: { contains: q.fullname, mode: "insensitive" } } : {}),
+    ...(q.idCardNumber
+      ? { idCardNumber: { contains: q.idCardNumber, mode: "insensitive" } }
+      : {}),
+    ...(q.phoneNumber ? { phoneNumber: { contains: q.phoneNumber, mode: "insensitive" } } : {}),
+  }
+
   const data = await Promise.all(
     survey.surveyObjectType.map(async (surveyObjectType) => {
       const orClauses = buildSurveyObjectTypeProfileOrClauses(surveyObjectType, q)
 
       const objectTypeProfiles = orClauses.length
         ? await prisma.userProfile.findMany({
-          select: { id: true },
-          where: {
-            deletedAt: null,
-            active: true,
-            ...(q.fullname ? { fullname: { contains: q.fullname, mode: "insensitive" } } : {}),
-            OR: orClauses,
-          },
-        })
+            select: { id: true },
+            where: {
+              deletedAt: null,
+              active: true,
+              ...profileTextFilters,
+              OR: orClauses,
+            },
+          })
         : []
 
       const taken = await prisma.surveySession.count({
@@ -929,8 +952,7 @@ app.openapi(getSurveyMajorCount, async (c) => {
 
   // Đơn vị từ thiết lập đối tượng: chuyên ngành đã chọn, hoặc chuyên ngành của lớp QL
   const configOrgByMajor = resolveMajorOrgFromSurveyObjectTypes(survey.surveyObjectType)
-  const singleConfigOrg =
-    configOrgByMajor.size === 1 ? [...configOrgByMajor.values()][0] : ""
+  const singleConfigOrg = configOrgByMajor.size === 1 ? [...configOrgByMajor.values()][0] : ""
 
   let allProfiles: any[] = []
 
@@ -950,27 +972,27 @@ app.openapi(getSurveyMajorCount, async (c) => {
                     curriculum: {
                       select: {
                         trainingMajor: {
-                            select: {
-                              name: true,
-                              trainingField: {
-                                select: { name: true }
-                              },
-                              organization: {
-                                select: { sTen: true }
-                              }
-                            }
+                          select: {
+                            name: true,
+                            trainingField: {
+                              select: { name: true },
+                            },
+                            organization: {
+                              select: { sTen: true },
+                            },
                           },
+                        },
                         trainingField: {
-                          select: { name: true }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
+                          select: { name: true },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
       },
       where: {
         deletedAt: null,
@@ -988,7 +1010,7 @@ app.openapi(getSurveyMajorCount, async (c) => {
   }
   const uniqueProfiles = Array.from(uniqueProfilesMap.values())
 
-  const profileIdToMajor = new Map<string, { majorName: string, orgName: string }>()
+  const profileIdToMajor = new Map<string, { majorName: string; orgName: string }>()
 
   uniqueProfiles.forEach((p: any) => {
     let majorName = "Khác"
@@ -997,10 +1019,11 @@ app.openapi(getSurveyMajorCount, async (c) => {
     const studentInfo = p.educationAndTraining?.[0]
     const curriculum = studentInfo?.fixedClass?.curriculumVersion?.curriculum
     if (curriculum) {
-      majorName = curriculum.trainingMajor?.trainingField?.name
-        || curriculum.trainingMajor?.name
-        || curriculum.trainingField?.name
-        || "Khác"
+      majorName =
+        curriculum.trainingMajor?.trainingField?.name ||
+        curriculum.trainingMajor?.name ||
+        curriculum.trainingField?.name ||
+        "Khác"
     }
     // Đơn vị = đơn vị chuyên ngành (từ HV hoặc từ thiết lập đối tượng / lớp QL)
     orgName =
@@ -1012,21 +1035,24 @@ app.openapi(getSurveyMajorCount, async (c) => {
     profileIdToMajor.set(p.id, { majorName, orgName })
   })
 
-  const profileIds = uniqueProfiles.map(p => p.id)
+  const profileIds = uniqueProfiles.map((p) => p.id)
 
   const takenSessions = await prisma.surveySession.findMany({
     where: {
       surveyId: survey.id,
       profileId: { in: profileIds },
     },
-    select: { profileId: true }
+    select: { profileId: true },
   })
 
-  const takenProfileIds = new Set(takenSessions.map(s => s.profileId).filter(Boolean))
+  const takenProfileIds = new Set(takenSessions.map((s) => s.profileId).filter(Boolean))
 
-  const majorStats = new Map<string, { name: string, total: number, taken: number, organization?: string }>()
+  const majorStats = new Map<
+    string,
+    { name: string; total: number; taken: number; organization?: string }
+  >()
 
-  uniqueProfiles.forEach(p => {
+  uniqueProfiles.forEach((p) => {
     const { majorName, orgName } = profileIdToMajor.get(p.id)!
     const isTaken = takenProfileIds.has(p.id)
 
@@ -1104,7 +1130,6 @@ const getSurveysByProfile = createRoute({
 app.openapi(getSurveysByProfile, async (c) => {
   const { id } = c.req.valid("param")
   const { semesterId, trainingObjectTypeId, limit = 10, page = 1, ...q } = c.req.valid("query")
-
 
   const profile = await prisma.userProfile.findUniqueOrThrow({
     where: { id },
@@ -1244,25 +1269,20 @@ app.openapi(getSurveysByProfile, async (c) => {
     ...(q.name ? { name: { contains: q.name, mode: "insensitive" } } : {}),
     ...(semesterId && { semesterId }),
     ...(trainingObjectTypeId && {
-      OR: [
-        { trainingObjectTypeId },
-        { surveyObjectType: { some: { trainingObjectTypeId } } },
-      ],
+      OR: [{ trainingObjectTypeId }, { surveyObjectType: { some: { trainingObjectTypeId } } }],
     }),
 
     ...(q.lecturerName
       ? {
-        lecture: {
-          userProfile: { fullname: { contains: q.lecturerName, mode: "insensitive" } },
-        },
-      }
+          lecture: {
+            userProfile: { fullname: { contains: q.lecturerName, mode: "insensitive" } },
+          },
+        }
       : {}),
     ...(q.subjectClassName
       ? { subjectClass: { name: { contains: q.subjectClassName, mode: "insensitive" } } }
       : {}),
-    ...(q.type
-      ? { surveyTopic: { type: q.type} }
-      : {}),
+    ...(q.type ? { surveyTopic: { type: q.type } } : {}),
 
     deletedAt: null,
     isPublic: false,
@@ -1447,12 +1467,12 @@ app.openapi(getPrivateSurvey, async (c) => {
 
   const lectureInfo = lecture
     ? {
-      firstName: lecture.userProfile.firstName,
-      lastName: lecture.userProfile.lastName,
-      academicDegree: lecture.userProfile.academicDegreeType?.sTen,
-      academicRank: lecture.userProfile.academicRankType?.sTen,
-   organization: lecture.userProfile?.donVi?.sTen ?? null,
-    }
+        firstName: lecture.userProfile.firstName,
+        lastName: lecture.userProfile.lastName,
+        academicDegree: lecture.userProfile.academicDegreeType?.sTen,
+        academicRank: lecture.userProfile.academicRankType?.sTen,
+        organization: lecture.userProfile?.donVi?.sTen ?? null,
+      }
     : null
 
   return c.json({ ...data, lectureInfo }, 200)
@@ -1534,7 +1554,7 @@ app.openapi(sinhdetudong, async (c) => {
     const arr = [...questions]
     for (let i = arr.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1))
-        ;[arr[i], arr[j]] = [arr[j], arr[i]]
+      ;[arr[i], arr[j]] = [arr[j], arr[i]]
     }
 
     const hasImage = (q: any): boolean =>

@@ -303,9 +303,7 @@ export const ModalPhuLucThacSi = () => {
   const isChiefSigner = signRole === "chief"
   const signerDisplayName = isChiefSigner ? chiefName : deputyName
   const signerTitle1 = isChiefSigner ? "TL. GIÁM ĐỐC" : "KT. TRƯỞNG PHÒNG"
-  const signerTitle2 = isChiefSigner
-    ? "Trưởng phòng sau đại học"
-    : "Phó trưởng phòng"
+  const signerTitle2 = isChiefSigner ? "Trưởng phòng sau đại học" : "Phó trưởng phòng"
 
   useEffect(() => {
     setSignRole(chiefName ? "chief" : "deputy")
@@ -349,10 +347,7 @@ export const ModalPhuLucThacSi = () => {
       const score10 = toScoreNumber(score?.manualFinalScore) ?? toScoreNumber(score?.finalScore)
       const converted =
         score10 != null
-          ? convertScore(
-              score10,
-              courseScoreConfigFrom(data?.fixedClass?.trainingCourse, score)
-            )
+          ? convertScore(score10, courseScoreConfigFrom(data?.fixedClass?.trainingCourse, score))
           : null
       const topicTitle = unwrapResearchTopicTitle(topic.name)
       const name = topicTitle
@@ -378,11 +373,9 @@ export const ModalPhuLucThacSi = () => {
     thesisScore10 != null
       ? convertScore(
           thesisScore10,
-          courseScoreConfigFrom(
-            data?.fixedClass?.trainingCourse,
-            thesisReg?.studentSubjectScore,
-            { isGraduation: true }
-          )
+          courseScoreConfigFrom(data?.fixedClass?.trainingCourse, thesisReg?.studentSubjectScore, {
+            isGraduation: true,
+          })
         )
       : null
   const thesisCredits =
@@ -390,13 +383,15 @@ export const ModalPhuLucThacSi = () => {
     thesisProject?.subjectClass?.subject?.credit ??
     null
   const thesisName =
-    courseRows.find(
-      (row) =>
-        row.graduation ||
-        row.type === $Enums.SubjectVersionType.Thesis ||
-        row.type === $Enums.SubjectVersionType.Project ||
-        row.type === $Enums.SubjectVersionType.Graduation
-    )?.name?.trim() ||
+    courseRows
+      .find(
+        (row) =>
+          row.graduation ||
+          row.type === $Enums.SubjectVersionType.Thesis ||
+          row.type === $Enums.SubjectVersionType.Project ||
+          row.type === $Enums.SubjectVersionType.Graduation
+      )
+      ?.name?.trim() ||
     thesisReg?.studentSubjectScore?.subjectVersion?.name?.trim() ||
     thesisProject?.subjectClass?.subject?.name?.trim() ||
     thesisReg?.studentSubjectScore?.subjectVersion?.subject?.name?.trim() ||
@@ -432,7 +427,10 @@ export const ModalPhuLucThacSi = () => {
   const computedGpa = useMemo(() => {
     const scored = courseRows.filter((row) => row.useForFinalScore && row.score10 != null)
     const totalCredits = scored.reduce((sum, row) => sum + (row.credits || 0), 0)
-    const totalWeighted = scored.reduce((sum, row) => sum + (row.score10 ?? 0) * (row.credits || 0), 0)
+    const totalWeighted = scored.reduce(
+      (sum, row) => sum + (row.score10 ?? 0) * (row.credits || 0),
+      0
+    )
     return totalCredits > 0 ? Number((totalWeighted / totalCredits).toFixed(2)) : null
   }, [courseRows])
 
@@ -457,7 +455,9 @@ export const ModalPhuLucThacSi = () => {
       .map((member) => {
         const expert = (versionToPersonLike(member.expertProfileVersion) ?? member.expert) as any
         const rank =
-          expert?.academicRankType?.sMa ?? expert?.lecturer?.userProfile?.academicRankType?.sMa ?? ""
+          expert?.academicRankType?.sMa ??
+          expert?.lecturer?.userProfile?.academicRankType?.sMa ??
+          ""
         const degree =
           expert?.academicDegreeType?.sMa ??
           expert?.lecturer?.userProfile?.academicDegreeType?.sMa ??
@@ -471,6 +471,7 @@ export const ModalPhuLucThacSi = () => {
           unit: resolveCouncilMemberUnitName({
             inAcademy: versionInAcademy(expert),
             lecturerOrg: lecturerOrg?.Id ? lecturerOrg : undefined,
+            workplace: typeof expert?.workplace === "string" ? expert.workplace : undefined,
             organization:
               typeof expert?.organization === "string" ? expert.organization : undefined,
             orgById,
@@ -528,8 +529,7 @@ export const ModalPhuLucThacSi = () => {
       title: "Ngày sinh:",
       value: (
         <span>
-          {data?.userProfile?.dateOfBirth &&
-            formatDateInSlash(data?.userProfile?.dateOfBirth)}
+          {data?.userProfile?.dateOfBirth && formatDateInSlash(data?.userProfile?.dateOfBirth)}
         </span>
       ),
     },
@@ -885,9 +885,7 @@ export const ModalPhuLucThacSi = () => {
                 <tbody>
                   <tr>
                     <td className="border border-black px-1 py-1 text-center" />
-                    <td className="border border-black px-1 py-1 font-bold">
-                      {thesisName}
-                    </td>
+                    <td className="border border-black px-1 py-1 font-bold">{thesisName}</td>
                     <td className="border border-black px-1 py-1 text-center">
                       {thesisCredits ?? ""}
                     </td>
@@ -1275,10 +1273,7 @@ export const ModalPhuLucThacSi = () => {
                       <li>
                         + Chuyên ngành: {data?.curriculumVersion?.curriculum?.trainingMajor?.name}
                       </li>
-                      <li>
-                        + Hình thức đào tạo:{" "}
-                        {data?.curriculumVersion?.trainingType?.name}
-                      </li>
+                      <li>+ Hình thức đào tạo: {data?.curriculumVersion?.trainingType?.name}</li>
                     </ul>
                   </td>
 

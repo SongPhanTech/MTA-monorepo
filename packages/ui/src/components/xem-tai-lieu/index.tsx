@@ -510,17 +510,7 @@ const OnlyOfficeViewer = ({
       cancelled = true
       destroyEditor()
     }
-  }, [
-    uri,
-    title,
-    fileType,
-    mode,
-    allowDownload,
-    editorHeight,
-    callbackUrl,
-    documentKey,
-    canEdit,
-  ])
+  }, [uri, title, fileType, mode, allowDownload, editorHeight, callbackUrl, documentKey, canEdit])
 
   return <div ref={hostRef} className={containerClassName} />
 }

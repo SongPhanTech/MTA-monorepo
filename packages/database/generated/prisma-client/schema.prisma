@@ -141,6 +141,15 @@ enum ExamType {
   Oral
   Practice
   Project
+  MultipleChoice
+  PracticeExercise
+  ProjectDefense
+  Report
+  ListeningSpeakingReadingWriting
+  ReadingWriting
+  ListeningSpeaking
+  ListeningReadingWriting
+  Unspecified
   Other
 
   @@schema("ql-dao-tao")
@@ -302,6 +311,7 @@ enum NotificationType {
   SURVEY_DEADLINE
   INDIVIDUAL_SCHEDULE
   CLASS_REMINDER
+  CHAT
 
   @@schema("ql-danh-muc")
 }
@@ -2537,6 +2547,7 @@ model DM_PhanCap_ChatLuong_TrangThietBi {
   sThietBiTao    String?
   sThietBiSua    String?
 
+  @@map("DM_PhanCap_ChatLuong_TTB")
   @@schema("mta")
 }
 
@@ -4750,40 +4761,42 @@ model StudentYearResult {
 }
 
 model Notification {
-  id             String               @id() @default(cuid())
-  code           String?              @unique()
-  active         Boolean              @default(true)
-  description    String?              @db.Text()
-  deletedAt      DateTime?
-  createdAt      DateTime             @default(now())
-  updatedAt      DateTime             @default(now()) @updatedAt()
-  createdBy      String?              @db.Uuid()
-  sNguoiTao      String?
-  sNguoiSua      String?
-  dNgayTao       DateTime?            @db.Timestamp(6)
-  dNgaySua       DateTime?            @db.Timestamp(6)
-  sThietBiTao    String?
-  sThietBiSua    String?
-  title          String
-  content        String
-  type           NotificationType     @default(GENERAL)
-  priority       NotificationPriority @default(NORMAL)
-  publishedAt    DateTime             @default(now())
-  expiresAt      DateTime?
-  targetAll      Boolean              @default(false)
-  targetCourses  TrainingCourse[]
-  targetClasses  FixedClass[]
-  targetStudents Student[]
-  lecturer       Lecturer?            @relation(fields: [lecturerId], references: [id])
-  lecturerId     String?
-  attachments    DocumentFile[]
-  targetDeviceId String?
-  pushExpiresAt  DateTime?            @db.Timestamptz(6)
-  reminderData   Json?
+  id                 String               @id() @default(cuid())
+  code               String?              @unique()
+  active             Boolean              @default(true)
+  description        String?              @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @default(now()) @updatedAt()
+  createdBy          String?              @db.Uuid()
+  sNguoiTao          String?
+  sNguoiSua          String?
+  dNgayTao           DateTime?            @db.Timestamp(6)
+  dNgaySua           DateTime?            @db.Timestamp(6)
+  sThietBiTao        String?
+  sThietBiSua        String?
+  title              String
+  content            String
+  type               NotificationType     @default(GENERAL)
+  priority           NotificationPriority @default(NORMAL)
+  publishedAt        DateTime             @default(now())
+  expiresAt          DateTime?
+  targetAll          Boolean              @default(false)
+  targetCourses      TrainingCourse[]
+  targetClasses      FixedClass[]
+  targetStudents     Student[]
+  lecturer           Lecturer?            @relation(fields: [lecturerId], references: [id])
+  lecturerId         String?
+  attachments        DocumentFile[]
+  targetDeviceId     String?
+  pushExpiresAt      DateTime?            @db.Timestamptz(6)
+  reminderData       Json?
+  recipientProfileId String?              @db.Uuid()
 
   @@index([lecturerId])
   @@index([type, publishedAt])
   @@index([targetDeviceId])
+  @@index([recipientProfileId])
   @@schema("ql-danh-muc")
 }
 
@@ -8120,7 +8133,6 @@ model SurveyObjectType {
 
 model SurveyTopic {
   id                  String                @id() @default(cuid())
-  code                String?               @unique()
   active              Boolean               @default(true)
   description         String?               @db.Text()
   deletedAt           DateTime?
@@ -8133,6 +8145,7 @@ model SurveyTopic {
   dNgaySua            DateTime?             @db.Timestamp(6)
   sThietBiTao         String?
   sThietBiSua         String?
+  code                String?
   name                String
   clusterSurvey       ClusterSurvey[]
   survey              Survey[]

@@ -8288,7 +8288,7 @@ const metadata: ModelMeta = {
                     fields: ["Id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@map", "args": [{ "name": "name", "value": "DM_PhanCap_ChatLuong_TTB" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
         dM_PhanLoai_CSKT: {
             name: 'DM_PhanLoai_CSKT', fields: {
@@ -17783,6 +17783,11 @@ const metadata: ModelMeta = {
                     name: "reminderData",
                     type: "Json",
                     isOptional: true,
+                }, recipientProfileId: {
+                    name: "recipientProfileId",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -17793,7 +17798,7 @@ const metadata: ModelMeta = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-danh-muc" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "create" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "update" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "update" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "delete" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-danh-muc" }] }],
         },
         personalWorkTag: {
             name: 'PersonalWorkTag', fields: {
@@ -32323,11 +32328,6 @@ const metadata: ModelMeta = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
                 }, active: {
                     name: "active",
                     type: "Boolean",
@@ -32381,6 +32381,10 @@ const metadata: ModelMeta = {
                     name: "sThietBiSua",
                     type: "String",
                     isOptional: true,
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -32412,9 +32416,6 @@ const metadata: ModelMeta = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 },
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],

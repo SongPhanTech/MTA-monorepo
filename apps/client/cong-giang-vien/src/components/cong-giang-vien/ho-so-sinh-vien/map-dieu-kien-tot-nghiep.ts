@@ -36,16 +36,18 @@ type MonHocRow = {
   finalScore?: number | null | { toNumber?: () => number }
   manualFinalScore?: number | null | { toNumber?: () => number }
   subjectClass?: {
-    subject?: { 
-      name?: string | null; 
-      code?: string | null;
-      trainingBlocks?: {
-        trainingBlockOnCurriculumVersion?: {
-          trainingBlock?: {
-            isNationalDefense?: boolean | null
-          } | null
-        } | null
-      }[] | null
+    subject?: {
+      name?: string | null
+      code?: string | null
+      trainingBlocks?:
+        | {
+            trainingBlockOnCurriculumVersion?: {
+              trainingBlock?: {
+                isNationalDefense?: boolean | null
+              } | null
+            } | null
+          }[]
+        | null
     } | null
     semester?: {
       name?: string | null

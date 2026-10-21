@@ -740,13 +740,22 @@ model Subject extends Base {
 // bảo đảm tối thiếu có 02 mã đề thi đối với hình thức thi tự luận
 // và gấp 1,5 lần số học viên dự thi đối với hình thức thi vấn đáp, thực hành.
 enum ExamType {
-  OfflineWritten // thi viết (trắc nghiệm hoặc tự luận, hoặc kết hợp trắc nghiệm và tự luận)
-  OnlineWritten // thi viết trực tuyến (trắc nghiệm hoặc tự luận, hoặc kết hợp trắc nghiệm và tự luận)
+  OfflineWritten // THI — Viết (trắc nghiệm hoặc tự luận, hoặc kết hợp)
+  OnlineWritten // TT — Trực tuyến
   // OfflineChoices // thi trắc nghiệm
   // OnlineChoices // thi trắc nghiệm trực tuyến
-  Oral // thi vấn đáp
-  Practice // thi thực hành
-  Project // thi đồ án
+  Oral // VĐ — Vấn đáp
+  Practice // TH — Thực hành
+  Project // Đồ án
+  MultipleChoice // TN — Trắc nghiệm
+  PracticeExercise // BTTH — Bài tập thực hành
+  ProjectDefense // BVDA — Bảo vệ đồ án
+  Report // BAOCAO — Báo cáo
+  ListeningSpeakingReadingWriting // NN_DV — Nghe nói đọc viết
+  ReadingWriting // DV — Đọc viết
+  ListeningSpeaking // NN — Nghe nói
+  ListeningReadingWriting // NĐV — Nghe đọc viết
+  Unspecified // Chưa xác định
   Other // loại khác
   @@schema("ql-dao-tao")
 }

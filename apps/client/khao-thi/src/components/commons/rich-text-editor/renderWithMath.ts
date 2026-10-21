@@ -2,10 +2,24 @@ import katex from "katex"
 import "katex/dist/katex.min.css"
 import "./index.css"
 
+export function flowImagesInline(html?: string) {
+  if (!html) return ""
+  return html
+    .replace(/(?:<br\s*\/?>\s*)+(<img\b)/gi, " $1")
+    .replace(/(<img\b[^>]*>)\s*(?:<br\s*\/?>\s*)+/gi, "$1 ")
+    .replace(/<img\b([^>]*?)>/gi, (_, attrs: string) => {
+      if (/\bqa-inline-img\b/.test(attrs)) return `<img${attrs}>`
+      if (/\bclass=/.test(attrs)) {
+        return `<img${attrs.replace(/class=(["'])/, "class=$1qa-inline-img ")}>`
+      }
+      return `<img class="qa-inline-img"${attrs}>`
+    })
+}
+
 export const renderWithMath = (html: string) => {
   if (!html) return html
 
-  const mathProcessedHtml = html
+  const mathProcessedHtml = flowImagesInline(html)
     // Handle block math first
     .replace(/\$\$([^$]+?)\$\$/g, (_, tex) => {
       return `<div class="math-display">${tex.trim()}</div>`

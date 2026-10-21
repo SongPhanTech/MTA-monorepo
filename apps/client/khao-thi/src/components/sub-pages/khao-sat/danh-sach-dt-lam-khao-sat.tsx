@@ -45,6 +45,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
     fixedClassIds: undefined,
     trainingCourseIds: undefined,
     organization: undefined,
+    organizationId: undefined,
     isStudent: "all",
   })
 
@@ -103,18 +104,50 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
       },
     })
 
+  // Cột "Mã HV/GV" chỉ set studentCode — map sang lecturer/staff để lọc được cả GV
+  const codeFilter = filters.studentCode || filters.lecturerCode || undefined
+  const organizationCode = filters.organizationId || undefined
+  const toIdArray = (value?: string | string[]) => {
+    if (value == null || value === "") return undefined
+    const arr = (Array.isArray(value) ? value : [value]).filter(Boolean)
+    return arr.length ? arr : undefined
+  }
+
+  const surveyObjectsQuery = useMemo(
+    () => ({
+      id: selectedId?.id || "",
+      fullname: filters.fullname,
+      studentCode: codeFilter,
+      lecturerCode: codeFilter,
+      staffCode: codeFilter,
+      idCardNumber: filters.idCardNumber,
+      phoneNumber: filters.phoneNumber,
+      fixedClassIds: toIdArray(filters.fixedClassIds),
+      trainingCourseIds: toIdArray(filters.trainingCourseIds),
+      organizationId: toIdArray(filters.organization),
+      organizationCode,
+      taken: filters?.taken && filters?.taken?.length === 1 ? filters.taken[0] : undefined,
+      isStudent: filters?.isStudent,
+    }),
+    [
+      selectedId?.id,
+      filters.fullname,
+      codeFilter,
+      filters.idCardNumber,
+      filters.phoneNumber,
+      filters.fixedClassIds,
+      filters.trainingCourseIds,
+      filters.organization,
+      organizationCode,
+      filters?.taken,
+      filters?.isStudent,
+    ]
+  )
+
   const { data: res } = useGetSurveyObjects({
     limit: numberOfPages || DEFAULT_PAGINATE_SIZE,
     page: currentPage || 1,
-    id: selectedId?.id || "",
-    fullname: filters.fullname,
-    lecturerCode: filters.lecturerCode,
-    studentCode: filters.studentCode,
-    fixedClassIds: filters.fixedClassIds,
-    trainingCourseIds: filters.trainingCourseIds,
-    organizationId: filters.organization,
-    taken: filters?.taken && filters?.taken?.length === 1 ? filters.taken[0] : undefined,
-    isStudent: filters?.isStudent,
+    ...surveyObjectsQuery,
   })
 
   const data = useMemo(() => {
@@ -247,18 +280,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                         query={{
                           limit: data?.count || 10,
                           page: 1,
-                          id: selectedId?.id,
-                          fullname: filters.fullname,
-                          lecturerCode: filters.lecturerCode,
-                          studentCode: filters.studentCode,
-                          fixedClassIds: filters.fixedClassIds,
-                          trainingCourseIds: filters.trainingCourseIds,
-                          organizationId: filters.organization,
-                          taken:
-                            filters?.taken && filters?.taken?.length === 1
-                              ? filters.taken[0]
-                              : undefined,
-                          isStudent: filters?.isStudent,
+                          ...surveyObjectsQuery,
                         }}
                         surveyName={selectedId?.name || ""}
                       />
@@ -329,8 +351,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                 dataIndex: "studentCode",
                 type: "input",
                 width: 125,
-                render: (_, record) =>
-                  record?.code || record?.lecturer?.userProfile?.code || "",
+                render: (_, record) => record?.code || record?.lecturer?.userProfile?.code || "",
               },
               // {
               //     title: 'Mã định danh',

@@ -4,7 +4,11 @@ import TheHeaderKetQuaHocTap, {
 } from "@components/cong-giang-vien/ket-qua-hoc-tap/the-header-ket-qua-hoc-tap"
 import { chiTietLopQuanLyPath } from "@/utils/cong-giang-vien-path-helper"
 import { useScoreConverter } from "@hooks/scoreConverter"
-import { useFindManyStudentSubjectScore, useFindManyTrainingBlockSubject, useFindUniqueStudent } from "@workspace/db/hooks"
+import {
+  useFindManyStudentSubjectScore,
+  useFindManyTrainingBlockSubject,
+  useFindUniqueStudent,
+} from "@workspace/db/hooks"
 import { baoLuuScoreDescriptionWhere, isBaoLuuScoreDescription } from "@workspace/libs/bao-luu-diem"
 import { courseScoreConfigFrom } from "@workspace/libs/utils"
 import { Alert, Button, Skeleton } from "antd"
@@ -217,7 +221,10 @@ export default function KetQuaHocTapSinhVienPage() {
       }
     }
     const indexBySemester = new Map(
-      (student?.studentSemesterResult ?? []).map((item) => [item.semesterId, item.semesterIndexInCourse])
+      (student?.studentSemesterResult ?? []).map((item) => [
+        item.semesterId,
+        item.semesterIndexInCourse,
+      ])
     )
     const currentIndex = semesterId ? indexBySemester.get(semesterId) : undefined
     const existingIds = new Set(diemMonHoc.map((item) => item.subjectVersionId))

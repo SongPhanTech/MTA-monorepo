@@ -191,7 +191,13 @@ function TakeTestPage() {
       <Button
         type="primary"
         onClick={() => {
-          router.push("/thiet-lap-khao-sat/danh-sach-khao-sat")
+          const tab =
+            router.query.type === "CLUSTER" || router.query.type === "SINGLE"
+              ? router.query.type
+              : survey?.lectureInfo
+                ? "CLUSTER"
+                : "SINGLE"
+          router.push(`/thiet-lap-khao-sat/danh-sach-khao-sat?type=${tab}`)
         }}
         size="large"
         className="mb-20"

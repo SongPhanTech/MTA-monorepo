@@ -29,21 +29,28 @@
  *   bun scripts/bulk-import-questions.mjs --errors-only --via-word --with-images
  *   bun scripts/fix-question-bank-tree-orgs.mjs
  *
- * Cần MINIO_* trong .env khi --with-images. Root mặc định:
- *   ~/Downloads/Convert ngân hàng câu hỏi/Ngân hàng câu hỏi thi
+ * Cần MINIO_* trong .env khi --with-images. Root mặc định (xem nhch-paths.mjs):
+ *   ~/Downloads/Ngân hàng câu hỏi thi
+ * Override: --root <path> hoặc NHCH_ROOT=...
  */
-import { readdirSync, statSync, writeFileSync } from "node:fs"
+import { existsSync, readdirSync, statSync, writeFileSync } from "node:fs"
 import { basename, join, relative } from "node:path"
 import { PrismaClient } from "../generated/prisma-client/index.js"
-
-const DEFAULT_ROOT = "/Users/minhah/Downloads/Convert ngân hàng câu hỏi/Ngân hàng câu hỏi thi"
+import { printNhchPathConfig, resolveNhchRoot } from "./nhch-paths.mjs"
 
 const rootArg = process.argv.indexOf("--root")
-const ROOT = rootArg !== -1 ? process.argv[rootArg + 1] : DEFAULT_ROOT
+const ROOT = resolveNhchRoot(rootArg !== -1 ? process.argv[rootArg + 1] : undefined)
 
 const url = process.env.DATABASE_URL
 if (!url) {
   console.error("DATABASE_URL required")
+  process.exit(1)
+}
+
+if (!existsSync(ROOT)) {
+  printNhchPathConfig({ root: ROOT })
+  console.error(`NHCH root missing: ${ROOT}`)
+  console.error("Set --root or NHCH_ROOT to the folder that contains K11/K13/V6/…")
   process.exit(1)
 }
 

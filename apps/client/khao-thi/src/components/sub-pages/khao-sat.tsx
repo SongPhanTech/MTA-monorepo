@@ -54,7 +54,11 @@ function TabDotKhaoSat({
       clusterSurveyId: null,
       deletedAt: null,
       surveyTopic: { deletedAt: null },
-      ...(semesterId ? { semesterId } : {}),
+      ...(filters.semesterIds?.length
+        ? { semesterId: { in: filters.semesterIds } }
+        : semesterId
+          ? { semesterId }
+          : {}),
       ...(trainingObjectTypeId ? { trainingObjectTypeId } : {}),
       ...(filters.name && filters.name !== ""
         ? {

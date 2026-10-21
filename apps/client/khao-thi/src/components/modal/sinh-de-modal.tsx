@@ -12,6 +12,7 @@ import {
   useFindUniqueExam,
 } from "@workspace/db/hooks"
 import { automaticTopicGeneration } from "@workspace/libs/api/exam"
+import type { AutomaticTopicGenerationBodyExamType } from "@workspace/libs/api/schemas/automaticTopicGenerationBodyExamType"
 import { Checkbox, Col, Form, Input, InputNumber, message, Row } from "antd"
 import dayjs from "dayjs"
 import { examTypeOptions } from "@workspace/libs/constants"
@@ -112,17 +113,34 @@ const SinhDeModal = () => {
       if (!values || !selectedExamId) return
 
       const res = await automaticTopicGeneration({
-        ...values,
-        isNote: values.isNote || false,
-        description: values.explain || undefined,
         id: "",
-        examTime: values?.examTime ?? selectedFramework?.time,
-        examId: selectedExamId,
+        code: values.code,
+        active: values.active,
+        description: values.explain || undefined,
         deletedAt: null,
         createdAt: new Date().toISOString(),
         updatedAt: null,
-        examDay: values?.examDay ? new Date(values?.examDay).toISOString() : null,
-        isGroup: values?.isGroup || true,
+        createdBy: values.createdBy,
+        sNguoiTao: values.sNguoiTao,
+        sNguoiSua: values.sNguoiSua,
+        dNgayTao: values.dNgayTao ? new Date(values.dNgayTao).toISOString() : null,
+        dNgaySua: values.dNgaySua ? new Date(values.dNgaySua).toISOString() : null,
+        sThietBiTao: values.sThietBiTao,
+        sThietBiSua: values.sThietBiSua,
+        examTime: values.examTime ?? selectedFramework?.time,
+        examCode: values.examCode,
+        explain: values.explain,
+        examDay: values.examDay ? new Date(values.examDay).toISOString() : null,
+        examType: values.examType as AutomaticTopicGenerationBodyExamType,
+        isLock: values.isLock,
+        isNote: values.isNote || false,
+        isGroup: values.isGroup || true,
+        quantity: values.quantity,
+        examFrameworkId: values.examFrameworkId,
+        examMatrixId: values.examMatrixId,
+        examId: selectedExamId,
+        codeFrom: values.codeFrom,
+        subjectClassId: values.subjectClassId || "",
       })
       if (res?.status === 200) {
         message.success("Tạo đề thành công!")

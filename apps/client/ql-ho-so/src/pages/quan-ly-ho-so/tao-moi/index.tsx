@@ -523,9 +523,19 @@ export default function CreateUserPage() {
           officerNumber: values.officerNumber,
           nationalityId: values.nationalityId,
           currentAddress: values.currentAddress,
+          newCurrentAddress: values.newCurrentAddress,
+          viTriCongViecId: values.sDM_ViTriCongViecId,
+          quanLyTrucTiepId: values.sQuanlyTrucTiepId,
+          provinceCurrentAddressId: values.provinceCurrentAddressId,
+          districtCurrentAddressId: values.districtCurrentAddressId,
+          communeCurrentAddressId: values.communeCurrentAddressId,
+          newProvinceCurrentAddressId: values.newProvinceCurrentAddressId,
+          newCommuneCurrentAddressId: values.newCommuneCurrentAddressId,
           bLaHocVien: values.bLaHocVien,
           bLaCanBoNhanVien: values.bLaCanBoNhanVien,
           bLaGiangVien,
+          bLaNguoiDung: values.bLaNguoiDung,
+          active: values.active,
         })
       )
       if (res?.status !== 200) {

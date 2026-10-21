@@ -147,20 +147,25 @@ export function abbreviateAcademyUnitName(name: string): string {
     .replace(/Hoc vien\s+Ky thuat\s+Quan su/gi, "Học viện KTQS")
 }
 
-/** Đơn vị hội đồng: trong HV = Học viện KTQS; ngoài HV = organization. */
+/** Đơn vị hội đồng: trong HV = Học viện KTQS; ngoài HV = workplace || organization. */
 export function resolveCouncilMemberUnitName(args: {
   inAcademy: boolean
   lecturerOrg?: OrgUnitNode | null
+  /** Nơi công tác (ưu tiên với chuyên gia ngoài HV). */
+  workplace?: string | null
   organization?: string | null
   orgById: Map<string, OrgUnitNode>
 }): string {
+  const workplace = (args.workplace || "").trim()
   const organization = (args.organization || "").trim()
-  // Ngoài HV, hoặc hồ sơ có tổ chức ngoài dù cờ inAcademy lệch
+  const outsideUnit = workplace || organization
+  // Ngoài HV: đơn vị công tác trên hồ sơ (workplace ưu tiên, fallback organization)
   if (!args.inAcademy) {
-    return organization
+    return outsideUnit
   }
-  if (organization && !/học viện/i.test(organization)) {
-    return organization
+  // Hồ sơ có tổ chức ngoài dù cờ inAcademy lệch
+  if (outsideUnit && !/học viện/i.test(outsideUnit)) {
+    return outsideUnit
   }
   const academy =
     getAcademyLevelOrgName(args.lecturerOrg, args.orgById) || findAcademyOrgName(args.orgById)
@@ -182,7 +187,10 @@ export function normalizeVietnamese(str: string): string {
 /** Bỏ khoảng trắng đầu/cuối và gom khoảng trắng thừa (kể cả NBSP từ Excel). */
 export function normalizeCatalogName(value?: string | null) {
   if (value == null) return ""
-  return String(value).replace(/\u00a0/g, " ").replace(/\s+/g, " ").trim()
+  return String(value)
+    .replace(/\u00a0/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
 }
 
 export function filterOption(input: any, option: any) {
@@ -551,13 +559,15 @@ function normalizeScoreLookup(value?: string | null) {
 }
 
 /** Đại học dân sự: type CIVILIAN + bậc Đại học (không gồm thạc sĩ/tiến sĩ dân sự). */
-export function isUndergraduateCivilian(course?: {
-  trainingObjectType?: {
-    type?: string | null
-    name?: string | null
-    trainingLevel?: { code?: string | null; name?: string | null } | null
+export function isUndergraduateCivilian(
+  course?: {
+    trainingObjectType?: {
+      type?: string | null
+      name?: string | null
+      trainingLevel?: { code?: string | null; name?: string | null } | null
+    } | null
   } | null
-} | null): boolean {
+): boolean {
   const objectType = course?.trainingObjectType
   if (objectType?.type !== $Enums.TrainingObjectTypes.CIVILIAN) return false
 
@@ -636,8 +646,8 @@ export const calcFinalScore = (
   // 1. Find max certificate final score
   const maxCertFinalScore = subjectScore.certificates?.length
     ? Decimal.max(
-      ...subjectScore.certificates.map((cert) => cert?.archivedCertificate?.finalScore)
-    ).toDecimalPlaces(1)
+        ...subjectScore.certificates.map((cert) => cert?.archivedCertificate?.finalScore)
+      ).toDecimalPlaces(1)
     : null
 
   // 2. Check if any score is null
