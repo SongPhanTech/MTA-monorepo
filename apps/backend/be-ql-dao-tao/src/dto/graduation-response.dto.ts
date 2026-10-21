@@ -25,3 +25,50 @@ export const PptxBinaryResponseSchema = z.string().openapi({
   format: "binary",
   description: "File PowerPoint (.pptx) — tải về qua header Content-Disposition.",
 })
+
+export const GraduationTranscriptSubjectSchema = z
+  .object({
+    id: z.string(),
+    subjectVersionId: z.string(),
+    code: z.string().nullable(),
+    name: z.string(),
+    credit: z.number(),
+    type: z.string().nullable(),
+    attendanceScore: z.number().nullable(),
+    midtermScore: z.number().nullable(),
+    examScore: z.number().nullable(),
+    finalScore: z.number().nullable(),
+    scoreBase4: z.number().nullable(),
+    letter: z.string().nullable(),
+    passed: z.boolean(),
+    usedForGpa: z.boolean(),
+    equivalentNote: z.string().nullable(),
+  })
+  .openapi("GraduationTranscriptSubject")
+
+export const GraduationTranscriptBlockSchema = z
+  .object({
+    id: z.string(),
+    code: z.string().nullable(),
+    name: z.string(),
+    subjectsInCurriculum: z.array(GraduationTranscriptSubjectSchema),
+  })
+  .openapi("GraduationTranscriptBlock")
+
+export const GraduationTranscriptSchema = z
+  .object({
+    studentId: z.string(),
+    fullname: z.string(),
+    studentCode: z.string().nullable(),
+    curriculumVersionName: z.string().nullable(),
+    gpaBase10: z.number(),
+    gpaBase4: z.number(),
+    totalPassCredit: z.number(),
+    requiredCredits: z.number().nullable(),
+    accumulatedElectiveCredits: z.number(),
+    electiveCreditsRequired: z.number(),
+    curriculumBlocks: z.array(GraduationTranscriptBlockSchema),
+    extraCurriculumSubjects: z.array(GraduationTranscriptSubjectSchema),
+    conditionalSubjects: z.array(GraduationTranscriptSubjectSchema),
+  })
+  .openapi("GraduationTranscript")

@@ -87,4 +87,5 @@ export type ExportTrainingDataResponseFiltersScope = typeof ExportTrainingDataRe
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ExportTrainingDataResponseFiltersScope = {
   full: 'full',
+  session: 'session',
 } as const;

@@ -35,6 +35,7 @@ import {
   useCreateClassSchedule,
   useDeleteClassSchedule,
   useFindManyRoom,
+  useUpdateManyStudentSubjectScore,
 } from "@workspace/db/hooks"
 import { calcFinalScore } from "@workspace/libs/utils"
 import { toVnDayjs, toVnEndOfDay, toVnStartOfDay } from "@workspace/libs/timezone"
@@ -121,6 +122,7 @@ const PutOneSubjectClassModal = () => {
   const { mutateAsync: updateClassSchedule } = useUpdateClassSchedule()
   const { mutateAsync: createClassSchedule } = useCreateClassSchedule()
   const { mutateAsync: deleteClassSchedule } = useDeleteClassSchedule()
+  const { mutateAsync: updateManyStudentSubjectScore } = useUpdateManyStudentSubjectScore()
 
   const lecturerId = Form.useWatch("lecturerId", form)
   const extraLecturerId = Form.useWatch("extraLecturerId", form)
@@ -174,6 +176,13 @@ const PutOneSubjectClassModal = () => {
           id: input?.id,
         },
       })
+
+      if (input?.id && output.subjectId) {
+        await updateManyStudentSubjectScore({
+          where: { subjectClassId: input.id, deletedAt: null },
+          data: { subjectVersionId: output.subjectId },
+        })
+      }
 
       // Xóa buổi đã bỏ khỏi danh sách local
       for (const removedId of removedScheduleIds) {
@@ -260,6 +269,12 @@ const PutOneSubjectClassModal = () => {
       })
       queryClient.invalidateQueries({
         queryKey: ["ClassSchedule"],
+      })
+      queryClient.invalidateQueries({
+        queryKey: ["StudentSubjectScore"],
+      })
+      queryClient.invalidateQueries({
+        queryKey: ["zenstack", "StudentSubjectScore"],
       })
       setRemovedScheduleIds([])
       onClose()

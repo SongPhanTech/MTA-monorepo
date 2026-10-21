@@ -1,18 +1,152 @@
 import PutFormModal from "@components/commons/put-modal"
-import type { Student } from "@workspace/db/client"
-import { useFindUniqueStudent } from "@workspace/db/hooks"
+import TableCollapse from "@components/commons/tableCollapse"
+import { Table, type ColumnsType } from "@components/commons/table"
+import type { ColumnType } from "antd/es/table"
+import { customTrainingFetch } from "@workspace/libs/api/custom-instance"
+import { SubjectRequirementType } from "@workspace/db"
+import { useQuery } from "@tanstack/react-query"
 import { Col, Form, Tag } from "antd"
 import dayjs from "dayjs"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import "dayjs/locale/vi"
-import TableCollapse from "@components/commons/tableCollapse"
-import { Table } from "@components/commons/table"
-import { SubjectRequirementType } from "@workspace/db"
-export type Student1 = Student
+
 dayjs.locale("vi")
 
+type TranscriptSubject = {
+  id: string
+  subjectVersionId: string
+  code: string | null
+  name: string
+  credit: number
+  type: string | null
+  attendanceScore: number | null
+  midtermScore: number | null
+  examScore: number | null
+  finalScore: number | null
+  scoreBase4: number | null
+  letter: string | null
+  passed: boolean
+  usedForGpa: boolean
+  equivalentNote: string | null
+}
+
+type GraduationTranscript = {
+  studentId: string
+  fullname: string
+  studentCode: string | null
+  curriculumVersionName: string | null
+  gpaBase10: number
+  gpaBase4: number
+  totalPassCredit: number
+  requiredCredits: number | null
+  accumulatedElectiveCredits: number
+  electiveCreditsRequired: number
+  curriculumBlocks: Array<{
+    id: string
+    code: string | null
+    name: string
+    subjectsInCurriculum: TranscriptSubject[]
+  }>
+  extraCurriculumSubjects: TranscriptSubject[]
+  conditionalSubjects: TranscriptSubject[]
+}
+
+function formatScore(value: number | null | undefined) {
+  if (value == null || Number.isNaN(Number(value))) return ""
+  return Number(value)
+}
+
+const subjectColumns: ColumnType<TranscriptSubject>[] = [
+  {
+    title: "Mã môn học",
+    width: 120,
+    align: "center",
+    render: (_value, record) => record?.code,
+  },
+  {
+    title: "Tên môn học",
+    width: 240,
+    render: (_value, record) => (
+      <div>
+        <div>{record?.name}</div>
+        {record?.equivalentNote ? (
+          <div className="text-xs text-amber-700">{record.equivalentNote}</div>
+        ) : null}
+        {record?.passed && record?.usedForGpa === false && record?.type ? (
+          <div className="text-xs text-gray-500">Không tính GPA</div>
+        ) : null}
+      </div>
+    ),
+  },
+  {
+    title: "Số TC",
+    width: 80,
+    align: "center",
+    render: (_value, record) => record?.credit,
+  },
+  {
+    title: "Điểm thường xuyên",
+    width: 140,
+    align: "center",
+    render: (_value, record) => formatScore(record?.attendanceScore),
+  },
+  {
+    title: "Điểm định kỳ",
+    width: 120,
+    align: "center",
+    render: (_value, record) => formatScore(record?.midtermScore),
+  },
+  {
+    title: "Điểm thi",
+    width: 100,
+    align: "center",
+    render: (_value, record) => formatScore(record?.examScore),
+  },
+  {
+    title: "Điểm học phần",
+    width: 120,
+    align: "center",
+    render: (_value, record) => formatScore(record?.finalScore),
+  },
+  {
+    title: "Loại môn",
+    width: 120,
+    align: "center",
+    render: (_value, record) =>
+      record?.type ? (
+        <Tag color={record.type === SubjectRequirementType.Mandatory ? "blue" : "green"}>
+          {record.type === SubjectRequirementType.Mandatory ? "Bắt buộc" : "Tự chọn"}
+        </Tag>
+      ) : null,
+  },
+]
+
+const extraSubjectColumns: ColumnType<TranscriptSubject>[] = [
+  {
+    title: "TT",
+    width: 60,
+    align: "center",
+    render: (_value, _record, index) => index + 1,
+  },
+  ...subjectColumns.filter((column) => column.title !== "Loại môn"),
+]
+
+const conditionalSubjectColumns: ColumnType<TranscriptSubject>[] = [
+  {
+    title: "TT",
+    width: 60,
+    align: "center",
+    render: (_value, _record, index) => index + 1,
+  },
+  ...subjectColumns,
+]
+
+function toTableColumns(columns: ColumnType<TranscriptSubject>[]): ColumnsType {
+  return columns as ColumnsType
+}
+
 const ModalLearningResult = () => {
-  const [form] = Form.useForm<Student1>()
+  const [form] = Form.useForm()
   const {
     isOpen,
     onClose,
@@ -22,113 +156,33 @@ const ModalLearningResult = () => {
     onClose: form.resetFields,
   })
 
-  const { data: learningResult } = useFindUniqueStudent({
-    where: { id },
-    include: {
-      userProfile: true,
-      subjectClassStudent: {
-        where: { deletedAt: null },
-        include: {
-          subjectVersion: true,
-        },
-      },
-      fixedClass: {
-        include: {
-          curriculumVersion: {
-            include: {
-              trainingBlocks: {
-                include: {
-                  subjects: {
-                    include: {
-                      subject: {
-                        include: {
-                          studentSubjectScore: {
-                            where: {
-                              studentId: id,
-                              deletedAt: null,
-                              finalScore: { not: null },
-                            },
-                            orderBy: {
-                              finalScore: "desc",
-                            },
-                          },
-                        },
-                      },
-                    },
-                  },
-                  trainingBlock: true,
-                },
-              },
-            },
-          },
-        },
-      },
+  const {
+    data: transcript,
+    isFetching,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["graduation-student-transcript", id],
+    queryFn: async () => {
+      if (!id) throw new Error("Thiếu mã sinh viên")
+      const res = await customTrainingFetch<{
+        status: number
+        data: GraduationTranscript | { message?: string }
+      }>(`/api/graduation/student-transcript?studentId=${encodeURIComponent(id)}`, {
+        method: "GET",
+      })
+      if (res.status !== 200) {
+        const message =
+          res.data && "message" in res.data
+            ? res.data.message
+            : "Không lấy được bảng điểm xét tốt nghiệp"
+        throw new Error(message)
+      }
+      return res.data as GraduationTranscript
     },
+    enabled: isOpen && Boolean(id),
+    refetchOnWindowFocus: false,
   })
-
-  const trainingBlocks = learningResult?.fixedClass?.curriculumVersion?.trainingBlocks ?? []
-
-  const subjectsInCurriculumByBlock = trainingBlocks.map((block) => {
-    const filteredSubjects = block.subjects
-      .filter((s) => s.useForFinalScore !== false)
-      .map((s) => ({
-        id: s.subject.id,
-        code: s.subject.code,
-        name: s.subject.name,
-        type: s.type,
-        credit: s.subject.credit,
-        finalScore: s.subject.studentSubjectScore?.[0]?.finalScore,
-        attendanceScore: s.subject.studentSubjectScore?.[0]?.attendanceScore,
-        examScore: s.subject.studentSubjectScore?.[0]?.examScore,
-        midtermScore: s.subject.studentSubjectScore?.[0]?.midtermScore,
-      }))
-
-    return {
-      id: block.trainingBlock.id,
-      code: block.trainingBlock.code,
-      name: block.trainingBlock.name,
-      subjectsInCurriculum: filteredSubjects,
-    }
-  })
-
-  const nonFinalSubjects = trainingBlocks.flatMap((block) =>
-    block.subjects
-      .filter((s) => s.useForFinalScore === false)
-      .map((s) => ({
-        id: s.subject.id,
-        code: s.subject.code,
-        name: s.subject.name,
-        credit: s.subject.credit,
-        finalScore: s.subject.studentSubjectScore?.[0]?.finalScore,
-        attendanceScore: s.subject.studentSubjectScore?.[0]?.attendanceScore,
-        examScore: s.subject.studentSubjectScore?.[0]?.examScore,
-        midtermScore: s.subject.studentSubjectScore?.[0]?.midtermScore,
-      }))
-  )
-
-  const subjectIdsInCurriculum = new Set(
-    subjectsInCurriculumByBlock.flatMap((block) => block.subjectsInCurriculum.map((s) => s.id))
-  )
-  const subjectIdsInNonFinal = new Set(nonFinalSubjects.map((s) => s.id))
-
-  const allCurriculumSubjectIds = new Set([...subjectIdsInCurriculum, ...subjectIdsInNonFinal])
-
-  const studentSubjectScores = learningResult?.subjectClassStudent ?? []
-
-  const scoredSubjects = studentSubjectScores.map((score) => ({
-    id: score.subjectVersion?.id,
-    code: score.subjectVersion?.code,
-    name: score.subjectVersion?.name,
-    credit: score.subjectVersion?.credit,
-    attendanceScore: score.attendanceScore,
-    midtermScore: score.midtermScore,
-    examScore: score.examScore,
-    finalScore: score.finalScore,
-  }))
-
-  const electiveSubjects = scoredSubjects.filter(
-    (subject) => !allCurriculumSubjectIds.has(subject.id)
-  )
 
   return (
     <PutFormModal
@@ -137,79 +191,55 @@ const ModalLearningResult = () => {
       onFinish={onClose}
       onCancel={onClose}
       maskClosable={true}
-      title={`Chi tiết kết quả học tập - ${learningResult?.userProfile.fullname} - ${learningResult?.userProfile?.code} `}
+      confirmLoading={isFetching}
+      title={`Chi tiết kết quả học tập - ${transcript?.fullname || ""} - ${transcript?.studentCode || ""}`}
       className="w-[80vw]"
     >
       <Col span={24}>
+        {isError ? (
+          <div className="mb-3 text-center text-red-600">
+            {error instanceof Error ? error.message : "Không lấy được bảng điểm xét tốt nghiệp"}
+          </div>
+        ) : null}
         <div style={{ textAlign: "center", fontWeight: "bold", fontSize: 16, margin: 12 }}>
           MÔN HỌC CHƯƠNG TRÌNH ĐÀO TẠO
         </div>
         <div style={{ textAlign: "center", fontWeight: "bold", fontSize: 16, margin: 12 }}>
-          {learningResult?.fixedClass?.curriculumVersion?.name}
+          {transcript?.curriculumVersionName}
         </div>
+        {transcript ? (
+          <div className="mb-3 flex flex-wrap justify-center gap-4 text-sm">
+            <span>
+              GPA hệ 10: <b>{transcript.gpaBase10.toFixed(2)}</b>
+            </span>
+            <span>
+              GPA hệ 4: <b>{transcript.gpaBase4.toFixed(2)}</b>
+            </span>
+            <span>
+              Tín chỉ tích lũy:{" "}
+              <b>
+                {transcript.totalPassCredit}
+                {transcript.requiredCredits != null ? `/${transcript.requiredCredits}` : ""}
+              </b>
+            </span>
+            <span>
+              TC tự chọn:{" "}
+              <b>
+                {transcript.accumulatedElectiveCredits}/{transcript.electiveCreditsRequired}
+              </b>
+            </span>
+          </div>
+        ) : null}
         <TableCollapse
-          rowKey="key"
+          rowKey="id"
           id="learning-result"
           headerTitleKey="name"
           defaultExpandAll
-          data={subjectsInCurriculumByBlock}
+          loading={isFetching}
+          data={transcript?.curriculumBlocks ?? []}
           scroll={{ y: 500 }}
           childrenFieldName="subjectsInCurriculum"
-          columns={[
-            {
-              title: "Mã môn học",
-              width: 120,
-              align: "center",
-              // fixed: 'left',
-              render: (_, record) => record?.code,
-            },
-            {
-              title: "Tên môn học",
-              width: 200,
-              // fixed: 'left',
-              render: (_, record) => record?.name,
-            },
-            {
-              title: "Số TC",
-              width: 80,
-              align: "center",
-              render: (_, record) => record?.credit,
-            },
-            {
-              title: "Điểm thường xuyên",
-              width: 200,
-              align: "center",
-              render: (_, record) => record?.attendanceScore,
-            },
-            {
-              title: "Điểm định kỳ",
-              width: 200,
-              align: "center",
-              render: (_, record) => record?.midtermScore,
-            },
-            {
-              title: "Điểm thi",
-              width: 200,
-              align: "center",
-              render: (_, record) => record?.examScore,
-            },
-            {
-              title: "Điểm học phần",
-              width: 200,
-              align: "center",
-              render: (_, record) => record?.finalScore?.toNumber(),
-            },
-            {
-              title: "Loại môn",
-              width: 120,
-              align: "center",
-              render: (_, record) => (
-                <Tag color={record?.type === SubjectRequirementType.Mandatory ? "blue" : "green"}>
-                  {record?.type === SubjectRequirementType.Mandatory ? "Bắt buộc" : "Tự chọn"}
-                </Tag>
-              ),
-            },
-          ]}
+          columns={subjectColumns as never}
           pagination={{
             hideOnSinglePage: true,
           }}
@@ -221,63 +251,12 @@ const ModalLearningResult = () => {
           MÔN HỌC NGOÀI CTĐT
         </div>
         <Table
-          rowKey="key"
-          id="learning-result"
+          rowKey="id"
+          id="learning-result-extra"
           scroll={{ y: 500 }}
-          dataSource={electiveSubjects}
-          columns={[
-            {
-              title: "TT",
-              width: 60,
-              align: "center",
-              // fixed: 'left',
-              render: (_, __, index) => index + 1,
-            },
-            {
-              title: "Mã môn học",
-              dataIndex: "code",
-              width: 145,
-              align: "center",
-              // fixed: 'left',
-            },
-            {
-              title: "Tên môn học",
-              dataIndex: "name",
-              width: 200,
-              // fixed: 'left',
-            },
-            {
-              title: "Số TC",
-              dataIndex: "credit",
-              width: 80,
-              align: "center",
-            },
-            {
-              title: "Điểm thường xuyên",
-              dataIndex: "attendanceScore",
-              width: 200,
-              align: "center",
-            },
-            {
-              title: "Điểm định kỳ",
-              dataIndex: "midtermScore",
-              width: 200,
-              align: "center",
-            },
-            {
-              title: "Điểm thi",
-              dataIndex: "examScore",
-              width: 200,
-              align: "center",
-            },
-            {
-              title: "Điểm học phần",
-              dataIndex: "finalScore",
-              width: 200,
-              align: "center",
-              render: (record) => record?.toNumber(),
-            },
-          ]}
+          loading={isFetching}
+          data={transcript?.extraCurriculumSubjects ?? []}
+          columns={toTableColumns(extraSubjectColumns)}
           pagination={{
             hideOnSinglePage: true,
           }}
@@ -289,63 +268,12 @@ const ModalLearningResult = () => {
           MÔN HỌC ĐIỀU KIỆN
         </div>
         <Table
-          rowKey="key"
-          id="learning-result"
+          rowKey="id"
+          id="learning-result-conditional"
           scroll={{ y: 500 }}
-          dataSource={nonFinalSubjects}
-          columns={[
-            {
-              title: "TT",
-              width: 60,
-              align: "center",
-              // fixed: 'left',
-              render: (_, __, index) => index + 1,
-            },
-            {
-              title: "Mã môn học",
-              dataIndex: "code",
-              width: 145,
-              align: "center",
-              fixed: "left",
-            },
-            {
-              title: "Tên môn học",
-              dataIndex: "name",
-              width: 200,
-              // fixed: 'left',
-            },
-            {
-              title: "Số TC",
-              dataIndex: "credit",
-              width: 80,
-              align: "center",
-            },
-            {
-              title: "Điểm thường xuyên",
-              dataIndex: "attendanceScore",
-              width: 200,
-              align: "center",
-            },
-            {
-              title: "Điểm định kỳ",
-              dataIndex: "midtermScore",
-              width: 200,
-              align: "center",
-            },
-            {
-              title: "Điểm thi",
-              dataIndex: "examScore",
-              width: 200,
-              align: "center",
-            },
-            {
-              title: "Điểm học phần",
-              dataIndex: "finalScore",
-              width: 200,
-              align: "center",
-              render: (record) => record?.toNumber(),
-            },
-          ]}
+          loading={isFetching}
+          data={transcript?.conditionalSubjects ?? []}
+          columns={toTableColumns(conditionalSubjectColumns)}
           pagination={{
             hideOnSinglePage: true,
           }}

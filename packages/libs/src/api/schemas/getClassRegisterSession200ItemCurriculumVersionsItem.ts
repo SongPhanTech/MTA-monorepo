@@ -23,6 +23,18 @@ export type GetClassRegisterSession200ItemCurriculumVersionsItem = {
   /** @nullable */
   createdBy?: string | null;
   /** @nullable */
+  sNguoiTao?: string | null;
+  /** @nullable */
+  sNguoiSua?: string | null;
+  /** @nullable */
+  dNgayTao?: string | null;
+  /** @nullable */
+  dNgaySua?: string | null;
+  /** @nullable */
+  sThietBiTao?: string | null;
+  /** @nullable */
+  sThietBiSua?: string | null;
+  /** @nullable */
   code?: string | null;
   name: string;
   /** @nullable */

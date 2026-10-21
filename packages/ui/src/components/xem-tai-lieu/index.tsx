@@ -461,25 +461,17 @@ const OnlyOfficeViewer = ({
       } satisfies OnlyOfficeFullConfig
 
       const events = {
-        onRequestSaveAs: () => {},
         onError(error: { data?: { errorDescription?: string; errorCode?: number } }) {
           console.error("[OnlyOffice] Editor error:", error?.data || error)
         },
-        onDownloadAs(data: { data?: { url?: string } }) {
-          const fileUrl = data?.data?.url ?? ""
-          if (!fileUrl) return
-          if (onDownloadAsUrlRef.current) {
-            onDownloadAsUrlRef.current(fileUrl)
-            return
-          }
-          if (!allowDownload) return
-          const link = document.createElement("a")
-          link.href = fileUrl
-          link.setAttribute("download", title || "download")
-          document.body.appendChild(link)
-          link.click()
-          link.parentNode?.removeChild(link)
-        },
+        ...(onDownloadAsUrlRef.current
+          ? {
+              onDownloadAs(data: { data?: { url?: string } }) {
+                const fileUrl = data?.data?.url ?? ""
+                if (fileUrl) onDownloadAsUrlRef.current?.(fileUrl)
+              },
+            }
+          : {}),
       }
 
       let token: string | undefined

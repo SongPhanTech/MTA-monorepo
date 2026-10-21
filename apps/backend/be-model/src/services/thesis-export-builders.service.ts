@@ -333,6 +333,7 @@ async function buildPhuLucDsLuanVan(rows: StudentRow[]) {
 
   let count = 1
   const dataRows: TableRow[] = Array.from(groups.values()).flatMap((group, index) => {
+    group.thesisProject.sortVietnameseName("hoTen")
     const orgRow: TableRow = {
       height: 24,
       cells: [

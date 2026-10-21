@@ -1,6 +1,6 @@
 import useSpinner from "@hooks/spinner"
 import { exportPhoiBangNganHan } from "@workspace/libs/api/training"
-import { Button, Form, Input, InputNumber, Modal, Select, message } from "antd"
+import { Button, Form, Input, InputNumber, Modal, Radio, Select, message } from "antd"
 import { saveAs } from "file-saver"
 import { useEffect } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -19,6 +19,8 @@ export type ModalPrintPhoiBangInput = {
   courseTextVi1?: string
   /** Prefill cụm phải dòng 2 — tên ĐTĐT */
   courseTextVi2?: string
+  /** Dân sự = Ông/Bà; Quân sự = không tiền tố */
+  includeNamePrefix?: boolean
 }
 
 type FormValues = {
@@ -29,6 +31,7 @@ type FormValues = {
   fontFamily: string
   fontSize: number
   rowHeight: number
+  printVariant: "civilian" | "military"
 }
 
 const DEFAULT_EN_1 = "FOR COMPLETING THE COURSE FOR TECHNICAL AND LOGISTICS"
@@ -58,6 +61,7 @@ const ModalPrintPhoiBang = () => {
       fontFamily: "Times New Roman",
       fontSize: 12,
       rowHeight: 18,
+      printVariant: input.includeNamePrefix ? "civilian" : "military",
     })
   }, [form, input, isOpen])
 
@@ -76,6 +80,7 @@ const ModalPrintPhoiBang = () => {
         thesisSessionIds: input.thesisSessionIds,
         printDate: input.printDate,
         signerName: input.signerName,
+        includeNamePrefix: values.printVariant === "civilian",
         courseTextEn1: values.courseTextEn1,
         courseTextEn2: values.courseTextEn2,
         courseTextVi1: values.courseTextVi1,
@@ -123,6 +128,17 @@ const ModalPrintPhoiBang = () => {
           Cụm trái (English) = tên ngành tiếng Anh · Cụm phải (dưới ĐÀO TẠO) = tên đối tượng đào
           tạo. Có thể sửa nội dung, font, cỡ chữ và chiều cao dòng trước khi xuất.
         </div>
+
+        <Form.Item
+          name="printVariant"
+          label="Hệ đào tạo"
+          rules={[{ required: true, message: "Chọn hệ đào tạo" }]}
+        >
+          <Radio.Group>
+            <Radio value="civilian">Dân sự (Ông/Bà)</Radio>
+            <Radio value="military">Quân sự</Radio>
+          </Radio.Group>
+        </Form.Item>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div className="rounded border border-gray-200 p-3">

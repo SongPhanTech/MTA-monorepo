@@ -1224,6 +1224,7 @@ export default function StudentGradeSystem() {
       courseTextEn2: fieldEn.toUpperCase(),
       courseTextVi1: "ĐÀO TẠO",
       courseTextVi2: (selectedObjectType?.name || "").toUpperCase(),
+      includeNamePrefix: selectedObjectType?.type === "CIVILIAN",
     })
   }
 
@@ -1913,7 +1914,12 @@ export default function StudentGradeSystem() {
   const subjects: {
     daiHoc: { id: number; name: string; onClick?: () => void; dropdown?: boolean }[]
     nganHan: { id: number; name: string; onClick?: () => void | Promise<void> }[]
-    caoHoc: { id: number; name: string; onClick?: () => void | Promise<void> }[]
+    caoHoc: {
+      id: number
+      name: string
+      onClick?: () => void | Promise<void>
+      dropdown?: boolean
+    }[]
   } = {
     daiHoc: [
       { id: 1, name: "Phụ lục văn bằng", dropdown: true },
@@ -1952,7 +1958,7 @@ export default function StudentGradeSystem() {
       {
         id: 20,
         name: "In phôi bằng CAO HỌC",
-        onClick: () => handleCommonExport(exportHandlers.phoiBangCaoHoc),
+        dropdown: true,
       },
       {
         id: 21,
@@ -2175,16 +2181,50 @@ export default function StudentGradeSystem() {
         <div className="mb-6">
           <h3 className="text-sm font-bold color text-primary mb-3">III. Cao học</h3>
           <div className="grid grid-cols-4 gap-3">
-            {subjects.caoHoc.map((subject, index) => (
-              <Button
-                key={subject.id}
-                onClick={subject?.onClick}
-                type="primary"
-                className="h-auto py-2 px-3 text-xs justify-start text-white"
-              >
-                {index + 1}. {subject.name}
-              </Button>
-            ))}
+            {subjects.caoHoc.map((subject, index) =>
+              subject.dropdown ? (
+                <Dropdown
+                  key={subject.id}
+                  trigger={["click"]}
+                  menu={{
+                    items: [
+                      {
+                        key: "civilian",
+                        label: "DÂN SỰ",
+                        onClick: () =>
+                          handleCommonExport(exportHandlers.phoiBangCaoHoc, {
+                            includeNamePrefix: true,
+                          }),
+                      },
+                      {
+                        key: "military",
+                        label: "QUÂN SỰ",
+                        onClick: () =>
+                          handleCommonExport(exportHandlers.phoiBangCaoHoc, {
+                            includeNamePrefix: false,
+                          }),
+                      },
+                    ],
+                  }}
+                >
+                  <Button
+                    type="primary"
+                    className="h-auto w-full py-2 px-3 text-xs justify-start text-white"
+                  >
+                    {index + 1}. {subject.name} <DownOutlined />
+                  </Button>
+                </Dropdown>
+              ) : (
+                <Button
+                  key={subject.id}
+                  onClick={subject?.onClick}
+                  type="primary"
+                  className="h-auto py-2 px-3 text-xs justify-start text-white"
+                >
+                  {index + 1}. {subject.name}
+                </Button>
+              )
+            )}
           </div>
         </div>
 

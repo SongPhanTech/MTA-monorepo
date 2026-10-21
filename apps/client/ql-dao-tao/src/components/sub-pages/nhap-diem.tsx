@@ -1062,11 +1062,10 @@ export default function NhapDiem({
                         id: selectedSubjectClassId ?? "",
                         type: "DANH-SACH-THI",
                         userId: profileId,
-                      })}`
+                      })}&t=${Date.now()}`
                     ),
                     name: "Danh sách thi",
                     mimeType: "xlsx",
-                    convertTo: "pdf",
                   })
                 }}
                 disabled={!dataDetailSubjectClass?.enteredScore || !selectedSubjectClassId}

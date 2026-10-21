@@ -21,6 +21,18 @@ export type GetClassesInfo200Item = {
   updatedAt?: string | null;
   /** @nullable */
   createdBy?: string | null;
+  /** @nullable */
+  sNguoiTao?: string | null;
+  /** @nullable */
+  sNguoiSua?: string | null;
+  /** @nullable */
+  dNgayTao?: string | null;
+  /** @nullable */
+  dNgaySua?: string | null;
+  /** @nullable */
+  sThietBiTao?: string | null;
+  /** @nullable */
+  sThietBiSua?: string | null;
   code: string;
   isLocked?: boolean;
   name: string;

@@ -39,7 +39,6 @@ export const useMoDanhSachThi = () => {
       uri: getUrl(baseUrl, `${exportPath}&t=${Date.now()}`),
       name: "Danh sách thi",
       mimeType: "xlsx",
-      convertTo: "pdf",
     })
   }
 }

@@ -1,0 +1,783 @@
+import {
+  SubjectRequirementType,
+  type ScoreConvert,
+  type TrainingBlockSubject,
+} from "@workspace/db"
+import { courseScoreConfigFrom, isFailedByCourseConfig } from "@workspace/libs/utils"
+import Decimal from "decimal.js"
+import { prisma } from ".."
+
+export type GraduationCourseScoreConfig = {
+  scoreToPass: number
+  scoreToPassConditional: number
+  scoreToPassGraduation: number
+  scoreToRetain: number
+  scoreToTakeExam?: number | null
+  examScoreToPass?: number | null
+  scoreConverts: Pick<
+    ScoreConvert,
+    "base10Min" | "base10Max" | "base4" | "letter" | "pass" | "improvementRegister"
+  >[]
+}
+
+export type GraduationCurriculumSubjectInput = Pick<
+  TrainingBlockSubject,
+  "subjectId" | "type" | "useForFinalScore" | "graduation"
+> & {
+  subject: { name: string; credit: number; code?: string | null; subjectId?: string }
+}
+
+export type ResolvedGraduationScore = {
+  id: string
+  subjectVersionId: string
+  attendanceScore: number | null
+  midtermScore: number | null
+  examScore: number | null
+  scoreBase10: Decimal
+  scoreBase4: Decimal
+  letter: string | null
+  canImprove: boolean
+  subjectVersion: {
+    id: string
+    name: string
+    code: string | null
+    credit: number
+    subjectId: string
+  }
+}
+
+export type ResolveGraduationScoresResult = {
+  finalScores: Map<string, ResolvedGraduationScore>
+  markDoneScores: Map<string, ResolvedGraduationScore>
+  subjectScoresMap: Map<string, ResolvedGraduationScore>
+  displayScoresMap: Map<string, ResolvedGraduationScore>
+  curriculumDisplayScores: Map<string, ResolvedGraduationScore>
+  processedSubjects: Set<string>
+  equivalencyNotes: Map<string, string>
+  equivalencyScores: Map<string, ResolvedGraduationScore>
+  totalDebtCredit: number
+  issueReasons: string[]
+  subjectReasons: string[]
+  accumulatedElectiveCredits: number
+  totalScoreBase10: Decimal
+  totalScoreBase4: Decimal
+  totalPassCredit: number
+  courseGradeLowest: number
+  graduationCourseGradeLowest: number
+}
+
+function toScoreBase10(score: {
+  manualFinalScore?: number | null
+  finalScore?: Decimal | number | null
+}): Decimal | null {
+  if (score.manualFinalScore != null && !Number.isNaN(Number(score.manualFinalScore))) {
+    return new Decimal(score.manualFinalScore)
+  }
+  if (score.finalScore != null) {
+    const value = new Decimal(score.finalScore)
+    return value.isNaN() ? null : value
+  }
+  return null
+}
+
+function isPassedByCourseRules(
+  curriculumSubject: GraduationCurriculumSubjectInput | undefined,
+  scoreBase10: Decimal,
+  record: {
+    attendanceScore?: number | null
+    midtermScore?: number | null
+    examScore?: number | null
+  },
+  course: GraduationCourseScoreConfig,
+  scoreConvert: GraduationCourseScoreConfig["scoreConverts"][number] | undefined
+) {
+  if (
+    isFailedByCourseConfig(
+      courseScoreConfigFrom(
+        course,
+        {
+          attendanceScore: record.attendanceScore,
+          midtermScore: record.midtermScore,
+          examScore: record.examScore,
+        },
+        {
+          isGraduation: !!curriculumSubject?.graduation,
+          isConditional:
+            !!curriculumSubject &&
+            !curriculumSubject.graduation &&
+            !curriculumSubject.useForFinalScore,
+        }
+      ),
+      scoreBase10.toNumber()
+    )
+  ) {
+    return false
+  }
+
+  if (scoreConvert && !scoreConvert.pass) return false
+  return true
+}
+
+function keepHighestScore(
+  map: Map<string, ResolvedGraduationScore>,
+  score: ResolvedGraduationScore
+) {
+  const current = map.get(score.subjectVersionId)
+  if (current && current.scoreBase10.gte(score.scoreBase10)) return
+  map.set(score.subjectVersionId, score)
+}
+
+function sameSubjectCode(left?: string | null, right?: string | null) {
+  const a = left?.trim()
+  const b = right?.trim()
+  return !!a && !!b && a === b
+}
+
+/** Chỉ lấy điểm đúng phiên bản môn CTĐT, hoặc cùng mã môn. Không lấy phiên bản khác (012463 ≠ 012469). */
+function findScoreForCurriculumSubject(
+  subject: GraduationCurriculumSubjectInput,
+  map: Map<string, ResolvedGraduationScore>,
+  usedScoreIds: Set<string>
+) {
+  const exact = map.get(subject.subjectId)
+  if (exact && !usedScoreIds.has(exact.id)) return exact
+
+  const matches = [...map.values()]
+    .filter((item) => sameSubjectCode(item.subjectVersion.code, subject.subject.code))
+    .filter((item) => !usedScoreIds.has(item.id))
+    .sort((a, b) => b.scoreBase10.cmp(a.scoreBase10))
+  return matches[0]
+}
+
+export async function resolveGraduationSubjectScores(input: {
+  studentId: string
+  curriculumSubjects: GraduationCurriculumSubjectInput[]
+  trainingCourse: GraduationCourseScoreConfig
+  electiveCreditsRequired: number
+}): Promise<ResolveGraduationScoresResult> {
+  const { studentId, curriculumSubjects, trainingCourse, electiveCreditsRequired } = input
+  const { scoreToRetain, scoreConverts } = trainingCourse
+
+  const rawSubjectScores = await prisma.studentSubjectScore.findMany({
+    where: {
+      studentId,
+      deletedAt: null,
+      AND: [
+        {
+          OR: [{ subjectClassId: null }, { subjectClass: { cancelled: false } }],
+        },
+        {
+          OR: [{ manualFinalScore: { not: null } }, { finalScore: { not: null } }],
+        },
+      ],
+    },
+    include: {
+      subjectVersion: {
+        select: { id: true, name: true, code: true, credit: true, subjectId: true },
+      },
+    },
+    orderBy: { createdAt: "asc" },
+  })
+
+  const displayScoresMap = new Map<string, ResolvedGraduationScore>()
+  const subjectScoresMap = new Map<string, ResolvedGraduationScore>()
+
+  for (const subjectScore of rawSubjectScores) {
+    const scoreBase10 = toScoreBase10(subjectScore)
+    if (!scoreBase10) continue
+
+    const scoreConvert = scoreConverts.find(
+      (item) =>
+        new Decimal(item.base10Min).lte(scoreBase10) && new Decimal(item.base10Max).gte(scoreBase10)
+    )
+    const resolved: ResolvedGraduationScore = {
+      id: subjectScore.id,
+      subjectVersionId: subjectScore.subjectVersionId,
+      attendanceScore: subjectScore.attendanceScore,
+      midtermScore: subjectScore.midtermScore,
+      examScore: subjectScore.examScore,
+      scoreBase10,
+      scoreBase4: new Decimal(scoreConvert?.base4 || 0),
+      letter: scoreConvert?.letter ?? null,
+      canImprove: scoreConvert?.improvementRegister || false,
+      subjectVersion: subjectScore.subjectVersion,
+    }
+    keepHighestScore(displayScoresMap, resolved)
+
+    if (
+      subjectScore.examPostponed ||
+      subjectScore.exempted ||
+      subjectScore.withdrew ||
+      subjectScore.suspended ||
+      subjectScore.examBanned
+    ) {
+      continue
+    }
+    if (subjectScore.repeated && scoreBase10.lt(scoreToRetain)) continue
+
+    const curriculumSubject =
+      curriculumSubjects.find((subject) => subject.subjectId === subjectScore.subjectVersionId) ||
+      curriculumSubjects.find((subject) =>
+        sameSubjectCode(subject.subject.code, subjectScore.subjectVersion.code)
+      )
+    if (
+      !isPassedByCourseRules(
+        curriculumSubject,
+        scoreBase10,
+        subjectScore,
+        trainingCourse,
+        scoreConvert
+      )
+    ) {
+      continue
+    }
+    keepHighestScore(subjectScoresMap, resolved)
+  }
+
+  const equivalencyGroups = await prisma.equivalencyGroup.findMany({
+    where: {
+      deletedAt: null,
+      active: true,
+      subjects: {
+        some: {
+          subjectId: { in: curriculumSubjects.map(({ subjectId }) => subjectId) },
+        },
+      },
+    },
+    include: {
+      subjects: {
+        include: { subject: { select: { id: true, name: true, code: true, credit: true } } },
+      },
+    },
+  })
+
+  const finalScores = new Map<string, ResolvedGraduationScore>()
+  const markDoneScores = new Map<string, ResolvedGraduationScore>()
+  const processedSubjects = new Set<string>()
+  const processedEquivalencyGroups = new Set<string>()
+  const equivalencyNotes = new Map<string, string>()
+  const equivalencyScores = new Map<string, ResolvedGraduationScore>()
+  const curriculumDisplayScores = new Map<string, ResolvedGraduationScore>()
+  const usedScoreIds = new Set<string>()
+  const subjectReasons: string[] = []
+
+  const assignScore = (subjectId: string, score: ResolvedGraduationScore) => {
+    const subjectInCurriculum = curriculumSubjects.find((item) => item.subjectId === subjectId)
+    if (subjectInCurriculum && !subjectInCurriculum.useForFinalScore) {
+      markDoneScores.set(subjectId, score)
+      finalScores.delete(subjectId)
+      return
+    }
+    finalScores.set(subjectId, score)
+    markDoneScores.delete(subjectId)
+  }
+
+  const curriculumVersionIds = new Set(curriculumSubjects.map((item) => item.subjectId))
+
+  const applyEquivalencyFillMissing = (
+    curriculumSideResult: Array<{ subjectId: string; score?: ResolvedGraduationScore }>,
+    otherSideResult: Array<{
+      subjectId: string
+      score: ResolvedGraduationScore
+      subject: { name: string; code: string | null }
+    }>
+  ) => {
+    const replacementNote = `Đạt bằng môn tương đương: ${otherSideResult
+      .map((item) => `${item.subject.code ? `${item.subject.code} - ` : ""}${item.subject.name}`)
+      .join(", ")}`
+    const otherSideUsed = new Set<string>()
+
+    for (const result of curriculumSideResult) {
+      if (result.score) {
+        assignScore(result.subjectId, result.score)
+        continue
+      }
+      processedSubjects.add(result.subjectId)
+      equivalencyNotes.set(result.subjectId, replacementNote)
+    }
+
+    for (const result of otherSideResult) {
+      if (!curriculumVersionIds.has(result.subjectId)) continue
+      if (otherSideUsed.has(result.score.id)) continue
+      otherSideUsed.add(result.score.id)
+      assignScore(result.subjectId, result.score)
+    }
+  }
+
+  for (const subject of curriculumSubjects) {
+    if (
+      finalScores.has(subject.subjectId) ||
+      markDoneScores.has(subject.subjectId) ||
+      processedSubjects.has(subject.subjectId)
+    ) {
+      continue
+    }
+
+    const displayScore = findScoreForCurriculumSubject(subject, displayScoresMap, new Set())
+    if (displayScore) curriculumDisplayScores.set(subject.subjectId, displayScore)
+
+    const subjectScore = findScoreForCurriculumSubject(subject, subjectScoresMap, usedScoreIds)
+    if (subjectScore) {
+      usedScoreIds.add(subjectScore.id)
+      assignScore(subject.subjectId, subjectScore)
+      continue
+    }
+
+    const equivGroups = equivalencyGroups
+      .filter(({ subjects }) => subjects.some(({ subjectId }) => subjectId === subject.subjectId))
+      .filter(({ id }) => !processedEquivalencyGroups.has(id))
+
+    if (!subjectScore && !equivGroups.length) {
+      if (subject.type === SubjectRequirementType.Mandatory) {
+        subjectReasons.push(`Chưa đạt môn bắt buộc (${subject.subject.name})`)
+      }
+      continue
+    }
+
+    let hasEquivalencyGroup = false
+    for (const equivGroup of equivGroups) {
+      processedEquivalencyGroups.add(equivGroup.id)
+
+      const equivalencyGroupSubject = equivGroup.subjects.find(
+        ({ subjectId }) => subject.subjectId === subjectId
+      )
+      if (!equivalencyGroupSubject) continue
+
+      const side = equivalencyGroupSubject.side
+      const curriculumSide = equivGroup.subjects.filter((item) => item.side === side)
+      const otherSide = equivGroup.subjects.filter((item) => item.side !== side)
+
+      const curriculumSideResult = curriculumSide.map((item) => {
+        const curriculumSubject = curriculumSubjects.find(
+          (subject) => subject.subjectId === item.subjectId
+        )
+        return {
+          ...item,
+          score: curriculumSubject
+            ? findScoreForCurriculumSubject(curriculumSubject, subjectScoresMap, usedScoreIds)
+            : subjectScoresMap.get(item.subjectId),
+        }
+      })
+      const otherSideResult = otherSide
+        .map((item) => {
+          const curriculumSubject = curriculumSubjects.find(
+            (subject) => subject.subjectId === item.subjectId
+          )
+          return {
+            ...item,
+            score: curriculumSubject
+              ? findScoreForCurriculumSubject(curriculumSubject, subjectScoresMap, usedScoreIds)
+              : subjectScoresMap.get(item.subjectId),
+          }
+        })
+        .filter(
+          (item): item is typeof item & { score: ResolvedGraduationScore } => item.score != null
+        )
+
+      if (otherSide.some((item) => !curriculumVersionIds.has(item.subjectId))) continue
+      if (otherSideResult.length < otherSide.length) continue
+
+      if (curriculumSideResult.some((item) => !item.score)) {
+        hasEquivalencyGroup = true
+        applyEquivalencyFillMissing(curriculumSideResult, otherSideResult)
+        break
+      }
+    }
+
+    if (!hasEquivalencyGroup && subject.type === SubjectRequirementType.Mandatory) {
+      subjectReasons.push(`Chưa đạt môn bắt buộc (${subject.subject.name})`)
+    }
+  }
+
+  const electiveSubjects = curriculumSubjects.filter(
+    (subject) =>
+      subject.type === SubjectRequirementType.Optional && !processedSubjects.has(subject.subjectId)
+  )
+
+  const passedElectives = electiveSubjects
+    .map((subject) => ({
+      subject,
+      score: finalScores.get(subject.subjectId),
+    }))
+    .filter(
+      (item): item is { subject: typeof item.subject; score: ResolvedGraduationScore } =>
+        item.score !== undefined
+    )
+    .sort((a, b) => b.score.scoreBase10.cmp(a.score.scoreBase10))
+
+  let accumulatedElectiveCredits = 0
+  for (const { subject, score } of passedElectives) {
+    if (accumulatedElectiveCredits >= electiveCreditsRequired) {
+      finalScores.delete(subject.subjectId)
+      markDoneScores.set(subject.subjectId, score)
+    } else {
+      accumulatedElectiveCredits += subject.subject.credit
+    }
+  }
+
+  if (accumulatedElectiveCredits < electiveCreditsRequired) {
+    subjectReasons.push(
+      `Chưa đủ tín chỉ tự chọn (${accumulatedElectiveCredits}/${electiveCreditsRequired} TC)`
+    )
+  }
+
+  let totalScoreBase10 = new Decimal(0)
+  let totalScoreBase4 = new Decimal(0)
+  let totalPassCredit = 0
+  let courseGradeLowest = Number.POSITIVE_INFINITY
+  let graduationCourseGradeLowest = Number.POSITIVE_INFINITY
+
+  for (const [subjectId, score] of finalScores) {
+    const credit = score.subjectVersion.credit
+    totalScoreBase10 = totalScoreBase10.add(score.scoreBase10.mul(credit))
+    totalScoreBase4 = totalScoreBase4.add(score.scoreBase4.mul(credit))
+    totalPassCredit += credit
+
+    if (score.scoreBase10.lt(courseGradeLowest)) {
+      courseGradeLowest = score.scoreBase10.toNumber()
+    }
+
+    const subjectInCurriculum = curriculumSubjects.find((item) => item.subjectId === subjectId)
+    if (subjectInCurriculum?.graduation && score.scoreBase10.lt(graduationCourseGradeLowest)) {
+      graduationCourseGradeLowest = score.scoreBase10.toNumber()
+    }
+  }
+
+  if (courseGradeLowest === Number.POSITIVE_INFINITY) courseGradeLowest = 0
+  if (graduationCourseGradeLowest === Number.POSITIVE_INFINITY) graduationCourseGradeLowest = 0
+
+  const issueScores = await prisma.studentSubjectScore.findMany({
+    where: {
+      studentId,
+      deletedAt: null,
+      active: true,
+      AND: [
+        { OR: [{ subjectClassId: null }, { subjectClass: { cancelled: false } }] },
+        { OR: [{ examBanned: true }, { suspended: true }] },
+      ],
+    },
+    include: { subjectVersion: { select: { id: true, name: true, credit: true } } },
+  })
+
+  const issueReasons: string[] = []
+  const debtSubjectIds = new Set<string>()
+
+  for (const subject of curriculumSubjects) {
+    if (
+      finalScores.has(subject.subjectId) ||
+      markDoneScores.has(subject.subjectId) ||
+      processedSubjects.has(subject.subjectId)
+    ) {
+      continue
+    }
+    if (subject.type === SubjectRequirementType.Optional) continue
+    debtSubjectIds.add(subject.subjectId)
+  }
+
+  const issueBySubject = new Map<
+    string,
+    { name: string; examBannedReasons: string[]; suspendedReasons: string[] }
+  >()
+  for (const score of issueScores) {
+    if (subjectScoresMap.has(score.subjectVersionId)) continue
+    const current = issueBySubject.get(score.subjectVersionId) ?? {
+      name: score.subjectVersion.name,
+      examBannedReasons: [],
+      suspendedReasons: [],
+    }
+    if (score.examBanned && score.examBannedReason) {
+      current.examBannedReasons.push(score.examBannedReason)
+    }
+    if (score.suspended && score.suspendedReason) {
+      current.suspendedReasons.push(score.suspendedReason)
+    }
+    issueBySubject.set(score.subjectVersionId, current)
+    if (!curriculumSubjects.some((item) => item.subjectId === score.subjectVersionId)) {
+      debtSubjectIds.add(score.subjectVersionId)
+    }
+  }
+
+  for (const [subjectId, issue] of issueBySubject) {
+    if (!debtSubjectIds.has(subjectId) && subjectScoresMap.has(subjectId)) continue
+    for (const reason of [...new Set(issue.examBannedReasons)]) {
+      issueReasons.push(`Môn ${issue.name}: ${reason}`)
+    }
+    for (const reason of [...new Set(issue.suspendedReasons)]) {
+      issueReasons.push(`Môn ${issue.name}: ${reason}`)
+    }
+  }
+
+  let totalDebtCredit = 0
+  for (const subjectId of debtSubjectIds) {
+    const curriculumSubject = curriculumSubjects.find((item) => item.subjectId === subjectId)
+    const score = subjectScoresMap.get(subjectId)
+    totalDebtCredit += curriculumSubject?.subject.credit || score?.subjectVersion.credit || 0
+  }
+
+  return {
+    finalScores,
+    markDoneScores,
+    subjectScoresMap,
+    displayScoresMap,
+    curriculumDisplayScores,
+    processedSubjects,
+    equivalencyNotes,
+    equivalencyScores,
+    totalDebtCredit,
+    issueReasons,
+    subjectReasons,
+    accumulatedElectiveCredits,
+    totalScoreBase10,
+    totalScoreBase4,
+    totalPassCredit,
+    courseGradeLowest,
+    graduationCourseGradeLowest,
+  }
+}
+
+export const graduationCurriculumSelect = {
+  id: true,
+  name: true,
+  requiredCredits: true,
+  electiveCredits: true,
+  diplomaType: true,
+  trainingBlocks: {
+    where: { deletedAt: null, active: true },
+    include: {
+      trainingBlock: { select: { id: true, code: true, name: true } },
+      subjects: {
+        where: { deletedAt: null, active: true },
+        include: {
+          subject: { select: { id: true, name: true, code: true, credit: true, subjectId: true } },
+        },
+      },
+    },
+  },
+  curriculum: { include: { trainingMajor: true } },
+} as const
+
+export type GraduationTranscriptSubject = {
+  id: string
+  subjectVersionId: string
+  code: string | null
+  name: string
+  credit: number
+  type: SubjectRequirementType | null
+  attendanceScore: number | null
+  midtermScore: number | null
+  examScore: number | null
+  finalScore: number | null
+  scoreBase4: number | null
+  letter: string | null
+  passed: boolean
+  usedForGpa: boolean
+  equivalentNote: string | null
+}
+
+export type GraduationTranscriptBlock = {
+  id: string
+  code: string | null
+  name: string
+  subjectsInCurriculum: GraduationTranscriptSubject[]
+}
+
+export type GraduationTranscript = {
+  studentId: string
+  fullname: string
+  studentCode: string | null
+  curriculumVersionName: string | null
+  gpaBase10: number
+  gpaBase4: number
+  totalPassCredit: number
+  requiredCredits: number | null
+  accumulatedElectiveCredits: number
+  electiveCreditsRequired: number
+  curriculumBlocks: GraduationTranscriptBlock[]
+  extraCurriculumSubjects: GraduationTranscriptSubject[]
+  conditionalSubjects: GraduationTranscriptSubject[]
+}
+
+function toTranscriptSubject(input: {
+  id: string
+  subjectVersionId: string
+  code: string | null
+  name: string
+  credit: number
+  type: SubjectRequirementType | null
+  score?: ResolvedGraduationScore | null
+  usedForGpa: boolean
+  equivalentNote?: string | null
+}): GraduationTranscriptSubject {
+  return {
+    id: input.id,
+    subjectVersionId: input.subjectVersionId,
+    code: input.code,
+    name: input.name,
+    credit: input.credit,
+    type: input.type,
+    attendanceScore: input.score?.attendanceScore ?? null,
+    midtermScore: input.score?.midtermScore ?? null,
+    examScore: input.score?.examScore ?? null,
+    finalScore: input.score ? input.score.scoreBase10.toNumber() : null,
+    scoreBase4: input.score ? input.score.scoreBase4.toNumber() : null,
+    letter: input.score?.letter ?? null,
+    passed: !!input.score,
+    usedForGpa: input.usedForGpa,
+    equivalentNote: input.equivalentNote ?? null,
+  }
+}
+
+export async function buildGraduationTranscript(
+  studentId: string
+): Promise<{ data: GraduationTranscript } | { error: string; status: 400 | 404 }> {
+  const student = await prisma.student.findFirst({
+    where: { id: studentId, deletedAt: null },
+    select: {
+      id: true,
+      userProfile: { select: { fullname: true, code: true } },
+      curriculumVersion: { select: graduationCurriculumSelect },
+      fixedClass: {
+        select: {
+          trainingCourse: {
+            select: {
+              scoreToPass: true,
+              scoreToPassConditional: true,
+              scoreToPassGraduation: true,
+              scoreToRetain: true,
+              scoreToTakeExam: true,
+              examScoreToPass: true,
+              scoreConverts: { where: { deletedAt: null, active: true } },
+            },
+          },
+          curriculumVersion: { select: graduationCurriculumSelect },
+        },
+      },
+    },
+  })
+
+  if (!student) return { error: "Không tìm thấy sinh viên", status: 404 }
+  if (!student.fixedClass) return { error: "Sinh viên không có lớp quản lý", status: 400 }
+
+  const curriculumVersion = student.curriculumVersion || student.fixedClass.curriculumVersion
+  if (!curriculumVersion) return { error: "Sinh viên không có CTĐT", status: 400 }
+
+  const curriculumSubjects = curriculumVersion.trainingBlocks.flatMap((block) =>
+    block.subjects.map((subject) => ({
+      ...subject,
+      trainingBlockId: block.trainingBlock.id,
+      trainingBlockCode: block.trainingBlock.code,
+      trainingBlockName: block.trainingBlock.name,
+    }))
+  )
+
+  const electiveCreditsRequired = curriculumVersion.trainingBlocks.reduce(
+    (sum, block) => sum + block.electiveCreditsRequired,
+    0
+  )
+
+  const resolved = await resolveGraduationSubjectScores({
+    studentId,
+    curriculumSubjects,
+    trainingCourse: student.fixedClass.trainingCourse,
+    electiveCreditsRequired,
+  })
+
+  const usedScoreIds = new Set(
+    [...resolved.finalScores.values(), ...resolved.markDoneScores.values()].map((item) => item.id)
+  )
+
+  const curriculumBlocks: GraduationTranscriptBlock[] = curriculumVersion.trainingBlocks.map(
+    (block) => ({
+      id: block.trainingBlock.id,
+      code: block.trainingBlock.code,
+      name: block.trainingBlock.name,
+      subjectsInCurriculum: block.subjects
+        .filter((subject) => subject.useForFinalScore !== false)
+        .map((subject) => {
+          const score =
+            resolved.curriculumDisplayScores.get(subject.subjectId) ||
+            resolved.finalScores.get(subject.subjectId) ||
+            resolved.subjectScoresMap.get(subject.subjectId)
+          return toTranscriptSubject({
+            id: subject.id,
+            subjectVersionId: subject.subjectId,
+            code: subject.subject.code,
+            name: subject.subject.name,
+            credit: subject.subject.credit,
+            type: subject.type,
+            score,
+            usedForGpa: resolved.finalScores.has(subject.subjectId),
+            equivalentNote: resolved.equivalencyNotes.get(subject.subjectId) ?? null,
+          })
+        }),
+    })
+  )
+
+  const conditionalSubjects = curriculumSubjects
+    .filter((subject) => subject.useForFinalScore === false)
+    .map((subject) => {
+      const score =
+        resolved.curriculumDisplayScores.get(subject.subjectId) ||
+        resolved.markDoneScores.get(subject.subjectId) ||
+        resolved.subjectScoresMap.get(subject.subjectId)
+      return toTranscriptSubject({
+        id: subject.id,
+        subjectVersionId: subject.subjectId,
+        code: subject.subject.code,
+        name: subject.subject.name,
+        credit: subject.subject.credit,
+        type: subject.type,
+        score,
+        usedForGpa: false,
+        equivalentNote: resolved.equivalencyNotes.get(subject.subjectId) ?? null,
+      })
+    })
+
+  const curriculumSubjectIds = new Set(curriculumSubjects.map((subject) => subject.subjectId))
+  const extraCurriculumSubjects = [...resolved.displayScoresMap.values()].filter(
+    (score) => !curriculumSubjectIds.has(score.subjectVersionId) && !usedScoreIds.has(score.id)
+  )
+    .map((score) =>
+      toTranscriptSubject({
+        id: score.id,
+        subjectVersionId: score.subjectVersionId,
+        code: score.subjectVersion.code,
+        name: score.subjectVersion.name,
+        credit: score.subjectVersion.credit,
+        type: null,
+        score,
+        usedForGpa: usedScoreIds.has(score.id),
+      })
+    )
+
+  const gpaBase10 = resolved.totalPassCredit
+    ? resolved.totalScoreBase10
+        .div(resolved.totalPassCredit)
+        .toDecimalPlaces(2, Decimal.ROUND_HALF_UP)
+        .toNumber()
+    : 0
+  const gpaBase4 = resolved.totalPassCredit
+    ? resolved.totalScoreBase4
+        .div(resolved.totalPassCredit)
+        .toDecimalPlaces(2, Decimal.ROUND_HALF_UP)
+        .toNumber()
+    : 0
+
+  return {
+    data: {
+      studentId: student.id,
+      fullname: student.userProfile.fullname,
+      studentCode: student.userProfile.code,
+      curriculumVersionName: curriculumVersion.name,
+      gpaBase10,
+      gpaBase4,
+      totalPassCredit: resolved.totalPassCredit,
+      requiredCredits: curriculumVersion.requiredCredits,
+      accumulatedElectiveCredits: resolved.accumulatedElectiveCredits,
+      electiveCreditsRequired,
+      curriculumBlocks,
+      extraCurriculumSubjects,
+      conditionalSubjects,
+    },
+  }
+}

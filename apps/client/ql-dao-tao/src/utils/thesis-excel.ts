@@ -559,6 +559,9 @@ export const exportPhuLucDsLuanVan = async ({
       })
     })
     const result = Array.from(majorMap.values())
+    result.forEach((item: any) => {
+      item.thesisProject.sortVietnameseName("hovatenhocvien")
+    })
     if (result.length === 0) {
       message.error("Không có dữ liệu để xuất phụ lục danh sách luận văn")
       hideSpinner()
