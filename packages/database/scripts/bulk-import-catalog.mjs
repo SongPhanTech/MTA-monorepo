@@ -36,16 +36,17 @@
 import { existsSync, readdirSync, statSync, writeFileSync } from "node:fs"
 import { basename, join, relative } from "node:path"
 import { PrismaClient } from "../generated/prisma-client/index.js"
-import { printNhchPathConfig, resolveNhchRoot } from "./nhch-paths.mjs"
+import { printDatabaseTarget, printNhchPathConfig, resolveDatabaseUrl, resolveNhchRoot } from "./nhch-paths.mjs"
 
 const rootArg = process.argv.indexOf("--root")
 const ROOT = resolveNhchRoot(rootArg !== -1 ? process.argv[rootArg + 1] : undefined)
 
-const url = process.env.DATABASE_URL
+const url = resolveDatabaseUrl()
 if (!url) {
-  console.error("DATABASE_URL required")
+  console.error("DATABASE_URL or POSTGRES_URL required")
   process.exit(1)
 }
+printDatabaseTarget(url)
 
 if (!existsSync(ROOT)) {
   printNhchPathConfig({ root: ROOT })

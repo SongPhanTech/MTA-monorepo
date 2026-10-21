@@ -16,7 +16,9 @@
 img.qa-inline-img {
   display: inline-block;
   vertical-align: middle;
-  max-width: 100%;
+  max-width: 220px;
+  max-height: 88px;
+  width: auto;
   height: auto;
   margin: 0 0.2em;
 }

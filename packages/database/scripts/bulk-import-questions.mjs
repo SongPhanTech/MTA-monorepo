@@ -32,7 +32,7 @@ import {
   applyImgTokensToQuestions,
   requireMinioOrThrow,
 } from "./nhch-images.mjs"
-import { NHCH_TMP_CONVERT } from "./nhch-paths.mjs"
+import { NHCH_TMP_CONVERT, printDatabaseTarget, resolveDatabaseUrl } from "./nhch-paths.mjs"
 import { extractLinedMc, parsePointToken, splitAnswerSection, toDisplayHtml } from "./nhch-qa-format.mjs"
 
 const dryRun = process.argv.includes("--dry-run")
@@ -66,11 +66,12 @@ const ERRORS_OUT_PATH = errorsOutArg !== -1 ? process.argv[errorsOutArg + 1] : n
 const topArg = process.argv.indexOf("--top")
 const TOP = topArg !== -1 ? String(process.argv[topArg + 1] || "").trim() : ""
 
-const url = process.env.DATABASE_URL
+const url = resolveDatabaseUrl()
 if (!url) {
-  console.error("DATABASE_URL required")
+  console.error("DATABASE_URL or POSTGRES_URL required")
   process.exit(1)
 }
+printDatabaseTarget(url)
 
 const prisma = new PrismaClient({
   datasources: {
@@ -261,20 +262,23 @@ async function convertDocument(docPath) {
   if (withImages) {
     requireMinioOrThrow()
     const zip = isZipContainer(docPath)
+    const preferWordHtml = viaWord || process.env.NHCH_WORD_HTML === "1"
+    if (preferWordHtml || (!zip && oleMayHavePictures(docPath))) {
+      try {
+        const { text, images } = await docToHtmlViaWord(docPath)
+        if (text.trim().length >= 10 || images.length) {
+          const urlByName = dryRun ? {} : await uploadImageList(images, { requireMinio: true })
+          return { text, urlByName, imageCount: images.length }
+        }
+      } catch (e) {
+        console.warn(`    Word HTML fallback to zip/text: ${e.message}`)
+      }
+    }
     if (zip && zipHasMedia(docPath)) {
       const { text, images } = extractDocxTextAndImages(docPath)
       if (text.trim().length >= 10 || images.length) {
         const urlByName = dryRun ? {} : await uploadImageList(images, { requireMinio: true })
         return { text, urlByName, imageCount: images.length }
-      }
-    }
-    if (!zip && (viaWord || oleMayHavePictures(docPath))) {
-      try {
-        const { text, images } = await docToHtmlViaWord(docPath)
-        const urlByName = dryRun ? {} : await uploadImageList(images, { requireMinio: true })
-        return { text, urlByName, imageCount: images.length }
-      } catch (e) {
-        console.warn(`    Word HTML fallback to text: ${e.message}`)
       }
     }
   }
