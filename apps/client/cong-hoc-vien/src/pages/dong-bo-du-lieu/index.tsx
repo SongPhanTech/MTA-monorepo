@@ -8,6 +8,7 @@ import {
   finishDataSync,
   startDataSync,
   useGetDataSyncHistory,
+  type DataSyncHistoryItem,
 } from "@workspace/libs/api/data-sync-history"
 import {
   importFromInternal,
@@ -46,6 +47,7 @@ import {
   FileJson,
   History,
   Info,
+  Loader2,
   Upload as UploadIcon,
 } from "lucide-react"
 import { useEffect, useMemo, useRef, useState } from "react"
@@ -97,12 +99,20 @@ function DongBoDuLieuPage() {
   } = useGetDataSyncHistory(50, {
     refetchOnWindowFocus: false,
     refetchInterval: (query) => {
-      const res = query.state.data as
-        | { status?: number; data?: Array<{ status: string }> }
-        | undefined
-      const items = res?.status === 200 ? res.data : undefined
+      const stateData = query.state.data
+      let items: Array<{ status?: string }> | undefined
+      if (Array.isArray(stateData)) {
+        items = stateData
+      } else if (
+        stateData &&
+        typeof stateData === "object" &&
+        "data" in stateData &&
+        Array.isArray((stateData as any).data)
+      ) {
+        items = (stateData as any).data
+      }
       const hasPending = items?.some((h) => h.status === "PENDING")
-      return hasPending ? 3000 : false
+      return hasPending ? 2000 : false
     },
   })
   const { data: classRegisterSession, isLoading: sessionLoading } = useGetClassRegisterSession({
@@ -680,6 +690,31 @@ function DongBoDuLieuPage() {
             ),
             children: (
               <Card>
+                {pendingImport && (
+                  <Alert
+                    type="info"
+                    showIcon
+                    icon={<Loader2 className="w-5 h-5 animate-spin text-blue-600" />}
+                    className="mb-4 bg-blue-50/80 border-blue-200"
+                    message={
+                      <div className="font-semibold text-blue-900">
+                        Đang đồng bộ dữ liệu: {pendingImport.sessionName}
+                      </div>
+                    }
+                    description={
+                      <div className="mt-1 text-sm text-blue-800 flex flex-col gap-1">
+                        <div className="font-medium flex items-center gap-2">
+                          <Loader2 className="w-4 h-4 animate-spin shrink-0 text-blue-600" />
+                          <span>{pendingImport.description || "Hệ thống đang chuẩn bị và xử lý dữ liệu..."}</span>
+                        </div>
+                        <div className="text-xs text-blue-600/80 mt-0.5">
+                          Tệp: {pendingImport.fileName ?? "—"} • Bắt đầu lúc:{" "}
+                          {dayjs(pendingImport.createdAt).format("HH:mm:ss — DD/MM/YYYY")}
+                        </div>
+                      </div>
+                    }
+                  />
+                )}
                 <Table
                   size="small"
                   loading={historyLoading}
@@ -705,7 +740,7 @@ function DongBoDuLieuPage() {
                     {
                       title: "Loại",
                       dataIndex: "type",
-                      width: 120,
+                      width: 110,
                       render: (type: "IMPORT" | "EXPORT") =>
                         type === "IMPORT" ? (
                           <Tag color="blue">Nhập</Tag>
@@ -716,6 +751,7 @@ function DongBoDuLieuPage() {
                     {
                       title: "Đợt đăng ký",
                       dataIndex: "sessionName",
+                      width: 180,
                     },
                     {
                       title: "Tên file",
@@ -725,18 +761,44 @@ function DongBoDuLieuPage() {
                     {
                       title: "Trạng thái",
                       dataIndex: "status",
-                      width: 130,
+                      width: 135,
                       render: (status: "PENDING" | "SUCCESS" | "FAILED") => {
                         if (status === "SUCCESS") return <Tag color="success">Thành công</Tag>
                         if (status === "FAILED") return <Tag color="error">Thất bại</Tag>
-                        return <Tag color="processing">Đang xử lý</Tag>
+                        return (
+                          <Tag color="processing" className="inline-flex items-center gap-1.5 font-medium">
+                            <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-600" />
+                            Đang xử lý
+                          </Tag>
+                        )
                       },
                     },
                     {
-                      title: "Ghi chú / lỗi",
-                      dataIndex: "errorMessage",
+                      title: "Ghi chú/ Lỗi",
+                      dataIndex: "description",
                       ellipsis: true,
-                      render: (value: string | null) => value || "—",
+                      render: (_: unknown, record: DataSyncHistoryItem) => {
+                        if (record.status === "PENDING") {
+                          return (
+                            <span className="text-blue-600 font-medium inline-flex items-center gap-1.5">
+                              <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0 text-blue-600" />
+                              <span className="truncate">{record.description || "Đang xử lý..."}</span>
+                            </span>
+                          )
+                        }
+                        if (record.status === "FAILED") {
+                          return (
+                            <span className="text-red-500" title={record.errorMessage ?? undefined}>
+                              {record.errorMessage || "Thất bại"}
+                            </span>
+                          )
+                        }
+                        return (
+                          <span className="text-gray-600" title={record.description ?? undefined}>
+                            {record.description || "—"}
+                          </span>
+                        )
+                      },
                     },
                     {
                       title: "Thời gian",

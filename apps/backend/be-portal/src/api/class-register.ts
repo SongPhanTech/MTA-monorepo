@@ -1172,22 +1172,36 @@ app.openapi(getStudentInfo, async (c) => {
 
   let maxCredit = null
 
-  if (sessionId && latestSemesterResult) {
+  if (sessionId) {
     const maxCreditsSetting = await prisma.classRegisterSessionCredit.findMany({
       where: { classRegisterSessionId: sessionId, deletedAt: null },
       orderBy: [{ base10Min: "asc" }, { base4Min: "asc" }],
     })
 
     if (maxCreditsSetting.length > 0) {
-      const matchedLimit = matchCreditLimitByCourseBaseScore(
-        maxCreditsSetting,
-        courseBaseScore,
-        Number(latestSemesterResult.gpaBase4 ?? latestSemesterResult.cumulativeGpaBase4) || 0,
-        Number(latestSemesterResult.gpaBase10 ?? latestSemesterResult.cumulativeGpaBase10) || 0
-      )
+      if (latestSemesterResult) {
+        const matchedLimit = matchCreditLimitByCourseBaseScore(
+          maxCreditsSetting,
+          courseBaseScore,
+          Number(latestSemesterResult.gpaBase4 ?? latestSemesterResult.cumulativeGpaBase4) || 0,
+          Number(latestSemesterResult.gpaBase10 ?? latestSemesterResult.cumulativeGpaBase10) || 0
+        )
 
-      if (matchedLimit && matchedLimit.maxCredit != null) {
-        maxCredit = matchedLimit.maxCredit
+        if (matchedLimit && matchedLimit.maxCredit != null) {
+          maxCredit = matchedLimit.maxCredit
+        }
+      } else {
+        const defaultLimit = matchCreditLimitByCourseBaseScore(
+          maxCreditsSetting,
+          courseBaseScore,
+          2.0,
+          5.0
+        )
+        maxCredit =
+          defaultLimit?.maxCredit ??
+          maxCreditsSetting.find((c) => (c.maxCredit || 0) >= 20)?.maxCredit ??
+          maxCreditsSetting[0]?.maxCredit ??
+          20
       }
     }
   }

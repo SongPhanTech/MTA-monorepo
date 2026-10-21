@@ -41,6 +41,9 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000",
+      "http://localhost:3001",
+      "http://localhost:3002",
+      "http://localhost:3003",
       "https://daotao.swantech.vn",
       "https://user.mta.swantech.vn",
       "https://am.swantech.vn",
@@ -132,3 +135,6 @@ export default {
 process.on("SIGINT", () => {
   process.exit()
 })
+
+
+

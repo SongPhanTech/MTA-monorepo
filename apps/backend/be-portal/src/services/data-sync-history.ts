@@ -78,8 +78,15 @@ export async function markDataSyncHistorySuccess(
   })
 }
 
+export async function markDataSyncHistoryProcessing(id: string, description: string) {
+  return prisma.dataSyncHistory.update({
+    where: { id },
+    data: { description },
+  })
+}
+
 /** PENDING quá hạn (start rồi không enqueue Kafka / import không xong) không được chặn lần sau. */
-const STALE_PENDING_IMPORT_MS = Number(process.env.DATA_SYNC_STALE_PENDING_MS || 20 * 60 * 1000)
+const STALE_PENDING_IMPORT_MS = Number(process.env.DATA_SYNC_STALE_PENDING_MS || 5 * 60 * 1000)
 
 export async function expireStalePendingImports() {
   const cutoff = new Date(Date.now() - Math.max(STALE_PENDING_IMPORT_MS, 60_000))
@@ -88,11 +95,25 @@ export async function expireStalePendingImports() {
       type: $Enums.DataSyncType.IMPORT,
       status: $Enums.DataSyncStatus.PENDING,
       deletedAt: null,
-      createdAt: { lt: cutoff },
+      updatedAt: { lt: cutoff },
     },
     data: {
       status: $Enums.DataSyncStatus.FAILED,
       errorMessage: "Hết hạn chờ nhập (không nhận job Kafka / import không hoàn tất).",
+    },
+  })
+}
+
+export async function cleanupPendingImportsOnBoot() {
+  await prisma.dataSyncHistory.updateMany({
+    where: {
+      type: $Enums.DataSyncType.IMPORT,
+      status: $Enums.DataSyncStatus.PENDING,
+      deletedAt: null,
+    },
+    data: {
+      status: $Enums.DataSyncStatus.FAILED,
+      errorMessage: "Tiến trình bị gián đoạn do khởi động lại backend.",
     },
   })
 }
@@ -121,6 +142,8 @@ export async function markDataSyncHistoryFailed(id: string, errorMessage: string
 }
 
 export async function listDataSyncHistory(limit = 50) {
+  await expireStalePendingImports()
+
   return prisma.dataSyncHistory.findMany({
     where: { deletedAt: null },
     orderBy: { createdAt: "desc" },
@@ -132,8 +155,10 @@ export async function listDataSyncHistory(limit = 50) {
       sessionName: true,
       fileName: true,
       fileVersion: true,
+      description: true,
       errorMessage: true,
       createdAt: true,
+      updatedAt: true,
       classRegisterSessionId: true,
     },
   })

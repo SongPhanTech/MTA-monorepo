@@ -317,7 +317,11 @@ export async function parseImportJsonFile(file: File): Promise<ImportJsonPreview
     name: str(row, "name"),
   }))
 
-  const creditLimits = asRecords(data.ClassRegisterSessionCredit).map((row) => ({
+  const targetSessionId = str(session, "id")
+  const sessionCredits = asRecords(data.ClassRegisterSessionCredit).filter(
+    (row) => !str(row, "classRegisterSessionId") || str(row, "classRegisterSessionId") === targetSessionId
+  )
+  const creditLimits = (sessionCredits.length > 0 ? sessionCredits : asRecords(data.ClassRegisterSessionCredit)).map((row) => ({
     minCredit: num(row, "minCredit") ?? null,
     maxCredit: num(row, "maxCredit") ?? null,
     baseScore: str(row, "baseScore") ?? null,
