@@ -1,24 +1,15 @@
 import { prisma } from ".."
 import { loadAllCatalogs } from "./export-all-catalogs"
+import {
+  loadSessionScopedEntities,
+  notDeleted,
+  queryJoinTable,
+  uniqueIds,
+} from "./export-session-scope"
+import { loadWarningAndScholarshipData } from "./export-warning-scholarship"
 
-/** Bump khi thay đổi cấu trúc gói JSON — portal phải hỗ trợ version này */
-export const EXPORT_TRAINING_DATA_VERSION = "1.4.0"
-
-export type ExportTrainingDataParams = {
-  /** Giữ tương thích API cũ — không còn lọc theo 1 đợt; luôn xuất toàn bộ */
-  classRegisterSessionId?: string
-}
-
-type JoinRow = {
-  A: string
-  B: string
-}
-
-const notDeleted = { deletedAt: null } as const
-
-function uniqueIds(values: (string | null | undefined)[]): string[] {
-  return [...new Set(values.filter((v): v is string => Boolean(v)))]
-}
+/** Bump khi thay đổi cấu trúc gói — 1.6.0: JSON bên trong, file tải về Gzip+AES-GCM (.dat) */
+export const EXPORT_TRAINING_DATA_VERSION = "1.6.0"
 
 function serializeForJson(value: unknown): unknown {
   if (value === null || value === undefined) return value
@@ -37,8 +28,8 @@ function serializeForJson(value: unknown): unknown {
   return value
 }
 
-async function queryJoinTable(table: string) {
-  return prisma.$queryRawUnsafe<JoinRow[]>(`SELECT "A", "B" FROM "ql-dao-tao"."${table}"`)
+export type ExportTrainingDataParams = {
+  classRegisterSessionId?: string
 }
 
 /**
@@ -62,9 +53,6 @@ export async function exportTrainingData(params: ExportTrainingDataParams = {}) 
   if (classRegisterSessionId && !targetSession) {
     throw new Error(`Không tìm thấy đợt đăng ký học với ID: ${classRegisterSessionId}`)
   }
-
-  const targetSemesterId = targetSession?.semesterId
-  const targetCourseIds = targetSession?.trainingCourses?.map((tc) => tc.id) ?? []
 
   const [
     catalogs,
@@ -124,162 +112,95 @@ export async function exportTrainingData(params: ExportTrainingDataParams = {}) 
     ? allSessionToCourses.filter((r) => r.A === classRegisterSessionId)
     : allSessionToCourses
 
-  const subjectClasses = targetSemesterId
-    ? await prisma.subjectClass.findMany({
-        where: { semesterId: targetSemesterId, deletedAt: null },
-      })
-    : await prisma.subjectClass.findMany({ where: notDeleted })
-
-  const subjectClassIds = subjectClasses.map((sc) => sc.id)
-
-  const [subjectClassTimes, classSchedules, allFixedClassToSubjectClass, exams] = await Promise.all([
-    targetSemesterId
-      ? (subjectClassIds.length > 0
-          ? prisma.subjectClassTime.findMany({
-              where: { subjectClassId: { in: subjectClassIds }, deletedAt: null },
-            })
-          : Promise.resolve([]))
-      : prisma.subjectClassTime.findMany({ where: notDeleted }),
-    targetSemesterId
-      ? (subjectClassIds.length > 0
-          ? prisma.classSchedule.findMany({
-              where: { subjectClassId: { in: subjectClassIds }, deletedAt: null },
-            })
-          : Promise.resolve([]))
-      : prisma.classSchedule.findMany({ where: notDeleted }),
-    queryJoinTable("_FixedClassToSubjectClass"),
-    (() => {
-      if (!targetSemesterId) return prisma.exam.findMany({ where: notDeleted })
-      const examIds = uniqueIds(subjectClasses.map((sc) => sc.examId))
-      return examIds.length > 0
-        ? prisma.exam.findMany({ where: { id: { in: examIds }, deletedAt: null } })
-        : Promise.resolve([])
-    })(),
-  ])
-
-  const fixedClassToSubjectClass = targetSemesterId
-    ? allFixedClassToSubjectClass.filter((r) => subjectClassIds.includes(r.B))
-    : allFixedClassToSubjectClass
-
-  // Học kỳ và năm học (toàn bộ danh mục học kỳ/năm học để đảm bảo khóa ngoại cho bảng điểm và kết quả học tập)
   const [semesters, schoolYears] = await Promise.all([
     prisma.semester.findMany({ where: notDeleted }),
     prisma.schoolYear.findMany({ where: notDeleted }),
   ])
 
-  const trainingCourses = targetCourseIds.length > 0
-    ? targetSession.trainingCourses
-    : await prisma.trainingCourse.findMany({ where: notDeleted })
+  let trainingCourses: Array<Record<string, unknown> & { id: string }>
+  let trainingCourseRegulations: Awaited<ReturnType<typeof prisma.trainingCourseRegulation.findMany>>
+  let subjectClasses: Awaited<ReturnType<typeof prisma.subjectClass.findMany>>
+  let subjectClassTimes: Awaited<ReturnType<typeof prisma.subjectClassTime.findMany>>
+  let classSchedules: Awaited<ReturnType<typeof prisma.classSchedule.findMany>>
+  let exams: Awaited<ReturnType<typeof prisma.exam.findMany>>
+  let fixedClassToSubjectClass: Awaited<ReturnType<typeof queryJoinTable>>
+  let fixedClasses: Awaited<ReturnType<typeof prisma.fixedClass.findMany>>
+  let students: Awaited<ReturnType<typeof prisma.student.findMany>>
+  let lecturers: Awaited<ReturnType<typeof prisma.lecturer.findMany>>
+  let staff: Awaited<ReturnType<typeof prisma.staff.findMany>>
+  let userProfiles: Awaited<ReturnType<typeof prisma.userProfile.findMany>>
+  let studentSubjectScores: Awaited<ReturnType<typeof prisma.studentSubjectScore.findMany>>
+  let studentSemesterResults: Awaited<ReturnType<typeof prisma.studentSemesterResult.findMany>>
+  let studentIds: string[]
+  let exportedCourseIds: string[]
 
-  const trainingCourseRegulations = targetCourseIds.length > 0
-    ? await prisma.trainingCourseRegulation.findMany({
-        where: { trainingCourseId: { in: targetCourseIds }, deletedAt: null },
-      })
-    : await prisma.trainingCourseRegulation.findMany({ where: notDeleted })
-
-  const linkedFixedClassIds = uniqueIds(fixedClassToSubjectClass.map((r) => r.A))
-  const fixedClassOrConditions = [
-    ...(targetCourseIds.length > 0 ? [{ trainingCourseId: { in: targetCourseIds } }] : []),
-    ...(linkedFixedClassIds.length > 0 ? [{ id: { in: linkedFixedClassIds } }] : []),
-  ]
-  const fixedClasses = targetSession
-    ? (fixedClassOrConditions.length > 0
-        ? await prisma.fixedClass.findMany({
-            where: {
-              deletedAt: null,
-              OR: fixedClassOrConditions,
-            },
-          })
-        : [])
-    : await prisma.fixedClass.findMany({ where: notDeleted })
-
-  const fixedClassIds = fixedClasses.map((fc) => fc.id)
-  const studentOrConditions = [
-    ...(fixedClassIds.length > 0 ? [{ fixedClassId: { in: fixedClassIds } }] : []),
-    ...(targetCourseIds.length > 0
-      ? [{ fixedClass: { trainingCourseId: { in: targetCourseIds } } }]
-      : []),
-  ]
-  const students = targetSession
-    ? (studentOrConditions.length > 0
-        ? await prisma.student.findMany({
-            where: {
-              deletedAt: null,
-              OR: studentOrConditions,
-            },
-          })
-        : [])
-    : await prisma.student.findMany({ where: notDeleted })
-
-  const targetLecturerIds = targetSession
-    ? uniqueIds([
-        ...subjectClasses.map((sc) => sc.lecturerId),
-        ...subjectClasses.map((sc) => sc.extraLecturerId),
-        ...subjectClasses.map((sc) => sc.enterGradeLecturerId),
-        ...fixedClasses.map((fc) => fc.lecturerManagementId),
-      ])
-    : []
-
-  const targetStaffIds = targetSession
-    ? uniqueIds([...fixedClasses.map((fc) => fc.staffManagementId)])
-    : []
-
-  const [lecturers, staff] = await Promise.all([
-    targetSession
-      ? (targetLecturerIds.length > 0
-          ? prisma.lecturer.findMany({
-              where: { id: { in: targetLecturerIds }, deletedAt: null },
-            })
-          : Promise.resolve([]))
-      : prisma.lecturer.findMany({ where: notDeleted }),
-    targetSession
-      ? (targetStaffIds.length > 0
-          ? prisma.staff.findMany({
-              where: { id: { in: targetStaffIds }, deletedAt: null },
-            })
-          : Promise.resolve([]))
-      : prisma.staff.findMany({ where: notDeleted }),
-  ])
-
-  const userProfileIds = uniqueIds([
-    ...lecturers.map((l) => l.userProfileId),
-    ...students.map((s) => s.userProfileId),
-    ...staff.map((s) => s.userProfileId),
-  ])
-
-  const userProfiles: Awaited<ReturnType<typeof prisma.userProfile.findMany>> = []
-  const PROFILE_CHUNK = 5000
-  for (let i = 0; i < userProfileIds.length; i += PROFILE_CHUNK) {
-    const chunk = userProfileIds.slice(i, i + PROFILE_CHUNK)
-    const rows = await prisma.userProfile.findMany({
-      where: { id: { in: chunk }, deletedAt: null },
+  if (targetSession) {
+    const scoped = await loadSessionScopedEntities(targetSession)
+    trainingCourses = scoped.trainingCourses
+    trainingCourseRegulations = scoped.trainingCourseRegulations
+    fixedClasses = scoped.fixedClasses
+    students = scoped.students
+    subjectClasses = scoped.subjectClasses
+    subjectClassTimes = scoped.subjectClassTimes
+    classSchedules = scoped.classSchedules
+    exams = scoped.exams
+    fixedClassToSubjectClass = scoped.fixedClassToSubjectClass
+    lecturers = scoped.lecturers
+    staff = scoped.staff
+    userProfiles = scoped.userProfiles
+    studentSubjectScores = scoped.studentSubjectScores
+    studentSemesterResults = scoped.studentSemesterResults
+    studentIds = scoped.studentIds
+    exportedCourseIds = scoped.targetCourseIds
+  } else {
+    trainingCourses = await prisma.trainingCourse.findMany({ where: notDeleted })
+    trainingCourseRegulations = await prisma.trainingCourseRegulation.findMany({
+      where: notDeleted,
     })
-    userProfiles.push(...rows)
+    subjectClasses = await prisma.subjectClass.findMany({ where: notDeleted })
+    const [times, schedules, joins, examRows] = await Promise.all([
+      prisma.subjectClassTime.findMany({ where: notDeleted }),
+      prisma.classSchedule.findMany({ where: notDeleted }),
+      queryJoinTable("_FixedClassToSubjectClass"),
+      prisma.exam.findMany({ where: notDeleted }),
+    ])
+    subjectClassTimes = times
+    classSchedules = schedules
+    fixedClassToSubjectClass = joins
+    exams = examRows
+    fixedClasses = await prisma.fixedClass.findMany({ where: notDeleted })
+    students = await prisma.student.findMany({ where: notDeleted })
+    lecturers = await prisma.lecturer.findMany({ where: notDeleted })
+    staff = await prisma.staff.findMany({ where: notDeleted })
+    const userProfileIds = uniqueIds([
+      ...lecturers.map((l) => l.userProfileId),
+      ...students.map((s) => s.userProfileId),
+      ...staff.map((s) => s.userProfileId),
+    ])
+    userProfiles = []
+    const PROFILE_CHUNK = 5000
+    for (let i = 0; i < userProfileIds.length; i += PROFILE_CHUNK) {
+      const chunk = userProfileIds.slice(i, i + PROFILE_CHUNK)
+      const rows = await prisma.userProfile.findMany({
+        where: { id: { in: chunk }, deletedAt: null },
+      })
+      userProfiles.push(...rows)
+    }
+    studentIds = uniqueIds(students.map((s) => s.id))
+    exportedCourseIds = trainingCourses.map((tc) => tc.id)
+    ;[studentSubjectScores, studentSemesterResults] = await Promise.all([
+      prisma.studentSubjectScore.findMany({ where: notDeleted }),
+      prisma.studentSemesterResult.findMany({ where: notDeleted }),
+    ])
   }
 
-  const studentIds = uniqueIds(students.map((s) => s.id))
-  const [studentSubjectScores, studentSemesterResults] = await Promise.all([
-    targetSession
-      ? (studentIds.length > 0
-          ? prisma.studentSubjectScore.findMany({
-              where: { studentId: { in: studentIds }, deletedAt: null },
-            })
-          : Promise.resolve([]))
-      : prisma.studentSubjectScore.findMany({ where: notDeleted }),
-    targetSession
-      ? (studentIds.length > 0
-          ? prisma.studentSemesterResult.findMany({
-              where: { studentId: { in: studentIds }, deletedAt: null },
-            })
-          : Promise.resolve([]))
-      : prisma.studentSemesterResult.findMany({ where: notDeleted }),
-  ])
+  const warningScholarship = await loadWarningAndScholarshipData({
+    studentIds,
+    trainingCourseIds: exportedCourseIds,
+    scoped: Boolean(targetSession),
+  })
 
-  const subjectClassRecordsNormalized = subjectClasses.map((sc) => ({
-    ...sc,
-    scoreLinkSubjectVersionId: null,
-  }))
-
+  // SubjectVersion upsert trước SubjectClass trên portal — giữ nguyên scoreLinkSubjectVersionId
   const data = {
     ...catalogs,
     ClassRegisterSession: classRegisterSessions,
@@ -303,7 +224,7 @@ export async function exportTrainingData(params: ExportTrainingDataParams = {}) 
     TrainingBlock: trainingBlocks,
     TrainingBlockOnCurriculumVersion: trainingBlockOnCvs,
     TrainingBlockSubject: trainingBlockSubjects,
-    SubjectClass: subjectClassRecordsNormalized,
+    SubjectClass: subjectClasses,
     SubjectClassTime: subjectClassTimes,
     FixedClass: fixedClasses,
     _FixedClassToSubjectClass: fixedClassToSubjectClass,
@@ -317,6 +238,7 @@ export async function exportTrainingData(params: ExportTrainingDataParams = {}) 
     StudentSemesterResult: studentSemesterResults,
     Exam: exams,
     ClassSchedule: classSchedules,
+    ...warningScholarship,
   }
 
   const counts = Object.fromEntries(
@@ -324,6 +246,7 @@ export async function exportTrainingData(params: ExportTrainingDataParams = {}) 
   )
 
   const finalSession = targetSession || classRegisterSessions[0]
+  // API sync trả JSON (đã auth). File tải về người dùng dùng luồng async → .dat (gzip+AES).
   return serializeForJson({
     version: EXPORT_TRAINING_DATA_VERSION,
     exportedAt: new Date().toISOString(),

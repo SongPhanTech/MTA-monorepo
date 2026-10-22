@@ -65,11 +65,7 @@ export default function ExportTaskFloatingWidget() {
               <CloseCircleOutlined style={{ color: "#ff4d4f" }} />
             )}
             <Text strong style={{ fontSize: 13 }}>
-              {isRunning
-                ? "Đang xuất dữ liệu đăng ký học"
-                : isSuccess
-                  ? "Đã xuất xong dữ liệu"
-                  : "Lỗi xuất dữ liệu"}
+              {isRunning ? "Đang xuất dữ liệu" : isSuccess ? "Hoàn thành" : "Xuất thất bại"}
             </Text>
           </Flex>
         }
@@ -89,23 +85,18 @@ export default function ExportTaskFloatingWidget() {
             percent={task.progress}
             status={isFailed ? "exception" : isSuccess ? "success" : "active"}
             size="small"
+            showInfo={isRunning}
           />
-          <Text type="secondary" style={{ fontSize: 12 }}>
-            {task.message || "Đang xử lý..."}
-          </Text>
 
           {isSuccess && task.downloadUrl && (
-            <Flex justify="space-between" align="center" style={{ marginTop: 4 }}>
-              <Text type="secondary" style={{ fontSize: 11 }}>
-                File: {((task.fileSize || 0) / (1024 * 1024)).toFixed(1)} MB
-              </Text>
+            <Flex justify="end" align="center" style={{ marginTop: 4 }}>
               <Button
                 type="primary"
                 size="small"
                 icon={<DownloadOutlined />}
                 onClick={() => downloadExportedFile(task.downloadUrl!, task.fileName)}
               >
-                Tải lại file
+                Tải lại
               </Button>
             </Flex>
           )}

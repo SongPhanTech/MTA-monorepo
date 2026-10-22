@@ -218,8 +218,10 @@ function DongBoDuLieuPage() {
 
       const startRes = await startDataSync({
         type: "IMPORT",
-        sessionName: importPreview.sessionName,
-        classRegisterSessionId: importPreview.sessionId,
+        sessionName: importPreview.sessionName || file.name,
+        classRegisterSessionId: importPreview.encrypted
+          ? undefined
+          : importPreview.sessionId || undefined,
         fileName: importFiles[0]?.name,
         fileVersion: importPreview.version,
         sourceExportedAt: importPreview.exportedAt,
@@ -457,10 +459,10 @@ function DongBoDuLieuPage() {
 
                     <div className="mb-4">
                       <Text strong className="block mb-2">
-                        File JSON từ QL đào tạo
+                        File đồng bộ từ QL đào tạo
                       </Text>
                       <Dragger
-                        accept=".json,application/json"
+                        accept=".dat,.sync,.json,application/x-mta-dat,application/octet-stream,application/json"
                         maxCount={1}
                         fileList={importFiles}
                         beforeUpload={() => false}
@@ -476,11 +478,11 @@ function DongBoDuLieuPage() {
                           <FileJson className="size-10 text-green-700" />
                         </p>
                         <p className="ant-upload-text">
-                          Kéo thả hoặc bấm để chọn file JSON xuất từ đợt đăng ký nội bộ
+                          Kéo thả hoặc bấm để chọn file xuất từ đợt đăng ký nội bộ
                         </p>
                         <p className="ant-upload-hint text-gray-500">
-                          Định dạng: export-dot-dang-ky-*.json (phiên bản 1.3.2). File chứa đầy đủ
-                          thông tin đợt đăng ký cần khởi tạo.
+                          Định dạng: export-dot-dang-ky-*.dat (Gzip + AES-256, phiên bản 1.6.0).
+                          File mã hóa — chỉ Portal giải mã được.
                         </p>
                       </Dragger>
                     </div>

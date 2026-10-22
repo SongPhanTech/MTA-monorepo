@@ -1,58 +1,25 @@
 /**
  * Background Worker xuất dữ liệu đào tạo sang JSON.
- * Cập nhật tiến độ realtime vào Redis và ghi file ra đĩa.
+ * Tiến độ + payload thành phẩm đều lưu Redis (không ghi disk, không Map in-process).
  */
-import fs from "node:fs/promises"
-import { constants } from "node:fs"
-import os from "node:os"
-import path from "node:path"
 import dayjs from "dayjs"
 import { prisma } from ".."
 import { loadAllCatalogs } from "./export-all-catalogs"
+import { packSyncPayload, SYNC_FILE_EXT } from "./data-sync-pack"
+import { setExportPayloadBinary } from "./export-payload-store"
 import {
   markExportJobFailed,
   markExportJobSuccess,
   updateExportJobProgress,
 } from "./export-redis-store"
-
-export const EXPORT_OUTPUT_DIR =
-  process.env.EXPORT_OUTPUT_DIR || path.join(process.cwd(), "tmp-exports")
-
-/**
- * Đảm bảo thư mục lưu file xuất tồn tại và có quyền ghi.
- * Tự động fallback sang os.tmpdir() (/tmp trên Linux) nếu cwd không có quyền ghi (ví dụ Docker container non-root bun).
- */
-export async function ensureExportOutputDir(): Promise<string> {
-  const preferredDir = process.env.EXPORT_OUTPUT_DIR || path.join(process.cwd(), "tmp-exports")
-  try {
-    await fs.mkdir(preferredDir, { recursive: true })
-    await fs.access(preferredDir, constants.W_OK)
-    return preferredDir
-  } catch (err) {
-    const fallbackDir = path.join(os.tmpdir(), "tmp-exports")
-    console.warn(
-      `[export-worker] Không thể ghi vào ${preferredDir} (${(err as Error)?.message}). Tự động fallback sang: ${fallbackDir}`
-    )
-    await fs.mkdir(fallbackDir, { recursive: true })
-    return fallbackDir
-  }
-}
-
-const notDeleted = { deletedAt: null } as const
-
-type JoinRow = { A: string; B: string }
-
-function uniqueIds(values: (string | null | undefined)[]): string[] {
-  return [...new Set(values.filter((v): v is string => Boolean(v)))]
-}
-
-async function queryJoinTable(table: string) {
-  try {
-    return await prisma.$queryRawUnsafe<JoinRow[]>(`SELECT "A", "B" FROM "ql-dao-tao"."${table}"`)
-  } catch {
-    return []
-  }
-}
+import {
+  loadSessionScopedEntities,
+  notDeleted,
+  queryJoinTable,
+  uniqueIds,
+} from "./export-session-scope"
+import { loadWarningAndScholarshipData } from "./export-warning-scholarship"
+import { EXPORT_TRAINING_DATA_VERSION } from "./export-training-data"
 
 export async function processExportJob(jobId: string, classRegisterSessionId?: string): Promise<void> {
   try {
@@ -73,9 +40,6 @@ export async function processExportJob(jobId: string, classRegisterSessionId?: s
     if (classRegisterSessionId && !targetSession) {
       throw new Error(`Không tìm thấy đợt đăng ký học với ID: ${classRegisterSessionId}`)
     }
-
-    const targetSemesterId = targetSession?.semesterId
-    const targetCourseIds = targetSession?.trainingCourses?.map((tc) => tc.id) ?? []
 
     // 1. Tải danh mục hệ thống (Catalogs)
     await updateExportJobProgress(jobId, 15, "Đang tải danh mục hệ thống (DM_*)...")
@@ -119,8 +83,16 @@ export async function processExportJob(jobId: string, classRegisterSessionId?: s
       queryJoinTable("_CoRequisiteSubject"),
     ])
 
-    // 3. Tải đợt đăng ký học & Lớp học phần của kỳ đang tải
-    await updateExportJobProgress(jobId, 50, "Đang tải đợt đăng ký và lớp học phần của kỳ...")
+    // 3–5. Đợt ĐK + SV/LHP/điểm
+    // Theo đợt: chỉ SV/lớp niên chế thuộc khóa gắn đợt (không kéo SV khóa khác qua LHP cả kỳ)
+    await updateExportJobProgress(
+      jobId,
+      50,
+      targetSession
+        ? "Đang tải dữ liệu theo khóa của đợt đăng ký..."
+        : "Đang tải đợt đăng ký và lớp học phần..."
+    )
+
     const cleanSession = targetSession
       ? (() => {
           const { trainingCourses: _tc, creditLimit: _cl, semester: _sem, ...rest } = targetSession
@@ -141,170 +113,106 @@ export async function processExportJob(jobId: string, classRegisterSessionId?: s
       ? allSessionToCourses.filter((r) => r.A === classRegisterSessionId)
       : allSessionToCourses
 
-    // Lớp học phần: Chỉ lấy theo kỳ học của đợt (nếu có targetSemesterId)
-    const subjectClasses = targetSemesterId
-      ? await prisma.subjectClass.findMany({
-          where: { semesterId: targetSemesterId, deletedAt: null },
-        })
-      : await prisma.subjectClass.findMany({ where: notDeleted })
-
-    const subjectClassIds = subjectClasses.map((sc) => sc.id)
-
-    const [subjectClassTimes, classSchedules, allFixedClassToSubjectClass, exams] = await Promise.all([
-      targetSemesterId
-        ? (subjectClassIds.length > 0
-            ? prisma.subjectClassTime.findMany({
-                where: { subjectClassId: { in: subjectClassIds }, deletedAt: null },
-              })
-            : Promise.resolve([]))
-        : prisma.subjectClassTime.findMany({ where: notDeleted }),
-      targetSemesterId
-        ? (subjectClassIds.length > 0
-            ? prisma.classSchedule.findMany({
-                where: { subjectClassId: { in: subjectClassIds }, deletedAt: null },
-              })
-            : Promise.resolve([]))
-        : prisma.classSchedule.findMany({ where: notDeleted }),
-      queryJoinTable("_FixedClassToSubjectClass"),
-      (() => {
-        if (!targetSemesterId) return prisma.exam.findMany({ where: notDeleted })
-        const examIds = uniqueIds(subjectClasses.map((sc) => sc.examId))
-        return examIds.length > 0
-          ? prisma.exam.findMany({ where: { id: { in: examIds }, deletedAt: null } })
-          : Promise.resolve([])
-      })(),
-    ])
-
-    const fixedClassToSubjectClass = targetSemesterId
-      ? allFixedClassToSubjectClass.filter((r) => subjectClassIds.includes(r.B))
-      : allFixedClassToSubjectClass
-
-    // Học kỳ và năm học (toàn bộ danh mục học kỳ/năm học để đảm bảo khóa ngoại cho bảng điểm và kết quả học tập)
     const [semesters, schoolYears] = await Promise.all([
       prisma.semester.findMany({ where: notDeleted }),
       prisma.schoolYear.findMany({ where: notDeleted }),
     ])
 
-    const trainingCourses = targetCourseIds.length > 0
-      ? targetSession.trainingCourses
-      : await prisma.trainingCourse.findMany({ where: notDeleted })
+    let trainingCourses: Array<Record<string, unknown> & { id: string }>
+    let trainingCourseRegulations: Awaited<ReturnType<typeof prisma.trainingCourseRegulation.findMany>>
+    let subjectClasses: Awaited<ReturnType<typeof prisma.subjectClass.findMany>>
+    let subjectClassTimes: Awaited<ReturnType<typeof prisma.subjectClassTime.findMany>>
+    let classSchedules: Awaited<ReturnType<typeof prisma.classSchedule.findMany>>
+    let exams: Awaited<ReturnType<typeof prisma.exam.findMany>>
+    let fixedClassToSubjectClass: Awaited<ReturnType<typeof queryJoinTable>>
+    let fixedClasses: Awaited<ReturnType<typeof prisma.fixedClass.findMany>>
+    let students: Awaited<ReturnType<typeof prisma.student.findMany>>
+    let lecturers: Awaited<ReturnType<typeof prisma.lecturer.findMany>>
+    let staff: Awaited<ReturnType<typeof prisma.staff.findMany>>
+    let userProfiles: Awaited<ReturnType<typeof prisma.userProfile.findMany>>
+    let studentSubjectScores: Awaited<ReturnType<typeof prisma.studentSubjectScore.findMany>>
+    let studentSemesterResults: Awaited<ReturnType<typeof prisma.studentSemesterResult.findMany>>
+    let studentIds: string[]
+    let exportedCourseIds: string[]
 
-    const trainingCourseRegulations = targetCourseIds.length > 0
-      ? await prisma.trainingCourseRegulation.findMany({
-          where: { trainingCourseId: { in: targetCourseIds }, deletedAt: null },
-        })
-      : await prisma.trainingCourseRegulation.findMany({ where: notDeleted })
-
-    // 4. Tải Giảng viên, Sinh viên, Cán bộ, Hồ sơ
-    await updateExportJobProgress(jobId, 70, "Đang tải hồ sơ sinh viên, giảng viên và lớp niên chế...")
-    const linkedFixedClassIds = uniqueIds(fixedClassToSubjectClass.map((r) => r.A))
-    const fixedClassOrConditions = [
-      ...(targetCourseIds.length > 0 ? [{ trainingCourseId: { in: targetCourseIds } }] : []),
-      ...(linkedFixedClassIds.length > 0 ? [{ id: { in: linkedFixedClassIds } }] : []),
-    ]
-    const fixedClasses = targetSession
-      ? (fixedClassOrConditions.length > 0
-          ? await prisma.fixedClass.findMany({
-              where: {
-                deletedAt: null,
-                OR: fixedClassOrConditions,
-              },
-            })
-          : [])
-      : await prisma.fixedClass.findMany({ where: notDeleted })
-
-    const fixedClassIds = fixedClasses.map((fc) => fc.id)
-    const studentOrConditions = [
-      ...(fixedClassIds.length > 0 ? [{ fixedClassId: { in: fixedClassIds } }] : []),
-      ...(targetCourseIds.length > 0
-        ? [{ fixedClass: { trainingCourseId: { in: targetCourseIds } } }]
-        : []),
-    ]
-    const students = targetSession
-      ? (studentOrConditions.length > 0
-          ? await prisma.student.findMany({
-              where: {
-                deletedAt: null,
-                OR: studentOrConditions,
-              },
-            })
-          : [])
-      : await prisma.student.findMany({ where: notDeleted })
-
-    const targetLecturerIds = targetSession
-      ? uniqueIds([
-          ...subjectClasses.map((sc) => sc.lecturerId),
-          ...subjectClasses.map((sc) => sc.extraLecturerId),
-          ...subjectClasses.map((sc) => sc.enterGradeLecturerId),
-          ...fixedClasses.map((fc) => fc.lecturerManagementId),
-        ])
-      : []
-
-    const targetStaffIds = targetSession
-      ? uniqueIds([...fixedClasses.map((fc) => fc.staffManagementId)])
-      : []
-
-    const [lecturers, staff] = await Promise.all([
-      targetSession
-        ? (targetLecturerIds.length > 0
-            ? prisma.lecturer.findMany({
-                where: { id: { in: targetLecturerIds }, deletedAt: null },
-              })
-            : Promise.resolve([]))
-        : prisma.lecturer.findMany({ where: notDeleted }),
-      targetSession
-        ? (targetStaffIds.length > 0
-            ? prisma.staff.findMany({
-                where: { id: { in: targetStaffIds }, deletedAt: null },
-              })
-            : Promise.resolve([]))
-        : prisma.staff.findMany({ where: notDeleted }),
-    ])
-
-    const userProfileIds = uniqueIds([
-      ...lecturers.map((l) => l.userProfileId),
-      ...students.map((s) => s.userProfileId),
-      ...staff.map((s) => s.userProfileId),
-    ])
-
-    const userProfiles: any[] = []
-    const PROFILE_CHUNK = 5000
-    for (let i = 0; i < userProfileIds.length; i += PROFILE_CHUNK) {
-      const chunk = userProfileIds.slice(i, i + PROFILE_CHUNK)
-      const rows = await prisma.userProfile.findMany({
-        where: { id: { in: chunk }, deletedAt: null },
+    if (targetSession) {
+      await updateExportJobProgress(jobId, 70, "Đang lọc SV/LHP/điểm theo khóa của đợt...")
+      const scoped = await loadSessionScopedEntities(targetSession)
+      trainingCourses = scoped.trainingCourses
+      trainingCourseRegulations = scoped.trainingCourseRegulations
+      fixedClasses = scoped.fixedClasses
+      students = scoped.students
+      subjectClasses = scoped.subjectClasses
+      subjectClassTimes = scoped.subjectClassTimes
+      classSchedules = scoped.classSchedules
+      exams = scoped.exams
+      fixedClassToSubjectClass = scoped.fixedClassToSubjectClass
+      lecturers = scoped.lecturers
+      staff = scoped.staff
+      userProfiles = scoped.userProfiles
+      studentSubjectScores = scoped.studentSubjectScores
+      studentSemesterResults = scoped.studentSemesterResults
+      studentIds = scoped.studentIds
+      exportedCourseIds = scoped.targetCourseIds
+    } else {
+      trainingCourses = await prisma.trainingCourse.findMany({ where: notDeleted })
+      trainingCourseRegulations = await prisma.trainingCourseRegulation.findMany({
+        where: notDeleted,
       })
-      userProfiles.push(...rows)
+
+      subjectClasses = await prisma.subjectClass.findMany({ where: notDeleted })
+      const [times, schedules, allFixedClassToSubjectClass, examRows] = await Promise.all([
+        prisma.subjectClassTime.findMany({ where: notDeleted }),
+        prisma.classSchedule.findMany({ where: notDeleted }),
+        queryJoinTable("_FixedClassToSubjectClass"),
+        prisma.exam.findMany({ where: notDeleted }),
+      ])
+      subjectClassTimes = times
+      classSchedules = schedules
+      fixedClassToSubjectClass = allFixedClassToSubjectClass
+      exams = examRows
+
+      await updateExportJobProgress(jobId, 70, "Đang tải hồ sơ sinh viên, giảng viên và lớp niên chế...")
+      fixedClasses = await prisma.fixedClass.findMany({ where: notDeleted })
+      students = await prisma.student.findMany({ where: notDeleted })
+      lecturers = await prisma.lecturer.findMany({ where: notDeleted })
+      staff = await prisma.staff.findMany({ where: notDeleted })
+
+      const userProfileIds = uniqueIds([
+        ...lecturers.map((l) => l.userProfileId),
+        ...students.map((s) => s.userProfileId),
+        ...staff.map((s) => s.userProfileId),
+      ])
+      userProfiles = []
+      const PROFILE_CHUNK = 5000
+      for (let i = 0; i < userProfileIds.length; i += PROFILE_CHUNK) {
+        const chunk = userProfileIds.slice(i, i + PROFILE_CHUNK)
+        const rows = await prisma.userProfile.findMany({
+          where: { id: { in: chunk }, deletedAt: null },
+        })
+        userProfiles.push(...rows)
+      }
+
+      await updateExportJobProgress(jobId, 85, "Đang tải điểm môn học và kết quả học kỳ...")
+      studentIds = uniqueIds(students.map((s) => s.id))
+      exportedCourseIds = trainingCourses.map((tc) => tc.id)
+      ;[studentSubjectScores, studentSemesterResults] = await Promise.all([
+        prisma.studentSubjectScore.findMany({ where: notDeleted }),
+        prisma.studentSemesterResult.findMany({ where: notDeleted }),
+      ])
     }
 
-    // 5. Tải Bảng điểm & Kết quả học tập
-    await updateExportJobProgress(jobId, 85, "Đang tải điểm môn học và kết quả học kỳ...")
-    const studentIds = uniqueIds(students.map((s) => s.id))
-    const [studentSubjectScores, studentSemesterResults] = await Promise.all([
-      targetSession
-        ? (studentIds.length > 0
-            ? prisma.studentSubjectScore.findMany({
-                where: { studentId: { in: studentIds }, deletedAt: null },
-              })
-            : Promise.resolve([]))
-        : prisma.studentSubjectScore.findMany({ where: notDeleted }),
-      targetSession
-        ? (studentIds.length > 0
-            ? prisma.studentSemesterResult.findMany({
-                where: { studentId: { in: studentIds }, deletedAt: null },
-              })
-            : Promise.resolve([]))
-        : prisma.studentSemesterResult.findMany({ where: notDeleted }),
-    ])
+    await updateExportJobProgress(jobId, 88, "Đang tải cảnh báo học tập / học đường / học bổng...")
+    const warningScholarship = await loadWarningAndScholarshipData({
+      studentIds,
+      trainingCourseIds: exportedCourseIds,
+      scoped: Boolean(targetSession),
+    })
 
-    // 6. Chuẩn bị đối tượng dữ liệu tổng hợp
-    await updateExportJobProgress(jobId, 92, "Đang đóng gói và định dạng file JSON...")
+    // 6. Đóng gói JSON → Gzip → AES-256-GCM (.dat) → Redis
+    await updateExportJobProgress(jobId, 92, "Đang đóng gói, nén và mã hóa...")
 
-    const subjectClassRecordsNormalized = subjectClasses.map((sc) => ({
-      ...sc,
-      scoreLinkSubjectVersionId: null,
-    }))
-
+    // SubjectVersion được import trước SubjectClass — giữ scoreLinkSubjectVersionId
     const data: Record<string, unknown[]> = {
       ...catalogs,
       ClassRegisterSession: classRegisterSessions,
@@ -328,7 +236,7 @@ export async function processExportJob(jobId: string, classRegisterSessionId?: s
       TrainingBlock: trainingBlocks,
       TrainingBlockOnCurriculumVersion: trainingBlockOnCvs,
       TrainingBlockSubject: trainingBlockSubjects,
-      SubjectClass: subjectClassRecordsNormalized,
+      SubjectClass: subjectClasses,
       SubjectClassTime: subjectClassTimes,
       FixedClass: fixedClasses,
       _FixedClassToSubjectClass: fixedClassToSubjectClass,
@@ -342,6 +250,7 @@ export async function processExportJob(jobId: string, classRegisterSessionId?: s
       StudentSemesterResult: studentSemesterResults,
       Exam: exams,
       ClassSchedule: classSchedules,
+      ...warningScholarship,
     }
 
     const counts = Object.fromEntries(
@@ -349,8 +258,9 @@ export async function processExportJob(jobId: string, classRegisterSessionId?: s
     )
 
     const finalSession = targetSession || classRegisterSessions[0]
+    // Toàn vẹn + bảo mật: AES-GCM (không xuất JSON plaintext). HMAC trong JSON không còn cần.
     const payload = {
-      version: "1.4.0",
+      version: EXPORT_TRAINING_DATA_VERSION,
       exportedAt: new Date().toISOString(),
       filters: {
         scope: classRegisterSessionId ? ("session" as const) : ("full" as const),
@@ -366,61 +276,34 @@ export async function processExportJob(jobId: string, classRegisterSessionId?: s
       data,
     }
 
-    // 7. Ghi file trực tiếp ra ổ đĩa
-    const outputDir = await ensureExportOutputDir()
     const stamp = dayjs().format("YYYYMMDD-HHmm")
     let fileName: string
     if (classRegisterSessionId && finalSession?.name) {
-      const safeName = finalSession.name.replace(/[\\/:*?"<>|\s]+/g, "_")
-      fileName = `export-dot-dang-ky-${safeName}-${stamp}-${jobId.slice(0, 8)}.json`
+      const safeName = finalSession.name
+        .normalize("NFKD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^\w.-]+/g, "_")
+        .replace(/^_+|_+$/g, "")
+        .slice(0, 60) || "dot"
+      fileName = `export-dot-dang-ky-${safeName}-${stamp}-${jobId.slice(0, 8)}${SYNC_FILE_EXT}`
     } else {
-      fileName = `export-toan-bo-du-lieu-${stamp}-${jobId.slice(0, 8)}.json`
+      fileName = `export-toan-bo-du-lieu-${stamp}-${jobId.slice(0, 8)}${SYNC_FILE_EXT}`
     }
-    const filePath = path.join(outputDir, fileName)
 
-    await updateExportJobProgress(jobId, 96, "Đang ghi file ra ổ đĩa...")
-    await fs.writeFile(filePath, JSON.stringify(payload), "utf-8")
+    await updateExportJobProgress(jobId, 96, "Đang nén/mã hóa và lưu Redis...")
+    const json = JSON.stringify(payload)
+    const packed = packSyncPayload(json)
+    const fileSize = await setExportPayloadBinary(jobId, packed, fileName)
 
-    const stat = await fs.stat(filePath)
-    const fileSize = stat.size
-
-    // 8. Đánh dấu thành công
-    await markExportJobSuccess(jobId, filePath, fileName, fileSize, counts)
-    console.log(`[export-worker] Đã hoàn tất job ${jobId} -> File: ${filePath} (${(fileSize / (1024 * 1024)).toFixed(2)} MB)`)
-
-    // 9. Tự động dọn dẹp các file xuất tạm cũ, chỉ giữ lại 5 file mới nhất
-    await cleanupOldExports(outputDir)
+    await markExportJobSuccess(jobId, fileName, fileSize, counts)
+    console.log(
+      `[export-worker] Đã hoàn tất job ${jobId} -> ${fileName} ` +
+        `(packed ${(fileSize / (1024 * 1024)).toFixed(2)} MB từ JSON ~${(Buffer.byteLength(json) / (1024 * 1024)).toFixed(1)} MB, redis)`
+    )
   } catch (error) {
     const errorMsg = error instanceof Error ? error.message : String(error)
     console.error(`[export-worker] Lỗi xuất dữ liệu job ${jobId}:`, error)
     await markExportJobFailed(jobId, errorMsg)
-  }
-}
-
-async function cleanupOldExports(outputDir?: string) {
-  try {
-    const dir = outputDir || (await ensureExportOutputDir())
-    const files = await fs.readdir(dir)
-    const jsonFiles = files.filter(
-      (f) =>
-        (f.startsWith("export-toan-bo-du-lieu-") || f.startsWith("export-dot-dang-ky-")) &&
-        f.endsWith(".json")
-    )
-    if (jsonFiles.length > 5) {
-      const fileStats = await Promise.all(
-        jsonFiles.map(async (file) => {
-          const stat = await fs.stat(path.join(dir, file)).catch(() => null)
-          return { file, mtime: stat?.mtimeMs || 0 }
-        })
-      )
-      fileStats.sort((a, b) => a.mtime - b.mtime) // Cũ nhất đứng đầu
-      const toDelete = fileStats.slice(0, fileStats.length - 5)
-      for (const { file } of toDelete) {
-        await fs.unlink(path.join(dir, file)).catch(() => {})
-      }
-    }
-  } catch {
-    // ignore cleanup errors
   }
 }
 

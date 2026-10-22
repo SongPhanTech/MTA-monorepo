@@ -195,18 +195,22 @@ export default function ClassRegisterSession() {
 
   async function handleExportRawData(sessionId?: string, sessionName?: string) {
     try {
-      const isSingle = Boolean(sessionId)
       message.loading({
-        content: isSingle
-          ? `Đã kích hoạt xuất dữ liệu cho đợt "${sessionName || sessionId}". Bạn có thể tiếp tục làm việc bình thường!`
-          : "Đã kích hoạt xuất toàn bộ dữ liệu ngầm. Bạn có thể tiếp tục làm việc bình thường!",
+        content: "Đang xuất dữ liệu",
         key: "global-export-task",
-        duration: 3,
+        duration: 2,
       })
 
-      const res = await exportRawDataAsync((sessionId ? { classRegisterSessionId: sessionId } : {}))
+      const res = await exportRawDataAsync(sessionId ? { classRegisterSessionId: sessionId } : {})
       if (res.status === 202 && res.data.jobId) {
         trackNewExportJob(res.data.jobId, sessionId, sessionName)
+      } else if (res.status === 429) {
+        message.warning({
+          content:
+            (res.data as { message?: string })?.message ||
+            "Đang có quá nhiều tiến trình xuất. Vui lòng đợi rồi thử lại.",
+          key: "global-export-task",
+        })
       } else {
         message.error({
           content: "Không thể khởi tạo tiến trình xuất dữ liệu",
@@ -316,12 +320,12 @@ export default function ClassRegisterSession() {
                     <Tooltip
                       title={
                         isGlobalProcessing
-                          ? `Đang chạy ngầm (${exportJobState.progress}%): ${exportJobState.message}. Bạn vẫn có thể thao tác song song bình thường.`
+                          ? "Đang xuất dữ liệu"
                           : isGlobalSuccess
-                            ? `Đã xuất xong (${((exportJobState.fileSize || 0) / (1024 * 1024)).toFixed(1)} MB). Bấm để tải lại file.`
+                            ? "Hoàn thành"
                             : isGlobalFailed
-                              ? `Lỗi xuất: ${exportJobState.error}. Bấm để thử lại.`
-                              : "Xuất toàn bộ dữ liệu ra file JSON để đồng bộ sang internet"
+                              ? "Xuất thất bại"
+                              : "Xuất toàn bộ dữ liệu ra internet"
                       }
                     >
                       <Button
@@ -364,9 +368,7 @@ export default function ClassRegisterSession() {
                         }
                         onClick={() => {
                           if (exportJobState.status === "PENDING" || exportJobState.status === "PROCESSING") {
-                            message.info(
-                              `Tiến trình xuất đang chạy ngầm (${exportJobState.progress}%). Bạn vẫn có thể làm việc khác song song!`
-                            )
+                            message.info("Đang xuất dữ liệu")
                             return
                           }
                           if (isGlobalSuccess && exportJobState.downloadUrl) {
@@ -377,11 +379,11 @@ export default function ClassRegisterSession() {
                         }}
                       >
                         {isGlobalProcessing
-                          ? `Đang xuất dữ liệu (${exportJobState.progress}%)`
+                          ? "Đang xuất dữ liệu"
                           : isGlobalSuccess
-                            ? `Hoàn tất (100%) - Bấm để tải lại`
+                            ? "Hoàn thành"
                             : isGlobalFailed
-                              ? `Lỗi xuất dữ liệu (Thử lại)`
+                              ? "Thử lại"
                               : "Xuất toàn bộ dữ liệu ra internet"}
                       </Button>
                     </Tooltip>
@@ -533,10 +535,7 @@ export default function ClassRegisterSession() {
 
                       if (isThisRowExporting) {
                         return (
-                          <Tooltip
-                            title={`Đang xuất dữ liệu (${exportJobState.progress}%): ${exportJobState.message}`}
-                            placement="top"
-                          >
+                          <Tooltip title="Đang xuất dữ liệu" placement="top">
                             <span
                               className="inline-flex items-center gap-1 font-semibold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-300 cursor-wait select-none"
                               onClick={(e) => e.stopPropagation()}
@@ -550,7 +549,7 @@ export default function ClassRegisterSession() {
 
                       if (isThisRowSuccess) {
                         return (
-                          <Tooltip title="Xuất thành công! Bấm để tải lại file" placement="top">
+                          <Tooltip title="Hoàn thành" placement="top">
                             <span
                               className="inline-flex items-center gap-1 font-medium text-green-700 bg-green-50 px-1.5 py-0.5 rounded border border-green-300 cursor-pointer select-none hover:bg-green-100"
                               onClick={(e) => {
@@ -561,7 +560,7 @@ export default function ClassRegisterSession() {
                               }}
                             >
                               <CheckCircleOutlined className="text-xs text-green-600" />
-                              <span className="text-xs">Tải lại</span>
+                              <span className="text-xs">Hoàn thành</span>
                             </span>
                           </Tooltip>
                         )
@@ -569,7 +568,7 @@ export default function ClassRegisterSession() {
 
                       if (isThisRowFailed) {
                         return (
-                          <Tooltip title={`Lỗi xuất: ${exportJobState.error}. Bấm để thử lại`} placement="top">
+                          <Tooltip title="Xuất thất bại" placement="top">
                             <span
                               className="inline-flex items-center gap-1 font-medium text-red-600 bg-red-50 px-1.5 py-0.5 rounded border border-red-300 cursor-pointer select-none hover:bg-red-100"
                               onClick={(e) => {
@@ -593,9 +592,7 @@ export default function ClassRegisterSession() {
                                 exportJobState.status === "PENDING" ||
                                 exportJobState.status === "PROCESSING"
                               ) {
-                                message.info(
-                                  `Tiến trình xuất đang chạy ngầm (${exportJobState.progress}%). Vui lòng đợi hoàn tất!`
-                                )
+                                message.info("Đang xuất dữ liệu")
                                 return
                               }
                               void handleExportRawData(record.id, record.name)

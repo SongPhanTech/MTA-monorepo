@@ -1,5 +1,6 @@
 import { Store, useStore } from "@tanstack/react-store"
 import { getExportStatus } from "@workspace/libs/api/export-training-data"
+import { fetchInstance } from "@workspace/libs/api/custom-instance"
 import { message } from "antd"
 
 export type ExportTaskState = {
@@ -70,15 +71,30 @@ function saveState(state: ExportTaskState) {
 
 let pollingInterval: NodeJS.Timeout | null = null
 
-export function downloadExportedFile(downloadUrl: string, fileName?: string) {
+/** Tải qua fetch + Bearer token (không dùng <a href> — endpoint download yêu cầu auth). */
+export async function downloadExportedFile(downloadUrl: string, fileName?: string) {
   if (typeof window === "undefined") return
   const baseApi = process.env.NEXT_PUBLIC_API_LMS_BASE_URL || "http://localhost:3002"
-  const link = document.createElement("a")
-  link.href = `${baseApi}${downloadUrl}`
-  link.download = fileName || "export-toan-bo-du-lieu.json"
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
+  const url = downloadUrl.startsWith("http") ? downloadUrl : `${baseApi}${downloadUrl}`
+  try {
+    const res = await fetchInstance(url, { method: "GET" })
+    if (!res.ok) {
+      const text = await res.text().catch(() => "")
+      message.error(text || `Không tải được file (HTTP ${res.status})`)
+      return
+    }
+    const blob = await res.blob()
+    const objectUrl = URL.createObjectURL(blob)
+    const link = document.createElement("a")
+    link.href = objectUrl
+    link.download = fileName || "export-toan-bo-du-lieu.dat"
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(objectUrl)
+  } catch (e) {
+    message.error(e instanceof Error ? e.message : "Không tải được file xuất dữ liệu")
+  }
 }
 
 export function startPolling(jobId: string) {
@@ -97,7 +113,12 @@ export function startPolling(jobId: string) {
           sessionName: current.sessionName,
           status: data.status,
           progress: data.progress,
-          message: data.message,
+          message:
+            data.status === "SUCCESS"
+              ? "Hoàn thành"
+              : data.status === "FAILED"
+                ? "Xuất thất bại"
+                : "Đang xuất dữ liệu",
           fileName: data.fileName,
           fileSize: data.fileSize,
           downloadUrl: data.downloadUrl,
@@ -111,11 +132,10 @@ export function startPolling(jobId: string) {
           if (pollingInterval) clearInterval(pollingInterval)
           pollingInterval = null
 
-          const mb = ((data.fileSize || 0) / (1024 * 1024)).toFixed(1)
           message.success({
-            content: `Xuất dữ liệu ra internet thành công (${mb} MB)! Đang tải file...`,
+            content: "Hoàn thành",
             key: "global-export-task",
-            duration: 6,
+            duration: 3,
           })
 
           if (data.downloadUrl) {
@@ -143,9 +163,9 @@ export function startPolling(jobId: string) {
           pollingInterval = null
 
           message.error({
-            content: data.message || "Xuất dữ liệu thất bại",
+            content: "Xuất thất bại",
             key: "global-export-task",
-            duration: 6,
+            duration: 3,
           })
 
           setTimeout(() => {
@@ -178,7 +198,7 @@ export function trackNewExportJob(jobId: string, sessionId?: string | null, sess
     sessionName: sessionName || null,
     status: "PROCESSING",
     progress: 5,
-    message: "Đã tạo tác vụ nền, Worker đang tải dữ liệu...",
+    message: "Đang xuất dữ liệu",
   }
   exportStore.setState(() => initial)
   saveState(initial)

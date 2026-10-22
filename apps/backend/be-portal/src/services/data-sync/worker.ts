@@ -5,7 +5,7 @@
  * Retry transient (DB timeout) tối đa DATA_SYNC_MAX_ATTEMPTS lần rồi đẩy DLQ.
  */
 import type { PrismaClient } from "@workspace/db"
-import { removeImportFile } from "./import-file-store"
+import { removeImportPayload } from "./import-file-store"
 import {
   DATA_SYNC_CONSUMER_GROUP,
   DATA_SYNC_IMPORT_TOPIC,
@@ -15,7 +15,7 @@ import {
   type DataSyncImportJob,
 } from "./kafka-queue"
 import { getKafka } from "../class-registration/kafka-queue"
-import { processImportFromFile } from "../import-training-data"
+import { processImportFromRedis } from "../import-training-data"
 import {
   cleanupPendingImportsOnBoot,
   markDataSyncHistoryFailed,
@@ -49,13 +49,31 @@ async function handleMessage(value: Buffer | null): Promise<void> {
     return
   }
 
-  if (!job.syncHistoryId || !job.filePath) {
-    console.warn("[data-sync-worker] message thiếu syncHistoryId/filePath", job)
+  if (!job.syncHistoryId) {
+    console.warn("[data-sync-worker] message thiếu syncHistoryId", job)
     return
   }
 
+  // Kafka rebalance có thể giao lại message đã xử lý — bỏ qua nếu đã SUCCESS
+  try {
+    const { prisma } = await import("../../prisma")
+    const existing = await prisma.dataSyncHistory.findUnique({
+      where: { id: job.syncHistoryId },
+      select: { status: true },
+    })
+    if (existing?.status === "SUCCESS") {
+      console.log(
+        `[data-sync-worker] bỏ qua history=${job.syncHistoryId} (đã SUCCESS, có thể do Kafka redelivery)`
+      )
+      await removeImportPayload(job.syncHistoryId)
+      return
+    }
+  } catch (e) {
+    console.warn("[data-sync-worker] không kiểm tra được status hiện tại:", e)
+  }
+
   console.log(
-    `[data-sync-worker] bắt đầu history=${job.syncHistoryId} file=${job.filePath} attempts=${job.attempts}`
+    `[data-sync-worker] bắt đầu history=${job.syncHistoryId} file=${job.fileName || "(redis)"} attempts=${job.attempts}`
   )
 
   try {
@@ -63,7 +81,7 @@ async function handleMessage(value: Buffer | null): Promise<void> {
       job.syncHistoryId,
       `Đang xử lý file${job.fileName ? ` ${job.fileName}` : ""}: đọc dữ liệu và cập nhật cơ sở dữ liệu...`
     )
-    const result = await processImportFromFile(job.filePath, async (msg) => {
+    const result = await processImportFromRedis(job.syncHistoryId, async (msg) => {
       await markDataSyncHistoryProcessing(job.syncHistoryId, msg).catch(() => undefined)
     })
     const description =
@@ -74,7 +92,7 @@ async function handleMessage(value: Buffer | null): Promise<void> {
       classRegisterSessionId: result.sessionId,
       description,
     })
-    await removeImportFile(job.filePath)
+    await removeImportPayload(job.syncHistoryId)
     console.log(
       `[data-sync-worker] xong history=${job.syncHistoryId} session=${result.sessionName} warnings=${result.warnings.length}`
     )
@@ -97,7 +115,7 @@ async function handleMessage(value: Buffer | null): Promise<void> {
     await markDataSyncHistoryFailed(job.syncHistoryId, message).catch((e) => {
       console.error("[data-sync-worker] không ghi được FAILED", e)
     })
-    await removeImportFile(job.filePath)
+    await removeImportPayload(job.syncHistoryId)
   }
 }
 

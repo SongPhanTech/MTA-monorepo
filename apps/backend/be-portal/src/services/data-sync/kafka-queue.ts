@@ -4,8 +4,8 @@
  * - Topic chính: data_sync_import_queue
  * - Topic DLQ:   data_sync_import_queue_dlq
  *
- * Message chỉ chứa syncHistoryId + đường dẫn file (không đẩy JSON lớn lên Kafka).
- * File nằm thư mục DATA_SYNC_IMPORT_DIR (volume dùng chung nếu API và worker tách container).
+ * Message chỉ chứa syncHistoryId (+ fileName). JSON lớn nằm Redis:
+ * portal:import_payload:{syncHistoryId}
  */
 import { hasKafkaBrokers, produceKafkaMessage } from "../class-registration/kafka-queue"
 
@@ -19,7 +19,8 @@ export const DATA_SYNC_KAFKA_ENABLED = hasKafkaBrokers && process.env.DATA_SYNC_
 
 export type DataSyncImportJob = {
   syncHistoryId: string
-  filePath: string
+  /** @deprecated Payload đã chuyển Redis; giữ optional cho message cũ trên queue */
+  filePath?: string
   fileName?: string
   timestamp: string
   attempts: number
