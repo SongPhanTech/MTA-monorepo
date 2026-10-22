@@ -34,6 +34,7 @@ import ModalPrintPhuLucVb from "./modal-print-phu-luc-vb"
 import ModalPrintPhoiBang from "./modal-print-phoi-bang"
 import ModalPrintDecision from "./modal-print-quyet-dinh-hoi-dong"
 import ModalPrintSupervisorGuide from "./modal-print-quyet-dinh-huong-dan"
+import ModalPrintBangDiemDuKhoa from "./modal-print-bang-diem-du-khoa"
 import ModalGraduationCriteria from "./modal-tieu-chi-xet-tn"
 import ModalTraCuuVanBang from "./modal-tra-cuu-van-bang"
 import ModalVanBang from "./modal-van-bang"
@@ -228,6 +229,7 @@ export {
   PutTrainingLevel,
   PutClassRegisterSession,
   ModalPrintSupervisorGuide,
+  ModalPrintBangDiemDuKhoa,
   NhapDiemThuCong,
   PutChuanDauRaModal,
   MoKhoaNhapDiem,
