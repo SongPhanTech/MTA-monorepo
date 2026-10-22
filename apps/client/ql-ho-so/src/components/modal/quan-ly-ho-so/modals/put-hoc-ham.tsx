@@ -3,6 +3,7 @@ import FormItem from "@components/commons/form-item"
 import PutFormModal from "@components/commons/put-modal"
 import Select from "@components/commons/select"
 import useSpinner from "@hooks/spinner"
+import { toNullableISO } from "@lib/utils"
 import type { HocHam } from "@workspace/db"
 import { useFindManyDM_HocHam } from "@workspace/db/hooks"
 import { Col, Form, Input, InputNumber, message } from "antd"
@@ -32,12 +33,14 @@ export default function PutHocHamModal() {
     if (!output) return
     try {
       showSpinner()
-      const dataToSave: HocHam = {
+      const dataToSave = {
         ...output,
+        from: toNullableISO(output.from),
+        to: toNullableISO(output.to),
       }
 
       if (input?.onSave) {
-        input.onSave(dataToSave)
+        input.onSave(dataToSave as HocHam)
       }
       message.success(isEdit ? "Cập nhật học hàm thành công" : "Thêm mới học hàm thành công")
       onClose()
@@ -54,8 +57,8 @@ export default function PutHocHamModal() {
       if (Object.keys(formData).length > 0) {
         form.setFieldsValue({
           ...formData,
-          from: formData.from ? dayjs(formData.from) : "",
-          to: formData.to ? dayjs(formData.to) : "",
+          from: formData.from ? dayjs(formData.from) : null,
+          to: formData.to ? dayjs(formData.to) : null,
         })
       }
     }

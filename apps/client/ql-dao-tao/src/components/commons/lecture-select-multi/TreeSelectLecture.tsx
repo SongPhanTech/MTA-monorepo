@@ -7,37 +7,45 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import type { TreeNodeType } from "@/utils/convertOrganizationToTree"
 import { whereOrganization } from "@workspace/libs/constants"
 
-// Hàm tạo cây đơn vị và giảng viên
+type OrgNode = { id: string; name: string | null; parentId: string | null }
+type LecturerNode = {
+  id: string
+  userProfile: { fullName: string; sDM_DonViId: string | null }
+}
+
+function groupByParent<T>(items: T[], getParentId: (item: T) => string | null): Map<string | null, T[]> {
+  const map = new Map<string | null, T[]>()
+  for (const item of items) {
+    const key = getParentId(item)
+    const list = map.get(key)
+    if (list) list.push(item)
+    else map.set(key, [item])
+  }
+  return map
+}
+
 function buildOrgAndLectureTree(
-  list: Array<{ id: string; name: string | null; parentId: string | null }>,
-  lecturers: Array<{
-    id: string
-    userProfile: { fullName: string; sDM_DonViId: string | null }
-  }>,
+  orgsByParent: Map<string | null, OrgNode[]>,
+  lecturersByOrg: Map<string | null, LecturerNode[]>,
   parentId: string | null = null
 ): Array<TreeNodeType> {
-  const organizationLecturers = lecturers
-    .filter((lecturer) => lecturer.userProfile?.sDM_DonViId === parentId)
-    .map((lecturer) => ({
-      title: lecturer.userProfile?.fullName || "Giảng viên không tên",
-      value: lecturer.id,
-      selectable: true,
-      icon: <UserIcon size={16} className="pb-1" />,
-    }))
+  const organizationLecturers = (lecturersByOrg.get(parentId) ?? []).map((lecturer) => ({
+    title: lecturer.userProfile?.fullName || "Giảng viên không tên",
+    value: lecturer.id,
+    selectable: true,
+    icon: <UserIcon size={16} className="pb-1" />,
+  }))
 
-  const children = list
-    .filter((item) => (item.parentId ?? null) === parentId)
-    .map((item) => ({
-      title: item.name || "Đơn vị không tên",
-      value: item.id,
-      selectable: false,
-      children: buildOrgAndLectureTree(list, lecturers, item.id),
-    }))
+  const children = (orgsByParent.get(parentId) ?? []).map((item) => ({
+    title: item.name || "Đơn vị không tên",
+    value: item.id,
+    selectable: false,
+    children: buildOrgAndLectureTree(orgsByParent, lecturersByOrg, item.id),
+  }))
 
   return [...organizationLecturers, ...children]
 }
 
-// để auto-expand cho thấy ngay giảng viên đã chọn
 function findAncestorKeys(
   nodes: Array<TreeNodeType>,
   targetValue: string,
@@ -53,11 +61,10 @@ function findAncestorKeys(
   return null
 }
 
-// Define props for our custom component
 type LectureTreeSelectProps = {
-  organizationId?: string | null // ID của tổ chức để lọc giảng viên
-  ignoreOrgIds?: string[] // Danh sách ID tổ chức để bỏ qua
-  ignoreLectureIds?: string[] // Danh sách ID giảng viên để bỏ qua
+  organizationId?: string | null
+  ignoreOrgIds?: string[]
+  ignoreLectureIds?: string[]
 } & TreeSelectProps
 
 const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
@@ -65,54 +72,93 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
   style = { width: "100%" },
   dropdownStyle = { maxHeight: 400, overflow: "auto", width: 600 },
   organizationId,
+  ignoreOrgIds,
+  ignoreLectureIds,
+  onDropdownVisibleChange,
+  defaultOpen,
+  open,
   ...rest
 }) => {
   const [isSelectAllOrgs, setIsSelectAllOrgs] = useState(false)
   const lastAutoAdjustedValue = useRef<string | undefined>(undefined)
   const [expandedKeys, setExpandedKeys] = useState<string[]>([])
+  const [dropdownOpen, setDropdownOpen] = useState(!!open || !!defaultOpen)
 
-  // Lấy danh sách Organization (Khoa và Bộ môn)
   const {
     data: organizations = [],
     isLoading: organizationsLoading,
     error: organizationsError,
-  } = useFindManyDM_DonVi({
-    where: whereOrganization,
-    orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
-  })
+  } = useFindManyDM_DonVi(
+    {
+      where: whereOrganization,
+      orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
+    },
+    { refetchOnWindowFocus: false }
+  )
 
-  // Lấy danh sách Lecturer
   const {
     data: lecturers = [],
     isLoading: lecturersLoading,
     error: lecturersError,
-  } = useFindManyLecturer({
-    include: {
-      userProfile: {
-        select: {
-          id: true,
-          code: true,
-          fullname: true,
-          sDM_DonViId: true,
-          academicRankType: true,
-          academicDegreeType: true,
+  } = useFindManyLecturer(
+    {
+      include: {
+        userProfile: {
+          select: {
+            id: true,
+            code: true,
+            fullname: true,
+            sDM_DonViId: true,
+            academicRankType: true,
+            academicDegreeType: true,
+          },
         },
       },
-    },
-    where: {
-      userProfile: {
+      where: {
+        userProfile: {
+          active: true,
+        },
         active: true,
       },
-      active: true,
     },
-  })
+    { refetchOnWindowFocus: false }
+  )
 
-  // Tạo treeData từ organizations và lecturers
-  const treeData: TreeNodeType[] = useMemo(() => {
-    if (!organizations.length) return []
+  const ignoreOrgKey = ignoreOrgIds?.join("\0") ?? ""
+  const ignoreLectureKey = ignoreLectureIds?.join("\0") ?? ""
+
+  const lecturerNameById = useMemo(() => {
+    const map = new Map<string, string>()
+    for (const lec of lecturers) {
+      map.set(lec.id, formatLecturerName(lec) || "Giảng viên không tên")
+    }
+    return map
+  }, [lecturers])
+
+  const selectedValues = useMemo(() => {
+    const value = rest.value
+    if (value == null || value === "") return [] as string[]
+    return (Array.isArray(value) ? value : [value]).filter(Boolean) as string[]
+  }, [rest.value])
+
+  const closedTreeData = useMemo(
+    () =>
+      selectedValues.map((id) => ({
+        title: lecturerNameById.get(id) || id,
+        value: id,
+        selectable: true,
+      })),
+    [selectedValues, lecturerNameById]
+  )
+
+  const fullTreeData: TreeNodeType[] = useMemo(() => {
+    if (!dropdownOpen || !organizations.length) return []
+
+    const ignoreOrgSet = ignoreOrgKey ? new Set(ignoreOrgKey.split("\0")) : null
+    const ignoreLectureSet = ignoreLectureKey ? new Set(ignoreLectureKey.split("\0")) : null
 
     const mappedOrgs = organizations
-      .filter((org) => (rest.ignoreOrgIds ? !rest.ignoreOrgIds.includes(org.Id) : true))
+      .filter((org) => (ignoreOrgSet ? !ignoreOrgSet.has(org.Id) : true))
       .map((org) => ({
         id: org.Id,
         name: org.sTen,
@@ -120,7 +166,7 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
       }))
 
     const mappedLecturers = lecturers
-      .filter((lec) => (rest.ignoreLectureIds ? !rest.ignoreLectureIds.includes(lec.id) : true))
+      .filter((lec) => (ignoreLectureSet ? !ignoreLectureSet.has(lec.id) : true))
       .map((lec) => ({
         id: lec.id,
         userProfile: {
@@ -130,22 +176,24 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
       }))
 
     return buildOrgAndLectureTree(
-      mappedOrgs,
-      mappedLecturers,
+      groupByParent(mappedOrgs, (org) => org.parentId ?? null),
+      groupByParent(mappedLecturers, (lec) => lec.userProfile?.sDM_DonViId ?? null),
       isSelectAllOrgs ? null : (organizationId ?? null)
     )
   }, [
+    dropdownOpen,
     organizations,
     lecturers,
     organizationId,
-    rest.ignoreOrgIds,
-    rest.ignoreLectureIds,
+    ignoreOrgKey,
+    ignoreLectureKey,
     isSelectAllOrgs,
   ])
 
+  const treeData = dropdownOpen ? fullTreeData : closedTreeData
+
   useEffect(() => {
     const selectedValue = rest.value as string | undefined
-    // Chưa load xong lecturers thì khoan xử lý (không đánh dấu đã xử lý)
     if (!selectedValue || !organizationId || lecturers.length === 0) return
     if (selectedValue === lastAutoAdjustedValue.current) return
     lastAutoAdjustedValue.current = selectedValue
@@ -157,24 +205,21 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
     }
   }, [rest.value, lecturers, organizationId])
 
-  // Auto-expand các đơn vị cha chứa giảng viên đã chọn để hiện ngay khi mở dropdown
   useEffect(() => {
     const selectedValue = rest.value as string | undefined
-    if (!selectedValue || !treeData.length) {
-      setExpandedKeys([])
+    if (!dropdownOpen || !selectedValue || !fullTreeData.length) {
+      if (!dropdownOpen) setExpandedKeys([])
       return
     }
-    setExpandedKeys(findAncestorKeys(treeData, selectedValue) ?? [])
-  }, [rest.value, treeData])
+    setExpandedKeys(findAncestorKeys(fullTreeData, selectedValue) ?? [])
+  }, [rest.value, fullTreeData, dropdownOpen])
 
-  // Xử lý lỗi
   useEffect(() => {
     if (organizationsError || lecturersError) {
       message.error("Không thể tải dữ liệu. Vui lòng thử lại.")
     }
   }, [organizationsError, lecturersError])
 
-  // Hàm lọc tùy chỉnh cho tìm kiếm
   const filterTreeNode = (input: string, treeNode: any) => {
     return treeNode?.title?.toLowerCase()?.includes(input?.toLowerCase())
   }
@@ -194,7 +239,7 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
       onTreeExpand={(keys) => setExpandedKeys(keys as string[])}
       treeIcon
       showCheckedStrategy="SHOW_CHILD"
-      placeholder="Chọn giảng viên"
+      placeholder={placeholder}
       loading={organizationsLoading || lecturersLoading}
       dropdownRender={(menu) => (
         <>
@@ -207,6 +252,12 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
         </>
       )}
       {...rest}
+      defaultOpen={defaultOpen}
+      open={open}
+      onDropdownVisibleChange={(visible) => {
+        setDropdownOpen(visible)
+        onDropdownVisibleChange?.(visible)
+      }}
     />
   )
 }

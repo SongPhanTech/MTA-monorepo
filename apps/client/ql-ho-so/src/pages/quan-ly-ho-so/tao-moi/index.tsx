@@ -53,6 +53,7 @@ import { emptyObjectIf } from "@workspace/constant"
 import type { Prisma } from "@workspace/db"
 import { useCreateLecturer, useCreateStaff, useUpsertUserProfile } from "@workspace/db/hooks"
 import { buildLsbNhanVienPayload, getLsbErrorMessage } from "@lib/lsb-nhan-vien"
+import { toHocHamCreateInput, toHocViCreateInput } from "@lib/utils"
 import { postDMNhanViens } from "@workspace/libs/api/system"
 import { getRuntimeEnv } from "@workspace/libs/utils"
 import { useAbility } from "@workspace/permissions/hooks"
@@ -598,9 +599,7 @@ export default function CreateUserPage() {
               {
                 hocVi: {
                   createMany: {
-                    data: hocVi?.map((item) => ({
-                      ...item,
-                    })),
+                    data: hocVi?.map((item) => toHocViCreateInput(item as Record<string, unknown>)),
                   },
                 },
               },
@@ -611,9 +610,7 @@ export default function CreateUserPage() {
               {
                 hocHam: {
                   createMany: {
-                    data: hocHam?.map((item) => ({
-                      ...item,
-                    })),
+                    data: hocHam?.map((item) => toHocHamCreateInput(item as Record<string, unknown>)),
                   },
                 },
               },

@@ -3,19 +3,15 @@ import { queryClient } from "@api/index"
 import DatePicker from "@components/commons/date-picker"
 import TreeSelectDepartment from "@components/commons/department-select/TreeSelectDepartment"
 import FormItem from "@components/commons/form-item"
-import LectureTreeSelect from "@components/commons/lecture-select-multi/TreeSelectLecture"
 import Select from "@components/commons/select"
 import TableCollapse from "@components/commons/tableCollapse"
-import DeleteIcon from "@components/icons/delete"
-import EditIcon from "@components/icons/edit"
-import { CopyOutlined } from "@ant-design/icons"
 import { DEFAULT_PAGINATE_SIZE, SUBJECT_CLASS_SCHEDULE_TYPE } from "@constants/constants"
 import type { FilterProps } from "@constants/type"
 import { useExamTypeOptions } from "@hooks/examType"
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
 import { layGiangVienPhanCongThayDoi, thongBaoPhanCongGiangDay } from "@lib/thong-bao-giang-vien"
-import { buildOrgFlat, buildOrgTree } from "@lib/utils"
+import { buildOrgFlat } from "@lib/utils"
 import { emptyObjectIf } from "@workspace/constant"
 import { $Enums, type Prisma, type SubjectClass } from "@workspace/db/client"
 import {
@@ -31,7 +27,7 @@ import {
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { whereOrganization } from "@workspace/libs/constants"
 import { exportFromTemplate } from "@workspace/libs/template-excel"
-import { formatLecturerName, getMinioUrl } from "@workspace/libs/utils"
+import { getMinioUrl } from "@workspace/libs/utils"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
 import {
@@ -55,35 +51,42 @@ import {
   Row,
   Switch,
   Tooltip,
-  TreeSelect,
   Modal,
   Radio,
 } from "antd"
-import type { Dayjs } from "dayjs"
 import _ from "lodash"
 import type React from "react"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+import {
+  ActionsCell,
+  AssignmentRowPaint,
+  DeadlineCell,
+  ExamTypeCell,
+  FixedClassCodes,
+  FormStateGate,
+  LecturerCell,
+  LecturerNameProvider,
+  LocationCell,
+  LockLecturerCell,
+  RoomCell,
+  ScheduleCell,
+  SubjectNameCell,
+  type TeachingAssignmentForm,
+} from "@components/phan-cong-giang-day/assignment-cells"
 
-type TeachingAssignmentForm = {
-  subjectClass: Record<
-    string,
-    {
-      schedule: $Enums.SubjectClassSchedule | null
-      lecturerId: string | null
-      extraLecturerId: string | null
-      enterGradeLecturerId: string | null
-      lecturerAssignmentDeadline: Dayjs | null
-      examType: $Enums.ExamType | null
-      roomId: string | null
-      trainingLocationId: string | null
-      maxStudent: number | null
-      isEdit?: boolean
-      cancelled: boolean
-      isLockLecturer: boolean
-    }
-  >
-}
+const SCHEDULE_OPTIONS = Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(([key, value]) => ({
+  label: value,
+  value: key,
+}))
+
+const LECTURER_USER_PROFILE_SELECT = {
+  id: true,
+  code: true,
+  fullname: true,
+  academicRankType: true,
+  academicDegreeType: true,
+} as const
 
 type BaoDayForm = {
   deadline: string
@@ -145,7 +148,7 @@ export default function PhanCongGiangDay({
 
   const [form] = Form.useForm<TeachingAssignmentForm>()
 
-  const subjectClassForm = Form.useWatch("subjectClass", form) || {}
+  const [selectionVersion, setSelectionVersion] = useState(0)
 
   const [formBaoDay] = Form.useForm<BaoDayForm>()
   const [formXepKhuVuc] = Form.useForm<XepKhuVucForm>()
@@ -287,18 +290,22 @@ export default function PhanCongGiangDay({
     { refetchOnWindowFocus: false }
   )
 
-  const orgIds = [
-    ...buildOrgFlat(
-      dmDonViIds.map((e) => ({
-        Id: e.Id,
-        sTen: null,
-        sParentId: e.sParentId,
-        sMa: null,
-      })),
-      orgId || "0"
-    ).map((org) => org.value),
-    orgId,
-  ].filter(Boolean)
+  const orgIds = useMemo(
+    () =>
+      [
+        ...buildOrgFlat(
+          dmDonViIds.map((e) => ({
+            Id: e.Id,
+            sTen: null,
+            sParentId: e.sParentId,
+            sMa: null,
+          })),
+          orgId || "0"
+        ).map((org) => org.value),
+        orgId,
+      ].filter(Boolean),
+    [dmDonViIds, orgId]
+  )
 
   const { data: dmDonViData = [], refetch } = useFindManyDM_DonVi(
     {
@@ -310,84 +317,67 @@ export default function PhanCongGiangDay({
                 subjectClass: {
                   where,
                   include: {
-                    semester: true,
                     subject: {
-                      include: {
+                      select: {
+                        name: true,
+                        credit: true,
+                        managementOrganizationId: true,
                         subject: {
-                          include: { managementOrganization: true },
+                          select: {
+                            managementOrganization: {
+                              select: { sMa: true },
+                            },
+                          },
                         },
                       },
                     },
                     mainLecturer: {
                       include: {
                         userProfile: {
-                          select: {
-                            id: true,
-                            code: true,
-                            fullname: true,
-                            academicRankType: true,
-                            academicDegreeType: true,
-                          },
+                          select: LECTURER_USER_PROFILE_SELECT,
                         },
                       },
                     },
                     extraLecturer: {
                       include: {
                         userProfile: {
-                          select: {
-                            id: true,
-                            code: true,
-                            fullname: true,
-                            academicRankType: true,
-                            academicDegreeType: true,
-                          },
+                          select: LECTURER_USER_PROFILE_SELECT,
                         },
                       },
                     },
                     enterGradeLecturer: {
                       include: {
                         userProfile: {
-                          select: {
-                            id: true,
-                            code: true,
-                            fullname: true,
-                            academicRankType: true,
-                            academicDegreeType: true,
-                          },
+                          select: LECTURER_USER_PROFILE_SELECT,
                         },
                       },
                     },
-                    room: true,
                     _count: {
                       select: {
-                        subjectClassStudent: { where: { examScore: { not: null } } },
+                        subjectClassStudent: true,
                       },
                     },
-                    trainingLocation: true,
-                    subjectClassStudent: true,
-                    subjectClassTimes: true,
+                    trainingLocation: {
+                      select: { name: true },
+                    },
+                    subjectClassStudent: {
+                      where: { examScore: { not: null } },
+                      take: 1,
+                      select: { id: true },
+                    },
                     subjectClassHistory: {
                       where: { isLockLecturer: { not: null } },
                       orderBy: { createdAt: "desc" },
                       take: 1,
-                      include: {
-                        updatedBy: true,
+                      select: {
+                        isLockLecturer: true,
+                        createdAt: true,
+                        updatedBy: { select: { fullname: true } },
                       },
                     },
                     fixedClasses: {
                       select: {
                         code: true,
-                        _count: {
-                          select: {
-                            students: {
-                              where: {
-                                deletedAt: null,
-                                active: true,
-                                status: "ENROLLED",
-                              },
-                            },
-                          },
-                        },
                       },
                     },
                   },
@@ -509,15 +499,16 @@ export default function PhanCongGiangDay({
   function handleCopyApply() {
     if (!copySourceId || selectedRowKeys.length === 0) return
 
-    const sourceData = subjectClassForm[copySourceId]
+    const subjectClassMap = form.getFieldValue("subjectClass") || {}
+    const sourceData = subjectClassMap[copySourceId]
     if (!sourceData) {
       message.warning("Không tìm thấy dữ liệu dòng nguồn")
       return
     }
     const overwriteRows = selectedRowKeys.filter((destId) => {
       const id = destId as string
-      if (id === copySourceId || subjectClassForm[id]?.cancelled) return false
-      const dest = subjectClassForm[id]
+      if (id === copySourceId || subjectClassMap[id]?.cancelled) return false
+      const dest = subjectClassMap[id]
       if (!dest) return false
       return (
         (copyFields.lecturerId && !!dest.lecturerId) ||
@@ -554,8 +545,9 @@ export default function PhanCongGiangDay({
   }
 
   function applyCopy() {
-    const sourceData = subjectClassForm[copySourceId!]
-    const updated = { ...subjectClassForm }
+    const subjectClassMap = form.getFieldValue("subjectClass") || {}
+    const sourceData = subjectClassMap[copySourceId!]
+    const updated = { ...subjectClassMap }
 
     selectedRowKeys.forEach((destId) => {
       const id = destId as string
@@ -573,6 +565,7 @@ export default function PhanCongGiangDay({
     })
 
     form.setFieldValue("subjectClass", updated)
+    setSelectionVersion((value) => value + 1)
 
     const appliedCount = selectedRowKeys.filter((id) => id !== copySourceId).length
     message.success(`Đã copy phân công GV vào ${appliedCount} lớp. Nhấn "Lưu" để ghi vào hệ thống.`)
@@ -580,11 +573,23 @@ export default function PhanCongGiangDay({
     setCopySourceId(null)
     setCopyFields({ lecturerId: true, extraLecturerId: true, enterGradeLecturerId: true })
   }
-  function handleCopyCancel() {
+  const handleCopyCancel = useCallback(() => {
     setCopySourceId(null)
     setCopyFields({ lecturerId: true, extraLecturerId: true, enterGradeLecturerId: true })
     setSelectedRowKeys([])
-  }
+  }, [])
+
+  const handleCopyToggle = useCallback((id: string) => {
+    setCopySourceId((prev) => {
+      if (prev === id) {
+        setCopyFields({ lecturerId: true, extraLecturerId: true, enterGradeLecturerId: true })
+        setSelectedRowKeys([])
+        return null
+      }
+      setSelectedRowKeys([])
+      return id
+    })
+  }, [])
 
   const p2GuiBaoDay = async (values: BaoDayForm) => {
     try {
@@ -629,14 +634,62 @@ export default function PhanCongGiangDay({
     },
   })
 
+  const trainingLocationOptions = useMemo(
+    () => trainingLocationData.map((e) => ({ label: e.name, value: e.id })),
+    [trainingLocationData]
+  )
+
+  const roomCapacityById = useMemo(() => {
+    const map = new Map<string, number | null>()
+    for (const building of buildingData) {
+      for (const room of building.rooms) {
+        map.set(room.id, room.capacity ?? null)
+      }
+    }
+    return map
+  }, [buildingData])
+
+  const buildingTreeByLocationId = useMemo(() => {
+    const map: Record<string, any[]> = {}
+    for (const building of buildingData) {
+      const locationId = building.trainingLocationId
+      if (!locationId) continue
+      if (!map[locationId]) map[locationId] = []
+      map[locationId].push({
+        title: building.name,
+        label: building.name,
+        value: building.id,
+        selectable: false,
+        children: building.rooms.map((room) => ({
+          title: (
+            <span>
+              {room.name} - Sức chứa: {room.capacity}
+            </span>
+          ),
+          label: room.name,
+          filterValue: room.name,
+          value: room.id,
+          selectable: true,
+        })),
+      })
+    }
+    return map
+  }, [buildingData])
+
   async function handleP2LuuKeHoach() {
     try {
       showSpinner()
-      const banGhiSua = Object.entries(subjectClassForm).filter(([_, sc]) => sc.isEdit)
+      const subjectClassMap = form.getFieldValue("subjectClass") || {}
+      const banGhiSua = (
+        Object.entries(subjectClassMap) as [
+          string,
+          NonNullable<TeachingAssignmentForm["subjectClass"]>[string],
+        ][]
+      ).filter(([_, sc]) => sc.isEdit)
       const lopGoc = dataWithRowSpan.flatMap((e) => e.children)
 
       const res = await sqlTransaction(
-        banGhiSua.map(([id, subjectClass]) => ({
+        banGhiSua.map(([id, subjectClass]: any) => ({
           model: "SubjectClass",
           operation: "update",
           data: {
@@ -688,11 +741,17 @@ export default function PhanCongGiangDay({
   async function handleKhoaBoMonLuuPCGD() {
     try {
       showSpinner()
-      const banGhiSua = Object.entries(subjectClassForm).filter(([_, sc]) => sc.isEdit)
+      const subjectClassMap = form.getFieldValue("subjectClass") || {}
+        const banGhiSua = (
+          Object.entries(subjectClassMap) as [
+            string,
+            NonNullable<TeachingAssignmentForm["subjectClass"]>[string],
+          ][]
+        ).filter(([_, sc]) => sc.isEdit)
       const lopGoc = dataWithRowSpan.flatMap((e) => e.children)
 
       const res = await sqlTransaction(
-        banGhiSua.map(([id, subjectClass]) => ({
+        banGhiSua.map(([id, subjectClass]: any) => ({
           model: "SubjectClass",
           operation: "update",
           data: {
@@ -1163,20 +1222,23 @@ export default function PhanCongGiangDay({
 
   const { mutateAsync: deleteSubjectClass } = useDeleteSubjectClass()
 
-  async function handleDelete(id: string) {
-    try {
-      showSpinner()
-      await deleteSubjectClass({ where: { id } })
-    } catch (error: any) {
-      if (error?.info?.message) {
-        message.error(error?.info?.message)
-      } else {
-        message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+  const handleDelete = useCallback(
+    async (id: string) => {
+      try {
+        showSpinner()
+        await deleteSubjectClass({ where: { id } })
+      } catch (error: any) {
+        if (error?.info?.message) {
+          message.error(error?.info?.message)
+        } else {
+          message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+        }
+      } finally {
+        hideSpinner()
       }
-    } finally {
-      hideSpinner()
-    }
-  }
+    },
+    [deleteSubjectClass]
+  )
 
   const { onOpen: onOpenModalNhapTKB } = useDisclosure<{
     type?: $Enums.SubjectClassType
@@ -1266,18 +1328,345 @@ export default function PhanCongGiangDay({
   useEffect(() => {
     if (resetForm) {
       resetForm()
+      setSelectionVersion((value) => value + 1)
     }
   }, [resetForm])
 
-  const canTriggerCopy = (recordId: string) => {
-    const sc = subjectClassForm[recordId]
-    if (!sc) return false
-    if (sc.cancelled) return false
-    return !!sc.lecturerId
-  }
+  const canEditSubjectClass = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, "SUA")
+  const canDeleteSubjectClass = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, "XOA")
+
+  const handleEditSubjectClass = useCallback(
+    (id: string) => {
+      onOpenEditSubjectClass({ id, mode: "edit" })
+    },
+    [onOpenEditSubjectClass]
+  )
+
+  const handleTablePageChange = useCallback(
+    (page: number, pageSize: number) => {
+      if (numberOfPages === pageSize) {
+        setCurrentPage(page)
+      } else {
+        setCurrentPage(1)
+        setNumberOfPages(pageSize)
+      }
+    },
+    [numberOfPages]
+  )
+
+  const pagination = useMemo(
+    () => ({
+      current: currentPage,
+      pageSize: numberOfPages,
+      total: count,
+      onChange: handleTablePageChange,
+    }),
+    [count, currentPage, handleTablePageChange, numberOfPages]
+  )
+
+  const columns = useMemo(() => {
+    const isDeadlinePassed = (deadline?: Date | string | null) =>
+      !!khoaBoMon &&
+      !!deadline &&
+      dayjs(deadline).isBefore(dayjs().startOf("day"))
+
+    const canShowLecturerSelect = (record: any) =>
+      role === "P2_KHCT"
+        ? true
+        : !khoaBoMon
+          ? true
+          : !record?.submitLecturerAssignmentAt && !record?.approveLecturerAssignmentAt
+
+    return [
+      {
+        title: "Hạn PCGD",
+        width: 100,
+        align: "center" as const,
+        distinctFilters: [],
+        render: (_: unknown, record: any) => (
+          <DeadlineCell
+            recordId={record.id}
+            canEdit={canXemTatCa && !khoaBoMon}
+            lecturerAssignmentDeadline={record.lecturerAssignmentDeadline}
+            approveLecturerAssignmentAt={record.approveLecturerAssignmentAt}
+          />
+        ),
+      },
+      {
+        title: "Mã LMH",
+        width: 90,
+        dataIndex: "code",
+        align: "center" as const,
+        type: "input" as const,
+        render: (_: unknown, record: any) => (
+          <>
+            <AssignmentRowPaint
+              recordId={record.id}
+              submitLecturerAssignmentAt={record.submitLecturerAssignmentAt}
+              approveLecturerAssignmentAt={record.approveLecturerAssignmentAt}
+              isParent={record.$type === "parent"}
+              copySourceId={copySourceId}
+            />
+            {record?.code || ""}
+          </>
+        ),
+      },
+      {
+        title: "Tên môn",
+        align: "center" as const,
+        width: 220,
+        dataIndex: "name",
+        type: "input" as const,
+        onCell: (record: any) => ({
+          rowSpan: record.rowSpan,
+        }),
+        render: (_: unknown, record: any) => (
+          <SubjectNameCell name={record?.subject?.name} credit={record.subject?.credit} />
+        ),
+      },
+      {
+        title: "Kíp",
+        align: "center" as const,
+        width: 90,
+        options: SCHEDULE_OPTIONS,
+        render: (_: unknown, record: any) => (
+          <ScheduleCell recordId={record.id} options={SCHEDULE_OPTIONS} />
+        ),
+      },
+      {
+        title: "Lớp QL",
+        align: "center" as const,
+        width: 100,
+        render: (_: unknown, record: any) => <FixedClassCodes codes={record?.fixedClasses} />,
+      },
+      {
+        title: "Số SV",
+        width: 50,
+        align: "center" as const,
+        render: (_: unknown, record: any) => <p>{record?._count?.subjectClassStudent ?? 0}</p>,
+      },
+      {
+        title: "Khóa GV",
+        width: 80,
+        align: "center" as const,
+        render: (_: unknown, record: any) => {
+          if (record.$type === "parent" || !record.id) return null
+          const history = record.subjectClassHistory?.[0]
+          const logText = history
+            ? `${history.isLockLecturer ? "Khóa" : "Mở"} bởi: ${history.updatedBy?.fullname ?? "-"} lúc ${dayjs(history.createdAt).format("HH:mm DD/MM")}`
+            : ""
+          return <LockLecturerCell recordId={record.id} logText={logText} refetch={refetch} />
+        },
+      },
+      {
+        title: "Giảng viên 1",
+        align: "center" as const,
+        type: "input" as const,
+        width: 200,
+        dataIndex: "mainLecturer",
+        render: (_: unknown, record: any) => (
+          <LecturerCell
+            recordId={record.id}
+            field="lecturerId"
+            ignoreField="extraLecturerId"
+            organizationId={record?.subject?.managementOrganizationId ?? ""}
+            lecturer={record?.mainLecturer}
+            canShowSelect={canShowLecturerSelect(record)}
+            deadlinePassed={isDeadlinePassed(record.lecturerAssignmentDeadline)}
+          />
+        ),
+      },
+      {
+        title: "Giảng viên 2",
+        align: "center" as const,
+        dataIndex: "extraLecturer",
+        type: "input" as const,
+        width: 200,
+        render: (_: unknown, record: any) => (
+          <LecturerCell
+            recordId={record.id}
+            field="extraLecturerId"
+            ignoreField="lecturerId"
+            organizationId={record?.subject?.managementOrganizationId}
+            lecturer={record?.extraLecturer}
+            canShowSelect={canShowLecturerSelect(record)}
+            deadlinePassed={isDeadlinePassed(record.lecturerAssignmentDeadline)}
+          />
+        ),
+      },
+      {
+        title: "GV nhập điểm",
+        dataIndex: "enterGradeLecturer",
+        align: "center" as const,
+        type: "input" as const,
+        width: 200,
+        render: (_: unknown, record: any) => (
+          <LecturerCell
+            recordId={record.id}
+            field="enterGradeLecturerId"
+            organizationId={record?.subject?.managementOrganizationId}
+            lecturer={record?.enterGradeLecturer}
+            canShowSelect={canShowLecturerSelect(record)}
+            deadlinePassed={isDeadlinePassed(record.lecturerAssignmentDeadline)}
+          />
+        ),
+      },
+      {
+        title: "Hình thức thi",
+        align: "center" as const,
+        width: 110,
+        type: "select" as const,
+        options: options,
+        dataIndex: "examType",
+        render: (_: unknown, record: any) => (
+          <ExamTypeCell
+            recordId={record.id}
+            options={options}
+            cancelled={record.cancelled}
+            hasGradedStudent={(record.subjectClassStudent?.length ?? 0) > 0}
+            khoaBoMon={!!khoaBoMon}
+            submitLecturerAssignmentAt={record.submitLecturerAssignmentAt}
+            deadlinePassed={isDeadlinePassed(record.lecturerAssignmentDeadline)}
+            initialValue={getExamTypeLabel(record.examType)}
+          />
+        ),
+      },
+      {
+        title: "Khu vực",
+        align: "center" as const,
+        width: 150,
+        type: "input" as const,
+        dataIndex: "room",
+        render: (_: unknown, record: any) => (
+          <LocationCell
+            recordId={record.id}
+            options={trainingLocationOptions}
+            canEdit={!khoaBoMon}
+            trainingLocationName={record.trainingLocation?.name}
+          />
+        ),
+      },
+      {
+        title: "Phòng học",
+        align: "center" as const,
+        width: 150,
+        render: (_: unknown, record: any) => (
+          <RoomCell
+            recordId={record.id}
+            treeDataByLocation={buildingTreeByLocationId}
+            cancelled={record.cancelled}
+            khoaBoMon={!!khoaBoMon}
+            submitLecturerAssignmentAt={record.submitLecturerAssignmentAt}
+            deadlinePassed={isDeadlinePassed(record.lecturerAssignmentDeadline)}
+          />
+        ),
+      },
+      {
+        title: <Tooltip title="Đơn vị phụ trách">ĐVPT</Tooltip>,
+        width: 80,
+        align: "center" as const,
+        render: (_: unknown, record: any) =>
+          record?.subject?.subject?.managementOrganization?.sMa || "",
+      },
+      ...(canXemTatCa && !khoaBoMon
+        ? [
+            {
+              title: "Thao tác",
+              width: 100,
+              align: "center" as const,
+              render: (_: unknown, record: SubjectClass) => (
+                <ActionsCell
+                  recordId={record?.id}
+                  cancelled={record.cancelled}
+                  status={record.status}
+                  copySourceId={copySourceId}
+                  canEdit={canEditSubjectClass}
+                  canDelete={canDeleteSubjectClass}
+                  onCopyToggle={handleCopyToggle}
+                  onEdit={handleEditSubjectClass}
+                  onDelete={handleDelete}
+                />
+              ),
+            },
+          ]
+        : []),
+    ]
+  }, [
+    buildingTreeByLocationId,
+    canDeleteSubjectClass,
+    canEditSubjectClass,
+    canXemTatCa,
+    copySourceId,
+    handleCopyToggle,
+    handleDelete,
+    handleEditSubjectClass,
+    khoaBoMon,
+    options,
+    refetch,
+    role,
+    trainingLocationOptions,
+  ])
 
   return (
     <div>
+      <Form
+        form={form}
+        onValuesChange={(changedValue) => {
+          if (!changedValue.subjectClass) return
+          const subjectClassId = Object.keys(changedValue.subjectClass)[0]
+          const changedField = changedValue.subjectClass[subjectClassId]
+          if (
+            !subjectClassId ||
+            Object.keys(changedField || {}).includes("submitLecturerAssignmentAt")
+          ) {
+            return
+          }
+
+          const current = form.getFieldValue(["subjectClass", subjectClassId]) || {}
+          const newSubjectClassData = {
+            ...current,
+            ...changedField,
+            isEdit: true,
+          }
+
+          if ("lecturerId" in changedField) {
+            newSubjectClassData.enterGradeLecturerId = changedField.lecturerId
+            if (
+              changedField.lecturerId &&
+              current?.extraLecturerId === changedField.lecturerId
+            ) {
+              newSubjectClassData.extraLecturerId = null
+            }
+          }
+
+          if ("extraLecturerId" in changedField) {
+            if (
+              changedField.extraLecturerId &&
+              current?.lecturerId === changedField.extraLecturerId
+            ) {
+              newSubjectClassData.lecturerId = null
+            }
+          }
+
+          if ("trainingLocationId" in changedField) {
+            newSubjectClassData.roomId = null
+            newSubjectClassData.maxStudent = null
+          }
+
+          if ("roomId" in changedField) {
+            newSubjectClassData.maxStudent = roomCapacityById.get(changedField.roomId) ?? null
+          }
+
+          form.setFieldValue(["subjectClass", subjectClassId], newSubjectClassData)
+          if (
+            "lecturerId" in changedField ||
+            "enterGradeLecturerId" in changedField ||
+            "cancelled" in changedField
+          ) {
+            setSelectionVersion((value) => value + 1)
+          }
+        }}
+      >
       <Row gutter={[8, 8]}>
         <Col span={24}>
           <Affix offsetTop={105} style={{ zIndex: 1000 }}>
@@ -1413,18 +1802,17 @@ export default function PhanCongGiangDay({
                       QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KHOA_BO_MON_PHAN_CONG_GIANG_DAY,
                       "SUA"
                     ) && (
-                      <Button
-                        onClick={() => handleKhoaBoMonLuuPCGD()}
-                        type="primary"
-                        disabled={
-                          !dmDonViData.length ||
-                          Object.entries(subjectClassForm).filter(
-                            ([_, subjectClass]) => subjectClass.isEdit
-                          ).length === 0
-                        }
-                      >
-                        Lưu
-                      </Button>
+                      <FormStateGate form={form}>
+                        {({ hasUnsavedEdits }) => (
+                          <Button
+                            onClick={() => handleKhoaBoMonLuuPCGD()}
+                            type="primary"
+                            disabled={!dmDonViData.length || !hasUnsavedEdits}
+                          >
+                            Lưu
+                          </Button>
+                        )}
+                      </FormStateGate>
                     )}
                   {khoaBoMon &&
                     can(
@@ -1667,9 +2055,11 @@ export default function PhanCongGiangDay({
                       trigger="click"
                       placement="bottomRight"
                     >
+                      <FormStateGate form={form}>
+                        {({ missingTrainingLocation }) => (
                       <Tooltip
                         title={
-                          Object.values(subjectClassForm).some((sc) => !sc.trainingLocationId)
+                          missingTrainingLocation
                             ? "Vui lòng nhập khu vực đào tạo cho tất cả lớp môn học trước khi báo dạy"
                             : undefined
                         }
@@ -1677,13 +2067,13 @@ export default function PhanCongGiangDay({
                         <Button
                           type="primary"
                           className="bg-red-500"
-                          disabled={Object.values(subjectClassForm).some(
-                            (sc) => !sc.trainingLocationId
-                          )}
+                          disabled={missingTrainingLocation}
                         >
                           1.Báo dạy
                         </Button>
                       </Tooltip>
+                        )}
+                      </FormStateGate>
                     </Popover>
                   )}
                   {!khoaBoMon &&
@@ -1829,64 +2219,8 @@ export default function PhanCongGiangDay({
           </Affix>
         </Col>
         <Col span={24}>
-          <Form
-            form={form}
-            onValuesChange={(changedValue) => {
-              if (changedValue.subjectClass) {
-                const subjectClassId = Object.keys(changedValue.subjectClass)[0]
-                const changedField = changedValue.subjectClass[subjectClassId]
-                if (
-                  subjectClassId &&
-                  !Object.keys(changedField || {}).includes("submitLecturerAssignmentAt")
-                ) {
-                  const newSubjectClassData = {
-                    ...subjectClassForm?.[subjectClassId],
-                    ...changedField,
-                    isEdit: true,
-                  }
-
-                  if ("lecturerId" in changedField) {
-                    newSubjectClassData.enterGradeLecturerId = changedField.lecturerId
-                    if (
-                      changedField.lecturerId &&
-                      subjectClassForm?.[subjectClassId]?.extraLecturerId ===
-                        changedField.lecturerId
-                    ) {
-                      newSubjectClassData.extraLecturerId = null
-                    }
-                  }
-
-                  if ("extraLecturerId" in changedField) {
-                    if (
-                      changedField.extraLecturerId &&
-                      subjectClassForm?.[subjectClassId]?.lecturerId ===
-                        changedField.extraLecturerId
-                    ) {
-                      newSubjectClassData.lecturerId = null
-                    }
-                  }
-
-                  if ("trainingLocationId" in changedField) {
-                    newSubjectClassData.roomId = null
-                    newSubjectClassData.maxStudent = null
-                  }
-
-                  if ("roomId" in changedField) {
-                    const room = buildingData
-                      .flatMap((b) => b.rooms)
-                      .find((r) => r.id === changedField.roomId)
-                    newSubjectClassData.maxStudent = room?.capacity ?? null
-                  }
-
-                  form.setFieldValue("subjectClass", {
-                    ...subjectClassForm,
-                    [subjectClassId]: newSubjectClassData,
-                  })
-                }
-              }
-            }}
-          >
             <FormItem form={form} name={"subjectClass"} hidden />
+            <LecturerNameProvider>
             <TableCollapse
               rowKey="id"
               scrollable
@@ -1902,9 +2236,11 @@ export default function PhanCongGiangDay({
                 selectedRowKeys,
                 onChange: setSelectedRowKeys,
                 getCheckboxProps(record) {
+                  void selectionVersion
+                  const row = form.getFieldValue(["subjectClass", record.id])
                   let disabledRecord =
-                    !subjectClassForm?.[record.id]?.lecturerId ||
-                    !subjectClassForm?.[record.id]?.enterGradeLecturerId ||
+                    !row?.lecturerId ||
+                    !row?.enterGradeLecturerId ||
                     !!record.cancelled ||
                     !!record.approveLecturerAssignmentAt ||
                     record?.$type === "parent"
@@ -1914,7 +2250,7 @@ export default function PhanCongGiangDay({
                   }
                   if (copySourceId) {
                     const isSelf = record.id === copySourceId
-                    const isCancelled = !!subjectClassForm?.[record.id]?.cancelled
+                    const isCancelled = !!row?.cancelled
                     const isParent = record?.$type === "parent"
                     disabledRecord = isSelf || isCancelled || isParent
                   }
@@ -1927,515 +2263,21 @@ export default function PhanCongGiangDay({
               }}
               defaultExpandAll
               onRow={(record) => {
-                const recordSubjectClass = record as unknown as SubjectClass
-                return {
-                  className: cn(
-                    !!recordSubjectClass?.submitLecturerAssignmentAt && "bg-yellow-200",
-                    (!subjectClassForm?.[record.id]?.lecturerId ||
-                      !subjectClassForm?.[record.id]?.enterGradeLecturerId) &&
-                      "bg-slate-200",
-                    !!recordSubjectClass?.approveLecturerAssignmentAt && "bg-green-200",
-                    subjectClassForm?.[record.id]?.isEdit && "bg-yellow-100",
-                    subjectClassForm?.[record.id]?.cancelled && "bg-red-200",
-                    (record as any)?.$type === "parent" && "bg-white",
-                    record.id === copySourceId && "bg-blue-100 border-l-2 border-blue-400"
-                  ),
+                if ((record as any)?.$type === "parent") {
+                  return { className: "bg-white" }
                 }
+                return {}
               }}
-              columns={[
-                {
-                  title: "Hạn PCGD",
-                  width: 100,
-                  align: "center",
-                  distinctFilters: [],
-                  render: (_, record) =>
-                    canXemTatCa && !khoaBoMon ? (
-                      <FormItem
-                        form={form}
-                        name={["subjectClass", record.id, "lecturerAssignmentDeadline"]}
-                      >
-                        <DatePicker
-                          suffixIcon={null}
-                          className="px-1"
-                          placeholder="Chọn ngày"
-                          disabled={
-                            subjectClassForm?.[record.id]?.cancelled ||
-                            !!record?.approveLecturerAssignmentAt
-                          }
-                        />
-                      </FormItem>
-                    ) : record.lecturerAssignmentDeadline ? (
-                      <p
-                        className={cn(
-                          dayjs(record.lecturerAssignmentDeadline).isBefore(
-                            dayjs().startOf("day")
-                          ) && "text-red-600"
-                        )}
-                      >
-                        {dayjs(record.lecturerAssignmentDeadline).format("DD/MM/YYYY")}
-                      </p>
-                    ) : (
-                      ""
-                    ),
-                },
-                {
-                  title: "Mã LMH",
-                  width: 90,
-                  dataIndex: "code",
-                  align: "center",
-                  type: "input",
-                  render: (_, record) => record?.code || "",
-                },
-                {
-                  title: "Tên môn",
-                  align: "center",
-                  width: 220,
-                  dataIndex: "name",
-                  type: "input",
-                  onCell: (record) => ({
-                    rowSpan: record.rowSpan,
-                  }),
-                  render: (_, record) => (
-                    <p className="text-left">
-                      {record?.subject?.name} ({record.subject?.credit} TC)
-                    </p>
-                  ),
-                },
-                {
-                  title: "Kíp",
-                  align: "center",
-                  width: 90,
-                  options: Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(([key, value]) => ({
-                    label: value,
-                    value: key,
-                  })),
-                  render: (_, record) => (
-                    <FormItem form={form} name={["subjectClass", record.id, "schedule"]}>
-                      <Select
-                        options={Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(
-                          ([key, value]) => ({
-                            label: value,
-                            value: key,
-                          })
-                        )}
-                        allowClear={false}
-                        disabled={subjectClassForm?.[record.id]?.cancelled}
-                      />
-                    </FormItem>
-                  ),
-                },
-                {
-                  title: "Lớp QL",
-                  align: "center",
-                  width: 100,
-                  render: (_, record) => (
-                    <p className="text-left">
-                      {record?.fixedClasses?.map((e) => (
-                        <p>{e?.code}</p>
-                      ))}
-                    </p>
-                  ),
-                },
-                {
-                  title: "Số SV",
-                  width: 50,
-                  align: "center",
-                  render: (_, record) => <p>{record?.subjectClassStudent?.length ?? 0}</p>,
-                },
-                {
-                  title: "Khóa GV",
-                  width: 80,
-                  align: "center",
-                  render: (_, record: any) => {
-                    if (record.$type === "parent" || !record.id || !subjectClassForm?.[record.id]) {
-                      return null
-                    }
-                    const history = record.subjectClassHistory?.[0]
-                    const logText = history
-                      ? `${history.isLockLecturer ? "Khóa" : "Mở"} bởi: ${history.updatedBy?.fullname ?? "-"} lúc ${dayjs(history.createdAt).format("HH:mm DD/MM")}`
-                      : ""
-                    const isLocked = subjectClassForm?.[record.id]?.isLockLecturer ?? true
-                    return (
-                      <Flex vertical align="center" className="gap-1">
-                        <FormItem
-                          form={form}
-                          name={["subjectClass", record.id, "isLockLecturer"]}
-                          valuePropName="checked"
-                          className="m-0"
-                        >
-                          <Tooltip title={logText || "Chưa có lịch sử khóa"}>
-                            <Switch
-                              checkedChildren="Khóa"
-                              unCheckedChildren="Mở"
-                              checked={isLocked}
-                              disabled={subjectClassForm?.[record.id]?.cancelled}
-                              onChange={async (checked) => {
-                                try {
-                                  showSpinner()
-                                  // 1. Lưu ngay trạng thái khóa vào DB
-                                  await sqlTransaction([
-                                    {
-                                      model: "SubjectClass",
-                                      operation: "update",
-                                      data: {
-                                        where: { id: record.id },
-                                        data: { isLockLecturer: checked },
-                                      },
-                                    },
-                                  ])
-                                  message.success(
-                                    checked
-                                      ? "Đã khóa phân công giảng viên"
-                                      : "Đã mở khóa phân công giảng viên"
-                                  )
-
-                                  // 2. Cập nhật cục bộ trong form
-                                  const updated = {
-                                    ...subjectClassForm,
-                                    [record.id]: {
-                                      ...subjectClassForm?.[record.id],
-                                      isLockLecturer: checked,
-                                      isEdit: false,
-                                    },
-                                  }
-                                  form.setFieldValue("subjectClass", updated)
-
-                                  // 3. Tải lại dữ liệu bảng
-                                  refetch()
-                                } catch (err: any) {
-                                  message.error(
-                                    err?.message || "Không thể cập nhật trạng thái khóa"
-                                  )
-                                } finally {
-                                  hideSpinner()
-                                }
-                              }}
-                            />
-                          </Tooltip>
-                        </FormItem>
-                      </Flex>
-                    )
-                  },
-                },
-                {
-                  title: "Giảng viên 1",
-                  align: "center",
-                  type: "input",
-                  width: 200,
-                  dataIndex: "mainLecturer",
-                  render: (__, record) =>
-                    !subjectClassForm?.[record.id]?.cancelled &&
-                    (role === "P2_KHCT"
-                      ? true
-                      : !khoaBoMon
-                        ? true
-                        : !record?.submitLecturerAssignmentAt &&
-                          !record?.approveLecturerAssignmentAt) ? (
-                      <FormItem form={form} name={["subjectClass", record.id, "lecturerId"]}>
-                        <LectureTreeSelect
-                          placeholder="Chọn giảng viên"
-                          ignoreLectureIds={
-                            [subjectClassForm?.[record.id]?.extraLecturerId].filter(
-                              Boolean
-                            ) as string[]
-                          }
-                          disabled={
-                            (khoaBoMon &&
-                              !!record.lecturerAssignmentDeadline &&
-                              dayjs(record.lecturerAssignmentDeadline).isBefore(
-                                dayjs().startOf("day")
-                              )) ||
-                            (subjectClassForm?.[record.id]?.isLockLecturer ?? true)
-                          }
-                          organizationId={record?.subject?.managementOrganizationId ?? ""}
-                        />
-                      </FormItem>
-                    ) : (
-                      formatLecturerName(record?.mainLecturer)
-                    ),
-                },
-                {
-                  title: "Giảng viên 2",
-                  align: "center",
-                  dataIndex: "extraLecturer",
-                  type: "input",
-                  width: 200,
-                  render: (__, record) =>
-                    !subjectClassForm?.[record.id]?.cancelled &&
-                    (role === "P2_KHCT"
-                      ? true
-                      : !khoaBoMon
-                        ? true
-                        : !record?.submitLecturerAssignmentAt &&
-                          !record?.approveLecturerAssignmentAt) ? (
-                      <FormItem form={form} name={["subjectClass", record.id, "extraLecturerId"]}>
-                        <LectureTreeSelect
-                          placeholder="Chọn giảng viên"
-                          ignoreLectureIds={
-                            [subjectClassForm?.[record.id]?.lecturerId].filter(Boolean) as string[]
-                          }
-                          disabled={
-                            (khoaBoMon &&
-                              !!record.lecturerAssignmentDeadline &&
-                              dayjs(record.lecturerAssignmentDeadline).isBefore(
-                                dayjs().startOf("day")
-                              )) ||
-                            (subjectClassForm?.[record.id]?.isLockLecturer ?? true)
-                          }
-                          organizationId={record?.subject?.managementOrganizationId}
-                        />
-                      </FormItem>
-                    ) : (
-                      formatLecturerName(record?.extraLecturer)
-                    ),
-                },
-                {
-                  title: "GV nhập điểm",
-                  dataIndex: "enterGradeLecturer",
-                  align: "center",
-                  type: "input",
-                  width: 200,
-                  render: (__, record) =>
-                    !subjectClassForm?.[record.id]?.cancelled &&
-                    (role === "P2_KHCT"
-                      ? true
-                      : !khoaBoMon
-                        ? true
-                        : !record?.submitLecturerAssignmentAt &&
-                          !record?.approveLecturerAssignmentAt) ? (
-                      <FormItem
-                        form={form}
-                        name={["subjectClass", record.id, "enterGradeLecturerId"]}
-                      >
-                        <LectureTreeSelect
-                          placeholder="Chọn giảng viên"
-                          organizationId={record?.subject?.managementOrganizationId}
-                          disabled={
-                            (khoaBoMon &&
-                              !!record.lecturerAssignmentDeadline &&
-                              dayjs(record.lecturerAssignmentDeadline).isBefore(
-                                dayjs().startOf("day")
-                              )) ||
-                            (subjectClassForm?.[record.id]?.isLockLecturer ?? true)
-                          }
-                        />
-                      </FormItem>
-                    ) : (
-                      formatLecturerName(record?.enterGradeLecturer)
-                    ),
-                },
-                {
-                  title: "Hình thức thi",
-                  align: "center",
-                  width: 110,
-                  type: "select",
-                  options: options,
-                  dataIndex: "examType",
-                  render: (__, record) => (
-                    <FormItem
-                      form={form}
-                      name={["subjectClass", record.id, "examType"]}
-                      initialValue={getExamTypeLabel(record.examType)}
-                    >
-                      <Select
-                        dropdownStyle={{ width: 250 }}
-                        options={options}
-                        disabled={
-                          record.cancelled ||
-                          record._count?.subjectClassStudent > 0 ||
-                          (khoaBoMon &&
-                            (!!record?.submitLecturerAssignmentAt ||
-                              (!!record.lecturerAssignmentDeadline &&
-                                dayjs(record.lecturerAssignmentDeadline).isBefore(
-                                  dayjs().startOf("day")
-                                ))))
-                        }
-                      />
-                    </FormItem>
-                  ),
-                },
-                {
-                  title: "Khu vực",
-                  align: "center",
-                  width: 150,
-                  type: "input",
-                  dataIndex: "room",
-                  render: (_, record) =>
-                    !khoaBoMon ? (
-                      <FormItem
-                        form={form}
-                        name={["subjectClass", record.id, "trainingLocationId"]}
-                      >
-                        <Select
-                          options={trainingLocationData.map((e) => ({
-                            label: e.name,
-                            value: e.id,
-                          }))}
-                          allowClear
-                          showSearch
-                          disabled={subjectClassForm?.[record.id]?.cancelled}
-                          filterOption={(input, option) =>
-                            (option?.label ?? "")
-                              .toString()
-                              .toLowerCase()
-                              .includes(input.toLowerCase())
-                          }
-                          dropdownStyle={{ width: 400, maxHeight: 400 }}
-                        />
-                      </FormItem>
-                    ) : record.trainingLocation ? (
-                      record.trainingLocation?.name
-                    ) : (
-                      "-"
-                    ),
-                },
-                {
-                  title: "Phòng học",
-                  align: "center",
-                  width: 150,
-                  render: (_, record) => (
-                    <FormItem form={form} name={["subjectClass", record.id, "roomId"]}>
-                      <TreeSelect
-                        treeData={buildingData
-                          .filter(
-                            (e) =>
-                              subjectClassForm?.[record.id]?.trainingLocationId &&
-                              e.trainingLocationId ===
-                                subjectClassForm[record.id]?.trainingLocationId
-                          )
-                          .map((e) => ({
-                            title: e.name,
-                            label: e.name,
-                            value: e.id,
-                            selectable: false,
-                            children: e.rooms.map((room) => ({
-                              title: (
-                                <span>
-                                  {room.name} - Sức chứa: {room.capacity}
-                                </span>
-                              ),
-                              label: room.name,
-                              filterValue: room.name,
-                              value: room.id,
-                              selectable: true,
-                            })),
-                          }))}
-                        filterTreeNode={(input, option) =>
-                          ((option as any)?.filterValue ?? "")
-                            .toLowerCase()
-                            .includes(input?.toLowerCase())
-                        }
-                        disabled={
-                          subjectClassForm?.[record.id]?.cancelled ||
-                          (khoaBoMon &&
-                            (!!record?.submitLecturerAssignmentAt ||
-                              (!!record.lecturerAssignmentDeadline &&
-                                dayjs(record.lecturerAssignmentDeadline).isBefore(
-                                  dayjs().startOf("day")
-                                ))))
-                        }
-                        showSearch
-                        allowClear
-                        treeNodeFilterProp="title"
-                        treeNodeLabelProp="label"
-                        multiple={false}
-                        treeExpandAction="click"
-                        showCheckedStrategy="SHOW_CHILD"
-                        dropdownStyle={{ width: 400, maxHeight: 400 }}
-                      />
-                    </FormItem>
-                  ),
-                },
-                {
-                  title: <Tooltip title="Đơn vị phụ trách">ĐVPT</Tooltip>,
-                  width: 80,
-                  align: "center",
-                  render: (_, record) =>
-                    record?.subject?.subject?.managementOrganization?.sMa || "",
-                },
-                ...(canXemTatCa && !khoaBoMon
-                  ? [
-                      {
-                        title: "Thao tác",
-                        width: 100,
-                        align: "center" as const,
-                        render: (_: any, record: SubjectClass) => {
-                          if (record.cancelled) return null
-                          const id = record?.id
-                          if (!id) return ""
-
-                          return (
-                            <Row className="justify-center gap-2">
-                              <Tooltip
-                                title={
-                                  canTriggerCopy(id)
-                                    ? copySourceId === id
-                                      ? "Đang chọn làm nguồn copy — nhấn để bỏ"
-                                      : "Copy PCGV"
-                                    : "Dòng này chưa có GV 1"
-                                }
-                              >
-                                <CopyOutlined
-                                  onClick={() => {
-                                    if (!canTriggerCopy(id)) return
-                                    if (copySourceId === id) {
-                                      handleCopyCancel()
-                                    } else {
-                                      setCopySourceId(id)
-                                      setSelectedRowKeys([])
-                                    }
-                                  }}
-                                  className={cn(
-                                    "text-sm cursor-pointer",
-                                    !canTriggerCopy(id) && "text-gray-300 cursor-not-allowed",
-                                    copySourceId === id ? "text-blue-600" : "text-gray-600"
-                                  )}
-                                />
-                              </Tooltip>
-                              {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, "SUA") && (
-                                <EditIcon
-                                  onClick={onOpenEditSubjectClass.bind(null, {
-                                    id,
-                                    mode: "edit",
-                                  })}
-                                  className="text-sm text-blue-700 cursor-pointer"
-                                />
-                              )}
-                              {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, "XOA") && (
-                                <DeleteIcon
-                                  popConfirm={{
-                                    onConfirm: () => handleDelete(id),
-                                  }}
-                                  disabled={record?.status !== $Enums.SubjectClassStatus.DRAFT}
-                                />
-                              )}
-                            </Row>
-                          )
-                        },
-                      },
-                    ]
-                  : []),
-              ]}
+              columns={columns}
               headerTitleKey={"sTen"}
               data={dataWithRowSpan}
               childrenFieldName="children"
-              pagination={{
-                current: currentPage,
-                pageSize: numberOfPages,
-                total: count,
-                onChange: (page, pageSize) => {
-                  if (numberOfPages === pageSize) {
-                    setCurrentPage(page)
-                  } else {
-                    setCurrentPage(1)
-                    setNumberOfPages(pageSize)
-                  }
-                },
-              }}
+              pagination={pagination}
             />
-          </Form>
+            </LecturerNameProvider>
         </Col>
       </Row>
+      </Form>
       <style>
         {`
           .readonly-checkbox.ant-checkbox-wrapper-disabled {
