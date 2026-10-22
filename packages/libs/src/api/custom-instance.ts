@@ -60,7 +60,40 @@ const getBody = <T>(c: Response | Request): Promise<T> => {
 }
 
 export const getUrl = (baseUrl: string, contextUrl: string): string => {
-  const cleanBase = (baseUrl || "").trim().replace(/^["']+|["'/]+$/g, "")
+  let cleanBase = (baseUrl || "").trim().replace(/^["']+|["'/]+$/g, "")
+
+  // Khi chạy trên browser tại domain production (ví dụ mta.edu.vn),
+  // nếu baseUrl bị cấu hình dính cứng sang domain staging bên ngoài (daotao.swantech.vn),
+  // tự động chuẩn hóa về same-origin để tránh lỗi CORS và đảm bảo dữ liệu gọi về đúng server.
+  if (typeof window !== "undefined" && window.location?.hostname) {
+    const currentHost = window.location.hostname
+    if (
+      currentHost !== "localhost" &&
+      currentHost !== "127.0.0.1" &&
+      (cleanBase.startsWith("http://") || cleanBase.startsWith("https://"))
+    ) {
+      try {
+        const parsed = new URL(cleanBase)
+        if (parsed.hostname !== currentHost && parsed.hostname.includes("swantech.vn")) {
+          const apiPath = parsed.pathname.includes("/api/portal")
+            ? "/api/portal"
+            : parsed.pathname.includes("/api/model")
+              ? "/api/model"
+              : parsed.pathname.includes("/api/lms")
+                ? "/api/lms"
+                : parsed.pathname.includes("/api/ems")
+                  ? "/api/ems"
+                  : parsed.pathname.includes("/api/system")
+                    ? "/api/system"
+                    : parsed.pathname.replace(/\/+$/, "")
+          cleanBase = `${window.location.origin}${apiPath}`
+        }
+      } catch {
+        // ignore parse error
+      }
+    }
+  }
+
   const cleanContext = contextUrl.startsWith("/") ? contextUrl : `/${contextUrl}`
   return `${cleanBase}${cleanContext}`
 }
