@@ -34,6 +34,7 @@ RUN apt update && apt install -y libssl3
 # COPY --from=builder /app/packages/database/node_modules/prisma/*.node /tmp/prisma-engines/
 COPY --from=builder /app/packages/database/generated/prisma-client/*.so.node /tmp/prisma-engines/
 COPY --from=builder /app/apps/backend/${PACKAGE}/dist .
+RUN mkdir -p /app/tmp-exports && chown -R bun:bun /app
 USER bun
 
 CMD ["bun", "index.js"]

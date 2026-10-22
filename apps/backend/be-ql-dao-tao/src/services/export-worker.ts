@@ -3,6 +3,8 @@
  * Cập nhật tiến độ realtime vào Redis và ghi file ra đĩa.
  */
 import fs from "node:fs/promises"
+import { constants } from "node:fs"
+import os from "node:os"
 import path from "node:path"
 import dayjs from "dayjs"
 import { prisma } from ".."
@@ -15,6 +17,26 @@ import {
 
 export const EXPORT_OUTPUT_DIR =
   process.env.EXPORT_OUTPUT_DIR || path.join(process.cwd(), "tmp-exports")
+
+/**
+ * Đảm bảo thư mục lưu file xuất tồn tại và có quyền ghi.
+ * Tự động fallback sang os.tmpdir() (/tmp trên Linux) nếu cwd không có quyền ghi (ví dụ Docker container non-root bun).
+ */
+export async function ensureExportOutputDir(): Promise<string> {
+  const preferredDir = process.env.EXPORT_OUTPUT_DIR || path.join(process.cwd(), "tmp-exports")
+  try {
+    await fs.mkdir(preferredDir, { recursive: true })
+    await fs.access(preferredDir, constants.W_OK)
+    return preferredDir
+  } catch (err) {
+    const fallbackDir = path.join(os.tmpdir(), "tmp-exports")
+    console.warn(
+      `[export-worker] Không thể ghi vào ${preferredDir} (${(err as Error)?.message}). Tự động fallback sang: ${fallbackDir}`
+    )
+    await fs.mkdir(fallbackDir, { recursive: true })
+    return fallbackDir
+  }
+}
 
 const notDeleted = { deletedAt: null } as const
 
@@ -345,7 +367,7 @@ export async function processExportJob(jobId: string, classRegisterSessionId?: s
     }
 
     // 7. Ghi file trực tiếp ra ổ đĩa
-    await fs.mkdir(EXPORT_OUTPUT_DIR, { recursive: true })
+    const outputDir = await ensureExportOutputDir()
     const stamp = dayjs().format("YYYYMMDD-HHmm")
     let fileName: string
     if (classRegisterSessionId && finalSession?.name) {
@@ -354,7 +376,7 @@ export async function processExportJob(jobId: string, classRegisterSessionId?: s
     } else {
       fileName = `export-toan-bo-du-lieu-${stamp}-${jobId.slice(0, 8)}.json`
     }
-    const filePath = path.join(EXPORT_OUTPUT_DIR, fileName)
+    const filePath = path.join(outputDir, fileName)
 
     await updateExportJobProgress(jobId, 96, "Đang ghi file ra ổ đĩa...")
     await fs.writeFile(filePath, JSON.stringify(payload), "utf-8")
@@ -367,7 +389,7 @@ export async function processExportJob(jobId: string, classRegisterSessionId?: s
     console.log(`[export-worker] Đã hoàn tất job ${jobId} -> File: ${filePath} (${(fileSize / (1024 * 1024)).toFixed(2)} MB)`)
 
     // 9. Tự động dọn dẹp các file xuất tạm cũ, chỉ giữ lại 5 file mới nhất
-    await cleanupOldExports()
+    await cleanupOldExports(outputDir)
   } catch (error) {
     const errorMsg = error instanceof Error ? error.message : String(error)
     console.error(`[export-worker] Lỗi xuất dữ liệu job ${jobId}:`, error)
@@ -375,9 +397,10 @@ export async function processExportJob(jobId: string, classRegisterSessionId?: s
   }
 }
 
-async function cleanupOldExports() {
+async function cleanupOldExports(outputDir?: string) {
   try {
-    const files = await fs.readdir(EXPORT_OUTPUT_DIR)
+    const dir = outputDir || (await ensureExportOutputDir())
+    const files = await fs.readdir(dir)
     const jsonFiles = files.filter(
       (f) =>
         (f.startsWith("export-toan-bo-du-lieu-") || f.startsWith("export-dot-dang-ky-")) &&
@@ -386,14 +409,14 @@ async function cleanupOldExports() {
     if (jsonFiles.length > 5) {
       const fileStats = await Promise.all(
         jsonFiles.map(async (file) => {
-          const stat = await fs.stat(path.join(EXPORT_OUTPUT_DIR, file)).catch(() => null)
+          const stat = await fs.stat(path.join(dir, file)).catch(() => null)
           return { file, mtime: stat?.mtimeMs || 0 }
         })
       )
       fileStats.sort((a, b) => a.mtime - b.mtime) // Cũ nhất đứng đầu
       const toDelete = fileStats.slice(0, fileStats.length - 5)
       for (const { file } of toDelete) {
-        await fs.unlink(path.join(EXPORT_OUTPUT_DIR, file)).catch(() => {})
+        await fs.unlink(path.join(dir, file)).catch(() => {})
       }
     }
   } catch {

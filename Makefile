@@ -398,6 +398,10 @@ _build-fe:
 	pnpm i && \
 	NEXT_PUBLIC_APP_URL=$(APP_URL) \
 	NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT=$(ONLY_OFFICE_ENDPOINT) \
+	NEXT_PUBLIC_API_PORTAL_BASE_URL="$(FE_APP_URL)/api/portal" \
+	NEXT_PUBLIC_API_MODEL_BASE_URL="$(FE_APP_URL)/api/model" \
+	NEXT_PUBLIC_API_LMS_BASE_URL="$(FE_APP_URL)/api/lms" \
+	NEXT_PUBLIC_API_SYSTEM_BASE_URL="$(FE_APP_URL)/api/system" \
 	pnpm build && \
 	rm -rf $(CDN_NAME) && \
 	mv out $(CDN_NAME) && \
