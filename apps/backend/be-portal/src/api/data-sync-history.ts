@@ -1,6 +1,7 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { $Enums } from "@workspace/db"
 import { models } from "@workspace/db/zod"
+import { prisma } from "../prisma"
 import {
   createDataSyncHistoryPending,
   listDataSyncHistory,
@@ -9,6 +10,44 @@ import {
 } from "../services/data-sync-history"
 
 const app = new OpenAPIHono({ strict: false })
+
+/** Danh sách đợt cho tab Xuất (không lọc theo SV / ngày mở như get-class-register-session) */
+const listSyncSessions = createRoute({
+  operationId: "list-data-sync-sessions",
+  path: "/list-sessions",
+  tags: ["DataSync"],
+  summary: "Liệt kê đợt đăng ký để xuất kết quả về nội bộ",
+  description:
+    "Trả mọi đợt chưa xóa (kể cả đã kết thúc). Khác get-class-register-session (chỉ đợt đang mở + khớp khóa của SV).",
+  method: "get",
+  responses: {
+    200: {
+      description: "Danh sách đợt",
+      content: {
+        "application/json": {
+          schema: z.array(
+            models.ClassRegisterSessionScalarSchema.extend({
+              semester: models.SemesterScalarSchema.extend({
+                schoolYear: models.SchoolYearScalarSchema.nullable().optional(),
+              }).nullable().optional(),
+            })
+          ),
+        },
+      },
+    },
+  },
+})
+
+app.openapi(listSyncSessions, async (c) => {
+  const sessions = await prisma.classRegisterSession.findMany({
+    where: { deletedAt: null },
+    orderBy: { createdAt: "desc" },
+    include: {
+      semester: { include: { schoolYear: true } },
+    },
+  })
+  return c.json(sessions, 200)
+})
 
 const getDataSyncHistory = createRoute({
   operationId: "get-data-sync-history",

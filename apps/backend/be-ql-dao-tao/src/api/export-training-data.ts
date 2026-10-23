@@ -1,12 +1,17 @@
-import fs from "node:fs/promises"
-import { existsSync, createReadStream } from "node:fs"
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
-import { ErrorMessageResponseSchema } from "../dto/common-response.dto"
+import { jwtAuth } from "@workspace/auth/hono"
 import { fieldDesc } from "../dto/openapi-helpers"
 import { standardErrorResponses } from "../dto/openapi-route-helpers"
 import { exportTrainingData } from "../services/export-training-data"
 import { enqueueExportJob, startExportConsumer } from "../services/export-kafka-queue"
-import { getExportJob, setExportJob } from "../services/export-redis-store"
+import { getExportPayloadBinary } from "../services/export-payload-store"
+import { SYNC_CONTENT_TYPE } from "../services/data-sync-pack"
+import {
+  countActiveExportJobs,
+  EXPORT_MAX_CONCURRENT,
+  getExportJob,
+  setExportJob,
+} from "../services/export-redis-store"
 import { processExportJob } from "../services/export-worker"
 
 // Khởi chạy Kafka Consumer lắng nghe job xuất dữ liệu (nếu Kafka khả dụng)
@@ -16,13 +21,32 @@ startExportConsumer(async (job) => {
 
 const app = new OpenAPIHono()
 
+/** Bắt buộc đăng nhập cho mọi API xuất / tải gói đồng bộ */
+app.use("*", jwtAuth("lms"))
+
+type AuthUser = { id?: string; userName?: string }
+
+function currentUserId(c: { get: (k: "user") => AuthUser | undefined }): string | undefined {
+  return c.get("user")?.id
+}
+
+function assertJobOwner(
+  state: { createdByUserId?: string },
+  userId: string | undefined
+): string | null {
+  if (!state.createdByUserId) return null
+  if (!userId) return "Unauthorized"
+  if (state.createdByUserId !== userId) return "Bạn không có quyền truy cập tác vụ xuất này"
+  return null
+}
+
 const exportTrainingDataRequestSchema = z
   .object({
     classRegisterSessionId: z
       .string()
       .optional()
       .openapi(
-        fieldDesc("Tùy chọn, giữ tương thích. Xuất luôn toàn bộ dữ liệu, không lọc theo đợt.")
+        fieldDesc("Tùy chọn: xuất theo đợt. Bỏ trống = xuất toàn bộ (có giới hạn kích thước Redis).")
       ),
   })
   .openapi("ExportTrainingDataRequest")
@@ -31,6 +55,7 @@ const exportTrainingDataResponseSchema = z
   .object({
     version: z.string(),
     exportedAt: z.string(),
+    signature: z.string().optional(),
     filters: z.object({
       scope: z.enum(["full", "session"]),
       classRegisterSessionIds: z.array(z.string()),
@@ -76,7 +101,7 @@ app.openapi(exportTrainingDataRoute, async (c) => {
   try {
     let classRegisterSessionId: string | undefined
     try {
-      const body = c.req.valid("json") as any
+      const body = c.req.valid("json") as { classRegisterSessionId?: string }
       classRegisterSessionId = body?.classRegisterSessionId
     } catch {
       // Body optional
@@ -84,7 +109,7 @@ app.openapi(exportTrainingDataRoute, async (c) => {
     const result = await exportTrainingData({ classRegisterSessionId })
     return c.json(result, 200)
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Xuất dữ liệu thất bại"
+    const message = "Không xuất được dữ liệu"
     return c.json({ message }, 500)
   }
 })
@@ -96,7 +121,8 @@ const exportAsyncRoute = createRoute({
   path: "/export-async",
   method: "post",
   summary: "Khởi tạo tiến trình xuất dữ liệu đào tạo nền (Bất đồng bộ - Asynchronous)",
-  description: "Tạo tác vụ nền, đẩy vào Kafka Queue / Worker, lưu trạng thái trong Redis và trả về mã tiến trình ngay lập tức.",
+  description:
+    "Tạo tác vụ nền, đẩy vào Kafka Queue / Worker, lưu trạng thái trong Redis và trả về mã tiến trình ngay lập tức.",
   request: {
     body: {
       required: false,
@@ -120,6 +146,14 @@ const exportAsyncRoute = createRoute({
         },
       },
     },
+    429: {
+      description: "Quá nhiều job xuất đang chạy",
+      content: {
+        "application/json": {
+          schema: z.object({ message: z.string() }),
+        },
+      },
+    },
     ...standardErrorResponses(),
   },
 })
@@ -127,26 +161,37 @@ const exportAsyncRoute = createRoute({
 app.openapi(exportAsyncRoute, async (c) => {
   let classRegisterSessionId: string | undefined
   try {
-    const body = c.req.valid("json") as any
+    const body = c.req.valid("json") as { classRegisterSessionId?: string }
     classRegisterSessionId = body?.classRegisterSessionId
   } catch {
     // optional body
   }
+
+  const active = await countActiveExportJobs()
+  if (active >= EXPORT_MAX_CONCURRENT) {
+    return c.json(
+      {
+        message: `Đang có ${active} tiến trình xuất (tối đa ${EXPORT_MAX_CONCURRENT}). Vui lòng đợi hoàn tất rồi thử lại.`,
+      },
+      429
+    )
+  }
+
   const jobId = crypto.randomUUID()
   const now = new Date().toISOString()
+  const createdByUserId = currentUserId(c)
 
-  // 1. Lưu trạng thái PENDING vào Redis
   await setExportJob({
     jobId,
     status: "PENDING",
     progress: 0,
     message: "Đã xếp hàng đợi xuất dữ liệu",
     classRegisterSessionId,
+    createdByUserId,
     createdAt: now,
     updatedAt: now,
   })
 
-  // 2. Đẩy job vào Kafka (hoặc fallback chạy ngầm in-process)
   const enqueued = await enqueueExportJob({
     jobId,
     classRegisterSessionId,
@@ -154,7 +199,6 @@ app.openapi(exportAsyncRoute, async (c) => {
   })
 
   if (!enqueued) {
-    // Chạy ngầm bất đồng bộ qua Worker
     setTimeout(() => {
       processExportJob(jobId, classRegisterSessionId)
     }, 20)
@@ -201,6 +245,14 @@ const getStatusRoute = createRoute({
         },
       },
     },
+    403: {
+      description: "Không đúng chủ sở hữu job",
+      content: {
+        "application/json": {
+          schema: z.object({ message: z.string() }),
+        },
+      },
+    },
     404: {
       description: "Không tìm thấy tác vụ",
       content: {
@@ -220,6 +272,11 @@ app.openapi(getStatusRoute, async (c) => {
     return c.json({ message: "Không tìm thấy tác vụ xuất dữ liệu" }, 404)
   }
 
+  const ownerErr = assertJobOwner(state, currentUserId(c))
+  if (ownerErr) {
+    return c.json({ message: ownerErr }, 403)
+  }
+
   return c.json(
     {
       jobId: state.jobId,
@@ -230,31 +287,44 @@ app.openapi(getStatusRoute, async (c) => {
       fileSize: state.fileSize,
       recordCounts: state.recordCounts,
       error: state.error,
-      downloadUrl: state.status === "SUCCESS" ? `/api/export-training-data/download/${jobId}` : undefined,
+      downloadUrl:
+        state.status === "SUCCESS" ? `/api/export-training-data/download/${jobId}` : undefined,
     },
     200
   )
 })
 
-// 4. Tuyến tải file JSON thành phẩm
+// 4. Tải JSON thành phẩm từ Redis — bắt buộc auth + đúng chủ job
 app.get("/download/:jobId", async (c) => {
   const jobId = c.req.param("jobId")
   const state = await getExportJob(jobId)
 
-  if (!state || state.status !== "SUCCESS" || !state.filePath) {
-    return c.text("File chưa hoàn tất hoặc không tồn tại", 404)
+  if (!state || state.status !== "SUCCESS") {
+    return c.text("File chưa hoàn tất, đã hết hạn, hoặc không còn trên Redis", 404)
   }
 
-  if (!existsSync(state.filePath)) {
-    return c.text("Không tìm thấy file trên máy chủ", 404)
+  const ownerErr = assertJobOwner(state, currentUserId(c))
+  if (ownerErr) {
+    return c.text(ownerErr, 403)
   }
 
-  const fileName = state.fileName || `export-toan-bo-du-lieu-${jobId.slice(0, 8)}.json`
-  c.header("Content-Disposition", `attachment; filename="${fileName}"`)
-  c.header("Content-Type", "application/json; charset=utf-8")
+  const payload = await getExportPayloadBinary(jobId)
+  if (!payload) {
+    return c.text("File chưa hoàn tất, đã hết hạn, hoặc không còn trên Redis", 404)
+  }
 
-  const file = Bun.file(state.filePath)
-  return c.body(file.stream())
+  const fileName =
+    payload.fileName || state.fileName || `export-toan-bo-du-lieu-${jobId.slice(0, 8)}.dat`
+  const asciiName = fileName.replace(/[^\x20-\x7E]/g, "_")
+  const encodedName = encodeURIComponent(fileName)
+  c.header(
+    "Content-Disposition",
+    `attachment; filename="${asciiName}"; filename*=UTF-8''${encodedName}`
+  )
+  c.header("Content-Type", payload.contentType || SYNC_CONTENT_TYPE)
+  c.header("Content-Length", String(payload.fileSize))
+
+  return c.body(new Uint8Array(payload.bytes))
 })
 
 export default app

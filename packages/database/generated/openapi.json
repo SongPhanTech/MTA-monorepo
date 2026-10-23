@@ -30376,10 +30376,6 @@
           "id": {
             "type": "string"
           },
-          "code": {
-            "type": "string",
-            "nullable": true
-          },
           "active": {
             "type": "boolean"
           },
@@ -30427,6 +30423,10 @@
             "nullable": true
           },
           "sThietBiSua": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
             "type": "string",
             "nullable": true
           },
@@ -74152,10 +74152,6 @@
           "id": {
             "type": "string"
           },
-          "code": {
-            "type": "string",
-            "nullable": true
-          },
           "active": {
             "type": "boolean"
           },
@@ -74203,6 +74199,10 @@
             "nullable": true
           },
           "sThietBiSua": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
             "type": "string",
             "nullable": true
           },
@@ -152463,9 +152463,6 @@
           "id": {
             "type": "integer"
           },
-          "code": {
-            "type": "integer"
-          },
           "active": {
             "type": "integer"
           },
@@ -152502,6 +152499,9 @@
           "sThietBiSua": {
             "type": "integer"
           },
+          "code": {
+            "type": "integer"
+          },
           "name": {
             "type": "integer"
           },
@@ -152514,7 +152514,6 @@
         },
         "required": [
           "id",
-          "code",
           "active",
           "description",
           "deletedAt",
@@ -152527,6 +152526,7 @@
           "dNgaySua",
           "sThietBiTao",
           "sThietBiSua",
+          "code",
           "name",
           "type",
           "_all"
@@ -152536,10 +152536,6 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "nullable": true
-          },
-          "code": {
             "type": "string",
             "nullable": true
           },
@@ -152593,6 +152589,10 @@
             "nullable": true
           },
           "sThietBiSua": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
             "type": "string",
             "nullable": true
           },
@@ -152617,10 +152617,6 @@
             "type": "string",
             "nullable": true
           },
-          "code": {
-            "type": "string",
-            "nullable": true
-          },
           "active": {
             "type": "boolean",
             "nullable": true
@@ -152671,6 +152667,10 @@
             "nullable": true
           },
           "sThietBiSua": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
             "type": "string",
             "nullable": true
           },

@@ -4,7 +4,7 @@ import {
   studentStatusLabel,
   type ImportJsonPreview,
 } from "@/utils/parse-import-json"
-import { Button, Descriptions, Modal, Table, Tabs, Tag, Typography } from "antd"
+import { Alert, Button, Descriptions, Modal, Table, Tabs, Tag, Typography } from "antd"
 import dayjs from "dayjs"
 
 const { Text } = Typography
@@ -40,9 +40,11 @@ export default function ModalPreviewImportJson({
 }: Props) {
   if (!preview) return null
 
+  const isEncrypted = Boolean(preview.encrypted)
+
   return (
     <Modal
-      title="Kiểm tra dữ liệu trong file JSON"
+      title={isEncrypted ? "Xác nhận nhập gói đồng bộ (.dat)" : "Kiểm tra dữ liệu trong file JSON"}
       open={open}
       onCancel={onClose}
       width="90vw"
@@ -56,26 +58,51 @@ export default function ModalPreviewImportJson({
         </Button>,
       ]}
     >
+      {isEncrypted ? (
+        <Alert
+          type="info"
+          showIcon
+          className="mb-4"
+          message="Gói .dat được mã hóa — trình duyệt không xem trước chi tiết"
+          description={
+            <>
+              File hợp lệ (Gzip + AES). Nội dung chỉ giải mã trên server khi nhập. Các số 0 bên
+              dưới <strong>không có nghĩa file trống</strong>. Bấm «Xác nhận nhập dữ liệu», rồi
+              theo dõi tab <strong>Lịch sử đồng bộ</strong> đến khi SUCCESS — đợt đăng ký sẽ hiện
+              trong danh sách.
+            </>
+          }
+        />
+      ) : null}
       <Descriptions size="small" bordered column={{ xs: 1, sm: 2, lg: 3 }} className="mb-4">
         <Descriptions.Item label="File">{fileName || "—"}</Descriptions.Item>
         <Descriptions.Item label="Phiên bản">{preview.version}</Descriptions.Item>
         <Descriptions.Item label="Thời điểm xuất">
-          {fmtDateTime(preview.exportedAt)}
+          {isEncrypted ? "Xem sau khi nhập" : fmtDateTime(preview.exportedAt)}
         </Descriptions.Item>
-        <Descriptions.Item label="Lớp học phần">
-          {preview.summary.subjectClassCount}
-        </Descriptions.Item>
-        <Descriptions.Item label="Thời khóa biểu">
-          {preview.summary.scheduleCount}
-        </Descriptions.Item>
-        <Descriptions.Item label="Sinh viên">{preview.summary.studentCount}</Descriptions.Item>
-        <Descriptions.Item label="CTĐT">{preview.summary.curriculumCount}</Descriptions.Item>
-        <Descriptions.Item label="Môn học">{preview.summary.subjectCount}</Descriptions.Item>
-        <Descriptions.Item label="Danh mục hệ thống">
-          {preview.catalogs.length} loại
-        </Descriptions.Item>
+        {!isEncrypted ? (
+          <>
+            <Descriptions.Item label="Lớp học phần">
+              {preview.summary.subjectClassCount}
+            </Descriptions.Item>
+            <Descriptions.Item label="Thời khóa biểu">
+              {preview.summary.scheduleCount}
+            </Descriptions.Item>
+            <Descriptions.Item label="Sinh viên">{preview.summary.studentCount}</Descriptions.Item>
+            <Descriptions.Item label="CTĐT">{preview.summary.curriculumCount}</Descriptions.Item>
+            <Descriptions.Item label="Môn học">{preview.summary.subjectCount}</Descriptions.Item>
+            <Descriptions.Item label="Danh mục hệ thống">
+              {preview.catalogs.length} loại
+            </Descriptions.Item>
+          </>
+        ) : (
+          <Descriptions.Item label="Trạng thái gói" span={3}>
+            <Tag color="blue">Đã mã hóa — chờ nhập nền trên server</Tag>
+          </Descriptions.Item>
+        )}
       </Descriptions>
 
+      {isEncrypted ? null : (
       <Tabs
         items={[
           {
@@ -390,6 +417,7 @@ export default function ModalPreviewImportJson({
           },
         ]}
       />
+      )}
     </Modal>
   )
 }

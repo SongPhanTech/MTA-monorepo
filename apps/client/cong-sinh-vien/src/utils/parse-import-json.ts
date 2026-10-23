@@ -1,4 +1,6 @@
 export type ImportJsonPreview = {
+  /** Gói .dat mã hóa — không preview chi tiết trên trình duyệt */
+  encrypted?: boolean
   version: string
   exportedAt?: string
   sessionId: string
@@ -188,21 +190,69 @@ export function dayOfWeekLabel(day?: number) {
   return `Thứ ${day}`
 }
 
+function emptyEncryptedPreview(file: File): ImportJsonPreview {
+  const emptySummary = {
+    subjectClassCount: 0,
+    scheduleCount: 0,
+    classTimeCount: 0,
+    studentCount: 0,
+    userProfileCount: 0,
+    catalogCount: 0,
+    curriculumCount: 0,
+    subjectCount: 0,
+    trainingCourseCount: 0,
+  }
+  return {
+    encrypted: true,
+    version: "1.6.0 (.dat)",
+    sessionId: "",
+    sessionName: file.name.replace(/\.(dat|sync)$/i, "") || "Gói đồng bộ mã hóa",
+    trainingCourses: [],
+    creditLimits: [],
+    subjectClasses: [],
+    classTimes: [],
+    schedules: [],
+    students: [],
+    fixedClasses: [],
+    catalogs: [],
+    curricula: [],
+    subjects: [],
+    summary: emptySummary,
+  }
+}
+
+function isMtaSyncFile(file: File, bytes: Uint8Array): boolean {
+  const name = file.name.toLowerCase()
+  if (name.endsWith(".dat") || name.endsWith(".sync")) return true
+  return (
+    bytes.length >= 4 &&
+    bytes[0] === 0x4d &&
+    bytes[1] === 0x54 &&
+    bytes[2] === 0x41 &&
+    bytes[3] === 0x53
+  )
+}
+
 export async function parseImportJsonFile(file: File): Promise<ImportJsonPreview> {
-  const text = await file.text()
+  const buf = new Uint8Array(await file.arrayBuffer())
+  if (isMtaSyncFile(file, buf)) {
+    return emptyEncryptedPreview(file)
+  }
+
+  const text = new TextDecoder("utf-8").decode(buf)
   let json: ExportJsonShape
 
   try {
     json = JSON.parse(text) as ExportJsonShape
   } catch {
-    throw new Error("File JSON không hợp lệ")
+    throw new Error("Không nhập được dữ liệu")
   }
 
   const data = json.data ?? {}
   const sessions = asRecords(data.ClassRegisterSession)
   const session = sessions[0]
   if (!str(session, "id") || !str(session, "name")) {
-    throw new Error("Không tìm thấy thông tin đợt đăng ký (ClassRegisterSession) trong file")
+    throw new Error("Không nhập được dữ liệu")
   }
 
   const semesters = asRecords(data.Semester)

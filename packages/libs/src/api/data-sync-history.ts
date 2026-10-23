@@ -16,6 +16,25 @@ export type DataSyncHistoryItem = {
   classRegisterSessionId: string | null
 }
 
+/** Đợt đăng ký cho dropdown xuất (admin sync) — không lọc theo SV */
+export type DataSyncSessionItem = {
+  id: string
+  name: string
+  active: boolean
+  startDate: string
+  endDate: string
+  semester?: {
+    id?: string
+    name?: string | null
+    schoolYear?: { id?: string; name?: string | null } | null
+  } | null
+}
+
+type PortalSessionsResponse = {
+  status: number
+  data: DataSyncSessionItem[]
+}
+
 export type StartDataSyncRequest = {
   type: "IMPORT" | "EXPORT"
   sessionName: string
@@ -49,6 +68,29 @@ export const getDataSyncHistory = async (limit = 50) => {
     { method: "GET" }
   )
 }
+
+export const listDataSyncSessions = async () => {
+  return customPortalFetch<PortalSessionsResponse>("/api/data-sync/list-sessions", {
+    method: "GET",
+  })
+}
+
+export const getListDataSyncSessionsQueryKey = () => ["data-sync-sessions"] as const
+
+export const useListDataSyncSessions = (
+  options?: Omit<
+    UseQueryOptions<PortalSessionsResponse, Error, DataSyncSessionItem[]>,
+    "queryKey" | "queryFn" | "select"
+  >
+) =>
+  useQuery({
+    queryKey: getListDataSyncSessionsQueryKey(),
+    queryFn: () => listDataSyncSessions(),
+    select: (res) => (res.status === 200 ? res.data : []),
+    refetchOnWindowFocus: false,
+    staleTime: 60_000,
+    ...options,
+  })
 
 export const startDataSync = async (body: StartDataSyncRequest) => {
   return customPortalFetch<PortalStartResponse>("/api/data-sync/start-data-sync", {

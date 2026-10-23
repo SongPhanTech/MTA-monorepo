@@ -26,6 +26,8 @@ IMG_PREFIX := mta-
 #                          NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT at build time
 # ─────────────────────────────────────────────────────────────────────────────
 SERVER_PROFILE ?= swantech_x52
+# Prefix nginx mount for BE APIs (empty = /api/... ; mta_online = /cong-sinh-vien/api/...)
+FE_API_PREFIX ?=
 
 # ── Profile: swan1 ────────────────────────────────────────────────────────────
 ifeq ($(SERVER_PROFILE),swan1)
@@ -79,6 +81,8 @@ else ifeq ($(SERVER_PROFILE),mta_online)
   FE_APP_DIR       := ~/mta-app-sso
   FE_COMPOSE_FILE  := app-docker-compose.yml
   FE_APP_URL       := https://mta.edu.vn
+  # Nginx chỉ proxy BE dưới /cong-sinh-vien/api/* (không có /api/portal trực tiếp)
+  FE_API_PREFIX    := /cong-sinh-vien
   ONLY_OFFICE_ENDPOINT := 
 
 # Fallback: unknown profile ─────────────────────────────────────────────────
@@ -96,9 +100,11 @@ else
 endif
 
 # SSH / SCP helpers (automatically use sshpass when a password is set)
+# -O: legacy SCP protocol (OpenSSH 9+ SFTP default hay fail trên một số server)
+# PreferredAuthentications=password: tránh thử pubkey rồi bị deny trước khi dùng sshpass
 ifneq ($(SERVER_PASSWORD),)
-  SSH  := sshpass -p "$(SERVER_PASSWORD)" ssh
-  SCP  := sshpass -p "$(SERVER_PASSWORD)" scp
+  SSH  := sshpass -p "$(SERVER_PASSWORD)" ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no
+  SCP  := sshpass -p "$(SERVER_PASSWORD)" scp -O -o PreferredAuthentications=password -o PubkeyAuthentication=no
 else
   SSH  := ssh
   SCP  := scp
@@ -393,15 +399,15 @@ _build-be:
 _build-fe:
 	$(eval CDN_NAME := $(CDN_NAME_$(PACKAGE)))
 	$(eval APP_URL  := $(FE_APP_URL)$(APP_URL_SUFFIX_$(PACKAGE)))
-	@echo "Building FE package $(PACKAGE) -> $(CDN_NAME) [APP_URL=$(APP_URL)] [ONLY_OFFICE=$(ONLY_OFFICE_ENDPOINT)]"
+	@echo "Building FE package $(PACKAGE) -> $(CDN_NAME) [APP_URL=$(APP_URL)] [API=$(FE_APP_URL)$(FE_API_PREFIX)/api/...] [ONLY_OFFICE=$(ONLY_OFFICE_ENDPOINT)]"
 	cd apps/client/$(PACKAGE) && \
 	pnpm i && \
 	NEXT_PUBLIC_APP_URL=$(APP_URL) \
 	NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT=$(ONLY_OFFICE_ENDPOINT) \
-	NEXT_PUBLIC_API_PORTAL_BASE_URL="$(FE_APP_URL)/api/portal" \
-	NEXT_PUBLIC_API_MODEL_BASE_URL="$(FE_APP_URL)/api/model" \
-	NEXT_PUBLIC_API_LMS_BASE_URL="$(FE_APP_URL)/api/lms" \
-	NEXT_PUBLIC_API_SYSTEM_BASE_URL="$(FE_APP_URL)/api/system" \
+	NEXT_PUBLIC_API_PORTAL_BASE_URL="$(FE_APP_URL)$(FE_API_PREFIX)/api/portal" \
+	NEXT_PUBLIC_API_MODEL_BASE_URL="$(FE_APP_URL)$(FE_API_PREFIX)/api/model" \
+	NEXT_PUBLIC_API_LMS_BASE_URL="$(FE_APP_URL)$(FE_API_PREFIX)/api/lms" \
+	NEXT_PUBLIC_API_SYSTEM_BASE_URL="$(FE_APP_URL)$(FE_API_PREFIX)/api/system" \
 	pnpm build && \
 	rm -rf $(CDN_NAME) && \
 	mv out $(CDN_NAME) && \

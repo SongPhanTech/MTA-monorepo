@@ -5,6 +5,7 @@ import {
   markDataSyncHistoryFailed,
   markDataSyncHistorySuccess,
 } from "../services/data-sync-history"
+import { packSyncPayload, SYNC_FILE_EXT } from "../services/data-sync-pack"
 import { exportRegistrationResults } from "../services/export-registration-results"
 
 const app = new OpenAPIHono({ strict: false })
@@ -13,9 +14,9 @@ const exportToInternal = createRoute({
   operationId: "export-to-internal",
   path: "/export-to-internal",
   tags: ["DataSync"],
-  summary: "Xuất kết quả đăng ký học về phần mềm nội bộ",
+  summary: "Xuất kết quả đăng ký học về phần mềm nội bộ (.dat)",
   description:
-    "Xuất ClassRegisterLogs, StudentSubjectScore và dữ liệu liên quan của 1 đợt đăng ký thành file JSON.",
+    "Xuất ClassRegisterLogs, StudentSubjectScore và dữ liệu liên quan của 1 đợt đăng ký thành gói .dat (Gzip + AES-256-GCM).",
   method: "post",
   request: {
     body: {
@@ -31,7 +32,7 @@ const exportToInternal = createRoute({
   },
   responses: {
     200: {
-      description: "Gói JSON kết quả đăng ký",
+      description: "Meta + gói .dat (base64)",
       content: {
         "application/json": {
           schema: z.object({
@@ -51,7 +52,9 @@ const exportToInternal = createRoute({
               registrationCount: z.number(),
             }),
             counts: z.record(z.string(), z.number()),
-            data: z.record(z.string(), z.array(z.any())),
+            fileName: z.string(),
+            fileBase64: z.string(),
+            fileSize: z.number(),
             syncHistoryId: z.string().optional(),
           }),
         },
@@ -77,12 +80,28 @@ app.openapi(exportToInternal, async (c) => {
   try {
     const result = await exportRegistrationResults(classRegisterSessionId)
 
+    const safeName = (result.meta.sessionName || "dot-dang-ky")
+      .replace(/[\\/:*?"<>|]/g, "_")
+      .trim()
+    const fileName = `export-ket-qua-dang-ky-${safeName}${SYNC_FILE_EXT}`
+
+    // Không trả plaintext data — chỉ gói mã hóa
+    const packed = packSyncPayload(JSON.stringify(result))
+    const publicMeta = {
+      version: result.version,
+      type: result.type,
+      exportedAt: result.exportedAt,
+      filters: result.filters,
+      meta: result.meta,
+      counts: result.counts,
+    }
+
     if (!syncHistoryId) {
       const history = await createDataSyncHistoryPending({
         type: $Enums.DataSyncType.EXPORT,
         sessionName: result.meta.sessionName,
         classRegisterSessionId,
-        fileName: `export-ket-qua-dang-ky-${result.meta.sessionName}.json`,
+        fileName,
         fileVersion: result.version,
         recordCounts: result.counts,
         performedById: user.id,
@@ -94,13 +113,16 @@ app.openapi(exportToInternal, async (c) => {
 
     return c.json(
       {
-        ...result,
+        ...publicMeta,
+        fileName,
+        fileBase64: packed.toString("base64"),
+        fileSize: packed.byteLength,
         syncHistoryId,
       },
       200
     )
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Xuất dữ liệu thất bại"
+  } catch {
+    const message = "Không xuất được dữ liệu"
     if (syncHistoryId) {
       await markDataSyncHistoryFailed(syncHistoryId, message)
     }

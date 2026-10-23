@@ -1,5 +1,7 @@
 import { Store, useStore } from "@tanstack/react-store"
 import { getExportStatus } from "@workspace/libs/api/export-training-data"
+import { fetchInstance, getUrl } from "@workspace/libs/api/custom-instance"
+import { getRuntimeEnv } from "@workspace/libs/utils"
 import { message } from "antd"
 
 export type ExportTaskState = {
@@ -70,15 +72,76 @@ function saveState(state: ExportTaskState) {
 
 let pollingInterval: NodeJS.Timeout | null = null
 
-export function downloadExportedFile(downloadUrl: string, fileName?: string) {
-  if (typeof window === "undefined") return
-  const baseApi = process.env.NEXT_PUBLIC_API_LMS_BASE_URL || "http://localhost:3002"
-  const link = document.createElement("a")
-  link.href = `${baseApi}${downloadUrl}`
-  link.download = fileName || "export-toan-bo-du-lieu.json"
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
+export type DownloadExportedFileOptions = {
+  /** 0–100 theo byte (hoặc ước lượng nếu thiếu Content-Length) */
+  onProgress?: (percent: number) => void
+}
+
+/** Tải qua fetch + Bearer token; trả true nếu lưu file thành công. */
+export async function downloadExportedFile(
+  downloadUrl: string,
+  fileName?: string,
+  options?: DownloadExportedFileOptions
+): Promise<boolean> {
+  if (typeof window === "undefined") return false
+  const url = downloadUrl.startsWith("http")
+    ? downloadUrl
+    : getUrl(getRuntimeEnv("NEXT_PUBLIC_API_LMS_BASE_URL") || "/api/lms", downloadUrl)
+  try {
+    const res = await fetchInstance(url, { method: "GET" })
+    if (!res.ok) {
+      const text = await res.text().catch(() => "")
+      message.error("Không xuất được dữ liệu")
+      return false
+    }
+
+    const total = Number(res.headers.get("Content-Length") || 0)
+    const onProgress = options?.onProgress
+    let blob: Blob
+
+    if (res.body && onProgress) {
+      const reader = res.body.getReader()
+      const chunks: Uint8Array[] = []
+      let received = 0
+      let tick = 0
+      onProgress(0)
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        if (value) {
+          chunks.push(value)
+          received += value.length
+          if (total > 0) {
+            onProgress(Math.min(99, Math.round((received / total) * 100)))
+          } else {
+            // thiếu Content-Length — ước lượng mượt tới ~90%
+            tick += 1
+            onProgress(Math.min(90, 8 + Math.round(Math.log10(received + 10) * 18) + (tick % 5)))
+          }
+        }
+      }
+      blob = new Blob(chunks as BlobPart[])
+      onProgress(100)
+    } else {
+      onProgress?.(30)
+      blob = await res.blob()
+      onProgress?.(100)
+    }
+
+    const objectUrl = URL.createObjectURL(blob)
+    const link = document.createElement("a")
+    link.href = objectUrl
+    link.download = fileName || "export-toan-bo-du-lieu.dat"
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(objectUrl)
+    return true
+  } catch (e) {
+    message.error("Không xuất được dữ liệu")
+    return false
+  }
 }
 
 export function startPolling(jobId: string) {
@@ -97,7 +160,12 @@ export function startPolling(jobId: string) {
           sessionName: current.sessionName,
           status: data.status,
           progress: data.progress,
-          message: data.message,
+          message:
+            data.status === "SUCCESS"
+              ? "Xuất dữ liệu thành công"
+              : data.status === "FAILED"
+                ? "Không xuất được dữ liệu"
+                : "Đang xuất dữ liệu",
           fileName: data.fileName,
           fileSize: data.fileSize,
           downloadUrl: data.downloadUrl,
@@ -111,18 +179,16 @@ export function startPolling(jobId: string) {
           if (pollingInterval) clearInterval(pollingInterval)
           pollingInterval = null
 
-          const mb = ((data.fileSize || 0) / (1024 * 1024)).toFixed(1)
           message.success({
-            content: `Xuất dữ liệu ra internet thành công (${mb} MB)! Đang tải file...`,
+            content: "Xuất dữ liệu thành công",
             key: "global-export-task",
-            duration: 6,
+            duration: 2,
           })
 
-          if (data.downloadUrl) {
-            downloadExportedFile(data.downloadUrl, data.fileName)
-          }
+          // Không auto-download ở đây: nút ExportInternetDownloadButton
+          // tự tải với progress + micro-interaction.
 
-          // Tự động giải phóng sau 15 giây
+          // Giữ SUCCESS đủ lâu để nút kịp tải file rồi reset
           setTimeout(() => {
             const cur = exportStore.state
             if (cur.jobId === jobId && cur.status === "SUCCESS") {
@@ -137,15 +203,15 @@ export function startPolling(jobId: string) {
               exportStore.setState(() => resetState)
               saveState(resetState)
             }
-          }, 15000)
+          }, 60000)
         } else if (data.status === "FAILED") {
           if (pollingInterval) clearInterval(pollingInterval)
           pollingInterval = null
 
           message.error({
-            content: data.message || "Xuất dữ liệu thất bại",
+            content: "Không xuất được dữ liệu",
             key: "global-export-task",
-            duration: 6,
+            duration: 3,
           })
 
           setTimeout(() => {
@@ -178,7 +244,7 @@ export function trackNewExportJob(jobId: string, sessionId?: string | null, sess
     sessionName: sessionName || null,
     status: "PROCESSING",
     progress: 5,
-    message: "Đã tạo tác vụ nền, Worker đang tải dữ liệu...",
+    message: "Đang xuất dữ liệu",
   }
   exportStore.setState(() => initial)
   saveState(initial)

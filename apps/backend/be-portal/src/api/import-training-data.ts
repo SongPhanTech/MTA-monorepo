@@ -1,12 +1,16 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { $Enums } from "@workspace/db"
 import { createDataSyncHistoryPending, findOtherPendingImport } from "../services/data-sync-history"
-import { saveImportFile } from "../services/data-sync/import-file-store"
+import { decodeImportBytes } from "../services/data-sync-pack"
+import { saveImportPayload } from "../services/data-sync/import-file-store"
 import {
   DATA_SYNC_KAFKA_ENABLED,
   enqueueDataSyncImport,
 } from "../services/data-sync/kafka-queue"
-import { markImportJobProcessing, runImportTrainingDataJobFromFile } from "../services/import-training-data"
+import {
+  markImportJobProcessing,
+  runImportTrainingDataJobFromRedis,
+} from "../services/import-training-data"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -98,14 +102,46 @@ app.openapi(importFromInternal, async (c) => {
   let syncHistoryId = form.syncHistoryId
 
   if (!file || file.size === 0) {
-    return c.json({ message: "Vui lòng chọn file JSON" }, 400)
+    return c.json({ message: "Không nhập được dữ liệu" }, 400)
   }
 
-  const otherPending = await findOtherPendingImport(syncHistoryId)
+  // Giải mã .dat (hoặc parse JSON cũ) để lấy session + phát hiện file hỏng sớm
+  const fileBytes = Buffer.from(await file.arrayBuffer())
+  let sessionIdFromFile: string | undefined
+  let sessionNameFromFile: string | undefined
+  try {
+    const parsed = decodeImportBytes(fileBytes) as {
+      data?: { ClassRegisterSession?: Array<{ id?: string; name?: string }> }
+    }
+    const s = parsed?.data?.ClassRegisterSession?.[0]
+    if (s?.id) sessionIdFromFile = s.id
+    if (s?.name) sessionNameFromFile = String(s.name)
+  } catch {
+    return c.json({ message: "Không nhập được dữ liệu" }, 400)
+  }
+
+  // Nếu FE đã tạo history, lấy session từ DB; không thì dùng từ file
+  let lockSessionId = sessionIdFromFile
+  if (syncHistoryId) {
+    try {
+      const { prisma } = await import("../prisma")
+      const hist = await prisma.dataSyncHistory.findUnique({
+        where: { id: syncHistoryId },
+        select: { classRegisterSessionId: true },
+      })
+      if (hist?.classRegisterSessionId) lockSessionId = hist.classRegisterSessionId
+    } catch {
+      /* ignore */
+    }
+  }
+
+  const otherPending = await findOtherPendingImport(syncHistoryId, lockSessionId)
   if (otherPending) {
     return c.json(
       {
-        message: `Đang có một tiến trình nhập dữ liệu (${otherPending.sessionName || otherPending.fileName || otherPending.id}). Vui lòng đợi hoàn tất.`,
+        message: lockSessionId
+          ? `Đang có tiến trình nhập cho cùng đợt đăng ký (${otherPending.sessionName || otherPending.fileName || otherPending.id}). Vui lòng đợi hoàn tất.`
+          : `Đang có một tiến trình nhập dữ liệu (${otherPending.sessionName || otherPending.fileName || otherPending.id}). Vui lòng đợi hoàn tất.`,
       },
       409
     )
@@ -114,21 +150,21 @@ app.openapi(importFromInternal, async (c) => {
   if (!syncHistoryId) {
     const history = await createDataSyncHistoryPending({
       type: $Enums.DataSyncType.IMPORT,
-      sessionName: file.name || "Import JSON",
+      sessionName: sessionNameFromFile || file.name || "Import JSON",
       fileName: file.name,
+      classRegisterSessionId: sessionIdFromFile,
       performedById: session.id,
     })
     syncHistoryId = history.id
   }
 
   const historyId = syncHistoryId
-  const filePath = await saveImportFile(historyId, Buffer.from(await file.arrayBuffer()))
+  await saveImportPayload(historyId, fileBytes)
   await markImportJobProcessing(historyId, file.name)
 
   if (DATA_SYNC_KAFKA_ENABLED) {
     const enqueued = await enqueueDataSyncImport({
       syncHistoryId: historyId,
-      filePath,
       fileName: file.name,
       timestamp: new Date().toISOString(),
       attempts: 0,
@@ -147,10 +183,8 @@ app.openapi(importFromInternal, async (c) => {
   }
 
   setTimeout(() => {
-    console.log(
-      `[data-sync] fallback bắt đầu history=${historyId} file=${filePath}`
-    )
-    runImportTrainingDataJobFromFile(historyId, filePath)
+    console.log(`[data-sync] fallback bắt đầu history=${historyId} (redis)`)
+    runImportTrainingDataJobFromRedis(historyId)
   }, 50)
 
   return c.json(

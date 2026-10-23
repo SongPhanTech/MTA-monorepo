@@ -5,8 +5,19 @@ import {
   markDataSyncHistoryProcessing,
   markDataSyncHistorySuccess,
 } from "./data-sync-history"
+import { requiresExportSignature, verifyExportSignature } from "./data-sync-signature"
 
-export const SUPPORTED_IMPORT_VERSIONS = ["1.3.0", "1.3.1", "1.3.2", "1.3.3", "1.4.0"] as const
+export const SUPPORTED_IMPORT_VERSIONS = [
+  "1.3.0",
+  "1.3.1",
+  "1.3.2",
+  "1.3.3",
+  "1.4.0",
+  "1.5.0",
+  "1.5.1",
+  "1.5.2",
+  "1.6.0",
+] as const
 
 type JsonRecord = Record<string, unknown>
 type ExportPayload = {
@@ -176,6 +187,13 @@ const BUSINESS_UPSERT_ORDER = [
   "ClassRegisterSessionCredit",
   "StudentSubjectScore",
   "StudentSemesterResult",
+  "AcademicWarningRule",
+  "DisciplinaryWarningReason",
+  "Scholarship",
+  "ScholarshipCriteria",
+  "AcademicWarning",
+  "DisciplinaryWarning",
+  "ScholarshipAward",
 ] as const
 
 function toDelegateName(modelName: string): string {
@@ -569,7 +587,9 @@ async function importJoinTable(
     | "_ClassRegisterSessionToTrainingCourse"
     | "_FixedClassToSubjectClass"
     | "_PrerequisiteSubject"
-    | "_CoRequisiteSubject",
+    | "_CoRequisiteSubject"
+    | "_AcademicWarningToAcademicWarningRule"
+    | "_DisciplinaryWarningToDisciplinaryWarningReason",
   rows: Array<{ A?: string; B?: string }>,
   warnings: string[]
 ): Promise<number> {
@@ -628,7 +648,7 @@ export async function importTrainingDataFromJson(
   const progressCb: ProgressCallback | undefined =
     typeof onProgressOrDb === "function" ? onProgressOrDb : onProgress
 
-  const json = payload as ExportPayload
+  const json = payload as ExportPayload & { signature?: string }
   if (!json?.data || typeof json.data !== "object") {
     throw new Error("File JSON thiếu khối data")
   }
@@ -639,6 +659,14 @@ export async function importTrainingDataFromJson(
     throw new Error(
       `Phiên bản file không hỗ trợ: ${json.version}. Hỗ trợ: ${SUPPORTED_IMPORT_VERSIONS.join(", ")}`
     )
+  }
+
+  // Legacy JSON 1.5.2 có HMAC trong body. Gói 1.6.0+ đi qua .dat (AES-GCM) — đã verify lúc giải mã.
+  if (
+    json.version !== "1.6.0" &&
+    (requiresExportSignature(json.version) || typeof json.signature === "string")
+  ) {
+    verifyExportSignature(json as Record<string, unknown>)
   }
 
   const data = json.data as Record<string, unknown>
@@ -798,6 +826,36 @@ export async function importTrainingDataFromJson(
     steps.push({ table: "_CoRequisiteSubject", count: coreqJoin })
   }
 
+  const academicWarningJoin = await importJoinTable(
+    "_AcademicWarningToAcademicWarningRule",
+    asRows(data, "_AcademicWarningToAcademicWarningRule") as Array<{ A?: string; B?: string }>,
+    warnings
+  )
+  if (
+    academicWarningJoin > 0 ||
+    asRows(data, "_AcademicWarningToAcademicWarningRule").length > 0
+  ) {
+    steps.push({ table: "_AcademicWarningToAcademicWarningRule", count: academicWarningJoin })
+  }
+
+  const disciplinaryWarningJoin = await importJoinTable(
+    "_DisciplinaryWarningToDisciplinaryWarningReason",
+    asRows(data, "_DisciplinaryWarningToDisciplinaryWarningReason") as Array<{
+      A?: string
+      B?: string
+    }>,
+    warnings
+  )
+  if (
+    disciplinaryWarningJoin > 0 ||
+    asRows(data, "_DisciplinaryWarningToDisciplinaryWarningReason").length > 0
+  ) {
+    steps.push({
+      table: "_DisciplinaryWarningToDisciplinaryWarningReason",
+      count: disciplinaryWarningJoin,
+    })
+  }
+
   return {
     sessionId: String(session.id),
     sessionName: String(session.name),
@@ -806,14 +864,25 @@ export async function importTrainingDataFromJson(
   }
 }
 
-/** Parse file JSON (không xóa file — caller tự cleanup). */
+/** Đọc JSON từ Redis theo syncHistoryId (caller tự xóa key). */
+export async function processImportFromRedis(
+  syncHistoryId: string,
+  onProgress?: ProgressCallback
+): Promise<ImportTrainingDataResult> {
+  const { readImportPayload } = await import("./data-sync/import-file-store")
+  if (onProgress) await onProgress("Đang đọc và phân tích file JSON...")
+  const payload = await readImportPayload(syncHistoryId)
+  return importTrainingDataFromJson(payload, onProgress)
+}
+
+/** @deprecated Alias — tham số là syncHistoryId (hoặc redis key), không còn path disk. */
 export async function processImportFromFile(
-  filePath: string,
+  syncHistoryIdOrPath: string,
   onProgress?: ProgressCallback
 ): Promise<ImportTrainingDataResult> {
   const { readImportJson } = await import("./data-sync/import-file-store")
   if (onProgress) await onProgress("Đang đọc và phân tích file JSON...")
-  const payload = await readImportJson(filePath)
+  const payload = await readImportJson(syncHistoryIdOrPath)
   return importTrainingDataFromJson(payload, onProgress)
 }
 
@@ -848,7 +917,7 @@ export function runImportTrainingDataJob(syncHistoryId: string, payload: unknown
       })
       await finishImportJob(syncHistoryId, result)
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Nhập dữ liệu thất bại"
+      const message = "Không nhập được dữ liệu"
       console.error(`[data-sync] import lỗi history=${syncHistoryId}`, error)
       await markDataSyncHistoryFailed(syncHistoryId, message).catch((e) => {
         console.error("[data-sync] không ghi được FAILED", e)
@@ -857,28 +926,30 @@ export function runImportTrainingDataJob(syncHistoryId: string, payload: unknown
   })()
 }
 
-/** Fallback in-process: parse file tạm + import + xóa file. */
-export function runImportTrainingDataJobFromFile(syncHistoryId: string, filePath: string) {
+/** Fallback in-process: đọc Redis + import + xóa key. */
+export function runImportTrainingDataJobFromRedis(syncHistoryId: string) {
   void (async () => {
     try {
       console.log(`[data-sync] fallback đang xử lý history=${syncHistoryId}`)
-      await markDataSyncHistoryProcessing(
-        syncHistoryId,
-        "Đang đọc dữ liệu và cập nhật cơ sở dữ liệu..."
-      )
-      const result = await processImportFromFile(filePath, async (msg) => {
+      await markDataSyncHistoryProcessing(syncHistoryId, "Đang nhập dữ liệu")
+      const result = await processImportFromRedis(syncHistoryId, async (msg) => {
         await markDataSyncHistoryProcessing(syncHistoryId, msg).catch(() => undefined)
       })
       await finishImportJob(syncHistoryId, result)
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Nhập dữ liệu thất bại"
+      const message = "Không nhập được dữ liệu"
       console.error(`[data-sync] import lỗi history=${syncHistoryId}`, error)
       await markDataSyncHistoryFailed(syncHistoryId, message).catch((e) => {
         console.error("[data-sync] không ghi được FAILED", e)
       })
     } finally {
-      const { removeImportFile } = await import("./data-sync/import-file-store")
-      await removeImportFile(filePath)
+      const { removeImportPayload } = await import("./data-sync/import-file-store")
+      await removeImportPayload(syncHistoryId)
     }
   })()
+}
+
+/** @deprecated Dùng runImportTrainingDataJobFromRedis */
+export function runImportTrainingDataJobFromFile(syncHistoryId: string, _filePath?: string) {
+  runImportTrainingDataJobFromRedis(syncHistoryId)
 }

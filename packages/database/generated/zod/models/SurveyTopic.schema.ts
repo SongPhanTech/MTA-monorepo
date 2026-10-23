@@ -8,7 +8,6 @@ import { z } from 'zod/v3';
 import { SurveyTypeSchema } from '../enums/SurveyType.schema';
 const baseSchema = z.object({
     id: z.string(),
-    code: z.string().nullish(),
     active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
@@ -21,13 +20,13 @@ const baseSchema = z.object({
     dNgaySua: z.coerce.date().nullish(),
     sThietBiTao: z.string().nullish(),
     sThietBiSua: z.string().nullish(),
+    code: z.string().nullish(),
     name: z.string(),
     type: SurveyTypeSchema.nullish(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
     id: z.string(),
-    code: z.string().nullish(),
     active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
@@ -40,6 +39,7 @@ const baseSchemaWithoutDefaults = z.object({
     dNgaySua: z.coerce.date().nullish(),
     sThietBiTao: z.string().nullish(),
     sThietBiSua: z.string().nullish(),
+    code: z.string().nullish(),
     name: z.string(),
     type: SurveyTypeSchema.nullish(),
 }
@@ -76,7 +76,6 @@ export const SurveyTopicPrismaCreateSchema = baseSchemaWithoutDefaults.partial()
  */
 export const SurveyTopicPrismaUpdateSchema = z.object({
     id: z.string(),
-    code: z.string().nullish(),
     active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
@@ -89,6 +88,7 @@ export const SurveyTopicPrismaUpdateSchema = z.object({
     dNgaySua: z.coerce.date().nullish(),
     sThietBiTao: z.string().nullish(),
     sThietBiSua: z.string().nullish(),
+    code: z.string().nullish(),
     name: z.string(),
     type: SurveyTypeSchema.nullish()
 }).partial().passthrough();

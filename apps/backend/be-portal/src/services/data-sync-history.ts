@@ -118,7 +118,15 @@ export async function cleanupPendingImportsOnBoot() {
   })
 }
 
-export async function findOtherPendingImport(excludeId?: string) {
+/**
+ * Khóa import theo đợt (classRegisterSessionId) thay vì toàn cục.
+ * - Có sessionId: chỉ chặn PENDING cùng đợt.
+ * - Không có sessionId: vẫn chặn mọi PENDING (an toàn cho import thiếu ngữ cảnh).
+ */
+export async function findOtherPendingImport(
+  excludeId?: string,
+  classRegisterSessionId?: string | null
+) {
   await expireStalePendingImports()
   return prisma.dataSyncHistory.findFirst({
     where: {
@@ -126,8 +134,16 @@ export async function findOtherPendingImport(excludeId?: string) {
       status: $Enums.DataSyncStatus.PENDING,
       deletedAt: null,
       ...(excludeId ? { id: { not: excludeId } } : {}),
+      ...(classRegisterSessionId
+        ? { classRegisterSessionId }
+        : {}),
     },
-    select: { id: true, sessionName: true, fileName: true },
+    select: {
+      id: true,
+      sessionName: true,
+      fileName: true,
+      classRegisterSessionId: true,
+    },
   })
 }
 

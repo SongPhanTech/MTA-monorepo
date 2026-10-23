@@ -23,7 +23,9 @@ export type ExportToInternalPayload = {
     registrationCount: number
   }
   counts: Record<string, number>
-  data: Record<string, unknown[]>
+  fileName: string
+  fileBase64: string
+  fileSize: number
   syncHistoryId?: string
 }
 
@@ -63,17 +65,27 @@ export const useExportToInternal = () => {
   })
 }
 
-export function downloadExportJson(payload: ExportToInternalPayload, fallbackName?: string) {
-  const safeName = (payload.meta.sessionName || fallbackName || "dot-dang-ky")
-    .replace(/[\\/:*?"<>|]/g, "_")
-    .trim()
-  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" })
+/** Tải gói .dat (base64 từ API) về máy */
+export function downloadExportDat(payload: ExportToInternalPayload, fallbackName?: string) {
+  const fileName =
+    payload.fileName ||
+    `export-ket-qua-dang-ky-${(payload.meta.sessionName || fallbackName || "dot-dang-ky")
+      .replace(/[\\/:*?"<>|]/g, "_")
+      .trim()}.dat`
+
+  const binary = Uint8Array.from(atob(payload.fileBase64), (c) => c.charCodeAt(0))
+  const blob = new Blob([binary], { type: "application/x-mta-dat" })
   const url = URL.createObjectURL(blob)
   const a = document.createElement("a")
   a.href = url
-  a.download = `export-ket-qua-dang-ky-${safeName}.json`
+  a.download = fileName
   document.body.appendChild(a)
   a.click()
   a.remove()
   URL.revokeObjectURL(url)
+}
+
+/** @deprecated Dùng downloadExportDat */
+export function downloadExportJson(payload: ExportToInternalPayload, fallbackName?: string) {
+  downloadExportDat(payload, fallbackName)
 }
