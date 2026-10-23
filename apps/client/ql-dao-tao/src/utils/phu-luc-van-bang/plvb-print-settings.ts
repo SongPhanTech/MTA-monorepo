@@ -32,7 +32,7 @@ export const PLVB_CREDIT_ROW_LINE_COUNT = 1
 /** Khoảng cách giữa quốc hiệu và tiêu ngữ (pt). */
 export const PLVB_HEADER_RIGHT_GAP = 0
 /** Khoảng cách từ mép bảng điểm xuống khối tổng kết/chữ ký (pt). */
-export const PLVB_SUMMARY_BLOCK_MARGIN_TOP = 2
+export const PLVB_SUMMARY_BLOCK_MARGIN_TOP = 10
 export const PLVB_NOTE_FONT = 10
 export const PLVB_BODY_FONT = 10
 export const PLVB_HEADER_FONT = 9
@@ -230,6 +230,9 @@ export function loadPlvbPrintSettings(variant: PlvbPrintVariant = "military"): P
     // v9 lưu nhầm mặc định 3 dòng tổng tín chỉ — kéo cả chữ ký ra xa bảng điểm.
     if (parsed.headerRightGap == null && parsed.creditRowLineCount === 3) {
       merged.creditRowLineCount = defaults.creditRowLineCount
+    }
+    if (parsed.summaryBlockMarginTop === 2) {
+      merged.summaryBlockMarginTop = defaults.summaryBlockMarginTop
     }
     return merged
   } catch {

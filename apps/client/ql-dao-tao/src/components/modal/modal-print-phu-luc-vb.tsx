@@ -1258,7 +1258,7 @@ function StudentAppendixPage({
       <table
         className="w-full border-collapse"
         style={{
-          marginTop: `${settings.summaryBlockMarginTop ?? 2}pt`,
+          marginTop: `${settings.summaryBlockMarginTop ?? 10}pt`,
           fontSize: `${settings.summaryFontSize}pt`,
           lineHeight: settings.summaryLineHeight || 1.15,
         }}
@@ -1989,11 +1989,11 @@ const ModalPrintPhuLucVb = () => {
                 step: 0.05,
                 fallback: 1.1,
               })}
-              {ptField("Cụm tổng kết", "summaryLineHeight", {
-                min: 0.8,
-                max: 2,
-                step: 0.05,
-                fallback: 1.15,
+              {ptField("Cụm tổng kết (khoảng cách cả cụm, pt)", "summaryBlockMarginTop", {
+                min: 0,
+                max: 40,
+                step: 0.5,
+                fallback: 10,
               })}
               {ptField("Cụm ghi chú", "noteLineHeight", {
                 min: 0.8,
@@ -2009,12 +2009,6 @@ const ModalPrintPhuLucVb = () => {
                 min: 8,
                 max: 16,
                 fallback: 12,
-              })}
-              {ptField("Khoảng cách bảng → tổng kết/chữ ký", "summaryBlockMarginTop", {
-                min: 0,
-                max: 24,
-                step: 0.5,
-                fallback: 2,
               })}
               {ptField("Chiều cao 1 dòng tổng kết", "summaryRowHeight", {
                 min: 10,
