@@ -1,12 +1,8 @@
 import { Readable } from "node:stream"
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import {
-  AcademicActionType,
-  AcademicRankingBaseType,
   ApplicationStatus,
-  ArchivedCertificateStatus,
   FixedClassType,
-  RankingContext,
   StudentStatus,
   SubjectVersionType,
   ThesisType,
@@ -55,14 +51,9 @@ import {
   reclaimAllStaleGraduationData,
   reclaimStudentsFromStaleGraduation,
 } from "../services/delete-graduation-session"
-import {
-  buildGraduationTranscript,
-  graduationCurriculumSelect,
-  resolveGraduationSubjectScores,
-} from "../services/graduation-scores"
-import { evaluateCondition } from "../services/student-result.service"
-import type { StudentDataContext } from "../types/student-context"
-import { criteriaFieldLabels, criteriaOperatorLabels } from "@workspace/libs/constants"
+import { runGraduationCheck } from "../services/graduation-check"
+import { buildGraduationTranscript } from "../services/graduation-scores"
+import { criteriaFieldLabels } from "@workspace/libs/constants"
 import {
   parseSignerInfo,
   parsePostgraduateDeptSignerInfo,
@@ -101,30 +92,6 @@ function isApplicationOrientation(
   if (classType === FixedClassType.APPLICATION) return true
   if (classType === FixedClassType.RESEARCH) return false
   return fallbackIsProject
-}
-
-/** So TBTL với khoảng xếp loại cùng hệ với điểm đang hiển thị (hệ điểm khoá). */
-function isGpaInGraduationRankRange(
-  rank: {
-    base10Min: number | null
-    base10Max: number | null
-    base4Min: number | null
-    base4Max: number | null
-  },
-  cumulativeBase10: Decimal,
-  cumulativeBase4: Decimal,
-  displayBaseScore: AcademicRankingBaseType | string | null | undefined
-) {
-  const useBase10 =
-    displayBaseScore === AcademicRankingBaseType.Base10 || displayBaseScore === "Base10"
-
-  if (useBase10) {
-    if (rank.base10Min == null || rank.base10Max == null) return false
-    return cumulativeBase10.gte(rank.base10Min) && cumulativeBase10.lte(rank.base10Max)
-  }
-
-  if (rank.base4Min == null || rank.base4Max == null) return false
-  return cumulativeBase4.gte(rank.base4Min) && cumulativeBase4.lte(rank.base4Max)
 }
 
 function buildApprovedGraduateStudentWhere(params: {
@@ -671,381 +638,7 @@ const graduationCheck = createRoute({
 
 app.openapi(graduationCheck, async (c) => {
   const { sessionId, applicationIds } = c.req.valid("json")
-
-  const session = await prisma.graduationSession.findUniqueOrThrow({
-    where: { id: sessionId },
-    include: {
-      applications: {
-        where: applicationIds?.length
-          ? { id: { in: applicationIds } }
-          : {
-              status: {
-                in: [ApplicationStatus.SUBMITTED, ApplicationStatus.IN_REVIEW],
-              },
-            },
-      },
-      outputStandard: {
-        where: { deletedAt: null, active: true },
-        include: { certificates: true },
-      },
-    },
-  })
-
-  const results: z.infer<typeof GraduationCheckResult>[] = []
-
-  const curriculumSelect = graduationCurriculumSelect
-
-  for (const [idx, application] of session.applications.entries()) {
-    const student = await prisma.student.findFirstOrThrow({
-      where: { id: application.studentId },
-      select: {
-        id: true,
-        academicWarningLevel: true,
-        disciplinaryWarningLevel: true,
-        entryScore: true,
-        foreignLangPass: true,
-        _count: { select: { priorityObject: true } },
-        classMonitor: { select: { id: true } },
-        studentAcademicDecision: true,
-        curriculumVersion: { select: curriculumSelect },
-        semesterTrainingScore: {
-          where: { deletedAt: null },
-          take: 1,
-          orderBy: { semester: { startDate: "desc" } },
-        },
-        studentSemesterResult: {
-          where: { deletedAt: null },
-          take: 1,
-          orderBy: { createdAt: "desc" },
-        },
-        studentYearResult: { where: { deletedAt: null }, take: 1, orderBy: { createdAt: "desc" } },
-        archivedCertificate: {
-          where: { deletedAt: null, status: ArchivedCertificateStatus.APPROVED },
-        },
-        fixedClass: {
-          select: {
-            trainingCourse: {
-              include: {
-                scoreConverts: { where: { deletedAt: null, active: true } },
-                academicRankingConvert: {
-                  where: {
-                    context: RankingContext.GRADUATION,
-                    deletedAt: null,
-                    active: true,
-                  },
-                  include: {
-                    rankingCondition: true,
-                    downgradeRules: {
-                      include: { initialRank: true, conditions: true },
-                    },
-                  },
-                  orderBy: { rankOrder: "asc" },
-                },
-              },
-            },
-            curriculumVersion: { select: curriculumSelect },
-          },
-        },
-      },
-    })
-
-    if (!student.fixedClass) {
-      results.push({
-        applicationId: application.id,
-        graduation: false,
-        reason: "Sinh viên không có lớp quản lý",
-        trainingMajor: null,
-        diplomaType: null,
-      })
-      continue
-    }
-
-    const curriculumVersion = student.curriculumVersion || student.fixedClass.curriculumVersion
-
-    if (!curriculumVersion) {
-      results.push({
-        applicationId: application.id,
-        graduation: false,
-        reason: "Sinh viên không có CTĐT",
-        trainingMajor: null,
-        diplomaType: null,
-      })
-      continue
-    }
-
-    const reasons: string[] = []
-
-    // Chỉ xét chuẩn đầu ra khi đợt đã chọn; không chọn thì không bắt buộc
-    if (session.outputStandard.length > 0) {
-      const lackOfOutputStandard = session.outputStandard.filter((standard) => {
-        if (standard.certificates.length === 0) return false
-        const notCompleted = standard.certificates.every((cert) => {
-          const archived = student.archivedCertificate.find(
-            (archived) => archived.certificateId === cert.id
-          )
-          return !archived
-        })
-        return notCompleted
-      })
-
-      if (lackOfOutputStandard.length > 0) {
-        reasons.push(
-          `Chưa đạt chuẩn đầu ra: ${lackOfOutputStandard.map((standard) => standard.name).join(", ")}`
-        )
-      }
-    }
-
-    const curriculumSubjects = curriculumVersion.trainingBlocks.flatMap(({ subjects }) => subjects)
-
-    const trainingCourse = student.fixedClass.trainingCourse
-    const { baseScore } = trainingCourse
-    const useCourseBase10 = baseScore === AcademicRankingBaseType.Base10
-    const electiveCreditsRequired = curriculumVersion.trainingBlocks.reduce(
-      (pre, cur) => pre + cur.electiveCreditsRequired,
-      0
-    )
-
-    const resolvedScores = await resolveGraduationSubjectScores({
-      studentId: application.studentId,
-      curriculumSubjects,
-      trainingCourse,
-      electiveCreditsRequired,
-    })
-
-    const {
-      finalScores,
-      markDoneScores,
-      totalDebtCredit,
-      issueReasons,
-      subjectReasons,
-      accumulatedElectiveCredits,
-      totalScoreBase10,
-      totalScoreBase4,
-      totalPassCredit,
-      courseGradeLowest,
-      graduationCourseGradeLowest,
-    } = resolvedScores
-
-    reasons.push(...issueReasons, ...subjectReasons)
-
-    await prisma.studentGraduationApplication.update({
-      where: { id: application.id },
-      data: {
-        gpaScore: {
-          set: Array.from(finalScores.values()).map((score) => ({
-            id: score.id,
-          })),
-        },
-        supplementaryScore: {
-          set: Array.from(markDoneScores.values()).map((score) => ({
-            id: score.id,
-          })),
-        },
-      },
-    })
-
-    if (curriculumVersion.requiredCredits && totalPassCredit < curriculumVersion.requiredCredits) {
-      reasons.push(
-        `Chưa đạt số tín chỉ bắt buộc (${totalPassCredit} < ${curriculumVersion.requiredCredits})`
-      )
-    }
-
-    const cumulativeBase10 = totalPassCredit
-      ? totalScoreBase10.div(totalPassCredit).toDecimalPlaces(2, Decimal.ROUND_HALF_UP)
-      : new Decimal(0)
-    const cumulativeBase4 = totalPassCredit
-      ? totalScoreBase4.div(totalPassCredit).toDecimalPlaces(2, Decimal.ROUND_HALF_UP)
-      : new Decimal(0)
-
-    const rankLevels = trainingCourse.academicRankingConvert
-    if (!rankLevels.length) {
-      reasons.push("Không có hạng xếp loại")
-    }
-
-    const CUMULATIVE_GPA = (useCourseBase10 ? cumulativeBase10 : cumulativeBase4).toNumber()
-
-    const latestSemesterResult = student.studentSemesterResult[0]
-    const semesterRegisteredCredits = latestSemesterResult?.registeredCredits || 0
-    const semesterFailedCredits = latestSemesterResult?.failedCredits || 0
-    let repeatYearCount = 0
-    let suspensionCount = 0
-    for (const decision of student.studentAcademicDecision) {
-      if (decision.actionTaken === AcademicActionType.REPEAT_YEAR) {
-        repeatYearCount++
-      }
-      if (decision.actionTaken === AcademicActionType.SUSPENSION) {
-        suspensionCount++
-      }
-    }
-
-    const studentDataContext: StudentDataContext = {
-      SEMESTER_GPA: useCourseBase10
-        ? latestSemesterResult?.gpaBase10.toNumber() || 0
-        : latestSemesterResult?.gpaBase4.toNumber() || 0,
-      YEARLY_GPA: useCourseBase10
-        ? student.studentYearResult[0]?.gpaBase10.toNumber() || 0
-        : student.studentYearResult[0]?.gpaBase4.toNumber() || 0,
-      CUMULATIVE_GPA,
-      ENTRY_SCORE: student.entryScore || 0,
-      COURSE_GRADE_LOWEST: courseGradeLowest,
-      GRADUATION_COURSE_GRADE_LOWEST: graduationCourseGradeLowest,
-
-      SEMESTER_REGISTERED_CREDITS: semesterRegisteredCredits,
-      SEMESTER_PASSED_CREDITS: latestSemesterResult?.passedCredits || 0,
-      SEMESTER_FAILED_CREDITS: semesterFailedCredits,
-      FAILED_CREDITS_PERCENT: semesterRegisteredCredits
-        ? (semesterFailedCredits / semesterRegisteredCredits) * 100
-        : 0,
-      YEAR_FAILED_CREDITS: student.studentYearResult[0]?.failedCredits || 0,
-      CUMULATIVE_PASSED_CREDITS: totalPassCredit,
-      CUMULATIVE_DEBT_CREDITS: totalDebtCredit,
-      CUMULATIVE_PROGRESS_PERCENT: curriculumVersion.requiredCredits
-        ? (totalPassCredit / curriculumVersion.requiredCredits) * 100
-        : 0,
-      CUMULATIVE_RETAKE_PERCENT: totalPassCredit
-        ? (totalDebtCredit / totalPassCredit) * 100
-        : 0,
-
-      ACADEMIC_WARNING_LEVEL: student.academicWarningLevel,
-      DISCIPLINARY_WARNING_LEVEL: student.disciplinaryWarningLevel,
-      REPEAT_YEAR_COUNT: repeatYearCount,
-      SUSPENSION_COUNT: suspensionCount,
-
-      CONDUCT_SCORE: student.semesterTrainingScore[0]?.score || 0,
-      HAS_PASSED_FOREIGN_LANGUAGE: student.foreignLangPass,
-      HAS_REGISTERED_FOR_SEMESTER: !!latestSemesterResult,
-      IS_PRIORITY_STUDENT: !!student._count.priorityObject,
-      IS_CLASS_MONITOR_OR_LEADER: !!student.classMonitor,
-      IS_STUDY_DURATION_EXCEEDED: false,
-      IS_DEBT_SUBJECT_CONSECUTIVE: false,
-      HAS_IMPROVEMENT_REGISTRATION: latestSemesterResult?.isImproving || false,
-    }
-    // Nếu có lý do thất bại → không xét xếp loại
-    if (reasons.length > 0) {
-      results.push({
-        applicationId: application.id,
-        graduation: false,
-        gpa: CUMULATIVE_GPA,
-        rank: null,
-        reason: reasons.join("\n"),
-        trainingMajor: curriculumVersion.curriculum.trainingMajor,
-        diplomaType: curriculumVersion.diplomaType,
-      })
-      continue
-    }
-
-    // Xếp loại tốt nghiệp: so khoảng theo hệ số xét của từng hạng
-    const sortedRankLevels = rankLevels
-
-    for (const [rankIdx, rank] of sortedRankLevels.entries()) {
-      const eligibilityResults = await Promise.all(
-        rank.rankingCondition.map(async (rule) => {
-          const passed = evaluateCondition(studentDataContext, rule)
-          const actualValue = Number(studentDataContext[rule.field])
-          try {
-            await prisma.applicationCheckResult.upsert({
-              where: {
-                studentGraduationApplicationId_rankingConditionId: {
-                  studentGraduationApplicationId: application.id,
-                  rankingConditionId: rule.id,
-                },
-              },
-              create: {
-                studentGraduationApplicationId: application.id,
-                rankingConditionId: rule.id,
-                passed,
-                actualValue,
-              },
-              update: { passed, actualValue },
-            })
-          } catch (e) {
-            console.log(e)
-          }
-          return passed
-        })
-      )
-      const isEligible = eligibilityResults.every((p) => p)
-
-      const isCorrectScore = isGpaInGraduationRankRange(
-        rank,
-        cumulativeBase10,
-        cumulativeBase4,
-        baseScore
-      )
-
-      const eligibleRank = isEligible && isCorrectScore ? rank : null
-
-      if (eligibleRank) {
-        const downgrade = eligibleRank.downgradeRules.find(({ conditions }) =>
-          conditions.every((rule) => evaluateCondition(studentDataContext, rule))
-        )
-
-        const rankDowngrade = sortedRankLevels[rankIdx + 1] || null
-
-        if (downgrade) {
-          const reason = `Bị hạ bậc: ${downgrade.conditions
-            .map((rule) => {
-              return `${criteriaFieldLabels[rule.field]} ${criteriaOperatorLabels[rule.operator]} ${rule.value}`
-            })
-            .join("\n")}`
-          results.push({
-            applicationId: application.id,
-            graduation: !!rankDowngrade?.graduated,
-            gpa: CUMULATIVE_GPA,
-            rank: rankDowngrade || null,
-            reason,
-            trainingMajor: curriculumVersion.curriculum.trainingMajor,
-            diplomaType: curriculumVersion.diplomaType,
-            downgraded: {
-              from: rank,
-              conditions: downgrade.conditions,
-            },
-          })
-          break
-        }
-
-        results.push({
-          applicationId: application.id,
-          graduation: !!rank.graduated,
-          gpa: CUMULATIVE_GPA,
-          rank,
-          reason: "",
-          trainingMajor: curriculumVersion.curriculum.trainingMajor,
-          diplomaType: curriculumVersion.diplomaType,
-        })
-        break
-      }
-    }
-
-    if (!results[idx]) {
-      results.push({
-        applicationId: application.id,
-        graduation: false,
-        gpa: CUMULATIVE_GPA,
-        rank: null,
-        reason: "Không thoả mãn xếp loại nào",
-        trainingMajor: curriculumVersion.curriculum.trainingMajor,
-        diplomaType: curriculumVersion.diplomaType,
-      })
-    }
-  }
-
-  // Lưu kết quả tất cả đơn
-  for (const result of results) {
-    await prisma.studentGraduationApplication.update({
-      where: { id: result.applicationId },
-      data: {
-        graduation: result.graduation,
-        diplomaTypeId: result.diplomaType?.id,
-        trainingMajorId: result.trainingMajor?.id,
-        gpa: result.gpa,
-        rankId: result.rank?.id,
-        reason: result.reason,
-        status: ApplicationStatus.IN_REVIEW,
-      },
-    })
-  }
-
+  const { results } = await runGraduationCheck({ sessionId, applicationIds })
   return c.json({ results }, 200)
 })
 
@@ -1298,73 +891,164 @@ const graduationSessionDecision = createRoute({
   },
 })
 
+type GraduationDecisionExportRow = {
+  no: number
+  originalDiplomaNumber: string
+  diplomaNumber: string
+  diplomaIssueDate: string
+  decisionDate: string
+  finalGpa: number | string
+  notes: string
+  fullname: string
+  FULLNAME: string
+  gender: string
+  dayOfBirth: string
+  monthOfBirth: string
+  mmmOfBirth: string
+  yearOfBirth: string | number
+  trainingMajor: string
+  classification: string
+  classificationEnglish: string
+  trainingType: string
+  diplomaType: string
+  diplomaTypeEnglish: string
+}
+
+function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) => {
+      timer = setTimeout(() => reject(new Error(`${label} timeout after ${ms}ms`)), ms)
+    }),
+  ]).finally(() => {
+    if (timer) clearTimeout(timer)
+  })
+}
+
+async function buildGraduationDecisionExcelFallback(data: GraduationDecisionExportRow[]) {
+  const workbook = new ExcelJS.Workbook()
+  const sheet = workbook.addWorksheet("DanhSachTotNghiep")
+  sheet.columns = [
+    { header: "STT", key: "no", width: 8 },
+    { header: "Họ và tên", key: "fullname", width: 28 },
+    { header: "Giới tính", key: "gender", width: 12 },
+    { header: "Ngày sinh", key: "dayOfBirth", width: 8 },
+    { header: "Tháng sinh", key: "monthOfBirth", width: 12 },
+    { header: "Năm sinh", key: "yearOfBirth", width: 10 },
+    { header: "Ngành", key: "trainingMajor", width: 28 },
+    { header: "Xếp loại", key: "classification", width: 16 },
+    { header: "Loại bằng", key: "diplomaType", width: 20 },
+    { header: "Hình thức đào tạo", key: "trainingType", width: 20 },
+    { header: "Số hiệu văn bằng", key: "diplomaNumber", width: 18 },
+    { header: "Số vào sổ gốc", key: "originalDiplomaNumber", width: 16 },
+    { header: "Ngày cấp", key: "diplomaIssueDate", width: 14 },
+    { header: "Ngày quyết định", key: "decisionDate", width: 16 },
+    { header: "ĐTBTL", key: "finalGpa", width: 10 },
+    { header: "Ghi chú", key: "notes", width: 24 },
+  ]
+  sheet.addRows(data)
+  return workbook.xlsx.writeBuffer()
+}
+
 app.openapi(graduationSessionDecision, async (c) => {
   const { sessionId } = c.req.valid("query")
 
-  const graduationDecisions = await prisma.graduationDecision.findMany({
-    where: { application: { sessionId } },
-    include: {
-      trainingMajor: true,
-      finalRanking: true,
-      diplomaType: true,
-      student: {
-        include: {
-          userProfile: { include: { gender: true } },
-          curriculumVersion: {
-            include: {
-              trainingType: true,
+  const [graduationDecisions, templateBuffer] = await Promise.all([
+    prisma.graduationDecision.findMany({
+      where: { application: { sessionId }, deletedAt: null },
+      select: {
+        originalDiplomaNumber: true,
+        diplomaNumber: true,
+        diplomaIssueDate: true,
+        decisionDate: true,
+        finalGpa: true,
+        notes: true,
+        trainingMajor: { select: { name: true } },
+        finalRanking: { select: { classification: true, classificationEnglish: true } },
+        diplomaType: { select: { name: true, englishName: true } },
+        student: {
+          select: {
+            userProfile: {
+              select: {
+                fullname: true,
+                firstName: true,
+                dateOfBirth: true,
+                gender: { select: { sTen: true } },
+              },
             },
-          },
-          fixedClass: {
-            include: {
-              curriculumVersion: {
-                include: {
-                  trainingType: true,
+            curriculumVersion: {
+              select: { trainingType: { select: { name: true } } },
+            },
+            fixedClass: {
+              select: {
+                curriculumVersion: {
+                  select: { trainingType: { select: { name: true } } },
                 },
               },
             },
           },
         },
       },
-    },
-  })
+      orderBy: [
+        { originalDiplomaNumber: "asc" },
+        { student: { userProfile: { firstName: "asc" } } },
+      ],
+    }),
+    withTimeout(
+      getTemplateBuffer(prisma, "DANH_SACH_TOT_NGHIEP"),
+      8_000,
+      "getTemplateBuffer(DANH_SACH_TOT_NGHIEP)"
+    ).catch((error) => {
+      console.error("Không tải được mẫu DANH_SACH_TOT_NGHIEP, dùng Excel fallback", error)
+      return null
+    }),
+  ])
 
-  const data = graduationDecisions.map((graduationDecision, idx) => {
+  const data: GraduationDecisionExportRow[] = graduationDecisions.map((item, idx) => {
     const curriculumVersion =
-      graduationDecision.student.curriculumVersion ||
-      graduationDecision.student.fixedClass?.curriculumVersion
-
-    const dateOfBirth = graduationDecision.student.userProfile.dateOfBirth
+      item.student.curriculumVersion || item.student.fixedClass?.curriculumVersion
+    const dateOfBirth = item.student.userProfile.dateOfBirth
+    const fullname = item.student.userProfile.fullname ?? ""
 
     return {
       no: idx + 1,
-      ...graduationDecision,
-      originalDiplomaNumber: graduationDecision.originalDiplomaNumber,
-      diplomaNumber: graduationDecision.diplomaNumber,
-      diplomaIssueDate: graduationDecision.diplomaIssueDate,
-      fullname: graduationDecision.student.userProfile.fullname,
-      FULLNAME: graduationDecision.student.userProfile.fullname?.toUpperCase(),
-      gender: graduationDecision.student.userProfile.gender?.sTen,
-      dayOfBirth: dateOfBirth ? dateOfBirth.getDate().toString().padStart(2, "0") : null,
-      monthOfBirth: dateOfBirth ? formatThangIn(dateOfBirth.getMonth() + 1) : null,
-      mmmOfBirth: dateOfBirth ? dateOfBirth.toLocaleString("en-US", { month: "short" }) : null,
-      yearOfBirth: dateOfBirth ? dateOfBirth.getFullYear() : null,
-      trainingMajor: graduationDecision.trainingMajor?.name,
-      classification: graduationDecision.finalRanking.classification,
-      classificationEnglish: graduationDecision.finalRanking.classificationEnglish,
-      trainingType: curriculumVersion?.trainingType?.name,
-      diplomaType: graduationDecision.diplomaType?.name,
-      diplomaTypeEnglish: graduationDecision.diplomaType?.englishName,
+      originalDiplomaNumber: item.originalDiplomaNumber ?? "",
+      diplomaNumber: item.diplomaNumber ?? "",
+      diplomaIssueDate: item.diplomaIssueDate
+        ? dayjs(item.diplomaIssueDate).format("DD/MM/YYYY")
+        : "",
+      decisionDate: item.decisionDate ? dayjs(item.decisionDate).format("DD/MM/YYYY") : "",
+      finalGpa: item.finalGpa != null ? Number(item.finalGpa) : "",
+      notes: item.notes ?? "",
+      fullname,
+      FULLNAME: fullname.toUpperCase(),
+      gender: item.student.userProfile.gender?.sTen ?? "",
+      dayOfBirth: dateOfBirth ? dateOfBirth.getDate().toString().padStart(2, "0") : "",
+      monthOfBirth: dateOfBirth ? formatThangIn(dateOfBirth.getMonth() + 1) : "",
+      mmmOfBirth: dateOfBirth ? dateOfBirth.toLocaleString("en-US", { month: "short" }) : "",
+      yearOfBirth: dateOfBirth ? dateOfBirth.getFullYear() : "",
+      trainingMajor: item.trainingMajor?.name ?? "",
+      classification: item.finalRanking.classification,
+      classificationEnglish: item.finalRanking.classificationEnglish ?? "",
+      trainingType: curriculumVersion?.trainingType?.name ?? "",
+      diplomaType: item.diplomaType?.name ?? "",
+      diplomaTypeEnglish: item.diplomaType?.englishName ?? "",
     }
   })
 
-  const buffer = await getTemplateBuffer(prisma, "DANH_SACH_TOT_NGHIEP")
-
-  const template = new XlsxTemplate(buffer)
-
-  template.substitute(1, { data })
-
-  const result = await template.generate({ type: "arraybuffer" })
+  let result: ArrayBuffer
+  try {
+    if (!templateBuffer) throw new Error("missing template")
+    const template = new XlsxTemplate(templateBuffer)
+    template.substitute(1, { data })
+    result = (await template.generate({ type: "arraybuffer" })) as ArrayBuffer
+  } catch (error) {
+    if (templateBuffer) {
+      console.error("xlsx-template substitute thất bại, dùng Excel fallback", error)
+    }
+    result = (await buildGraduationDecisionExcelFallback(data)) as unknown as ArrayBuffer
+  }
 
   const fileName = "DANH_SACH_TOT_NGHIEP.xlsx"
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`

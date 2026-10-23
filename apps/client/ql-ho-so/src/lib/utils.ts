@@ -21,6 +21,39 @@ const formatDate = (date: string | Date | Dayjs, unit?: "Day" | "Month" | "Year"
   return formatDateInSlash(date)
 }
 
+/** Prisma DateTime không nhận chuỗi rỗng từ DatePicker; trả về ISO hoặc null. */
+function toNullableISO(value: unknown): string | null {
+  if (value == null || value === "") return null
+  const d = dayjs(value as string | Date | Dayjs)
+  return d.isValid() ? d.toISOString() : null
+}
+
+function omitNestedCreateMeta<T extends Record<string, unknown>>(item: T) {
+  const {
+    id: _id,
+    userProfileId: _userProfileId,
+    userProfile: _userProfile,
+    academicRankType: _academicRankType,
+    academicDegreeType: _academicDegreeType,
+    nationality: _nationality,
+    truong: _truong,
+    ...rest
+  } = item as T & Record<string, unknown>
+  return rest
+}
+
+function toHocHamCreateInput(item: Record<string, unknown>) {
+  return {
+    ...omitNestedCreateMeta(item),
+    from: toNullableISO(item.from),
+    to: toNullableISO(item.to),
+  }
+}
+
+function toHocViCreateInput(item: Record<string, unknown>) {
+  return omitNestedCreateMeta(item)
+}
+
 const formatDateReadable = (date: string | Date | Dayjs) => {
   const d = dayjs(date)
   return `${d.hour().toString().padStart(2, "0")}h:${d.minute().toString().padStart(2, "0")} - ${formatNgayIn(d.date())}/${formatThangIn(d.month() + 1)}/${d.year()}`
@@ -149,4 +182,7 @@ export {
   stringToSlug,
   generatePassword,
   buildOrgTree,
+  toNullableISO,
+  toHocHamCreateInput,
+  toHocViCreateInput,
 }

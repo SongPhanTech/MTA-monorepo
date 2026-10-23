@@ -55,24 +55,40 @@ function normalizeAcademicLabel(value?: string | null) {
     .replace(/\p{M}/gu, "")
     .toLowerCase()
     .replace(/\s+/g, " ")
+    .replace(/\bsy\b/g, "si")
     .trim()
 }
 
-/** Nhóm học hàm cho phép trên màn chuyên gia; ưu tiên nhận diện Phó giáo sư trước Giáo sư. */
+/** Nhóm học hàm cho phép trên màn chuyên gia: Giáo sư, Phó giáo sư. */
 function expertRankKey(sTen?: string | null, sMa?: string | null) {
   const name = normalizeAcademicLabel(sTen)
   const code = (sMa ?? "").trim().toUpperCase()
-  if (name.includes("pho giao su") || code === "PGS") return "phó giáo sư"
-  if (name === "giao su" || code === "GS") return "giáo sư"
+  if (name.includes("pho giao su") || code === "PGS" || code.startsWith("PGS")) return "phó giáo sư"
+  if (name.includes("giao su") || code === "GS" || code.startsWith("GS")) return "giáo sư"
   return null
 }
 
-/** Nhóm học vị cho phép trên màn chuyên gia. */
+/** Nhóm học vị cho phép trên màn chuyên gia: TS / Tiến sĩ|sỹ, ThS / Thạc sĩ|sỹ. */
 function expertDegreeKey(sTen?: string | null, sMa?: string | null) {
   const name = normalizeAcademicLabel(sTen)
+  const compact = name.replace(/\s+/g, "")
   const code = (sMa ?? "").trim().toUpperCase()
-  if (name.includes("thac s") || code === "THS") return "thạc sĩ"
-  if (name.includes("tien s") || code === "TS") return "tiến sĩ"
+  if (
+    compact.includes("thacsi") ||
+    compact.includes("thacsy") ||
+    code === "THS" ||
+    code.startsWith("THS")
+  ) {
+    return "thạc sĩ"
+  }
+  if (
+    compact.includes("tiensi") ||
+    compact.includes("tiensy") ||
+    code === "TS" ||
+    code.startsWith("TS")
+  ) {
+    return "tiến sĩ"
+  }
   return null
 }
 
@@ -248,21 +264,10 @@ const PutExpert = () => {
     { enabled: !!selectedLecturerId }
   )
 
-  // Chỉ hiển thị Giáo sư/Phó giáo sư và Tiến sĩ(sỹ)/Thạc sĩ(sỹ) trên màn chỉnh sửa chuyên gia
-  const { data: academicRankTypeRaw } = useFindManyDM_HocHam({
-    where: {
-      OR: [{ sTen: { contains: "giáo sư", mode: "insensitive" } }, { sMa: { in: ["GS", "PGS"] } }],
-    },
-  })
-  const { data: academicDegreeTypeRaw } = useFindManyDM_HocVi({
-    where: {
-      OR: [
-        { sTen: { contains: "tiến", mode: "insensitive" } },
-        { sTen: { contains: "thạc", mode: "insensitive" } },
-        { sMa: { in: ["TS", "ThS"] } },
-      ],
-    },
-  })
+  // Lấy full danh mục rồi lọc client: Giáo sư / Phó giáo sư, TS / Tiến sĩ, ThS / Thạc sĩ.
+  // Không phụ thuộc where Prisma — where bị bỏ qua thì dropdown sẽ ra hết.
+  const { data: academicRankTypeRaw } = useFindManyDM_HocHam()
+  const { data: academicDegreeTypeRaw } = useFindManyDM_HocVi()
   const academicRankType = useMemo(
     () => pickUniqueByKey(academicRankTypeRaw, (item) => expertRankKey(item.sTen, item.sMa)),
     [academicRankTypeRaw]

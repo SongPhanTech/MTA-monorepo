@@ -312,11 +312,12 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
       if (res.status === 200) {
         saveAs(res.data, "DANH_SACH_TOT_NGHIEP.xlsx")
       } else {
-        message.error(res.data.message)
+        const errData = res.data as { message?: string }
+        message.error(errData?.message || "Xuất kết quả thất bại, vui lòng thử lại")
       }
     } catch (error) {
       console.error(error)
-      message.error("Đã xảy ra lỗi, vui lòng thử lại")
+      message.error("Xuất kết quả bị gián đoạn, vui lòng thử lại")
     } finally {
       setIsExporting(false)
     }

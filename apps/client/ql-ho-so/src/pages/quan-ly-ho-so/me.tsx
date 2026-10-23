@@ -35,6 +35,7 @@ import { useSession } from "@workspace/auth/react"
 import { useFindUniqueUserProfile } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { buildLsbNhanVienPayload, getLsbErrorMessage } from "@lib/lsb-nhan-vien"
+import { toHocHamCreateInput, toHocViCreateInput } from "@lib/utils"
 import { putDMNhanViens } from "@workspace/libs/api/system"
 import { useAbility } from "@workspace/permissions/hooks"
 import { ROUTER_PATH } from "@workspace/router"
@@ -421,6 +422,8 @@ export default function UpdateUserPage() {
     organizationId,
     staffTypeId,
     staffPositionId,
+    hocVi,
+    hocHam,
     ...values
   }: SubmitForm) => {
     if (!values) return
@@ -498,17 +501,17 @@ export default function UpdateUserPage() {
         rank = findLatestQuyetDinh(values?.capBac)
       }
 
-      if (values.hocVi?.length > 0) {
-        if (values.hocVi?.length === 1) {
-          hocvi = values.hocVi[0]
+      if (hocVi?.length > 0) {
+        if (hocVi?.length === 1) {
+          hocvi = hocVi[0]
         }
-        hocvi = findLatestHocVi(values?.hocVi)
+        hocvi = findLatestHocVi(hocVi)
       }
-      if (values.hocHam?.length > 0) {
-        if (values.hocHam?.length === 1) {
-          hocham = values.hocHam[0]
+      if (hocHam?.length > 0) {
+        if (hocHam?.length === 1) {
+          hocham = hocHam[0]
         }
-        hocham = findLatestHocHam(values?.hocHam)
+        hocham = findLatestHocHam(hocHam)
       }
       // if (res.status === 200) {
       let listTransaction: any = [
@@ -598,26 +601,24 @@ export default function UpdateUserPage() {
               academicRankTypeId: hocham?.academicRankTypeId ?? null,
               academicDegreeTypeId: hocvi?.academicDegreeTypeId ?? null,
               hocVi:
-                values.hocVi && values.hocVi.length > 0
+                hocVi && hocVi.length > 0
                   ? {
                       createMany: {
-                        data: values.hocVi.map((item) => {
-                          const { id, userProfileId, ...itemWithoutId } = item
-                          return itemWithoutId
-                        }),
+                        data: hocVi.map((item) =>
+                          toHocViCreateInput(item as Record<string, unknown>)
+                        ),
                         skipDuplicates: true,
                       },
                     }
                   : undefined,
 
               hocHam:
-                values.hocHam && values.hocHam.length > 0
+                hocHam && hocHam.length > 0
                   ? {
                       createMany: {
-                        data: values.hocHam.map((item) => {
-                          const { id, userProfileId, ...itemWithoutId } = item
-                          return itemWithoutId
-                        }),
+                        data: hocHam.map((item) =>
+                          toHocHamCreateInput(item as Record<string, unknown>)
+                        ),
                         skipDuplicates: true,
                       },
                     }
