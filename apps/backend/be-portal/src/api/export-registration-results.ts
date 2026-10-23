@@ -121,8 +121,8 @@ app.openapi(exportToInternal, async (c) => {
       },
       200
     )
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Xuất dữ liệu thất bại"
+  } catch {
+    const message = "Không xuất được dữ liệu"
     if (syncHistoryId) {
       await markDataSyncHistoryFailed(syncHistoryId, message)
     }

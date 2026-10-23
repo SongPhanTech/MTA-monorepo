@@ -55,11 +55,11 @@ export function packSyncPayload(jsonUtf8: string): Buffer {
 
 export function unpackSyncPayload(packed: Buffer): string {
   if (!isMtaSyncBinary(packed)) {
-    throw new Error("File không phải gói đồng bộ MTA (.dat) hợp lệ")
+    throw new Error("Không nhập được dữ liệu")
   }
   const ver = packed[4]
   if (ver !== SYNC_FORMAT_VERSION) {
-    throw new Error(`Phiên bản gói .dat không hỗ trợ: ${ver}`)
+    throw new Error("Không nhập được dữ liệu")
   }
   const iv = packed.subarray(5, 5 + IV_LEN)
   const tag = packed.subarray(5 + IV_LEN, 5 + IV_LEN + TAG_LEN)
@@ -72,14 +72,12 @@ export function unpackSyncPayload(packed: Buffer): string {
   try {
     compressed = Buffer.concat([decipher.update(ciphertext), decipher.final()])
   } catch {
-    throw new Error(
-      "Giải mã thất bại — file có thể đã bị can thiệp, sai khóa, hoặc không phải gói xuất hợp lệ"
-    )
+    throw new Error("Không nhập được dữ liệu")
   }
   try {
     return gunzipSync(compressed).toString("utf8")
   } catch {
-    throw new Error("Giải nén Gzip thất bại — gói đồng bộ bị hỏng")
+    throw new Error("Không nhập được dữ liệu")
   }
 }
 

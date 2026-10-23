@@ -129,19 +129,13 @@ export function decodeRegistrationResultsFile(bytes: Buffer): unknown {
     )
   }
   if (!isMtaSyncBinary(bytes)) {
-    throw new Error(
-      "Chỉ chấp nhận gói .dat mã hóa (Gzip + AES-256-GCM) xuất từ Portal. File JSON thuần không còn được hỗ trợ."
-    )
+    throw new Error("Không nhập được dữ liệu")
   }
   try {
     return JSON.parse(unpackSyncPayload(bytes))
   } catch (error) {
-    if (error instanceof Error && error.message.includes("Giải mã")) throw error
-    if (error instanceof Error && error.message.includes("Giải nén")) throw error
-    if (error instanceof Error && error.message.includes("gói")) throw error
-    throw new Error(
-      error instanceof Error ? error.message : "Không đọc được gói .dat kết quả đăng ký"
-    )
+    if (error instanceof Error && error.message === "Không nhập được dữ liệu") throw error
+    throw new Error("Không nhập được dữ liệu")
   }
 }
 

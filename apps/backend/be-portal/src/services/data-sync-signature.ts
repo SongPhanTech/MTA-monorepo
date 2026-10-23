@@ -31,7 +31,7 @@ export function verifyExportSignature(parsed: Record<string, unknown>): void {
   const a = Buffer.from(signature, "hex")
   const b = Buffer.from(expected, "hex")
   if (a.length !== b.length || !timingSafeEqual(a, b)) {
-    throw new Error("Chữ ký file không hợp lệ — dữ liệu có thể đã bị can thiệp trước khi nhập.")
+    throw new Error("Không nhập được dữ liệu")
   }
 }
 

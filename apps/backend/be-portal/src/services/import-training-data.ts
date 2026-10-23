@@ -917,7 +917,7 @@ export function runImportTrainingDataJob(syncHistoryId: string, payload: unknown
       })
       await finishImportJob(syncHistoryId, result)
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Nhập dữ liệu thất bại"
+      const message = "Không nhập được dữ liệu"
       console.error(`[data-sync] import lỗi history=${syncHistoryId}`, error)
       await markDataSyncHistoryFailed(syncHistoryId, message).catch((e) => {
         console.error("[data-sync] không ghi được FAILED", e)
@@ -931,16 +931,13 @@ export function runImportTrainingDataJobFromRedis(syncHistoryId: string) {
   void (async () => {
     try {
       console.log(`[data-sync] fallback đang xử lý history=${syncHistoryId}`)
-      await markDataSyncHistoryProcessing(
-        syncHistoryId,
-        "Đang đọc dữ liệu và cập nhật cơ sở dữ liệu..."
-      )
+      await markDataSyncHistoryProcessing(syncHistoryId, "Đang nhập dữ liệu")
       const result = await processImportFromRedis(syncHistoryId, async (msg) => {
         await markDataSyncHistoryProcessing(syncHistoryId, msg).catch(() => undefined)
       })
       await finishImportJob(syncHistoryId, result)
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Nhập dữ liệu thất bại"
+      const message = "Không nhập được dữ liệu"
       console.error(`[data-sync] import lỗi history=${syncHistoryId}`, error)
       await markDataSyncHistoryFailed(syncHistoryId, message).catch((e) => {
         console.error("[data-sync] không ghi được FAILED", e)

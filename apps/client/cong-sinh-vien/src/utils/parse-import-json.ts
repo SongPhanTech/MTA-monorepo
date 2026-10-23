@@ -245,14 +245,14 @@ export async function parseImportJsonFile(file: File): Promise<ImportJsonPreview
   try {
     json = JSON.parse(text) as ExportJsonShape
   } catch {
-    throw new Error("File JSON không hợp lệ (hoặc không phải gói .dat)")
+    throw new Error("Không nhập được dữ liệu")
   }
 
   const data = json.data ?? {}
   const sessions = asRecords(data.ClassRegisterSession)
   const session = sessions[0]
   if (!str(session, "id") || !str(session, "name")) {
-    throw new Error("Không tìm thấy thông tin đợt đăng ký (ClassRegisterSession) trong file")
+    throw new Error("Không nhập được dữ liệu")
   }
 
   const semesters = asRecords(data.Semester)

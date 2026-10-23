@@ -102,7 +102,7 @@ app.openapi(importFromInternal, async (c) => {
   let syncHistoryId = form.syncHistoryId
 
   if (!file || file.size === 0) {
-    return c.json({ message: "Vui lòng chọn file đồng bộ (.dat) hoặc JSON legacy" }, 400)
+    return c.json({ message: "Không nhập được dữ liệu" }, 400)
   }
 
   // Giải mã .dat (hoặc parse JSON cũ) để lấy session + phát hiện file hỏng sớm
@@ -116,16 +116,8 @@ app.openapi(importFromInternal, async (c) => {
     const s = parsed?.data?.ClassRegisterSession?.[0]
     if (s?.id) sessionIdFromFile = s.id
     if (s?.name) sessionNameFromFile = String(s.name)
-  } catch (err) {
-    return c.json(
-      {
-        message:
-          err instanceof Error
-            ? err.message
-            : "File đồng bộ không hợp lệ hoặc không giải mã được",
-      },
-      400
-    )
+  } catch {
+    return c.json({ message: "Không nhập được dữ liệu" }, 400)
   }
 
   // Nếu FE đã tạo history, lấy session từ DB; không thì dùng từ file

@@ -154,7 +154,7 @@ export async function markExportJobFailed(jobId: string, error: string): Promise
     ...current,
     status: "FAILED",
     progress: 100,
-    message: `Xuất dữ liệu thất bại: ${error}`,
+    message: "Không xuất được dữ liệu",
     error,
     updatedAt: new Date().toISOString(),
   }

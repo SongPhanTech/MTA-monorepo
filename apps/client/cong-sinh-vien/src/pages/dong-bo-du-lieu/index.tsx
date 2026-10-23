@@ -4,6 +4,11 @@ import DefaultLayout from "@layouts/default-layout"
 import { usePagination } from "@hooks/usePagination"
 import ModalPreviewImportJson from "@components/modal/modal-preview-import-json"
 import SyncProcessModal from "@components/modal/SyncProcessModal"
+import { AnimatedDownloadButton } from "@components/ui/animated-download-button"
+import {
+  CloudUploadPanel,
+  type CloudUploadPanelHandle,
+} from "@components/ui/cloud-upload-panel"
 import { type ImportJsonPreview, parseImportJsonFile } from "@/utils/parse-import-json"
 import {
   finishDataSync,
@@ -31,31 +36,20 @@ import {
   Descriptions,
   Row,
   Select,
-  Steps,
   Table,
   Tabs,
   Tag,
   Typography,
-  Upload,
   message,
 } from "antd"
 import type { UploadFile } from "antd/es/upload/interface"
 import dayjs from "dayjs"
-import {
-  ArrowDownToLine,
-  ArrowUpFromLine,
-  FileJson,
-  History,
-  Info,
-  Loader2,
-  Upload as UploadIcon,
-} from "lucide-react"
+import { ArrowDownToLine, ArrowUpFromLine, History, Info, Loader2 } from "lucide-react"
 import { useEffect, useMemo, useRef, useState } from "react"
 
 dayjs.locale("vi")
 
 const { Title, Paragraph, Text } = Typography
-const { Dragger } = Upload
 
 const IMPORT_DATA_ITEMS = [
   "Đợt đăng ký học",
@@ -86,6 +80,8 @@ function DongBoDuLieuPage() {
   const [exporting, setExporting] = useState(false)
   const [activeImportId, setActiveImportId] = useState<string>()
   const prevImportStatus = useRef<string>()
+  const cloudUploadRef = useRef<CloudUploadPanelHandle>(null)
+  const pendingImportToast = useRef<{ type: "success" | "warning"; text: string } | null>(null)
   const queryClient = useQueryClient()
   const {
     currentPage,
@@ -138,25 +134,15 @@ function DongBoDuLieuPage() {
   const selectedExportSession = sessions.find((s) => s.id === exportSessionId)
   const pendingImport = history.find((h) => h.type === "IMPORT" && h.status === "PENDING")
 
-  const handleImportFileChange = async (fileList: UploadFile[]) => {
-    const nextFiles = fileList.slice(-1)
-    setImportFiles(nextFiles)
-
-    if (nextFiles.length === 0) {
-      setImportPreview(null)
-      setPreviewModalOpen(false)
-      setImportParseError(null)
-      return
+  const handleCloudFileSelected = async (file: File) => {
+    const asUploadFile: UploadFile = {
+      uid: `${file.name}-${file.size}-${file.lastModified}`,
+      name: file.name,
+      size: file.size,
+      status: "done",
+      originFileObj: file as UploadFile["originFileObj"],
     }
-
-    const file = nextFiles[0]?.originFileObj
-    if (!file) {
-      setImportPreview(null)
-      setPreviewModalOpen(false)
-      setImportParseError("Không đọc được file đã chọn")
-      return
-    }
-
+    setImportFiles([asUploadFile])
     setParsingImportFile(true)
     setImportParseError(null)
     try {
@@ -166,12 +152,10 @@ function DongBoDuLieuPage() {
     } catch (error) {
       setImportPreview(null)
       setPreviewModalOpen(false)
-      setImportParseError(
-        error instanceof Error ? error.message : "Không đọc được thông tin từ file JSON"
-      )
-      message.error(
-        error instanceof Error ? error.message : "Không đọc được thông tin từ file JSON"
-      )
+      setImportParseError("Không nhập được dữ liệu")
+      message.error("Không nhập được dữ liệu")
+      cloudUploadRef.current?.reset()
+      setImportFiles([])
     } finally {
       setParsingImportFile(false)
     }
@@ -184,36 +168,38 @@ function DongBoDuLieuPage() {
     if (!item) return
 
     if (item.status === "SUCCESS" && prevImportStatus.current !== "SUCCESS") {
-      message.success(`Nhập dữ liệu thành công: ${item.sessionName}`)
+      message.success("Nhập dữ liệu thành công")
       void queryClient.invalidateQueries({ queryKey: getGetClassRegisterSessionQueryKey() })
       void queryClient.invalidateQueries({ queryKey: getListDataSyncSessionsQueryKey() })
       setActiveImportId(undefined)
     }
     if (item.status === "FAILED" && prevImportStatus.current !== "FAILED") {
-      message.error(item.errorMessage || `Nhập dữ liệu thất bại: ${item.sessionName}`)
+      message.error("Không nhập được dữ liệu")
       setActiveImportId(undefined)
     }
     prevImportStatus.current = item.status
   }, [history, activeImportId, pendingImport?.id, queryClient])
 
-  const handleImport = async () => {
-    if (importFiles.length === 0) {
-      message.warning("Vui lòng chọn file JSON từ phần mềm nội bộ")
-      return
-    }
+  const handleImportUpload = async (
+    file: File,
+    onProgress: (percent: number) => void
+  ): Promise<boolean> => {
     if (!importPreview) {
-      message.warning(importParseError ?? "File JSON chưa hợp lệ hoặc đang được đọc")
-      return
+      message.warning("Không nhập được dữ liệu")
+      return false
     }
 
     setImporting(true)
+    pendingImportToast.current = null
     let syncId: string | undefined
+    let progressTimer: ReturnType<typeof setInterval> | undefined
     try {
-      const file = importFiles[0]?.originFileObj
-      if (!file) {
-        message.error("Không đọc được file đã chọn")
-        return
-      }
+      onProgress(8)
+      let fake = 10
+      progressTimer = setInterval(() => {
+        fake = Math.min(88, fake + 2 + Math.random() * 4)
+        onProgress(fake)
+      }, 350)
 
       const startRes = await startDataSync({
         type: "IMPORT",
@@ -221,24 +207,30 @@ function DongBoDuLieuPage() {
         classRegisterSessionId: importPreview.encrypted
           ? undefined
           : importPreview.sessionId || undefined,
-        fileName: importFiles[0]?.name,
+        fileName: file.name,
         fileVersion: importPreview.version,
         sourceExportedAt: importPreview.exportedAt,
         recordCounts: importPreview.recordCounts,
       })
 
       if (startRes.status !== 200) {
-        message.error("Không ghi được lịch sử đồng bộ")
-        return
+        message.error("Không nhập được dữ liệu")
+        return false
       }
 
       syncId = startRes.data.id
+      onProgress(30)
 
       const importRes = await importFromInternal({
         file,
         syncHistoryId: syncId,
       })
 
+      if (progressTimer) {
+        clearInterval(progressTimer)
+        progressTimer = undefined
+      }
+      onProgress(95)
       await refetchHistory()
 
       if (
@@ -247,40 +239,42 @@ function DongBoDuLieuPage() {
       ) {
         prevImportStatus.current = "PENDING"
         setActiveImportId(importRes.data.syncHistoryId || syncId)
-        message.success(
-          importRes.data.message ||
-            "Đã nhận file. Hệ thống đang nhập nền — theo dõi tab Lịch sử đồng bộ."
-        )
-        setActiveTab("history")
-        return
+        pendingImportToast.current = {
+          type: "success",
+          text: "Đang nhập dữ liệu",
+        }
+        onProgress(100)
+        return true
       }
 
       if (isImportFromInternalOk(importRes) && importRes.data.sessionName) {
         await queryClient.invalidateQueries({ queryKey: getGetClassRegisterSessionQueryKey() })
         await queryClient.invalidateQueries({ queryKey: getListDataSyncSessionsQueryKey() })
         const warningCount = importRes.data.warnings?.length ?? 0
-        if (warningCount > 0) {
-          message.warning(
-            `Đã nhập đợt «${importRes.data.sessionName}» với ${warningCount} cảnh báo. Kiểm tra tab Lịch sử đồng bộ.`
-          )
-        } else {
-          message.success(`Nhập dữ liệu thành công: ${importRes.data.sessionName}`)
-        }
-        return
+        pendingImportToast.current =
+          warningCount > 0
+            ? {
+                type: "warning",
+                text: "Nhập dữ liệu thành công",
+              }
+            : {
+                type: "success",
+                text: "Nhập dữ liệu thành công",
+              }
+        onProgress(100)
+        return true
       }
 
-      const errMessage = isImportFromInternalOk(importRes)
-        ? "Nhập dữ liệu thất bại"
-        : String(importRes.data.message ?? "Nhập dữ liệu thất bại")
       if (syncId && importRes.status >= 400) {
         await finishDataSync({
           id: syncId,
           status: "FAILED",
-          errorMessage: errMessage,
+          errorMessage: "Không nhập được dữ liệu",
         })
         await refetchHistory()
       }
-      message.error(errMessage)
+      message.error("Không nhập được dữ liệu")
+      return false
     } catch (error) {
       const errText = error instanceof Error ? error.message : String(error)
       const isNetworkError =
@@ -289,40 +283,62 @@ function DongBoDuLieuPage() {
       if (syncId && isNetworkError) {
         prevImportStatus.current = "PENDING"
         setActiveImportId(syncId)
-        message.warning(
-          "Mất kết nối khi gửi file. Nếu máy chủ đã nhận, tiến trình vẫn chạy — theo dõi tab Lịch sử đồng bộ."
-        )
-        setActiveTab("history")
+        pendingImportToast.current = {
+          type: "warning",
+          text: "Đang nhập dữ liệu",
+        }
         await refetchHistory()
-        return
+        onProgress(100)
+        return true
       }
       if (syncId) {
         await finishDataSync({
           id: syncId,
           status: "FAILED",
-          errorMessage: errText || "Đồng bộ thất bại",
+          errorMessage: "Không nhập được dữ liệu",
         })
         await refetchHistory()
       }
-      message.error(errText || "Nhập dữ liệu thất bại")
+      message.error("Không nhập được dữ liệu")
+      return false
     } finally {
+      if (progressTimer) clearInterval(progressTimer)
       setImporting(false)
     }
   }
 
-  const handleExport = async () => {
+  const finishCloudImportUi = () => {
+    const toast = pendingImportToast.current
+    pendingImportToast.current = null
+    if (toast?.type === "warning") message.warning(toast.text)
+    else if (toast?.type === "success") message.success(toast.text)
+    if (activeImportId || pendingImport) setActiveTab("history")
+    setImportPreview(null)
+    setImportFiles([])
+  }
+
+  const handleExport = async (onProgress: (percent: number) => void): Promise<boolean> => {
     if (!hasSessions) {
       message.warning("Chưa có đợt đăng ký. Vui lòng nhập dữ liệu từ nội bộ trước.")
-      return
+      return false
     }
     if (!exportSessionId) {
       message.warning("Vui lòng chọn đợt đăng ký học")
-      return
+      return false
     }
 
     setExporting(true)
     let syncId: string | undefined
+    let progressTimer: ReturnType<typeof setInterval> | undefined
     try {
+      onProgress(5)
+      // Ước lượng lúc gọi API (response JSON base64, không có Content-Length stream)
+      let fake = 8
+      progressTimer = setInterval(() => {
+        fake = Math.min(82, fake + 2 + Math.random() * 5)
+        onProgress(fake)
+      }, 350)
+
       const startRes = await startDataSync({
         type: "EXPORT",
         sessionName: selectedExportSession?.name ?? "",
@@ -330,47 +346,47 @@ function DongBoDuLieuPage() {
       })
 
       if (startRes.status !== 200) {
-        message.error("Không ghi được lịch sử đồng bộ")
-        return
+        message.error("Không xuất được dữ liệu")
+        return false
       }
 
       syncId = startRes.data.id
+      onProgress(25)
 
       const exportRes = await exportToInternal({
         classRegisterSessionId: exportSessionId,
         syncHistoryId: syncId,
       })
 
+      if (progressTimer) {
+        clearInterval(progressTimer)
+        progressTimer = undefined
+      }
       await refetchHistory()
 
       if (exportRes.status === 200 && "meta" in exportRes.data && "fileBase64" in exportRes.data) {
+        onProgress(90)
         downloadExportDat(exportRes.data, selectedExportSession?.name)
-        const count = exportRes.data.meta.registrationCount
-        if (!exportRes.data.meta.sessionEnded) {
-          message.warning(
-            `Đã xuất ${count} lượt đăng ký (.dat). Lưu ý: đợt đăng ký chưa kết thúc / vẫn đang mở.`
-          )
-        } else {
-          message.success(`Xuất thành công ${count} lượt đăng ký (.dat)`)
-        }
-      } else {
-        const errMessage =
-          exportRes.data && "message" in exportRes.data
-            ? String(exportRes.data.message ?? "Xuất dữ liệu thất bại")
-            : "Xuất dữ liệu thất bại"
-        message.error(errMessage)
+        onProgress(100)
+        message.success("Xuất dữ liệu thành công")
+        return true
       }
+
+      message.error("Không xuất được dữ liệu")
+      return false
     } catch (error) {
       if (syncId) {
         await finishDataSync({
           id: syncId,
           status: "FAILED",
-          errorMessage: error instanceof Error ? error.message : "Đồng bộ thất bại",
+          errorMessage: "Không xuất được dữ liệu",
         })
         await refetchHistory()
       }
-      message.error(error instanceof Error ? error.message : "Xuất dữ liệu thất bại")
+      message.error("Không xuất được dữ liệu")
+      return false
     } finally {
+      if (progressTimer) clearInterval(progressTimer)
       setExporting(false)
     }
   }
@@ -431,12 +447,12 @@ function DongBoDuLieuPage() {
                         type="warning"
                         showIcon
                         className="mb-4"
-                        message="Đang nhập dữ liệu nền"
+                        message="Đang nhập dữ liệu"
                         description={`Đợt «${pendingImport.sessionName}» đang được xử lý. Có thể chuyển tab hoặc rời trang — tiến trình vẫn chạy trên server.`}
                       />
                     )}
 
-                    <Steps
+                    {/* <Steps
                       direction="vertical"
                       size="small"
                       current={importPreview ? 1 : 0}
@@ -445,36 +461,27 @@ function DongBoDuLieuPage() {
                         { title: "Tải file JSON từ nội bộ" },
                         { title: "Xác nhận và nhập dữ liệu" },
                       ]}
-                    />
+                    /> */}
 
                     <div className="mb-4">
                       <Text strong className="block mb-2">
                         File đồng bộ từ QL đào tạo
                       </Text>
-                      <Dragger
-                        accept=".dat,.sync,.json,application/x-mta-dat,application/octet-stream,application/json"
-                        maxCount={1}
-                        fileList={importFiles}
-                        beforeUpload={() => false}
-                        onChange={({ fileList }) => {
-                          void handleImportFileChange(fileList)
-                        }}
-                        onRemove={() => {
-                          void handleImportFileChange([])
-                          return true
-                        }}
-                      >
-                        <p className="ant-upload-drag-icon flex justify-center">
-                          <FileJson className="size-10 text-green-700" />
-                        </p>
-                        <p className="ant-upload-text">
-                          Kéo thả hoặc bấm để chọn file xuất từ đợt đăng ký nội bộ
-                        </p>
-                        <p className="ant-upload-hint text-gray-500">
-                          Định dạng: export-dot-dang-ky-*.dat (Gzip + AES-256, phiên bản 1.6.0).
-                          File mã hóa — chỉ Portal giải mã được.
-                        </p>
-                      </Dragger>
+                      <CloudUploadPanel
+                        ref={cloudUploadRef}
+                        disabled={Boolean(pendingImport) || parsingImportFile || importing}
+                        showUploadButton={false}
+                        hint="Gói .dat / .sync xuất từ đợt đăng ký nội bộ"
+                        onFileSelected={handleCloudFileSelected}
+                        onUpload={handleImportUpload}
+                        onComplete={finishCloudImportUi}
+                      />
+                      {parsingImportFile ? (
+                        <div className="mt-2 flex items-center gap-2 text-sm text-slate-500">
+                          <Loader2 className="size-4 animate-spin" />
+                          Đang đọc file…
+                        </div>
+                      ) : null}
                     </div>
 
                     <div className="flex flex-wrap gap-2">
@@ -483,20 +490,6 @@ function DongBoDuLieuPage() {
                         disabled={!importPreview || parsingImportFile}
                       >
                         Xem dữ liệu file
-                      </Button>
-                      <Button
-                        type="primary"
-                        icon={<UploadIcon className="size-4" />}
-                        loading={importing || parsingImportFile}
-                        onClick={handleImport}
-                        disabled={
-                          importFiles.length === 0 ||
-                          !importPreview ||
-                          parsingImportFile ||
-                          Boolean(pendingImport)
-                        }
-                      >
-                        {pendingImport ? "Đang nhập nền..." : "Nhập dữ liệu"}
                       </Button>
                     </div>
                   </Card>
@@ -641,15 +634,11 @@ function DongBoDuLieuPage() {
                       </>
                     )}
 
-                    <Button
-                      type="primary"
-                      icon={<ArrowUpFromLine className="size-4" />}
-                      loading={exporting}
-                      onClick={handleExport}
-                      disabled={!hasSessions || !exportSessionId}
-                    >
-                      Xuất file .dat
-                    </Button>
+                    <AnimatedDownloadButton
+                      label="Xuất file .dat"
+                      disabled={!hasSessions || !exportSessionId || exporting}
+                      onDownload={handleExport}
+                    />
                   </Card>
                 </Col>
 
@@ -690,7 +679,7 @@ function DongBoDuLieuPage() {
                     className="mb-4 bg-blue-50/80 border-blue-200"
                     message={
                       <div className="font-semibold text-blue-900">
-                        Đang đồng bộ dữ liệu: {pendingImport.sessionName}
+                        Đang nhập dữ liệu
                       </div>
                     }
                     description={
@@ -771,19 +760,21 @@ function DongBoDuLieuPage() {
                       ellipsis: true,
                       render: (_: unknown, record: DataSyncHistoryItem) => {
                         if (record.status === "PENDING") {
+                          const pendingText =
+                            record.type === "EXPORT" ? "Đang xuất dữ liệu" : "Đang nhập dữ liệu"
                           return (
                             <span className="text-blue-600 font-medium inline-flex items-center gap-1.5">
                               <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0 text-blue-600" />
-                              <span className="truncate">{record.description || "Đang xử lý..."}</span>
+                              <span className="truncate">{pendingText}</span>
                             </span>
                           )
                         }
                         if (record.status === "FAILED") {
-                          return (
-                            <span className="text-red-500" title={record.errorMessage ?? undefined}>
-                              {record.errorMessage || "Thất bại"}
-                            </span>
-                          )
+                          const failText =
+                            record.type === "EXPORT"
+                              ? "Không xuất được dữ liệu"
+                              : "Không nhập được dữ liệu"
+                          return <span className="text-red-500">{failText}</span>
                         }
                         return (
                           <span className="text-gray-600" title={record.description ?? undefined}>
@@ -815,7 +806,7 @@ function DongBoDuLieuPage() {
         onClose={() => setPreviewModalOpen(false)}
         onConfirmImport={() => {
           setPreviewModalOpen(false)
-          void handleImport()
+          void cloudUploadRef.current?.startUpload()
         }}
       />
     </div>

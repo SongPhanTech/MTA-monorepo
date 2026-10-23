@@ -2,12 +2,11 @@ import { useEffect } from "react"
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
-  DownloadOutlined,
   LoadingOutlined,
 } from "@ant-design/icons"
 import { Button, Card, Flex, Progress, Typography } from "antd"
+import { ExportInternetDownloadButton } from "@components/ui/export-internet-download-button"
 import {
-  downloadExportedFile,
   resetExportJob,
   startPolling,
   useExportTrainingStore,
@@ -18,12 +17,8 @@ const { Text } = Typography
 export default function ExportTaskFloatingWidget() {
   const task = useExportTrainingStore()
 
-  // Tự động khôi phục Polling nếu người dùng F5 hoặc chuyển trang quay lại
   useEffect(() => {
-    if (
-      task.jobId &&
-      (task.status === "PENDING" || task.status === "PROCESSING")
-    ) {
+    if (task.jobId && (task.status === "PENDING" || task.status === "PROCESSING")) {
       startPolling(task.jobId)
     }
   }, [task.jobId, task.status])
@@ -65,17 +60,16 @@ export default function ExportTaskFloatingWidget() {
               <CloseCircleOutlined style={{ color: "#ff4d4f" }} />
             )}
             <Text strong style={{ fontSize: 13 }}>
-              {isRunning ? "Đang xuất dữ liệu" : isSuccess ? "Hoàn thành" : "Xuất thất bại"}
+              {isRunning
+                ? "Đang xuất dữ liệu"
+                : isSuccess
+                  ? "Xuất dữ liệu thành công"
+                  : "Không xuất được dữ liệu"}
             </Text>
           </Flex>
         }
         extra={
-          <Button
-            type="text"
-            size="small"
-            style={{ fontSize: 12 }}
-            onClick={() => resetExportJob()}
-          >
+          <Button type="text" size="small" style={{ fontSize: 12 }} onClick={() => resetExportJob()}>
             Đóng
           </Button>
         }
@@ -88,18 +82,17 @@ export default function ExportTaskFloatingWidget() {
             showInfo={isRunning}
           />
 
-          {isSuccess && task.downloadUrl && (
+          {isSuccess && task.downloadUrl ? (
             <Flex justify="end" align="center" style={{ marginTop: 4 }}>
-              <Button
-                type="primary"
-                size="small"
-                icon={<DownloadOutlined />}
-                onClick={() => downloadExportedFile(task.downloadUrl!, task.fileName)}
-              >
-                Tải lại
-              </Button>
+              <ExportInternetDownloadButton
+                label="Tải lại"
+                externalStatus="SUCCESS"
+                downloadUrl={task.downloadUrl}
+                fileName={task.fileName}
+                onStartExport={() => undefined}
+              />
             </Flex>
-          )}
+          ) : null}
         </div>
       </Card>
     </div>

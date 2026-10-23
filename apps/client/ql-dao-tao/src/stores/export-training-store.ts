@@ -72,10 +72,18 @@ function saveState(state: ExportTaskState) {
 
 let pollingInterval: NodeJS.Timeout | null = null
 
-/** Tải qua fetch + Bearer token (không dùng <a href> tới API — tránh nhảy sang localhost/sai origin). */
-export async function downloadExportedFile(downloadUrl: string, fileName?: string) {
-  if (typeof window === "undefined") return
-  // Cùng cách resolve URL với customTrainingFetch — không fallback localhost:3002
+export type DownloadExportedFileOptions = {
+  /** 0–100 theo byte (hoặc ước lượng nếu thiếu Content-Length) */
+  onProgress?: (percent: number) => void
+}
+
+/** Tải qua fetch + Bearer token; trả true nếu lưu file thành công. */
+export async function downloadExportedFile(
+  downloadUrl: string,
+  fileName?: string,
+  options?: DownloadExportedFileOptions
+): Promise<boolean> {
+  if (typeof window === "undefined") return false
   const url = downloadUrl.startsWith("http")
     ? downloadUrl
     : getUrl(getRuntimeEnv("NEXT_PUBLIC_API_LMS_BASE_URL") || "/api/lms", downloadUrl)
@@ -83,10 +91,44 @@ export async function downloadExportedFile(downloadUrl: string, fileName?: strin
     const res = await fetchInstance(url, { method: "GET" })
     if (!res.ok) {
       const text = await res.text().catch(() => "")
-      message.error(text || `Không tải được file (HTTP ${res.status})`)
-      return
+      message.error("Không xuất được dữ liệu")
+      return false
     }
-    const blob = await res.blob()
+
+    const total = Number(res.headers.get("Content-Length") || 0)
+    const onProgress = options?.onProgress
+    let blob: Blob
+
+    if (res.body && onProgress) {
+      const reader = res.body.getReader()
+      const chunks: Uint8Array[] = []
+      let received = 0
+      let tick = 0
+      onProgress(0)
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        if (value) {
+          chunks.push(value)
+          received += value.length
+          if (total > 0) {
+            onProgress(Math.min(99, Math.round((received / total) * 100)))
+          } else {
+            // thiếu Content-Length — ước lượng mượt tới ~90%
+            tick += 1
+            onProgress(Math.min(90, 8 + Math.round(Math.log10(received + 10) * 18) + (tick % 5)))
+          }
+        }
+      }
+      blob = new Blob(chunks as BlobPart[])
+      onProgress(100)
+    } else {
+      onProgress?.(30)
+      blob = await res.blob()
+      onProgress?.(100)
+    }
+
     const objectUrl = URL.createObjectURL(blob)
     const link = document.createElement("a")
     link.href = objectUrl
@@ -95,8 +137,10 @@ export async function downloadExportedFile(downloadUrl: string, fileName?: strin
     link.click()
     document.body.removeChild(link)
     URL.revokeObjectURL(objectUrl)
+    return true
   } catch (e) {
-    message.error(e instanceof Error ? e.message : "Không tải được file xuất dữ liệu")
+    message.error("Không xuất được dữ liệu")
+    return false
   }
 }
 
@@ -118,9 +162,9 @@ export function startPolling(jobId: string) {
           progress: data.progress,
           message:
             data.status === "SUCCESS"
-              ? "Hoàn thành"
+              ? "Xuất dữ liệu thành công"
               : data.status === "FAILED"
-                ? "Xuất thất bại"
+                ? "Không xuất được dữ liệu"
                 : "Đang xuất dữ liệu",
           fileName: data.fileName,
           fileSize: data.fileSize,
@@ -136,16 +180,15 @@ export function startPolling(jobId: string) {
           pollingInterval = null
 
           message.success({
-            content: "Hoàn thành",
+            content: "Xuất dữ liệu thành công",
             key: "global-export-task",
-            duration: 3,
+            duration: 2,
           })
 
-          if (data.downloadUrl) {
-            downloadExportedFile(data.downloadUrl, data.fileName)
-          }
+          // Không auto-download ở đây: nút ExportInternetDownloadButton
+          // tự tải với progress + micro-interaction.
 
-          // Tự động giải phóng sau 15 giây
+          // Giữ SUCCESS đủ lâu để nút kịp tải file rồi reset
           setTimeout(() => {
             const cur = exportStore.state
             if (cur.jobId === jobId && cur.status === "SUCCESS") {
@@ -160,13 +203,13 @@ export function startPolling(jobId: string) {
               exportStore.setState(() => resetState)
               saveState(resetState)
             }
-          }, 15000)
+          }, 60000)
         } else if (data.status === "FAILED") {
           if (pollingInterval) clearInterval(pollingInterval)
           pollingInterval = null
 
           message.error({
-            content: "Xuất thất bại",
+            content: "Không xuất được dữ liệu",
             key: "global-export-task",
             duration: 3,
           })

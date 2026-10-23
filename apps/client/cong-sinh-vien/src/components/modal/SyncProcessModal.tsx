@@ -101,7 +101,7 @@ const STEPS = [
     title: "Nội bộ → Internet",
     subtitle: "Khởi tạo dữ liệu",
     description:
-      "Xuất file JSON từ phần mềm QL Đào tạo và nhập vào Cổng Internet. Quá trình này giúp khởi tạo Đợt đăng ký, Lớp học phần và Danh sách sinh viên trên môi trường mạng ngoài.",
+      "Xuất file từ phần mềm QL Đào tạo và nhập vào Cổng Internet. Quá trình này giúp khởi tạo Đợt đăng ký, Lớp học phần và Danh sách sinh viên trên môi trường mạng ngoài.",
     badges: (
       <>
         <EnvBadge variant="internal">Nội bộ</EnvBadge>

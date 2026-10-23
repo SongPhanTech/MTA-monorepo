@@ -109,7 +109,7 @@ app.openapi(exportTrainingDataRoute, async (c) => {
     const result = await exportTrainingData({ classRegisterSessionId })
     return c.json(result, 200)
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Xuất dữ liệu thất bại"
+    const message = "Không xuất được dữ liệu"
     return c.json({ message }, 500)
   }
 })

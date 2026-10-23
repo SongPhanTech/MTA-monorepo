@@ -30506,10 +30506,6 @@ const metadata: ModelMeta = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
                 }, active: {
                     name: "active",
                     type: "Boolean",
@@ -30560,6 +30556,10 @@ const metadata: ModelMeta = {
                     name: "sThietBiSua",
                     type: "String",
                     isOptional: true,
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -30591,9 +30591,6 @@ const metadata: ModelMeta = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 },
             },
         },

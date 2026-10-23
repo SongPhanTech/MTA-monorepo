@@ -127,9 +127,8 @@ app.openapi(previewRoute, async (c) => {
       fileHash
     )
     return c.json(preview, 200)
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Xem trước nhập thất bại"
-    return c.json({ message }, 400)
+  } catch {
+    return c.json({ message: "Không nhập được dữ liệu" }, 400)
   }
 })
 
@@ -189,7 +188,7 @@ app.openapi(confirmRoute, async (c) => {
       200
     )
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Nhập dữ liệu đăng ký thất bại"
+    const message = "Không nhập được dữ liệu"
     return c.json({ message }, 400)
   }
 })

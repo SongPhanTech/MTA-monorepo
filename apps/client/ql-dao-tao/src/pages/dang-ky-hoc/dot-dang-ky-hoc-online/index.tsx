@@ -1,12 +1,10 @@
-import {
-  CheckCircleOutlined,
-  CloseCircleOutlined,
-  DownloadOutlined,
-  EyeOutlined,
-  LoadingOutlined,
-  UploadOutlined,
-} from "@ant-design/icons"
+import { EyeOutlined, UploadOutlined } from "@ant-design/icons"
 import Table from "@components/commons/table"
+import { ExportInternetDownloadButton } from "@components/ui/export-internet-download-button"
+import {
+  CloudUploadPanel,
+  type CloudUploadPanelHandle,
+} from "@components/ui/cloud-upload-panel"
 import DeleteIcon from "@components/icons/delete"
 import EditIcon from "@components/icons/edit"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
@@ -41,11 +39,7 @@ import { BookPlus } from "lucide-react"
 import { useRouter } from "next/router"
 import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
-import {
-  downloadExportedFile,
-  trackNewExportJob,
-  useExportTrainingStore,
-} from "@/stores/export-training-store"
+import { trackNewExportJob, useExportTrainingStore } from "@/stores/export-training-store"
 
 export default function ClassRegisterSession() {
   const { can } = useAbility()
@@ -164,7 +158,10 @@ export default function ClassRegisterSession() {
 
   const { mutateAsync: deleteClassRegisterSession } = useUpdateClassRegisterSession()
   const importFileInputRef = useRef<HTMLInputElement>(null)
+  const cloudImportRef = useRef<CloudUploadPanelHandle>(null)
   const [importSessionId, setImportSessionId] = useState<string | null>(null)
+  const [cloudImportOpen, setCloudImportOpen] = useState(false)
+  const cloudImportToastRef = useRef<{ type: "success" | "warning"; text: string } | null>(null)
   const pendingImportRef = useRef<{
     sessionId: string
     file: File
@@ -213,21 +210,19 @@ export default function ClassRegisterSession() {
         trackNewExportJob(res.data.jobId, sessionId, sessionName)
       } else if (res.status === 429) {
         message.warning({
-          content:
-            (res.data as { message?: string })?.message ||
-            "Đang có quá nhiều tiến trình xuất. Vui lòng đợi rồi thử lại.",
+          content: "Đang xuất dữ liệu",
           key: "global-export-task",
         })
       } else {
         message.error({
-          content: "Không thể khởi tạo tiến trình xuất dữ liệu",
+          content: "Không xuất được dữ liệu",
           key: "global-export-task",
         })
       }
     } catch (err: any) {
       console.error(err)
       message.error({
-        content: "Đã xảy ra lỗi khi khởi tạo xuất dữ liệu",
+        content: "Không xuất được dữ liệu",
         key: "global-export-task",
       })
     }
@@ -254,7 +249,7 @@ export default function ClassRegisterSession() {
       file.type === "application/x-mta-dat" ||
       file.type === "application/octet-stream"
     if (!nameOk) {
-      message.warning("Vui lòng chọn gói .dat xuất từ Portal (không còn hỗ trợ JSON thuần)")
+      message.warning("Không nhập được dữ liệu")
       setImportSessionId(null)
       return
     }
@@ -267,10 +262,7 @@ export default function ClassRegisterSession() {
       })
 
       if (previewRes.status !== 200 || !("fileHash" in previewRes.data)) {
-        message.error(
-          ("message" in previewRes.data ? previewRes.data.message : undefined) ||
-            "Xem trước nhập thất bại"
-        )
+        message.error("Không nhập được dữ liệu")
         return
       }
 
@@ -309,45 +301,17 @@ export default function ClassRegisterSession() {
         ),
         okText: "Xác nhận nhập",
         cancelText: "Hủy",
-        onOk: async () => {
-          const pending = pendingImportRef.current
-          if (!pending) return
-          try {
-            showSpinner()
-            const res = await confirmImportRegistrationResults({
-              classRegisterSessionId: pending.sessionId,
-              file: pending.file,
-              fileHash: pending.preview.fileHash,
-            })
-            if (res.status === 200) {
-              const payload = res.data as ImportTrainingDataPayload
-              const warningCount = payload.warnings?.length ?? 0
-              if (warningCount > 0) {
-                message.warning(
-                  `${payload.message || "Nhập thành công"} (${warningCount} cảnh báo)`
-                )
-              } else {
-                message.success(payload.message || "Nhập dữ liệu đăng ký thành công")
-              }
-              return
-            }
-            message.error(
-              ("message" in res.data ? res.data.message : undefined) ||
-                "Nhập dữ liệu đăng ký thất bại"
-            )
-          } catch {
-            message.error("Đã xảy ra lỗi khi xác nhận nhập")
-          } finally {
-            hideSpinner()
-            pendingImportRef.current = null
-          }
+        onOk: () => {
+          if (!pendingImportRef.current) return
+          cloudImportToastRef.current = null
+          setCloudImportOpen(true)
         },
         onCancel: () => {
           pendingImportRef.current = null
         },
       })
     } catch {
-      message.error("Đã xảy ra lỗi khi xem trước nhập dữ liệu đăng ký")
+      message.error("Không nhập được dữ liệu")
     } finally {
       hideSpinner()
       setImportSessionId(null)
@@ -387,86 +351,29 @@ export default function ClassRegisterSession() {
             </Col>
             <Col span={12}>
               <Flex justify="end" gap={4} wrap="wrap">
-                {(() => {
+                {/* {(() => {
                   const isGlobalJob = !exportJobState.sessionId
-                  const isGlobalProcessing =
-                    isGlobalJob && (exportJobState.status === "PENDING" || exportJobState.status === "PROCESSING")
-                  const isGlobalSuccess = isGlobalJob && exportJobState.status === "SUCCESS"
-                  const isGlobalFailed = isGlobalJob && exportJobState.status === "FAILED"
+                  const isBusy =
+                    exportJobState.status === "PENDING" || exportJobState.status === "PROCESSING"
+                  const isOtherJobRunning = isBusy && !isGlobalJob
 
                   return (
-                    <Tooltip
-                      title={
-                        isGlobalProcessing
-                          ? "Đang xuất dữ liệu"
-                          : isGlobalSuccess
-                            ? "Hoàn thành"
-                            : isGlobalFailed
-                              ? "Xuất thất bại"
-                              : "Xuất toàn bộ dữ liệu ra internet"
-                      }
-                    >
-                      <Button
-                        style={
-                          isGlobalProcessing
-                            ? {
-                                position: "relative",
-                                overflow: "hidden",
-                                borderColor: "#1890ff",
-                                color: "#096dd9",
-                                fontWeight: 600,
-                                background: `linear-gradient(to right, rgba(24, 144, 255, 0.22) ${exportJobState.progress}%, #ffffff ${exportJobState.progress}%)`,
-                                transition: "background 0.3s ease",
-                              }
-                            : isGlobalSuccess
-                              ? {
-                                  borderColor: "#52c41a",
-                                  color: "#389e0d",
-                                  background: "#f6ffed",
-                                  fontWeight: 600,
-                                }
-                              : isGlobalFailed
-                                ? {
-                                    borderColor: "#ff4d4f",
-                                    color: "#cf1322",
-                                    background: "#fff1f0",
-                                  }
-                                : undefined
-                        }
-                        icon={
-                          isGlobalProcessing ? (
-                            <LoadingOutlined spin />
-                          ) : isGlobalSuccess ? (
-                            <CheckCircleOutlined style={{ color: "#52c41a" }} />
-                          ) : isGlobalFailed ? (
-                            <CloseCircleOutlined style={{ color: "#ff4d4f" }} />
-                          ) : (
-                            <DownloadOutlined />
-                          )
-                        }
-                        onClick={() => {
-                          if (exportJobState.status === "PENDING" || exportJobState.status === "PROCESSING") {
-                            message.info("Đang xuất dữ liệu")
-                            return
-                          }
-                          if (isGlobalSuccess && exportJobState.downloadUrl) {
-                            downloadExportedFile(exportJobState.downloadUrl, exportJobState.fileName)
-                            return
-                          }
-                          void handleExportRawData()
-                        }}
-                      >
-                        {isGlobalProcessing
-                          ? "Đang xuất dữ liệu"
-                          : isGlobalSuccess
-                            ? "Hoàn thành"
-                            : isGlobalFailed
-                              ? "Thử lại"
-                              : "Xuất toàn bộ dữ liệu ra internet"}
-                      </Button>
+                    <Tooltip title="Xuất toàn bộ dữ liệu ra internet">
+                      <span>
+                        <ExportInternetDownloadButton
+                          label="Xuất toàn bộ dữ liệu ra internet"
+                          prepareProgress={isGlobalJob ? exportJobState.progress : 0}
+                          externalStatus={isGlobalJob ? exportJobState.status : "IDLE"}
+                          downloadUrl={isGlobalJob ? exportJobState.downloadUrl : undefined}
+                          fileName={isGlobalJob ? exportJobState.fileName : undefined}
+                          isOtherJobRunning={isOtherJobRunning}
+                          onOtherJobRunning={() => message.info("Đang xuất dữ liệu")}
+                          onStartExport={() => void handleExportRawData()}
+                        />
+                      </span>
                     </Tooltip>
                   )
-                })()}
+                })()} */}
                 {can(
                   QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANG_KY_HOC_DOT_DANG_KY_HOC_ONLINE,
                   "THEM"
@@ -603,80 +510,32 @@ export default function ClassRegisterSession() {
                       />
                     </Tooltip>
                     {(() => {
-                      const isThisRowExporting =
+                      const isThisRow =
                         exportJobState.sessionId === record.id &&
-                        (exportJobState.status === "PENDING" || exportJobState.status === "PROCESSING")
-                      const isThisRowSuccess =
-                        exportJobState.sessionId === record.id && exportJobState.status === "SUCCESS"
-                      const isThisRowFailed =
-                        exportJobState.sessionId === record.id && exportJobState.status === "FAILED"
-
-                      if (isThisRowExporting) {
-                        return (
-                          <Tooltip title="Đang xuất dữ liệu" placement="top">
-                            <span
-                              className="inline-flex items-center gap-1 font-semibold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-300 cursor-wait select-none"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <LoadingOutlined spin className="text-xs" />
-                              <span className="text-xs">{exportJobState.progress}%</span>
-                            </span>
-                          </Tooltip>
-                        )
-                      }
-
-                      if (isThisRowSuccess) {
-                        return (
-                          <Tooltip title="Hoàn thành" placement="top">
-                            <span
-                              className="inline-flex items-center gap-1 font-medium text-green-700 bg-green-50 px-1.5 py-0.5 rounded border border-green-300 cursor-pointer select-none hover:bg-green-100"
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                if (exportJobState.downloadUrl) {
-                                  downloadExportedFile(exportJobState.downloadUrl, exportJobState.fileName)
-                                }
-                              }}
-                            >
-                              <CheckCircleOutlined className="text-xs text-green-600" />
-                              <span className="text-xs">Hoàn thành</span>
-                            </span>
-                          </Tooltip>
-                        )
-                      }
-
-                      if (isThisRowFailed) {
-                        return (
-                          <Tooltip title="Xuất thất bại" placement="top">
-                            <span
-                              className="inline-flex items-center gap-1 font-medium text-red-600 bg-red-50 px-1.5 py-0.5 rounded border border-red-300 cursor-pointer select-none hover:bg-red-100"
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                void handleExportRawData(record.id, record.name)
-                              }}
-                            >
-                              <CloseCircleOutlined className="text-xs text-red-600" />
-                              <span className="text-xs">Thử lại</span>
-                            </span>
-                          </Tooltip>
-                        )
-                      }
+                        exportJobState.status !== "IDLE"
+                      const isBusy =
+                        exportJobState.status === "PENDING" ||
+                        exportJobState.status === "PROCESSING"
+                      const isOtherJobRunning = isBusy && exportJobState.sessionId !== record.id
 
                       return (
                         <Tooltip title="Xuất dữ liệu đợt này ra internet" placement="top">
-                          <DownloadOutlined
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              if (
-                                exportJobState.status === "PENDING" ||
-                                exportJobState.status === "PROCESSING"
-                              ) {
-                                message.info("Đang xuất dữ liệu")
-                                return
+                          <span onClick={(e) => e.stopPropagation()}>
+                            <ExportInternetDownloadButton
+                              compact
+                              prepareProgress={isThisRow ? exportJobState.progress : 0}
+                              externalStatus={
+                                isThisRow ? exportJobState.status : "IDLE"
                               }
-                              void handleExportRawData(record.id, record.name)
-                            }}
-                            className="text-sm cursor-pointer"
-                          />
+                              downloadUrl={isThisRow ? exportJobState.downloadUrl : undefined}
+                              fileName={isThisRow ? exportJobState.fileName : undefined}
+                              isOtherJobRunning={isOtherJobRunning}
+                              onOtherJobRunning={() => message.info("Đang xuất dữ liệu")}
+                              onStartExport={() =>
+                                void handleExportRawData(record.id, record.name)
+                              }
+                            />
+                          </span>
                         </Tooltip>
                       )
                     })()}
@@ -748,6 +607,87 @@ export default function ClassRegisterSession() {
           />
         </Col>
       </Row>
+
+      <Modal
+        title="Nhập kết quả đăng ký từ Portal"
+        open={cloudImportOpen}
+        footer={null}
+        closable={false}
+        maskClosable={false}
+        onCancel={() => {
+          setCloudImportOpen(false)
+          pendingImportRef.current = null
+          cloudImportRef.current?.reset()
+        }}
+        width={480}
+        destroyOnClose
+        afterOpenChange={(open) => {
+          if (!open) return
+          const pending = pendingImportRef.current
+          if (!pending) return
+          cloudImportRef.current?.setExternalFile(pending.file)
+          window.setTimeout(() => {
+            void cloudImportRef.current?.startUpload()
+          }, 320)
+        }}
+      >
+        <CloudUploadPanel
+          ref={cloudImportRef}
+          hidePicker
+          showUploadButton={false}
+          hint="Gói .dat từ Portal"
+          onUpload={async (file, onProgress) => {
+            const pending = pendingImportRef.current
+            if (!pending) return false
+            let timer: ReturnType<typeof setInterval> | undefined
+            try {
+              onProgress(10)
+              let fake = 12
+              timer = setInterval(() => {
+                fake = Math.min(85, fake + 3 + Math.random() * 4)
+                onProgress(fake)
+              }, 300)
+              const res = await confirmImportRegistrationResults({
+                classRegisterSessionId: pending.sessionId,
+                file,
+                fileHash: pending.preview.fileHash,
+              })
+              if (timer) clearInterval(timer)
+              onProgress(100)
+              if (res.status === 200) {
+                const payload = res.data as ImportTrainingDataPayload
+                const warningCount = payload.warnings?.length ?? 0
+                cloudImportToastRef.current =
+                  warningCount > 0
+                    ? {
+                        type: "warning",
+                        text: "Nhập dữ liệu thành công",
+                      }
+                    : {
+                        type: "success",
+                        text: "Nhập dữ liệu thành công",
+                      }
+                return true
+              }
+              message.error("Không nhập được dữ liệu")
+              return false
+            } catch {
+              message.error("Không nhập được dữ liệu")
+              return false
+            } finally {
+              if (timer) clearInterval(timer)
+            }
+          }}
+          onComplete={() => {
+            const toast = cloudImportToastRef.current
+            cloudImportToastRef.current = null
+            if (toast?.type === "warning") message.warning(toast.text)
+            else if (toast?.type === "success") message.success(toast.text)
+            setCloudImportOpen(false)
+            pendingImportRef.current = null
+          }}
+        />
+      </Modal>
     </div>
   )
 }
