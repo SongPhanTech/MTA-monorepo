@@ -6,6 +6,7 @@ import ReactECharts from "echarts-for-react"
 import { useRef } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { useReactToPrint } from "react-to-print"
+import { buildReportTitleSemester } from "@/utils/export-survey-docx-template"
 
 dayjs.locale("vi")
 
@@ -51,6 +52,9 @@ const ModalPrintSurveyOrganization = () => {
     chartOption: any
     organizationCode?: string
     trainingObjectTypeName?: string
+    semesterName?: string
+    schoolYearName?: string
+    trainingSystemName?: string
     departmentName?: string
     departmentCode?: string
   }>({
@@ -140,7 +144,7 @@ const ModalPrintSurveyOrganization = () => {
         <div className="flex justify-between text-center font-bold">
           <div className="w-[45%]">
             <div className="uppercase">HỌC VIỆN KỸ THUẬT QUÂN SỰ</div>
-            <div className="uppercase underline">BAN KT & ĐBCLGD-ĐT</div>
+            <div className="uppercase underline">BAN KHẢO THÍ VÀ ĐBCLGD - ĐT</div>
           </div>
           <div className="w-[45%]">
             <div className="uppercase">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</div>
@@ -151,14 +155,23 @@ const ModalPrintSurveyOrganization = () => {
         {/* ===== TITLE ===== */}
         <div className="text-center mt-6  ">
           <div className="text-lg font-bold uppercase">TỔNG HỢP PHIẾU LẤY Ý KIẾN NGƯỜI HỌC</div>
-          <div className="text-lg mt-1 font-bold uppercase">VỀ HOẠT ĐỘNG GIẢNG DẠY</div>
-          <div className="text-sm mt-1 font-semibold uppercase">
-            <span>HĐGD của GV, </span>
-            <span>{input.surveyName}</span>
-            <span> - {input.trainingObjectTypeName}</span>
-            {/* {['HĐGD của GV', input.surveyName, `Hệ ${input.trainingObjectTypeName}`]
-                            .filter(Boolean)
-                            .join(', ')} */}
+          <div className="text-lg mt-1 font-bold uppercase">
+            VỀ HOẠT ĐỘNG GIẢNG DẠY CỦA GIẢNG VIÊN
+          </div>
+          <div className="text-sm mt-1 font-bold uppercase">
+            {buildReportTitleSemester({
+              semesterName: input.semesterName,
+              schoolYearName: input.schoolYearName,
+              trainingSystemName: input.trainingSystemName,
+              trainingObjectTypeName: input.trainingObjectTypeName,
+              surveyName: input.surveyName,
+            }) || (
+              <>
+                <span>HĐGD của GV, </span>
+                <span>{input.surveyName}</span>
+                <span> - {input.trainingObjectTypeName}</span>
+              </>
+            )}
           </div>
 
           {/* ===== FACULTY INFO ===== */}
@@ -227,7 +240,10 @@ const ModalPrintSurveyOrganization = () => {
                         <>
                           {`Câu ${index + 1}`}
                           {isSpecial && (
-                            <span className="special-star" style={{ color: "#FF0000", fontWeight: 700 }}>
+                            <span
+                              className="special-star"
+                              style={{ color: "#FF0000", fontWeight: 700 }}
+                            >
                               {" "}
                               *
                             </span>
@@ -238,9 +254,7 @@ const ModalPrintSurveyOrganization = () => {
                     {percent.map((p: any, answerIndex: number) => {
                       const special =
                         isSpecial &&
-                        (q.specificChoice.find(
-                          (c: any) => String(c.answer) === String(p.answer)
-                        ) ||
+                        (q.specificChoice.find((c: any) => String(c.answer) === String(p.answer)) ||
                           q.specificChoice[answerIndex])
                       const specialLabel =
                         special?.description?.trim() || special?.answer?.trim() || ""

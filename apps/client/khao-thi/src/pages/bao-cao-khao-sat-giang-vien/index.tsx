@@ -63,7 +63,18 @@ export default function BaoCaoGiangVien() {
   }, [router.isReady, queryClusterId, queryClusterName])
 
   const { data: semester } = useFindUniqueSemester(
-    { where: { id: semesterId }, select: { name: true } },
+    {
+      where: { id: semesterId },
+      select: {
+        name: true,
+        semesterType: true,
+        schoolYear: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    },
     { enabled: !!semesterId }
   )
   const { data: trainingObjectType } = useFindUniqueTrainingObjectType(
@@ -177,6 +188,7 @@ export default function BaoCaoGiangVien() {
     }
 
     const semesterName = semester?.name ?? ""
+    const schoolYearName = semester?.schoolYear?.name ?? ""
     const trainingObjectTypeName = trainingObjectType?.name ?? ""
     const trainingSystemName = trainingSystemNameFromDbType(trainingObjectType?.type)
 
@@ -209,6 +221,7 @@ export default function BaoCaoGiangVien() {
           organizationCode={isDepartment ? (parentOrg?.sMa ?? "") : (org.sMa ?? "")}
           departmentName={isDepartment ? (org.sTen ?? "") : ""}
           departmentCode={isDepartment ? (org.sMa ?? "") : ""}
+          schoolYearName={schoolYearName}
           selectedItem={org}
           selectedOrgNode={selectedNode}
           sectionTitle={sectionTitle}
@@ -241,6 +254,7 @@ export default function BaoCaoGiangVien() {
           lecturerCode={lecturer.userProfile?.code ?? undefined}
           departmentName={isDepartment ? (org?.sTen ?? "") : ""}
           departmentCode={isDepartment ? (org?.sMa ?? "") : ""}
+          schoolYearName={schoolYearName}
         />
       )
     }

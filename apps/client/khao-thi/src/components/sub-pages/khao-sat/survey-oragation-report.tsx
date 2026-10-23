@@ -50,6 +50,7 @@ function SurveyOrganizationReport({
   trainingObjectTypeName,
   semesterName,
   trainingSystemName,
+  schoolYearName,
   organizationCode,
   organizationName,
   departmentName,
@@ -64,6 +65,7 @@ function SurveyOrganizationReport({
   trainingObjectTypeName?: string
   semesterName?: string
   trainingSystemName?: string
+  schoolYearName?: string
   organizationCode?: string
   organizationName?: string
   departmentName?: string
@@ -100,8 +102,7 @@ function SurveyOrganizationReport({
   )
 
   const questionsWithSpecific = useMemo(() => {
-    const questions =
-      dataLevel?.status === 200 ? dataLevel.data.data?.questions || [] : []
+    const questions = dataLevel?.status === 200 ? dataLevel.data.data?.questions || [] : []
     return questions.map((q: any) => ({
       ...q,
       specificChoice: specificChoiceByQuestionId[q.id] || [],
@@ -621,6 +622,7 @@ function SurveyOrganizationReport({
                               trainingObjectTypeName,
                               semesterName,
                               trainingSystemName,
+                              schoolYearName,
                               organizationName,
                               organizationCode,
                               departmentName,
@@ -640,6 +642,9 @@ function SurveyOrganizationReport({
                           onOpen({
                             surveyName,
                             trainingObjectTypeName,
+                            semesterName,
+                            schoolYearName,
+                            trainingSystemName,
                             questions: questionsWithSpecific,
                             chartOption: dataBarchart,
                             organizationCode,
