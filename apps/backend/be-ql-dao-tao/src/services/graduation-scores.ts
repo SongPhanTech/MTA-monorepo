@@ -149,35 +149,151 @@ function findScoreForCurriculumSubject(
   return matches[0]
 }
 
-export async function resolveGraduationSubjectScores(input: {
+type LoadedSubjectScore = {
+  id: string
   studentId: string
+  subjectVersionId: string
+  attendanceScore: number | null
+  midtermScore: number | null
+  examScore: number | null
+  manualFinalScore: number | null
+  finalScore: Decimal | number | null
+  examPostponed: boolean
+  exempted: boolean
+  withdrew: boolean
+  suspended: boolean
+  examBanned: boolean
+  repeated: boolean
+  examBannedReason: string | null
+  suspendedReason: string | null
+  subjectVersion: {
+    id: string
+    name: string
+    code: string | null
+    credit: number
+    subjectId: string
+  }
+}
+
+type LoadedIssueScore = {
+  studentId: string
+  subjectVersionId: string
+  examBanned: boolean
+  examBannedReason: string | null
+  suspended: boolean
+  suspendedReason: string | null
+  subjectVersion: { id: string; name: string; credit: number }
+}
+
+type LoadedEquivalencyGroup = {
+  id: string
+  subjects: Array<{
+    subjectId: string
+    side: string
+    subject: { id: string; name: string; code: string | null; credit: number }
+  }>
+}
+
+function groupByStudentId<T extends { studentId: string }>(items: T[]) {
+  const map = new Map<string, T[]>()
+  for (const item of items) {
+    const list = map.get(item.studentId)
+    if (list) list.push(item)
+    else map.set(item.studentId, [item])
+  }
+  return map
+}
+
+export async function loadGraduationScoreSources(input: {
+  studentIds: string[]
+  curriculumSubjectIds: string[]
+}) {
+  const { studentIds, curriculumSubjectIds } = input
+  if (studentIds.length === 0) {
+    return {
+      rawScoresByStudent: new Map<string, LoadedSubjectScore[]>(),
+      issueScoresByStudent: new Map<string, LoadedIssueScore[]>(),
+      equivalencyGroups: [] as LoadedEquivalencyGroup[],
+    }
+  }
+
+  const [rawSubjectScores, issueScores, equivalencyGroups] = await Promise.all([
+    prisma.studentSubjectScore.findMany({
+      where: {
+        studentId: { in: studentIds },
+        deletedAt: null,
+        AND: [
+          {
+            OR: [{ subjectClassId: null }, { subjectClass: { cancelled: false } }],
+          },
+          {
+            OR: [{ manualFinalScore: { not: null } }, { finalScore: { not: null } }],
+          },
+        ],
+      },
+      include: {
+        subjectVersion: {
+          select: { id: true, name: true, code: true, credit: true, subjectId: true },
+        },
+      },
+      orderBy: { createdAt: "asc" },
+    }),
+    prisma.studentSubjectScore.findMany({
+      where: {
+        studentId: { in: studentIds },
+        deletedAt: null,
+        active: true,
+        AND: [
+          { OR: [{ subjectClassId: null }, { subjectClass: { cancelled: false } }] },
+          { OR: [{ examBanned: true }, { suspended: true }] },
+        ],
+      },
+      include: { subjectVersion: { select: { id: true, name: true, credit: true } } },
+    }),
+    curriculumSubjectIds.length
+      ? prisma.equivalencyGroup.findMany({
+          where: {
+            deletedAt: null,
+            active: true,
+            subjects: {
+              some: {
+                subjectId: { in: curriculumSubjectIds },
+              },
+            },
+          },
+          include: {
+            subjects: {
+              include: { subject: { select: { id: true, name: true, code: true, credit: true } } },
+            },
+          },
+        })
+      : Promise.resolve([]),
+  ])
+
+  return {
+    rawScoresByStudent: groupByStudentId(rawSubjectScores as LoadedSubjectScore[]),
+    issueScoresByStudent: groupByStudentId(issueScores as LoadedIssueScore[]),
+    equivalencyGroups: equivalencyGroups as LoadedEquivalencyGroup[],
+  }
+}
+
+export function computeGraduationSubjectScores(input: {
   curriculumSubjects: GraduationCurriculumSubjectInput[]
   trainingCourse: GraduationCourseScoreConfig
   electiveCreditsRequired: number
-}): Promise<ResolveGraduationScoresResult> {
-  const { studentId, curriculumSubjects, trainingCourse, electiveCreditsRequired } = input
+  rawSubjectScores: LoadedSubjectScore[]
+  issueScores: LoadedIssueScore[]
+  equivalencyGroups: LoadedEquivalencyGroup[]
+}): ResolveGraduationScoresResult {
+  const {
+    curriculumSubjects,
+    trainingCourse,
+    electiveCreditsRequired,
+    rawSubjectScores,
+    issueScores,
+    equivalencyGroups,
+  } = input
   const { scoreToRetain, scoreConverts } = trainingCourse
-
-  const rawSubjectScores = await prisma.studentSubjectScore.findMany({
-    where: {
-      studentId,
-      deletedAt: null,
-      AND: [
-        {
-          OR: [{ subjectClassId: null }, { subjectClass: { cancelled: false } }],
-        },
-        {
-          OR: [{ manualFinalScore: { not: null } }, { finalScore: { not: null } }],
-        },
-      ],
-    },
-    include: {
-      subjectVersion: {
-        select: { id: true, name: true, code: true, credit: true, subjectId: true },
-      },
-    },
-    orderBy: { createdAt: "asc" },
-  })
 
   const displayScoresMap = new Map<string, ResolvedGraduationScore>()
   const subjectScoresMap = new Map<string, ResolvedGraduationScore>()
@@ -233,23 +349,6 @@ export async function resolveGraduationSubjectScores(input: {
     }
     keepHighestScore(subjectScoresMap, resolved)
   }
-
-  const equivalencyGroups = await prisma.equivalencyGroup.findMany({
-    where: {
-      deletedAt: null,
-      active: true,
-      subjects: {
-        some: {
-          subjectId: { in: curriculumSubjects.map(({ subjectId }) => subjectId) },
-        },
-      },
-    },
-    include: {
-      subjects: {
-        include: { subject: { select: { id: true, name: true, code: true, credit: true } } },
-      },
-    },
-  })
 
   const finalScores = new Map<string, ResolvedGraduationScore>()
   const markDoneScores = new Map<string, ResolvedGraduationScore>()
@@ -446,19 +545,6 @@ export async function resolveGraduationSubjectScores(input: {
   if (courseGradeLowest === Number.POSITIVE_INFINITY) courseGradeLowest = 0
   if (graduationCourseGradeLowest === Number.POSITIVE_INFINITY) graduationCourseGradeLowest = 0
 
-  const issueScores = await prisma.studentSubjectScore.findMany({
-    where: {
-      studentId,
-      deletedAt: null,
-      active: true,
-      AND: [
-        { OR: [{ subjectClassId: null }, { subjectClass: { cancelled: false } }] },
-        { OR: [{ examBanned: true }, { suspended: true }] },
-      ],
-    },
-    include: { subjectVersion: { select: { id: true, name: true, credit: true } } },
-  })
-
   const issueReasons: string[] = []
   const debtSubjectIds = new Set<string>()
 
@@ -533,6 +619,27 @@ export async function resolveGraduationSubjectScores(input: {
     courseGradeLowest,
     graduationCourseGradeLowest,
   }
+}
+
+export async function resolveGraduationSubjectScores(input: {
+  studentId: string
+  curriculumSubjects: GraduationCurriculumSubjectInput[]
+  trainingCourse: GraduationCourseScoreConfig
+  electiveCreditsRequired: number
+}): Promise<ResolveGraduationScoresResult> {
+  const { studentId, curriculumSubjects, trainingCourse, electiveCreditsRequired } = input
+  const sources = await loadGraduationScoreSources({
+    studentIds: [studentId],
+    curriculumSubjectIds: curriculumSubjects.map((subject) => subject.subjectId),
+  })
+  return computeGraduationSubjectScores({
+    curriculumSubjects,
+    trainingCourse,
+    electiveCreditsRequired,
+    rawSubjectScores: sources.rawScoresByStudent.get(studentId) ?? [],
+    issueScores: sources.issueScoresByStudent.get(studentId) ?? [],
+    equivalencyGroups: sources.equivalencyGroups,
+  })
 }
 
 export const graduationCurriculumSelect = {

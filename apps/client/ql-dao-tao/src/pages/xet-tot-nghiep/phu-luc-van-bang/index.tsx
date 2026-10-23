@@ -75,6 +75,7 @@ import {
   PLVB_BODY_ROW_HEIGHT_2,
   PLVB_NAME_ONE_LINE_MAX,
   PLVB_NOTE_FONT,
+  getAppendixSubjectPrintName,
   getAppendixSubjectRowHeight as sharedGetAppendixSubjectRowHeight,
   wrapAppendixSubjectName as sharedWrapAppendixSubjectName,
 } from "../../../utils/phu-luc-van-bang/plvb-print-settings"
@@ -178,6 +179,7 @@ type AppendixSubject = {
   thangDiem10?: string | number | null
   thangDiem4?: string | number | null
   thangDiemChu?: string | null
+  isConditional?: boolean
 }
 
 function isGraduationSemesterGroup(id?: string | null) {
@@ -261,7 +263,7 @@ function appendixSubjectValues(
   if (!subject) return ["", "", "", "", "", ""]
   return [
     stt,
-    wrapAppendixSubjectName(subject.tenHocPhan),
+    wrapAppendixSubjectName(getAppendixSubjectPrintName(subject)),
     subject.soTinChi ?? "",
     formatAppendixScoreDisplay(subject.thangDiem10),
     formatAppendixScoreDisplay(subject.thangDiem4),
@@ -278,7 +280,10 @@ function buildTwoColumnSubjectValueRows(subjects: AppendixSubject[]) {
   return left.map((subject, index) => {
     const other = right[index]
     return {
-      height: getAppendixSubjectRowHeight([subject?.tenHocPhan, other?.tenHocPhan]),
+      height: getAppendixSubjectRowHeight([
+        getAppendixSubjectPrintName(subject),
+        getAppendixSubjectPrintName(other),
+      ]),
       values: [
         ...appendixSubjectValues(index + 1, subject),
         ...appendixSubjectValues(other ? leftCount + index + 1 : "", other),
@@ -832,13 +837,19 @@ export default function StudentGradeSystem() {
       const curriculumVersionId =
         student?.fixedClass?.curriculumVersion?.id || student?.curriculumVersion?.id
 
-      const getPlannedSemester = (item: (typeof student.subjectClassStudent)[number]) => {
-        const matchedTrainingBlock = item?.subjectVersion?.trainingBlocks?.find(
-          (trainingBlock) =>
-            trainingBlock?.trainingBlockOnCurriculumVersion?.curriculumVersionId ===
-            curriculumVersionId
+      const getMatchedTrainingBlock = (item: (typeof student.subjectClassStudent)[number]) => {
+        const blocks = item?.subjectVersion?.trainingBlocks ?? []
+        return (
+          blocks.find(
+            (trainingBlock) =>
+              trainingBlock?.trainingBlockOnCurriculumVersion?.curriculumVersionId ===
+              curriculumVersionId
+          ) ?? (blocks.length === 1 ? blocks[0] : undefined)
         )
-        const raw = matchedTrainingBlock?.semester
+      }
+
+      const getPlannedSemester = (item: (typeof student.subjectClassStudent)[number]) => {
+        const raw = getMatchedTrainingBlock(item)?.semester
         return typeof raw === "number" && Number.isFinite(raw) ? raw : null
       }
 
@@ -896,6 +907,7 @@ export default function StudentGradeSystem() {
           thangDiem10: scoreValue != null ? scoreValue.toFixed(2) : "-",
           thangDiem4: scoreConvert?.base4 || "",
           thangDiemChu: scoreConvert?.letter,
+          isConditional: getMatchedTrainingBlock(item)?.useForFinalScore === false,
         })
       }
 
@@ -1349,8 +1361,9 @@ export default function StudentGradeSystem() {
         if (restartStt) stt = 0
         for (const s1 of subjects) {
           stt += 1
+          const printName = getAppendixSubjectPrintName(s1)
           tableRows.push({
-            height: estimateWrappedRowHeight([s1?.tenHocPhan], 40, 12),
+            height: estimateWrappedRowHeight([printName], 40, 12),
             cells: [
               {
                 value: stt,
@@ -1360,7 +1373,7 @@ export default function StudentGradeSystem() {
                 borderStyle: PLVB_TABLE_BORDER,
               },
               {
-                value: s1?.tenHocPhan ?? "",
+                value: printName,
                 wrapText: true,
                 fontSize: 12,
                 borderStyle: PLVB_TABLE_BORDER,

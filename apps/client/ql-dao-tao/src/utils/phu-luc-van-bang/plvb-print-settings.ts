@@ -66,6 +66,8 @@ export type PlvbPrintSettings = {
   headerRightLine1: string
   headerRightLine2: string
   trainingResultLabel: string
+  /** Nhãn dòng Nơi sinh trong cụm thông tin cá nhân */
+  infoLabelPlaceOfBirth: string
   /** Quốc hiệu trái — từng dòng (pt) */
   headerLeftLine1Height: number
   headerLeftLine2Height: number
@@ -106,6 +108,7 @@ const SHARED_LAYOUT_DEFAULTS: Omit<
   | "headerRightLine1"
   | "headerRightLine2"
   | "trainingResultLabel"
+  | "infoLabelPlaceOfBirth"
 > = {
   columns: 2,
   fontFamily: PLVB_FONT_FAMILY,
@@ -165,6 +168,7 @@ export const DEFAULT_PLVB_PRINT_SETTINGS: PlvbPrintSettings = {
   headerRightLine1: "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM",
   headerRightLine2: "Độc lập - Tự do - Hạnh phúc",
   trainingResultLabel: "Kết quả đào tạo:",
+  infoLabelPlaceOfBirth: "Nơi sinh:",
 }
 
 /** Mẫu hệ quốc tế — mặc định giống hệt hệ QS (chỉnh riêng trong cấu hình in). */
@@ -269,6 +273,26 @@ export type PlvbAppendixSubject = {
   thangDiem10?: string | number | null
   thangDiem4?: string | number | null
   thangDiemChu?: string | null
+  /** `TrainingBlockSubject.useForFinalScore === false` — học phần điều kiện, in dấu * */
+  isConditional?: boolean
+}
+
+/** Gắn "* " trước tên học phần điều kiện khi in PLVB. */
+export function markConditionalAppendixSubjectName(
+  name?: string | null,
+  isConditional?: boolean | null
+): string {
+  const text = String(name || "")
+    .replace(/\s+/g, " ")
+    .trim()
+  if (!isConditional || !text || /^\*/.test(text)) return text
+  return `* ${text}`
+}
+
+export function getAppendixSubjectPrintName(
+  subject?: Pick<PlvbAppendixSubject, "tenHocPhan" | "isConditional"> | null
+): string {
+  return markConditionalAppendixSubjectName(subject?.tenHocPhan, subject?.isConditional)
 }
 
 export function plvbSubjectSelectKey(subject: PlvbAppendixSubject): string {

@@ -9,6 +9,7 @@ import { useReactToPrint } from "react-to-print"
 import {
   filterSubjectsForPlvbPrint,
   formatAppendixScoreDisplay,
+  getAppendixSubjectPrintName,
   getAppendixSubjectRowHeight,
   getDefaultPlvbPrintSettings,
   isTwoLineAppendixName,
@@ -371,8 +372,9 @@ function SubjectScoreCells({
     )
   }
 
-  const name = wrapAppendixSubjectName(subject.tenHocPhan, settings.nameOneLineMax)
-  const twoLineName = isTwoLineAppendixName(subject.tenHocPhan, settings.nameOneLineMax)
+  const printName = getAppendixSubjectPrintName(subject)
+  const name = wrapAppendixSubjectName(printName, settings.nameOneLineMax)
+  const twoLineName = isTwoLineAppendixName(printName, settings.nameOneLineMax)
   let scoreIdx = 0
   return (
     <>
@@ -738,7 +740,10 @@ function SubjectOneColumnTable({
             <tr
               key={`1col-${index}-${subject.tenHocPhan}`}
               style={{
-                height: `${getAppendixSubjectRowHeight([subject.tenHocPhan], settings)}pt`,
+                height: `${getAppendixSubjectRowHeight(
+                  [getAppendixSubjectPrintName(subject)],
+                  settings
+                )}pt`,
               }}
             >
               <SubjectScoreCells subject={subject} settings={settings} stt={index + 1} />
@@ -756,7 +761,10 @@ function SubjectOneColumnTable({
             <tr
               key={`1col-grad-${index}-${subject.tenHocPhan}`}
               style={{
-                height: `${getAppendixSubjectRowHeight([subject.tenHocPhan], settings)}pt`,
+                height: `${getAppendixSubjectRowHeight(
+                  [getAppendixSubjectPrintName(subject)],
+                  settings
+                )}pt`,
               }}
             >
               <SubjectScoreCells subject={subject} settings={settings} stt={index + 1} />
@@ -818,7 +826,7 @@ function SubjectTwoColumnTable({
             const leftSubject = left[index]
             const rightSubject = right[index]
             const height = getAppendixSubjectRowHeight(
-              [leftSubject?.tenHocPhan, rightSubject?.tenHocPhan],
+              [getAppendixSubjectPrintName(leftSubject), getAppendixSubjectPrintName(rightSubject)],
               settings
             )
             return (
@@ -850,7 +858,7 @@ function SubjectTwoColumnTable({
             const leftSubject = gradSplit.left[index]
             const rightSubject = gradSplit.right[index]
             const height = getAppendixSubjectRowHeight(
-              [leftSubject?.tenHocPhan, rightSubject?.tenHocPhan],
+              [getAppendixSubjectPrintName(leftSubject), getAppendixSubjectPrintName(rightSubject)],
               settings
             )
             return (
@@ -1062,7 +1070,7 @@ function StudentAppendixPage({
   ]
   const infoRight = [
     { label: "Mã học viên:", value: header.ma_hoc_vien, bold: false },
-    { label: "Nơi sinh:", value: header.noi_sinh, bold: false },
+    { label: settings.infoLabelPlaceOfBirth, value: header.noi_sinh, bold: false },
     { label: "Ngày nhập học:", value: header.ngay_nhap_hoc, bold: false },
     { label: "Thời gian đào tạo:", value: header.thoi_gian_dao_tao, bold: false },
     { label: "Trình độ đào tạo:", value: header.trinh_do_dao_tao, bold: false },
@@ -1889,6 +1897,13 @@ const ModalPrintPhuLucVb = () => {
                 <Input
                   value={settings.trainingResultLabel}
                   onChange={(e) => updateSetting("trainingResultLabel", e.target.value)}
+                />
+              </div>
+              <div className="col-span-2">
+                <div className="mb-1 text-xs text-gray-500">Nhãn nơi sinh</div>
+                <Input
+                  value={settings.infoLabelPlaceOfBirth}
+                  onChange={(e) => updateSetting("infoLabelPlaceOfBirth", e.target.value)}
                 />
               </div>
               <div className="col-span-2">
