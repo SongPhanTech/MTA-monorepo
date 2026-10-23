@@ -19,6 +19,20 @@ export const PLVB_BODY_ROW_HEIGHT_1 = 15.6
 export const PLVB_BODY_ROW_HEIGHT_2 = 25.5
 /** Khoảng cách giữa 2 dòng tên môn (hệ số line-height). */
 export const PLVB_NAME_LINE_HEIGHT = 1.2
+/** Khoảng cách 2 dòng — cụm thông tin cá nhân. */
+export const PLVB_INFO_LINE_HEIGHT = 1.3
+/** Khoảng cách 2 dòng — cụm tổng kết. */
+export const PLVB_SUMMARY_LINE_HEIGHT = 1.15
+/** Khoảng cách 2 dòng — cụm ghi chú. */
+export const PLVB_NOTE_LINE_HEIGHT = 1.35
+/** Chiều cao 1 dòng khối tổng kết (pt). */
+export const PLVB_SUMMARY_ROW_HEIGHT = 15.75
+/** Dòng Tổng số tín chỉ chiếm bao nhiêu dòng (chỉ bên trái, không đẩy chữ ký). */
+export const PLVB_CREDIT_ROW_LINE_COUNT = 1
+/** Khoảng cách giữa quốc hiệu và tiêu ngữ (pt). */
+export const PLVB_HEADER_RIGHT_GAP = 0
+/** Khoảng cách từ mép bảng điểm xuống khối tổng kết/chữ ký (pt). */
+export const PLVB_SUMMARY_BLOCK_MARGIN_TOP = 2
 export const PLVB_NOTE_FONT = 10
 export const PLVB_BODY_FONT = 10
 export const PLVB_HEADER_FONT = 9
@@ -39,6 +53,20 @@ export type PlvbPrintSettings = {
   rowHeight2: number
   /** Khoảng cách giữa 2 dòng khi tên môn xuống dòng. */
   nameLineHeight: number
+  /** Khoảng cách 2 dòng — cụm thông tin cá nhân. */
+  infoLineHeight: number
+  /** Khoảng cách 2 dòng — cụm tổng kết. */
+  summaryLineHeight: number
+  /** Khoảng cách 2 dòng — cụm ghi chú. */
+  noteLineHeight: number
+  /** Chiều cao 1 dòng khối tổng kết (pt). */
+  summaryRowHeight: number
+  /** Dòng Tổng số tín chỉ chiếm bao nhiêu dòng. */
+  creditRowLineCount: number
+  /** Khoảng cách giữa quốc hiệu và tiêu ngữ (pt). */
+  headerRightGap: number
+  /** Khoảng cách từ bảng điểm xuống khối tổng kết/chữ ký (pt). */
+  summaryBlockMarginTop: number
   marginTopMm: number
   marginBottomMm: number
   marginLeftMm: number
@@ -120,6 +148,13 @@ const SHARED_LAYOUT_DEFAULTS: Omit<
   rowHeight1: PLVB_BODY_ROW_HEIGHT_1,
   rowHeight2: PLVB_BODY_ROW_HEIGHT_2,
   nameLineHeight: PLVB_NAME_LINE_HEIGHT,
+  infoLineHeight: PLVB_INFO_LINE_HEIGHT,
+  summaryLineHeight: PLVB_SUMMARY_LINE_HEIGHT,
+  noteLineHeight: PLVB_NOTE_LINE_HEIGHT,
+  summaryRowHeight: PLVB_SUMMARY_ROW_HEIGHT,
+  creditRowLineCount: PLVB_CREDIT_ROW_LINE_COUNT,
+  headerRightGap: PLVB_HEADER_RIGHT_GAP,
+  summaryBlockMarginTop: PLVB_SUMMARY_BLOCK_MARGIN_TOP,
   marginTopMm: 12,
   marginBottomMm: 10,
   marginLeftMm: 6,
@@ -191,7 +226,12 @@ export function loadPlvbPrintSettings(variant: PlvbPrintVariant = "military"): P
     const raw = window.localStorage.getItem(PLVB_PRINT_SETTINGS_KEYS[variant])
     if (!raw) return defaults
     const parsed = JSON.parse(raw) as Partial<PlvbPrintSettings>
-    return { ...defaults, ...parsed }
+    const merged = { ...defaults, ...parsed }
+    // v9 lưu nhầm mặc định 3 dòng tổng tín chỉ — kéo cả chữ ký ra xa bảng điểm.
+    if (parsed.headerRightGap == null && parsed.creditRowLineCount === 3) {
+      merged.creditRowLineCount = defaults.creditRowLineCount
+    }
+    return merged
   } catch {
     return defaults
   }

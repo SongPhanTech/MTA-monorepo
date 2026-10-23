@@ -963,7 +963,7 @@ function ScoreScaleNote({
       className="mt-0.5"
       style={{
         fontSize: `${settings.noteFontSize}pt`,
-        lineHeight: 1.35,
+        lineHeight: settings.noteLineHeight || 1.35,
         fontFamily: settings.fontFamily,
       }}
     >
@@ -1173,6 +1173,7 @@ function StudentAppendixPage({
               fontSize: `${settings.headerRightLine2FontSize}pt`,
               fontWeight: 700,
               display: "inline-block",
+              marginTop: `${settings.headerRightGap || 0}pt`,
               height: `${settings.headerRightLine2Height}pt`,
               lineHeight: `${settings.headerRightLine2Height}pt`,
               textDecoration: "underline",
@@ -1215,7 +1216,7 @@ function StudentAppendixPage({
         className="mt-1 flex justify-between gap-6"
         style={{
           fontSize: `${settings.infoFontSize}pt`,
-          lineHeight: 1.3,
+          lineHeight: settings.infoLineHeight || 1.3,
           paddingLeft: "18pt",
         }}
       >
@@ -1253,30 +1254,38 @@ function StudentAppendixPage({
         {renderSubjectsBlock()}
       </div>
 
-      {/* Tổng kết trái + chữ ký phải — Số vào sổ gốc cùng hàng ngày ký (mẫu Hệ QS R69) */}
+      {/* Tổng kết trái + chữ ký phải — ngày ký cùng hàng Số vào sổ gốc */}
       <table
-        className="w-full mt-1 border-collapse"
-        style={{ fontSize: `${settings.summaryFontSize}pt` }}
+        className="w-full border-collapse"
+        style={{
+          marginTop: `${settings.summaryBlockMarginTop ?? 2}pt`,
+          fontSize: `${settings.summaryFontSize}pt`,
+          lineHeight: settings.summaryLineHeight || 1.15,
+        }}
       >
         <colgroup>
           <col style={{ width: "62%" }} />
           <col style={{ width: "38%" }} />
         </colgroup>
         <tbody>
-          <tr style={{ height: "15.75pt" }}>
-            <td className="align-middle">
+          <tr
+            style={{
+              height: `${(settings.summaryRowHeight || 15.75) * (settings.creditRowLineCount || 1)}pt`,
+            }}
+          >
+            <td className={(settings.creditRowLineCount || 1) > 1 ? "align-bottom" : "align-middle"}>
               Tổng số tín chỉ: <strong>{tongTinChi}</strong>
             </td>
             <td />
           </tr>
-          <tr style={{ height: "15.75pt" }}>
+          <tr style={{ height: `${settings.summaryRowHeight || 15.75}pt` }}>
             <td className="align-middle">
               Điểm trung bình chung tích lũy toàn khóa (Thang điểm 10):{" "}
               <strong>{diemTBHe10.toFixed(2).replace(".", ",")}</strong>
             </td>
             <td />
           </tr>
-          <tr style={{ height: "15.75pt" }}>
+          <tr style={{ height: `${settings.summaryRowHeight || 15.75}pt` }}>
             <td className="align-middle">
               Xếp hạng tốt nghiệp: <strong>{xepLoai}</strong>
             </td>
@@ -1310,7 +1319,6 @@ function StudentAppendixPage({
               {settings.signerTitle2}
             </td>
           </tr>
-          {/* Khoảng trống chữ ký tay — tách khỏi hàng tên để in không bị đẩy tên lên */}
           <tr style={{ height: `${settings.signerGapHeight}pt` }}>
             <td />
             <td />
@@ -1783,17 +1791,6 @@ const ModalPrintPhuLucVb = () => {
                 />
               </div>
               <div>
-                <div className="mb-1 text-xs text-gray-500">Khoảng cách 2 dòng tên môn</div>
-                <InputNumber
-                  className="w-full"
-                  min={0.8}
-                  max={2}
-                  step={0.05}
-                  value={settings.nameLineHeight}
-                  onChange={(v) => updateSetting("nameLineHeight", Number(v) || 1.1)}
-                />
-              </div>
-              <div>
                 <div className="mb-1 text-xs text-gray-500">Lề trên (mm)</div>
                 <InputNumber
                   className="w-full"
@@ -1948,6 +1945,12 @@ const ModalPrintPhuLucVb = () => {
                 max: 20,
                 fallback: 14,
               })}
+              {ptField("Khoảng cách quốc hiệu → tiêu ngữ", "headerRightGap", {
+                min: -12,
+                max: 24,
+                step: 0.5,
+                fallback: 0,
+              })}
               {ptField("Khoảng cách xuống tiêu đề", "titleBlockMarginTop", {
                 min: 0,
                 fallback: 10,
@@ -1966,12 +1969,64 @@ const ModalPrintPhuLucVb = () => {
               })}
 
               <div className="col-span-2 border-t border-gray-200 pt-2 text-xs font-medium text-gray-600">
+                Khoảng cách 2 dòng theo cụm
+              </div>
+              {ptField("Quốc hiệu — tiêu ngữ (pt)", "headerRightGap", {
+                min: -12,
+                max: 24,
+                step: 0.5,
+                fallback: 0,
+              })}
+              {ptField("Cụm thông tin cá nhân", "infoLineHeight", {
+                min: 0.8,
+                max: 2,
+                step: 0.05,
+                fallback: 1.3,
+              })}
+              {ptField("Cụm bảng điểm (tên môn)", "nameLineHeight", {
+                min: 0.8,
+                max: 2,
+                step: 0.05,
+                fallback: 1.1,
+              })}
+              {ptField("Cụm tổng kết", "summaryLineHeight", {
+                min: 0.8,
+                max: 2,
+                step: 0.05,
+                fallback: 1.15,
+              })}
+              {ptField("Cụm ghi chú", "noteLineHeight", {
+                min: 0.8,
+                max: 2,
+                step: 0.05,
+                fallback: 1.35,
+              })}
+
+              <div className="col-span-2 border-t border-gray-200 pt-2 text-xs font-medium text-gray-600">
                 Tổng kết & chữ ký (pt)
               </div>
               {ptField("Cỡ chữ khối tổng kết", "summaryFontSize", {
                 min: 8,
                 max: 16,
                 fallback: 12,
+              })}
+              {ptField("Khoảng cách bảng → tổng kết/chữ ký", "summaryBlockMarginTop", {
+                min: 0,
+                max: 24,
+                step: 0.5,
+                fallback: 2,
+              })}
+              {ptField("Chiều cao 1 dòng tổng kết", "summaryRowHeight", {
+                min: 10,
+                max: 40,
+                step: 0.05,
+                fallback: 15.75,
+              })}
+              {ptField("Dòng tổng tín chỉ — số dòng (trái)", "creditRowLineCount", {
+                min: 1,
+                max: 8,
+                step: 1,
+                fallback: 1,
               })}
               {ptField("Dòng ngày ký — chiều cao", "signDateLineHeight", {
                 fallback: 15.9,
