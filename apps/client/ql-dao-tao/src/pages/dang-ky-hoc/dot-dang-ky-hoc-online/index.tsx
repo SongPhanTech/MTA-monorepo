@@ -22,15 +22,19 @@ import {
 } from "@workspace/db/hooks"
 import {
   getExportStatus,
-  useExportTrainingData,
   useExportTrainingDataAsync,
 } from "@workspace/libs/api/export-training-data"
-import { useImportTrainingData } from "@workspace/libs/api/import-training-data"
+import {
+  confirmImportRegistrationResults,
+  previewImportRegistrationResults,
+  type ImportRegistrationPreviewPayload,
+  type ImportTrainingDataPayload,
+} from "@workspace/libs/api/import-training-data"
 import { invalidateRegistrationCaches } from "@workspace/libs/api/invalidate-class-register-cache"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from "@workspace/router"
 import { Select, useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
-import { Button, Col, Flex, message, Row, Tag, Tooltip } from "antd"
+import { Button, Col, Flex, Modal, message, Row, Tag, Tooltip } from "antd"
 import dayjs from "dayjs"
 import { saveAs } from "file-saver"
 import { BookPlus } from "lucide-react"
@@ -159,10 +163,13 @@ export default function ClassRegisterSession() {
   })
 
   const { mutateAsync: deleteClassRegisterSession } = useUpdateClassRegisterSession()
-  const { mutateAsync: exportRawData } = useExportTrainingData()
-  const { mutateAsync: importRawData } = useImportTrainingData()
   const importFileInputRef = useRef<HTMLInputElement>(null)
   const [importSessionId, setImportSessionId] = useState<string | null>(null)
+  const pendingImportRef = useRef<{
+    sessionId: string
+    file: File
+    preview: ImportRegistrationPreviewPayload
+  } | null>(null)
 
   async function handleDeleteClassRegisterSession(id: string) {
     try {
@@ -234,42 +241,113 @@ export default function ClassRegisterSession() {
   async function handleImportFileChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0]
     event.target.value = ""
+    const sessionId = importSessionId
 
-    if (!file || !importSessionId) {
+    if (!file || !sessionId) {
       setImportSessionId(null)
       return
     }
 
-    if (!file.name.endsWith(".json") && file.type !== "application/json") {
-      message.warning("Vui lòng chọn file JSON")
+    const nameOk =
+      file.name.endsWith(".dat") ||
+      file.name.endsWith(".sync") ||
+      file.type === "application/x-mta-dat" ||
+      file.type === "application/octet-stream"
+    if (!nameOk) {
+      message.warning("Vui lòng chọn gói .dat xuất từ Portal (không còn hỗ trợ JSON thuần)")
       setImportSessionId(null)
       return
     }
 
     try {
       showSpinner()
-      const res = await importRawData({
-        classRegisterSessionId: importSessionId,
+      const previewRes = await previewImportRegistrationResults({
+        classRegisterSessionId: sessionId,
         file,
       })
 
-      if (res.status === 200) {
-        const payload =
-          res.data as import("@workspace/libs/api/import-training-data").ImportTrainingDataPayload
-        const warningCount = payload.warnings?.length ?? 0
-        if (warningCount > 0) {
-          message.warning(`${payload.message || "Nhập thành công"} (${warningCount} cảnh báo)`)
-        } else {
-          message.success(payload.message || "Nhập dữ liệu đăng ký thành công")
-        }
+      if (previewRes.status !== 200 || !("fileHash" in previewRes.data)) {
+        message.error(
+          ("message" in previewRes.data ? previewRes.data.message : undefined) ||
+            "Xem trước nhập thất bại"
+        )
         return
       }
 
-      message.error(
-        ("message" in res.data ? res.data.message : undefined) || "Nhập dữ liệu đăng ký thất bại"
-      )
+      const preview = previewRes.data
+      pendingImportRef.current = { sessionId, file, preview }
+      const s = preview.stats
+
+      Modal.confirm({
+        title: "Xác nhận nhập kết quả đăng ký",
+        width: 520,
+        content: (
+          <div className="space-y-2 text-sm">
+            <p>
+              Đợt: <strong>{preview.sessionName}</strong>
+            </p>
+            <ul className="list-disc pl-5">
+              <li>
+                Nhật ký đăng ký: thêm {s.createLogs}, cập nhật {s.updateLogs}
+              </li>
+              <li>
+                Điểm môn (placeholder): thêm {s.createScores}, cập nhật {s.updateScores}, bỏ qua đã
+                có điểm {s.skipScoresWithGrade}
+              </li>
+              <li>
+                Sẽ ẩn (soft-delete): {s.removeLogs} đăng ký, {s.removeScores} điểm trống
+              </li>
+              {s.failed > 0 ? <li>Bản ghi lỗi / bỏ qua: {s.failed}</li> : null}
+            </ul>
+            {preview.warnings.length > 0 ? (
+              <p className="text-amber-700">
+                {preview.warnings.length} cảnh báo (xem chi tiết sau khi xác nhận)
+              </p>
+            ) : null}
+            <p className="text-slate-500">Chỉ xác nhận khi đúng đợt và đúng file từ Portal.</p>
+          </div>
+        ),
+        okText: "Xác nhận nhập",
+        cancelText: "Hủy",
+        onOk: async () => {
+          const pending = pendingImportRef.current
+          if (!pending) return
+          try {
+            showSpinner()
+            const res = await confirmImportRegistrationResults({
+              classRegisterSessionId: pending.sessionId,
+              file: pending.file,
+              fileHash: pending.preview.fileHash,
+            })
+            if (res.status === 200) {
+              const payload = res.data as ImportTrainingDataPayload
+              const warningCount = payload.warnings?.length ?? 0
+              if (warningCount > 0) {
+                message.warning(
+                  `${payload.message || "Nhập thành công"} (${warningCount} cảnh báo)`
+                )
+              } else {
+                message.success(payload.message || "Nhập dữ liệu đăng ký thành công")
+              }
+              return
+            }
+            message.error(
+              ("message" in res.data ? res.data.message : undefined) ||
+                "Nhập dữ liệu đăng ký thất bại"
+            )
+          } catch {
+            message.error("Đã xảy ra lỗi khi xác nhận nhập")
+          } finally {
+            hideSpinner()
+            pendingImportRef.current = null
+          }
+        },
+        onCancel: () => {
+          pendingImportRef.current = null
+        },
+      })
     } catch {
-      message.error("Đã xảy ra lỗi khi nhập dữ liệu đăng ký")
+      message.error("Đã xảy ra lỗi khi xem trước nhập dữ liệu đăng ký")
     } finally {
       hideSpinner()
       setImportSessionId(null)
@@ -281,7 +359,7 @@ export default function ClassRegisterSession() {
       <input
         ref={importFileInputRef}
         type="file"
-        accept=".json,application/json"
+        accept=".dat,.sync,application/x-mta-dat,application/octet-stream"
         className="hidden"
         onChange={handleImportFileChange}
       />
@@ -515,7 +593,7 @@ export default function ClassRegisterSession() {
                 fixed: "right",
                 render: (_, record) => (
                   <div className="flex items-center justify-center gap-2 flex-nowrap">
-                    <Tooltip title="Nhập dữ liệu đăng ký từ internet" placement="top">
+                    <Tooltip title="Nhập gói .dat kết quả đăng ký từ Portal" placement="top">
                       <UploadOutlined
                         onClick={(e) => {
                           e.stopPropagation()

@@ -1,6 +1,7 @@
 import { Store, useStore } from "@tanstack/react-store"
 import { getExportStatus } from "@workspace/libs/api/export-training-data"
-import { fetchInstance } from "@workspace/libs/api/custom-instance"
+import { fetchInstance, getUrl } from "@workspace/libs/api/custom-instance"
+import { getRuntimeEnv } from "@workspace/libs/utils"
 import { message } from "antd"
 
 export type ExportTaskState = {
@@ -71,11 +72,13 @@ function saveState(state: ExportTaskState) {
 
 let pollingInterval: NodeJS.Timeout | null = null
 
-/** Tải qua fetch + Bearer token (không dùng <a href> — endpoint download yêu cầu auth). */
+/** Tải qua fetch + Bearer token (không dùng <a href> tới API — tránh nhảy sang localhost/sai origin). */
 export async function downloadExportedFile(downloadUrl: string, fileName?: string) {
   if (typeof window === "undefined") return
-  const baseApi = process.env.NEXT_PUBLIC_API_LMS_BASE_URL || "http://localhost:3002"
-  const url = downloadUrl.startsWith("http") ? downloadUrl : `${baseApi}${downloadUrl}`
+  // Cùng cách resolve URL với customTrainingFetch — không fallback localhost:3002
+  const url = downloadUrl.startsWith("http")
+    ? downloadUrl
+    : getUrl(getRuntimeEnv("NEXT_PUBLIC_API_LMS_BASE_URL") || "/api/lms", downloadUrl)
   try {
     const res = await fetchInstance(url, { method: "GET" })
     if (!res.ok) {

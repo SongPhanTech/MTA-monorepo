@@ -1,7 +1,14 @@
+import { createHash } from "node:crypto"
 import { Prisma } from "@workspace/db"
 import { prisma } from ".."
+import { isMtaSyncBinary, unpackSyncPayload } from "./data-sync-pack"
 
 export const SUPPORTED_REGISTRATION_RESULTS_VERSIONS = ["1.0.0"] as const
+
+export const IMPORT_REGISTRATION_MAX_MB = Math.max(
+  1,
+  Number(process.env.IMPORT_REGISTRATION_MAX_MB || 32) || 32
+)
 
 type JsonRecord = Record<string, unknown>
 
@@ -19,15 +26,39 @@ type ExportPayload = {
   data?: Record<string, unknown>
 }
 
+export type ImportRegistrationDetails = {
+  classRegisterLogs: number
+  studentSubjectScore: number
+  removedLogs: number
+  removedScores: number
+  createdLogs?: number
+  updatedLogs?: number
+  createdScores?: number
+  updatedScores?: number
+  skippedScoresWithGrade?: number
+}
+
 export type ImportRegistrationResultsResult = {
   message: string
   imported: number
   failed: number
-  details: {
-    classRegisterLogs: number
-    studentSubjectScore: number
-    removedLogs: number
-    removedScores: number
+  details: ImportRegistrationDetails
+  warnings: string[]
+}
+
+export type ImportRegistrationPreview = {
+  fileHash: string
+  sessionName: string
+  fileSessionId: string | null
+  stats: {
+    createLogs: number
+    updateLogs: number
+    createScores: number
+    updateScores: number
+    skipScoresWithGrade: number
+    removeLogs: number
+    removeScores: number
+    failed: number
   }
   warnings: string[]
 }
@@ -86,22 +117,63 @@ function hasGradeData(score: {
   )
 }
 
-export async function importRegistrationResultsFromJson(
-  classRegisterSessionId: string,
-  raw: unknown
-): Promise<ImportRegistrationResultsResult> {
-  const warnings: string[] = []
-  const payload = raw as ExportPayload
+export function hashImportFileBytes(bytes: Buffer): string {
+  return createHash("sha256").update(bytes).digest("hex")
+}
 
-  if (!payload || typeof payload !== "object") {
-    throw new Error("File JSON không hợp lệ")
+/** Chỉ chấp nhận gói .dat (Gzip + AES-256-GCM). Từ chối JSON plaintext. */
+export function decodeRegistrationResultsFile(bytes: Buffer): unknown {
+  if (bytes.byteLength > IMPORT_REGISTRATION_MAX_MB * 1024 * 1024) {
+    throw new Error(
+      `File vượt giới hạn ${IMPORT_REGISTRATION_MAX_MB} MB. Tăng IMPORT_REGISTRATION_MAX_MB nếu cần.`
+    )
   }
+  if (!isMtaSyncBinary(bytes)) {
+    throw new Error(
+      "Chỉ chấp nhận gói .dat mã hóa (Gzip + AES-256-GCM) xuất từ Portal. File JSON thuần không còn được hỗ trợ."
+    )
+  }
+  try {
+    return JSON.parse(unpackSyncPayload(bytes))
+  } catch (error) {
+    if (error instanceof Error && error.message.includes("Giải mã")) throw error
+    if (error instanceof Error && error.message.includes("Giải nén")) throw error
+    if (error instanceof Error && error.message.includes("gói")) throw error
+    throw new Error(
+      error instanceof Error ? error.message : "Không đọc được gói .dat kết quả đăng ký"
+    )
+  }
+}
 
+function parsePayload(raw: unknown): ExportPayload {
+  if (!raw || typeof raw !== "object") {
+    throw new Error("Nội dung gói không hợp lệ")
+  }
+  const payload = raw as ExportPayload
   if (payload.type !== "registration-results") {
     throw new Error(
       `File không phải kết quả đăng ký (type=${payload.type ?? "thiếu"}). Cần type "registration-results".`
     )
   }
+  return payload
+}
+
+type PreparedContext = {
+  session: { id: string; name: string; semesterId: string }
+  payload: ExportPayload
+  logs: JsonRecord[]
+  scores: JsonRecord[]
+  studentSet: Set<string>
+  subjectClassMap: Map<string, string>
+  warnings: string[]
+}
+
+async function prepareContext(
+  classRegisterSessionId: string,
+  raw: unknown
+): Promise<PreparedContext> {
+  const warnings: string[] = []
+  const payload = parsePayload(raw)
 
   if (
     payload.version &&
@@ -120,9 +192,12 @@ export async function importRegistrationResultsFromJson(
   }
 
   const fileSessionId = payload.filters?.classRegisterSessionId
-  if (fileSessionId && fileSessionId !== classRegisterSessionId) {
-    warnings.push(
-      `ID đợt trong file (${fileSessionId}) khác đợt đang chọn (${classRegisterSessionId}). Dữ liệu sẽ gắn vào đợt đang chọn.`
+  if (!fileSessionId) {
+    throw new Error("Gói thiếu filters.classRegisterSessionId — không thể xác minh đợt đăng ký")
+  }
+  if (fileSessionId !== classRegisterSessionId) {
+    throw new Error(
+      `ID đợt trong file (${fileSessionId}) khác đợt đang chọn (${classRegisterSessionId}). Từ chối import để tránh xóa nhầm dữ liệu.`
     )
   }
 
@@ -159,17 +234,215 @@ export async function importRegistrationResultsFromJson(
       : Promise.resolve([]),
   ])
 
-  const studentSet = new Set(existingStudents.map((s) => s.id))
-  const subjectClassMap = new Map(existingSubjectClasses.map((sc) => [sc.id, sc.subjectId]))
+  return {
+    session: { id: session.id, name: session.name, semesterId: session.semesterId },
+    payload,
+    logs,
+    scores,
+    studentSet: new Set(existingStudents.map((s) => s.id)),
+    subjectClassMap: new Map(existingSubjectClasses.map((sc) => [sc.id, sc.subjectId])),
+    warnings,
+  }
+}
+
+export async function previewRegistrationResultsImport(
+  classRegisterSessionId: string,
+  raw: unknown,
+  fileHash: string
+): Promise<ImportRegistrationPreview> {
+  const ctx = await prepareContext(classRegisterSessionId, raw)
+  const { logs, scores, studentSet, subjectClassMap, session, warnings, payload } = ctx
+
+  let createLogs = 0
+  let updateLogs = 0
+  let createScores = 0
+  let updateScores = 0
+  let skipScoresWithGrade = 0
+  let failed = 0
+
+  const validLogIds = new Set<string>()
+  const importedPairs = new Set<string>()
+
+  for (const rawLog of logs) {
+    const logId = typeof rawLog.id === "string" ? rawLog.id : null
+    const studentId = typeof rawLog.studentId === "string" ? rawLog.studentId : null
+    const subjectClassId =
+      typeof rawLog.subjectClassId === "string" ? rawLog.subjectClassId : null
+
+    if (!logId || !studentId || !subjectClassId) {
+      failed += 1
+      warnings.push(`ClassRegisterLogs: bỏ qua bản ghi thiếu id/studentId/subjectClassId`)
+      continue
+    }
+    if (!studentSet.has(studentId)) {
+      failed += 1
+      warnings.push(`ClassRegisterLogs/${logId}: không tìm thấy sinh viên ${studentId}`)
+      continue
+    }
+    if (!subjectClassMap.has(subjectClassId)) {
+      failed += 1
+      warnings.push(`ClassRegisterLogs/${logId}: không tìm thấy lớp HP ${subjectClassId}`)
+      continue
+    }
+
+    const existingByPair = await prisma.classRegisterLogs.findFirst({
+      where: { classRegisterSessionId, studentId, subjectClassId },
+      select: { id: true, deletedAt: true },
+    })
+
+    if (existingByPair) {
+      updateLogs += 1
+      validLogIds.add(existingByPair.id)
+    } else {
+      const existingById = await prisma.classRegisterLogs.findFirst({
+        where: { id: logId },
+        select: { id: true },
+      })
+      if (existingById) updateLogs += 1
+      else createLogs += 1
+      validLogIds.add(logId)
+    }
+    importedPairs.add(`${studentId}::${subjectClassId}`)
+  }
+
+  for (const rawScore of scores) {
+    const studentId = typeof rawScore.studentId === "string" ? rawScore.studentId : null
+    const subjectClassId =
+      typeof rawScore.subjectClassId === "string" ? rawScore.subjectClassId : null
+    const scoreId = typeof rawScore.id === "string" ? rawScore.id : null
+
+    if (!studentId || !subjectClassId) {
+      failed += 1
+      warnings.push(`StudentSubjectScore: bỏ qua bản ghi thiếu studentId/subjectClassId`)
+      continue
+    }
+    if (!studentSet.has(studentId)) {
+      failed += 1
+      warnings.push(`StudentSubjectScore/${scoreId ?? "?"}: không tìm thấy sinh viên ${studentId}`)
+      continue
+    }
+    const subjectVersionId =
+      subjectClassMap.get(subjectClassId) ??
+      (typeof rawScore.subjectVersionId === "string" ? rawScore.subjectVersionId : null)
+    if (!subjectClassMap.has(subjectClassId) || !subjectVersionId) {
+      failed += 1
+      warnings.push(
+        `StudentSubjectScore/${scoreId ?? "?"}: không tìm thấy lớp HP ${subjectClassId}`
+      )
+      continue
+    }
+
+    importedPairs.add(`${studentId}::${subjectClassId}`)
+
+    const existing = await prisma.studentSubjectScore.findFirst({
+      where: { studentId, subjectClassId },
+      select: {
+        id: true,
+        deletedAt: true,
+        attendanceScore: true,
+        midtermScore: true,
+        examScore: true,
+        finalScore: true,
+        manualFinalScore: true,
+      },
+    })
+
+    if (existing && !existing.deletedAt && hasGradeData(existing)) {
+      skipScoresWithGrade += 1
+      continue
+    }
+    if (existing) updateScores += 1
+    else createScores += 1
+  }
+
+  let removeLogs = 0
+  let removeScores = 0
+  const canReconcile = logs.length === 0 || validLogIds.size > 0
+
+  if (canReconcile) {
+    const logsToRemove = await prisma.classRegisterLogs.findMany({
+      where: {
+        classRegisterSessionId,
+        deletedAt: null,
+        ...(validLogIds.size > 0 ? { id: { notIn: [...validLogIds] } } : {}),
+      },
+      select: { id: true, studentId: true, subjectClassId: true },
+    })
+    removeLogs = logsToRemove.length
+
+    for (const log of logsToRemove) {
+      const pairKey = `${log.studentId}::${log.subjectClassId}`
+      if (importedPairs.has(pairKey)) continue
+
+      const score = await prisma.studentSubjectScore.findFirst({
+        where: {
+          studentId: log.studentId,
+          subjectClassId: log.subjectClassId,
+          deletedAt: null,
+        },
+        include: {
+          examPaper: { select: { id: true } },
+          studentResearchTopic: { select: { id: true } },
+          studentInternship: { select: { id: true } },
+        },
+      })
+      if (!score) continue
+      if (
+        hasGradeData(score) ||
+        score.examPaper ||
+        score.studentResearchTopic ||
+        score.studentInternship
+      ) {
+        warnings.push(
+          `StudentSubjectScore/${score.id}: sẽ giữ nguyên vì đã phát sinh điểm/dữ liệu liên quan`
+        )
+        continue
+      }
+      removeScores += 1
+    }
+  } else {
+    warnings.push("Sẽ bỏ qua bước gỡ đăng ký cũ vì không có nhật ký hợp lệ trong file")
+  }
+
+  return {
+    fileHash,
+    sessionName: session.name || classRegisterSessionId,
+    fileSessionId: payload.filters?.classRegisterSessionId ?? null,
+    stats: {
+      createLogs,
+      updateLogs,
+      createScores,
+      updateScores,
+      skipScoresWithGrade,
+      removeLogs,
+      removeScores,
+      failed,
+    },
+    warnings: warnings.slice(0, 50),
+  }
+}
+
+export async function importRegistrationResultsFromJson(
+  classRegisterSessionId: string,
+  raw: unknown
+): Promise<ImportRegistrationResultsResult> {
+  const ctx = await prepareContext(classRegisterSessionId, raw)
+  const { logs, scores, studentSet, subjectClassMap, session, warnings } = ctx
 
   let logsImported = 0
   let scoresImported = 0
+  let createdLogs = 0
+  let updatedLogs = 0
+  let createdScores = 0
+  let updatedScores = 0
+  let skippedScoresWithGrade = 0
   let failed = 0
   let removedLogs = 0
   let removedScores = 0
 
   const importedLogIds = new Set<string>()
   const importedPairs = new Set<string>()
+  const now = new Date()
 
   await prisma.$transaction(async (tx) => {
     for (const rawLog of logs) {
@@ -200,15 +473,16 @@ export async function importRegistrationResultsFromJson(
         classRegisterSessionId,
         studentId,
         subjectClassId,
+        deletedAt: null,
       })
 
       try {
+        // Gồm cả bản ghi soft-deleted để khôi phục nếu SV đăng ký lại
         const existingByPair = await tx.classRegisterLogs.findFirst({
           where: {
             classRegisterSessionId,
             studentId,
             subjectClassId,
-            deletedAt: null,
           },
         })
 
@@ -216,17 +490,30 @@ export async function importRegistrationResultsFromJson(
           const { id: _id, ...updateData } = prepared
           await tx.classRegisterLogs.update({
             where: { id: existingByPair.id },
-            data: updateData as Prisma.ClassRegisterLogsUncheckedUpdateInput,
+            data: {
+              ...(updateData as Prisma.ClassRegisterLogsUncheckedUpdateInput),
+              deletedAt: null,
+            },
           })
           importedLogIds.add(existingByPair.id)
+          updatedLogs += 1
         } else {
+          const existingById = await tx.classRegisterLogs.findFirst({
+            where: { id: logId },
+            select: { id: true },
+          })
           const { id: _id, ...updateData } = prepared
           await tx.classRegisterLogs.upsert({
             where: { id: logId },
             create: prepared as Prisma.ClassRegisterLogsUncheckedCreateInput,
-            update: updateData as Prisma.ClassRegisterLogsUncheckedUpdateInput,
+            update: {
+              ...(updateData as Prisma.ClassRegisterLogsUncheckedUpdateInput),
+              deletedAt: null,
+            },
           })
           importedLogIds.add(logId)
+          if (existingById) updatedLogs += 1
+          else createdLogs += 1
         }
 
         logsImported += 1
@@ -275,16 +562,17 @@ export async function importRegistrationResultsFromJson(
 
       try {
         const existing = await tx.studentSubjectScore.findFirst({
-          where: { studentId, subjectClassId, deletedAt: null },
+          where: { studentId, subjectClassId },
         })
 
-        if (existing) {
-          if (hasGradeData(existing)) {
-            warnings.push(`StudentSubjectScore/${existing.id}: đã có điểm, giữ nguyên không ghi đè`)
-            scoresImported += 1
-            continue
-          }
+        if (existing && !existing.deletedAt && hasGradeData(existing)) {
+          warnings.push(`StudentSubjectScore/${existing.id}: đã có điểm, giữ nguyên không ghi đè`)
+          scoresImported += 1
+          skippedScoresWithGrade += 1
+          continue
+        }
 
+        if (existing) {
           await tx.studentSubjectScore.update({
             where: { id: existing.id },
             data: {
@@ -296,6 +584,7 @@ export async function importRegistrationResultsFromJson(
             },
           })
           scoresImported += 1
+          updatedScores += 1
           continue
         }
 
@@ -305,12 +594,14 @@ export async function importRegistrationResultsFromJson(
           subjectVersionId,
           semesterId:
             typeof rawScore.semesterId === "string" ? rawScore.semesterId : session.semesterId,
+          deletedAt: null,
         })
 
         await tx.studentSubjectScore.create({
           data: prepared as Prisma.StudentSubjectScoreUncheckedCreateInput,
         })
         scoresImported += 1
+        createdScores += 1
       } catch (error) {
         failed += 1
         warnings.push(
@@ -321,7 +612,6 @@ export async function importRegistrationResultsFromJson(
       }
     }
 
-    // Chỉ đồng bộ hủy đăng ký khi import logs thành công (tránh xóa nhầm nếu mọi dòng đều lỗi)
     const canReconcileDeletes = logs.length === 0 || logsImported > 0
 
     if (canReconcileDeletes) {
@@ -336,10 +626,11 @@ export async function importRegistrationResultsFromJson(
 
       if (logsToRemove.length > 0) {
         const removeIds = logsToRemove.map((l) => l.id)
-        const deleteResult = await tx.classRegisterLogs.deleteMany({
+        const soft = await tx.classRegisterLogs.updateMany({
           where: { id: { in: removeIds } },
+          data: { deletedAt: now },
         })
-        removedLogs = deleteResult.count
+        removedLogs = soft.count
 
         for (const log of logsToRemove) {
           const pairKey = `${log.studentId}::${log.subjectClassId}`
@@ -366,15 +657,15 @@ export async function importRegistrationResultsFromJson(
             score.studentInternship
           ) {
             warnings.push(
-              `StudentSubjectScore/${score.id}: không xóa vì đã phát sinh điểm/dữ liệu liên quan`
+              `StudentSubjectScore/${score.id}: không gỡ vì đã phát sinh điểm/dữ liệu liên quan`
             )
             continue
           }
 
-          await tx.studentSubjectScoreHistory.deleteMany({
-            where: { studentSubjectScoreId: score.id },
+          await tx.studentSubjectScore.update({
+            where: { id: score.id },
+            data: { deletedAt: now },
           })
-          await tx.studentSubjectScore.delete({ where: { id: score.id } })
           removedScores += 1
         }
       }
@@ -388,7 +679,7 @@ export async function importRegistrationResultsFromJson(
 
   return {
     message: `Đã nhập kết quả đăng ký vào đợt "${sessionLabel}": ${logsImported} nhật ký, ${scoresImported} điểm môn${
-      removedLogs > 0 ? `, đã gỡ ${removedLogs} đăng ký cũ` : ""
+      removedLogs > 0 ? `, đã ẩn (soft-delete) ${removedLogs} đăng ký cũ` : ""
     }`,
     imported,
     failed,
@@ -397,6 +688,11 @@ export async function importRegistrationResultsFromJson(
       studentSubjectScore: scoresImported,
       removedLogs,
       removedScores,
+      createdLogs,
+      updatedLogs,
+      createdScores,
+      updatedScores,
+      skippedScoresWithGrade,
     },
     warnings,
   }

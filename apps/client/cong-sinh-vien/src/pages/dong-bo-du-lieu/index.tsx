@@ -3,11 +3,14 @@ import Loading from "@components/commons/loading"
 import DefaultLayout from "@layouts/default-layout"
 import { usePagination } from "@hooks/usePagination"
 import ModalPreviewImportJson from "@components/modal/modal-preview-import-json"
+import SyncProcessModal from "@components/modal/SyncProcessModal"
 import { type ImportJsonPreview, parseImportJsonFile } from "@/utils/parse-import-json"
 import {
   finishDataSync,
+  getListDataSyncSessionsQueryKey,
   startDataSync,
   useGetDataSyncHistory,
+  useListDataSyncSessions,
   type DataSyncHistoryItem,
 } from "@workspace/libs/api/data-sync-history"
 import {
@@ -15,13 +18,10 @@ import {
   isImportFromInternalOk,
 } from "@workspace/libs/api/portal-import-training-data"
 import {
-  downloadExportJson,
+  downloadExportDat,
   exportToInternal,
 } from "@workspace/libs/api/portal-export-registration-results"
-import {
-  getGetClassRegisterSessionQueryKey,
-  useGetClassRegisterSession,
-} from "@workspace/libs/api/portal"
+import { getGetClassRegisterSessionQueryKey } from "@workspace/libs/api/portal"
 import { useQueryClient } from "@tanstack/react-query"
 import {
   Alert,
@@ -79,6 +79,7 @@ function DongBoDuLieuPage() {
   const [importFiles, setImportFiles] = useState<UploadFile[]>([])
   const [importPreview, setImportPreview] = useState<ImportJsonPreview | null>(null)
   const [previewModalOpen, setPreviewModalOpen] = useState(false)
+  const [processModalOpen, setProcessModalOpen] = useState(false)
   const [parsingImportFile, setParsingImportFile] = useState(false)
   const [importParseError, setImportParseError] = useState<string | null>(null)
   const [importing, setImporting] = useState(false)
@@ -115,25 +116,22 @@ function DongBoDuLieuPage() {
       return hasPending ? 2000 : false
     },
   })
-  const { data: classRegisterSession, isLoading: sessionLoading } = useGetClassRegisterSession({
-    query: { refetchOnWindowFocus: false, staleTime: 60_000 },
-  })
-
-  const sessions = useMemo(() => {
-    if (classRegisterSession?.status !== 200) return []
-    return classRegisterSession.data ?? []
-  }, [classRegisterSession])
+  const { data: sessions = [], isLoading: sessionLoading } = useListDataSyncSessions()
 
   const hasSessions = sessions.length > 0
 
   const sessionOptions = useMemo(
     () =>
-      sessions.map((session) => ({
-        value: session.id,
-        label: [session.name, session.semester?.name, session.semester?.schoolYear?.name]
+      sessions.map((session) => {
+        const ended = new Date(session.endDate).getTime() < Date.now()
+        const base = [session.name, session.semester?.name, session.semester?.schoolYear?.name]
           .filter(Boolean)
-          .join(" — "),
-      })),
+          .join(" — ")
+        return {
+          value: session.id,
+          label: ended ? `${base} (đã kết thúc)` : base,
+        }
+      }),
     [sessions]
   )
 
@@ -188,6 +186,7 @@ function DongBoDuLieuPage() {
     if (item.status === "SUCCESS" && prevImportStatus.current !== "SUCCESS") {
       message.success(`Nhập dữ liệu thành công: ${item.sessionName}`)
       void queryClient.invalidateQueries({ queryKey: getGetClassRegisterSessionQueryKey() })
+      void queryClient.invalidateQueries({ queryKey: getListDataSyncSessionsQueryKey() })
       setActiveImportId(undefined)
     }
     if (item.status === "FAILED" && prevImportStatus.current !== "FAILED") {
@@ -258,6 +257,7 @@ function DongBoDuLieuPage() {
 
       if (isImportFromInternalOk(importRes) && importRes.data.sessionName) {
         await queryClient.invalidateQueries({ queryKey: getGetClassRegisterSessionQueryKey() })
+        await queryClient.invalidateQueries({ queryKey: getListDataSyncSessionsQueryKey() })
         const warningCount = importRes.data.warnings?.length ?? 0
         if (warningCount > 0) {
           message.warning(
@@ -343,15 +343,15 @@ function DongBoDuLieuPage() {
 
       await refetchHistory()
 
-      if (exportRes.status === 200 && "meta" in exportRes.data) {
-        downloadExportJson(exportRes.data, selectedExportSession?.name)
+      if (exportRes.status === 200 && "meta" in exportRes.data && "fileBase64" in exportRes.data) {
+        downloadExportDat(exportRes.data, selectedExportSession?.name)
         const count = exportRes.data.meta.registrationCount
         if (!exportRes.data.meta.sessionEnded) {
           message.warning(
-            `Đã xuất ${count} lượt đăng ký. Lưu ý: đợt đăng ký chưa kết thúc / vẫn đang mở.`
+            `Đã xuất ${count} lượt đăng ký (.dat). Lưu ý: đợt đăng ký chưa kết thúc / vẫn đang mở.`
           )
         } else {
-          message.success(`Xuất thành công ${count} lượt đăng ký`)
+          message.success(`Xuất thành công ${count} lượt đăng ký (.dat)`)
         }
       } else {
         const errMessage =
@@ -380,36 +380,26 @@ function DongBoDuLieuPage() {
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <Title level={3} className="!mb-1">
-          Đồng bộ dữ liệu
-        </Title>
+        <div className="mb-1 flex items-center gap-2">
+          <Title level={3} className="!mb-0">
+            Đồng bộ dữ liệu
+          </Title>
+          <button
+            type="button"
+            onClick={() => setProcessModalOpen(true)}
+            className="inline-flex size-8 items-center justify-center rounded-full text-blue-600 transition-colors hover:bg-blue-50 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
+            aria-label="Xem quy trình đồng bộ"
+            title="Quy trình đồng bộ"
+          >
+            <Info className="size-5" />
+          </button>
+        </div>
         <Paragraph type="secondary" className="!mb-0">
           Trao đổi dữ liệu giữa phần mềm nội bộ (Quản lý đào tạo) và cổng đăng ký học internet.
         </Paragraph>
       </div>
 
-      <Alert
-        type="info"
-        showIcon
-        icon={<Info className="size-4 mt-0.5" />}
-        message="Quy trình đồng bộ"
-        description={
-          <ol className="mb-0 pl-4 list-decimal space-y-1">
-            <li>
-              <Text strong>Nội bộ → Internet:</Text> Xuất JSON từ QL đào tạo và nhập vào đây. Đợt
-              đăng ký, lớp HP, sinh viên sẽ được tạo từ file — hệ thống internet ban đầu chưa có dữ
-              liệu.
-            </li>
-            <li>
-              <Text strong>Internet:</Text> Học viên đăng ký môn trên cổng đăng ký học.
-            </li>
-            <li>
-              <Text strong>Internet → Nội bộ:</Text> Xuất kết quả đăng ký (JSON) và nhập lại vào
-              phần mềm nội bộ.
-            </li>
-          </ol>
-        }
-      />
+      <SyncProcessModal open={processModalOpen} onClose={() => setProcessModalOpen(false)} />
 
       <Tabs
         activeKey={activeTab}
@@ -603,8 +593,8 @@ function DongBoDuLieuPage() {
                 <Col xs={24} lg={14}>
                   <Card title="Xuất kết quả đăng ký về phần mềm nội bộ" className="h-full">
                     <Paragraph type="secondary">
-                      Sau khi học viên hoàn tất đăng ký trên internet, xuất file JSON để nhập lại
-                      vào QL đào tạo (đợt đăng ký học online → Nhập dữ liệu).
+                      Sau khi học viên hoàn tất đăng ký trên internet, xuất gói .dat (mã hóa) để
+                      nhập lại vào QL đào tạo (đợt đăng ký học online → Nhập dữ liệu).
                     </Paragraph>
 
                     {!hasSessions ? (
@@ -658,7 +648,7 @@ function DongBoDuLieuPage() {
                       onClick={handleExport}
                       disabled={!hasSessions || !exportSessionId}
                     >
-                      Xuất file JSON
+                      Xuất file .dat
                     </Button>
                   </Card>
                 </Col>
@@ -692,7 +682,7 @@ function DongBoDuLieuPage() {
             ),
             children: (
               <Card>
-                {pendingImport && (
+                {/* {pendingImport && (
                   <Alert
                     type="info"
                     showIcon
@@ -716,7 +706,7 @@ function DongBoDuLieuPage() {
                       </div>
                     }
                   />
-                )}
+                )} */}
                 <Table
                   size="small"
                   loading={historyLoading}

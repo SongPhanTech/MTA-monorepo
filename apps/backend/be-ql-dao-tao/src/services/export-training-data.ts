@@ -200,9 +200,17 @@ export async function exportTrainingData(params: ExportTrainingDataParams = {}) 
     scoped: Boolean(targetSession),
   })
 
+  // AcademicRankingConvert gắn trainingCourseId — khi export theo đợt chỉ lấy xếp hạng của khoá trong đợt,
+  // tránh upsert portal fail FK (TrainingCourse ngoài scope không có trong file).
+  const courseIdSet = new Set(exportedCourseIds)
+  const academicRankingConvert = (
+    (catalogs.AcademicRankingConvert ?? []) as Array<{ trainingCourseId?: string | null }>
+  ).filter((row) => row.trainingCourseId != null && courseIdSet.has(row.trainingCourseId))
+
   // SubjectVersion upsert trước SubjectClass trên portal — giữ nguyên scoreLinkSubjectVersionId
   const data = {
     ...catalogs,
+    AcademicRankingConvert: academicRankingConvert,
     ClassRegisterSession: classRegisterSessions,
     ClassRegisterSessionCredit: classRegisterSessionCredits,
     _ClassRegisterSessionToTrainingCourse: sessionToTrainingCourse,
