@@ -9,6 +9,7 @@ import { useReactToPrint } from "react-to-print"
 import {
   filterSubjectsForPlvbPrint,
   formatAppendixScoreDisplay,
+  summarizePlvbCredits,
   getAppendixSubjectPrintName,
   getAppendixSubjectRowHeight,
   getDefaultPlvbPrintSettings,
@@ -143,29 +144,11 @@ function buildStudentSummary(student: PlvbPrintStudent) {
     .filter((semester) => isGraduationSemesterGroup(semester.id))
     .flatMap((semester) => semester?.subjects ?? [])
 
-  const tongTinChi = student.semesters.reduce(
-    (acc, semester) =>
-      acc + (semester.subjects?.reduce((s, sub) => s + Number(sub.soTinChi ?? 0), 0) ?? 0),
-    0
-  )
-  const tongDiemNhanTinChiHe10 = student.semesters.reduce(
-    (acc, semester) =>
-      acc +
-      (semester.subjects?.reduce(
-        (s, sub) => s + (Number(sub?.thangDiem10) || 0) * Number(sub.soTinChi ?? 0),
-        0
-      ) ?? 0),
-    0
-  )
-  const tongDiemNhanTinChiHe4 = student.semesters.reduce(
-    (acc, semester) =>
-      acc +
-      (semester.subjects?.reduce(
-        (s, sub) => s + (Number(sub?.thangDiem4) || 0) * Number(sub.soTinChi ?? 0),
-        0
-      ) ?? 0),
-    0
-  )
+  const {
+    totalCredits: tongTinChi,
+    weighted10: tongDiemNhanTinChiHe10,
+    weighted4: tongDiemNhanTinChiHe4,
+  } = summarizePlvbCredits(student.semesters)
   const computedGpa10 =
     tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe10 / tongTinChi).toFixed(2))
   const officialGpa = student.graduationDecision?.finalGpa

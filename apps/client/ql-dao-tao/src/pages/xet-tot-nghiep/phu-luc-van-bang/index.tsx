@@ -77,6 +77,7 @@ import {
   PLVB_NOTE_FONT,
   getAppendixSubjectPrintName,
   getAppendixSubjectRowHeight as sharedGetAppendixSubjectRowHeight,
+  summarizePlvbCredits,
   wrapAppendixSubjectName as sharedWrapAppendixSubjectName,
 } from "../../../utils/phu-luc-van-bang/plvb-print-settings"
 
@@ -896,6 +897,7 @@ export default function StudentGradeSystem() {
         const scoreConvert = scoreConverts?.find(
           (s) => scoreValue != null && s.base10Min <= scoreValue && s.base10Max >= scoreValue
         )
+        const trainingBlock = getMatchedTrainingBlock(item)
         semesterGroup.subjects.push({
           id: item.id,
           key: item.id,
@@ -907,7 +909,9 @@ export default function StudentGradeSystem() {
           thangDiem10: scoreValue != null ? scoreValue.toFixed(2) : "-",
           thangDiem4: scoreConvert?.base4 || "",
           thangDiemChu: scoreConvert?.letter,
-          isConditional: getMatchedTrainingBlock(item)?.useForFinalScore === false,
+          isConditional: trainingBlock?.useForFinalScore === false,
+          requirementType: trainingBlock?.type ?? null,
+          useForFinalScore: trainingBlock?.useForFinalScore === true,
         })
       }
 
@@ -1273,29 +1277,11 @@ export default function StudentGradeSystem() {
         .filter((semester) => isGraduationSemesterGroup(semester.id))
         .flatMap((semester) => semester?.subjects ?? [])
 
-      const tongTinChi = student.semesters.reduce(
-        (acc, semester) =>
-          acc + (semester.subjects?.reduce((s, sub) => s + Number(sub.soTinChi ?? 0), 0) ?? 0),
-        0
-      )
-      const tongDiemNhanTinChiHe10 = student.semesters.reduce(
-        (acc, semester) =>
-          acc +
-          (semester.subjects?.reduce(
-            (s, sub) => s + (Number(sub?.thangDiem10) || 0) * Number(sub.soTinChi ?? 0),
-            0
-          ) ?? 0),
-        0
-      )
-      const tongDiemNhanTinChiHe4 = student.semesters.reduce(
-        (acc, semester) =>
-          acc +
-          (semester.subjects?.reduce(
-            (s, sub) => s + (Number(sub?.thangDiem4) || 0) * Number(sub.soTinChi ?? 0),
-            0
-          ) ?? 0),
-        0
-      )
+      const {
+        totalCredits: tongTinChi,
+        weighted10: tongDiemNhanTinChiHe10,
+        weighted4: tongDiemNhanTinChiHe4,
+      } = summarizePlvbCredits(student.semesters)
       const computedGpa10 =
         tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe10 / tongTinChi).toFixed(2))
       const officialGpa = student.graduationDecision?.finalGpa
@@ -1426,31 +1412,11 @@ export default function StudentGradeSystem() {
       }
       tableRows.splice(MAX_ROWS)
 
-      const tongTinChi = student.semesters.reduce(
-        (acc, semester) =>
-          acc + (semester.subjects?.reduce((s, sub) => s + Number(sub.soTinChi ?? 0), 0) ?? 0),
-        0
-      )
-
-      const tongDiemNhanTinChiHe10 = student.semesters.reduce(
-        (acc, semester) =>
-          acc +
-          (semester.subjects?.reduce(
-            (s, sub) => s + (Number(sub?.thangDiem10) || 0) * Number(sub.soTinChi ?? 0),
-            0
-          ) ?? 0),
-        0
-      )
-
-      const tongDiemNhanTinChiHe4 = student.semesters.reduce(
-        (acc, semester) =>
-          acc +
-          (semester.subjects?.reduce(
-            (s, sub) => s + (Number(sub?.thangDiem4) || 0) * Number(sub.soTinChi ?? 0),
-            0
-          ) ?? 0),
-        0
-      )
+      const {
+        totalCredits: tongTinChi,
+        weighted10: tongDiemNhanTinChiHe10,
+        weighted4: tongDiemNhanTinChiHe4,
+      } = summarizePlvbCredits(student.semesters)
 
       const diemTBHe10 =
         tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe10 / tongTinChi).toFixed(2))

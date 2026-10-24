@@ -318,6 +318,49 @@ export type PlvbAppendixSubject = {
   thangDiemChu?: string | null
   /** `TrainingBlockSubject.useForFinalScore === false` — học phần điều kiện, in dấu * */
   isConditional?: boolean
+  /** `TrainingBlockSubject.type` — Mandatory | Optional */
+  requirementType?: string | null
+  /** `TrainingBlockSubject.useForFinalScore` */
+  useForFinalScore?: boolean | null
+}
+
+/**
+ * Tổng tín chỉ phụ lục cộng học phần thỏa một trong hai điều kiện:
+ * bắt buộc, hoặc `useForFinalScore = true` (kể cả tự chọn).
+ * Chỉ bỏ học phần vừa không bắt buộc vừa không tính vào điểm tổng kết.
+ */
+export function countsTowardPlvbTotalCredits(subject: {
+  requirementType?: string | null
+  useForFinalScore?: boolean | null
+}): boolean {
+  return subject.requirementType === "Mandatory" || subject.useForFinalScore === true
+}
+
+export function summarizePlvbCredits(
+  semesters: Array<{
+    subjects?: Array<{
+      soTinChi?: number | string | null
+      thangDiem10?: string | number | null
+      thangDiem4?: string | number | null
+      requirementType?: string | null
+      useForFinalScore?: boolean | null
+    }> | null
+  }>
+) {
+  let totalCredits = 0
+  let weighted10 = 0
+  let weighted4 = 0
+  for (const semester of semesters) {
+    for (const subject of semester.subjects ?? []) {
+      if (!countsTowardPlvbTotalCredits(subject)) continue
+      const credits = Number(subject.soTinChi ?? 0)
+      if (!Number.isFinite(credits)) continue
+      totalCredits += credits
+      weighted10 += (Number(subject.thangDiem10) || 0) * credits
+      weighted4 += (Number(subject.thangDiem4) || 0) * credits
+    }
+  }
+  return { totalCredits, weighted10, weighted4 }
 }
 
 /** Gắn "* " trước tên học phần điều kiện khi in PLVB. */
