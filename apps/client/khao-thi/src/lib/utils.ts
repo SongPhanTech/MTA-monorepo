@@ -133,15 +133,15 @@ function buildOrgTree(
 }
 
 function searchVietnamese(
-  data: { value: string; label: string }[],
+  data: { value: any; label: string }[],
   keyword: string
-): { value: string; label: string }[] {
+): { value: any; label: string }[] {
   const normalizedKeyword = normalizeVietnamese(keyword.trim())
   if (!normalizedKeyword) return data
 
   return data.filter((item) => {
-    const normalizedLabel = normalizeVietnamese(item.label)
-    const normalizedValue = normalizeVietnamese(item.value)
+    const normalizedLabel = normalizeVietnamese(String(item.label ?? ""))
+    const normalizedValue = normalizeVietnamese(String(item.value ?? ""))
     return (
       normalizedLabel.includes(normalizedKeyword) || normalizedValue.includes(normalizedKeyword)
     )

@@ -28,6 +28,7 @@ import {
   PaginatedDataResponseSchema,
   PaginationQuerySchema,
   QueryStringArraySchema,
+  QueryBooleanSchema,
 } from "../zod/base"
 // import { Hono } from "hono"
 import { HTTPException } from "hono/http-exception"
@@ -663,7 +664,7 @@ const getSurveyObjects = createRoute({
       phoneNumber: z.string().optional(),
       fixedClassIds: QueryStringArraySchema,
       trainingCourseIds: QueryStringArraySchema,
-      taken: z.boolean().optional(),
+      taken: QueryBooleanSchema,
       isStudent: z.enum(["student", "lecturer", "all"]).optional(),
     }),
   },
@@ -816,7 +817,7 @@ const getSurveyObjectCount = createRoute({
       phoneNumber: z.string().optional(),
       fixedClassIds: QueryStringArraySchema,
       trainingCourseIds: QueryStringArraySchema,
-      taken: z.boolean().optional(),
+      taken: QueryBooleanSchema,
       isStudent: z.enum(["student", "lecturer", "all"]).optional(),
     }),
   },
@@ -1087,7 +1088,7 @@ const getSurveysByProfile = createRoute({
     query: PaginationQuerySchema.extend({
       name: z.string().optional(),
       code: z.string().optional(),
-      taken: z.boolean().optional(),
+      taken: QueryBooleanSchema,
       lecturerName: z.string().optional(),
       subjectClassName: z.string().optional(),
       semesterId: z.string().optional(),
@@ -1286,6 +1287,8 @@ app.openapi(getSurveysByProfile, async (c) => {
 
     deletedAt: null,
     isPublic: false,
+    ...(q.taken === true ? { surveySessions: { some: { profileId: id } } } : {}),
+    ...(q.taken === false ? { surveySessions: { none: { profileId: id } } } : {}),
     // startDate: { lte: new Date() },
   }
 

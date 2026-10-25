@@ -73,12 +73,22 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
   // Tiêu đề cột mã theo từng trường hợp
   const codeColumnTitle = isLecturerOnly ? "Mã định danh" : isMixed ? "Mã HV/GV" : "Mã HV"
 
-  // Tự động set bộ lọc isStudent khi đổi đợt khảo sát
+  // Tự động set bộ lọc isStudent và reset khi đổi đợt khảo sát
   useEffect(() => {
-    setFilters((prev) => ({
-      ...prev,
+    setFilters({
+      fullname: undefined,
+      studentCode: undefined,
+      lecturerCode: undefined,
+      idCardNumber: undefined,
+      phoneNumber: undefined,
+      taken: undefined,
+      fixedClassIds: undefined,
+      trainingCourseIds: undefined,
+      organization: undefined,
+      organizationId: undefined,
       isStudent: isLecturerOnly ? "lecturer" : "all",
-    }))
+    })
+    setCurrentPage(1)
   }, [isLecturerOnly, selectedId?.id])
   const router = useRouter()
   const { onOpen: openPrint } = useDisclosure({
@@ -126,7 +136,19 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
       trainingCourseIds: toIdArray(filters.trainingCourseIds),
       organizationId: toIdArray(filters.organization),
       organizationCode,
-      taken: filters?.taken && filters?.taken?.length === 1 ? filters.taken[0] : undefined,
+      taken: (() => {
+        if (!filters?.taken) return undefined
+        if (Array.isArray(filters.taken)) {
+          if (filters.taken.length !== 1) return undefined
+          const val = filters.taken[0] as unknown
+          if (val === true || val === "true") return true
+          if (val === false || val === "false") return false
+          return undefined
+        }
+        if ((filters.taken as unknown) === true || (filters.taken as unknown) === "true") return true
+        if ((filters.taken as unknown) === false || (filters.taken as unknown) === "false") return false
+        return undefined
+      })(),
       isStudent: filters?.isStudent,
     }),
     [
@@ -300,6 +322,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                   color="primary"
                   onClick={() => {
                     setFilters({ ...filters, isStudent: "all" })
+                    setCurrentPage(1)
                   }}
                   variant="solid"
                   size="small"
@@ -310,6 +333,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                   color="primary"
                   onClick={() => {
                     setFilters({ ...filters, isStudent: "student" })
+                    setCurrentPage(1)
                   }}
                   variant="solid"
                   size="small"
@@ -322,6 +346,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
               color="primary"
               onClick={() => {
                 setFilters({ ...filters, isStudent: "lecturer" })
+                setCurrentPage(1)
               }}
               variant="solid"
               size="small"
