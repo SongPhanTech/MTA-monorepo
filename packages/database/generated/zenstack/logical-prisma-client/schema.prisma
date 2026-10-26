@@ -816,7 +816,10 @@ model UserProfile {
   bLaNguoiDung                         Boolean?
   bLaGiangVien                         Boolean?
   bLaCanBoNhanVien                     Boolean?
+  /// Học viên quân sự — map LSB bLaHocVien
   bLaHocVien                           Boolean?
+  /// Sinh viên dân sự — map LSB bLaSinhVien
+  bLaSinhVien                          Boolean?
   group                                Group?                              @relation(fields: [groupId], references: [id])
   groupId                              String?
   /// Đơn vị quản lý GV/cán bộ (nguồn duy nhất cho giảng viên)

@@ -471,6 +471,7 @@ export default function UpdateUserPage() {
           newProvinceCurrentAddressId: values.newProvinceCurrentAddressId,
           newCommuneCurrentAddressId: values.newCommuneCurrentAddressId,
           bLaHocVien: values.bLaHocVien,
+          bLaSinhVien: values.bLaSinhVien,
           bLaCanBoNhanVien: values.bLaCanBoNhanVien,
           bLaGiangVien,
           bLaNguoiDung: values.bLaNguoiDung,
@@ -582,6 +583,7 @@ export default function UpdateUserPage() {
               lastName: values.lastName?.trim(),
               firstName: values.firstName?.trim(),
               bLaHocVien: values.bLaHocVien,
+              bLaSinhVien: values.bLaSinhVien,
               bLaCanBoNhanVien: values?.bLaCanBoNhanVien,
               bLaGiangVien: bLaGiangVien,
               bLaNguoiDung: values?.bLaNguoiDung,
@@ -1117,6 +1119,7 @@ export default function UpdateUserPage() {
       form.setFieldsValue({
         ...userData,
         bLaHocVien: !!userData.bLaHocVien,
+        bLaSinhVien: !!userData.bLaSinhVien,
         bLaCanBoNhanVien: !!userData.bLaCanBoNhanVien,
         bLaGiangVien: !!userData.bLaGiangVien,
         bLaNguoiDung: !!userData.bLaNguoiDung,
@@ -1203,7 +1206,7 @@ export default function UpdateUserPage() {
   useEffect(() => {
     if (!id || !cccdUserProfileData) return
     const isStudentOnly =
-      !!cccdUserProfileData.bLaHocVien &&
+      !!(cccdUserProfileData.bLaHocVien || cccdUserProfileData.bLaSinhVien) &&
       !cccdUserProfileData.bLaGiangVien &&
       !cccdUserProfileData.bLaCanBoNhanVien
     if (isStudentOnly && router.pathname === "/quan-ly-ho-so/[id]") {

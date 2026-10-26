@@ -153,6 +153,8 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
   const isMePage = router.pathname === "/quan-ly-ho-so/me"
   const profileId = routerProfileId || (isMePage ? session?.sDM_NhanVienId || "" : "")
   const bLaHocVien = Form.useWatch("bLaHocVien", form) || false
+  const bLaSinhVien = Form.useWatch("bLaSinhVien", form) || false
+  const isStudent = bLaHocVien || bLaSinhVien
   const bLaGiangVien = Form.useWatch("bLaGiangVien", form) || false
   // const bLaCanBoNhanVien = Form.useWatch('bLaCanBoNhanVien', form)
   const { data: lecturerTypeData = [] } = useFindManyLecturerType({}, { enabled: bLaGiangVien })
@@ -171,7 +173,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
       },
       orderBy: { createdAt: "desc" },
     },
-    { enabled: !!bLaHocVien && !!profileId }
+    { enabled: !!isStudent && !!profileId }
   )
   const studentOrgId =
     student?.fixedClass?.managementOrganizationId ||
@@ -419,7 +421,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
           </Col>
 
           <Col span={24}>
-            <Flex>
+            <Flex wrap="wrap">
               <FormItem
                 form={form}
                 name="bLaHocVien"
@@ -427,7 +429,16 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                 valuePropName="checked"
                 className="mb-0 mr-4"
               >
-                <Checkbox>Bạn là học viên</Checkbox>
+                <Checkbox>Bạn là học viên (quân sự)</Checkbox>
+              </FormItem>
+              <FormItem
+                form={form}
+                name="bLaSinhVien"
+                label=""
+                valuePropName="checked"
+                className="mb-0 mr-4"
+              >
+                <Checkbox>Bạn là sinh viên (dân sự)</Checkbox>
               </FormItem>
               <FormItem
                 form={form}
@@ -466,7 +477,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
               </FormItem>
             </Flex>
           </Col>
-          {bLaHocVien && (
+          {isStudent && (
             <Col span={24}>
               <Form.Item label="Đơn vị quản lý" className="mb-0">
                 <TreeSelect

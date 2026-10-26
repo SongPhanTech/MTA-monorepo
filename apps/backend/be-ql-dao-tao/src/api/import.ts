@@ -9,7 +9,7 @@ import {
   parseSheetStudent,
   zParseSheetError,
 } from "@workspace/libs/parseExcel"
-import { normalizeCatalogName, splitFullName } from "@workspace/libs/utils"
+import { normalizeCatalogName, splitFullName, studentLsbRoles } from "@workspace/libs/utils"
 import { prisma } from ".."
 import { UploadExcelModel } from "../dto/upload-excel.dto"
 import {
@@ -1465,13 +1465,14 @@ app.openapi(importStudent, async (c) => {
     const classRow = existingClassByCode.get(student.fixedClassCode)
     const fileOrgId = organizationMap.get(student.managementOrganization?.trim() || "") || null
     const donViId = fileOrgId || classRow?.managementOrganizationId || null
+    const studentRoles = studentLsbRoles(trainingObjectType.type)
     const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput = {
       ...splitFullName(student.fullname),
       code: student.profileCode,
       fullname: student.fullname,
       email,
       bLaGiangVien: profileHit?.bLaGiangVien ?? false,
-      bLaHocVien: true,
+      ...studentRoles,
       dateOfBirth: student.dateOfBirth,
       idCardNumber: student.idCardNumber,
       genderId: student.gender ? (genderMap.get(student.gender) ?? null) : null,
@@ -1489,7 +1490,7 @@ app.openapi(importStudent, async (c) => {
       // Không tự sinh SĐT từ mã SV khi file trống — số giả dạng 09x dễ trùng SĐT thật trên LSB.
       const lsbPayload = {
         sMa: student.profileCode,
-        bLaHocVien: true,
+        ...studentRoles,
         bLaTaiKhoan: true,
         dNgaySinh: student.dateOfBirth ? new Date(student.dateOfBirth).toISOString() : null,
         sCCCD: student.idCardNumber,
@@ -1913,7 +1914,7 @@ app.openapi(importHeQuanSu, async (c) => {
           ...splitFullName(student.fullname),
           code: student.profileCode,
           bLaGiangVien: false,
-          bLaHocVien: true,
+          ...studentLsbRoles(trainingObjectType.type),
           dateOfBirth: student.dateOfBirth,
           // TODO: need to use idCardNumber
           idCardNumber: student.profileCode,

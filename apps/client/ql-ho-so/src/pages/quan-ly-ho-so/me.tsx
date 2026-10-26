@@ -482,6 +482,7 @@ export default function UpdateUserPage() {
           newProvinceCurrentAddressId: values.newProvinceCurrentAddressId,
           newCommuneCurrentAddressId: values.newCommuneCurrentAddressId,
           bLaHocVien: values.bLaHocVien,
+          bLaSinhVien: values.bLaSinhVien,
           bLaCanBoNhanVien: values.bLaCanBoNhanVien,
           bLaGiangVien,
           bLaNguoiDung: values.bLaNguoiDung,
@@ -584,6 +585,7 @@ export default function UpdateUserPage() {
               lastName: values.lastName?.trim(),
               firstName: values.firstName?.trim(),
               bLaHocVien: values.bLaHocVien,
+              bLaSinhVien: values.bLaSinhVien,
               bLaCanBoNhanVien: values?.bLaCanBoNhanVien,
               sDM_DonViId: donViId,
               bLaGiangVien: bLaGiangVien,
@@ -1098,6 +1100,7 @@ export default function UpdateUserPage() {
       form.setFieldsValue({
         ...userData,
         bLaHocVien: !!userData.bLaHocVien,
+        bLaSinhVien: !!userData.bLaSinhVien,
         bLaCanBoNhanVien: !!userData.bLaCanBoNhanVien,
         bLaGiangVien: !!userData.bLaGiangVien,
         bLaNguoiDung: !!userData.bLaNguoiDung,

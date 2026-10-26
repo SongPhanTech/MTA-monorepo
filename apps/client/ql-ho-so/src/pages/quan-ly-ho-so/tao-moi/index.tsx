@@ -536,6 +536,7 @@ export default function CreateUserPage() {
           newProvinceCurrentAddressId: values.newProvinceCurrentAddressId,
           newCommuneCurrentAddressId: values.newCommuneCurrentAddressId,
           bLaHocVien: values.bLaHocVien,
+          bLaSinhVien: values.bLaSinhVien,
           bLaCanBoNhanVien: values.bLaCanBoNhanVien,
           bLaGiangVien,
           bLaNguoiDung: values.bLaNguoiDung,

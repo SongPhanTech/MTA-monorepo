@@ -1036,3 +1036,12 @@ export function formatQuestionPoint(point?: number | null): string {
   const rounded = Math.round(point * 100) / 100
   return Number.isInteger(rounded) ? String(rounded) : String(rounded)
 }
+
+/** Map đối tượng đào tạo → 2 role LSB: học viên quân sự / sinh viên dân sự */
+export function studentLsbRoles(type?: $Enums.TrainingObjectTypes | string | null) {
+  const isCivilian = type === $Enums.TrainingObjectTypes.CIVILIAN || type === "CIVILIAN"
+  return {
+    bLaHocVien: !isCivilian,
+    bLaSinhVien: isCivilian,
+  }
+}
