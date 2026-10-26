@@ -404,6 +404,7 @@ export default function UpdateUserPage() {
     bLaGiangVien,
     lecturerTypeId,
     lectureCode,
+    TKPUcode,
     organizationId,
     tinhTrangHonNhanId,
     dM_ChucDanhCMNVGiangVienId,
@@ -947,10 +948,12 @@ export default function UpdateUserPage() {
               create: {
                 userProfileId: id,
                 lecturerTypeId,
+                TKPUcode: TKPUcode?.trim() || null,
               },
               update: {
                 lecturerTypeId,
                 deletedAt: null,
+                TKPUcode: TKPUcode?.trim() || null,
               },
             },
           },
@@ -1131,6 +1134,7 @@ export default function UpdateUserPage() {
         lecturerTypeId: userData.lecturer?.lecturerTypeId,
         organizationId: userData.sDM_DonViId,
         lectureCode: userData.code,
+        TKPUcode: userData.lecturer?.TKPUcode,
       })
       if (userData?.avatar) {
         const imageUrl = await getLInkImage()

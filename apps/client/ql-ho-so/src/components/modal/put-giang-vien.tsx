@@ -82,12 +82,15 @@ const PutUserProfileLectureModal = () => {
   //     },
   // })
 
+  const tkpuCode = (output?: { TKPUcode?: string | null }) => output?.TKPUcode?.trim() || null
+
   const buildLecturerCreateData = (
     output: LecturerProfileType,
     userProfileId: string
   ): Prisma.LecturerCreateInput => ({
     userProfile: { connect: { id: userProfileId } },
     lecturerType: { connect: { id: output.lecturerTypeId } },
+    TKPUcode: tkpuCode(output),
   })
 
   async function onOk(output?: PutLecturerProfile) {
@@ -101,6 +104,7 @@ const PutUserProfileLectureModal = () => {
           data: {
             userProfileId: output?.userProfileId,
             lecturerTypeId: output.lecturerTypeId,
+            TKPUcode: tkpuCode(output),
             userProfile: {
               update: {
                 sDM_DonViId: output.organizationId || null,
@@ -119,6 +123,7 @@ const PutUserProfileLectureModal = () => {
           data: {
             userProfileId: output?.userProfileId,
             lecturerTypeId: output.lecturerTypeId,
+            TKPUcode: tkpuCode(output),
           },
         })
         if (output?.userProfileId) {
@@ -158,6 +163,7 @@ const PutUserProfileLectureModal = () => {
       const formData = {
         // Thông tin từ Lecturer
         code: userProfile.code,
+        TKPUcode: lecturer.TKPUcode,
         organizationId: userProfile.sDM_DonViId,
         lecturerTypeId: lecturer.lecturerTypeId,
 

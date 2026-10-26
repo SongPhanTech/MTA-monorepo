@@ -5290,6 +5290,7 @@ model Lecturer {
   sThietBiSua                      String?
   from                             DateTime?
   lectureID                        String?                       @unique()
+  TKPUcode                         String?                       @unique()
   serviceDate                      DateTime?
   userProfile                      UserProfile                   @relation(fields: [userProfileId], references: [id])
   userProfileId                    String                        @unique() @db.Uuid()

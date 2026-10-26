@@ -3263,6 +3263,7 @@ exports.Prisma.LecturerScalarFieldEnum = {
   sThietBiSua: 'sThietBiSua',
   from: 'from',
   lectureID: 'lectureID',
+  TKPUcode: 'TKPUcode',
   serviceDate: 'serviceDate',
   userProfileId: 'userProfileId',
   lecturerTypeId: 'lecturerTypeId'
@@ -8728,6 +8729,7 @@ exports.Prisma.LecturerOrderByRelevanceFieldEnum = {
   sThietBiTao: 'sThietBiTao',
   sThietBiSua: 'sThietBiSua',
   lectureID: 'lectureID',
+  TKPUcode: 'TKPUcode',
   userProfileId: 'userProfileId',
   lecturerTypeId: 'lecturerTypeId'
 };

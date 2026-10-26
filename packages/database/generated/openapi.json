@@ -17938,6 +17938,10 @@
             "type": "string",
             "nullable": true
           },
+          "TKPUcode": {
+            "type": "string",
+            "nullable": true
+          },
           "serviceDate": {
             "type": "string",
             "format": "date-time",
@@ -56629,6 +56633,10 @@
             "nullable": true
           },
           "lectureID": {
+            "type": "string",
+            "nullable": true
+          },
+          "TKPUcode": {
             "type": "string",
             "nullable": true
           },
@@ -121377,6 +121385,9 @@
           "lectureID": {
             "type": "integer"
           },
+          "TKPUcode": {
+            "type": "integer"
+          },
           "serviceDate": {
             "type": "integer"
           },
@@ -121406,6 +121417,7 @@
           "sThietBiSua",
           "from",
           "lectureID",
+          "TKPUcode",
           "serviceDate",
           "userProfileId",
           "lecturerTypeId",
@@ -121478,6 +121490,10 @@
             "nullable": true
           },
           "lectureID": {
+            "type": "string",
+            "nullable": true
+          },
+          "TKPUcode": {
             "type": "string",
             "nullable": true
           },
@@ -121562,6 +121578,10 @@
             "nullable": true
           },
           "lectureID": {
+            "type": "string",
+            "nullable": true
+          },
+          "TKPUcode": {
             "type": "string",
             "nullable": true
           },

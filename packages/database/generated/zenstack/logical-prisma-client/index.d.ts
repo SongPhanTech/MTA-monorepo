@@ -9882,6 +9882,7 @@ export namespace Prisma {
         sThietBiSua: 'sThietBiSua',
         from: 'from',
         lectureID: 'lectureID',
+        TKPUcode: 'TKPUcode',
         serviceDate: 'serviceDate',
         userProfileId: 'userProfileId',
         lecturerTypeId: 'lecturerTypeId'
@@ -15055,6 +15056,7 @@ export namespace Prisma {
         sThietBiTao: 'sThietBiTao',
         sThietBiSua: 'sThietBiSua',
         lectureID: 'lectureID',
+        TKPUcode: 'TKPUcode',
         userProfileId: 'userProfileId',
         lecturerTypeId: 'lecturerTypeId'
     };
@@ -68008,6 +68010,7 @@ export namespace Prisma {
         readonly sThietBiSua: FieldRef<"Lecturer", 'String'>;
         readonly from: FieldRef<"Lecturer", 'DateTime'>;
         readonly lectureID: FieldRef<"Lecturer", 'String'>;
+        readonly TKPUcode: FieldRef<"Lecturer", 'String'>;
         readonly serviceDate: FieldRef<"Lecturer", 'DateTime'>;
         readonly userProfileId: FieldRef<"Lecturer", 'String'>;
         readonly lecturerTypeId: FieldRef<"Lecturer", 'String'>;
@@ -273472,6 +273475,7 @@ export namespace Prisma {
         sThietBiSua: string | null
         from: Date | null
         lectureID: string | null
+        TKPUcode: string | null
         serviceDate: Date | null
         userProfileId: string | null
         lecturerTypeId: string | null
@@ -273492,6 +273496,7 @@ export namespace Prisma {
         sThietBiSua: string | null
         from: Date | null
         lectureID: string | null
+        TKPUcode: string | null
         serviceDate: Date | null
         userProfileId: string | null
         lecturerTypeId: string | null
@@ -273512,6 +273517,7 @@ export namespace Prisma {
         sThietBiSua: number
         from: number
         lectureID: number
+        TKPUcode: number
         serviceDate: number
         userProfileId: number
         lecturerTypeId: number
@@ -273533,6 +273539,7 @@ export namespace Prisma {
         sThietBiSua?: true
         from?: true
         lectureID?: true
+        TKPUcode?: true
         serviceDate?: true
         userProfileId?: true
         lecturerTypeId?: true
@@ -273553,6 +273560,7 @@ export namespace Prisma {
         sThietBiSua?: true
         from?: true
         lectureID?: true
+        TKPUcode?: true
         serviceDate?: true
         userProfileId?: true
         lecturerTypeId?: true
@@ -273573,6 +273581,7 @@ export namespace Prisma {
         sThietBiSua?: true
         from?: true
         lectureID?: true
+        TKPUcode?: true
         serviceDate?: true
         userProfileId?: true
         lecturerTypeId?: true
@@ -273660,6 +273669,7 @@ export namespace Prisma {
         sThietBiSua: string | null
         from: Date | null
         lectureID: string | null
+        TKPUcode: string | null
         serviceDate: Date | null
         userProfileId: string
         lecturerTypeId: string
@@ -273695,6 +273705,7 @@ export namespace Prisma {
         sThietBiSua?: boolean
         from?: boolean
         lectureID?: boolean
+        TKPUcode?: boolean
         serviceDate?: boolean
         userProfileId?: boolean
         lecturerTypeId?: boolean
@@ -273742,6 +273753,7 @@ export namespace Prisma {
         sThietBiSua?: boolean
         from?: boolean
         lectureID?: boolean
+        TKPUcode?: boolean
         serviceDate?: boolean
         userProfileId?: boolean
         lecturerTypeId?: boolean
@@ -273764,6 +273776,7 @@ export namespace Prisma {
         sThietBiSua?: boolean
         from?: boolean
         lectureID?: boolean
+        TKPUcode?: boolean
         serviceDate?: boolean
         userProfileId?: boolean
         lecturerTypeId?: boolean
@@ -273786,11 +273799,12 @@ export namespace Prisma {
         sThietBiSua?: boolean
         from?: boolean
         lectureID?: boolean
+        TKPUcode?: boolean
         serviceDate?: boolean
         userProfileId?: boolean
         lecturerTypeId?: boolean
     };
-    export type LecturerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "sNguoiTao" | "sNguoiSua" | "dNgayTao" | "dNgaySua" | "sThietBiTao" | "sThietBiSua" | "from" | "lectureID" | "serviceDate" | "userProfileId" | "lecturerTypeId", ExtArgs["result"]["lecturer"]>;
+    export type LecturerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "sNguoiTao" | "sNguoiSua" | "dNgayTao" | "dNgaySua" | "sThietBiTao" | "sThietBiSua" | "from" | "lectureID" | "TKPUcode" | "serviceDate" | "userProfileId" | "lecturerTypeId", ExtArgs["result"]["lecturer"]>;
     export type LecturerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
         lecturerType?: boolean | LecturerTypeDefaultArgs<ExtArgs>
@@ -273874,6 +273888,7 @@ export namespace Prisma {
             sThietBiSua: string | null
             from: Date | null
             lectureID: string | null
+            TKPUcode: string | null
             serviceDate: Date | null
             userProfileId: string
             lecturerTypeId: string
@@ -425764,6 +425779,7 @@ export namespace Prisma {
         sThietBiSua?: StringNullableFilter<"Lecturer"> | string | null
         from?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
         lectureID?: StringNullableFilter<"Lecturer"> | string | null
+        TKPUcode?: StringNullableFilter<"Lecturer"> | string | null
         serviceDate?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
         userProfileId?: UuidFilter<"Lecturer"> | string
         lecturerTypeId?: StringFilter<"Lecturer"> | string
@@ -425810,6 +425826,7 @@ export namespace Prisma {
         sThietBiSua?: SortOrderInput | SortOrder
         from?: SortOrderInput | SortOrder
         lectureID?: SortOrderInput | SortOrder
+        TKPUcode?: SortOrderInput | SortOrder
         serviceDate?: SortOrderInput | SortOrder
         userProfileId?: SortOrder
         lecturerTypeId?: SortOrder
@@ -425844,6 +425861,7 @@ export namespace Prisma {
     export type LecturerWhereUniqueInput = Prisma.AtLeast<{
         id?: string
         lectureID?: string
+        TKPUcode?: string
         userProfileId?: string
         AND?: LecturerWhereInput | LecturerWhereInput[]
         OR?: LecturerWhereInput[]
@@ -425889,7 +425907,7 @@ export namespace Prisma {
         personalWorkTags?: PersonalWorkTagListRelationFilter
         individualSchedules?: IndividualScheduleListRelationFilter
         guestTeachingPayments?: GuestTeachingPaymentListRelationFilter
-    }, "id" | "lectureID" | "userProfileId">;
+    }, "id" | "lectureID" | "TKPUcode" | "userProfileId">;
     export type LecturerOrderByWithAggregationInput = {
         id?: SortOrder
         active?: SortOrder
@@ -425906,6 +425924,7 @@ export namespace Prisma {
         sThietBiSua?: SortOrderInput | SortOrder
         from?: SortOrderInput | SortOrder
         lectureID?: SortOrderInput | SortOrder
+        TKPUcode?: SortOrderInput | SortOrder
         serviceDate?: SortOrderInput | SortOrder
         userProfileId?: SortOrder
         lecturerTypeId?: SortOrder
@@ -425932,6 +425951,7 @@ export namespace Prisma {
         sThietBiSua?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
         from?: DateTimeNullableWithAggregatesFilter<"Lecturer"> | Date | string | null
         lectureID?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
+        TKPUcode?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
         serviceDate?: DateTimeNullableWithAggregatesFilter<"Lecturer"> | Date | string | null
         userProfileId?: UuidWithAggregatesFilter<"Lecturer"> | string
         lecturerTypeId?: StringWithAggregatesFilter<"Lecturer"> | string
@@ -468159,6 +468179,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -468203,6 +468224,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
         lecturerTypeId: string
@@ -468247,6 +468269,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -468291,6 +468314,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -468335,6 +468359,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
         lecturerTypeId: string
@@ -468355,6 +468380,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     };
     export type LecturerUncheckedUpdateManyInput = {
@@ -468373,6 +468399,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -505271,6 +505298,7 @@ export namespace Prisma {
         sThietBiSua?: SortOrder
         from?: SortOrder
         lectureID?: SortOrder
+        TKPUcode?: SortOrder
         serviceDate?: SortOrder
         userProfileId?: SortOrder
         lecturerTypeId?: SortOrder
@@ -505291,6 +505319,7 @@ export namespace Prisma {
         sThietBiSua?: SortOrder
         from?: SortOrder
         lectureID?: SortOrder
+        TKPUcode?: SortOrder
         serviceDate?: SortOrder
         userProfileId?: SortOrder
         lecturerTypeId?: SortOrder
@@ -505311,6 +505340,7 @@ export namespace Prisma {
         sThietBiSua?: SortOrder
         from?: SortOrder
         lectureID?: SortOrder
+        TKPUcode?: SortOrder
         serviceDate?: SortOrder
         userProfileId?: SortOrder
         lecturerTypeId?: SortOrder
@@ -551599,6 +551629,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
         mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
@@ -551642,6 +551673,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         lecturerTypeId: string
         mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
@@ -556138,6 +556170,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
         mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
@@ -556181,6 +556214,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
         mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
@@ -615896,6 +615930,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -615939,6 +615974,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
         lecturerTypeId: string
@@ -617617,6 +617653,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -617660,6 +617697,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -627647,6 +627685,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -627690,6 +627729,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
         lecturerTypeId: string
@@ -627737,6 +627777,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -627780,6 +627821,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
         lecturerTypeId: string
@@ -627827,6 +627869,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -627870,6 +627913,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
         lecturerTypeId: string
@@ -629494,6 +629538,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -629537,6 +629582,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -629589,6 +629635,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -629632,6 +629679,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -629684,6 +629732,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -629727,6 +629776,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -633316,6 +633366,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -633359,6 +633410,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
         lecturerTypeId: string
@@ -633406,6 +633458,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -633449,6 +633502,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
         lecturerTypeId: string
@@ -634265,6 +634319,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -634308,6 +634363,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -634360,6 +634416,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -634403,6 +634460,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -644523,6 +644581,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -644566,6 +644625,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
         lecturerTypeId: string
@@ -644755,6 +644815,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -644798,6 +644859,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -644854,6 +644916,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -644897,6 +644960,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
         lecturerTypeId: string
@@ -645011,6 +645075,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -645054,6 +645119,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -645110,6 +645176,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -645153,6 +645220,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
         lecturerTypeId: string
@@ -645615,6 +645683,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -645658,6 +645727,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -650344,6 +650414,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -650387,6 +650458,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
         lecturerTypeId: string
@@ -650613,6 +650685,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -650656,6 +650729,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -650879,6 +650953,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
         mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
@@ -650922,6 +650997,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
         mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
@@ -651043,6 +651119,7 @@ export namespace Prisma {
         sThietBiSua?: StringNullableFilter<"Lecturer"> | string | null
         from?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
         lectureID?: StringNullableFilter<"Lecturer"> | string | null
+        TKPUcode?: StringNullableFilter<"Lecturer"> | string | null
         serviceDate?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
         userProfileId?: UuidFilter<"Lecturer"> | string
         lecturerTypeId?: StringFilter<"Lecturer"> | string
@@ -675711,6 +675788,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -675754,6 +675832,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
         lecturerTypeId: string
@@ -675801,6 +675880,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -675844,6 +675924,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
         lecturerTypeId: string
@@ -676968,6 +677049,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -677011,6 +677093,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -677063,6 +677146,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -677106,6 +677190,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -678798,6 +678883,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -678841,6 +678927,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
         lecturerTypeId: string
@@ -679366,6 +679453,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -679409,6 +679497,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -679501,6 +679590,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -679544,6 +679634,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
         lecturerTypeId: string
@@ -680044,6 +680135,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -680087,6 +680179,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -689651,6 +689744,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -689694,6 +689788,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
         lecturerTypeId: string
@@ -689901,6 +689996,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -689944,6 +690040,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -690082,6 +690179,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -690125,6 +690223,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
         lecturerTypeId: string
@@ -690216,6 +690315,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -690259,6 +690359,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
         lecturerTypeId: string
@@ -690412,6 +690513,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -690455,6 +690557,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -691220,6 +691323,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -691263,6 +691367,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
         lecturerTypeId: string
@@ -691430,6 +691535,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -691473,6 +691579,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -694894,6 +695001,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -694937,6 +695045,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
         lecturerTypeId: string
@@ -694984,6 +695093,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -695027,6 +695137,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
         lecturerTypeId: string
@@ -695174,6 +695285,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -695217,6 +695329,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -695269,6 +695382,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -695312,6 +695426,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -699434,6 +699549,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -699477,6 +699593,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
         lecturerTypeId: string
@@ -699888,6 +700005,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -699931,6 +700049,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
         lecturerTypeId: string
@@ -700550,6 +700669,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -700593,6 +700713,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -705838,6 +705959,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -705881,6 +706003,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
         lecturerTypeId: string
@@ -706081,6 +706204,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -706124,6 +706248,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -706511,6 +706636,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -706554,6 +706680,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
         lecturerTypeId: string
@@ -706858,6 +706985,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -706901,6 +707029,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -767549,6 +767678,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         from?: Date | string | null
         lectureID?: string | null
+        TKPUcode?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
     };
@@ -767591,6 +767721,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
         mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
@@ -767634,6 +767765,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
         mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
@@ -767677,6 +767809,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
     };
@@ -784628,6 +784761,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -784671,6 +784805,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -784714,6 +784849,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -788640,6 +788776,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -788683,6 +788820,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -788726,6 +788864,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
         lecturerTypeId?: StringFieldUpdateOperationsInput | string

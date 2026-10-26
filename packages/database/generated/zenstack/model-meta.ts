@@ -18124,6 +18124,11 @@ const metadata: ModelMeta = {
                     type: "String",
                     isOptional: true,
                     attributes: [{ "name": "@unique", "args": [] }],
+                }, TKPUcode: {
+                    name: "TKPUcode",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
                 }, serviceDate: {
                     name: "serviceDate",
                     type: "DateTime",
@@ -18320,6 +18325,9 @@ const metadata: ModelMeta = {
                 }, lectureID: {
                     name: "lectureID",
                     fields: ["lectureID"]
+                }, TKPUcode: {
+                    name: "TKPUcode",
+                    fields: ["TKPUcode"]
                 }, userProfileId: {
                     name: "userProfileId",
                     fields: ["userProfileId"]

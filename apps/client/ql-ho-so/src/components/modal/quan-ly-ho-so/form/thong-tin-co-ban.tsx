@@ -482,6 +482,11 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                 </FormItem>
               </Col>
               <Col span={12}>
+                <FormItem form={form} name="TKPUcode" label="Mã TKPU" className="mb-0">
+                  <Input placeholder="Nhập mã TKPU" className="h-9" />
+                </FormItem>
+              </Col>
+              <Col span={12}>
                 <FormItem
                   form={form}
                   required

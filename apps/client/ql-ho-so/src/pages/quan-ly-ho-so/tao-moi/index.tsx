@@ -107,6 +107,7 @@ export type SubmitForm = Prisma.UserProfileGetPayload<{
   staffTypeId?: string
   staffPositionId?: string
   lectureCode?: string
+  TKPUcode?: string | null
   organizationId?: string
 }
 
@@ -435,6 +436,7 @@ export default function CreateUserPage() {
     staffTypeId,
     staffPositionId,
     lectureCode,
+    TKPUcode,
     organizationId,
     // Loại bỏ tất cả relation fields khỏi spread để tránh lỗi Prisma
     tinHoc,
@@ -931,6 +933,7 @@ export default function CreateUserPage() {
             data: {
               userProfileId: resProfile?.id,
               lecturerTypeId: lecturerTypeId,
+              TKPUcode: TKPUcode?.trim() || null,
             },
           })
         }
