@@ -14056,6 +14056,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'subjectClass',
+                }, documentFiles: {
+                    name: "documentFiles",
+                    type: "DocumentFile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subjectClass',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -22939,6 +22945,20 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'subjectVersion',
+                }, subjectClass: {
+                    name: "subjectClass",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectClassId" },
+                }, subjectClassId: {
+                    name: "subjectClassId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'subjectClass',
                 }, studentAcademicDecision: {
                     name: "studentAcademicDecision",
                     type: "StudentAcademicDecision",
