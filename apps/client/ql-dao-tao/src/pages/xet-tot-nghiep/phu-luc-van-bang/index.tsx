@@ -1,3 +1,5 @@
+import { useQuery } from "@tanstack/react-query"
+import { customTrainingFetch } from "@workspace/libs/api/custom-instance"
 import { formatDateInSlash, formatNgayIn, formatThangIn } from "@workspace/libs/timezone"
 import FormItem from "@components/commons/form-item"
 import Select from "@components/commons/select"
@@ -77,8 +79,9 @@ import {
   PLVB_NOTE_FONT,
   getAppendixSubjectPrintName,
   getAppendixSubjectRowHeight as sharedGetAppendixSubjectRowHeight,
-  summarizePlvbCredits,
+  resolvePlvbGraduationTotals,
   wrapAppendixSubjectName as sharedWrapAppendixSubjectName,
+  type PlvbGraduationSummary,
 } from "../../../utils/phu-luc-van-bang/plvb-print-settings"
 
 type TSubjectItem = StudentSubjectScore & {
@@ -488,6 +491,7 @@ export type TStudentWithSubjects = Student &
   }
 
 export type TStudentWithSemesters = TStudentWithSubjects & {
+  graduationSummary?: PlvbGraduationSummary | null
   semesters: Array<{
     id: string
     name: string
@@ -832,6 +836,38 @@ export default function StudentGradeSystem() {
     }
   )
 
+  const studentIds = useMemo(() => (students || []).map((item) => item.id).filter(Boolean), [students])
+
+  const { data: graduationSummaryByStudent = {} } = useQuery({
+    queryKey: ["plvb-graduation-gpa", studentIds],
+    enabled: viewResult && studentIds.length > 0,
+    refetchOnWindowFocus: false,
+    queryFn: async () => {
+      const entries = await Promise.all(
+        studentIds.map(async (studentId) => {
+          const res = await customTrainingFetch<{
+            status: number
+            data: PlvbGraduationSummary | { message?: string }
+          }>(`/api/graduation/student-transcript?studentId=${encodeURIComponent(studentId)}`, {
+            method: "GET",
+          })
+          if (res.status !== 200 || !res.data || !("totalPassCredit" in res.data)) return null
+          return [
+            studentId,
+            {
+              gpaBase10: res.data.gpaBase10,
+              gpaBase4: res.data.gpaBase4,
+              totalPassCredit: res.data.totalPassCredit,
+            },
+          ] as const
+        })
+      )
+      return Object.fromEntries(
+        entries.filter((item): item is readonly [string, PlvbGraduationSummary] => item != null)
+      )
+    },
+  })
+
   const studentsWithSemesters = useMemo(() => {
     return (students || []).map((student) => {
       const { scoreConverts } = student?.fixedClass?.trainingCourse || {}
@@ -955,9 +991,10 @@ export default function StudentGradeSystem() {
       return {
         ...student,
         semesters,
+        graduationSummary: graduationSummaryByStudent[student.id] ?? null,
       }
     }) as TStudentWithSemesters[]
-  }, [students])
+  }, [students, graduationSummaryByStudent])
 
   const studentTableData = useMemo(() => {
     return (studentsWithSemesters || []).map((student, index) => ({
@@ -1277,20 +1314,7 @@ export default function StudentGradeSystem() {
         .filter((semester) => isGraduationSemesterGroup(semester.id))
         .flatMap((semester) => semester?.subjects ?? [])
 
-      const {
-        totalCredits: tongTinChi,
-        weighted10: tongDiemNhanTinChiHe10,
-        weighted4: tongDiemNhanTinChiHe4,
-      } = summarizePlvbCredits(student.semesters)
-      const computedGpa10 =
-        tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe10 / tongTinChi).toFixed(2))
-      const officialGpa = student.graduationDecision?.finalGpa
-      const diemTBHe10 =
-        officialGpa != null && Number.isFinite(Number(officialGpa))
-          ? Number(Number(officialGpa).toFixed(2))
-          : computedGpa10
-      const diemTBHe4 =
-        tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe4 / tongTinChi).toFixed(2))
+      const { tongTinChi, diemTBHe10, diemTBHe4 } = resolvePlvbGraduationTotals(student)
       const xepLoai =
         student.graduationDecision?.finalRanking?.classification ??
         getGraduationClassification(diemTBHe10, diemTBHe4, academicRankingConvert || [])
@@ -1412,17 +1436,7 @@ export default function StudentGradeSystem() {
       }
       tableRows.splice(MAX_ROWS)
 
-      const {
-        totalCredits: tongTinChi,
-        weighted10: tongDiemNhanTinChiHe10,
-        weighted4: tongDiemNhanTinChiHe4,
-      } = summarizePlvbCredits(student.semesters)
-
-      const diemTBHe10 =
-        tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe10 / tongTinChi).toFixed(2))
-
-      const diemTBHe4 =
-        tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe4 / tongTinChi).toFixed(2))
+      const { tongTinChi, diemTBHe10, diemTBHe4 } = resolvePlvbGraduationTotals(student)
 
       const xepLoai =
         student.graduationDecision?.finalRanking?.classification ??

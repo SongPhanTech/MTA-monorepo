@@ -27,6 +27,31 @@ export type GraduationCurriculumSubjectInput = Pick<
   subject: { name: string; credit: number; code?: string | null; subjectId?: string }
 }
 
+/**
+ * Ngưỡng tín chỉ cùng tập môn với GPA:
+ * môn có tính điểm tổng kết, tự chọn chỉ đến hạn mức tín chỉ tự chọn.
+ * Môn điều kiện không cộng.
+ */
+export function sumRequiredCredits(
+  subjects: Array<{
+    type: SubjectRequirementType
+    useForFinalScore: boolean
+    subject: { credit: number }
+  }>,
+  electiveCreditsRequired = 0
+) {
+  let mandatoryCredits = 0
+  let electiveCredits = 0
+  for (const subject of subjects) {
+    if (!subject.useForFinalScore) continue
+    const credit = subject.subject.credit || 0
+    if (subject.type === SubjectRequirementType.Optional) electiveCredits += credit
+    else mandatoryCredits += credit
+  }
+  const countedElectiveCredits = Math.min(electiveCredits, Math.max(electiveCreditsRequired, 0))
+  return mandatoryCredits + countedElectiveCredits
+}
+
 export type ResolvedGraduationScore = {
   id: string
   subjectVersionId: string
@@ -879,7 +904,7 @@ export async function buildGraduationTranscript(
       gpaBase10,
       gpaBase4,
       totalPassCredit: resolved.totalPassCredit,
-      requiredCredits: curriculumVersion.requiredCredits,
+      requiredCredits: sumRequiredCredits(curriculumSubjects, electiveCreditsRequired),
       accumulatedElectiveCredits: resolved.accumulatedElectiveCredits,
       electiveCreditsRequired,
       curriculumBlocks,

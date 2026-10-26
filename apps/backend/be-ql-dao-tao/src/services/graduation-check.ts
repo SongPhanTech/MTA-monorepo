@@ -15,6 +15,7 @@ import {
   computeGraduationSubjectScores,
   graduationCurriculumSelect,
   loadGraduationScoreSources,
+  sumRequiredCredits,
 } from "./graduation-scores"
 
 function isGpaInGraduationRankRange(
@@ -301,10 +302,9 @@ export async function runGraduationCheck(input: {
     const gpaScoreIds = Array.from(finalScores.values()).map((score) => score.id)
     const supplementaryScoreIds = Array.from(markDoneScores.values()).map((score) => score.id)
 
-    if (curriculumVersion.requiredCredits && totalPassCredit < curriculumVersion.requiredCredits) {
-      reasons.push(
-        `Chưa đạt số tín chỉ bắt buộc (${totalPassCredit} < ${curriculumVersion.requiredCredits})`
-      )
+    const requiredCredits = sumRequiredCredits(curriculumSubjects, electiveCreditsRequired)
+    if (requiredCredits > 0 && totalPassCredit < requiredCredits) {
+      reasons.push(`Chưa đạt số tín chỉ bắt buộc (${totalPassCredit} < ${requiredCredits})`)
     }
 
     const cumulativeBase10 = totalPassCredit
@@ -355,9 +355,7 @@ export async function runGraduationCheck(input: {
       YEAR_FAILED_CREDITS: student.studentYearResult[0]?.failedCredits || 0,
       CUMULATIVE_PASSED_CREDITS: totalPassCredit,
       CUMULATIVE_DEBT_CREDITS: totalDebtCredit,
-      CUMULATIVE_PROGRESS_PERCENT: curriculumVersion.requiredCredits
-        ? (totalPassCredit / curriculumVersion.requiredCredits) * 100
-        : 0,
+      CUMULATIVE_PROGRESS_PERCENT: requiredCredits ? (totalPassCredit / requiredCredits) * 100 : 0,
       CUMULATIVE_RETAKE_PERCENT: totalPassCredit ? (totalDebtCredit / totalPassCredit) * 100 : 0,
 
       ACADEMIC_WARNING_LEVEL: student.academicWarningLevel,

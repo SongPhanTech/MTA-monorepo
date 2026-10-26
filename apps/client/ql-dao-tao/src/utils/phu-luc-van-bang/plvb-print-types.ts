@@ -1,4 +1,8 @@
-import type { PlvbAppendixSubject, PlvbPrintVariant } from "./plvb-print-settings"
+import type {
+  PlvbAppendixSubject,
+  PlvbGraduationSummary,
+  PlvbPrintVariant,
+} from "./plvb-print-settings"
 
 export type PlvbPrintStudentSemester = {
   id: string
@@ -81,6 +85,8 @@ export type PlvbPrintStudent = {
     diplomaType?: { name?: string | null } | null
   } | null
   semesters: PlvbPrintStudentSemester[]
+  /** GPA và tổng tín chỉ theo cùng công thức xét tốt nghiệp. */
+  graduationSummary?: PlvbGraduationSummary | null
 }
 
 export type ModalPrintPhuLucVbInput = {
