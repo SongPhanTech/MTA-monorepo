@@ -17,9 +17,13 @@ export type GetDataSyncHistory200Item = {
   /** @nullable */
   fileVersion: string | null;
   /** @nullable */
+  description?: string | null;
+  /** @nullable */
   errorMessage: string | null;
   /** @nullable */
   createdAt: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
   /** @nullable */
   classRegisterSessionId: string | null;
 };

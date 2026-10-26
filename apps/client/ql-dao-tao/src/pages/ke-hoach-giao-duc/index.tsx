@@ -242,7 +242,7 @@ export default function KeHoachDaoTao({ type = "NORMAL", role }: KeHoachDaoTaoPa
           allowClear
         />
       </Flex>
-      <Tabs activeKey={activeLeftTab} onChange={setActiveLeftTab}>
+      <Tabs activeKey={activeLeftTab} onChange={setActiveLeftTab} destroyInactiveTabPane>
         {tabs.map((tab) => (
           <Tabs.TabPane tab={tab.label} key={tab.key}>
             {tab.content}

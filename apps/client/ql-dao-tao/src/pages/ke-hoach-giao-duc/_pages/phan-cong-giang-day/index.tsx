@@ -13,7 +13,7 @@ import DefaultLayout from "@layouts/default-layout"
 import { layGiangVienPhanCongThayDoi, thongBaoPhanCongGiangDay } from "@lib/thong-bao-giang-vien"
 import { buildOrgFlat } from "@lib/utils"
 import { emptyObjectIf } from "@workspace/constant"
-import { $Enums, type Prisma, type SubjectClass } from "@workspace/db/client"
+import { $Enums, type Prisma } from "@workspace/db/client"
 import {
   useCountDM_DonVi,
   useCountSubjectClass,
@@ -27,7 +27,7 @@ import {
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { whereOrganization } from "@workspace/libs/constants"
 import { exportFromTemplate } from "@workspace/libs/template-excel"
-import { getMinioUrl } from "@workspace/libs/utils"
+import { formatLecturerName, getMinioUrl } from "@workspace/libs/utils"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
 import {
@@ -61,10 +61,11 @@ import { useDisclosure } from "react-hook-disclosure-modal"
 import {
   ActionsCell,
   AssignmentRowPaint,
+  CopySourceProvider,
   DeadlineCell,
   ExamTypeCell,
   FixedClassCodes,
-  FormStateGate,
+  getAssignmentRowClass,
   LecturerCell,
   LecturerNameProvider,
   LocationCell,
@@ -84,8 +85,17 @@ const LECTURER_USER_PROFILE_SELECT = {
   id: true,
   code: true,
   fullname: true,
-  academicRankType: true,
-  academicDegreeType: true,
+  academicRankType: { select: { sMa: true } },
+  academicDegreeType: { select: { sMa: true } },
+} as const
+
+const LECTURER_SELECT = {
+  select: {
+    id: true,
+    userProfile: {
+      select: LECTURER_USER_PROFILE_SELECT,
+    },
+  },
 } as const
 
 type BaoDayForm = {
@@ -149,6 +159,25 @@ export default function PhanCongGiangDay({
   const [form] = Form.useForm<TeachingAssignmentForm>()
 
   const [selectionVersion, setSelectionVersion] = useState(0)
+  const [toolbarFlags, setToolbarFlags] = useState({
+    hasUnsavedEdits: false,
+    missingTrainingLocation: false,
+  })
+  const refreshToolbarFlags = useCallback(
+    (map?: TeachingAssignmentForm["subjectClass"]) => {
+      const subjectClass = (map ??
+        form.getFieldValue("subjectClass") ??
+        {}) as TeachingAssignmentForm["subjectClass"]
+      const values = Object.values(subjectClass) as Array<
+        TeachingAssignmentForm["subjectClass"][string]
+      >
+      setToolbarFlags({
+        hasUnsavedEdits: values.some((item) => item?.isEdit),
+        missingTrainingLocation: values.some((item) => !item?.trainingLocationId),
+      })
+    },
+    [form]
+  )
 
   const [formBaoDay] = Form.useForm<BaoDayForm>()
   const [formXepKhuVuc] = Form.useForm<XepKhuVucForm>()
@@ -307,104 +336,124 @@ export default function PhanCongGiangDay({
     [dmDonViIds, orgId]
   )
 
+  const subjectClassQuery = useMemo(
+    () => ({
+      where,
+      select: {
+        id: true,
+        code: true,
+        subjectId: true,
+        schedule: true,
+        lecturerId: true,
+        extraLecturerId: true,
+        enterGradeLecturerId: true,
+        lecturerAssignmentDeadline: true,
+        examType: true,
+        roomId: true,
+        trainingLocationId: true,
+        maxStudent: true,
+        cancelled: true,
+        isLockLecturer: true,
+        status: true,
+        submitLecturerAssignmentAt: true,
+        approveLecturerAssignmentAt: true,
+        subject: {
+          select: {
+            name: true,
+            credit: true,
+            managementOrganizationId: true,
+            subject: {
+              select: {
+                managementOrganization: {
+                  select: { sMa: true },
+                },
+              },
+            },
+          },
+        },
+        mainLecturer: LECTURER_SELECT,
+        extraLecturer: LECTURER_SELECT,
+        enterGradeLecturer: LECTURER_SELECT,
+        _count: {
+          select: {
+            subjectClassStudent: true,
+          },
+        },
+        trainingLocation: {
+          select: { name: true },
+        },
+        subjectClassStudent: {
+          where: { examScore: { not: null } },
+          take: 1,
+          select: { id: true },
+        },
+        subjectClassHistory: {
+          where: { isLockLecturer: { not: null } },
+          orderBy: { createdAt: "desc" as const },
+          take: 1,
+          select: {
+            isLockLecturer: true,
+            createdAt: true,
+            updatedBy: { select: { fullname: true } },
+          },
+        },
+        fixedClasses: {
+          select: {
+            code: true,
+          },
+        },
+      },
+      orderBy: [
+        ...emptyObjectIf(
+          [
+            {
+              maxStudent: filters.maxStudent,
+            },
+          ],
+          !!filters.maxStudent
+        ),
+        ...emptyObjectIf(
+          [
+            {
+              subjectClassStudent: {
+                _count: filters.subjectClassStudent,
+              },
+            },
+          ],
+          !!filters.subjectClassStudent
+        ),
+        {
+          code: "asc" as const,
+        },
+      ],
+    }),
+    [filters.maxStudent, filters.subjectClassStudent, where]
+  )
+
   const { data: dmDonViData = [], refetch } = useFindManyDM_DonVi(
     {
-      include: {
+      select: {
+        Id: true,
+        sTen: true,
         subjects: {
-          include: {
+          where: {
             subjectVersion: {
-              include: {
+              some: {
                 subjectClass: {
-                  where,
-                  include: {
-                    subject: {
-                      select: {
-                        name: true,
-                        credit: true,
-                        managementOrganizationId: true,
-                        subject: {
-                          select: {
-                            managementOrganization: {
-                              select: { sMa: true },
-                            },
-                          },
-                        },
-                      },
-                    },
-                    mainLecturer: {
-                      include: {
-                        userProfile: {
-                          select: LECTURER_USER_PROFILE_SELECT,
-                        },
-                      },
-                    },
-                    extraLecturer: {
-                      include: {
-                        userProfile: {
-                          select: LECTURER_USER_PROFILE_SELECT,
-                        },
-                      },
-                    },
-                    enterGradeLecturer: {
-                      include: {
-                        userProfile: {
-                          select: LECTURER_USER_PROFILE_SELECT,
-                        },
-                      },
-                    },
-                    _count: {
-                      select: {
-                        subjectClassStudent: true,
-                      },
-                    },
-                    trainingLocation: {
-                      select: { name: true },
-                    },
-                    subjectClassStudent: {
-                      where: { examScore: { not: null } },
-                      take: 1,
-                      select: { id: true },
-                    },
-                    subjectClassHistory: {
-                      where: { isLockLecturer: { not: null } },
-                      orderBy: { createdAt: "desc" },
-                      take: 1,
-                      select: {
-                        isLockLecturer: true,
-                        createdAt: true,
-                        updatedBy: { select: { fullname: true } },
-                      },
-                    },
-                    fixedClasses: {
-                      select: {
-                        code: true,
-                      },
-                    },
-                  },
-                  orderBy: [
-                    ...emptyObjectIf(
-                      [
-                        {
-                          maxStudent: filters.maxStudent,
-                        },
-                      ],
-                      !!filters.maxStudent
-                    ),
-                    ...emptyObjectIf(
-                      [
-                        {
-                          subjectClassStudent: {
-                            _count: filters.subjectClassStudent,
-                          },
-                        },
-                      ],
-                      !!filters.subjectClassStudent
-                    ),
-                    {
-                      code: "asc",
-                    },
-                  ],
+                  some: where,
                 },
+              },
+            },
+          },
+          select: {
+            subjectVersion: {
+              where: {
+                subjectClass: {
+                  some: where,
+                },
+              },
+              select: {
+                subjectClass: subjectClassQuery,
               },
             },
           },
@@ -420,9 +469,7 @@ export default function PhanCongGiangDay({
             subjectVersion: {
               some: {
                 subjectClass: {
-                  some: {
-                    ...where,
-                  },
+                  some: where,
                 },
               },
             },
@@ -435,6 +482,7 @@ export default function PhanCongGiangDay({
     {
       enabled: !!semesterId && !!trainingObjectTypeId,
       refetchOnWindowFocus: false,
+      staleTime: 15_000,
     }
   )
 
@@ -487,11 +535,8 @@ export default function PhanCongGiangDay({
   const { showSpinner, hideSpinner } = useSpinner()
 
   const handleFilterChange = (key: string, value: string) => {
-    setFilters((prev) => {
-      const newFilters = { ...prev, [key]: value }
-      debouncedRefetch()
-      return newFilters
-    })
+    setCurrentPage(1)
+    setFilters((prev) => ({ ...prev, [key]: value }))
   }
 
   const { mutateAsync: updateManySubjectClass } = useUpdateManySubjectClass()
@@ -519,9 +564,7 @@ export default function PhanCongGiangDay({
 
     if (overwriteRows.length > 0) {
       const overwriteCodes = overwriteRows
-        .map(
-          (id) => dataWithRowSpan.flatMap((e) => e.children).find((c) => c.id === id)?.code || id
-        )
+        .map((id) => subjectClassById.get(id as string)?.code || id)
         .join(", ")
 
       Modal.confirm({
@@ -565,6 +608,7 @@ export default function PhanCongGiangDay({
     })
 
     form.setFieldValue("subjectClass", updated)
+    refreshToolbarFlags(updated)
     setSelectionVersion((value) => value + 1)
 
     const appliedCount = selectedRowKeys.filter((id) => id !== copySourceId).length
@@ -616,23 +660,34 @@ export default function PhanCongGiangDay({
     }
   }
 
-  const { data: trainingLocationData = [] } = useFindManyTrainingLocation({
-    orderBy: { name: "asc" },
-    where: { deletedAt: null, active: true },
-  })
+  const { data: trainingLocationData = [] } = useFindManyTrainingLocation(
+    {
+      select: { id: true, name: true },
+      orderBy: { name: "asc" },
+      where: { deletedAt: null, active: true },
+    },
+    { refetchOnWindowFocus: false, staleTime: 60_000 }
+  )
 
-  const { data: buildingData = [] } = useFindManyBuilding({
-    orderBy: { name: "asc" },
-    where: { deletedAt: null, active: true },
-    include: {
-      rooms: {
-        where: {
-          deletedAt: null,
-          active: true,
+  const { data: buildingData = [] } = useFindManyBuilding(
+    {
+      select: {
+        id: true,
+        name: true,
+        trainingLocationId: true,
+        rooms: {
+          where: {
+            deletedAt: null,
+            active: true,
+          },
+          select: { id: true, name: true, capacity: true },
         },
       },
+      orderBy: { name: "asc" },
+      where: { deletedAt: null, active: true },
     },
-  })
+    { refetchOnWindowFocus: false, staleTime: 60_000 }
+  )
 
   const trainingLocationOptions = useMemo(
     () => trainingLocationData.map((e) => ({ label: e.name, value: e.id })),
@@ -1253,14 +1308,18 @@ export default function PhanCongGiangDay({
   }>({
     tag: "PutOneSubjectClassModal",
   })
-  const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-    orderBy: { name: "asc" },
-    where: {
-      deletedAt: null,
-      active: true,
-      trainingObjectTypeId,
+  const { data: trainingCourseData = [] } = useFindManyTrainingCourse(
+    {
+      select: { id: true, name: true },
+      orderBy: { name: "asc" },
+      where: {
+        deletedAt: null,
+        active: true,
+        trainingObjectTypeId,
+      },
     },
-  })
+    { refetchOnWindowFocus: false, staleTime: 60_000 }
+  )
   const dataWithRowSpan = useMemo(() => {
     if (dmDonViData) {
       const countSubjectClassBySubjectId: Record<string, number> = {}
@@ -1296,40 +1355,64 @@ export default function PhanCongGiangDay({
     return []
   }, [dmDonViData])
 
+  const subjectClassById = useMemo(() => {
+    const map = new Map<string, (typeof dataWithRowSpan)[number]["children"][number]>()
+    for (const group of dataWithRowSpan) {
+      for (const child of group.children) {
+        map.set(child.id, child)
+      }
+    }
+    return map
+  }, [dataWithRowSpan])
+
+  const lecturerNameSeed = useMemo(() => {
+    const entries: Array<[string, string]> = []
+    for (const row of subjectClassById.values()) {
+      if (row.lecturerId && row.mainLecturer) {
+        entries.push([row.lecturerId, formatLecturerName(row.mainLecturer)])
+      }
+      if (row.extraLecturerId && row.extraLecturer) {
+        entries.push([row.extraLecturerId, formatLecturerName(row.extraLecturer)])
+      }
+      if (row.enterGradeLecturerId && row.enterGradeLecturer) {
+        entries.push([row.enterGradeLecturerId, formatLecturerName(row.enterGradeLecturer)])
+      }
+    }
+    return entries
+  }, [subjectClassById])
+
   const resetForm = useCallback(() => {
-    form.setFieldsValue({
-      subjectClass: dataWithRowSpan
-        .flatMap((e) => e.children)
-        .reduce(
-          (acc, curr) => {
-            acc[curr.id] = {
-              schedule: curr.schedule,
-              lecturerId: curr.lecturerId ?? null,
-              extraLecturerId: curr.extraLecturerId ?? null,
-              enterGradeLecturerId: curr.enterGradeLecturerId ?? null,
-              lecturerAssignmentDeadline: curr.lecturerAssignmentDeadline
-                ? dayjs(curr.lecturerAssignmentDeadline)
-                : null,
-              examType: curr.examType,
-              roomId: curr.roomId,
-              trainingLocationId: curr.trainingLocationId ?? null,
-              maxStudent: curr.maxStudent ?? null,
-              isEdit: false,
-              cancelled: !!curr.cancelled,
-              isLockLecturer: curr.isLockLecturer ?? true,
-            }
-            return acc
-          },
-          {} as TeachingAssignmentForm["subjectClass"]
-        ),
-    })
-  }, [dataWithRowSpan, form])
+    const subjectClass = dataWithRowSpan
+      .flatMap((e) => e.children)
+      .reduce(
+        (acc, curr) => {
+          acc[curr.id] = {
+            schedule: curr.schedule,
+            lecturerId: curr.lecturerId ?? null,
+            extraLecturerId: curr.extraLecturerId ?? null,
+            enterGradeLecturerId: curr.enterGradeLecturerId ?? null,
+            lecturerAssignmentDeadline: curr.lecturerAssignmentDeadline
+              ? dayjs(curr.lecturerAssignmentDeadline)
+              : null,
+            examType: curr.examType,
+            roomId: curr.roomId,
+            trainingLocationId: curr.trainingLocationId ?? null,
+            maxStudent: curr.maxStudent ?? null,
+            isEdit: false,
+            cancelled: !!curr.cancelled,
+            isLockLecturer: curr.isLockLecturer ?? true,
+          }
+          return acc
+        },
+        {} as TeachingAssignmentForm["subjectClass"]
+      )
+    form.setFieldsValue({ subjectClass })
+    refreshToolbarFlags(subjectClass)
+  }, [dataWithRowSpan, form, refreshToolbarFlags])
 
   useEffect(() => {
-    if (resetForm) {
-      resetForm()
-      setSelectionVersion((value) => value + 1)
-    }
+    resetForm()
+    setSelectionVersion((value) => value + 1)
   }, [resetForm])
 
   const canEditSubjectClass = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, "SUA")
@@ -1389,6 +1472,7 @@ export default function PhanCongGiangDay({
             canEdit={canXemTatCa && !khoaBoMon}
             lecturerAssignmentDeadline={record.lecturerAssignmentDeadline}
             approveLecturerAssignmentAt={record.approveLecturerAssignmentAt}
+            cancelled={record.cancelled}
           />
         ),
       },
@@ -1405,7 +1489,7 @@ export default function PhanCongGiangDay({
               submitLecturerAssignmentAt={record.submitLecturerAssignmentAt}
               approveLecturerAssignmentAt={record.approveLecturerAssignmentAt}
               isParent={record.$type === "parent"}
-              copySourceId={copySourceId}
+              cancelled={record.cancelled}
             />
             {record?.code || ""}
           </>
@@ -1430,7 +1514,7 @@ export default function PhanCongGiangDay({
         width: 90,
         options: SCHEDULE_OPTIONS,
         render: (_: unknown, record: any) => (
-          <ScheduleCell recordId={record.id} options={SCHEDULE_OPTIONS} />
+          <ScheduleCell recordId={record.id} options={SCHEDULE_OPTIONS} cancelled={record.cancelled} />
         ),
       },
       {
@@ -1455,7 +1539,14 @@ export default function PhanCongGiangDay({
           const logText = history
             ? `${history.isLockLecturer ? "Khóa" : "Mở"} bởi: ${history.updatedBy?.fullname ?? "-"} lúc ${dayjs(history.createdAt).format("HH:mm DD/MM")}`
             : ""
-          return <LockLecturerCell recordId={record.id} logText={logText} refetch={refetch} />
+          return (
+            <LockLecturerCell
+              recordId={record.id}
+              logText={logText}
+              refetch={refetch}
+              cancelled={record.cancelled}
+            />
+          )
         },
       },
       {
@@ -1473,6 +1564,7 @@ export default function PhanCongGiangDay({
             lecturer={record?.mainLecturer}
             canShowSelect={canShowLecturerSelect(record)}
             deadlinePassed={isDeadlinePassed(record.lecturerAssignmentDeadline)}
+            cancelled={record.cancelled}
           />
         ),
       },
@@ -1491,6 +1583,7 @@ export default function PhanCongGiangDay({
             lecturer={record?.extraLecturer}
             canShowSelect={canShowLecturerSelect(record)}
             deadlinePassed={isDeadlinePassed(record.lecturerAssignmentDeadline)}
+            cancelled={record.cancelled}
           />
         ),
       },
@@ -1508,6 +1601,7 @@ export default function PhanCongGiangDay({
             lecturer={record?.enterGradeLecturer}
             canShowSelect={canShowLecturerSelect(record)}
             deadlinePassed={isDeadlinePassed(record.lecturerAssignmentDeadline)}
+            cancelled={record.cancelled}
           />
         ),
       },
@@ -1543,6 +1637,7 @@ export default function PhanCongGiangDay({
             options={trainingLocationOptions}
             canEdit={!khoaBoMon}
             trainingLocationName={record.trainingLocation?.name}
+            cancelled={record.cancelled}
           />
         ),
       },
@@ -1574,12 +1669,11 @@ export default function PhanCongGiangDay({
               title: "Thao tác",
               width: 100,
               align: "center" as const,
-              render: (_: unknown, record: SubjectClass) => (
+              render: (_: unknown, record: any) => (
                 <ActionsCell
                   recordId={record?.id}
                   cancelled={record.cancelled}
                   status={record.status}
-                  copySourceId={copySourceId}
                   canEdit={canEditSubjectClass}
                   canDelete={canDeleteSubjectClass}
                   onCopyToggle={handleCopyToggle}
@@ -1596,7 +1690,6 @@ export default function PhanCongGiangDay({
     canDeleteSubjectClass,
     canEditSubjectClass,
     canXemTatCa,
-    copySourceId,
     handleCopyToggle,
     handleDelete,
     handleEditSubjectClass,
@@ -1622,42 +1715,36 @@ export default function PhanCongGiangDay({
             return
           }
 
-          const current = form.getFieldValue(["subjectClass", subjectClassId]) || {}
-          const newSubjectClassData = {
-            ...current,
-            ...changedField,
-            isEdit: true,
-          }
+          const path: ["subjectClass", string] = ["subjectClass", subjectClassId]
+          const current = form.getFieldValue(path) || {}
+          form.setFieldValue([...path, "isEdit"], true)
 
           if ("lecturerId" in changedField) {
-            newSubjectClassData.enterGradeLecturerId = changedField.lecturerId
-            if (
-              changedField.lecturerId &&
-              current?.extraLecturerId === changedField.lecturerId
-            ) {
-              newSubjectClassData.extraLecturerId = null
+            form.setFieldValue([...path, "enterGradeLecturerId"], changedField.lecturerId)
+            if (changedField.lecturerId && current?.extraLecturerId === changedField.lecturerId) {
+              form.setFieldValue([...path, "extraLecturerId"], null)
             }
           }
 
           if ("extraLecturerId" in changedField) {
-            if (
-              changedField.extraLecturerId &&
-              current?.lecturerId === changedField.extraLecturerId
-            ) {
-              newSubjectClassData.lecturerId = null
+            if (changedField.extraLecturerId && current?.lecturerId === changedField.extraLecturerId) {
+              form.setFieldValue([...path, "lecturerId"], null)
             }
           }
 
           if ("trainingLocationId" in changedField) {
-            newSubjectClassData.roomId = null
-            newSubjectClassData.maxStudent = null
+            form.setFieldValue([...path, "roomId"], null)
+            form.setFieldValue([...path, "maxStudent"], null)
           }
 
           if ("roomId" in changedField) {
-            newSubjectClassData.maxStudent = roomCapacityById.get(changedField.roomId) ?? null
+            form.setFieldValue(
+              [...path, "maxStudent"],
+              roomCapacityById.get(changedField.roomId) ?? null
+            )
           }
 
-          form.setFieldValue(["subjectClass", subjectClassId], newSubjectClassData)
+          refreshToolbarFlags()
           if (
             "lecturerId" in changedField ||
             "enterGradeLecturerId" in changedField ||
@@ -1802,17 +1889,13 @@ export default function PhanCongGiangDay({
                       QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KHOA_BO_MON_PHAN_CONG_GIANG_DAY,
                       "SUA"
                     ) && (
-                      <FormStateGate form={form}>
-                        {({ hasUnsavedEdits }) => (
-                          <Button
-                            onClick={() => handleKhoaBoMonLuuPCGD()}
-                            type="primary"
-                            disabled={!dmDonViData.length || !hasUnsavedEdits}
-                          >
-                            Lưu
-                          </Button>
-                        )}
-                      </FormStateGate>
+                      <Button
+                        onClick={() => handleKhoaBoMonLuuPCGD()}
+                        type="primary"
+                        disabled={!dmDonViData.length || !toolbarFlags.hasUnsavedEdits}
+                      >
+                        Lưu
+                      </Button>
                     )}
                   {khoaBoMon &&
                     can(
@@ -2055,11 +2138,9 @@ export default function PhanCongGiangDay({
                       trigger="click"
                       placement="bottomRight"
                     >
-                      <FormStateGate form={form}>
-                        {({ missingTrainingLocation }) => (
                       <Tooltip
                         title={
-                          missingTrainingLocation
+                          toolbarFlags.missingTrainingLocation
                             ? "Vui lòng nhập khu vực đào tạo cho tất cả lớp môn học trước khi báo dạy"
                             : undefined
                         }
@@ -2067,13 +2148,11 @@ export default function PhanCongGiangDay({
                         <Button
                           type="primary"
                           className="bg-red-500"
-                          disabled={missingTrainingLocation}
+                          disabled={toolbarFlags.missingTrainingLocation}
                         >
                           1.Báo dạy
                         </Button>
                       </Tooltip>
-                        )}
-                      </FormStateGate>
                     </Popover>
                   )}
                   {!khoaBoMon &&
@@ -2165,8 +2244,7 @@ export default function PhanCongGiangDay({
                 <span style={{ fontSize: 13, color: "#27500A", fontWeight: 500 }}>
                   Copy PCGV từ:{" "}
                   <span style={{ color: "#185FA5" }}>
-                    {dataWithRowSpan.flatMap((e) => e.children).find((c) => c.id === copySourceId)
-                      ?.code || copySourceId}
+                    {subjectClassById.get(copySourceId)?.code || copySourceId}
                   </span>
                 </span>
                 <Divider type="vertical" />
@@ -2220,7 +2298,8 @@ export default function PhanCongGiangDay({
         </Col>
         <Col span={24}>
             <FormItem form={form} name={"subjectClass"} hidden />
-            <LecturerNameProvider>
+            <CopySourceProvider value={copySourceId}>
+            <LecturerNameProvider seed={lecturerNameSeed}>
             <TableCollapse
               rowKey="id"
               scrollable
@@ -2262,12 +2341,9 @@ export default function PhanCongGiangDay({
                 },
               }}
               defaultExpandAll
-              onRow={(record) => {
-                if ((record as any)?.$type === "parent") {
-                  return { className: "bg-white" }
-                }
-                return {}
-              }}
+              onRow={(record) => ({
+                className: getAssignmentRowClass(record),
+              })}
               columns={columns}
               headerTitleKey={"sTen"}
               data={dataWithRowSpan}
@@ -2275,6 +2351,7 @@ export default function PhanCongGiangDay({
               pagination={pagination}
             />
             </LecturerNameProvider>
+            </CopySourceProvider>
         </Col>
       </Row>
       </Form>

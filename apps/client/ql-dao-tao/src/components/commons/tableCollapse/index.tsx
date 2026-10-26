@@ -179,6 +179,11 @@ const TableCollapse = <
       })
     }
 
+    const childIndexByKey = new Map<string, number>()
+    allChildren.forEach((item: any, index) => {
+      if (item?.key != null) childIndexByKey.set(item.key, index)
+    })
+
     const baseColumns = [
       {
         title: "TT",
@@ -191,8 +196,8 @@ const TableCollapse = <
             return indexMap.get(record.key as string) ?? ""
           }
 
-          const order = allChildren.findIndex((item: any) => item.key === record.key)
-          return order >= 0
+          const order = childIndexByKey.get(record.key as string)
+          return order != null
             ? order +
                 1 +
                 (((typeof pagination !== "boolean" && pagination?.current) || currentPage || 1) -

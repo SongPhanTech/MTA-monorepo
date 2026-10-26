@@ -87,6 +87,7 @@ import type { ExportTrainingDataResponseData } from './exportTrainingDataRespons
 export interface ExportTrainingDataResponse {
   version: string;
   exportedAt: string;
+  signature?: string;
   filters: ExportTrainingDataResponseFilters;
   counts: ExportTrainingDataResponseCounts;
   data: ExportTrainingDataResponseData;

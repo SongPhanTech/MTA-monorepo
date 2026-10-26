@@ -385,7 +385,7 @@ export default function DanhSachChuyenGiaLuanVan() {
                 render: (_: unknown, record: any) => getAcademicRank(record),
               },
               {
-                title: "Hàm vị",
+                title: "Học vị",
                 dataIndex: "academicDegree",
                 width: 100,
                 align: "center",

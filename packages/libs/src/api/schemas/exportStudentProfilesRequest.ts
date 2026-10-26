@@ -84,4 +84,8 @@ Một số endpoint đặc biệt:
 export interface ExportStudentProfilesRequest {
   /** ID khóa học. */
   trainingCourseId: string;
+  /** ID lớp quản lý — nếu có thì chỉ xuất sinh viên lớp đó. */
+  fixedClassId?: string;
+  /** Danh sách ID lớp quản lý — lọc theo cột Lớp trên bảng. */
+  fixedClassIds?: string[];
 }
