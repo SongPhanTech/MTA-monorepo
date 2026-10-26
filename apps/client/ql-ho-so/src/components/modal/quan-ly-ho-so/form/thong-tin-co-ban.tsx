@@ -60,72 +60,92 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
   const watchedDistrictPermanentAddressId = Form.useWatch("districtPermanentAddressId", form)
 
   // Hooks cho địa chỉ mới (DM_XaPhuong_New)
-  const { data: newCommuneOfBirthData = [] } = useFindManyDM_XaPhuong_New({
-    where: watchedNewProvinceOfBirthId
-      ? { sDM_TinhId_New: watchedNewProvinceOfBirthId }
-      : undefined,
-  })
+  const { data: newCommuneOfBirthData = [] } = useFindManyDM_XaPhuong_New(
+    {
+      where: { sDM_TinhId_New: watchedNewProvinceOfBirthId },
+    },
+    { enabled: !!watchedNewProvinceOfBirthId }
+  )
 
-  const { data: newCommuneCurrentAddressData = [] } = useFindManyDM_XaPhuong_New({
-    where: watchedNewProvinceCurrentAddressId
-      ? { sDM_TinhId_New: watchedNewProvinceCurrentAddressId }
-      : undefined,
-  })
+  const { data: newCommuneCurrentAddressData = [] } = useFindManyDM_XaPhuong_New(
+    {
+      where: { sDM_TinhId_New: watchedNewProvinceCurrentAddressId },
+    },
+    { enabled: !!watchedNewProvinceCurrentAddressId }
+  )
 
-  const { data: newCommunePermanentAddressData = [] } = useFindManyDM_XaPhuong_New({
-    where: watchedNewProvincePermanentAddressId
-      ? { sDM_TinhId_New: watchedNewProvincePermanentAddressId }
-      : undefined,
-  })
+  const { data: newCommunePermanentAddressData = [] } = useFindManyDM_XaPhuong_New(
+    {
+      where: { sDM_TinhId_New: watchedNewProvincePermanentAddressId },
+    },
+    { enabled: !!watchedNewProvincePermanentAddressId }
+  )
 
-  const { data: newCommuneHometownData = [] } = useFindManyDM_XaPhuong_New({
-    where: watchedNewProvinceHometownId
-      ? { sDM_TinhId_New: watchedNewProvinceHometownId }
-      : undefined,
-  })
+  const { data: newCommuneHometownData = [] } = useFindManyDM_XaPhuong_New(
+    {
+      where: { sDM_TinhId_New: watchedNewProvinceHometownId },
+    },
+    { enabled: !!watchedNewProvinceHometownId }
+  )
 
   // Hooks cho địa chỉ cũ (DM_QuanHuyen, DM_XaPhuong)
   // Quận/huyện
-  const { data: districtCurrentAddressData = [] } = useFindManyDM_QuanHuyen({
-    where: watchedProvinceCurrentAddressId
-      ? { sDM_TinhId: watchedProvinceCurrentAddressId }
-      : undefined,
-  })
+  const { data: districtCurrentAddressData = [] } = useFindManyDM_QuanHuyen(
+    {
+      where: { sDM_TinhId: watchedProvinceCurrentAddressId },
+    },
+    { enabled: !!watchedProvinceCurrentAddressId }
+  )
 
-  const { data: districtPermanentAddressData = [] } = useFindManyDM_QuanHuyen({
-    where: watchedProvincePermanentAddressId
-      ? { sDM_TinhId: watchedProvincePermanentAddressId }
-      : undefined,
-  })
+  const { data: districtPermanentAddressData = [] } = useFindManyDM_QuanHuyen(
+    {
+      where: { sDM_TinhId: watchedProvincePermanentAddressId },
+    },
+    { enabled: !!watchedProvincePermanentAddressId }
+  )
 
-  const { data: districtOfBirthData = [] } = useFindManyDM_QuanHuyen({
-    where: watchedProvinceOfBirthId ? { sDM_TinhId: watchedProvinceOfBirthId } : undefined,
-  })
+  const { data: districtOfBirthData = [] } = useFindManyDM_QuanHuyen(
+    {
+      where: { sDM_TinhId: watchedProvinceOfBirthId },
+    },
+    { enabled: !!watchedProvinceOfBirthId }
+  )
 
-  const { data: districtHometownData = [] } = useFindManyDM_QuanHuyen({
-    where: watchedProvinceHometownId ? { sDM_TinhId: watchedProvinceHometownId } : undefined,
-  })
+  const { data: districtHometownData = [] } = useFindManyDM_QuanHuyen(
+    {
+      where: { sDM_TinhId: watchedProvinceHometownId },
+    },
+    { enabled: !!watchedProvinceHometownId }
+  )
 
   // Xã/phường cũ
-  const { data: communeCurrentAddressData = [] } = useFindManyDM_XaPhuong({
-    where: watchedDistrictCurrentAddressId
-      ? { sDM_QuanHuyenId: watchedDistrictCurrentAddressId }
-      : undefined,
-  })
+  const { data: communeCurrentAddressData = [] } = useFindManyDM_XaPhuong(
+    {
+      where: { sDM_QuanHuyenId: watchedDistrictCurrentAddressId },
+    },
+    { enabled: !!watchedDistrictCurrentAddressId }
+  )
 
-  const { data: communePermanentAddressData = [] } = useFindManyDM_XaPhuong({
-    where: watchedDistrictPermanentAddressId
-      ? { sDM_QuanHuyenId: watchedDistrictPermanentAddressId }
-      : undefined,
-  })
+  const { data: communePermanentAddressData = [] } = useFindManyDM_XaPhuong(
+    {
+      where: { sDM_QuanHuyenId: watchedDistrictPermanentAddressId },
+    },
+    { enabled: !!watchedDistrictPermanentAddressId }
+  )
 
-  const { data: communeOfBirthData = [] } = useFindManyDM_XaPhuong({
-    where: watchedDistrictOfBirthId ? { sDM_QuanHuyenId: watchedDistrictOfBirthId } : undefined,
-  })
+  const { data: communeOfBirthData = [] } = useFindManyDM_XaPhuong(
+    {
+      where: { sDM_QuanHuyenId: watchedDistrictOfBirthId },
+    },
+    { enabled: !!watchedDistrictOfBirthId }
+  )
 
-  const { data: communeHometownData = [] } = useFindManyDM_XaPhuong({
-    where: watchedDistrictHometownId ? { sDM_QuanHuyenId: watchedDistrictHometownId } : undefined,
-  })
+  const { data: communeHometownData = [] } = useFindManyDM_XaPhuong(
+    {
+      where: { sDM_QuanHuyenId: watchedDistrictHometownId },
+    },
+    { enabled: !!watchedDistrictHometownId }
+  )
 
   const router = useRouter()
   const { data: session } = useSession()
@@ -216,6 +236,13 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                 },
               ]}
               className="mb-0"
+              getValueFromEvent={(e) => {
+                const value = e.target.value
+                if (form.getFieldValue("bLaGiangVien")) {
+                  form.setFieldValue("lectureCode", value)
+                }
+                return value
+              }}
             >
               <Input placeholder="Nhập mã" className="h-9" />
             </FormItem>
@@ -408,6 +435,14 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                 label=""
                 valuePropName="checked"
                 className="mb-0 mr-4"
+                getValueFromEvent={(e) => {
+                  const checked = e.target.checked
+                  if (checked) {
+                    const currentCode = form.getFieldValue("code")
+                    if (currentCode) form.setFieldValue("lectureCode", currentCode)
+                  }
+                  return checked
+                }}
               >
                 <Checkbox>Bạn là giảng viên</Checkbox>
               </FormItem>
@@ -477,6 +512,11 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                   name="lectureCode"
                   label="Mã định danh"
                   className="mb-0"
+                  getValueFromEvent={(e) => {
+                    const value = e.target.value
+                    form.setFieldValue("code", value)
+                    return value
+                  }}
                 >
                   <Input placeholder="Nhập Mã định danh" className="h-9" />
                 </FormItem>
@@ -637,7 +677,12 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
               <Select
                 allowClear
                 showSearch
-                placeholder="Chọn xã/phường/thị trấn"
+                disabled={!watchedNewProvinceOfBirthId}
+                placeholder={
+                  watchedNewProvinceOfBirthId
+                    ? "Chọn xã/phường/thị trấn"
+                    : "Chọn tỉnh/thành phố trước"
+                }
                 className="h-9"
                 options={newCommuneOfBirthData.map((i) => ({
                   value: i.Id,
@@ -692,7 +737,10 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
               <Select
                 allowClear
                 showSearch
-                placeholder="Chọn quận/huyện"
+                disabled={!watchedProvinceOfBirthId}
+                placeholder={
+                  watchedProvinceOfBirthId ? "Chọn quận/huyện" : "Chọn tỉnh/thành phố trước"
+                }
                 className="h-9"
                 onChange={() => {
                   form.setFieldValue("communeOfBirthId", null)
@@ -720,7 +768,10 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
               <Select
                 allowClear
                 showSearch
-                placeholder="Chọn xã/phường/thị trấn"
+                disabled={!watchedDistrictOfBirthId}
+                placeholder={
+                  watchedDistrictOfBirthId ? "Chọn xã/phường/thị trấn" : "Chọn quận/huyện trước"
+                }
                 className="h-9"
                 options={communeOfBirthData.map((i) => ({
                   value: i.Id,
@@ -776,7 +827,12 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
               <Select
                 allowClear
                 showSearch
-                placeholder="Chọn xã/phường/thị trấn"
+                disabled={!watchedNewProvinceHometownId}
+                placeholder={
+                  watchedNewProvinceHometownId
+                    ? "Chọn xã/phường/thị trấn"
+                    : "Chọn tỉnh/thành phố trước"
+                }
                 className="h-9"
                 options={newCommuneHometownData.map((i) => ({
                   value: i.Id,
@@ -831,7 +887,10 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
               <Select
                 allowClear
                 showSearch
-                placeholder="Chọn quận/huyện"
+                disabled={!watchedProvinceHometownId}
+                placeholder={
+                  watchedProvinceHometownId ? "Chọn quận/huyện" : "Chọn tỉnh/thành phố trước"
+                }
                 className="h-9"
                 onChange={() => {
                   form.setFieldValue("communeHometownId", null)
@@ -859,7 +918,10 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
               <Select
                 allowClear
                 showSearch
-                placeholder="Chọn xã/phường/thị trấn"
+                disabled={!watchedDistrictHometownId}
+                placeholder={
+                  watchedDistrictHometownId ? "Chọn xã/phường/thị trấn" : "Chọn quận/huyện trước"
+                }
                 className="h-9"
                 options={communeHometownData.map((i) => ({
                   value: i.Id,
@@ -914,7 +976,12 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
               <Select
                 allowClear
                 showSearch
-                placeholder="Chọn xã/phường/thị trấn"
+                disabled={!watchedNewProvinceCurrentAddressId}
+                placeholder={
+                  watchedNewProvinceCurrentAddressId
+                    ? "Chọn xã/phường/thị trấn"
+                    : "Chọn tỉnh/thành phố trước"
+                }
                 className="h-9"
                 options={newCommuneCurrentAddressData.map((i) => ({
                   value: i.Id,
@@ -969,7 +1036,10 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
               <Select
                 allowClear
                 showSearch
-                placeholder="Chọn quận/huyện"
+                disabled={!watchedProvinceCurrentAddressId}
+                placeholder={
+                  watchedProvinceCurrentAddressId ? "Chọn quận/huyện" : "Chọn tỉnh/thành phố trước"
+                }
                 className="h-9"
                 onChange={() => {
                   form.setFieldValue("communeCurrentAddressId", null)
@@ -997,7 +1067,12 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
               <Select
                 allowClear
                 showSearch
-                placeholder="Chọn xã/phường/thị trấn"
+                disabled={!watchedDistrictCurrentAddressId}
+                placeholder={
+                  watchedDistrictCurrentAddressId
+                    ? "Chọn xã/phường/thị trấn"
+                    : "Chọn quận/huyện trước"
+                }
                 className="h-9"
                 options={communeCurrentAddressData.map((i) => ({
                   value: i.Id,
@@ -1073,7 +1148,12 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
               <Select
                 allowClear
                 showSearch
-                placeholder="Chọn xã/phường/thị trấn"
+                disabled={!watchedNewProvincePermanentAddressId}
+                placeholder={
+                  watchedNewProvincePermanentAddressId
+                    ? "Chọn xã/phường/thị trấn"
+                    : "Chọn tỉnh/thành phố trước"
+                }
                 className="h-9"
                 options={newCommunePermanentAddressData.map((i) => ({
                   value: i.Id,
@@ -1128,7 +1208,10 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
               <Select
                 allowClear
                 showSearch
-                placeholder="Chọn quận/huyện"
+                disabled={!watchedProvincePermanentAddressId}
+                placeholder={
+                  watchedProvincePermanentAddressId ? "Chọn quận/huyện" : "Chọn tỉnh/thành phố trước"
+                }
                 className="h-9"
                 onChange={() => {
                   form.setFieldValue("communePermanentAddressId", null)
@@ -1156,7 +1239,12 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
               <Select
                 allowClear
                 showSearch
-                placeholder="Chọn xã/phường/thị trấn"
+                disabled={!watchedDistrictPermanentAddressId}
+                placeholder={
+                  watchedDistrictPermanentAddressId
+                    ? "Chọn xã/phường/thị trấn"
+                    : "Chọn quận/huyện trước"
+                }
                 className="h-9"
                 options={communePermanentAddressData.map((i) => ({
                   value: i.Id,

@@ -53,7 +53,7 @@ import { emptyObjectIf } from "@workspace/constant"
 import type { Prisma } from "@workspace/db"
 import { useCreateLecturer, useCreateStaff, useUpsertUserProfile } from "@workspace/db/hooks"
 import { buildLsbNhanVienPayload, getLsbErrorMessage } from "@lib/lsb-nhan-vien"
-import { toHocHamCreateInput, toHocViCreateInput } from "@lib/utils"
+import { toHocHamCreateInput, toHocViCreateInput, toNullableISO } from "@lib/utils"
 import { postDMNhanViens } from "@workspace/libs/api/system"
 import { getRuntimeEnv } from "@workspace/libs/utils"
 import { useAbility } from "@workspace/permissions/hooks"
@@ -511,10 +511,11 @@ export default function CreateUserPage() {
     try {
       showSpinner()
       const donViId = values.sDM_DonViId || organizationId || null
+      const profileCode = (values.code || lectureCode)?.trim()
       const res = await postDMNhanViens(
         buildLsbNhanVienPayload({
           donViId,
-          code: values.code,
+          code: profileCode,
           lastName: values.lastName,
           firstName: values.firstName,
           genderId: values.genderId,
@@ -570,7 +571,7 @@ export default function CreateUserPage() {
         }
         const profileData = {
           ...values,
-          code: values.code || lectureCode,
+          code: profileCode,
           lastName: values.lastName?.trim(),
           firstName: values.firstName?.trim(),
           id: res?.data?.Id,
@@ -580,6 +581,7 @@ export default function CreateUserPage() {
           sDM_DonViId: donViId,
           dateOfBirth: values.dateOfBirth ? dayjs(values.dateOfBirth).toISOString() : null,
           idCardDate: values.idCardDate ? dayjs(values.idCardDate).toISOString() : null,
+          idCardExpirationDate: toNullableISO(values.idCardExpirationDate),
           unionDate: values.unionDate ? dayjs(values.unionDate).toISOString() : null,
           CPVJoinDate: values.CPVJoinDate ? dayjs(values.CPVJoinDate).toISOString() : null,
           officialCPVDate: values.officialCPVDate
@@ -594,7 +596,7 @@ export default function CreateUserPage() {
         }
 
         const resProfile = await upsertUserProfile({
-          where: { code: values.code ?? undefined },
+          where: { code: profileCode ?? undefined },
           create: {
             ...profileData,
             ...emptyObjectIf(
