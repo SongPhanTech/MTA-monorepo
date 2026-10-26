@@ -175,8 +175,8 @@ export function resolveCouncilMemberUnitName(args: {
   return "Học viện KTQS"
 }
 
-export function normalizeVietnamese(str: string): string {
-  return str
+export function normalizeVietnamese(str: string | unknown): string {
+  return String(str ?? "")
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/đ/g, "d")
