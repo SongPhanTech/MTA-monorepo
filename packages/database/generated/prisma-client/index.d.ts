@@ -31113,6 +31113,7 @@ export namespace Prisma {
     subjectClassHistory: number
     examBank: number
     subjectClassAttendances: number
+    documentFiles: number
   }
 
   export type SubjectClassCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -31130,6 +31131,7 @@ export namespace Prisma {
     subjectClassHistory?: boolean | SubjectClassCountOutputTypeCountSubjectClassHistoryArgs
     examBank?: boolean | SubjectClassCountOutputTypeCountExamBankArgs
     subjectClassAttendances?: boolean | SubjectClassCountOutputTypeCountSubjectClassAttendancesArgs
+    documentFiles?: boolean | SubjectClassCountOutputTypeCountDocumentFilesArgs
   }
 
   // Custom InputTypes
@@ -31239,6 +31241,13 @@ export namespace Prisma {
    */
   export type SubjectClassCountOutputTypeCountSubjectClassAttendancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SubjectClassAttendanceWhereInput
+  }
+
+  /**
+   * SubjectClassCountOutputType without action
+   */
+  export type SubjectClassCountOutputTypeCountDocumentFilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DocumentFileWhereInput
   }
 
 
@@ -181946,6 +181955,7 @@ export namespace Prisma {
     subjectClassHistory?: boolean | SubjectClass$subjectClassHistoryArgs<ExtArgs>
     examBank?: boolean | SubjectClass$examBankArgs<ExtArgs>
     subjectClassAttendances?: boolean | SubjectClass$subjectClassAttendancesArgs<ExtArgs>
+    documentFiles?: boolean | SubjectClass$documentFilesArgs<ExtArgs>
     _count?: boolean | SubjectClassCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["subjectClass"]>
 
@@ -182157,6 +182167,7 @@ export namespace Prisma {
     subjectClassHistory?: boolean | SubjectClass$subjectClassHistoryArgs<ExtArgs>
     examBank?: boolean | SubjectClass$examBankArgs<ExtArgs>
     subjectClassAttendances?: boolean | SubjectClass$subjectClassAttendancesArgs<ExtArgs>
+    documentFiles?: boolean | SubjectClass$documentFilesArgs<ExtArgs>
     _count?: boolean | SubjectClassCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SubjectClassIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -182211,6 +182222,7 @@ export namespace Prisma {
       subjectClassHistory: Prisma.$SubjectClassHistoryPayload<ExtArgs>[]
       examBank: Prisma.$ExamBankPayload<ExtArgs>[]
       subjectClassAttendances: Prisma.$SubjectClassAttendancePayload<ExtArgs>[]
+      documentFiles: Prisma.$DocumentFilePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -182703,6 +182715,7 @@ export namespace Prisma {
     subjectClassHistory<T extends SubjectClass$subjectClassHistoryArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClass$subjectClassHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectClassHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     examBank<T extends SubjectClass$examBankArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClass$examBankArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamBankPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     subjectClassAttendances<T extends SubjectClass$subjectClassAttendancesArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClass$subjectClassAttendancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectClassAttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    documentFiles<T extends SubjectClass$documentFilesArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClass$documentFilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentFilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -183645,6 +183658,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SubjectClassAttendanceScalarFieldEnum | SubjectClassAttendanceScalarFieldEnum[]
+  }
+
+  /**
+   * SubjectClass.documentFiles
+   */
+  export type SubjectClass$documentFilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentFile
+     */
+    select?: DocumentFileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DocumentFile
+     */
+    omit?: DocumentFileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentFileInclude<ExtArgs> | null
+    where?: DocumentFileWhereInput
+    orderBy?: DocumentFileOrderByWithRelationInput | DocumentFileOrderByWithRelationInput[]
+    cursor?: DocumentFileWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DocumentFileScalarFieldEnum | DocumentFileScalarFieldEnum[]
   }
 
   /**
@@ -276067,6 +276104,7 @@ export namespace Prisma {
     curriculumId: string | null
     curriculumVersionId: string | null
     subjectVersionId: string | null
+    subjectClassId: string | null
     studentAcademicDecisionId: string | null
     notificationId: string | null
     decisionId: string | null
@@ -276111,6 +276149,7 @@ export namespace Prisma {
     curriculumId: string | null
     curriculumVersionId: string | null
     subjectVersionId: string | null
+    subjectClassId: string | null
     studentAcademicDecisionId: string | null
     notificationId: string | null
     decisionId: string | null
@@ -276155,6 +276194,7 @@ export namespace Prisma {
     curriculumId: number
     curriculumVersionId: number
     subjectVersionId: number
+    subjectClassId: number
     studentAcademicDecisionId: number
     notificationId: number
     decisionId: number
@@ -276209,6 +276249,7 @@ export namespace Prisma {
     curriculumId?: true
     curriculumVersionId?: true
     subjectVersionId?: true
+    subjectClassId?: true
     studentAcademicDecisionId?: true
     notificationId?: true
     decisionId?: true
@@ -276253,6 +276294,7 @@ export namespace Prisma {
     curriculumId?: true
     curriculumVersionId?: true
     subjectVersionId?: true
+    subjectClassId?: true
     studentAcademicDecisionId?: true
     notificationId?: true
     decisionId?: true
@@ -276297,6 +276339,7 @@ export namespace Prisma {
     curriculumId?: true
     curriculumVersionId?: true
     subjectVersionId?: true
+    subjectClassId?: true
     studentAcademicDecisionId?: true
     notificationId?: true
     decisionId?: true
@@ -276428,6 +276471,7 @@ export namespace Prisma {
     curriculumId: string | null
     curriculumVersionId: string | null
     subjectVersionId: string | null
+    subjectClassId: string | null
     studentAcademicDecisionId: string | null
     notificationId: string | null
     decisionId: string | null
@@ -276491,6 +276535,7 @@ export namespace Prisma {
     curriculumId?: boolean
     curriculumVersionId?: boolean
     subjectVersionId?: boolean
+    subjectClassId?: boolean
     studentAcademicDecisionId?: boolean
     notificationId?: boolean
     decisionId?: boolean
@@ -276514,6 +276559,7 @@ export namespace Prisma {
     curriculum?: boolean | DocumentFile$curriculumArgs<ExtArgs>
     curriculumVersion?: boolean | DocumentFile$curriculumVersionArgs<ExtArgs>
     subjectVersion?: boolean | DocumentFile$subjectVersionArgs<ExtArgs>
+    subjectClass?: boolean | DocumentFile$subjectClassArgs<ExtArgs>
     studentAcademicDecision?: boolean | DocumentFile$studentAcademicDecisionArgs<ExtArgs>
     notification?: boolean | DocumentFile$notificationArgs<ExtArgs>
     decision?: boolean | DocumentFile$decisionArgs<ExtArgs>
@@ -276558,6 +276604,7 @@ export namespace Prisma {
     curriculumId?: boolean
     curriculumVersionId?: boolean
     subjectVersionId?: boolean
+    subjectClassId?: boolean
     studentAcademicDecisionId?: boolean
     notificationId?: boolean
     decisionId?: boolean
@@ -276581,6 +276628,7 @@ export namespace Prisma {
     curriculum?: boolean | DocumentFile$curriculumArgs<ExtArgs>
     curriculumVersion?: boolean | DocumentFile$curriculumVersionArgs<ExtArgs>
     subjectVersion?: boolean | DocumentFile$subjectVersionArgs<ExtArgs>
+    subjectClass?: boolean | DocumentFile$subjectClassArgs<ExtArgs>
     studentAcademicDecision?: boolean | DocumentFile$studentAcademicDecisionArgs<ExtArgs>
     notification?: boolean | DocumentFile$notificationArgs<ExtArgs>
     decision?: boolean | DocumentFile$decisionArgs<ExtArgs>
@@ -276625,6 +276673,7 @@ export namespace Prisma {
     curriculumId?: boolean
     curriculumVersionId?: boolean
     subjectVersionId?: boolean
+    subjectClassId?: boolean
     studentAcademicDecisionId?: boolean
     notificationId?: boolean
     decisionId?: boolean
@@ -276648,6 +276697,7 @@ export namespace Prisma {
     curriculum?: boolean | DocumentFile$curriculumArgs<ExtArgs>
     curriculumVersion?: boolean | DocumentFile$curriculumVersionArgs<ExtArgs>
     subjectVersion?: boolean | DocumentFile$subjectVersionArgs<ExtArgs>
+    subjectClass?: boolean | DocumentFile$subjectClassArgs<ExtArgs>
     studentAcademicDecision?: boolean | DocumentFile$studentAcademicDecisionArgs<ExtArgs>
     notification?: boolean | DocumentFile$notificationArgs<ExtArgs>
     decision?: boolean | DocumentFile$decisionArgs<ExtArgs>
@@ -276692,6 +276742,7 @@ export namespace Prisma {
     curriculumId?: boolean
     curriculumVersionId?: boolean
     subjectVersionId?: boolean
+    subjectClassId?: boolean
     studentAcademicDecisionId?: boolean
     notificationId?: boolean
     decisionId?: boolean
@@ -276711,7 +276762,7 @@ export namespace Prisma {
     knowledgeBlockId?: boolean
   }
 
-  export type DocumentFileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "sNguoiTao" | "sNguoiSua" | "dNgayTao" | "dNgaySua" | "sThietBiTao" | "sThietBiSua" | "name" | "path" | "size" | "mimeType" | "archivedCertificateId" | "trainingCourseId" | "archivedAwardId" | "curriculumId" | "curriculumVersionId" | "subjectVersionId" | "studentAcademicDecisionId" | "notificationId" | "decisionId" | "defenseRecordId" | "librarySubmissionId" | "diplomaFrontId" | "diplomaBackId" | "diplomaVerificationId" | "diplomaVerificationFrontId" | "diplomaVerificationBackId" | "trainingFieldId" | "studentScoreConvertId" | "scoreLinkSheetId" | "examFrameworkId" | "noteId" | "evaluationPeriodId" | "knowledgeBlockId", ExtArgs["result"]["documentFile"]>
+  export type DocumentFileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "sNguoiTao" | "sNguoiSua" | "dNgayTao" | "dNgaySua" | "sThietBiTao" | "sThietBiSua" | "name" | "path" | "size" | "mimeType" | "archivedCertificateId" | "trainingCourseId" | "archivedAwardId" | "curriculumId" | "curriculumVersionId" | "subjectVersionId" | "subjectClassId" | "studentAcademicDecisionId" | "notificationId" | "decisionId" | "defenseRecordId" | "librarySubmissionId" | "diplomaFrontId" | "diplomaBackId" | "diplomaVerificationId" | "diplomaVerificationFrontId" | "diplomaVerificationBackId" | "trainingFieldId" | "studentScoreConvertId" | "scoreLinkSheetId" | "examFrameworkId" | "noteId" | "evaluationPeriodId" | "knowledgeBlockId", ExtArgs["result"]["documentFile"]>
   export type DocumentFileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     archivedCertificate?: boolean | DocumentFile$archivedCertificateArgs<ExtArgs>
     trainingCourse?: boolean | DocumentFile$trainingCourseArgs<ExtArgs>
@@ -276719,6 +276770,7 @@ export namespace Prisma {
     curriculum?: boolean | DocumentFile$curriculumArgs<ExtArgs>
     curriculumVersion?: boolean | DocumentFile$curriculumVersionArgs<ExtArgs>
     subjectVersion?: boolean | DocumentFile$subjectVersionArgs<ExtArgs>
+    subjectClass?: boolean | DocumentFile$subjectClassArgs<ExtArgs>
     studentAcademicDecision?: boolean | DocumentFile$studentAcademicDecisionArgs<ExtArgs>
     notification?: boolean | DocumentFile$notificationArgs<ExtArgs>
     decision?: boolean | DocumentFile$decisionArgs<ExtArgs>
@@ -276744,6 +276796,7 @@ export namespace Prisma {
     curriculum?: boolean | DocumentFile$curriculumArgs<ExtArgs>
     curriculumVersion?: boolean | DocumentFile$curriculumVersionArgs<ExtArgs>
     subjectVersion?: boolean | DocumentFile$subjectVersionArgs<ExtArgs>
+    subjectClass?: boolean | DocumentFile$subjectClassArgs<ExtArgs>
     studentAcademicDecision?: boolean | DocumentFile$studentAcademicDecisionArgs<ExtArgs>
     notification?: boolean | DocumentFile$notificationArgs<ExtArgs>
     decision?: boolean | DocumentFile$decisionArgs<ExtArgs>
@@ -276769,6 +276822,7 @@ export namespace Prisma {
     curriculum?: boolean | DocumentFile$curriculumArgs<ExtArgs>
     curriculumVersion?: boolean | DocumentFile$curriculumVersionArgs<ExtArgs>
     subjectVersion?: boolean | DocumentFile$subjectVersionArgs<ExtArgs>
+    subjectClass?: boolean | DocumentFile$subjectClassArgs<ExtArgs>
     studentAcademicDecision?: boolean | DocumentFile$studentAcademicDecisionArgs<ExtArgs>
     notification?: boolean | DocumentFile$notificationArgs<ExtArgs>
     decision?: boolean | DocumentFile$decisionArgs<ExtArgs>
@@ -276797,6 +276851,7 @@ export namespace Prisma {
       curriculum: Prisma.$CurriculumPayload<ExtArgs> | null
       curriculumVersion: Prisma.$CurriculumVersionPayload<ExtArgs> | null
       subjectVersion: Prisma.$SubjectVersionPayload<ExtArgs> | null
+      subjectClass: Prisma.$SubjectClassPayload<ExtArgs> | null
       studentAcademicDecision: Prisma.$StudentAcademicDecisionPayload<ExtArgs> | null
       notification: Prisma.$NotificationPayload<ExtArgs> | null
       decision: Prisma.$DecisionPayload<ExtArgs> | null
@@ -276840,6 +276895,7 @@ export namespace Prisma {
       curriculumId: string | null
       curriculumVersionId: string | null
       subjectVersionId: string | null
+      subjectClassId: string | null
       studentAcademicDecisionId: string | null
       notificationId: string | null
       decisionId: string | null
@@ -277257,6 +277313,7 @@ export namespace Prisma {
     curriculum<T extends DocumentFile$curriculumArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$curriculumArgs<ExtArgs>>): Prisma__CurriculumClient<$Result.GetResult<Prisma.$CurriculumPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     curriculumVersion<T extends DocumentFile$curriculumVersionArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$curriculumVersionArgs<ExtArgs>>): Prisma__CurriculumVersionClient<$Result.GetResult<Prisma.$CurriculumVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     subjectVersion<T extends DocumentFile$subjectVersionArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$subjectVersionArgs<ExtArgs>>): Prisma__SubjectVersionClient<$Result.GetResult<Prisma.$SubjectVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    subjectClass<T extends DocumentFile$subjectClassArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$subjectClassArgs<ExtArgs>>): Prisma__SubjectClassClient<$Result.GetResult<Prisma.$SubjectClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     studentAcademicDecision<T extends DocumentFile$studentAcademicDecisionArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$studentAcademicDecisionArgs<ExtArgs>>): Prisma__StudentAcademicDecisionClient<$Result.GetResult<Prisma.$StudentAcademicDecisionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     notification<T extends DocumentFile$notificationArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$notificationArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     decision<T extends DocumentFile$decisionArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$decisionArgs<ExtArgs>>): Prisma__DecisionClient<$Result.GetResult<Prisma.$DecisionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -277327,6 +277384,7 @@ export namespace Prisma {
     readonly curriculumId: FieldRef<"DocumentFile", 'String'>
     readonly curriculumVersionId: FieldRef<"DocumentFile", 'String'>
     readonly subjectVersionId: FieldRef<"DocumentFile", 'String'>
+    readonly subjectClassId: FieldRef<"DocumentFile", 'String'>
     readonly studentAcademicDecisionId: FieldRef<"DocumentFile", 'String'>
     readonly notificationId: FieldRef<"DocumentFile", 'String'>
     readonly decisionId: FieldRef<"DocumentFile", 'String'>
@@ -277851,6 +277909,25 @@ export namespace Prisma {
      */
     include?: SubjectVersionInclude<ExtArgs> | null
     where?: SubjectVersionWhereInput
+  }
+
+  /**
+   * DocumentFile.subjectClass
+   */
+  export type DocumentFile$subjectClassArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubjectClass
+     */
+    select?: SubjectClassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubjectClass
+     */
+    omit?: SubjectClassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubjectClassInclude<ExtArgs> | null
+    where?: SubjectClassWhereInput
   }
 
   /**
@@ -427806,6 +427883,7 @@ export namespace Prisma {
     curriculumId: 'curriculumId',
     curriculumVersionId: 'curriculumVersionId',
     subjectVersionId: 'subjectVersionId',
+    subjectClassId: 'subjectClassId',
     studentAcademicDecisionId: 'studentAcademicDecisionId',
     notificationId: 'notificationId',
     decisionId: 'decisionId',
@@ -433749,6 +433827,7 @@ export namespace Prisma {
     curriculumId: 'curriculumId',
     curriculumVersionId: 'curriculumVersionId',
     subjectVersionId: 'subjectVersionId',
+    subjectClassId: 'subjectClassId',
     studentAcademicDecisionId: 'studentAcademicDecisionId',
     notificationId: 'notificationId',
     decisionId: 'decisionId',
@@ -452093,6 +452172,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryListRelationFilter
     examBank?: ExamBankListRelationFilter
     subjectClassAttendances?: SubjectClassAttendanceListRelationFilter
+    documentFiles?: DocumentFileListRelationFilter
   }
 
   export type SubjectClassOrderByWithRelationInput = {
@@ -452171,6 +452251,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryOrderByRelationAggregateInput
     examBank?: ExamBankOrderByRelationAggregateInput
     subjectClassAttendances?: SubjectClassAttendanceOrderByRelationAggregateInput
+    documentFiles?: DocumentFileOrderByRelationAggregateInput
     _relevance?: SubjectClassOrderByRelevanceInput
   }
 
@@ -452253,6 +452334,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryListRelationFilter
     examBank?: ExamBankListRelationFilter
     subjectClassAttendances?: SubjectClassAttendanceListRelationFilter
+    documentFiles?: DocumentFileListRelationFilter
   }, "id" | "scoreLinkSubjectVersionId">
 
   export type SubjectClassOrderByWithAggregationInput = {
@@ -462286,6 +462368,7 @@ export namespace Prisma {
     curriculumId?: StringNullableFilter<"DocumentFile"> | string | null
     curriculumVersionId?: StringNullableFilter<"DocumentFile"> | string | null
     subjectVersionId?: StringNullableFilter<"DocumentFile"> | string | null
+    subjectClassId?: StringNullableFilter<"DocumentFile"> | string | null
     studentAcademicDecisionId?: StringNullableFilter<"DocumentFile"> | string | null
     notificationId?: StringNullableFilter<"DocumentFile"> | string | null
     decisionId?: StringNullableFilter<"DocumentFile"> | string | null
@@ -462309,6 +462392,7 @@ export namespace Prisma {
     curriculum?: XOR<CurriculumNullableScalarRelationFilter, CurriculumWhereInput> | null
     curriculumVersion?: XOR<CurriculumVersionNullableScalarRelationFilter, CurriculumVersionWhereInput> | null
     subjectVersion?: XOR<SubjectVersionNullableScalarRelationFilter, SubjectVersionWhereInput> | null
+    subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
     studentAcademicDecision?: XOR<StudentAcademicDecisionNullableScalarRelationFilter, StudentAcademicDecisionWhereInput> | null
     notification?: XOR<NotificationNullableScalarRelationFilter, NotificationWhereInput> | null
     decision?: XOR<DecisionNullableScalarRelationFilter, DecisionWhereInput> | null
@@ -462353,6 +462437,7 @@ export namespace Prisma {
     curriculumId?: SortOrderInput | SortOrder
     curriculumVersionId?: SortOrderInput | SortOrder
     subjectVersionId?: SortOrderInput | SortOrder
+    subjectClassId?: SortOrderInput | SortOrder
     studentAcademicDecisionId?: SortOrderInput | SortOrder
     notificationId?: SortOrderInput | SortOrder
     decisionId?: SortOrderInput | SortOrder
@@ -462376,6 +462461,7 @@ export namespace Prisma {
     curriculum?: CurriculumOrderByWithRelationInput
     curriculumVersion?: CurriculumVersionOrderByWithRelationInput
     subjectVersion?: SubjectVersionOrderByWithRelationInput
+    subjectClass?: SubjectClassOrderByWithRelationInput
     studentAcademicDecision?: StudentAcademicDecisionOrderByWithRelationInput
     notification?: NotificationOrderByWithRelationInput
     decision?: DecisionOrderByWithRelationInput
@@ -462429,6 +462515,7 @@ export namespace Prisma {
     curriculumId?: StringNullableFilter<"DocumentFile"> | string | null
     curriculumVersionId?: StringNullableFilter<"DocumentFile"> | string | null
     subjectVersionId?: StringNullableFilter<"DocumentFile"> | string | null
+    subjectClassId?: StringNullableFilter<"DocumentFile"> | string | null
     studentAcademicDecisionId?: StringNullableFilter<"DocumentFile"> | string | null
     notificationId?: StringNullableFilter<"DocumentFile"> | string | null
     decisionId?: StringNullableFilter<"DocumentFile"> | string | null
@@ -462447,6 +462534,7 @@ export namespace Prisma {
     curriculum?: XOR<CurriculumNullableScalarRelationFilter, CurriculumWhereInput> | null
     curriculumVersion?: XOR<CurriculumVersionNullableScalarRelationFilter, CurriculumVersionWhereInput> | null
     subjectVersion?: XOR<SubjectVersionNullableScalarRelationFilter, SubjectVersionWhereInput> | null
+    subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
     studentAcademicDecision?: XOR<StudentAcademicDecisionNullableScalarRelationFilter, StudentAcademicDecisionWhereInput> | null
     notification?: XOR<NotificationNullableScalarRelationFilter, NotificationWhereInput> | null
     decision?: XOR<DecisionNullableScalarRelationFilter, DecisionWhereInput> | null
@@ -462491,6 +462579,7 @@ export namespace Prisma {
     curriculumId?: SortOrderInput | SortOrder
     curriculumVersionId?: SortOrderInput | SortOrder
     subjectVersionId?: SortOrderInput | SortOrder
+    subjectClassId?: SortOrderInput | SortOrder
     studentAcademicDecisionId?: SortOrderInput | SortOrder
     notificationId?: SortOrderInput | SortOrder
     decisionId?: SortOrderInput | SortOrder
@@ -462543,6 +462632,7 @@ export namespace Prisma {
     curriculumId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
     curriculumVersionId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
     subjectVersionId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
+    subjectClassId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
     studentAcademicDecisionId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
     notificationId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
     decisionId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
@@ -495355,6 +495445,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateInput = {
@@ -495423,6 +495514,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUpdateInput = {
@@ -495491,6 +495583,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateInput = {
@@ -495559,6 +495652,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassCreateManyInput = {
@@ -507628,6 +507722,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -507672,6 +507767,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -507716,6 +507812,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -507760,6 +507857,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -507804,6 +507902,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -507869,6 +507968,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -543545,6 +543645,7 @@ export namespace Prisma {
     curriculumId?: SortOrder
     curriculumVersionId?: SortOrder
     subjectVersionId?: SortOrder
+    subjectClassId?: SortOrder
     studentAcademicDecisionId?: SortOrder
     notificationId?: SortOrder
     decisionId?: SortOrder
@@ -543593,6 +543694,7 @@ export namespace Prisma {
     curriculumId?: SortOrder
     curriculumVersionId?: SortOrder
     subjectVersionId?: SortOrder
+    subjectClassId?: SortOrder
     studentAcademicDecisionId?: SortOrder
     notificationId?: SortOrder
     decisionId?: SortOrder
@@ -543637,6 +543739,7 @@ export namespace Prisma {
     curriculumId?: SortOrder
     curriculumVersionId?: SortOrder
     subjectVersionId?: SortOrder
+    subjectClassId?: SortOrder
     studentAcademicDecisionId?: SortOrder
     notificationId?: SortOrder
     decisionId?: SortOrder
@@ -566198,6 +566301,13 @@ export namespace Prisma {
     connect?: SubjectClassAttendanceWhereUniqueInput | SubjectClassAttendanceWhereUniqueInput[]
   }
 
+  export type DocumentFileCreateNestedManyWithoutSubjectClassInput = {
+    create?: XOR<DocumentFileCreateWithoutSubjectClassInput, DocumentFileUncheckedCreateWithoutSubjectClassInput> | DocumentFileCreateWithoutSubjectClassInput[] | DocumentFileUncheckedCreateWithoutSubjectClassInput[]
+    connectOrCreate?: DocumentFileCreateOrConnectWithoutSubjectClassInput | DocumentFileCreateOrConnectWithoutSubjectClassInput[]
+    createMany?: DocumentFileCreateManySubjectClassInputEnvelope
+    connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+  }
+
   export type StudentSubjectScoreUncheckedCreateNestedManyWithoutSubjectClassInput = {
     create?: XOR<StudentSubjectScoreCreateWithoutSubjectClassInput, StudentSubjectScoreUncheckedCreateWithoutSubjectClassInput> | StudentSubjectScoreCreateWithoutSubjectClassInput[] | StudentSubjectScoreUncheckedCreateWithoutSubjectClassInput[]
     connectOrCreate?: StudentSubjectScoreCreateOrConnectWithoutSubjectClassInput | StudentSubjectScoreCreateOrConnectWithoutSubjectClassInput[]
@@ -566290,6 +566400,13 @@ export namespace Prisma {
     connectOrCreate?: SubjectClassAttendanceCreateOrConnectWithoutSubjectClassInput | SubjectClassAttendanceCreateOrConnectWithoutSubjectClassInput[]
     createMany?: SubjectClassAttendanceCreateManySubjectClassInputEnvelope
     connect?: SubjectClassAttendanceWhereUniqueInput | SubjectClassAttendanceWhereUniqueInput[]
+  }
+
+  export type DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput = {
+    create?: XOR<DocumentFileCreateWithoutSubjectClassInput, DocumentFileUncheckedCreateWithoutSubjectClassInput> | DocumentFileCreateWithoutSubjectClassInput[] | DocumentFileUncheckedCreateWithoutSubjectClassInput[]
+    connectOrCreate?: DocumentFileCreateOrConnectWithoutSubjectClassInput | DocumentFileCreateOrConnectWithoutSubjectClassInput[]
+    createMany?: DocumentFileCreateManySubjectClassInputEnvelope
+    connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
   }
 
   export type NullableEnumSubjectClassScheduleFieldUpdateOperationsInput = {
@@ -566586,6 +566703,20 @@ export namespace Prisma {
     deleteMany?: SubjectClassAttendanceScalarWhereInput | SubjectClassAttendanceScalarWhereInput[]
   }
 
+  export type DocumentFileUpdateManyWithoutSubjectClassNestedInput = {
+    create?: XOR<DocumentFileCreateWithoutSubjectClassInput, DocumentFileUncheckedCreateWithoutSubjectClassInput> | DocumentFileCreateWithoutSubjectClassInput[] | DocumentFileUncheckedCreateWithoutSubjectClassInput[]
+    connectOrCreate?: DocumentFileCreateOrConnectWithoutSubjectClassInput | DocumentFileCreateOrConnectWithoutSubjectClassInput[]
+    upsert?: DocumentFileUpsertWithWhereUniqueWithoutSubjectClassInput | DocumentFileUpsertWithWhereUniqueWithoutSubjectClassInput[]
+    createMany?: DocumentFileCreateManySubjectClassInputEnvelope
+    set?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+    disconnect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+    delete?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+    connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+    update?: DocumentFileUpdateWithWhereUniqueWithoutSubjectClassInput | DocumentFileUpdateWithWhereUniqueWithoutSubjectClassInput[]
+    updateMany?: DocumentFileUpdateManyWithWhereWithoutSubjectClassInput | DocumentFileUpdateManyWithWhereWithoutSubjectClassInput[]
+    deleteMany?: DocumentFileScalarWhereInput | DocumentFileScalarWhereInput[]
+  }
+
   export type StudentSubjectScoreUncheckedUpdateManyWithoutSubjectClassNestedInput = {
     create?: XOR<StudentSubjectScoreCreateWithoutSubjectClassInput, StudentSubjectScoreUncheckedCreateWithoutSubjectClassInput> | StudentSubjectScoreCreateWithoutSubjectClassInput[] | StudentSubjectScoreUncheckedCreateWithoutSubjectClassInput[]
     connectOrCreate?: StudentSubjectScoreCreateOrConnectWithoutSubjectClassInput | StudentSubjectScoreCreateOrConnectWithoutSubjectClassInput[]
@@ -566776,6 +566907,20 @@ export namespace Prisma {
     update?: SubjectClassAttendanceUpdateWithWhereUniqueWithoutSubjectClassInput | SubjectClassAttendanceUpdateWithWhereUniqueWithoutSubjectClassInput[]
     updateMany?: SubjectClassAttendanceUpdateManyWithWhereWithoutSubjectClassInput | SubjectClassAttendanceUpdateManyWithWhereWithoutSubjectClassInput[]
     deleteMany?: SubjectClassAttendanceScalarWhereInput | SubjectClassAttendanceScalarWhereInput[]
+  }
+
+  export type DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput = {
+    create?: XOR<DocumentFileCreateWithoutSubjectClassInput, DocumentFileUncheckedCreateWithoutSubjectClassInput> | DocumentFileCreateWithoutSubjectClassInput[] | DocumentFileUncheckedCreateWithoutSubjectClassInput[]
+    connectOrCreate?: DocumentFileCreateOrConnectWithoutSubjectClassInput | DocumentFileCreateOrConnectWithoutSubjectClassInput[]
+    upsert?: DocumentFileUpsertWithWhereUniqueWithoutSubjectClassInput | DocumentFileUpsertWithWhereUniqueWithoutSubjectClassInput[]
+    createMany?: DocumentFileCreateManySubjectClassInputEnvelope
+    set?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+    disconnect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+    delete?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+    connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+    update?: DocumentFileUpdateWithWhereUniqueWithoutSubjectClassInput | DocumentFileUpdateWithWhereUniqueWithoutSubjectClassInput[]
+    updateMany?: DocumentFileUpdateManyWithWhereWithoutSubjectClassInput | DocumentFileUpdateManyWithWhereWithoutSubjectClassInput[]
+    deleteMany?: DocumentFileScalarWhereInput | DocumentFileScalarWhereInput[]
   }
 
   export type SubjectClassCreateNestedOneWithoutSubjectClassAttendancesInput = {
@@ -575313,6 +575458,12 @@ export namespace Prisma {
     connect?: SubjectVersionWhereUniqueInput
   }
 
+  export type SubjectClassCreateNestedOneWithoutDocumentFilesInput = {
+    create?: XOR<SubjectClassCreateWithoutDocumentFilesInput, SubjectClassUncheckedCreateWithoutDocumentFilesInput>
+    connectOrCreate?: SubjectClassCreateOrConnectWithoutDocumentFilesInput
+    connect?: SubjectClassWhereUniqueInput
+  }
+
   export type StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput = {
     create?: XOR<StudentAcademicDecisionCreateWithoutDocumentEvidenceInput, StudentAcademicDecisionUncheckedCreateWithoutDocumentEvidenceInput>
     connectOrCreate?: StudentAcademicDecisionCreateOrConnectWithoutDocumentEvidenceInput
@@ -575481,6 +575632,16 @@ export namespace Prisma {
     delete?: SubjectVersionWhereInput | boolean
     connect?: SubjectVersionWhereUniqueInput
     update?: XOR<XOR<SubjectVersionUpdateToOneWithWhereWithoutDocumentFilesInput, SubjectVersionUpdateWithoutDocumentFilesInput>, SubjectVersionUncheckedUpdateWithoutDocumentFilesInput>
+  }
+
+  export type SubjectClassUpdateOneWithoutDocumentFilesNestedInput = {
+    create?: XOR<SubjectClassCreateWithoutDocumentFilesInput, SubjectClassUncheckedCreateWithoutDocumentFilesInput>
+    connectOrCreate?: SubjectClassCreateOrConnectWithoutDocumentFilesInput
+    upsert?: SubjectClassUpsertWithoutDocumentFilesInput
+    disconnect?: SubjectClassWhereInput | boolean
+    delete?: SubjectClassWhereInput | boolean
+    connect?: SubjectClassWhereUniqueInput
+    update?: XOR<XOR<SubjectClassUpdateToOneWithWhereWithoutDocumentFilesInput, SubjectClassUpdateWithoutDocumentFilesInput>, SubjectClassUncheckedUpdateWithoutDocumentFilesInput>
   }
 
   export type StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput = {
@@ -642549,6 +642710,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -642592,6 +642754,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -642895,6 +643058,7 @@ export namespace Prisma {
     curriculumId?: StringNullableFilter<"DocumentFile"> | string | null
     curriculumVersionId?: StringNullableFilter<"DocumentFile"> | string | null
     subjectVersionId?: StringNullableFilter<"DocumentFile"> | string | null
+    subjectClassId?: StringNullableFilter<"DocumentFile"> | string | null
     studentAcademicDecisionId?: StringNullableFilter<"DocumentFile"> | string | null
     notificationId?: StringNullableFilter<"DocumentFile"> | string | null
     decisionId?: StringNullableFilter<"DocumentFile"> | string | null
@@ -643375,6 +643539,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutSubjectClassStudentInput = {
@@ -643442,6 +643607,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutSubjectClassStudentInput = {
@@ -644565,6 +644731,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutSubjectClassStudentInput = {
@@ -644632,6 +644799,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectVersionUpsertWithoutStudentSubjectScoreInput = {
@@ -648391,6 +648559,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -648434,6 +648603,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -649830,6 +650000,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -649873,6 +650044,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -651136,6 +651308,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutSemesterInput = {
@@ -651203,6 +651376,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutSemesterInput = {
@@ -654667,6 +654841,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -654710,6 +654885,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -657481,6 +657657,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutFixedClassesInput = {
@@ -657548,6 +657725,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutFixedClassesInput = {
@@ -659476,6 +659654,7 @@ export namespace Prisma {
     archivedAward?: ArchivedAwardCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -659519,6 +659698,7 @@ export namespace Prisma {
     archivedAwardId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -660588,6 +660768,7 @@ export namespace Prisma {
     archivedAward?: ArchivedAwardCreateNestedOneWithoutDocumentFilesInput
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -660631,6 +660812,7 @@ export namespace Prisma {
     archivedAwardId?: string | null
     curriculumId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -663506,6 +663688,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutSubjectInput = {
@@ -663573,6 +663756,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutSubjectInput = {
@@ -663711,6 +663895,7 @@ export namespace Prisma {
     archivedAward?: ArchivedAwardCreateNestedOneWithoutDocumentFilesInput
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -663754,6 +663939,7 @@ export namespace Prisma {
     archivedAwardId?: string | null
     curriculumId?: string | null
     curriculumVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -667728,6 +667914,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutClassRegisterLogsInput = {
@@ -667795,6 +667982,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutClassRegisterLogsInput = {
@@ -668116,6 +668304,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutClassRegisterLogsInput = {
@@ -668183,6 +668372,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type StudentUpsertWithoutClassRegisterLogsInput = {
@@ -670638,6 +670828,104 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type DocumentFileCreateWithoutSubjectClassInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    dNgayTao?: Date | string | null
+    dNgaySua?: Date | string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    name: string
+    path: string
+    size: bigint | number
+    mimeType?: string | null
+    archivedCertificate?: ArchivedCertificateCreateNestedOneWithoutDocumentFilesInput
+    trainingCourse?: TrainingCourseCreateNestedOneWithoutDocumentFilesInput
+    archivedAward?: ArchivedAwardCreateNestedOneWithoutDocumentFilesInput
+    curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
+    curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
+    notification?: NotificationCreateNestedOneWithoutAttachmentsInput
+    decision?: DecisionCreateNestedOneWithoutDocumentFileInput
+    defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
+    librarySubmission?: LibrarySubmissionCreateNestedOneWithoutDocumentFileInput
+    diplomaFront?: GraduationDecisionCreateNestedOneWithoutDiplomaFrontInput
+    diplomaBack?: GraduationDecisionCreateNestedOneWithoutDiplomaBackInput
+    diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
+    diplomaVerificationFront?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaFrontInput
+    diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
+    trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
+    studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
+    scoreLinkSheet?: ScoreLinkSheetCreateNestedOneWithoutDocumentsInput
+    examFramework?: ExamFrameworkCreateNestedOneWithoutDocumentFilesInput
+    note?: NoteCreateNestedOneWithoutAttachmentsInput
+    evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
+    knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutDocumentFilesInput
+  }
+
+  export type DocumentFileUncheckedCreateWithoutSubjectClassInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    dNgayTao?: Date | string | null
+    dNgaySua?: Date | string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    name: string
+    path: string
+    size: bigint | number
+    mimeType?: string | null
+    archivedCertificateId?: string | null
+    trainingCourseId?: string | null
+    archivedAwardId?: string | null
+    curriculumId?: string | null
+    curriculumVersionId?: string | null
+    subjectVersionId?: string | null
+    studentAcademicDecisionId?: string | null
+    notificationId?: string | null
+    decisionId?: string | null
+    defenseRecordId?: string | null
+    librarySubmissionId?: string | null
+    diplomaFrontId?: string | null
+    diplomaBackId?: string | null
+    diplomaVerificationId?: string | null
+    diplomaVerificationFrontId?: string | null
+    diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
+    studentScoreConvertId?: string | null
+    scoreLinkSheetId?: string | null
+    examFrameworkId?: string | null
+    noteId?: string | null
+    evaluationPeriodId?: string | null
+    knowledgeBlockId?: string | null
+  }
+
+  export type DocumentFileCreateOrConnectWithoutSubjectClassInput = {
+    where: DocumentFileWhereUniqueInput
+    create: XOR<DocumentFileCreateWithoutSubjectClassInput, DocumentFileUncheckedCreateWithoutSubjectClassInput>
+  }
+
+  export type DocumentFileCreateManySubjectClassInputEnvelope = {
+    data: DocumentFileCreateManySubjectClassInput | DocumentFileCreateManySubjectClassInput[]
+    skipDuplicates?: boolean
+  }
+
   export type SubjectVersionUpsertWithoutSubjectClassInput = {
     update: XOR<SubjectVersionUpdateWithoutSubjectClassInput, SubjectVersionUncheckedUpdateWithoutSubjectClassInput>
     create: XOR<SubjectVersionCreateWithoutSubjectClassInput, SubjectVersionUncheckedCreateWithoutSubjectClassInput>
@@ -671845,6 +672133,22 @@ export namespace Prisma {
     data: XOR<SubjectClassAttendanceUpdateManyMutationInput, SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassInput>
   }
 
+  export type DocumentFileUpsertWithWhereUniqueWithoutSubjectClassInput = {
+    where: DocumentFileWhereUniqueInput
+    update: XOR<DocumentFileUpdateWithoutSubjectClassInput, DocumentFileUncheckedUpdateWithoutSubjectClassInput>
+    create: XOR<DocumentFileCreateWithoutSubjectClassInput, DocumentFileUncheckedCreateWithoutSubjectClassInput>
+  }
+
+  export type DocumentFileUpdateWithWhereUniqueWithoutSubjectClassInput = {
+    where: DocumentFileWhereUniqueInput
+    data: XOR<DocumentFileUpdateWithoutSubjectClassInput, DocumentFileUncheckedUpdateWithoutSubjectClassInput>
+  }
+
+  export type DocumentFileUpdateManyWithWhereWithoutSubjectClassInput = {
+    where: DocumentFileScalarWhereInput
+    data: XOR<DocumentFileUpdateManyMutationInput, DocumentFileUncheckedUpdateManyWithoutSubjectClassInput>
+  }
+
   export type SubjectClassCreateWithoutSubjectClassAttendancesInput = {
     id?: string
     active?: boolean
@@ -671910,6 +672214,7 @@ export namespace Prisma {
     survey?: SurveyCreateNestedManyWithoutSubjectClassInput
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutSubjectClassAttendancesInput = {
@@ -671977,6 +672282,7 @@ export namespace Prisma {
     survey?: SurveyUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutSubjectClassAttendancesInput = {
@@ -672548,6 +672854,7 @@ export namespace Prisma {
     survey?: SurveyUpdateManyWithoutSubjectClassNestedInput
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutSubjectClassAttendancesInput = {
@@ -672615,6 +672922,7 @@ export namespace Prisma {
     survey?: SurveyUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type UserProfileUpsertWithoutSubjectClassAttendanceInput = {
@@ -673632,6 +673940,7 @@ export namespace Prisma {
     survey?: SurveyCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutSubjectClassHistoryInput = {
@@ -673699,6 +674008,7 @@ export namespace Prisma {
     survey?: SurveyUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutSubjectClassHistoryInput = {
@@ -674147,6 +674457,7 @@ export namespace Prisma {
     survey?: SurveyUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutSubjectClassHistoryInput = {
@@ -674214,6 +674525,7 @@ export namespace Prisma {
     survey?: SurveyUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type UserProfileUpsertWithoutSubjectClassHistoryInput = {
@@ -674652,6 +674964,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutSubjectClassTimesInput = {
@@ -674719,6 +675032,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutSubjectClassTimesInput = {
@@ -674802,6 +675116,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutSubjectClassTimesInput = {
@@ -674869,6 +675184,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassCreateWithoutClassSchedulesInput = {
@@ -674936,6 +675252,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutClassSchedulesInput = {
@@ -675003,6 +675320,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutClassSchedulesInput = {
@@ -675900,6 +676218,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutClassSchedulesInput = {
@@ -675967,6 +676286,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type RoomUpsertWithoutClassSchedulesInput = {
@@ -678134,6 +678454,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -678177,6 +678498,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -679668,6 +679990,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutStudentPersonalEventsInput = {
@@ -679735,6 +680058,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutStudentPersonalEventsInput = {
@@ -679999,6 +680323,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutStudentPersonalEventsInput = {
@@ -680066,6 +680391,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type TrainingFieldCreateWithoutStudentsInput = {
@@ -686919,6 +687245,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
     defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
@@ -686962,6 +687289,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     decisionId?: string | null
     defenseRecordId?: string | null
@@ -688557,6 +688885,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutMainLecturerInput = {
@@ -688624,6 +688953,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutMainLecturerInput = {
@@ -688701,6 +689031,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutExtraLecturerInput = {
@@ -688768,6 +689099,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutExtraLecturerInput = {
@@ -688845,6 +689177,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutEnterGradeLecturerInput = {
@@ -688912,6 +689245,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutEnterGradeLecturerInput = {
@@ -694564,6 +694898,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutTrainingObjectTypeInput = {
@@ -694631,6 +694966,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutTrainingObjectTypeInput = {
@@ -696990,6 +697326,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutTrainingLocationInput = {
@@ -697057,6 +697394,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutTrainingLocationInput = {
@@ -697560,6 +697898,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutRoomInput = {
@@ -697627,6 +697966,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutRoomInput = {
@@ -697704,6 +698044,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutDefenseRoomsInput = {
@@ -697771,6 +698112,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutDefenseRoomsInput = {
@@ -698573,6 +698915,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -698616,6 +698959,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -707509,6 +707853,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -707552,6 +707897,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -707600,6 +707946,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -707643,6 +707990,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -708205,6 +708553,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -708248,6 +708597,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -708302,6 +708652,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -708345,6 +708696,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -709992,6 +710344,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -710035,6 +710388,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -710088,6 +710442,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -710131,6 +710486,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -710179,6 +710535,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -710222,6 +710579,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -710472,6 +710830,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -710515,6 +710874,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -710569,6 +710929,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -710612,6 +710973,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -713241,6 +713603,147 @@ export namespace Prisma {
     create: XOR<SubjectVersionCreateWithoutDocumentFilesInput, SubjectVersionUncheckedCreateWithoutDocumentFilesInput>
   }
 
+  export type SubjectClassCreateWithoutDocumentFilesInput = {
+    id?: string
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    dNgayTao?: Date | string | null
+    dNgaySua?: Date | string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    code: string
+    name: string
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    schedule?: $Enums.SubjectClassSchedule | null
+    maxStudent: number
+    enrolledCount?: number
+    version?: number
+    type?: $Enums.SubjectClassType
+    status?: $Enums.SubjectClassStatus
+    cancelled?: boolean
+    lecturerAssignmentDeadline?: Date | string | null
+    sendLecturerAssignmentAt?: Date | string | null
+    submitLecturerAssignmentAt?: Date | string | null
+    approveLecturerAssignmentAt?: Date | string | null
+    examDate?: Date | string | null
+    examType: $Enums.ExamType
+    scoreDeadLineStart?: Date | string | null
+    scoreDeadline?: Date | string | null
+    examScoreDeadline?: Date | string | null
+    enteredScore?: boolean
+    enteredExamScore?: boolean
+    issuedScoreAt?: Date | string | null
+    isLockScore?: boolean
+    isLockExamScore?: boolean
+    isLockLecturer?: boolean
+    scoreSubmitted?: boolean
+    scoreChecked?: boolean
+    subject: SubjectVersionCreateNestedOneWithoutSubjectClassInput
+    trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutSubjectClassInput
+    semester: SemesterCreateNestedOneWithoutSubjectClassesInput
+    exam?: ExamCreateNestedOneWithoutSubjectClassInput
+    room?: RoomCreateNestedOneWithoutSubjectClassesInput
+    trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
+    mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
+    extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
+    enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
+    scoreLinkSubjectVersion?: ScoreLinkSubjectVersionCreateNestedOneWithoutSubjectClassInput
+    subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutSubjectClassInput
+    fixedClasses?: FixedClassCreateNestedManyWithoutSubjectClassesInput
+    classSchedules?: ClassScheduleCreateNestedManyWithoutSubjectClassInput
+    studentPersonalEvents?: StudentPersonalEventCreateNestedManyWithoutSubjectClassInput
+    thesisProjects?: ThesisProjectCreateNestedManyWithoutSubjectClassInput
+    expert?: ExpertCreateNestedManyWithoutSubjectClassInput
+    defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
+    surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
+    subjectClassTimes?: SubjectClassTimeCreateNestedManyWithoutSubjectClassInput
+    survey?: SurveyCreateNestedManyWithoutSubjectClassInput
+    subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
+    examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
+    subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+  }
+
+  export type SubjectClassUncheckedCreateWithoutDocumentFilesInput = {
+    id?: string
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    dNgayTao?: Date | string | null
+    dNgaySua?: Date | string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    code: string
+    name: string
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    subjectId: string
+    schedule?: $Enums.SubjectClassSchedule | null
+    maxStudent: number
+    enrolledCount?: number
+    version?: number
+    type?: $Enums.SubjectClassType
+    status?: $Enums.SubjectClassStatus
+    trainingObjectTypeId: string
+    semesterId: string
+    cancelled?: boolean
+    lecturerAssignmentDeadline?: Date | string | null
+    sendLecturerAssignmentAt?: Date | string | null
+    submitLecturerAssignmentAt?: Date | string | null
+    approveLecturerAssignmentAt?: Date | string | null
+    examDate?: Date | string | null
+    examType: $Enums.ExamType
+    examId?: string | null
+    scoreDeadLineStart?: Date | string | null
+    scoreDeadline?: Date | string | null
+    examScoreDeadline?: Date | string | null
+    enteredScore?: boolean
+    enteredExamScore?: boolean
+    issuedScoreAt?: Date | string | null
+    isLockScore?: boolean
+    isLockExamScore?: boolean
+    isLockLecturer?: boolean
+    scoreSubmitted?: boolean
+    scoreChecked?: boolean
+    roomId?: string | null
+    trainingLocationId?: string | null
+    lecturerId?: string | null
+    extraLecturerId?: string | null
+    enterGradeLecturerId?: string | null
+    scoreLinkSubjectVersionId?: string | null
+    subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSubjectClassInput
+    fixedClasses?: FixedClassUncheckedCreateNestedManyWithoutSubjectClassesInput
+    classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutSubjectClassInput
+    studentPersonalEvents?: StudentPersonalEventUncheckedCreateNestedManyWithoutSubjectClassInput
+    thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutSubjectClassInput
+    expert?: ExpertUncheckedCreateNestedManyWithoutSubjectClassInput
+    defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
+    surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
+    subjectClassTimes?: SubjectClassTimeUncheckedCreateNestedManyWithoutSubjectClassInput
+    survey?: SurveyUncheckedCreateNestedManyWithoutSubjectClassInput
+    subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
+    examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
+    subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+  }
+
+  export type SubjectClassCreateOrConnectWithoutDocumentFilesInput = {
+    where: SubjectClassWhereUniqueInput
+    create: XOR<SubjectClassCreateWithoutDocumentFilesInput, SubjectClassUncheckedCreateWithoutDocumentFilesInput>
+  }
+
   export type StudentAcademicDecisionCreateWithoutDocumentEvidenceInput = {
     id?: string
     code?: string | null
@@ -714822,6 +715325,153 @@ export namespace Prisma {
     scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutSubjectVersionNestedInput
     certificate?: CertificateUncheckedUpdateManyWithoutSubjectVersionsNestedInput
     archivedCertificateSubjectScores?: ArchivedCertificateSubjectScoreUncheckedUpdateManyWithoutSubjectVersionNestedInput
+  }
+
+  export type SubjectClassUpsertWithoutDocumentFilesInput = {
+    update: XOR<SubjectClassUpdateWithoutDocumentFilesInput, SubjectClassUncheckedUpdateWithoutDocumentFilesInput>
+    create: XOR<SubjectClassCreateWithoutDocumentFilesInput, SubjectClassUncheckedCreateWithoutDocumentFilesInput>
+    where?: SubjectClassWhereInput
+  }
+
+  export type SubjectClassUpdateToOneWithWhereWithoutDocumentFilesInput = {
+    where?: SubjectClassWhereInput
+    data: XOR<SubjectClassUpdateWithoutDocumentFilesInput, SubjectClassUncheckedUpdateWithoutDocumentFilesInput>
+  }
+
+  export type SubjectClassUpdateWithoutDocumentFilesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
+    maxStudent?: IntFieldUpdateOperationsInput | number
+    enrolledCount?: IntFieldUpdateOperationsInput | number
+    version?: IntFieldUpdateOperationsInput | number
+    type?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
+    status?: EnumSubjectClassStatusFieldUpdateOperationsInput | $Enums.SubjectClassStatus
+    cancelled?: BoolFieldUpdateOperationsInput | boolean
+    lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approveLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
+    scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    enteredScore?: BoolFieldUpdateOperationsInput | boolean
+    enteredExamScore?: BoolFieldUpdateOperationsInput | boolean
+    issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isLockScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
+    scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
+    scoreChecked?: BoolFieldUpdateOperationsInput | boolean
+    subject?: SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput
+    trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutSubjectClassNestedInput
+    semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
+    exam?: ExamUpdateOneWithoutSubjectClassNestedInput
+    room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+    trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
+    mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
+    extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
+    enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
+    scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUpdateOneWithoutSubjectClassNestedInput
+    subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutSubjectClassNestedInput
+    fixedClasses?: FixedClassUpdateManyWithoutSubjectClassesNestedInput
+    classSchedules?: ClassScheduleUpdateManyWithoutSubjectClassNestedInput
+    studentPersonalEvents?: StudentPersonalEventUpdateManyWithoutSubjectClassNestedInput
+    thesisProjects?: ThesisProjectUpdateManyWithoutSubjectClassNestedInput
+    expert?: ExpertUpdateManyWithoutSubjectClassNestedInput
+    defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
+    surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
+    subjectClassTimes?: SubjectClassTimeUpdateManyWithoutSubjectClassNestedInput
+    survey?: SurveyUpdateManyWithoutSubjectClassNestedInput
+    subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
+    examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
+    subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+  }
+
+  export type SubjectClassUncheckedUpdateWithoutDocumentFilesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    subjectId?: StringFieldUpdateOperationsInput | string
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
+    maxStudent?: IntFieldUpdateOperationsInput | number
+    enrolledCount?: IntFieldUpdateOperationsInput | number
+    version?: IntFieldUpdateOperationsInput | number
+    type?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
+    status?: EnumSubjectClassStatusFieldUpdateOperationsInput | $Enums.SubjectClassStatus
+    trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+    semesterId?: StringFieldUpdateOperationsInput | string
+    cancelled?: BoolFieldUpdateOperationsInput | boolean
+    lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approveLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
+    examId?: NullableStringFieldUpdateOperationsInput | string | null
+    scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    enteredScore?: BoolFieldUpdateOperationsInput | boolean
+    enteredExamScore?: BoolFieldUpdateOperationsInput | boolean
+    issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isLockScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
+    scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
+    scoreChecked?: BoolFieldUpdateOperationsInput | boolean
+    roomId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+    extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+    enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+    scoreLinkSubjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutSubjectClassNestedInput
+    fixedClasses?: FixedClassUncheckedUpdateManyWithoutSubjectClassesNestedInput
+    classSchedules?: ClassScheduleUncheckedUpdateManyWithoutSubjectClassNestedInput
+    studentPersonalEvents?: StudentPersonalEventUncheckedUpdateManyWithoutSubjectClassNestedInput
+    thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutSubjectClassNestedInput
+    expert?: ExpertUncheckedUpdateManyWithoutSubjectClassNestedInput
+    defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
+    surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
+    subjectClassTimes?: SubjectClassTimeUncheckedUpdateManyWithoutSubjectClassNestedInput
+    survey?: SurveyUncheckedUpdateManyWithoutSubjectClassNestedInput
+    subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
+    examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
+    subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type StudentAcademicDecisionUpsertWithoutDocumentEvidenceInput = {
@@ -717045,6 +717695,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
     defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
@@ -717088,6 +717739,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     notificationId?: string | null
     decisionId?: string | null
     defenseRecordId?: string | null
@@ -719668,6 +720320,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutThesisProjectsInput = {
@@ -719735,6 +720388,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutThesisProjectsInput = {
@@ -720999,6 +721653,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutThesisProjectsInput = {
@@ -721066,6 +721721,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type ThesisSessionUpsertWithoutThesisProjectInput = {
@@ -723701,6 +724357,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutExpertInput = {
@@ -723768,6 +724425,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutExpertInput = {
@@ -725565,6 +726223,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
@@ -725608,6 +726267,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     defenseRecordId?: string | null
@@ -727186,6 +727846,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -727229,6 +727890,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -727598,6 +728260,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -727641,6 +728304,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -729242,6 +729906,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -729285,6 +729950,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -729903,6 +730569,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutScoreLinkSubjectVersionInput = {
@@ -729970,6 +730637,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutScoreLinkSubjectVersionInput = {
@@ -730263,6 +730931,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutScoreLinkSubjectVersionInput = {
@@ -730330,6 +730999,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type ScoreLinkSubjectVersionCreateWithoutScoreLinkStudentsInput = {
@@ -730963,6 +731633,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -731006,6 +731677,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -738684,6 +739356,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutExamInput = {
@@ -738751,6 +739424,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutExamInput = {
@@ -740156,6 +740830,7 @@ export namespace Prisma {
     survey?: SurveyCreateNestedManyWithoutSubjectClassInput
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutExamBankInput = {
@@ -740223,6 +740898,7 @@ export namespace Prisma {
     survey?: SurveyUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutExamBankInput = {
@@ -740460,6 +741136,7 @@ export namespace Prisma {
     survey?: SurveyUpdateManyWithoutSubjectClassNestedInput
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutExamBankInput = {
@@ -740527,6 +741204,7 @@ export namespace Prisma {
     survey?: SurveyUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type ExamBankQuestionUpsertWithWhereUniqueWithoutExamBankInput = {
@@ -741384,6 +742062,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -741427,6 +742106,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -742041,6 +742721,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -742084,6 +742765,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -743231,6 +743913,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutSurveyObjectTypesInput = {
@@ -743298,6 +743981,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutSurveyObjectTypesInput = {
@@ -744968,6 +745652,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutSurveyInput = {
@@ -745035,6 +745720,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutSurveyInput = {
@@ -745667,6 +746353,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutSurveyInput = {
@@ -745734,6 +746421,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SemesterUpsertWithoutSurveyInput = {
@@ -790848,6 +791536,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -790911,6 +791600,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -790954,6 +791644,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -790997,6 +791688,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -791861,6 +792553,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -791941,6 +792634,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -791984,6 +792678,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -792027,6 +792722,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -792181,6 +792877,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -792243,6 +792940,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -792286,6 +792984,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -792329,6 +793028,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -793740,6 +794440,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutSemesterInput = {
@@ -793807,6 +794508,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutSemesterInput = {
@@ -795960,6 +796662,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -797011,6 +797714,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -797054,6 +797758,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -797097,6 +797802,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -797839,6 +798545,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutFixedClassesInput = {
@@ -797906,6 +798613,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutFixedClassesInput = {
@@ -798225,6 +798933,7 @@ export namespace Prisma {
     archivedAwardId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -798313,6 +799022,7 @@ export namespace Prisma {
     archivedAward?: ArchivedAwardUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -798356,6 +799066,7 @@ export namespace Prisma {
     archivedAwardId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -798399,6 +799110,7 @@ export namespace Prisma {
     archivedAwardId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -798609,6 +799321,7 @@ export namespace Prisma {
     archivedAwardId?: string | null
     curriculumId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -798867,6 +799580,7 @@ export namespace Prisma {
     archivedAward?: ArchivedAwardUpdateOneWithoutDocumentFilesNestedInput
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -798910,6 +799624,7 @@ export namespace Prisma {
     archivedAwardId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -798953,6 +799668,7 @@ export namespace Prisma {
     archivedAwardId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -800316,6 +801032,7 @@ export namespace Prisma {
     archivedAwardId?: string | null
     curriculumId?: string | null
     curriculumVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -801399,6 +802116,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutSubjectInput = {
@@ -801466,6 +802184,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutSubjectInput = {
@@ -801673,6 +802392,7 @@ export namespace Prisma {
     archivedAward?: ArchivedAwardUpdateOneWithoutDocumentFilesNestedInput
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -801716,6 +802436,7 @@ export namespace Prisma {
     archivedAwardId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -801759,6 +802480,7 @@ export namespace Prisma {
     archivedAwardId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -803301,6 +804023,50 @@ export namespace Prisma {
     note?: string | null
   }
 
+  export type DocumentFileCreateManySubjectClassInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    dNgayTao?: Date | string | null
+    dNgaySua?: Date | string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    name: string
+    path: string
+    size: bigint | number
+    mimeType?: string | null
+    archivedCertificateId?: string | null
+    trainingCourseId?: string | null
+    archivedAwardId?: string | null
+    curriculumId?: string | null
+    curriculumVersionId?: string | null
+    subjectVersionId?: string | null
+    studentAcademicDecisionId?: string | null
+    notificationId?: string | null
+    decisionId?: string | null
+    defenseRecordId?: string | null
+    librarySubmissionId?: string | null
+    diplomaFrontId?: string | null
+    diplomaBackId?: string | null
+    diplomaVerificationId?: string | null
+    diplomaVerificationFrontId?: string | null
+    diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
+    studentScoreConvertId?: string | null
+    scoreLinkSheetId?: string | null
+    examFrameworkId?: string | null
+    noteId?: string | null
+    evaluationPeriodId?: string | null
+    knowledgeBlockId?: string | null
+  }
+
   export type StudentSubjectScoreUpdateWithoutSubjectClassInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -804594,6 +805360,138 @@ export namespace Prisma {
     note?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type DocumentFileUpdateWithoutSubjectClassInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    size?: BigIntFieldUpdateOperationsInput | bigint | number
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedCertificate?: ArchivedCertificateUpdateOneWithoutDocumentFilesNestedInput
+    trainingCourse?: TrainingCourseUpdateOneWithoutDocumentFilesNestedInput
+    archivedAward?: ArchivedAwardUpdateOneWithoutDocumentFilesNestedInput
+    curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
+    curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
+    notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
+    decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
+    defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
+    librarySubmission?: LibrarySubmissionUpdateOneWithoutDocumentFileNestedInput
+    diplomaFront?: GraduationDecisionUpdateOneWithoutDiplomaFrontNestedInput
+    diplomaBack?: GraduationDecisionUpdateOneWithoutDiplomaBackNestedInput
+    diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
+    diplomaVerificationFront?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaFrontNestedInput
+    diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
+    trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
+    studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
+    scoreLinkSheet?: ScoreLinkSheetUpdateOneWithoutDocumentsNestedInput
+    examFramework?: ExamFrameworkUpdateOneWithoutDocumentFilesNestedInput
+    note?: NoteUpdateOneWithoutAttachmentsNestedInput
+    evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
+    knowledgeBlock?: KnowledgeBlockUpdateOneWithoutDocumentFilesNestedInput
+  }
+
+  export type DocumentFileUncheckedUpdateWithoutSubjectClassInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    size?: BigIntFieldUpdateOperationsInput | bigint | number
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedCertificateId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedAwardId?: NullableStringFieldUpdateOperationsInput | string | null
+    curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
+    curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
+    notificationId?: NullableStringFieldUpdateOperationsInput | string | null
+    decisionId?: NullableStringFieldUpdateOperationsInput | string | null
+    defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
+    studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+    scoreLinkSheetId?: NullableStringFieldUpdateOperationsInput | string | null
+    examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
+    noteId?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
+    knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type DocumentFileUncheckedUpdateManyWithoutSubjectClassInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    size?: BigIntFieldUpdateOperationsInput | bigint | number
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedCertificateId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedAwardId?: NullableStringFieldUpdateOperationsInput | string | null
+    curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
+    curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
+    notificationId?: NullableStringFieldUpdateOperationsInput | string | null
+    decisionId?: NullableStringFieldUpdateOperationsInput | string | null
+    defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
+    studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+    scoreLinkSheetId?: NullableStringFieldUpdateOperationsInput | string | null
+    examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
+    noteId?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
+    knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type SubjectClassAttendanceStudentCreateManySubjectClassAttendanceInput = {
     id?: string
     code?: string | null
@@ -805375,6 +806273,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -805498,6 +806397,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -805541,6 +806441,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -805584,6 +806485,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -809422,6 +810324,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     decisionId?: string | null
     defenseRecordId?: string | null
@@ -809975,6 +810878,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
     defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
@@ -810018,6 +810922,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
     defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -810061,6 +810966,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
     defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -811515,6 +812421,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutMainLecturerInput = {
@@ -811582,6 +812489,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutMainLecturerInput = {
@@ -811702,6 +812610,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutExtraLecturerInput = {
@@ -811769,6 +812678,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutExtraLecturerInput = {
@@ -811889,6 +812799,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutEnterGradeLecturerInput = {
@@ -811956,6 +812867,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutEnterGradeLecturerInput = {
@@ -815792,6 +816704,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutTrainingObjectTypeInput = {
@@ -815859,6 +816772,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutTrainingObjectTypeInput = {
@@ -818198,6 +819112,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutTrainingLocationInput = {
@@ -818265,6 +819180,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutTrainingLocationInput = {
@@ -818661,6 +819577,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutRoomInput = {
@@ -818728,6 +819645,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutRoomInput = {
@@ -818848,6 +819766,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutDefenseRoomsInput = {
@@ -818915,6 +819834,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutDefenseRoomsInput = {
@@ -819432,6 +820352,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -819826,6 +820747,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -819869,6 +820791,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -819912,6 +820835,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -824391,6 +825315,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -824434,6 +825359,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -824477,6 +825403,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -824520,6 +825447,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -824919,6 +825847,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     notificationId?: string | null
     decisionId?: string | null
     defenseRecordId?: string | null
@@ -824962,6 +825891,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
     defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
@@ -825005,6 +825935,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
     defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -825048,6 +825979,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
     defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -826508,6 +827440,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutExpertInput = {
@@ -826575,6 +827508,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutExpertInput = {
@@ -828136,6 +829070,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     defenseRecordId?: string | null
@@ -828179,6 +829114,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
@@ -828222,6 +829158,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -828265,6 +829202,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -828668,6 +829606,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -828711,6 +829650,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -828754,6 +829694,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -828797,6 +829738,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -828840,6 +829782,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -828883,6 +829826,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -828926,6 +829870,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -828969,6 +829914,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -830170,6 +831116,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -830271,6 +831218,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -830314,6 +831262,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -830357,6 +831306,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -830497,6 +831447,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -830605,6 +831556,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -830648,6 +831600,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -830691,6 +831644,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -832851,6 +833805,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutExamInput = {
@@ -832918,6 +833873,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutExamInput = {
@@ -833405,6 +834361,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -833509,6 +834466,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -833552,6 +834510,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -833595,6 +834554,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -833856,6 +834816,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -834008,6 +834969,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -834051,6 +835013,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -834094,6 +835057,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -834933,6 +835897,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutSurveyObjectTypesInput = {
@@ -835000,6 +835965,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutSurveyObjectTypesInput = {

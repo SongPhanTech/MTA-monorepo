@@ -4443,6 +4443,7 @@ model SubjectClass {
   subjectClassHistory         SubjectClassHistory[]
   examBank                    ExamBank[]
   subjectClassAttendances     SubjectClassAttendance[]
+  documentFiles               DocumentFile[]
 
   @@index([lecturerId])
   @@index([extraLecturerId])
@@ -6849,6 +6850,8 @@ model DocumentFile {
   curriculumVersionId        String?
   subjectVersion             SubjectVersion?                 @relation(fields: [subjectVersionId], references: [id])
   subjectVersionId           String?
+  subjectClass               SubjectClass?                   @relation(fields: [subjectClassId], references: [id])
+  subjectClassId             String?
   studentAcademicDecision    StudentAcademicDecision?        @relation(fields: [studentAcademicDecisionId], references: [id])
   studentAcademicDecisionId  String?
   notification               Notification?                   @relation(fields: [notificationId], references: [id])
@@ -6884,6 +6887,7 @@ model DocumentFile {
   knowledgeBlock             KnowledgeBlock?                 @relation(fields: [knowledgeBlockId], references: [id])
   knowledgeBlockId           String?
 
+  @@index([subjectClassId])
   @@schema("ql-danh-muc")
 }
 

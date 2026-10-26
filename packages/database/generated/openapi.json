@@ -14868,6 +14868,12 @@
             "items": {
               "$ref": "#/components/schemas/SubjectClassAttendance"
             }
+          },
+          "documentFiles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DocumentFile"
+            }
           }
         },
         "required": [
@@ -23341,6 +23347,18 @@
             "nullable": true
           },
           "subjectVersionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "subjectClass": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SubjectClass"
+              }
+            ],
+            "nullable": true
+          },
+          "subjectClassId": {
             "type": "string",
             "nullable": true
           },
@@ -64254,6 +64272,10 @@
             "nullable": true
           },
           "subjectVersionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "subjectClassId": {
             "type": "string",
             "nullable": true
           },
@@ -134727,6 +134749,9 @@
           "subjectVersionId": {
             "type": "integer"
           },
+          "subjectClassId": {
+            "type": "integer"
+          },
           "studentAcademicDecisionId": {
             "type": "integer"
           },
@@ -134807,6 +134832,7 @@
           "curriculumId",
           "curriculumVersionId",
           "subjectVersionId",
+          "subjectClassId",
           "studentAcademicDecisionId",
           "notificationId",
           "decisionId",
@@ -134946,6 +134972,10 @@
             "nullable": true
           },
           "subjectVersionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "subjectClassId": {
             "type": "string",
             "nullable": true
           },
@@ -135120,6 +135150,10 @@
             "nullable": true
           },
           "subjectVersionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "subjectClassId": {
             "type": "string",
             "nullable": true
           },
