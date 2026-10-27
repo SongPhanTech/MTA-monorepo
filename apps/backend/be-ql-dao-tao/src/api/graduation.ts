@@ -59,6 +59,7 @@ import {
   parsePostgraduateDeptSignerInfo,
   stripLeadingCommaBeforeSignerName,
   generateExcelFromTemplate,
+  applyPhoiBangStudentPrintAreas,
   fixPhoiBangNganHanEndDateEnDisplay,
   applyPhoiBangNganHanCourseLabelStyles,
   getScoreClassification,
@@ -268,6 +269,29 @@ function isGraduationSubjectType(type?: string | null) {
     type === SubjectVersionType.Project ||
     type === SubjectVersionType.Graduation
   )
+}
+
+function formatDocxtemplaterError(error: unknown): string {
+  const err = error as {
+    message?: string
+    properties?: {
+      errors?: Array<{
+        message?: string
+        properties?: { id?: string; xtag?: string; explanation?: string; file?: string }
+      }>
+    }
+  }
+  const details = err?.properties?.errors
+  if (Array.isArray(details) && details.length) {
+    const parts = details.slice(0, 8).map((item) => {
+      const id = item.properties?.id || "template_error"
+      const tag = item.properties?.xtag
+      const why = item.properties?.explanation || item.message || ""
+      return tag ? `${id} [${tag}]: ${why}` : `${id}: ${why}`
+    })
+    return `Lỗi template Word: ${parts.join(" | ")}`
+  }
+  return `Lỗi khi xuất file Word: ${err?.message || "Unknown error"}`
 }
 
 /** In đậm các cụm chữ trong DOCX (sau khi Docxtemplater render). */
@@ -1930,10 +1954,11 @@ app.openapi(exportPhoiBangCaoHoc, async (c) => {
 
   try {
     const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhoiBangCaoHoc_v1.xlsx")
-    const result = await generateExcelFromTemplate(templateBuffer, payload, {
+    const generated = await generateExcelFromTemplate(templateBuffer, payload, {
       showGridLines: true,
       wrapText: true,
     })
+    const result = applyPhoiBangStudentPrintAreas(generated.buffer, generated.studentPrintBlocks)
 
     const fileName = "PhoiBangCaoHoc.xlsx"
     const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
@@ -2201,12 +2226,11 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
     const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhoiBangNganHan_v4.xlsx")
     const toNodeBuffer = (data: ArrayBuffer | Uint8Array | Buffer) =>
       Buffer.from(data instanceof ArrayBuffer ? new Uint8Array(data) : data)
-    const rawResult = toNodeBuffer(
-      await generateExcelFromTemplate(templateBuffer, payload, {
-        showGridLines: true,
-        wrapText: true,
-      })
-    )
+    const generated = await generateExcelFromTemplate(templateBuffer, payload, {
+      showGridLines: true,
+      wrapText: true,
+    })
+    const rawResult = toNodeBuffer(generated.buffer)
     const withEndDateFix = toNodeBuffer(await fixPhoiBangNganHanEndDateEnDisplay(rawResult))
 
     const first = payload[0]?.data
@@ -2217,7 +2241,7 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
       first?.chuyen_nganh_vi_2,
     ].filter(Boolean) as string[]
 
-    const result = await applyPhoiBangNganHanCourseLabelStyles(withEndDateFix, {
+    const styled = await applyPhoiBangNganHanCourseLabelStyles(withEndDateFix, {
       texts: styleTexts,
       replacements: [
         {
@@ -2229,10 +2253,11 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
           to: first?.chuyen_nganh_en_1 || DEFAULT_COURSE_TEXT_EN_1,
         },
       ],
-      fontFamily,
+      fontFamily: fontFamily?.trim() || "Cambria",
       fontSize,
       rowHeight,
     })
+    const result = applyPhoiBangStudentPrintAreas(toNodeBuffer(styled), generated.studentPrintBlocks)
 
     const fileName = "PhoiBangNganHan.xlsx"
     const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
@@ -2242,7 +2267,7 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
       "Content-Disposition": disposition,
     })
   } catch (error: any) {
-    console.error("Error generating Excel:", error.message)
+    console.error("Error generating Excel PhoiBangNganHan:", error)
     return c.json({ message: "Lỗi khi xuất file Excel" }, 500)
   }
 })
@@ -2767,7 +2792,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
   } catch (error: any) {
     const errorDetails = error.properties?.errors
     console.error("Docxtemplater render error for PhuLucVanBangCaoHoc:", errorDetails || error)
-    return c.json({ message: "Lỗi khi xuất file Word: " + (error.message || "Unknown error") }, 500)
+    return c.json({ message: formatDocxtemplaterError(error) }, 500)
   }
 })
 
@@ -3112,7 +3137,7 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
   } catch (error: any) {
     const errorDetails = error.properties?.errors
     console.error("Docxtemplater render error for PhuLucVanBangNganHan:", errorDetails || error)
-    return c.json({ message: "Lỗi khi xuất file Word: " + (error.message || "Unknown error") }, 500)
+    return c.json({ message: formatDocxtemplaterError(error) }, 500)
   }
 })
 

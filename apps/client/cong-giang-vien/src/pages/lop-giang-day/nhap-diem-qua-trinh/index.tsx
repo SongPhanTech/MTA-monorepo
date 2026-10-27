@@ -556,7 +556,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
       (r) => !coDiem(r.attendanceScore) || !coDiem(r.midtermScore)
     ).length
     if (thieuDiemQuaTrinh > 0) {
-      message.warning(`Còn ${thieuDiemQuaTrinh} sinh viên chưa nhập đủ điểm chuyên cần và định kỳ`)
+      message.warning(`Còn ${thieuDiemQuaTrinh} sinh viên chưa nhập đủ điểm thường xuyên và định kỳ`)
       return
     }
 
@@ -827,7 +827,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
               { title: "Mã định danh", dataIndex: "mssv", width: 100, align: "center" },
               { title: "Họ và tên", dataIndex: "hoTen", width: 180 },
               {
-                title: "Chuyên cần",
+                title: "Thường xuyên",
                 dataIndex: "attendanceScore",
                 width: 120,
                 align: "center",
@@ -1002,7 +1002,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
               render: (_v, r) => r.updatedBy?.fullname ?? "—",
             },
             {
-              title: "Chuyên cần",
+              title: "Thường xuyên",
               dataIndex: "attendanceScore",
               align: "center",
               width: 100,

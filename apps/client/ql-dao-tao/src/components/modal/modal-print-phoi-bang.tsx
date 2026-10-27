@@ -30,18 +30,55 @@ type FormValues = {
   courseTextVi2: string
   fontFamily: string
   fontSize: number
-  rowHeight: number
   printVariant: "civilian" | "military"
 }
 
 const DEFAULT_EN_1 = "FOR COMPLETING THE COURSE FOR TECHNICAL AND LOGISTICS"
 const DEFAULT_VI_1 = "ĐÀO TẠO"
 const FONT_OPTIONS = [
-  { label: "Times New Roman", value: "Times New Roman" },
-  { label: "Arial", value: "Arial" },
-  { label: "Tahoma", value: "Tahoma" },
-  { label: "Calibri", value: "Calibri" },
-  { label: ".VnTime", value: ".VnTime" },
+  {
+    label: "Serif (có chân)",
+    options: [
+      { label: "Cambria", value: "Cambria" },
+      { label: "Times New Roman", value: "Times New Roman" },
+      { label: "Georgia", value: "Georgia" },
+      { label: "Garamond", value: "Garamond" },
+      { label: "Palatino Linotype", value: "Palatino Linotype" },
+      { label: "Book Antiqua", value: "Book Antiqua" },
+      { label: "Century Schoolbook", value: "Century Schoolbook" },
+      { label: "Constantia", value: "Constantia" },
+      { label: "Calisto MT", value: "Calisto MT" },
+      { label: "Baskerville Old Face", value: "Baskerville Old Face" },
+      { label: "Liberation Serif", value: "Liberation Serif" },
+    ],
+  },
+  {
+    label: "Sans-serif (không chân)",
+    options: [
+      { label: "Arial", value: "Arial" },
+      { label: "Arial Unicode MS", value: "Arial Unicode MS" },
+      { label: "Tahoma", value: "Tahoma" },
+      { label: "Calibri", value: "Calibri" },
+      { label: "Verdana", value: "Verdana" },
+      { label: "Segoe UI", value: "Segoe UI" },
+      { label: "Trebuchet MS", value: "Trebuchet MS" },
+      { label: "Century Gothic", value: "Century Gothic" },
+      { label: "Candara", value: "Candara" },
+      { label: "Corbel", value: "Corbel" },
+      { label: "Microsoft Sans Serif", value: "Microsoft Sans Serif" },
+    ],
+  },
+  {
+    label: "Tiếng Việt (TCVN3 / VNI)",
+    options: [
+      { label: ".VnTime", value: ".VnTime" },
+      { label: ".VnTimeH", value: ".VnTimeH" },
+      { label: ".VnArial", value: ".VnArial" },
+      { label: ".VnArialH", value: ".VnArialH" },
+      { label: "VNI-Times", value: "VNI-Times" },
+      { label: "VNI-Helve", value: "VNI-Helve" },
+    ],
+  },
 ]
 
 const ModalPrintPhoiBang = () => {
@@ -58,9 +95,8 @@ const ModalPrintPhoiBang = () => {
       courseTextEn2: input.courseTextEn2 || "",
       courseTextVi1: input.courseTextVi1 || DEFAULT_VI_1,
       courseTextVi2: input.courseTextVi2 || "",
-      fontFamily: "Times New Roman",
+      fontFamily: "Cambria",
       fontSize: 12,
-      rowHeight: 18,
       printVariant: input.includeNamePrefix ? "civilian" : "military",
     })
   }, [form, input, isOpen])
@@ -87,7 +123,6 @@ const ModalPrintPhoiBang = () => {
         courseTextVi2: values.courseTextVi2,
         fontFamily: values.fontFamily,
         fontSize: values.fontSize,
-        rowHeight: values.rowHeight,
       })
 
       if (res.status === 200) {
@@ -126,7 +161,7 @@ const ModalPrintPhoiBang = () => {
       <Form form={form} layout="vertical" className="mt-2">
         <div className="mb-4 rounded border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900">
           Cụm trái (English) = tên ngành tiếng Anh · Cụm phải (dưới ĐÀO TẠO) = tên đối tượng đào
-          tạo. Có thể sửa nội dung, font, cỡ chữ và chiều cao dòng trước khi xuất.
+          tạo. Có thể sửa nội dung, font và cỡ chữ trước khi xuất. Chiều cao dòng lấy theo mẫu.
         </div>
 
         <Form.Item
@@ -178,15 +213,40 @@ const ModalPrintPhoiBang = () => {
           </div>
         </div>
 
-        <div className="mt-2 grid grid-cols-1 gap-3 md:grid-cols-3">
-          <Form.Item name="fontFamily" label="Font chữ" rules={[{ required: true }]}>
-            <Select options={FONT_OPTIONS} />
+        <div className="mt-2 grid grid-cols-1 gap-3 md:grid-cols-2">
+          <Form.Item
+            name="fontFamily"
+            label="Font chữ 2 dòng tiêu đề"
+            rules={[{ required: true, message: "Chọn hoặc nhập font chữ" }]}
+          >
+            <Select
+              showSearch
+              allowClear={false}
+              placeholder="Chọn hoặc gõ tên font"
+              options={FONT_OPTIONS}
+              optionFilterProp="label"
+              filterOption={(input, option) =>
+                String(option?.label ?? "")
+                  .toLowerCase()
+                  .includes(input.toLowerCase())
+              }
+              optionRender={(option) => (
+                <span style={{ fontFamily: String(option.value) }}>{option.label}</span>
+              )}
+              labelRender={(props) => (
+                <span style={{ fontFamily: String(props.value) }}>{props.label}</span>
+              )}
+              onInputKeyDown={(event) => {
+                if (event.key !== "Enter") return
+                const typed = (event.target as HTMLInputElement).value?.trim()
+                if (!typed) return
+                form.setFieldValue("fontFamily", typed)
+                event.preventDefault()
+              }}
+            />
           </Form.Item>
           <Form.Item name="fontSize" label="Cỡ chữ (pt)" rules={[{ required: true }]}>
             <InputNumber className="w-full" min={8} max={36} step={0.5} />
-          </Form.Item>
-          <Form.Item name="rowHeight" label="Chiều cao (pt)" rules={[{ required: true }]}>
-            <InputNumber className="w-full" min={10} max={60} step={0.5} />
           </Form.Item>
         </div>
       </Form>

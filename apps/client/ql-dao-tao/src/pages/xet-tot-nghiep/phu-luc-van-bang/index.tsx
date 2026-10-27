@@ -1690,8 +1690,11 @@ export default function StudentGradeSystem() {
     }
 
     const chiefName = session.chief?.trim() || session.graduationDecisionSigner?.trim() || ""
+    const deputyName = session.deputy?.trim() || ""
     setPendingSignKind("quyetDinhCongNhan")
     setSignRole(chiefName ? "chief" : "deputy")
+    setSignChiefName(chiefName)
+    setSignDeputyName(deputyName)
     const sidebarDate = form.getFieldValue("date")
     setSigningDate(sidebarDate ? dayjs(sidebarDate) : dayjs())
     setSignModalOpen(true)
@@ -1749,12 +1752,12 @@ export default function StudentGradeSystem() {
       | undefined
     if (!session) return
 
-    const chiefName = session.chief?.trim() || session.graduationDecisionSigner?.trim() || ""
-    const deputyName = session.deputy?.trim() || ""
+    const chiefName = signChiefName.trim()
+    const deputyName = signDeputyName.trim()
     const signerNameTS = signRole === "chief" ? chiefName : deputyName
-    if (!signerNameTS.trim()) {
+    if (!signerNameTS) {
       message.warning(
-        `Chưa có họ tên ${signRole === "chief" ? "Trưởng phòng" : "Phó trưởng phòng"} sau đại học trong đợt xét.`
+        `Vui lòng nhập họ tên ${signRole === "chief" ? "Trưởng phòng" : "Phó trưởng phòng"} sau đại học.`
       )
       return
     }
@@ -2376,50 +2379,33 @@ export default function StudentGradeSystem() {
           <Radio value="chief">
             <span className="inline-flex flex-wrap items-center gap-2">
               <span>Trưởng phòng sau đại học:</span>
-              {pendingSignKind === "phuLucVanBangCaoHoc" ||
-              pendingSignKind === "phuLucVanBangNganHan" ? (
-                <Input
-                  size="small"
-                  className="w-56"
-                  value={signChiefName}
-                  placeholder="Nhập họ tên"
-                  onClick={(e) => e.stopPropagation()}
-                  onChange={(e) => {
-                    setSignChiefName(e.target.value)
-                    setSignRole("chief")
-                  }}
-                />
-              ) : (
-                <strong>
-                  {(selectedThesisSession as SessionSignerInfo | undefined)?.chief?.trim() ||
-                    selectedThesisSession?.graduationDecisionSigner?.trim() ||
-                    "(chưa nhập)"}
-                </strong>
-              )}
+              <Input
+                size="small"
+                className="w-56"
+                value={signChiefName}
+                placeholder="Nhập họ tên"
+                onClick={(e) => e.stopPropagation()}
+                onChange={(e) => {
+                  setSignChiefName(e.target.value)
+                  setSignRole("chief")
+                }}
+              />
             </span>
           </Radio>
           <Radio value="deputy">
             <span className="inline-flex flex-wrap items-center gap-2">
               <span>Phó trưởng phòng sau đại học:</span>
-              {pendingSignKind === "phuLucVanBangCaoHoc" ||
-              pendingSignKind === "phuLucVanBangNganHan" ? (
-                <Input
-                  size="small"
-                  className="w-56"
-                  value={signDeputyName}
-                  placeholder="Nhập họ tên"
-                  onClick={(e) => e.stopPropagation()}
-                  onChange={(e) => {
-                    setSignDeputyName(e.target.value)
-                    setSignRole("deputy")
-                  }}
-                />
-              ) : (
-                <strong>
-                  {(selectedThesisSession as SessionSignerInfo | undefined)?.deputy?.trim() ||
-                    "(chưa nhập)"}
-                </strong>
-              )}
+              <Input
+                size="small"
+                className="w-56"
+                value={signDeputyName}
+                placeholder="Nhập họ tên"
+                onClick={(e) => e.stopPropagation()}
+                onChange={(e) => {
+                  setSignDeputyName(e.target.value)
+                  setSignRole("deputy")
+                }}
+              />
             </span>
           </Radio>
         </Radio.Group>

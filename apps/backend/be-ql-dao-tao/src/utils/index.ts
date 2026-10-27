@@ -6,6 +6,197 @@ import ExcelJS from "exceljs"
 import XlsxTemplate from "xlsx-template"
 import dayjs from "dayjs"
 import Decimal from "decimal.js"
+import PizZip from "pizzip"
+
+export type StudentPrintBlock = {
+  startRow: number
+  endRow: number
+}
+
+export type GenerateExcelFromTemplateResult = {
+  buffer: Buffer
+  studentPrintBlocks: StudentPrintBlock[]
+}
+
+const toNodeBuffer = (data: ArrayBuffer | Uint8Array | Buffer) =>
+  Buffer.from(data instanceof ArrayBuffer ? new Uint8Array(data) : data)
+
+const toColumnLetter = (columnNumber: number) => {
+  let result = ""
+  let current = columnNumber
+  while (current > 0) {
+    const remainder = (current - 1) % 26
+    result = String.fromCharCode(65 + remainder) + result
+    current = Math.floor((current - 1) / 26)
+  }
+  return result || "A"
+}
+
+const columnLetterToNumber = (letter: string) => {
+  let n = 0
+  for (const ch of letter.toUpperCase()) {
+    n = n * 26 + (ch.charCodeAt(0) - 64)
+  }
+  return Math.max(n, 1)
+}
+
+const quoteSheetName = (name: string) => `'${name.replace(/'/g, "''")}'`
+
+const absoluteCellRef = (ref: string) => ref.replace(/([A-Z]+)(\d+)/gi, "$$$1$$$2")
+
+const getFirstSheetInfo = (zip: PizZip) => {
+  const workbookXml = zip.file("xl/workbook.xml")?.asText()
+  const relsXml = zip.file("xl/_rels/workbook.xml.rels")?.asText()
+  if (!workbookXml) return null
+
+  const sheetTag = workbookXml.match(/<sheet\b[^>]*\/?>/)?.[0]
+  const name = sheetTag?.match(/\bname="([^"]+)"/)?.[1] || "Merged"
+  const rId = sheetTag?.match(/\br:id="([^"]+)"/)?.[1]
+
+  let path = "xl/worksheets/sheet1.xml"
+  if (relsXml && rId) {
+    for (const match of relsXml.matchAll(/<Relationship\b[^>]*\/?>/g)) {
+      const tag = match[0]
+      if (tag.match(/\bId="([^"]+)"/)?.[1] !== rId) continue
+      const target = tag.match(/\bTarget="([^"]+)"/)?.[1]
+      if (!target) break
+      const normalized = target.replace(/^\.\//, "").replace(/^\//, "")
+      path = normalized.startsWith("xl/") ? normalized : `xl/${normalized}`
+      break
+    }
+  }
+
+  if (!zip.file(path)) {
+    const fallback = Object.keys(zip.files).find((file) =>
+      /^xl\/worksheets\/sheet\d+\.xml$/.test(file)
+    )
+    if (fallback) path = fallback
+  }
+
+  return { name, path, workbookXml }
+}
+
+const getSheetLastColumnLetter = (sheetXml: string, fallback = "A") => {
+  const dimension = sheetXml.match(/<dimension\b[^>]*ref="[A-Z]+\d+:([A-Z]+)\d+"/i)?.[1]
+  let maxCol = dimension ? columnLetterToNumber(dimension) : 1
+  for (const match of sheetXml.matchAll(/\br="([A-Z]+)\d+"/g)) {
+    maxCol = Math.max(maxCol, columnLetterToNumber(match[1] || "A"))
+  }
+  return maxCol > 1 ? toColumnLetter(maxCol) : fallback
+}
+
+const insertXmlAfter = (xml: string, patterns: RegExp[], fragment: string) => {
+  for (const pattern of patterns) {
+    const match = pattern.exec(xml)
+    if (!match) continue
+    const at = match.index + match[0].length
+    return xml.slice(0, at) + fragment + xml.slice(at)
+  }
+  return null
+}
+
+const insertXmlBefore = (xml: string, patterns: RegExp[], fragment: string) => {
+  for (const pattern of patterns) {
+    const idx = xml.search(pattern)
+    if (idx >= 0) return xml.slice(0, idx) + fragment + xml.slice(idx)
+  }
+  return null
+}
+
+const upsertSheetRowBreaks = (sheetXml: string, breakRows: number[]) => {
+  let xml = sheetXml.replace(/<rowBreaks\b[^>]*>[\s\S]*?<\/rowBreaks>/g, "")
+  const unique = [...new Set(breakRows.filter((row) => row > 0))].sort((a, b) => a - b)
+  if (!unique.length) return xml
+
+  const breaksXml = unique.map((row) => `<brk id="${row}" max="16383" man="1"/>`).join("")
+  const rowBreaks = `<rowBreaks count="${unique.length}" manualBreakCount="${unique.length}">${breaksXml}</rowBreaks>`
+
+  return (
+    insertXmlAfter(
+      xml,
+      [
+        /<\/headerFooter>/,
+        /<pageSetup\b[^>]*\/>/,
+        /<\/pageSetup>/,
+        /<pageMargins\b[^>]*\/>/,
+        /<\/pageMargins>/,
+        /<printOptions\b[^>]*\/>/,
+        /<\/printOptions>/,
+        /<\/mergeCells>/,
+        /<\/sheetData>/,
+      ],
+      rowBreaks
+    ) ||
+    insertXmlBefore(
+      xml,
+      [/<drawing\b/, /<legacyDrawing\b/, /<picture\b/, /<tableParts\b/, /<extLst\b/, /<\/worksheet>/],
+      rowBreaks
+    ) ||
+    xml
+  )
+}
+
+const upsertPrintAreaDefinedName = (workbookXml: string, sheetName: string, ranges: string[]) => {
+  const value = ranges
+    .map((range) => `${quoteSheetName(sheetName)}!${absoluteCellRef(range)}`)
+    .join(",")
+  const tag = `<definedName name="_xlnm.Print_Area" localSheetId="0">${value}</definedName>`
+  let next = workbookXml.replace(
+    /<definedName\b[^>]*name="_xlnm\.Print_Area"[^>]*>[\s\S]*?<\/definedName>/g,
+    ""
+  )
+
+  if (/<definedNames\b[^>]*>[\s\S]*?<\/definedNames>/.test(next)) {
+    if (/<definedNames\b[^>]*>\s*<\/definedNames>/.test(next)) {
+      return next.replace(
+        /<definedNames\b[^>]*>\s*<\/definedNames>/,
+        `<definedNames>${tag}</definedNames>`
+      )
+    }
+    return next.replace("</definedNames>", `${tag}</definedNames>`)
+  }
+
+  const insert = `<definedNames>${tag}</definedNames>`
+  return (
+    insertXmlAfter(next, [/<\/sheets>/], insert) ||
+    insertXmlBefore(next, [/<calcPr\b/, /<oleSize\b/, /<extLst\b/, /<\/workbook>/], insert) ||
+    next
+  )
+}
+
+/** Print area riêng từng sinh viên — Excel coi mỗi vùng là một trang in. */
+export const applyPhoiBangStudentPrintAreas = (
+  buffer: Buffer | ArrayBuffer | Uint8Array,
+  blocks: StudentPrintBlock[]
+) => {
+  const input = toNodeBuffer(buffer)
+  if (!blocks.length) return input
+
+  try {
+    const zip = new PizZip(input)
+    const sheetInfo = getFirstSheetInfo(zip)
+    if (!sheetInfo || !zip.file(sheetInfo.path)) return input
+
+    const sheetXml = zip.file(sheetInfo.path)!.asText()
+    const maxColumnLetter = getSheetLastColumnLetter(sheetXml)
+    const ranges = blocks
+      .filter((block) => block.endRow >= block.startRow && block.startRow > 0)
+      .map((block) => `A${block.startRow}:${maxColumnLetter}${block.endRow}`)
+    if (!ranges.length) return input
+
+    const breakRows = blocks.slice(0, -1).map((block) => block.endRow).filter((row) => row > 0)
+    zip.file(sheetInfo.path, upsertSheetRowBreaks(sheetXml, breakRows))
+    zip.file(
+      "xl/workbook.xml",
+      upsertPrintAreaDefinedName(sheetInfo.workbookXml, sheetInfo.name, ranges)
+    )
+
+    return zip.generate({ type: "nodebuffer", compression: "DEFLATE" }) as Buffer
+  } catch (error) {
+    console.error("applyPhoiBangStudentPrintAreas failed:", error)
+    return input
+  }
+}
 
 export function parseDate(input?: number | string | Date): Date | null {
   if (!input) return null
@@ -321,7 +512,7 @@ export const buildCurriculumMapOrThrow = async (
 
   const managementOrganizationMap = await buildOrgNameMapOrThrow(
     prisma,
-    uniqueTuples.map((s) => s.managementOrganization)
+    uniqueTuples.map((s) => s.managementOrganization) 
   )
 
   const uniqueNames = Array.from(
@@ -1557,13 +1748,17 @@ export const generateExcelFromTemplate = async (
     if (worksheet) generatedSheets.push(worksheet)
   }
 
+  const studentPrintBlocks: StudentPrintBlock[] = []
   let currentRow = 1
   for (let i = 0; i < generatedSheets.length; i++) {
     const sourceSheet = generatedSheets[i]
     if (!sourceSheet) continue
+    const startRow = currentRow
     currentRow = copySheetContent(sourceSheet, outputSheet, currentRow)
+    const endRow = currentRow - 1
+    studentPrintBlocks.push({ startRow, endRow })
     if (i < generatedSheets.length - 1) {
-      outputSheet.getRow(currentRow - 1).addPageBreak()
+      outputSheet.getRow(endRow).addPageBreak()
     }
   }
 
@@ -1597,8 +1792,6 @@ export const generateExcelFromTemplate = async (
   }
 
   const lastDataRow = getLastUsedDataRow(outputSheet)
-  const maxColumn = Math.max(outputSheet.columnCount, 1)
-  const maxColumnLetter = toColumnLetter(maxColumn)
 
   if (finalMarkerRows.length > 0) {
     const uniqueBreakRows = [...new Set(finalMarkerRows)].sort((a, b) => a - b)
@@ -1607,13 +1800,16 @@ export const generateExcelFromTemplate = async (
         outputSheet.getRow(markerRow - 1).addPageBreak()
       }
     }
-    outputSheet.pageSetup.printArea = `A1:${maxColumnLetter}${lastDataRow}`
-    outputSheet.pageSetup.fitToPage = true
-    outputSheet.pageSetup.fitToWidth = 1
-    outputSheet.pageSetup.fitToHeight = 0
   }
 
-  return await mergedWorkbook.xlsx.writeBuffer()
+  outputSheet.pageSetup.fitToPage = true
+  outputSheet.pageSetup.fitToWidth = 1
+  outputSheet.pageSetup.fitToHeight = 0
+
+  return {
+    buffer: toNodeBuffer(await mergedWorkbook.xlsx.writeBuffer()),
+    studentPrintBlocks,
+  }
 }
 
 /**
@@ -1709,10 +1905,15 @@ export const applyPhoiBangNganHanCourseLabelStyles = async (
       if (!targetUpper.has(text.toUpperCase())) return
 
       touchedRows.add(rowNumber)
+      const fontName = options.fontFamily?.trim() || "Cambria"
+      const isSerif = /times|georgia|garamond|cambria|palatino|antiqua|schoolbook|constantia|calisto|baskerville|liberation serif|\.vntime|vni-times/i.test(
+        fontName
+      )
       cell.font = {
         ...(cell.font || {}),
         bold: cell.font?.bold ?? true,
-        ...(options.fontFamily ? { name: options.fontFamily } : {}),
+        name: fontName,
+        family: isSerif ? 1 : 2,
         ...(options.fontSize != null ? { size: options.fontSize } : {}),
       }
       cell.alignment = {
