@@ -25,8 +25,11 @@ import {
   Paragraph,
   TableCell,
   TableRow,
+  TabStopType,
+  TableLayoutType,
   TextRun,
   VerticalAlign,
+  WidthType,
 } from "docx"
 // @ts-nocheck
 import ReactECharts from "echarts-for-react"
@@ -181,8 +184,13 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
     {
       where: { id: selectedId },
       include: {
+        surveyTopic: true,
+        surveyChoice: {
+          orderBy: { answer: "asc" },
+        },
         surveyQuestion: {
           include: {
+            surveyQuestionGroup: true,
             specificChoice: {
               orderBy: { createdAt: "asc" },
             },
@@ -457,6 +465,50 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
     )
   }
 
+  const cleanText = (str?: string) =>
+    (str || "")
+      .replace(/<[^>]+>/g, "")
+      .replace(/&nbsp;/g, " ")
+      .replace(/&amp;/g, "&")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&quot;/g, '"')
+      .trim()
+
+  const calcGroupAverage = (
+    groupQuestions: any[],
+    choiceOptions: Array<{ answer: string; description: string }>
+  ) => {
+    const acc = choiceOptions.map((c) => ({
+      answer: String(c.answer),
+      description: c.description || "",
+      count: 0,
+    }))
+
+    let totalCount = 0
+
+    groupQuestions.forEach((q: any) => {
+      (q.answers || []).forEach((a: any) => {
+        const match = acc.find((item) => String(item.answer) === String(a.answer))
+        if (match) {
+          const cnt = Number(a.count || 0)
+          match.count += cnt
+          totalCount += cnt
+        }
+      })
+    })
+
+    return acc.map((item) => {
+      const percent =
+        totalCount === 0 ? 0 : Number.parseFloat(((item.count / totalCount) * 100).toFixed(2))
+      return {
+        ...item,
+        total: totalCount,
+        percent,
+      }
+    })
+  }
+
   const exportWordReport = async (
     name: string,
     dataTable: any,
@@ -465,141 +517,202 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
   ) => {
     showSpinner()
     try {
-      const centerCell = (text = "") =>
+      const centerCell = (
+        text = "",
+        opts?: { bold?: boolean; width?: number; size?: number }
+      ) =>
         new TableCell({
+          ...(opts?.width ? { width: { size: opts.width, type: WidthType.DXA } } : {}),
           verticalAlign: VerticalAlign.CENTER,
+          margins: { top: 60, bottom: 60, left: 60, right: 60 },
           children: [
             new Paragraph({
               alignment: AlignmentType.CENTER,
-              children: [new TextRun(text)],
+              children: [new TextRun({ text, bold: opts?.bold, size: opts?.size ?? 21 })],
             }),
           ],
         })
-      const specialAnswerCell = (label: string, percentText: string) =>
+
+      const contentCell = (
+        text = "",
+        opts?: { bold?: boolean; width?: number; size?: number }
+      ) =>
         new TableCell({
+          ...(opts?.width ? { width: { size: opts.width, type: WidthType.DXA } } : {}),
           verticalAlign: VerticalAlign.CENTER,
+          margins: { top: 60, bottom: 60, left: 80, right: 80 },
           children: [
             new Paragraph({
-              alignment: AlignmentType.CENTER,
-              children: [new TextRun({ text: label, bold: true, size: 18 })],
-            }),
-            new Paragraph({
-              alignment: AlignmentType.CENTER,
-              children: [new TextRun(percentText)],
+              children: [new TextRun({ text, bold: opts?.bold, size: opts?.size ?? 21 })],
             }),
           ],
         })
-      const headerCell = (text: string, opts?: { rowSpan?: number; columnSpan?: number }) =>
+
+      const questionCell = (
+        index: number | string,
+        isSpecial: boolean,
+        opts?: { width?: number; size?: number }
+      ) => {
+        if (isSpecial) {
+          return new TableCell({
+            ...(opts?.width ? { width: { size: opts.width, type: WidthType.DXA } } : {}),
+            verticalAlign: VerticalAlign.CENTER,
+            margins: { top: 60, bottom: 60, left: 60, right: 60 },
+            children: [
+              new Paragraph({
+                alignment: AlignmentType.CENTER,
+                children: [
+                  new TextRun({ text: `Câu hỏi ${index}`, size: opts?.size ?? 21 }),
+                  new TextRun({ text: " *", bold: true, color: "FF0000", size: opts?.size ?? 21 }),
+                ],
+              }),
+            ],
+          })
+        }
+        return centerCell(`Câu hỏi ${index}`, opts)
+      }
+
+      const headerCell = (
+        text: string,
+        opts?: { rowSpan?: number; columnSpan?: number; width?: number; size?: number }
+      ) =>
         new TableCell({
+          ...(opts?.width ? { width: { size: opts.width, type: WidthType.DXA } } : {}),
           ...(opts?.rowSpan ? { rowSpan: opts.rowSpan } : {}),
           ...(opts?.columnSpan ? { columnSpan: opts.columnSpan } : {}),
           verticalAlign: VerticalAlign.CENTER,
+          margins: { top: 80, bottom: 80, left: 60, right: 60 },
           children: [
             new Paragraph({
               alignment: AlignmentType.CENTER,
-              children: [new TextRun({ text, bold: true })],
+              children: [new TextRun({ text, bold: true, size: opts?.size ?? 22 })],
             }),
           ],
         })
 
-      const buildQuestionTable = (tData: any) => {
-        const answerHeaderItems =
-          tData?.[0]?.answers || tData?.[0]?.questions?.[0]?.answers || []
-        const answerHeaders = answerHeaderItems.map((a: any) => a.description)
-
-        const answerRows: any[] = []
-        if (tData?.length > 0) {
-          const flatData: any[] = []
-          let qIndex = 1
-          tData.forEach((group: any) => {
-            flatData.push({ ...group, isGroup: true })
-            group.questions?.forEach((q: any) => {
-              flatData.push({
-                ...q,
-                isGroup: false,
-                isSpecial: !!specificChoiceByQuestionId[q.id]?.length,
-                questionIndex: qIndex++,
+      const buildOptionsParagraphs = (
+        options: Array<{ answer: string; description: string }>
+      ) => {
+        if (!options || options.length === 0) return []
+        const paragraphs: Paragraph[] = []
+        const chunkSize = 3
+        for (let i = 0; i < options.length; i += chunkSize) {
+          const chunk = options.slice(i, i + chunkSize)
+          const children: TextRun[] = []
+          chunk.forEach((opt, idx) => {
+            if (idx > 0) {
+              children.push(new TextRun("	"))
+            }
+            const desc = (opt.description || "").trim()
+            const cleanDesc = desc.replace(new RegExp(`^${opt.answer}[.\\s]+`, "i"), "").trim()
+            children.push(
+              new TextRun({
+                text: `${opt.answer}. ${cleanDesc || desc}`,
+                bold: true,
+                size: 24,
               })
-            })
+            )
           })
+          paragraphs.push(
+            new Paragraph({
+              indent: { left: 500 },
+              tabStops: [
+                { type: TabStopType.LEFT, position: 3500 },
+                { type: TabStopType.LEFT, position: 6800 },
+              ],
+              spacing: { after: 60 },
+              children,
+            })
+          )
+        }
+        return paragraphs
+      }
 
-          flatData.forEach((i: any) => {
-            const percents = calculatePercent(i?.answers || [])
-            answerRows.push(
+      const buildQuestionTable = (
+        groups: any[],
+        options: Array<{ answer: string; description: string }>,
+        isSpecialTable: boolean
+      ) => {
+        const numOptions = options.length || 5
+        const totalOptionsWidth = 5250
+        const choiceColWidth = Math.floor(totalOptionsWidth / numOptions)
+        const totalChoiceWidth = choiceColWidth * numOptions
+        const sttWidth = 550
+        const questionWidth = 1100
+        const contentWidth = 9650 - sttWidth - questionWidth - totalChoiceWidth
+        const columnWidths = [
+          sttWidth,
+          questionWidth,
+          contentWidth,
+          ...Array(numOptions).fill(choiceColWidth),
+        ]
+        const tableWidth = sttWidth + questionWidth + contentWidth + totalChoiceWidth
+
+        const headerRows = [
+          new TableRow({
+            children: [
+              headerCell("STT", { width: sttWidth, rowSpan: 2 }),
+              headerCell("Câu hỏi", { width: questionWidth, rowSpan: 2 }),
+              headerCell("Nội dung", { width: contentWidth, rowSpan: 2 }),
+              headerCell("Phương án trả lời", { width: totalChoiceWidth, columnSpan: numOptions }),
+            ],
+          }),
+          new TableRow({
+            children: options.map((opt, idx) =>
+              headerCell(String(opt.answer ?? idx + 1), { width: choiceColWidth })
+            ),
+          }),
+        ]
+
+        const bodyRows: TableRow[] = []
+
+        groups.forEach((group: any) => {
+          const groupAvg = calcGroupAverage(group.questions, options)
+
+          // ĐGTB Row
+          bodyRows.push(
+            new TableRow({
+              children: [
+                centerCell("", { width: sttWidth }),
+                centerCell("ĐGTB", { width: questionWidth, bold: true }),
+                contentCell(group.groupName || "Nhóm câu hỏi", { width: contentWidth, bold: true }),
+                ...groupAvg.map((avg) => {
+                  const percentText = `${avg.percent || 0}% (${avg.count || 0}/${avg.total || 0})`
+                  return centerCell(percentText, { width: choiceColWidth })
+                }),
+              ],
+            })
+          )
+
+          // Question Rows
+          group.questions.forEach((q: any) => {
+            const qPercents = calculatePercent(q.answers || [])
+            bodyRows.push(
               new TableRow({
                 children: [
-                  centerCell(i.isGroup ? "" : String(i.questionIndex)),
-                  i.isGroup
-                    ? centerCell("ĐGTB")
-                    : i.isSpecial
-                      ? new TableCell({
-                          verticalAlign: VerticalAlign.CENTER,
-                          children: [
-                            new Paragraph({
-                              alignment: AlignmentType.CENTER,
-                              children: [
-                                new TextRun(`Câu hỏi ${i.questionIndex}`),
-                                new TextRun({ text: " *", bold: true, color: "FF0000" }),
-                              ],
-                            }),
-                          ],
-                        })
-                      : centerCell(`Câu hỏi ${i.questionIndex}`),
-                  new TableCell({
-                    children: [
-                      new Paragraph({
-                        children: [
-                          new TextRun({
-                            text: (i.isGroup ? i.groupName : i?.name) || "",
-                            bold: i.isGroup,
-                          }),
-                        ],
-                      }),
-                    ],
-                  }),
-                  ...percents.map((a: any, answerIndex: number) => {
-                    const percentText = `${a.percent || 0}% (${a?.count || 0}/${a?.total || 0})`
-                    if (i.isGroup || !i.isSpecial) return centerCell(percentText)
-
-                    const specialLabel = getSpecialChoiceLabel(
-                      specificChoiceByQuestionId[i.id],
-                      answerIndex,
-                      a?.answer
+                  centerCell(String(q.questionIndex), { width: sttWidth }),
+                  questionCell(q.questionIndex, isSpecialTable || q.isSpecial, { width: questionWidth }),
+                  contentCell(cleanText(q.name), { width: contentWidth }),
+                  ...options.map((opt) => {
+                    const match = qPercents.find(
+                      (a: any) => String(a.answer) === String(opt.answer)
                     )
-                    return specialLabel
-                      ? specialAnswerCell(specialLabel, percentText)
-                      : centerCell(percentText)
+                    const percentText = match
+                      ? `${match.percent || 0}% (${match.count || 0}/${match.total || 0})`
+                      : "0% (0/0)"
+                    return centerCell(percentText, { width: choiceColWidth })
                   }),
                 ],
               })
             )
           })
-        }
-
-        const headerRows =
-          answerHeaders.length > 0
-            ? [
-                new TableRow({
-                  children: [
-                    headerCell("STT", { rowSpan: 2 }),
-                    headerCell("Câu hỏi", { rowSpan: 2 }),
-                    headerCell("Nội dung", { rowSpan: 2 }),
-                    headerCell("Phương án trả lời", { columnSpan: answerHeaders.length }),
-                  ],
-                }),
-                new TableRow({
-                  children: answerHeaders.map((h: string) => headerCell(h || "")),
-                }),
-              ]
-            : [
-                new TableRow({
-                  children: [headerCell("STT"), headerCell("Câu hỏi"), headerCell("Nội dung")],
-                }),
-              ]
+        })
 
         return new DocxTable({
-          width: { size: 100, type: "pct" },
-          rows: [...headerRows, ...answerRows],
+          layout: TableLayoutType.FIXED,
+          width: { size: tableWidth, type: WidthType.DXA },
+          columnWidths,
+          rows: [...headerRows, ...bodyRows],
         })
       }
 
@@ -612,7 +725,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
         const headerParagraphs = [
           new Paragraph({
             alignment: "center",
-            children: [new TextRun({ text: `Tổng hợp số liệu: ${name}`, bold: true, size: 28 })],
+            children: [new TextRun({ text: `Tổng hợp số liệu: ${name || ""}`, bold: true, size: 28 })],
           }),
           ...(majorOrg
             ? [
@@ -645,17 +758,198 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
             : []),
         ]
 
-        return [
-          ...headerParagraphs,
-          new Paragraph({ text: "" }),
-          new Paragraph({
-            children: [new TextRun({ text: "Thống kê theo từng Câu hỏi", bold: true, size: 24 })],
+        if (!tData || !Array.isArray(tData) || tData.length === 0) {
+          return [
+            ...headerParagraphs,
+            new Paragraph({ text: "" }),
+            new Paragraph({
+              children: [new TextRun({ text: "Không có dữ liệu thống kê", italic: true })],
+            }),
+          ]
+        }
+
+        // 1. Assign sequential questionIndex to all questions across groups
+        let qIndex = 1
+        const enrichedGroups = tData.map((group: any) => ({
+          ...group,
+          questions: (group.questions || []).map((q: any) => {
+            const sc = specificChoiceByQuestionId[q.id] || q.specificChoice || []
+            const isSpecial = Boolean(sc && sc.length > 0)
+            return {
+              ...q,
+              questionIndex: qIndex++,
+              isSpecial,
+              specificChoice: sc,
+            }
           }),
-          buildQuestionTable(tData),
+        }))
+
+        // 2. Separate groups for Table 1 (normal) and Table 2 (special)
+        const normalGroups: any[] = []
+        const specialGroups: any[] = []
+
+        enrichedGroups.forEach((group: any) => {
+          const normalQs = group.questions.filter((q: any) => !q.isSpecial)
+          const specialQs = group.questions.filter((q: any) => q.isSpecial)
+
+          if (normalQs.length > 0) {
+            normalGroups.push({
+              ...group,
+              questions: normalQs,
+            })
+          }
+          if (specialQs.length > 0) {
+            specialGroups.push({
+              ...group,
+              questions: specialQs,
+            })
+          }
+        })
+
+        // 3. Resolve options for normal questions
+        let normalOptions: Array<{ answer: string; description: string }> = []
+        if (surveyDetail?.surveyChoice?.length) {
+          normalOptions = [...surveyDetail.surveyChoice]
+            .sort((a, b) => Number(a.answer) - Number(b.answer))
+            .map((c) => ({ answer: String(c.answer), description: c.description || "" }))
+        } else {
+          const rawHeaderItems =
+            tData?.[0]?.answers || tData?.[0]?.questions?.[0]?.answers || []
+          if (rawHeaderItems.length > 0) {
+            normalOptions = rawHeaderItems.map((c: any, idx: number) => ({
+              answer: String(c.answer ?? idx + 1),
+              description: c.description || "",
+            }))
+          } else {
+            normalOptions = [
+              { answer: "1", description: "Rất không đồng ý" },
+              { answer: "2", description: "Không đồng ý" },
+              { answer: "3", description: "Phân vân" },
+              { answer: "4", description: "Đồng ý" },
+              { answer: "5", description: "Rất đồng ý" },
+            ]
+          }
+        }
+
+        // 4. Resolve options for special questions
+        let specialOptions: Array<{ answer: string; description: string }> = []
+        for (const g of specialGroups) {
+          for (const q of g.questions) {
+            if (q.specificChoice && q.specificChoice.length > 0) {
+              specialOptions = [...q.specificChoice]
+                .sort((a, b) => Number(a.answer) - Number(b.answer))
+                .map((c: any) => ({
+                  answer: String(c.answer),
+                  description: c.description || "",
+                }))
+              break
+            }
+          }
+          if (specialOptions.length > 0) break
+        }
+        if (!specialOptions.length) {
+          specialOptions = [
+            { answer: "1", description: "Rất không hài lòng" },
+            { answer: "2", description: "Không hài lòng" },
+            { answer: "3", description: "Phân vân" },
+            { answer: "4", description: "Hài lòng" },
+            { answer: "5", description: "Rất hài lòng" },
+          ]
+        }
+
+        // 5. Titles
+        const hasBothTables = normalGroups.length > 0 && specialGroups.length > 0
+        const section1Prefix = hasBothTables ? "I. " : ""
+        const topicName = surveyDetail?.surveyTopic?.name?.trim()
+        const section1Title = `${section1Prefix}${topicName ? topicName.toUpperCase() : "NHẬN XÉT ĐÁNH GIÁ TOÀN KHÓA HỌC"}`
+
+        const section2Prefix = hasBothTables ? "II. " : ""
+        let section2Name = "CẢM NHẬN VỀ KẾT QUẢ ĐẠT ĐƯỢC"
+        if (specialGroups.length === 1 && specialGroups[0].groupName) {
+          const rawName = specialGroups[0].groupName.trim()
+          if (/cảm nhận.*kq.*đạt được/i.test(rawName)) {
+            section2Name = "CẢM NHẬN VỀ KẾT QUẢ ĐẠT ĐƯỢC"
+          } else {
+            section2Name = rawName.toUpperCase()
+          }
+        } else if (specialGroups.length > 1) {
+          const matching = specialGroups.find((g) => /cảm nhận.*kq.*đạt được/i.test(g.groupName || ""))
+          if (matching) {
+            section2Name = "CẢM NHẬN VỀ KẾT QUẢ ĐẠT ĐƯỢC"
+          } else {
+            section2Name = "CÂU HỎI CÓ ĐÁP ÁN ĐẶC BIỆT"
+          }
+        }
+        const section2Title = `${section2Prefix}${section2Name}`
+
+        const children: (Paragraph | DocxTable)[] = [
+          ...headerParagraphs,
         ]
+
+        if (normalGroups.length > 0) {
+          children.push(
+            new Paragraph({ text: "" }),
+            new Paragraph({
+              spacing: { after: 120 },
+              children: [
+                new TextRun({
+                  text: section1Title,
+                  bold: true,
+                  size: 26,
+                }),
+              ],
+            }),
+            ...buildOptionsParagraphs(normalOptions),
+            new Paragraph({ text: "" }),
+            new Paragraph({
+              spacing: { after: 120 },
+              children: [
+                new TextRun({
+                  text: "Thống kê theo từng Câu hỏi",
+                  bold: true,
+                  size: 24,
+                }),
+              ],
+            }),
+            buildQuestionTable(normalGroups, normalOptions, false)
+          )
+        }
+
+        if (specialGroups.length > 0) {
+          children.push(
+            new Paragraph({ text: "" }),
+            new Paragraph({ text: "" }),
+            new Paragraph({
+              spacing: { after: 120 },
+              children: [
+                new TextRun({
+                  text: section2Title,
+                  bold: true,
+                  size: 26,
+                }),
+              ],
+            }),
+            ...buildOptionsParagraphs(specialOptions),
+            new Paragraph({ text: "" }),
+            buildQuestionTable(specialGroups, specialOptions, true)
+          )
+        }
+
+        return children
       }
 
       const sections = []
+
+      const pageProperties = {
+        page: {
+          margin: {
+            top: 1440,
+            bottom: 1440,
+            left: 1134,
+            right: 1122,
+          },
+        },
+      }
 
       const primaryMajor =
         (dataMajorCount || []).find((m: any) => m.name !== "Khác" && m.organization) ||
@@ -663,7 +957,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
         (dataMajorCount || [])[0]
 
       sections.push({
-        properties: {},
+        properties: pageProperties,
         children: buildSection(
           "Tổng hợp chung",
           dataTable,
@@ -682,7 +976,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
             const tData = res?.data?.data || res?.data || res
             if (tData) {
               sections.push({
-                properties: {},
+                properties: pageProperties,
                 children: buildSection(`CN ${major.name}`, tData, major.name, major.organization),
               })
             }
@@ -692,7 +986,19 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
         }
       }
 
-      const doc = new Document({ sections })
+      const doc = new Document({
+        styles: {
+          default: {
+            document: {
+              run: {
+                font: "Times New Roman",
+                size: 24,
+              },
+            },
+          },
+        },
+        sections,
+      })
       const buffer = await Packer.toBlob(doc)
       saveAs(buffer, `Bao_cao_khao_sat_${name || ""}.docx`)
     } catch (e) {
