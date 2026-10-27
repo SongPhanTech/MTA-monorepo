@@ -533,7 +533,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
     }
   }
 
-  const exportWordReport = async (
+const exportWordReport = async (
     name: string,
     dataTable: any,
     dataTableInfo: any,
@@ -1159,7 +1159,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                             children: [
                               {
                                 key: "word-graduate-direct",
-                                label: "Tải xuống trực tiếp",
+                                label: "Xuất báo cáo tự động (Word)",
                                 icon: <DownloadOutlined />,
                                 onClick: () => handleDirectGraduateWordExport(),
                               },

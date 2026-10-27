@@ -16,7 +16,10 @@ import {
   SurveyMajorCountResponseSchema,
   GraduateSurveyReportResponseSchema,
 } from "../dto/survey-statistic.dto"
-import { getGraduateSurveyReportDataService } from "../services/graduate-survey-report.service"
+import {
+  getGraduateSurveyReportDataService,
+  loadGraduateSurveyReportTemplate,
+} from "../services/graduate-survey-report.service"
 import {
   SURVEY_OBJECT_TYPE_INCLUDE,
   SURVEY_OBJECT_TYPE_REPORT_INCLUDE,
@@ -1122,6 +1125,45 @@ app.openapi(getGraduateSurveyReportData, async (c) => {
       return c.json({ message: "Không tìm thấy khảo sát" }, 404)
     }
     throw error
+  }
+})
+
+const getGraduateReportTemplate = createRoute({
+  operationId: "get-graduate-report-template",
+  path: "/template/graduate-report-docx",
+  method: "get",
+  tags: ["Khảo sát"],
+  summary: "Tải file biểu mẫu báo cáo khảo sát tốt nghiệp từ MinIO",
+  responses: {
+    ...standardErrorResponses(),
+    200: {
+      description: "Tải template thành công",
+    },
+    500: {
+      description: "Lỗi tải template",
+      content: {
+        "application/json": {
+          schema: ErrorMessageResponseSchema,
+        },
+      },
+    },
+  },
+})
+
+app.openapi(getGraduateReportTemplate, async (c) => {
+  try {
+    const buffer = await loadGraduateSurveyReportTemplate()
+    c.header(
+      "Content-Disposition",
+      'attachment; filename="BaoCaoLayYkienHocVienTotNghiep_Mau.docx"'
+    )
+    c.header(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    )
+    return c.body(buffer, 200)
+  } catch (error: any) {
+    return c.json({ message: error?.message || "Không thể tải biểu mẫu template" }, 500)
   }
 })
 

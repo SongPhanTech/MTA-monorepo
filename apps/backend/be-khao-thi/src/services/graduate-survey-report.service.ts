@@ -1,3 +1,6 @@
+import fs from "node:fs/promises"
+import path from "node:path"
+import { fileURLToPath } from "node:url"
 import { PrismaClient } from "@workspace/db"
 import {
   buildSurveyObjectTypeProfileOrClauses,
@@ -482,6 +485,44 @@ export const DEFAULT_ACADEMY_DEPARTMENTS = [
     ],
   },
 ]
+
+export const GRADUATE_SURVEY_REPORT_TEMPLATE_MINIO_PATH =
+  "/mta/template/BaoCaoLayYkienHocVienTotNghiep_Mau.docx"
+
+export async function loadGraduateSurveyReportTemplate(): Promise<Buffer> {
+  // Fetch trực tiếp MinIO (không dùng cache) để nhận template mới sau khi upload
+  try {
+    const { fetchMinio } = await import("@workspace/libs/utils")
+    const res = await fetchMinio(GRADUATE_SURVEY_REPORT_TEMPLATE_MINIO_PATH)
+    if (res.ok) {
+      return Buffer.from(await res.arrayBuffer())
+    }
+  } catch {
+    // fallback below
+  }
+
+  const here = path.dirname(fileURLToPath(import.meta.url))
+  const candidates = [
+    path.join(process.cwd(), "templates/BaoCaoLayYkienHocVienTotNghiep_Mau.docx"),
+    path.join(
+      process.cwd(),
+      "apps/backend/be-khao-thi/templates/BaoCaoLayYkienHocVienTotNghiep_Mau.docx"
+    ),
+    path.join(here, "../../templates/BaoCaoLayYkienHocVienTotNghiep_Mau.docx"),
+  ]
+
+  for (const candidate of candidates) {
+    try {
+      return await fs.readFile(candidate)
+    } catch {
+      // try next
+    }
+  }
+
+  throw new Error(
+    "Không tìm thấy template BaoCaoLayYkienHocVienTotNghiep_Mau.docx trên MinIO hoặc local"
+  )
+}
 
 export async function getGraduateSurveyReportDataService(
   prisma: PrismaClient,

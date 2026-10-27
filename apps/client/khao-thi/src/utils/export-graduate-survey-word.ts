@@ -12,6 +12,304 @@ import {
   WidthType,
 } from "docx"
 import { saveAs } from "file-saver"
+import { fetchMinio } from "@workspace/libs/utils"
+import PizZip from "pizzip"
+
+export const GRADUATE_SURVEY_REPORT_TEMPLATE_MINIO_PATH =
+  "mta/template/BaoCaoLayYkienHocVienTotNghiep_Mau.docx"
+
+function xmlEscape(str: string): string {
+  if (!str) return ""
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;")
+}
+
+function makeParagraphXml({
+  text,
+  bold = false,
+  italic = false,
+  align = "both",
+  indent = true,
+  spacingBefore = 0,
+  spacingAfter = 120,
+  fontSize = 28,
+}: {
+  text: string
+  bold?: boolean
+  italic?: boolean
+  align?: "both" | "left" | "center" | "right"
+  indent?: boolean
+  spacingBefore?: number
+  spacingAfter?: number
+  fontSize?: number
+}) {
+  const jcVal =
+    align === "left" ? "left" : align === "center" ? "center" : align === "right" ? "right" : "both"
+  const indXml = indent ? '<w:ind w:firstLine="720"/>' : ""
+  const boldXml = bold ? "<w:b/><w:bCs/>" : ""
+  const italicXml = italic ? "<w:i/><w:iCs/>" : ""
+  const beforeXml = spacingBefore ? ` w:before="${spacingBefore}"` : ""
+
+  return `<w:p>
+    <w:pPr>
+      <w:spacing w:line="288" w:lineRule="auto"${beforeXml} w:after="${spacingAfter}"/>
+      ${indXml}
+      <w:jc w:val="${jcVal}"/>
+      <w:rPr>
+        <w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/>
+        <w:sz w:val="${fontSize}"/>
+        <w:szCs w:val="${fontSize}"/>
+      </w:rPr>
+    </w:pPr>
+    <w:r>
+      <w:rPr>
+        <w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/>
+        ${boldXml}
+        ${italicXml}
+        <w:sz w:val="${fontSize}"/>
+        <w:szCs w:val="${fontSize}"/>
+      </w:rPr>
+      <w:t xml:space="preserve">${xmlEscape(text)}</w:t>
+    </w:r>
+  </w:p>`
+}
+
+function buildMajorsTableXml(majors: GraduateMajorItem[]): string {
+  const padZero = (n: number) => (n < 10 ? `0${n}` : `${n}`)
+  const half = Math.ceil(majors.length / 2)
+  const col1 = majors.slice(0, half)
+  const col2 = majors.slice(half)
+
+  let rowsXml = ""
+  for (let i = 0; i < half; i++) {
+    const m1 = col1[i]
+    const m2 = col2[i]
+
+    const cell1Label = m1 ? `- ${m1.name}:` : ""
+    const cell1Value = m1 ? `${padZero(m1.taken)}/${padZero(m1.total)}` : ""
+    const cell2Label = m2 ? `- ${m2.name}:` : ""
+    const cell2Value = m2 ? `${padZero(m2.taken)}/${padZero(m2.total)}` : ""
+
+    rowsXml += `<w:tr>
+      <w:tc>
+        <w:tcPr><w:tcW w:w="3085" w:type="dxa"/></w:tcPr>
+        <w:p><w:pPr><w:spacing w:line="288" w:lineRule="auto"/><w:jc w:val="left"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="28"/><w:szCs w:val="28"/></w:rPr></w:pPr>
+        <w:r><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="28"/><w:szCs w:val="28"/></w:rPr><w:t xml:space="preserve">${xmlEscape(cell1Label)}</w:t></w:r></w:p>
+      </w:tc>
+      <w:tc>
+        <w:tcPr><w:tcW w:w="1200" w:type="dxa"/></w:tcPr>
+        <w:p><w:pPr><w:spacing w:line="288" w:lineRule="auto"/><w:jc w:val="left"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="28"/><w:szCs w:val="28"/></w:rPr></w:pPr>
+        <w:r><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="28"/><w:szCs w:val="28"/></w:rPr><w:t xml:space="preserve">${xmlEscape(cell1Value)}</w:t></w:r></w:p>
+      </w:tc>
+      <w:tc>
+        <w:tcPr><w:tcW w:w="3085" w:type="dxa"/></w:tcPr>
+        <w:p><w:pPr><w:spacing w:line="288" w:lineRule="auto"/><w:jc w:val="left"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="28"/><w:szCs w:val="28"/></w:rPr></w:pPr>
+        <w:r><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="28"/><w:szCs w:val="28"/></w:rPr><w:t xml:space="preserve">${xmlEscape(cell2Label)}</w:t></w:r></w:p>
+      </w:tc>
+      <w:tc>
+        <w:tcPr><w:tcW w:w="1200" w:type="dxa"/></w:tcPr>
+        <w:p><w:pPr><w:spacing w:line="288" w:lineRule="auto"/><w:jc w:val="left"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="28"/><w:szCs w:val="28"/></w:rPr></w:pPr>
+        <w:r><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="28"/><w:szCs w:val="28"/></w:rPr><w:t xml:space="preserve">${xmlEscape(cell2Value)}</w:t></w:r></w:p>
+      </w:tc>
+    </w:tr>`
+  }
+
+  return `<w:tbl>
+    <w:tblPr>
+      <w:tblW w:w="8570" w:type="dxa"/>
+      <w:tblBorders>
+        <w:top w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+        <w:left w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+        <w:bottom w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+        <w:right w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+        <w:insideH w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+        <w:insideV w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+      </w:tblBorders>
+      <w:tblLayout w:type="fixed"/>
+    </w:tblPr>
+    ${rowsXml}
+  </w:tbl>`
+}
+
+/**
+ * Đọc file template docx chuẩn từ MinIO và cập nhật dữ liệu khảo sát vào template.
+ * Giữ nguyên 100% định dạng, phông chữ, lề trang từ biểu mẫu của Học viện.
+ */
+export function fillGraduateSurveyReportTemplate(
+  templateBuffer: ArrayBuffer,
+  data: GraduateReportData
+): Uint8Array {
+  const zip = new PizZip(templateBuffer)
+  let docXml = zip.file("word/document.xml")?.asText() || ""
+
+  const tblMatches = [...docXml.matchAll(/<w:tbl[\s\S]*?<\/w:tbl>/g)]
+  if (tblMatches.length < 3) {
+    throw new Error("Template không chứa đủ 3 bảng cấu trúc chuẩn của Học viện")
+  }
+
+  const t1 = tblMatches[1]
+  const t2 = tblMatches[2]
+
+  let beforeT1 = docXml.slice(0, t1.index)
+  // 1. Cập nhật ngày tháng năm ở Header
+  if (data.surveyInfo.reportLocationDate) {
+    beforeT1 = beforeT1.replace(
+      /Hà Nội,\s*ngày\s*tháng\s*năm/g,
+      xmlEscape(data.surveyInfo.reportLocationDate)
+    )
+  }
+  // 2. Cập nhật tiêu đề báo cáo
+  const courseUpper = (data.surveyInfo.courseName || "").toUpperCase()
+  beforeT1 = beforeT1.replace(
+    /<w:t>TỪ HỌC VIÊN KHÓA 5<\/w:t>[\s\S]*?<w:t[^>]*>\s*TỐT NGHIỆP\s*<\/w:t>/g,
+    `<w:t>TỪ HỌC VIÊN ${xmlEscape(courseUpper)} TỐT NGHIỆP</w:t>`
+  )
+
+  // 3. Bảng chuyên ngành (Table 1)
+  const newT1 = buildMajorsTableXml(data.sectionA.majors || [])
+
+  // 4. Phần thân giữa Table 1 và Table 2
+  let middleXml = ""
+
+  // Phần B
+  middleXml += makeParagraphXml({
+    text: data.sectionB.title || "B. Nhận xét đánh giá của học viên các chuyên ngành",
+    bold: true,
+    indent: false,
+    spacingBefore: 240,
+    spacingAfter: 120,
+  })
+
+  ;(data.sectionB.fields || []).forEach((field, fIdx) => {
+    const roman = ["I", "II", "III", "IV", "V", "VI"][fIdx] || `${fIdx + 1}`
+    middleXml += makeParagraphXml({
+      text: `${roman}. ${field.title}`,
+      bold: true,
+      italic: true,
+      indent: false,
+      spacingBefore: 160,
+      spacingAfter: 80,
+    })
+    if (field.generalText) {
+      middleXml += makeParagraphXml({
+        text: field.generalText,
+        indent: true,
+        spacingAfter: 80,
+      })
+    }
+    if (field.standoutText) {
+      middleXml += makeParagraphXml({
+        text: field.standoutText,
+        indent: true,
+        spacingAfter: 120,
+      })
+    }
+  })
+
+  // Phần C
+  middleXml += makeParagraphXml({
+    text: data.sectionC.title || "C. Tổng hợp chung",
+    bold: true,
+    indent: false,
+    spacingBefore: 240,
+    spacingAfter: 120,
+  })
+  if (data.sectionC.text) {
+    middleXml += makeParagraphXml({
+      text: data.sectionC.text,
+      indent: true,
+      spacingAfter: 160,
+    })
+  }
+
+  // Phần D
+  middleXml += makeParagraphXml({
+    text: data.sectionD.title || "D. Các ý kiến góp ý của học viên",
+    bold: true,
+    indent: false,
+    spacingBefore: 240,
+    spacingAfter: 120,
+  })
+  if (data.sectionD.introText) {
+    middleXml += makeParagraphXml({
+      text: data.sectionD.introText,
+      indent: true,
+      spacingAfter: 120,
+    })
+  }
+
+  ;(data.sectionD.departments || []).forEach((dept) => {
+    middleXml += makeParagraphXml({
+      text: `${dept.romanIndex}. ${dept.name}`,
+      bold: true,
+      indent: false,
+      spacingBefore: 160,
+      spacingAfter: 80,
+    })
+
+    ;(dept.majors || []).forEach((maj) => {
+      middleXml += makeParagraphXml({
+        text: `${maj.arabicIndex}. ${maj.name}:`,
+        italic: true,
+        indent: false,
+        spacingBefore: 80,
+        spacingAfter: 60,
+      })
+
+      ;(maj.categories || []).forEach((cat) => {
+        middleXml += makeParagraphXml({
+          text: cat.title,
+          indent: false,
+          spacingBefore: 60,
+          spacingAfter: 40,
+        })
+
+        ;(cat.items || []).forEach((item) => {
+          const countPart = item.countText ? ` (${item.countText})` : ""
+          middleXml += makeParagraphXml({
+            text: `- ${item.text}${countPart}.`,
+            indent: true,
+            spacingAfter: 40,
+          })
+        })
+      })
+    })
+  })
+
+  // Kiến nghị
+  middleXml += makeParagraphXml({
+    text: data.recommendation.title || "Kiến nghị",
+    bold: true,
+    indent: false,
+    spacingBefore: 240,
+    spacingAfter: 120,
+  })
+  if (data.recommendation.text) {
+    middleXml += makeParagraphXml({
+      text: data.recommendation.text,
+      indent: true,
+      spacingAfter: 280,
+    })
+  }
+
+  // Table 2 (Ký tên)
+  let afterT2 = docXml.slice(t2.index)
+  if (data.recommendation.signTitle) {
+    afterT2 = afterT2.replace(
+      /<w:t>TRƯỞNG BAN<\/w:t>/g,
+      `<w:t>${xmlEscape(data.recommendation.signTitle)}</w:t>`
+    )
+  }
+
+  const finalDocXml = beforeT1 + newT1 + middleXml + afterT2
+  zip.file("word/document.xml", finalDocXml)
+
+  return zip.generate({ type: "uint8array" })
+}
 
 export interface GraduateMajorItem {
   name: string
@@ -97,7 +395,7 @@ function padZero(num: number): string {
   return num < 10 ? `0${num}` : `${num}`
 }
 
-export async function exportGraduateSurveyWord(data: GraduateReportData) {
+async function buildGraduateSurveyWordFallback(data: GraduateReportData): Promise<Blob> {
   const noneBorder = { style: BorderStyle.NONE, size: 0, color: "auto" }
   const tableBordersNone = {
     top: noneBorder,
@@ -609,8 +907,36 @@ export async function exportGraduateSurveyWord(data: GraduateReportData) {
   })
 
   const buffer = await Packer.toBlob(doc)
-  const safeCourse = (data.surveyInfo.courseName || "").replace(/\s+/g, "_")
-  const fileName = `Bao_cao_lay_y_kien_hoc_vien_tot_nghiep_${safeCourse || "HV_tot_nghiep"}.docx`
-  saveAs(buffer, fileName)
+  return buffer
 }
 
+
+/**
+ * Xuất báo cáo tốt nghiệp dạng file Word:
+ * 1. Lấy file biểu mẫu gốc từ MinIO (/mta/template/BaoCaoLayYkienHocVienTotNghiep_Mau.docx)
+ * 2. Đổ và cập nhật dữ liệu khảo sát thực tế vào biểu mẫu chuẩn này.
+ * 3. Nếu MinIO không khả dụng, tự động chuyển sang chế độ tạo tài liệu Word chuẩn dự phòng.
+ */
+export async function exportGraduateSurveyWord(data: GraduateReportData): Promise<void> {
+  const safeCourse = (data.surveyInfo.courseName || "").replace(/\s+/g, "_")
+  const fileName = `Bao_cao_lay_y_kien_hoc_vien_tot_nghiep_${safeCourse || "HV_tot_nghiep"}.docx`
+
+  try {
+    const res = await fetchMinio(GRADUATE_SURVEY_REPORT_TEMPLATE_MINIO_PATH)
+    if (res.ok) {
+      const templateBuffer = await res.arrayBuffer()
+      const processed = fillGraduateSurveyReportTemplate(templateBuffer, data)
+      const blob = new Blob([processed], {
+        type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      })
+      saveAs(blob, fileName)
+      return
+    }
+  } catch (err) {
+    console.warn("Không thể tải hoặc xử lý template từ MinIO, sử dụng fallback docx:", err)
+  }
+
+  // Fallback: Tạo tài liệu Word chuẩn bằng thư viện docx
+  const fallbackBlob = await buildGraduateSurveyWordFallback(data)
+  saveAs(fallbackBlob, fileName)
+}
