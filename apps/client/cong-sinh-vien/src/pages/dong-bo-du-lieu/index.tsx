@@ -34,6 +34,7 @@ import {
   Card,
   Col,
   Descriptions,
+  Result,
   Row,
   Select,
   Table,
@@ -44,7 +45,10 @@ import {
 } from "antd"
 import type { UploadFile } from "antd/es/upload/interface"
 import dayjs from "dayjs"
-import { ArrowDownToLine, ArrowUpFromLine, History, Info, Loader2 } from "lucide-react"
+import { ArrowDownToLine, ArrowUpFromLine, History, Info, Loader2, Lock } from "lucide-react"
+import { useRouter } from "next/router"
+import { ROUTER_PATH } from "@workspace/router"
+import { useCanAccessDongBoDuLieu } from "@hooks/use-can-access-dong-bo-du-lieu"
 import { useEffect, useMemo, useRef, useState } from "react"
 
 dayjs.locale("vi")
@@ -68,6 +72,8 @@ const EXPORT_DATA_ITEMS = [
 ]
 
 function DongBoDuLieuPage() {
+  const router = useRouter()
+  const { canAccess, isLoading: isAccessLoading } = useCanAccessDongBoDuLieu()
   const [activeTab, setActiveTab] = useState("import")
   const [exportSessionId, setExportSessionId] = useState<string>()
   const [importFiles, setImportFiles] = useState<UploadFile[]>([])
@@ -95,6 +101,7 @@ function DongBoDuLieuPage() {
     refetch: refetchHistory,
   } = useGetDataSyncHistory(50, {
     refetchOnWindowFocus: false,
+    enabled: canAccess,
     refetchInterval: (query) => {
       const stateData = query.state.data
       let items: Array<{ status?: string }> | undefined
@@ -392,6 +399,29 @@ function DongBoDuLieuPage() {
   }
 
   const exportTabLoading = activeTab === "export" && sessionLoading && !hasSessions
+
+  if (isAccessLoading) {
+    return <Loading />
+  }
+
+  if (!canAccess) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center px-4 py-12">
+        <div className="w-full max-w-lg rounded-2xl border border-red-100 bg-white p-8 shadow-sm text-center">
+          <Result
+            status="403"
+            title="403"
+            subTitle="Bạn không có quyền truy cập chức năng Đồng bộ dữ liệu."
+            extra={
+              <Button type="primary" onClick={() => router.push(ROUTER_PATH.CONG_SINH_VIEN.HOME)}>
+                Về trang chủ
+              </Button>
+            }
+          />
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-col gap-4">
