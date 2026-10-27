@@ -27,6 +27,8 @@ export interface TableCell {
   skip?: boolean
   /** Chỉ vẽ một số cạnh; ưu tiên hơn `border`. */
   borderEdges?: { top?: boolean; left?: boolean; bottom?: boolean; right?: boolean }
+  /** Chỉ định chi tiết từng cạnh viền (ưu tiên cao nhất). */
+  borderDetails?: Partial<ExcelJS.Borders>
 }
 
 export interface TableRow {
@@ -1004,7 +1006,9 @@ function applyDynamicCellStyle(
     style: cellData.borderStyle || "thin",
     color: { argb: "FF000000" },
   }
-  if (cellData.borderEdges) {
+  if (cellData.borderDetails) {
+    cell.border = cellData.borderDetails as ExcelJS.Borders
+  } else if (cellData.borderEdges) {
     const e = cellData.borderEdges
     cell.border = {
       top: e.top ? edge : { style: undefined },
