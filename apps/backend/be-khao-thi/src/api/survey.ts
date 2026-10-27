@@ -14,7 +14,9 @@ import {
   SurveyStatisticSchema,
   SurveyStatisticsByFieldResponseSchema,
   SurveyMajorCountResponseSchema,
+  GraduateSurveyReportResponseSchema,
 } from "../dto/survey-statistic.dto"
+import { getGraduateSurveyReportDataService } from "../services/graduate-survey-report.service"
 import {
   SURVEY_OBJECT_TYPE_INCLUDE,
   SURVEY_OBJECT_TYPE_REPORT_INCLUDE,
@@ -1075,6 +1077,52 @@ app.openapi(getSurveyMajorCount, async (c) => {
   })
 
   return c.json(data, 200)
+})
+
+
+const getGraduateSurveyReportData = createRoute({
+  operationId: "get-graduate-survey-report-data",
+  path: "/{id}/graduate-report-data",
+  method: "get",
+  tags: ["Khảo sát"],
+  summary: "Lấy dữ liệu báo cáo khảo sát tốt nghiệp theo biểu mẫu của Học viện",
+  request: {
+    params: z.object({
+      id: z.string().openapi({ description: "ID khảo sát" }),
+    }),
+  },
+  responses: {
+    ...standardErrorResponses(),
+    200: {
+      description: "Lấy dữ liệu báo cáo thành công",
+      content: {
+        "application/json": {
+          schema: GraduateSurveyReportResponseSchema,
+        },
+      },
+    },
+    404: {
+      description: "Không tìm thấy khảo sát.",
+      content: {
+        "application/json": {
+          schema: ErrorMessageResponseSchema,
+        },
+      },
+    },
+  },
+})
+
+app.openapi(getGraduateSurveyReportData, async (c) => {
+  const { id } = c.req.valid("param")
+  try {
+    const data = await getGraduateSurveyReportDataService(prisma, id)
+    return c.json(data, 200)
+  } catch (error: any) {
+    if (error?.message?.includes("Không tìm thấy")) {
+      return c.json({ message: "Không tìm thấy khảo sát" }, 404)
+    }
+    throw error
+  }
 })
 
 const getSurveysByProfile = createRoute({

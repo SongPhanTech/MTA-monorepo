@@ -42,6 +42,7 @@ import {
   buildSpecificChoiceMap,
   getSpecialChoiceLabel,
 } from "@/utils/survey-specific-choice"
+import { exportGraduateSurveyWord } from "@/utils/export-graduate-survey-word"
 
 const { Title } = Typography
 
@@ -77,6 +78,9 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
   const { showSpinner, hideSpinner } = useSpinner()
   const { onOpen } = useDisclosure({
     tag: "ModalPrintSurvey",
+  })
+  const { onOpen: onOpenGraduateReport } = useDisclosure({
+    tag: "ModalGraduateSurveyReport",
   })
   const { data } = useGetSurveyObjectCount({
     id: selectedId as string,
@@ -507,6 +511,26 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
         percent,
       }
     })
+  }
+
+
+  const handleDirectGraduateWordExport = async () => {
+    showSpinner()
+    try {
+      const res = await customExamFetch<any>(`/api/survey/${selectedId}/graduate-report-data`, {
+        method: "GET",
+      })
+      const reportData = res?.data || res
+      if (reportData && reportData.surveyInfo) {
+        await exportGraduateSurveyWord(reportData)
+      } else {
+        throw new Error("Không thể lấy dữ liệu báo cáo")
+      }
+    } catch (e: any) {
+      console.error(e)
+    } finally {
+      hideSpinner()
+    }
   }
 
   const exportWordReport = async (
@@ -1115,13 +1139,42 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                         key: "word",
                         label: "Xuất Word",
                         icon: <FileWordOutlined />,
-                        onClick: () =>
-                          exportWordReport(
-                            dataLevel?.data?.surveyName,
-                            dataLevel?.data?.data,
-                            data?.data,
-                            dataMajorCount
-                          ),
+                        children: [
+                          {
+                            key: "word-detailed",
+                            label: "Báo cáo thống kê chi tiết theo câu hỏi (Mẫu hiện tại)",
+                            icon: <FileWordOutlined />,
+                            onClick: () =>
+                              exportWordReport(
+                                dataLevel?.data?.surveyName,
+                                dataLevel?.data?.data,
+                                data?.data,
+                                dataMajorCount
+                              ),
+                          },
+                          {
+                            key: "word-graduate",
+                            label: "Báo cáo kết quả lấy ý kiến phản hồi từ học viên tốt nghiệp",
+                            icon: <FileWordOutlined />,
+                            children: [
+                              {
+                                key: "word-graduate-direct",
+                                label: "Tải xuống trực tiếp",
+                                icon: <DownloadOutlined />,
+                                onClick: () => handleDirectGraduateWordExport(),
+                              },
+                              {
+                                key: "word-graduate-modal",
+                                label: "Kiểm tra, chỉnh sửa và xuất báo cáo",
+                                icon: <FileWordOutlined />,
+                                onClick: () =>
+                                  onOpenGraduateReport({
+                                    selectedId,
+                                  }),
+                              },
+                            ],
+                          },
+                        ],
                       },
                       {
                         key: "excel",
