@@ -20,11 +20,10 @@ const HEADER_LEN = 4 + 1 + IV_LEN + TAG_LEN
 
 export function getDataSyncEncryptionKey(): Buffer {
   const raw =
-    process.env.DATA_SYNC_ENCRYPTION_KEY?.trim() ||
-    process.env.DATA_SYNC_HMAC_SECRET?.trim()
+    process.env.DATA_SYNC_ENCRYPTION_KEY?.trim() || process.env.DATA_SYNC_HMAC_SECRET?.trim()
   if (!raw) {
     throw new Error(
-      "Thiếu DATA_SYNC_ENCRYPTION_KEY hoặc DATA_SYNC_HMAC_SECRET — bắt buộc để giải mã gói .dat"
+      "Máy chủ chưa được cấu hình để đọc file đồng bộ. Vui lòng liên hệ quản trị hệ thống để cấu hình khóa đồng bộ rồi thực hiện lại."
     )
   }
   if (/^[0-9a-fA-F]{64}$/.test(raw)) {
@@ -44,22 +43,18 @@ export function packSyncPayload(jsonUtf8: string): Buffer {
   const cipher = createCipheriv("aes-256-gcm", key, iv)
   const ciphertext = Buffer.concat([cipher.update(compressed), cipher.final()])
   const tag = cipher.getAuthTag()
-  return Buffer.concat([
-    SYNC_MAGIC,
-    Buffer.from([SYNC_FORMAT_VERSION]),
-    iv,
-    tag,
-    ciphertext,
-  ])
+  return Buffer.concat([SYNC_MAGIC, Buffer.from([SYNC_FORMAT_VERSION]), iv, tag, ciphertext])
 }
 
 export function unpackSyncPayload(packed: Buffer): string {
   if (!isMtaSyncBinary(packed)) {
-    throw new Error("Không nhập được dữ liệu")
+    throw new Error("File không đúng định dạng gói đồng bộ .dat của hệ thống.")
   }
   const ver = packed[4]
   if (ver !== SYNC_FORMAT_VERSION) {
-    throw new Error("Không nhập được dữ liệu")
+    throw new Error(
+      "File .dat được tạo bởi phiên bản chưa được hỗ trợ. Hãy xuất lại file từ hệ thống nguồn."
+    )
   }
   const iv = packed.subarray(5, 5 + IV_LEN)
   const tag = packed.subarray(5 + IV_LEN, 5 + IV_LEN + TAG_LEN)
@@ -72,12 +67,16 @@ export function unpackSyncPayload(packed: Buffer): string {
   try {
     compressed = Buffer.concat([decipher.update(ciphertext), decipher.final()])
   } catch {
-    throw new Error("Không nhập được dữ liệu")
+    throw new Error(
+      "Không thể mở file .dat. File có thể bị hỏng, bị thay đổi hoặc được xuất từ hệ thống dùng khóa đồng bộ khác."
+    )
   }
   try {
     return gunzipSync(compressed).toString("utf8")
   } catch {
-    throw new Error("Không nhập được dữ liệu")
+    throw new Error(
+      "Nội dung file .dat không hợp lệ hoặc bị hỏng. Hãy xuất lại file từ hệ thống nguồn."
+    )
   }
 }
 
@@ -89,5 +88,9 @@ export function decodeImportBytes(bytes: Buffer): unknown {
   if (!text.trimStart().startsWith("{")) {
     throw new Error("Định dạng file không hỗ trợ (cần .dat mã hóa hoặc JSON cũ)")
   }
-  return JSON.parse(text)
+  try {
+    return JSON.parse(text)
+  } catch {
+    throw new Error("Nội dung JSON của file không hợp lệ. Hãy xuất lại file từ hệ thống nguồn.")
+  }
 }

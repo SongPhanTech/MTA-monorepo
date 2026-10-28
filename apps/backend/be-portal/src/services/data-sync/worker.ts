@@ -15,7 +15,12 @@ import {
   type DataSyncImportJob,
 } from "./kafka-queue"
 import { getKafka } from "../class-registration/kafka-queue"
-import { processImportFromRedis } from "../import-training-data"
+import {
+  getImportFailureMessage,
+  getImportExceptionMessage,
+  getImportSuccessDescription,
+  processImportFromRedis,
+} from "../import-training-data"
 import {
   cleanupPendingImportsOnBoot,
   markDataSyncHistoryFailed,
@@ -84,20 +89,21 @@ async function handleMessage(value: Buffer | null): Promise<void> {
     const result = await processImportFromRedis(job.syncHistoryId, async (msg) => {
       await markDataSyncHistoryProcessing(job.syncHistoryId, msg).catch(() => undefined)
     })
-    const description =
-      result.warnings.length > 0
-        ? result.warnings.slice(0, 80).join("\n")
-        : result.steps.map((s) => `${s.table}: ${s.count}`).join(", ")
-    await markDataSyncHistorySuccess(job.syncHistoryId, {
-      classRegisterSessionId: result.sessionId,
-      description,
-    })
+    const failureMessage = getImportFailureMessage(result)
+    if (failureMessage) {
+      await markDataSyncHistoryFailed(job.syncHistoryId, failureMessage)
+    } else {
+      await markDataSyncHistorySuccess(job.syncHistoryId, {
+        classRegisterSessionId: result.sessionId,
+        description: getImportSuccessDescription(result),
+      })
+    }
     await removeImportPayload(job.syncHistoryId)
     console.log(
       `[data-sync-worker] xong history=${job.syncHistoryId} session=${result.sessionName} warnings=${result.warnings.length}`
     )
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Nhập dữ liệu thất bại"
+    const message = getImportExceptionMessage(error)
     console.error(`[data-sync-worker] lỗi history=${job.syncHistoryId}`, error)
 
     if (isRetryable(error) && job.attempts + 1 < MAX_ATTEMPTS) {

@@ -80,9 +80,7 @@ app.openapi(exportToInternal, async (c) => {
   try {
     const result = await exportRegistrationResults(classRegisterSessionId)
 
-    const safeName = (result.meta.sessionName || "dot-dang-ky")
-      .replace(/[\\/:*?"<>|]/g, "_")
-      .trim()
+    const safeName = (result.meta.sessionName || "dot-dang-ky").replace(/[\\/:*?"<>|]/g, "_").trim()
     const fileName = `export-ket-qua-dang-ky-${safeName}${SYNC_FILE_EXT}`
 
     // Không trả plaintext data — chỉ gói mã hóa
@@ -109,7 +107,13 @@ app.openapi(exportToInternal, async (c) => {
       syncHistoryId = history.id
     }
 
-    await markDataSyncHistorySuccess(syncHistoryId)
+    const exportedCount = Object.values(result.counts).reduce((total, count) => total + count, 0)
+    const countDetail = Object.entries(result.counts)
+      .map(([name, count]) => `${name}: ${count}`)
+      .join(", ")
+    await markDataSyncHistorySuccess(syncHistoryId, {
+      description: `Đã xuất thành công ${exportedCount} bản ghi${countDetail ? ` (${countDetail})` : ""}.`,
+    })
 
     return c.json(
       {
