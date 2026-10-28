@@ -1464,13 +1464,7 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
       },
       graduationApplications: true,
       thesisRegistrations: {
-        where: {
-          ...(thesisSessionIds?.length && {
-            thesisProject: {
-              thesisSessionId: { in: thesisSessionIds },
-            },
-          }),
-        },
+        where: { deletedAt: null },
         include: {
           council: true,
           thesisProject: {
@@ -1542,20 +1536,18 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
     trainingObjectType?.trainingForm?.name ||
     ""
   setupAppTimezone()
-  let selectedDate = printDate ? dayjs.tz(printDate, "DD/MM/YYYY", APP_TIMEZONE) : nowVn()
-  if (!selectedDate.isValid()) {
-    selectedDate = nowVn()
+  // Ngày in từ form là ISO (DatePicker) hoặc DD/MM/YYYY.
+  // dayjs.tz(chuỗi, "DD/MM/YYYY") ném lỗi khi chuỗi không đúng format.
+  let selectedDate = nowVn()
+  if (printDate) {
+    const slashDate = dayjs(printDate, "DD/MM/YYYY", true)
+    if (slashDate.isValid()) {
+      selectedDate = slashDate.tz(APP_TIMEZONE)
+    } else {
+      selectedDate = toVnDayjs(printDate) || nowVn()
+    }
   }
   const ngayInText = `ngày ${formatNgayIn(selectedDate.date())} tháng ${formatThangIn(selectedDate.month() + 1)} năm ${selectedDate.year()}`
-
-  const formatDecisionText = (code?: string | null, date?: Date | string | null) => {
-    const trimmed = (code || "").trim()
-    const dateParts = getReportDateParts(date)
-    if (!trimmed && !dateParts) return ""
-    if (!dateParts) return trimmed
-    if (!trimmed) return dateParts.fullVi
-    return `${trimmed} ${dateParts.fullVi}`
-  }
 
   const signerInfo = parseSignerInfo(signerName || "")
 
@@ -1609,6 +1601,8 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
     const course = student.fixedClass?.trainingCourse
     const major =
       gD?.trainingMajor || student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
+    const nganhDaoTao = major?.trainingField?.name || ""
+    const chuyenNganh = major?.name || ""
     const defenseDate = thesisProject?.defenseDate || thesisSession?.startDate
     const calculatedTBC = calcTBC(student.subjectClassStudent)
     const tbcFinal = gD?.finalGpa
@@ -1631,10 +1625,13 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
       ngayBaoVe: defenseDate ? formatDateVn(defenseDate) : "",
       quyetDinhTotNghiep: gD?.code || thesisSession?.graduationNumber || "",
       namTN: student.universityGraduationYear || "",
-      nganhDaoTao: major?.trainingField?.name || "",
-      chuyenNganh: major?.name || "",
+      nganhDaoTao,
+      chuyenNganh,
+      nganhChuyenNganh: [nganhDaoTao, chuyenNganh ? `(${chuyenNganh})` : ""].filter(Boolean).join("\n"),
+      maHocVien: user?.code || "",
       soHieuVanBang: gD?.diplomaNumber || "",
       soVaoSoGoc: gD?.originalDiplomaNumber || "",
+      maNganhDaoTao: major?.trainingField?.code || "",
       coQuanDonVi:
         student.department ||
         student.fixedClass?.managementOrganization?.sTenVietTat ||
@@ -1657,7 +1654,7 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
       graduationDecisionDate?: Date | null
     }
   ): Promise<Buffer> => {
-    const buf = await getLuanVanTemplateBuffer(prisma, "SoGocCapPhatVanBangCaoHoc_v7.xlsx")
+    const buf = await getLuanVanTemplateBuffer(prisma, "SoGocCapPhatVanBangCaoHoc_v6.xlsx")
     const tpl = new XlsxTemplate(buf)
     const rows = sessionStudents.map((s, i) => buildRow(s, i))
     const first = sessionStudents[0]
@@ -1667,16 +1664,12 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
       firstSession?.graduationNumber ||
       first?.graduationDecision?.code ||
       ""
-    const decisionDate =
-      sessionMeta?.graduationDecisionDate ||
-      firstSession?.graduationDecisionDate ||
-      first?.graduationDecision?.decisionDate ||
-      null
     tpl.substitute("PD", {
       khoa: courseNames,
       dot_xet: sessionName,
       hinh_thuc_dao_tao: trainingType,
-      so_van_ban: formatDecisionText(decisionCode, decisionDate),
+      // Template v6 đã có ${ngay_in} ngay sau số quyết định
+      so_van_ban: (decisionCode || "").trim(),
       ngay_in: ngayInText,
       ...signerInfo,
       data: rows,
@@ -3045,6 +3038,8 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
           : 0
       return {
         data: {
+          so_hieu_bang: safeString(gD?.diplomaNumber),
+          so_vao_so: safeString(gD?.originalDiplomaNumber),
           so_quyet_dinh: safeString(gD?.originalDiplomaNumber),
           ten_hoc_vien: safeString(user?.fullname?.toUpperCase()),
           ma_hoc_vien: safeString(student.userProfile?.code),

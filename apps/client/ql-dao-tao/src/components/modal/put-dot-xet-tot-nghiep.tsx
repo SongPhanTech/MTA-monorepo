@@ -130,6 +130,7 @@ const PutGraduationSession = () => {
           ? dayjs(output.graduationDecisionDate).toDate()
           : undefined,
         proposalGraduation: output.proposalGraduation?.trim() || undefined,
+        councilMeetingBasis: output.councilMeetingBasis?.trim() || undefined,
       }
 
       if (id) {
@@ -322,6 +323,14 @@ const PutGraduationSession = () => {
       <Col span={12}>
         <FormItem form={form} name="proposalGraduation" label="Tờ trình tốt nghiệp">
           <Input placeholder="số 581/TTr-SĐH ngày 27/6/2025" />
+        </FormItem>
+      </Col>
+      <Col span={24}>
+        <FormItem form={form} name="councilMeetingBasis" label="Căn cứ họp hội đồng">
+          <Input.TextArea
+            rows={2}
+            placeholder="Căn cứ Quyết nghị của Hội đồng tốt nghiệp Sau đại học năm học 2025-2026 tại phiên họp ngày 30/7/2026;"
+          />
         </FormItem>
       </Col>
     </PutFormModal>

@@ -429,6 +429,7 @@ export interface SessionSignerInfo {
   graduationDecisionDate?: Date | string | null
   proposalGraduation?: string | null
   graduationReport?: string | null
+  councilMeetingBasis?: string | null
   graduationDecisionMaker?: string | null
   name?: string | null
 }
@@ -1768,7 +1769,7 @@ export default function StudentGradeSystem() {
     await doExportQuyetDinhCongNhan(signerNameTS, signingDate)
   }
 
-  const doExportQuyetDinhCongNhan = async (signerNameTS: string, dateTS: Dayjs) => {
+  const doExportQuyetDinhCongNhan = async (signerNameTS: string, _dateTS: Dayjs) => {
     const selectedSessionId = thesisSessionIds?.[0]
     const session = thesisSessionData.find((s) => s.id === selectedSessionId) as
       | SessionSignerInfo
@@ -1793,7 +1794,9 @@ export default function StudentGradeSystem() {
       titlePart = parts[0]
       namePart = parts[1]
     } else {
-      const match = (effectiveSignerName || "").match(/^(PGD|GD|GĐ|Phó Giám đốc|Giám đốc)\s+(.*)$/i)
+      const match = (effectiveSignerName || "").match(
+        /^(PGĐ|PGD|GD|GĐ|Phó Giám đốc|Giám đốc)\s+(.*)$/i
+      )
       if (match) {
         titlePart = match[1]
         namePart = match[2]
@@ -1824,27 +1827,27 @@ export default function StudentGradeSystem() {
     const thangQD = String(dateQD.month() + 1)
     const namQD = String(dateQD.year())
 
-    const ngayTS = String(dateTS.date())
-    const thangTS = String(dateTS.month() + 1)
-    const namTS = String(dateTS.year())
+    const today = dayjs()
+    const ngayTS = String(today.date())
+    const thangTS = String(today.month() + 1)
+    const namTS = String(today.year())
 
-    let soToTrinh = session?.graduationReport || session?.proposalGraduation || ""
-    let ngayToTrinh = ""
-    if (soToTrinh.toLowerCase().includes(" ngày ")) {
-      const reportParts = soToTrinh.split(/ ngày /i)
-      soToTrinh = reportParts[0].trim()
-      ngayToTrinh = reportParts[1].trim()
-    }
-
-    const firstStudentCourse = studentsWithSemesters?.[0]?.fixedClass?.trainingCourse
-    const namHocStr =
-      firstStudentCourse?.academicYear ||
-      (firstStudentCourse?.startYear && firstStudentCourse?.endYear
-        ? `${firstStudentCourse.startYear} - ${firstStudentCourse.endYear}`
-        : `${dayjs().year()} - ${dayjs().year() + 1}`)
+    const toTrinh = (session?.proposalGraduation || session?.graduationReport || "").trim()
+    const canCuHoiDong = (session?.councilMeetingBasis || "").trim()
+    const quyChe = [
+      ...new Set(
+        (studentsWithSemesters || [])
+          .map((student) => student.fixedClass?.trainingCourse?.regulation?.trim())
+          .filter((value): value is string => Boolean(value))
+      ),
+    ].join("; ")
+    const signerNameTrichSao = signerNameTS
 
     const items = studentsWithSemesters.map((student) => {
       const course = student.fixedClass?.trainingCourse
+      const trainingMajor =
+        student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor ||
+        student.graduationDecision?.trainingMajor
       let nienKhoaStr = ""
       if (course?.academicYear) {
         nienKhoaStr = `(${course.academicYear})`
@@ -1855,12 +1858,11 @@ export default function StudentGradeSystem() {
       return {
         hoTen: student.userProfile.fullname,
         ngaySinh: formatSpecialDate(student.userProfile.dateOfBirth ?? ""),
-        chuyenNganh: student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ?? "",
+        nganh: trainingMajor?.trainingField?.name ?? "",
+        chuyenNganh: trainingMajor?.name ?? "",
         tenKhoa: course ? `${course.name} ${nienKhoaStr}`.trim() : "",
-        soVanBang:
-          student.graduationDecision?.originalDiplomaNumber ??
-          student.graduationDecision?.diplomaNumber ??
-          "",
+        soHieuBang: student.graduationDecision?.diplomaNumber ?? "",
+        soVaoSoGoc: student.graduationDecision?.originalDiplomaNumber ?? "",
       }
     })
 
@@ -1876,16 +1878,13 @@ export default function StudentGradeSystem() {
           thangQD,
           namQD,
           dot: session?.name || "",
-          namHoc: namHocStr,
-          ngayHop: session?.graduationDecisionDate
-            ? formatSpecialDate(session.graduationDecisionDate.toString())
-            : "",
-          soToTrinh,
-          ngayToTrinh,
+          quyChe,
+          canCuHoiDong,
+          toTrinh,
           signerTitle,
           signerSubTitle,
           signerRankName,
-          signerNameTS,
+          signerNameTS: signerNameTrichSao,
           ngayTS,
           thangTS,
           namTS,
@@ -2371,44 +2370,40 @@ export default function StudentGradeSystem() {
             : (selectedThesisSession?.name ?? "—")}
           .
         </p>
-        <Radio.Group
-          value={signRole}
-          onChange={(e) => setSignRole(e.target.value)}
-          className="flex flex-col gap-3"
-        >
-          <Radio value="chief">
-            <span className="inline-flex flex-wrap items-center gap-2">
-              <span>Trưởng phòng sau đại học:</span>
-              <Input
-                size="small"
-                className="w-56"
-                value={signChiefName}
-                placeholder="Nhập họ tên"
-                onClick={(e) => e.stopPropagation()}
-                onChange={(e) => {
-                  setSignChiefName(e.target.value)
-                  setSignRole("chief")
-                }}
-              />
-            </span>
-          </Radio>
-          <Radio value="deputy">
-            <span className="inline-flex flex-wrap items-center gap-2">
-              <span>Phó trưởng phòng sau đại học:</span>
-              <Input
-                size="small"
-                className="w-56"
-                value={signDeputyName}
-                placeholder="Nhập họ tên"
-                onClick={(e) => e.stopPropagation()}
-                onChange={(e) => {
-                  setSignDeputyName(e.target.value)
-                  setSignRole("deputy")
-                }}
-              />
-            </span>
-          </Radio>
-        </Radio.Group>
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-wrap items-center gap-2">
+            <Radio checked={signRole === "chief"} onChange={() => setSignRole("chief")}>
+              Trưởng phòng sau đại học:
+            </Radio>
+            <Input
+              size="small"
+              className="w-56"
+              value={signChiefName}
+              placeholder="Nhập họ tên"
+              onFocus={() => setSignRole("chief")}
+              onChange={(e) => {
+                setSignChiefName(e.target.value)
+                setSignRole("chief")
+              }}
+            />
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <Radio checked={signRole === "deputy"} onChange={() => setSignRole("deputy")}>
+              Phó trưởng phòng sau đại học:
+            </Radio>
+            <Input
+              size="small"
+              className="w-56"
+              value={signDeputyName}
+              placeholder="Nhập họ tên"
+              onFocus={() => setSignRole("deputy")}
+              onChange={(e) => {
+                setSignDeputyName(e.target.value)
+                setSignRole("deputy")
+              }}
+            />
+          </div>
+        </div>
         <div className="mt-4">
           <div className="mb-2 text-gray-700">Ngày in</div>
           <DatePicker
