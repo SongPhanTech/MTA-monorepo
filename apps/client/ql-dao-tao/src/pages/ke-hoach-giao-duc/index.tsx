@@ -186,24 +186,31 @@ export default function KeHoachDaoTao({ type = "NORMAL", role }: KeHoachDaoTaoPa
     }
   }, [trainingMajorId, trainingMajorData, onSelectTrainingMajor])
 
-  const { data: fixedClassData = [] } = useFindManyFixedClass({
-    orderBy: { name: "asc" },
-    where: {
-      deletedAt: null,
-      active: true,
-      trainingCourse: {
-        trainingObjectTypeId,
-        id: trainingCourseId,
-      },
-      curriculumVersion: {
-        curriculum: {
-          trainingMajorId,
+  const hideParentFilter = activeLeftTab === "phan-cong-giang-day"
+
+  const { data: fixedClassData = [] } = useFindManyFixedClass(
+    {
+      orderBy: { name: "asc" },
+      where: {
+        deletedAt: null,
+        active: true,
+        trainingCourse: {
+          trainingObjectTypeId,
+          id: trainingCourseId,
+        },
+        curriculumVersion: {
+          curriculum: {
+            trainingMajorId,
+          },
         },
       },
     },
-  })
+    { enabled: !hideParentFilter }
+  )
+
   return (
     <>
+      {!hideParentFilter && (
       <Flex gap={8}>
         <Form.Item className="m-0" name="trainingCourseId" label="Khoá đào tạo" labelAlign="left">
           <SelectTrainingCourseStore />
@@ -242,6 +249,7 @@ export default function KeHoachDaoTao({ type = "NORMAL", role }: KeHoachDaoTaoPa
           allowClear
         />
       </Flex>
+      )}
       <Tabs activeKey={activeLeftTab} onChange={setActiveLeftTab} destroyInactiveTabPane>
         {tabs.map((tab) => (
           <Tabs.TabPane tab={tab.label} key={tab.key}>

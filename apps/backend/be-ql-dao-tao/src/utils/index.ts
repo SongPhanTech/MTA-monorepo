@@ -1480,11 +1480,11 @@ export const parseSignerInfo = (signerStr: string) => {
   const isDeputyDirector = roleKey === "pho giam doc" || roleKey === "pgd"
   const isDirector = roleKey === "giam doc" || roleKey === "gd"
 
-  // Trưởng phòng sau đại học: dòng trên là TL. GIÁM ĐỐC, dòng dưới là chức danh.
-  // Phó giám đốc: chỉ ghi KT. GIÁM ĐỐC, không thêm chức danh phía dưới.
+  // Trưởng phòng: dòng trên là TL. GIÁM ĐỐC, dòng dưới là chức danh.
+  // Phó giám đốc: KT. GIÁM ĐỐC, dòng dưới là PHÓ GIÁM ĐỐC.
   return {
     chuc_vi: isDeputyDirector ? "KT. GIÁM ĐỐC" : isDirector ? "GIÁM ĐỐC" : "TL. GIÁM ĐỐC",
-    chuc_vi_ky_thay: isDirector || isDeputyDirector ? "" : role.toUpperCase(),
+    chuc_vi_ky_thay: isDeputyDirector ? "PHÓ GIÁM ĐỐC" : isDirector ? "" : role.toUpperCase(),
     quan_ham: rank,
     ten_day_du: nameWithDegree,
   }

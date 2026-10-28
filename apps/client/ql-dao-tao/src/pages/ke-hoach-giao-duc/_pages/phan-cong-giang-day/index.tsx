@@ -1,10 +1,13 @@
 import { formatThangIn } from "@workspace/libs/timezone"
 import { queryClient } from "@api/index"
 import DatePicker from "@components/commons/date-picker"
-import TreeSelectDepartment from "@components/commons/department-select/TreeSelectDepartment"
 import FormItem from "@components/commons/form-item"
 import Select from "@components/commons/select"
-import TableCollapse from "@components/commons/tableCollapse"
+import TableLayout from "@components/commons/table-layout"
+import TableCollapse, { type ChildData } from "@components/commons/tableCollapse"
+import CourseClassFilter from "@pages/ke-hoach-giao-duc/_components/course-class-filter"
+import AdvancedFilter from "./advanced-filter"
+import { type FilterStatus } from "./status-filter-chips"
 import { DEFAULT_PAGINATE_SIZE, SUBJECT_CLASS_SCHEDULE_TYPE } from "@constants/constants"
 import type { FilterProps } from "@constants/type"
 import { useExamTypeOptions } from "@hooks/examType"
@@ -39,24 +42,25 @@ import {
 } from "@workspace/ui"
 import { cn } from "@workspace/ui/lib/utils"
 import {
-  Affix,
   Button,
   Checkbox,
   Col,
   Divider,
   Flex,
   Form,
+  Input,
   message,
   Popover,
-  Row,
   Switch,
   Tooltip,
   Modal,
   Radio,
+  Dropdown,
 } from "antd"
 import _ from "lodash"
+import { Ellipsis } from "lucide-react"
 import type React from "react"
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useDeferredValue, useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import {
   ActionsCell,
@@ -80,6 +84,66 @@ const SCHEDULE_OPTIONS = Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(([key, 
   label: value,
   value: key,
 }))
+
+const assignmentRowStamp = (record: ChildData) =>
+  [
+    record.id,
+    record.cancelled,
+    record.status,
+    record.lecturerId,
+    record.extraLecturerId,
+    record.enterGradeLecturerId,
+    record.examType,
+    record.roomId,
+    record.trainingLocationId,
+    record.rowSpan,
+    record.isLockLecturer,
+    String(record.lecturerAssignmentDeadline ?? ""),
+    String(record.submitLecturerAssignmentAt ?? ""),
+    String(record.approveLecturerAssignmentAt ?? ""),
+  ].join("|")
+
+const shouldAssignmentCellUpdate = (record: ChildData, prevRecord: ChildData) =>
+  assignmentRowStamp(record) !== assignmentRowStamp(prevRecord)
+
+function toAssignmentFormRow(
+  curr: Omit<TeachingAssignmentForm["subjectClass"][string], "lecturerAssignmentDeadline"> & {
+    lecturerAssignmentDeadline?: Date | string | null
+  } & Record<string, any>
+): TeachingAssignmentForm["subjectClass"][string] {
+  return {
+    schedule: curr.schedule,
+    lecturerId: curr.lecturerId ?? null,
+    extraLecturerId: curr.extraLecturerId ?? null,
+    enterGradeLecturerId: curr.enterGradeLecturerId ?? null,
+    lecturerAssignmentDeadline: curr.lecturerAssignmentDeadline
+      ? dayjs(curr.lecturerAssignmentDeadline)
+      : null,
+    examType: curr.examType,
+    roomId: curr.roomId,
+    trainingLocationId: curr.trainingLocationId ?? null,
+    maxStudent: curr.maxStudent ?? null,
+    isEdit: false,
+    cancelled: !!curr.cancelled,
+    isLockLecturer: curr.isLockLecturer ?? true,
+  }
+}
+
+function assignmentFormStamp(row: TeachingAssignmentForm["subjectClass"][string]) {
+  return [
+    row.schedule,
+    row.lecturerId,
+    row.extraLecturerId,
+    row.enterGradeLecturerId,
+    row.examType,
+    row.roomId,
+    row.trainingLocationId,
+    row.maxStudent,
+    row.cancelled,
+    row.isLockLecturer,
+    row.lecturerAssignmentDeadline?.valueOf?.() ?? "",
+  ].join("|")
+}
 
 const LECTURER_USER_PROFILE_SELECT = {
   id: true,
@@ -109,8 +173,6 @@ type XepKhuVucForm = {
   schedule?: $Enums.SubjectClassSchedule
   isOverride: boolean
 }
-
-type FilterStatus = "YEU_CAU_PCGD" | "LMH_DA_HUY" | "CHO_DUYET_PCGD" | "DA_DUYET_PCGD"
 
 type CopyFields = {
   lecturerId: boolean
@@ -146,8 +208,10 @@ export default function PhanCongGiangDay({
   })
 
   const [filterStatus, setFilterStatus] = useState<FilterStatus>()
+  const [nameInput, setNameInput] = useState("")
   const [isExportModalOpen, setIsExportModalOpen] = useState(false)
   const [exportGroupType, setExportGroupType] = useState<"department" | "faculty">("faculty")
+  const [moreMenuOpen, setMoreMenuOpen] = useState(false)
 
   const [copySourceId, setCopySourceId] = useState<string | null>(null)
   const [copyFields, setCopyFields] = useState<CopyFields>({
@@ -187,32 +251,36 @@ export default function PhanCongGiangDay({
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
   const { id: trainingCourseId } = useTrainingCourseStore()
   const { id: fixedClassId } = useFixedClassStore()
+  const deferredTrainingCourseId = useDeferredValue(trainingCourseId)
+  const deferredFixedClassId = useDeferredValue(fixedClassId)
+  const deferredFilterStatus = useDeferredValue(filterStatus)
+  const deferredFilters = useDeferredValue(filters)
   const canXemTatCa = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, "XEM_TAT_CA")
   const orgId = window.contextData?.organizationId
   const where = useMemo(
     () =>
       ({
-        ...(filters?.name
-          ? { name: { contains: filters.name, mode: "insensitive" as const } }
+        ...(deferredFilters?.name
+          ? { name: { contains: deferredFilters.name, mode: "insensitive" as const } }
           : {}),
-        ...(filters?.code
-          ? { code: { contains: filters.code, mode: "insensitive" as const } }
+        ...(deferredFilters?.code
+          ? { code: { contains: deferredFilters.code, mode: "insensitive" as const } }
           : {}),
-        ...(filters?.examType ? { examType: { in: filters.examType } } : {}),
-        ...(filters?.schedule ? { schedule: { in: filters.schedule } } : {}),
+        ...(deferredFilters?.examType ? { examType: { in: deferredFilters.examType } } : {}),
+        ...(deferredFilters?.schedule ? { schedule: { in: deferredFilters.schedule } } : {}),
         ...(semesterId ? { semester: { id: semesterId } } : {}),
-        ...(filters.lecturerId?.length === 1
-          ? filters.lecturerId[0]
+        ...(deferredFilters.lecturerId?.length === 1
+          ? deferredFilters.lecturerId[0]
             ? { lecturerId: { not: null } }
             : { lecturerId: null }
           : {}),
-        ...(filters.mainLecturer
+        ...(deferredFilters.mainLecturer
           ? {
               mainLecturer: {
-                userProfile: filters.mainLecturer
+                userProfile: deferredFilters.mainLecturer
                   ? {
                       fullname: {
-                        contains: filters.mainLecturer,
+                        contains: deferredFilters.mainLecturer,
                         mode: "insensitive" as const,
                       },
                     }
@@ -220,13 +288,13 @@ export default function PhanCongGiangDay({
               },
             }
           : {}),
-        ...(filters.extraLecturer
+        ...(deferredFilters.extraLecturer
           ? {
               extraLecturer: {
-                userProfile: filters.extraLecturer
+                userProfile: deferredFilters.extraLecturer
                   ? {
                       fullname: {
-                        contains: filters.extraLecturer,
+                        contains: deferredFilters.extraLecturer,
                         mode: "insensitive" as const,
                       },
                     }
@@ -234,13 +302,13 @@ export default function PhanCongGiangDay({
               },
             }
           : {}),
-        ...(filters.room
+        ...(deferredFilters.room
           ? {
               room: {
                 building: {
                   trainingLocation: {
                     name: {
-                      contains: filters.room,
+                      contains: deferredFilters.room,
                       mode: "insensitive" as const,
                     },
                   },
@@ -248,21 +316,21 @@ export default function PhanCongGiangDay({
               },
             }
           : {}),
-        ...(filters.organization && filters.organization.length > 0
+        ...(deferredFilters.organization && deferredFilters.organization.length > 0
           ? {
               subject: {
                 subject: {
                   managementOrganizationId: {
-                    in: filters.organization,
+                    in: deferredFilters.organization,
                   },
                 },
               },
             }
           : {}),
-        ...(trainingCourseId && type === "NORMAL"
-          ? { fixedClasses: { some: { trainingCourseId } } }
+        ...(deferredTrainingCourseId && type === "NORMAL"
+          ? { fixedClasses: { some: { trainingCourseId: deferredTrainingCourseId } } }
           : {}),
-        ...(fixedClassId ? { fixedClasses: { some: { id: fixedClassId } } } : {}),
+        ...(deferredFixedClassId ? { fixedClasses: { some: { id: deferredFixedClassId } } } : {}),
         deletedAt: null,
         active: true,
         trainingObjectTypeId,
@@ -274,13 +342,13 @@ export default function PhanCongGiangDay({
             }
           : {}),
         type: type,
-        ...(filterStatus === "CHO_DUYET_PCGD"
+        ...(deferredFilterStatus === "CHO_DUYET_PCGD"
           ? {
               submitLecturerAssignmentAt: {
                 not: null,
               },
             }
-          : filterStatus === "YEU_CAU_PCGD"
+          : deferredFilterStatus === "YEU_CAU_PCGD"
             ? {
                 OR: [
                   { lecturerId: null },
@@ -288,25 +356,25 @@ export default function PhanCongGiangDay({
                   { enterGradeLecturerId: null },
                 ],
               }
-            : filterStatus === "DA_DUYET_PCGD"
+            : deferredFilterStatus === "DA_DUYET_PCGD"
               ? {
                   approveLecturerAssignmentAt: {
                     not: null,
                   },
                 }
-              : filterStatus === "LMH_DA_HUY"
+              : deferredFilterStatus === "LMH_DA_HUY"
                 ? { cancelled: true }
                 : {}),
       }) satisfies Prisma.SubjectClassWhereInput,
     [
-      filters,
+      deferredFilters,
       semesterId,
       trainingObjectTypeId,
-      trainingCourseId,
-      fixedClassId,
+      deferredTrainingCourseId,
+      deferredFixedClassId,
       khoaBoMon,
       type,
-      filterStatus,
+      deferredFilterStatus,
     ]
   )
 
@@ -407,27 +475,27 @@ export default function PhanCongGiangDay({
         ...emptyObjectIf(
           [
             {
-              maxStudent: filters.maxStudent,
+              maxStudent: deferredFilters.maxStudent,
             },
           ],
-          !!filters.maxStudent
+          !!deferredFilters.maxStudent
         ),
         ...emptyObjectIf(
           [
             {
               subjectClassStudent: {
-                _count: filters.subjectClassStudent,
+                _count: deferredFilters.subjectClassStudent,
               },
             },
           ],
-          !!filters.subjectClassStudent
+          !!deferredFilters.subjectClassStudent
         ),
         {
           code: "asc" as const,
         },
       ],
     }),
-    [filters.maxStudent, filters.subjectClassStudent, where]
+    [deferredFilters.maxStudent, deferredFilters.subjectClassStudent, where]
   )
 
   const { data: dmDonViData = [], refetch } = useFindManyDM_DonVi(
@@ -483,6 +551,7 @@ export default function PhanCongGiangDay({
       enabled: !!semesterId && !!trainingObjectTypeId,
       refetchOnWindowFocus: false,
       staleTime: 15_000,
+      placeholderData: (previousData) => previousData,
     }
   )
 
@@ -495,8 +564,8 @@ export default function PhanCongGiangDay({
       deletedAt: null,
       cancelled: false,
       type: type,
-      ...(trainingCourseId && type === "NORMAL"
-        ? { fixedClasses: { some: { trainingCourseId } } }
+      ...(deferredTrainingCourseId && type === "NORMAL"
+        ? { fixedClasses: { some: { trainingCourseId: deferredTrainingCourseId } } }
         : {}),
     },
   })
@@ -509,21 +578,27 @@ export default function PhanCongGiangDay({
       deletedAt: null,
       cancelled: false,
       type: type,
-      ...(trainingCourseId && type === "NORMAL"
-        ? { fixedClasses: { some: { trainingCourseId } } }
+      ...(deferredTrainingCourseId && type === "NORMAL"
+        ? { fixedClasses: { some: { trainingCourseId: deferredTrainingCourseId } } }
         : {}),
     },
   })
 
-  const { data: count } = useCountDM_DonVi({
-    where: {
-      bActive: true,
-      subjects: {
-        some: { subjectVersion: { some: { subjectClass: { some: where } } } },
+  const { data: count } = useCountDM_DonVi(
+    {
+      where: {
+        bActive: true,
+        subjects: {
+          some: { subjectVersion: { some: { subjectClass: { some: where } } } },
+        },
+        Id: !khoaBoMon ? undefined : { in: orgIds },
       },
-      Id: !khoaBoMon ? undefined : { in: orgIds },
     },
-  })
+    {
+      placeholderData: (previousData) => previousData,
+      staleTime: 15_000,
+    }
+  )
 
   const debouncedRefetch = useCallback(
     _.debounce(() => {
@@ -534,10 +609,71 @@ export default function PhanCongGiangDay({
 
   const { showSpinner, hideSpinner } = useSpinner()
 
-  const handleFilterChange = (key: string, value: string) => {
+  const handleFilterChange = (key: string, value: unknown) => {
     setCurrentPage(1)
     setFilters((prev) => ({ ...prev, [key]: value }))
   }
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [deferredTrainingCourseId, deferredFixedClassId])
+
+  const handleTableFilters = useCallback((value: FilterProps) => {
+    setFilters(value)
+    setCurrentPage(1)
+  }, [])
+
+  const handleTableRow = useCallback((record: { id: string; [key: string]: any }) => {
+    return {
+      className: getAssignmentRowClass(record),
+    }
+  }, [])
+
+  const rowSelection = useMemo(
+    () => ({
+      type: "checkbox" as const,
+      columnWidth: 35,
+      selectedRowKeys,
+      onChange: setSelectedRowKeys,
+      getCheckboxProps(record: { id?: string; [key: string]: any }) {
+        void selectionVersion
+        const row = record.id ? form.getFieldValue(["subjectClass", record.id]) : undefined
+        let disabledRecord =
+          !row?.lecturerId ||
+          !row?.enterGradeLecturerId ||
+          !!record.cancelled ||
+          !!record.approveLecturerAssignmentAt ||
+          record?.$type === "parent"
+
+        if (khoaBoMon) {
+          disabledRecord = disabledRecord || !!record.submitLecturerAssignmentAt
+        }
+        if (copySourceId) {
+          const isSelf = record.id === copySourceId
+          const isCancelled = !!row?.cancelled
+          const isParent = record?.$type === "parent"
+          disabledRecord = isSelf || isCancelled || isParent
+        }
+
+        return {
+          disabled: disabledRecord,
+          className: cn(disabledRecord && "hidden"),
+        }
+      },
+    }),
+    [copySourceId, form, khoaBoMon, selectedRowKeys, selectionVersion]
+  )
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setFilters((prev) => {
+        if (prev.name === nameInput) return prev
+        return { ...prev, name: nameInput }
+      })
+      setCurrentPage((page) => (page === 1 ? page : 1))
+    }, 300)
+    return () => window.clearTimeout(timer)
+  }, [nameInput])
 
   const { mutateAsync: updateManySubjectClass } = useUpdateManySubjectClass()
 
@@ -784,6 +920,10 @@ export default function PhanCongGiangDay({
         }
       }
 
+      for (const [id] of banGhiSua) {
+        form.setFieldValue(["subjectClass", id, "isEdit"], false)
+      }
+      refreshToolbarFlags()
       debouncedRefetch()
       message.success("Phân công giảng dạy thành công")
     } catch (error: any) {
@@ -842,6 +982,10 @@ export default function PhanCongGiangDay({
         }
       }
 
+      for (const [id] of banGhiSua) {
+        form.setFieldValue(["subjectClass", id, "isEdit"], false)
+      }
+      refreshToolbarFlags()
       debouncedRefetch()
       message.success("Lưu phân công giảng dạy thành công")
     } catch (error: any) {
@@ -1382,37 +1526,22 @@ export default function PhanCongGiangDay({
   }, [subjectClassById])
 
   const resetForm = useCallback(() => {
-    const subjectClass = dataWithRowSpan
-      .flatMap((e) => e.children)
-      .reduce(
-        (acc, curr) => {
-          acc[curr.id] = {
-            schedule: curr.schedule,
-            lecturerId: curr.lecturerId ?? null,
-            extraLecturerId: curr.extraLecturerId ?? null,
-            enterGradeLecturerId: curr.enterGradeLecturerId ?? null,
-            lecturerAssignmentDeadline: curr.lecturerAssignmentDeadline
-              ? dayjs(curr.lecturerAssignmentDeadline)
-              : null,
-            examType: curr.examType,
-            roomId: curr.roomId,
-            trainingLocationId: curr.trainingLocationId ?? null,
-            maxStudent: curr.maxStudent ?? null,
-            isEdit: false,
-            cancelled: !!curr.cancelled,
-            isLockLecturer: curr.isLockLecturer ?? true,
-          }
-          return acc
-        },
-        {} as TeachingAssignmentForm["subjectClass"]
-      )
-    form.setFieldsValue({ subjectClass })
-    refreshToolbarFlags(subjectClass)
+    const current = (form.getFieldValue("subjectClass") ??
+      {}) as TeachingAssignmentForm["subjectClass"]
+    let changed = false
+    for (const curr of dataWithRowSpan.flatMap((e) => e.children)) {
+      const incoming = toAssignmentFormRow(curr)
+      const existing = current[curr.id]
+      if (existing?.isEdit) continue
+      if (existing && assignmentFormStamp(existing) === assignmentFormStamp(incoming)) continue
+      form.setFieldValue(["subjectClass", curr.id], incoming)
+      changed = true
+    }
+    if (changed) refreshToolbarFlags()
   }, [dataWithRowSpan, form, refreshToolbarFlags])
 
   useEffect(() => {
     resetForm()
-    setSelectionVersion((value) => value + 1)
   }, [resetForm])
 
   const canEditSubjectClass = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, "SUA")
@@ -1700,10 +1829,589 @@ export default function PhanCongGiangDay({
     trainingLocationOptions,
   ])
 
-  return (
+  const handleToggleOfficialStatus = async (checked: boolean) => {
+    try {
+      await sqlTransaction([
+        {
+          model: "SubjectClass",
+          operation: "updateMany",
+          data: {
+            where: {
+              semesterId,
+              approveLecturerAssignmentAt: {
+                not: null,
+              },
+              trainingObjectTypeId,
+              lecturerId: { not: null },
+              cancelled: false,
+              active: true,
+              deletedAt: null,
+              type: type,
+              ...(trainingCourseId && type === "NORMAL"
+                ? {
+                    fixedClasses: {
+                      some: {
+                        trainingCourseId,
+                      },
+                    },
+                  }
+                : {}),
+            },
+            data: {
+              status: checked
+                ? $Enums.SubjectClassStatus.OFFICIAL
+                : $Enums.SubjectClassStatus.DRAFT,
+            },
+          },
+        },
+      ])
+      queryClient.invalidateQueries({
+        queryKey: ["zenstack", "SubjectClass"],
+      })
+      message.success(
+        checked
+          ? `Đã đưa ${countSubjectClass} LMH đã duyệt PCGD vào giảng dạy`
+          : "Đã chuyển các LMH về trạng thái nháp"
+      )
+    } catch {
+      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+    }
+  }
+
+  const toolbar = (
     <div>
+      <div className="bg-white/95 backdrop-blur-sm">
+        <div className="flex flex-col gap-1.5 lg:flex-row lg:items-center lg:justify-between lg:gap-3">
+          <div className="flex min-w-0 flex-wrap items-center gap-2 lg:flex-1 lg:flex-nowrap">
+            <CourseClassFilter showFixedClass={false} type={type} />
+            <Input
+              allowClear
+              placeholder="Tìm theo tên môn"
+              className="w-[220px] lg:w-auto lg:min-w-[100px] lg:max-w-[220px] lg:flex-1"
+              value={nameInput}
+              onChange={(e) => setNameInput(e.target.value)}
+            />
+            <AdvancedFilter
+              khoaBoMon={!!khoaBoMon}
+              orgId={orgId}
+              organization={filters.organization}
+              onChangeOrganization={(val) => handleFilterChange("organization", val)}
+              filterStatus={filterStatus}
+              onChangeFilterStatus={(next) => {
+                setCurrentPage(1)
+                setFilterStatus(next)
+              }}
+              examType={filters.examType}
+              onChangeExamType={(val) => handleFilterChange("examType", val)}
+              examTypeOptions={options}
+            />
+          </div>
+
+          <div className="flex shrink-0 items-center justify-end gap-1.5">
+            {khoaBoMon &&
+              can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KHOA_BO_MON_PHAN_CONG_GIANG_DAY, "SUA") && (
+                <>
+                  <Button
+                    onClick={() => handleKhoaBoMonLuuPCGD()}
+                    type="primary"
+                    disabled={!dmDonViData.length || !toolbarFlags.hasUnsavedEdits}
+                  >
+                    Lưu
+                  </Button>
+                  <Popover
+                    content={
+                      <Flex gap={12} className="mt-4 text-right">
+                        <Button
+                          type="primary"
+                          className="bg-yellow-400 text-black"
+                          onClick={async () => {
+                            try {
+                              showSpinner()
+                              await updateManySubjectClass({
+                                data: {
+                                  submitLecturerAssignmentAt: new Date(),
+                                },
+                                where: {
+                                  lecturerId: {
+                                    not: null,
+                                  },
+                                  lecturerAssignmentDeadline: { not: null },
+                                  submitLecturerAssignmentAt: null,
+                                  approveLecturerAssignmentAt: null,
+                                  type: type,
+                                  trainingObjectTypeId,
+                                  semesterId,
+                                  id: {
+                                    in: selectedRowKeys as string[],
+                                  },
+                                },
+                              })
+                              message.success("Gửi PCGD thành công")
+                              form.resetFields()
+                              setSelectedRowKeys([])
+                              debouncedRefetch()
+                            } catch {
+                              message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+                            } finally {
+                              hideSpinner()
+                            }
+                          }}
+                          disabled={selectedRowKeys.length === 0}
+                        >
+                          Gửi PCGD {selectedRowKeys.length} lớp MH đã chọn
+                        </Button>
+                      </Flex>
+                    }
+                    title="Gửi phân công giảng dạy"
+                    trigger="click"
+                    placement="bottomRight"
+                  >
+                    <Button
+                      type="primary"
+                      className="hidden md:inline-flex"
+                      disabled={!dmDonViData.length || selectedRowKeys.length === 0}
+                    >
+                      Gửi PCGD
+                    </Button>
+                  </Popover>
+                  <div className="md:hidden">
+                    <Dropdown
+                      trigger={["click"]}
+                      placement="bottomRight"
+                      dropdownRender={() => (
+                        <div className="min-w-[200px] rounded-md border border-gray-200 bg-white p-1 shadow-md">
+                          <Popover
+                            content={
+                              <Flex gap={12} className="mt-4 text-right">
+                                <Button
+                                  type="primary"
+                                  className="bg-yellow-400 text-black"
+                                  disabled={selectedRowKeys.length === 0}
+                                  onClick={async () => {
+                                    try {
+                                      showSpinner()
+                                      await updateManySubjectClass({
+                                        data: {
+                                          submitLecturerAssignmentAt: new Date(),
+                                        },
+                                        where: {
+                                          lecturerId: { not: null },
+                                          lecturerAssignmentDeadline: { not: null },
+                                          submitLecturerAssignmentAt: null,
+                                          approveLecturerAssignmentAt: null,
+                                          type: type,
+                                          trainingObjectTypeId,
+                                          semesterId,
+                                          id: { in: selectedRowKeys as string[] },
+                                        },
+                                      })
+                                      message.success("Gửi PCGD thành công")
+                                      form.resetFields()
+                                      setSelectedRowKeys([])
+                                      debouncedRefetch()
+                                    } catch {
+                                      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+                                    } finally {
+                                      hideSpinner()
+                                    }
+                                  }}
+                                >
+                                  Gửi PCGD {selectedRowKeys.length} lớp MH đã chọn
+                                </Button>
+                              </Flex>
+                            }
+                            title="Gửi phân công giảng dạy"
+                            trigger="click"
+                            placement="leftTop"
+                          >
+                            <button
+                              type="button"
+                              disabled={!dmDonViData.length || selectedRowKeys.length === 0}
+                              className="flex w-full items-center rounded px-3 py-2 text-left text-sm hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+                            >
+                              Gửi PCGD
+                            </button>
+                          </Popover>
+                        </div>
+                      )}
+                    >
+                      <Button
+                        className="!inline-flex h-8 w-8 items-center justify-center !p-0"
+                        icon={<Ellipsis size={16} strokeWidth={2} className="block" />}
+                      />
+                    </Dropdown>
+                  </div>
+                </>
+              )}
+
+            {!khoaBoMon && (
+              <>
+                <Button
+                  onClick={() => handleP2LuuKeHoach()}
+                  type="primary"
+                  className="whitespace-nowrap"
+                >
+                  Lưu kế hoạch
+                </Button>
+                <Dropdown
+                  trigger={["click"]}
+                  placement="bottomRight"
+                  open={moreMenuOpen}
+                  onOpenChange={setMoreMenuOpen}
+                  dropdownRender={() => (
+                    <div className="max-h-[70vh] min-w-[240px] overflow-y-auto rounded-md border border-gray-200 bg-white p-1 shadow-md">
+                      <Popover
+                        content={
+                          <Form
+                            form={formXepKhuVuc}
+                            initialValues={{ isOverride: false }}
+                            layout="horizontal"
+                            labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 16 }}
+                            labelAlign="left"
+                            colon={true}
+                            style={{ width: 360 }}
+                            className="[&_.ant-form-item]:mb-3"
+                            onFinish={async (values: XepKhuVucForm) => {
+                              try {
+                                showSpinner()
+                                const res = await sqlTransaction([
+                                  {
+                                    model: "SubjectClass",
+                                    operation: "updateMany",
+                                    data: {
+                                      where: {
+                                        trainingObjectTypeId,
+                                        semesterId,
+                                        active: true,
+                                        deletedAt: null,
+                                        type: type,
+                                        ...(values.trainingCourseId
+                                          ? {
+                                              fixedClasses: {
+                                                some: { trainingCourseId: values.trainingCourseId },
+                                              },
+                                            }
+                                          : {}),
+                                        ...(!values.isOverride ? { trainingLocationId: null } : {}),
+                                      },
+                                      data: {
+                                        ...(values.trainingLocationId
+                                          ? { trainingLocationId: values.trainingLocationId }
+                                          : {}),
+                                        ...(values.schedule ? { schedule: values.schedule } : {}),
+                                      },
+                                    },
+                                  },
+                                ])
+                                if (res.status !== 200) {
+                                  throw new Error("Lỗi khi xếp khu vực")
+                                }
+                                debouncedRefetch()
+                                formXepKhuVuc.resetFields()
+                                message.success("Xếp khu vực / kíp học thành công")
+                              } catch {
+                                message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+                              } finally {
+                                hideSpinner()
+                              }
+                            }}
+                          >
+                            <Form.Item name="trainingCourseId" label="Khoá đào tạo">
+                              <Select
+                                options={trainingCourseData.map((e) => ({
+                                  label: e.name,
+                                  value: e.id,
+                                }))}
+                                allowClear
+                                showSearch
+                                placeholder="Tất cả khoá"
+                                filterOption={(input, option) =>
+                                  (option?.label ?? "")
+                                    .toString()
+                                    .toLowerCase()
+                                    .includes(input.toLowerCase())
+                                }
+                                dropdownStyle={{ width: 320 }}
+                              />
+                            </Form.Item>
+                            <Form.Item name="trainingLocationId" label="Khu vực đào tạo">
+                              <Select
+                                options={trainingLocationOptions}
+                                allowClear
+                                showSearch
+                                placeholder="Không thay đổi"
+                                filterOption={(input, option) =>
+                                  (option?.label ?? "")
+                                    .toString()
+                                    .toLowerCase()
+                                    .includes(input.toLowerCase())
+                                }
+                                dropdownStyle={{ width: 320 }}
+                              />
+                            </Form.Item>
+                            <Form.Item name="schedule" label="Kíp học">
+                              <Select
+                                options={SCHEDULE_OPTIONS}
+                                allowClear
+                                placeholder="Không thay đổi"
+                              />
+                            </Form.Item>
+                            <Divider className="my-2" />
+                            <Form.Item
+                              name="isOverride"
+                              label="Ghi đè đã xếp"
+                              valuePropName="checked"
+                            >
+                              <Switch checkedChildren="Ghi đè" unCheckedChildren="Bỏ qua" />
+                            </Form.Item>
+                            <Form.Item wrapperCol={{ offset: 9, span: 15 }}>
+                              <Flex gap={8} justify="end">
+                                <Button onClick={() => formXepKhuVuc.resetFields()}>Đặt lại</Button>
+                                <Button type="primary" htmlType="submit">
+                                  Xếp nhanh
+                                </Button>
+                              </Flex>
+                            </Form.Item>
+                          </Form>
+                        }
+                        title="Xếp khu vực / kíp học (nhanh)"
+                        trigger="click"
+                        placement="leftTop"
+                      >
+                        <button
+                          type="button"
+                          className="flex w-full items-center rounded px-3 py-2 text-left text-sm hover:bg-gray-50"
+                        >
+                          Xếp khu vực (nhanh)
+                        </button>
+                      </Popover>
+
+                      <div className="rounded px-3 py-2">
+                        <Checkbox
+                          className="m-0"
+                          disabled={countSubjectClass === 0}
+                          indeterminate={
+                            countSubjectClassOfficial > 0 &&
+                            countSubjectClassOfficial < countSubjectClass
+                          }
+                          checked={
+                            countSubjectClassOfficial > 0 &&
+                            countSubjectClassOfficial === countSubjectClass
+                          }
+                          onChange={(e) => {
+                            void handleToggleOfficialStatus(e.target.checked)
+                          }}
+                        >
+                          Đưa LMH vào giảng dạy
+                        </Checkbox>
+                      </div>
+
+                      <Popover
+                        content={
+                          <Form
+                            form={formBaoDay}
+                            initialValues={{ isOverride: false }}
+                            onFinish={p2GuiBaoDay}
+                          >
+                            <FormItem
+                              form={formBaoDay}
+                              name={"deadline"}
+                              required
+                              label="Hạn phân công giảng dạy"
+                            >
+                              <DatePicker />
+                            </FormItem>
+                            <FormItem
+                              form={formBaoDay}
+                              name={"isOverride"}
+                              label="Ghi đè hạn PCGD"
+                              className="mt-2"
+                            >
+                              <Switch />
+                            </FormItem>
+                            <Col span={24} className="mt-4 text-right">
+                              <Button type="primary" htmlType="submit">
+                                Gửi báo dạy
+                              </Button>
+                            </Col>
+                          </Form>
+                        }
+                        title="Báo dạy cho Khoa/Viện/Bộ môn"
+                        trigger="click"
+                        placement="leftTop"
+                      >
+                        <Tooltip
+                          title={
+                            toolbarFlags.missingTrainingLocation
+                              ? "Vui lòng nhập khu vực đào tạo cho tất cả lớp môn học trước khi báo dạy"
+                              : undefined
+                          }
+                        >
+                          <button
+                            type="button"
+                            disabled={toolbarFlags.missingTrainingLocation}
+                            className="flex w-full items-center rounded px-3 py-2 text-left text-sm hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+                          >
+                            1. Báo dạy
+                          </button>
+                        </Tooltip>
+                      </Popover>
+
+                      {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, "DUYET") && (
+                        <Popover
+                          content={
+                            <Flex gap={12} className="mt-4 text-right">
+                              <Button
+                                type="primary"
+                                disabled={selectedRowKeys.length === 0}
+                                danger
+                                onClick={handleP2TuChoiPCGD}
+                              >
+                                Từ chối PCGD {selectedRowKeys.length} LMH
+                              </Button>
+                              <Button
+                                type="primary"
+                                onClick={handleP2DuyetPCGD}
+                                disabled={selectedRowKeys.length === 0}
+                              >
+                                Duyệt PCGD {selectedRowKeys.length} LMH
+                              </Button>
+                            </Flex>
+                          }
+                          title="Duyệt báo dạy"
+                          trigger="click"
+                          placement="leftTop"
+                        >
+                          <button
+                            type="button"
+                            className="flex w-full items-center rounded px-3 py-2 text-left text-sm hover:bg-gray-50"
+                          >
+                            2. Tiếp nhận báo dạy
+                          </button>
+                        </Popover>
+                      )}
+
+                      <button
+                        type="button"
+                        disabled={!dataWithRowSpan?.length}
+                        onClick={() => setIsExportModalOpen(true)}
+                        className="flex w-full items-center rounded px-3 py-2 text-left text-sm hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        3. Xuất PCGD
+                      </button>
+
+                      {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, "NHAP_EXCEL") && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setMoreMenuOpen(false)
+                            onOpenModalNhapTKB({ type, trainingCourseId: trainingCourseId })
+                          }}
+                          className="flex w-full items-center rounded px-3 py-2 text-left text-sm hover:bg-gray-50"
+                        >
+                          4. Nhập từ TKB
+                        </button>
+                      )}
+                    </div>
+                  )}
+                >
+                  <Button
+                    className="!inline-flex h-8 w-8 items-center justify-center !p-0 [&>.ant-btn-icon]:!m-0 [&>.ant-btn-icon]:!flex [&>.ant-btn-icon]:!items-center [&>.ant-btn-icon]:!justify-center"
+                    icon={<Ellipsis size={16} strokeWidth={2} className="block" />}
+                  />
+                </Dropdown>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+      {copySourceId && (
+        <Flex
+          align="center"
+          gap={8}
+          className="mt-2 rounded border border-green-200 bg-green-50 px-2 py-1"
+          style={{ flexWrap: "wrap" }}
+        >
+          <span style={{ fontSize: 13, color: "#27500A", fontWeight: 500 }}>
+            Copy PCGV từ:{" "}
+            <span style={{ color: "#185FA5" }}>
+              {subjectClassById.get(copySourceId)?.code || copySourceId}
+            </span>
+          </span>
+          <Divider type="vertical" />
+          <span style={{ fontSize: 12, color: "#5F5E5A" }}>Thông tin :</span>
+          <Checkbox
+            checked={copyFields.lecturerId}
+            onChange={(e) => setCopyFields((p) => ({ ...p, lecturerId: e.target.checked }))}
+          >
+            GV 1
+          </Checkbox>
+          <Checkbox
+            checked={copyFields.extraLecturerId}
+            onChange={(e) => setCopyFields((p) => ({ ...p, extraLecturerId: e.target.checked }))}
+          >
+            GV 2
+          </Checkbox>
+          <Checkbox
+            checked={copyFields.enterGradeLecturerId}
+            onChange={(e) =>
+              setCopyFields((p) => ({ ...p, enterGradeLecturerId: e.target.checked }))
+            }
+          >
+            GV nhập điểm
+          </Checkbox>
+          <Divider type="vertical" />
+          <span style={{ fontSize: 12, color: "#5F5E5A" }}>
+            {selectedRowKeys.length > 0
+              ? `Đã chọn ${selectedRowKeys.length} dòng đích`
+              : "Chọn lớp cần áp dụng"}
+          </span>
+          <Button size="small" onClick={handleCopyCancel}>
+            Hủy
+          </Button>
+          <Button
+            size="small"
+            type="primary"
+            disabled={selectedRowKeys.length === 0 || !Object.values(copyFields).some(Boolean)}
+            onClick={handleCopyApply}
+          >
+            Áp dụng {selectedRowKeys.length > 0 ? `(${selectedRowKeys.length} dòng)` : ""}
+          </Button>
+        </Flex>
+      )}
+      <Modal
+        title="Tùy chọn xuất phân công giảng dạy"
+        open={isExportModalOpen}
+        onCancel={() => setIsExportModalOpen(false)}
+        onOk={() => handleExportExcel(exportGroupType)}
+        okText="Xuất file"
+        cancelText="Hủy"
+      >
+        <div style={{ padding: "16px 0" }}>
+          <Radio.Group
+            onChange={(e) => setExportGroupType(e.target.value)}
+            value={exportGroupType}
+            style={{ display: "flex", flexDirection: "column", gap: "12px" }}
+          >
+            <Radio value="faculty">
+              <strong>Xuất theo Khoa/Viện</strong>
+            </Radio>
+            <Radio value="department">
+              <strong>Xuất theo Bộ môn</strong>
+            </Radio>
+          </Radio.Group>
+        </div>
+      </Modal>
+    </div>
+  )
+
+  return (
+    <div className="flex h-[calc(100vh-190px)] min-h-0 flex-col overflow-hidden">
+      <TableLayout toolbar={toolbar}>
       <Form
         form={form}
+        className="flex min-h-0 flex-1 flex-col overflow-hidden"
         onValuesChange={(changedValue) => {
           if (!changedValue.subjectClass) return
           const subjectClassId = Object.keys(changedValue.subjectClass)[0]
@@ -1754,607 +2462,31 @@ export default function PhanCongGiangDay({
           }
         }}
       >
-      <Row gutter={[8, 8]}>
-        <Col span={24}>
-          <Affix offsetTop={105} style={{ zIndex: 1000 }}>
-            <Flex justify="space-between" gap={4} className="bg-white py-1">
-              <Col span={10}>
-                {!khoaBoMon && (
-                  <p className="mt-1">
-                    Khoa/Viện/Bộ môn chỉ có thể nhìn thấy lớp môn học có hạn phân công giảng dạy.
-                  </p>
-                )}
-                <Flex gap={2} className="px-1">
-                  <Button
-                    type={filterStatus === "YEU_CAU_PCGD" ? "primary" : "link"}
-                    className="flex gap-1 items-center cursor-pointer px-1"
-                    onClick={() => {
-                      if (filterStatus === "YEU_CAU_PCGD") {
-                        setFilterStatus(undefined)
-                      } else {
-                        setFilterStatus("YEU_CAU_PCGD")
-                      }
-                    }}
-                  >
-                    <p className="bg-slate-200 h-4 w-4 rounded" />
-                    <span>Yêu cầu PCGD</span>
-                  </Button>
-                  <Button
-                    type={filterStatus === "LMH_DA_HUY" ? "primary" : "link"}
-                    className="flex gap-1 items-center cursor-pointer"
-                    onClick={() => {
-                      if (filterStatus === "LMH_DA_HUY") {
-                        setFilterStatus(undefined)
-                      } else {
-                        setFilterStatus("LMH_DA_HUY")
-                      }
-                    }}
-                  >
-                    <p className="bg-red-200 h-4 w-4 rounded" />
-                    <span>LMH đã huỷ</span>
-                  </Button>
-                  <Button
-                    type={filterStatus === "CHO_DUYET_PCGD" ? "primary" : "link"}
-                    className="flex gap-1 items-center cursor-pointer"
-                    onClick={() => {
-                      if (filterStatus === "CHO_DUYET_PCGD") {
-                        setFilterStatus(undefined)
-                      } else {
-                        setFilterStatus("CHO_DUYET_PCGD")
-                      }
-                    }}
-                  >
-                    <p className="bg-yellow-200 h-4 w-4 rounded" />
-                    <span>Chờ duyệt PCGD</span>
-                  </Button>
-                  <Button
-                    type={filterStatus === "DA_DUYET_PCGD" ? "primary" : "link"}
-                    className="flex gap-1 items-center"
-                    onClick={() => {
-                      filterStatus === "DA_DUYET_PCGD"
-                        ? setFilterStatus(undefined)
-                        : setFilterStatus("DA_DUYET_PCGD")
-                    }}
-                  >
-                    <p className="bg-green-200 h-4 w-4 rounded " />
-                    <span>Đã duyệt PCGD</span>
-                  </Button>
-                  {!khoaBoMon && (
-                    <p className="flex gap-1 items-center">
-                      <Checkbox
-                        indeterminate={
-                          countSubjectClassOfficial > 0 &&
-                          countSubjectClassOfficial < countSubjectClass
-                        }
-                        checked={
-                          countSubjectClassOfficial > 0 &&
-                          countSubjectClassOfficial === countSubjectClass
-                        }
-                        onChange={async (e) => {
-                          try {
-                            await sqlTransaction([
-                              {
-                                model: "SubjectClass",
-                                operation: "updateMany",
-                                data: {
-                                  where: {
-                                    semesterId,
-                                    approveLecturerAssignmentAt: {
-                                      not: null,
-                                    },
-                                    trainingObjectTypeId,
-                                    lecturerId: { not: null },
-                                    cancelled: false,
-                                    active: true,
-                                    deletedAt: null,
-                                    type: type,
-                                    ...(trainingCourseId && type === "NORMAL"
-                                      ? {
-                                          fixedClasses: {
-                                            some: {
-                                              trainingCourseId,
-                                            },
-                                          },
-                                        }
-                                      : {}),
-                                  },
-                                  data: {
-                                    status: e.target.checked
-                                      ? $Enums.SubjectClassStatus.OFFICIAL
-                                      : $Enums.SubjectClassStatus.DRAFT,
-                                  },
-                                },
-                              },
-                            ])
-                            queryClient.invalidateQueries({
-                              queryKey: ["zenstack", "SubjectClass"],
-                            })
-                          } catch (error) {}
-                        }}
-                      />
-                      <span>Đưa LMH vào giảng dạy</span>
-                    </p>
-                  )}
-                </Flex>
-              </Col>
-              <Col span={14}>
-                <Flex gap={4} justify="end">
-                  <TreeSelectDepartment
-                    className="w-[300px]"
-                    rootId={!khoaBoMon ? "0" : orgId}
-                    onChange={(val) => handleFilterChange("organization", val)}
-                  />
-                  {khoaBoMon &&
-                    can(
-                      QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KHOA_BO_MON_PHAN_CONG_GIANG_DAY,
-                      "SUA"
-                    ) && (
-                      <Button
-                        onClick={() => handleKhoaBoMonLuuPCGD()}
-                        type="primary"
-                        disabled={!dmDonViData.length || !toolbarFlags.hasUnsavedEdits}
-                      >
-                        Lưu
-                      </Button>
-                    )}
-                  {khoaBoMon &&
-                    can(
-                      QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KHOA_BO_MON_PHAN_CONG_GIANG_DAY,
-                      "SUA"
-                    ) && (
-                      <Popover
-                        content={
-                          <Flex gap={12} className="text-right mt-4">
-                            <Button
-                              type="primary"
-                              className="bg-yellow-400 text-black"
-                              onClick={async () => {
-                                try {
-                                  showSpinner()
-                                  await updateManySubjectClass({
-                                    data: {
-                                      submitLecturerAssignmentAt: new Date(),
-                                    },
-                                    where: {
-                                      lecturerId: {
-                                        not: null,
-                                      },
-                                      lecturerAssignmentDeadline: { not: null },
-                                      submitLecturerAssignmentAt: null,
-                                      approveLecturerAssignmentAt: null,
-                                      type: type,
-                                      trainingObjectTypeId,
-                                      semesterId,
-                                      id: {
-                                        in: selectedRowKeys as string[],
-                                      },
-                                    },
-                                  })
-                                  message.success("Gửi PCGD thành công")
-                                  form.resetFields()
-                                  setSelectedRowKeys([])
-                                  debouncedRefetch()
-                                } catch (error: any) {
-                                  message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
-                                } finally {
-                                  hideSpinner()
-                                }
-                              }}
-                              disabled={selectedRowKeys.length === 0}
-                            >
-                              Gửi PCGD {selectedRowKeys.length} lớp MH đã chọn
-                            </Button>
-                          </Flex>
-                        }
-                        title="Gửi phân công giảng dạy"
-                        trigger="click"
-                        placement="bottomRight"
-                      >
-                        <Button
-                          type="primary"
-                          disabled={!dmDonViData.length || selectedRowKeys.length === 0}
-                        >
-                          Gửi PCGD
-                        </Button>
-                      </Popover>
-                    )}
-                  {!khoaBoMon && (
-                    <Popover
-                      content={
-                        <Form
-                          form={formXepKhuVuc}
-                          initialValues={{ isOverride: false }}
-                          layout="horizontal"
-                          labelCol={{ span: 8 }}
-                          wrapperCol={{ span: 16 }}
-                          labelAlign="left"
-                          colon={true}
-                          style={{ width: 360 }}
-                          className="[&_.ant-form-item]:mb-3"
-                          onFinish={async (values: XepKhuVucForm) => {
-                            try {
-                              showSpinner()
-                              const res = await sqlTransaction([
-                                {
-                                  model: "SubjectClass",
-                                  operation: "updateMany",
-                                  data: {
-                                    where: {
-                                      trainingObjectTypeId,
-                                      semesterId,
-                                      active: true,
-                                      deletedAt: null,
-                                      type: type,
-                                      ...(values.trainingCourseId
-                                        ? {
-                                            fixedClasses: {
-                                              some: { trainingCourseId: values.trainingCourseId },
-                                            },
-                                          }
-                                        : {}),
-                                      ...(!values.isOverride ? { trainingLocationId: null } : {}),
-                                    },
-                                    data: {
-                                      ...(values.trainingLocationId
-                                        ? { trainingLocationId: values.trainingLocationId }
-                                        : {}),
-                                      ...(values.schedule ? { schedule: values.schedule } : {}),
-                                    },
-                                  },
-                                },
-                              ])
-                              if (res.status !== 200) {
-                                throw new Error("Lỗi khi xếp khu vực")
-                              }
-                              debouncedRefetch()
-                              formXepKhuVuc.resetFields()
-                              message.success("Xếp khu vực / kíp học thành công")
-                            } catch (error: any) {
-                              message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
-                            } finally {
-                              hideSpinner()
-                            }
-                          }}
-                        >
-                          <Form.Item name="trainingCourseId" label="Khoá đào tạo">
-                            <Select
-                              options={trainingCourseData.map((e) => ({
-                                label: e.name,
-                                value: e.id,
-                              }))}
-                              allowClear
-                              showSearch
-                              placeholder="Tất cả khoá"
-                              filterOption={(input, option) =>
-                                (option?.label ?? "")
-                                  .toString()
-                                  .toLowerCase()
-                                  .includes(input.toLowerCase())
-                              }
-                              dropdownStyle={{ width: 320 }}
-                            />
-                          </Form.Item>
-
-                          <Form.Item name="trainingLocationId" label="Khu vực đào tạo">
-                            <Select
-                              options={trainingLocationData.map((e) => ({
-                                label: e.name,
-                                value: e.id,
-                              }))}
-                              allowClear
-                              showSearch
-                              placeholder="Không thay đổi"
-                              filterOption={(input, option) =>
-                                (option?.label ?? "")
-                                  .toString()
-                                  .toLowerCase()
-                                  .includes(input.toLowerCase())
-                              }
-                              dropdownStyle={{ width: 320 }}
-                            />
-                          </Form.Item>
-
-                          <Form.Item name="schedule" label="Kíp học">
-                            <Select
-                              options={Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(
-                                ([key, value]) => ({
-                                  label: value,
-                                  value: key,
-                                })
-                              )}
-                              allowClear
-                              placeholder="Không thay đổi"
-                            />
-                          </Form.Item>
-
-                          <Divider className="my-2" />
-
-                          <Form.Item
-                            name="isOverride"
-                            label="Ghi đè đã xếp"
-                            valuePropName="checked"
-                          >
-                            <Switch checkedChildren="Ghi đè" unCheckedChildren="Bỏ qua" />
-                          </Form.Item>
-
-                          <Form.Item wrapperCol={{ offset: 9, span: 15 }}>
-                            <Flex gap={8} justify="end">
-                              <Button onClick={() => formXepKhuVuc.resetFields()}>Đặt lại</Button>
-                              <Button type="primary" htmlType="submit">
-                                Xếp nhanh
-                              </Button>
-                            </Flex>
-                          </Form.Item>
-                        </Form>
-                      }
-                      title="Xếp khu vực / kíp học (nhanh)"
-                      trigger="click"
-                      placement="bottomRight"
-                    >
-                      <Button type="dashed">Xếp khu vực (nhanh)</Button>
-                    </Popover>
-                  )}
-                  {!khoaBoMon && (
-                    <Button
-                      onClick={() => handleP2LuuKeHoach()}
-                      type="default"
-                      className="text-primary"
-                    >
-                      0. Lưu kế hoạch
-                    </Button>
-                  )}
-                  {!khoaBoMon && (
-                    <Popover
-                      content={
-                        <Form
-                          form={formBaoDay}
-                          initialValues={{ isOverride: false }}
-                          onFinish={p2GuiBaoDay}
-                        >
-                          <FormItem
-                            form={formBaoDay}
-                            name={"deadline"}
-                            required
-                            label="Hạn phân công giảng dạy"
-                          >
-                            <DatePicker />
-                          </FormItem>
-                          <FormItem
-                            form={formBaoDay}
-                            name={"isOverride"}
-                            label="Ghi đè hạn PCGD"
-                            className="mt-2"
-                          >
-                            <Switch />
-                          </FormItem>
-                          <Col span={24} className="text-right mt-4">
-                            <Button type="primary" htmlType="submit">
-                              Gửi báo dạy
-                            </Button>
-                          </Col>
-                        </Form>
-                      }
-                      title="Báo dạy cho Khoa/Viện/Bộ môn"
-                      trigger="click"
-                      placement="bottomRight"
-                    >
-                      <Tooltip
-                        title={
-                          toolbarFlags.missingTrainingLocation
-                            ? "Vui lòng nhập khu vực đào tạo cho tất cả lớp môn học trước khi báo dạy"
-                            : undefined
-                        }
-                      >
-                        <Button
-                          type="primary"
-                          className="bg-red-500"
-                          disabled={toolbarFlags.missingTrainingLocation}
-                        >
-                          1.Báo dạy
-                        </Button>
-                      </Tooltip>
-                    </Popover>
-                  )}
-                  {!khoaBoMon &&
-                    can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, "DUYET") && (
-                      <Popover
-                        content={
-                          <Flex gap={12} className="text-right mt-4">
-                            <Button
-                              type="primary"
-                              disabled={selectedRowKeys.length === 0}
-                              danger
-                              onClick={handleP2TuChoiPCGD}
-                            >
-                              Từ chối PCGD {selectedRowKeys.length} LMH
-                            </Button>
-                            <Button
-                              type="primary"
-                              onClick={handleP2DuyetPCGD}
-                              disabled={selectedRowKeys.length === 0}
-                            >
-                              Duyệt PCGD {selectedRowKeys.length} LMH
-                            </Button>
-                          </Flex>
-                        }
-                        title="Duyệt báo dạy"
-                        trigger="click"
-                        placement="bottomRight"
-                      >
-                        <Button type="primary">2. Tiếp nhận báo dạy</Button>
-                      </Popover>
-                    )}
-                  {!khoaBoMon && (
-                    <>
-                      <Button
-                        onClick={() => setIsExportModalOpen(true)}
-                        type="primary"
-                        className="bg-blue-500"
-                        disabled={!dataWithRowSpan?.length}
-                      >
-                        3. Xuất PCGD
-                      </Button>
-                      <Modal
-                        title="Tùy chọn xuất phân công giảng dạy"
-                        open={isExportModalOpen}
-                        onCancel={() => setIsExportModalOpen(false)}
-                        onOk={() => handleExportExcel(exportGroupType)}
-                        okText="Xuất file"
-                        cancelText="Hủy"
-                      >
-                        <div style={{ padding: "16px 0" }}>
-                          <Radio.Group
-                            onChange={(e) => setExportGroupType(e.target.value)}
-                            value={exportGroupType}
-                            style={{ display: "flex", flexDirection: "column", gap: "12px" }}
-                          >
-                            <Radio value="faculty">
-                              <strong>Xuất theo Khoa/Viện</strong>
-                            </Radio>
-                            <Radio value="department">
-                              <strong>Xuất theo Bộ môn</strong>
-                            </Radio>
-                          </Radio.Group>
-                        </div>
-                      </Modal>
-                    </>
-                  )}
-                  {!khoaBoMon &&
-                    can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, "NHAP_EXCEL") && (
-                      <Button
-                        type="primary"
-                        className="bg-yellow-500 text-black"
-                        onClick={() =>
-                          onOpenModalNhapTKB({ type, trainingCourseId: trainingCourseId })
-                        }
-                      >
-                        4. Nhập từ TKB
-                      </Button>
-                    )}
-                </Flex>
-              </Col>
-            </Flex>
-            {copySourceId && (
-              <Flex
-                align="center"
-                gap={8}
-                className="px-2 py-2 bg-green-50 border border-green-200 rounded mt-1"
-                style={{ flexWrap: "wrap" }}
-              >
-                <span style={{ fontSize: 13, color: "#27500A", fontWeight: 500 }}>
-                  Copy PCGV từ:{" "}
-                  <span style={{ color: "#185FA5" }}>
-                    {subjectClassById.get(copySourceId)?.code || copySourceId}
-                  </span>
-                </span>
-                <Divider type="vertical" />
-                <span style={{ fontSize: 12, color: "#5F5E5A" }}>Thông tin :</span>
-                <Checkbox
-                  checked={copyFields.lecturerId}
-                  onChange={(e) => setCopyFields((p) => ({ ...p, lecturerId: e.target.checked }))}
-                >
-                  GV 1
-                </Checkbox>
-                <Checkbox
-                  checked={copyFields.extraLecturerId}
-                  onChange={(e) =>
-                    setCopyFields((p) => ({ ...p, extraLecturerId: e.target.checked }))
-                  }
-                >
-                  GV 2
-                </Checkbox>
-                <Checkbox
-                  checked={copyFields.enterGradeLecturerId}
-                  onChange={(e) =>
-                    setCopyFields((p) => ({ ...p, enterGradeLecturerId: e.target.checked }))
-                  }
-                >
-                  GV nhập điểm
-                </Checkbox>
-                <Divider type="vertical" />
-                <span style={{ fontSize: 12, color: "#5F5E5A" }}>
-                  {selectedRowKeys.length > 0
-                    ? `Đã chọn ${selectedRowKeys.length} dòng đích`
-                    : "Chọn lớp cần áp dụng"}
-                </span>
-                <Button size="small" onClick={handleCopyCancel}>
-                  Hủy
-                </Button>
-                <Button
-                  size="small"
-                  type="primary"
-                  disabled={
-                    selectedRowKeys.length === 0 || !Object.values(copyFields).some(Boolean)
-                  }
-                  onClick={handleCopyApply}
-                >
-                  Áp dụng {selectedRowKeys.length > 0 ? `(${selectedRowKeys.length} dòng)` : ""}
-                </Button>
-              </Flex>
-            )}
-
-            <Divider className="m-0" />
-          </Affix>
-        </Col>
-        <Col span={24}>
             <FormItem form={form} name={"subjectClass"} hidden />
             <CopySourceProvider value={copySourceId}>
             <LecturerNameProvider seed={lecturerNameSeed}>
             <TableCollapse
               rowKey="id"
+              className="fit-height-table flex-1 min-h-0"
               scrollable
-              maxHeight={khoaBoMon ? "calc(100vh - 370px)" : "calc(100vh - 460px)"}
+              maxHeight="100%"
               filters={filters}
-              setFilters={(value) => {
-                setFilters(value)
-                setCurrentPage(1)
-              }}
-              rowSelection={{
-                type: "checkbox",
-                columnWidth: 35,
-                selectedRowKeys,
-                onChange: setSelectedRowKeys,
-                getCheckboxProps(record) {
-                  void selectionVersion
-                  const row = form.getFieldValue(["subjectClass", record.id])
-                  let disabledRecord =
-                    !row?.lecturerId ||
-                    !row?.enterGradeLecturerId ||
-                    !!record.cancelled ||
-                    !!record.approveLecturerAssignmentAt ||
-                    record?.$type === "parent"
-
-                  if (khoaBoMon) {
-                    disabledRecord = disabledRecord || !!record.submitLecturerAssignmentAt
-                  }
-                  if (copySourceId) {
-                    const isSelf = record.id === copySourceId
-                    const isCancelled = !!row?.cancelled
-                    const isParent = record?.$type === "parent"
-                    disabledRecord = isSelf || isCancelled || isParent
-                  }
-
-                  return {
-                    disabled: disabledRecord,
-                    className: cn(disabledRecord && "hidden"),
-                  }
-                },
-              }}
+              setFilters={handleTableFilters}
+              rowSelection={rowSelection}
               defaultExpandAll
-              onRow={(record) => ({
-                className: getAssignmentRowClass(record),
-              })}
+              onRow={handleTableRow}
               columns={columns}
               headerTitleKey={"sTen"}
               data={dataWithRowSpan}
               childrenFieldName="children"
+              shouldCellUpdate={shouldAssignmentCellUpdate}
+              keepCollapsedRowsMounted
               pagination={pagination}
             />
             </LecturerNameProvider>
             </CopySourceProvider>
-        </Col>
-      </Row>
       </Form>
+      </TableLayout>
       <style>
         {`
           .readonly-checkbox.ant-checkbox-wrapper-disabled {

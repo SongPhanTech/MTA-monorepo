@@ -1,6 +1,6 @@
 import { useFindManyTrainingCourse, useFindUniqueSemester } from "@workspace/db/hooks"
 import type { SelectProps } from "antd"
-import { useEffect } from "react"
+import { startTransition, useEffect } from "react"
 import { Select } from "../commons/select"
 import { useSemesterStore } from "../select-semester"
 import { useTrainingObjectTypeStore } from "../select-training-object-type"
@@ -148,7 +148,7 @@ export const SelectTrainingCourseStore = (props: SelectProps) => {
       style={{ width: 200 }}
       {...props}
       value={id}
-      onChange={onSelect}
+      onChange={(value) => startTransition(() => onSelect(value))}
     />
   )
 }

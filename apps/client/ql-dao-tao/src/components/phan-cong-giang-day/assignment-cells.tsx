@@ -4,7 +4,7 @@ import LectureTreeSelect from "@components/commons/lecture-select-multi/TreeSele
 import Select from "@components/commons/select"
 import DeleteIcon from "@components/icons/delete"
 import EditIcon from "@components/icons/edit"
-import { CopyOutlined } from "@ant-design/icons"
+import { CopyOutlined, DownOutlined } from "@ant-design/icons"
 import useSpinner from "@hooks/spinner"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { formatLecturerName } from "@workspace/libs/utils"
@@ -135,7 +135,12 @@ type LecturerLike = {
   } | null
 } | null
 
-function LazyTrigger({
+type InjectedField<T> = {
+  value?: T
+  onChange?: (value: T) => void
+}
+
+function FieldTrigger({
   disabled,
   label,
   placeholder,
@@ -151,22 +156,20 @@ function LazyTrigger({
       type="button"
       disabled={disabled}
       className={cn(
-        "w-full min-h-8 px-1 text-left text-sm truncate rounded border border-transparent bg-transparent",
-        !disabled && "hover:border-[#d9d9d9] hover:bg-white cursor-pointer",
-        disabled && "cursor-not-allowed opacity-70"
+        "flex h-8 w-full items-center justify-between gap-1 rounded-md border border-[#d9d9d9] bg-white px-2 text-left text-sm",
+        !disabled && "hover:border-[#4096ff] cursor-pointer",
+        disabled && "cursor-not-allowed bg-[#f5f5f5] text-black/25"
       )}
       onClick={() => {
         if (!disabled) onOpen()
       }}
     >
-      {label ? label : <span className="text-gray-400">{placeholder}</span>}
+      <span className={cn("min-w-0 truncate", !label && "text-gray-400")}>
+        {label || placeholder}
+      </span>
+      <DownOutlined className="shrink-0 text-[10px] text-black/25" />
     </button>
   )
-}
-
-type InjectedField<T> = {
-  value?: T
-  onChange?: (value: T) => void
 }
 
 const LazyDateField = memo(function LazyDateField({
@@ -199,7 +202,7 @@ const LazyDateField = memo(function LazyDateField({
   }
 
   return (
-    <LazyTrigger
+    <FieldTrigger
       disabled={disabled}
       label={display}
       placeholder="Chọn ngày"
@@ -255,7 +258,7 @@ const LazyOptionsField = memo(function LazyOptionsField({
   }
 
   return (
-    <LazyTrigger
+    <FieldTrigger
       disabled={disabled}
       label={label}
       placeholder={placeholder}
@@ -306,7 +309,7 @@ const LazyLecturerField = memo(function LazyLecturerField({
   }
 
   return (
-    <LazyTrigger
+    <FieldTrigger
       disabled={disabled}
       label={label}
       placeholder="Chọn giảng viên"
@@ -361,7 +364,7 @@ const LazyRoomField = memo(function LazyRoomField({
   }
 
   return (
-    <LazyTrigger
+    <FieldTrigger
       disabled={disabled}
       label={roomLabel}
       placeholder="Chọn phòng"

@@ -2114,13 +2114,13 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
     const gD = student.graduationDecision
     const course = student.fixedClass?.trainingCourse
     const major = student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
-    const trainingObjectTypeName = course?.trainingObjectType?.name?.toUpperCase() || ""
-    const fieldNameEn = major?.trainingField?.englishName?.toUpperCase() || ""
+    const trainingObjectTypeName = course?.trainingObjectType?.name || ""
+    const fieldNameEn = major?.trainingField?.englishName || ""
 
-    const en1 = (courseTextEn1 ?? DEFAULT_COURSE_TEXT_EN_1).trim().toUpperCase()
-    const en2 = (courseTextEn2 ?? fieldNameEn).trim().toUpperCase()
-    const vi1 = (courseTextVi1 ?? DEFAULT_COURSE_TEXT_VI_1).trim().toUpperCase()
-    const vi2 = (courseTextVi2 ?? trainingObjectTypeName).trim().toUpperCase()
+    const en1 = (courseTextEn1 ?? DEFAULT_COURSE_TEXT_EN_1).trim()
+    const en2 = (courseTextEn2 ?? fieldNameEn).trim()
+    const vi1 = (courseTextVi1 ?? DEFAULT_COURSE_TEXT_VI_1).trim()
+    const vi2 = (courseTextVi2 ?? trainingObjectTypeName).trim()
 
     const dobParts = getReportDateParts(user?.dateOfBirth)
     const startDateParts = getReportDateParts(

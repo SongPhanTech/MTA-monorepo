@@ -3,7 +3,17 @@ import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import type { FilterProps } from "@constants/type"
 import type { TableProps as TableAntdProps } from "antd"
 import type { ColumnType, TablePaginationConfig } from "antd/es/table"
-import { Fragment, type ReactNode, useEffect, useMemo, useState } from "react"
+import {
+  Fragment,
+  memo,
+  type ReactNode,
+  useEffect,
+  useId,
+  useMemo,
+  useState,
+  useSyncExternalStore,
+} from "react"
+import { cn } from "@workspace/ui/lib/utils"
 import Table, { type ColumnOption } from "../table"
 
 interface BaseNode {
@@ -53,10 +63,103 @@ type TableProps<T, ChildKey extends keyof T> = {
   onRowDoubleClick?: (record: T) => void
   defaultExpandAll?: boolean
   resetIndexPerGroup?: boolean
+  shouldCellUpdate?: (record: ChildData, prevRecord: ChildData) => boolean
+  // Đóng nhóm chỉ ẩn dòng con bằng CSS thay vì unmount ⇒ đóng/mở không phải mount lại control trong ô
+  keepCollapsedRowsMounted?: boolean
 } & Omit<
   TableAntdProps,
   "columns" | "data" | "pagination" | "headerTitleKey" | "onRow" | "childrenFieldName" | "number"
 >
+
+// Trạng thái nhóm đang đóng để ngoài React state: bấm đóng/mở chỉ render lại thẻ <style> và icon của nhóm,
+// không render lại cả bảng (dùng cho keepCollapsedRowsMounted)
+function createCollapsedGroupStore() {
+  let collapsedKeys = new Set<string>()
+  const listeners = new Set<() => void>()
+  const emit = () => listeners.forEach((listener) => listener())
+  return {
+    subscribe: (listener: () => void) => {
+      listeners.add(listener)
+      return () => {
+        listeners.delete(listener)
+      }
+    },
+    getSnapshot: () => collapsedKeys,
+    toggle: (key: string) => {
+      const next = new Set(collapsedKeys)
+      if (next.has(key)) next.delete(key)
+      else next.add(key)
+      collapsedKeys = next
+      emit()
+    },
+    reset: (keys: string[]) => {
+      collapsedKeys = new Set(keys)
+      emit()
+    },
+  }
+}
+
+type CollapsedGroupStore = ReturnType<typeof createCollapsedGroupStore>
+
+const toCssToken = (value: React.Key) => String(value).replace(/[^a-zA-Z0-9_-]/g, "_")
+const groupRowClassName = (groupKey: React.Key) => `tc-group-${toCssToken(groupKey)}`
+
+function CollapsedGroupStyle({
+  store,
+  scopeClassName,
+}: {
+  store: CollapsedGroupStore
+  scopeClassName: string
+}) {
+  const collapsedKeys = useSyncExternalStore(store.subscribe, store.getSnapshot, store.getSnapshot)
+  return (
+    <style>
+      {[...collapsedKeys]
+        .map((key) => `.${scopeClassName} tr.${groupRowClassName(key)} { display: none; }`)
+        .join("\n")}
+    </style>
+  )
+}
+
+function ExpandArrow({
+  expanded,
+  onClick,
+}: {
+  expanded: boolean
+  onClick: React.MouseEventHandler<HTMLSpanElement>
+}) {
+  return (
+    <DownOutlined
+      onClick={onClick}
+      style={{
+        transform: expanded ? "rotate(0deg)" : "rotate(-90deg)",
+        transition: "transform 0.2s ease",
+        marginRight: 8,
+        fontSize: 12,
+        position: "sticky",
+        top: 0,
+        left: 10,
+      }}
+    />
+  )
+}
+
+function StoreExpandArrow({
+  store,
+  groupKey,
+  onClick,
+}: {
+  store: CollapsedGroupStore
+  groupKey: string
+  onClick: React.MouseEventHandler<HTMLSpanElement>
+}) {
+  const collapsed = useSyncExternalStore(
+    store.subscribe,
+    () => store.getSnapshot().has(groupKey),
+    () => store.getSnapshot().has(groupKey)
+  )
+  return <ExpandArrow expanded={!collapsed} onClick={onClick} />
+}
 
 const TableCollapse = <
   T extends {
@@ -86,14 +189,23 @@ const TableCollapse = <
   filters,
   setFilters,
   resetIndexPerGroup = false,
+  shouldCellUpdate,
+  keepCollapsedRowsMounted = false,
+  className,
   ...rest
 }: TableProps<T, ChildKey>) => {
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([])
+  const [collapsedGroupStore] = useState(createCollapsedGroupStore)
+  const scopeClassName = `tc-scope-${toCssToken(useId())}`
 
   const handleExpand = (expanded: boolean, record: T) => {
     const children = record[childrenFieldName]
 
     if (!Array.isArray(children) || children?.length === 0) return
+    if (keepCollapsedRowsMounted) {
+      if (record.key) collapsedGroupStore.toggle(String(record.key))
+      return
+    }
     setExpandedKeys((prev) => {
       if (expanded && record.key) {
         return [...prev, record.key]
@@ -140,17 +252,39 @@ const TableCollapse = <
     })
   }, [data, childrenFieldName, rowKey])
 
+  // Chỉ mở lại tất cả khi danh sách nhóm đổi, không phải mỗi lần data đổi tham chiếu (vd. sửa 1 ô)
+  const parentKeys = useMemo(() => dataWithKey.map((d) => d.key as React.Key), [dataWithKey])
+  const parentKeysSignature = parentKeys.join("|")
+
   useEffect(() => {
+    if (keepCollapsedRowsMounted) {
+      collapsedGroupStore.reset(
+        !defaultExpandAll && parentKeysSignature ? parentKeysSignature.split("|") : []
+      )
+      return
+    }
+
     if (!defaultExpandAll) {
       setExpandedKeys([])
       return
     }
 
-    if (defaultExpandAll && dataWithKey.length > 0) {
-      setExpandedKeys(dataWithKey.map((d) => d.key as React.Key))
+    if (defaultExpandAll && parentKeysSignature) {
+      setExpandedKeys(parentKeysSignature.split("|"))
       return
     }
-  }, [defaultExpandAll, dataWithKey])
+  }, [defaultExpandAll, parentKeysSignature, keepCollapsedRowsMounted, collapsedGroupStore])
+
+  const groupKeyByChildKey = useMemo(() => {
+    const groupKeys = new Map<React.Key, React.Key>()
+    if (!keepCollapsedRowsMounted) return groupKeys
+    for (const item of dataWithKey) {
+      const itemChildren = item[childrenFieldName]
+      if (item.$type !== "parent" || !Array.isArray(itemChildren)) continue
+      for (const child of itemChildren) groupKeys.set(child.key, item.key as React.Key)
+    }
+    return groupKeys
+  }, [keepCollapsedRowsMounted, dataWithKey, childrenFieldName])
 
   const allChildren = useMemo(() => {
     const children: T[ChildKey][] = []
@@ -206,7 +340,7 @@ const TableCollapse = <
             : ""
         },
       },
-      ...columns,
+      ...columns.map((col) => (shouldCellUpdate ? { ...col, shouldCellUpdate } : col)),
     ]
 
     return baseColumns?.map((col, index) => ({
@@ -242,14 +376,24 @@ const TableCollapse = <
         return text
       },
     }))
-  }, [columns, allChildren, currentPage, pagination, headerColumn])
+  }, [
+    columns,
+    allChildren,
+    currentPage,
+    pagination,
+    headerColumn,
+    dataWithKey,
+    childrenFieldName,
+    resetIndexPerGroup,
+    shouldCellUpdate,
+  ])
 
   return (
     <Fragment>
       <Table
         id={id}
         rowKey="key"
-        className="mt-2"
+        className={cn("mt-2", className, keepCollapsedRowsMounted && scopeClassName)}
         scrollable={scrollable}
         maxHeight={maxHeight}
         bordered
@@ -282,7 +426,7 @@ const TableCollapse = <
           }
         }}
         expandable={{
-          expandedRowKeys: expandedKeys,
+          expandedRowKeys: keepCollapsedRowsMounted ? parentKeys : expandedKeys,
           onExpand: handleExpand,
           rowExpandable: (record) => {
             const children = record[childrenFieldName]
@@ -291,24 +435,22 @@ const TableCollapse = <
           expandRowByClick: true,
           expandIcon: ({ expanded, onExpand, record }) => {
             const children = record[childrenFieldName]
+            const handleArrowClick: React.MouseEventHandler<HTMLSpanElement> = (e) => {
+              e.stopPropagation()
+              onExpand(record, e)
+            }
             return Array.isArray(children) ? (
               <div className="flex justify-center">
-                {children.length > 0 && (
-                  <DownOutlined
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      onExpand(record, e)
-                    }}
-                    style={{
-                      transform: expanded ? "rotate(0deg)" : "rotate(-90deg)",
-                      marginRight: 8,
-                      fontSize: 12,
-                      position: "sticky",
-                      top: 0,
-                      left: 10,
-                    }}
-                  />
-                )}
+                {children.length > 0 &&
+                  (keepCollapsedRowsMounted ? (
+                    <StoreExpandArrow
+                      store={collapsedGroupStore}
+                      groupKey={String(record.key)}
+                      onClick={handleArrowClick}
+                    />
+                  ) : (
+                    <ExpandArrow expanded={expanded} onClick={handleArrowClick} />
+                  ))}
                 {!headerColumn && (
                   <div className="flex w-full items-center justify-between">
                     <strong className="select-none sticky left-[30px]">
@@ -331,6 +473,19 @@ const TableCollapse = <
           ...expandable,
         }}
         {...rest}
+        {...(keepCollapsedRowsMounted
+          ? {
+              rowClassName: (record: T, index: number, indent: number) => {
+                const groupKey = groupKeyByChildKey.get(record.key as React.Key)
+                return cn(
+                  typeof rest.rowClassName === "function"
+                    ? rest.rowClassName(record, index, indent)
+                    : rest.rowClassName,
+                  groupKey !== undefined && groupRowClassName(groupKey)
+                )
+              },
+            }
+          : {})}
         columns={restColumns as any[]}
         filters={filters}
         setFilters={setFilters}
@@ -348,8 +503,11 @@ const TableCollapse = <
                 }
             `}
       </style>
+      {keepCollapsedRowsMounted && (
+        <CollapsedGroupStyle store={collapsedGroupStore} scopeClassName={scopeClassName} />
+      )}
     </Fragment>
   )
 }
 
-export default TableCollapse
+export default memo(TableCollapse) as typeof TableCollapse

@@ -1274,9 +1274,9 @@ export default function StudentGradeSystem() {
       printDate,
       signerName: signerName ?? "",
       courseTextEn1: "FOR COMPLETING THE COURSE FOR TECHNICAL AND LOGISTICS",
-      courseTextEn2: fieldEn.toUpperCase(),
+      courseTextEn2: fieldEn,
       courseTextVi1: "ĐÀO TẠO",
-      courseTextVi2: (selectedObjectType?.name || "").toUpperCase(),
+      courseTextVi2: selectedObjectType?.name || "",
       includeNamePrefix: selectedObjectType?.type === "CIVILIAN",
     })
   }
