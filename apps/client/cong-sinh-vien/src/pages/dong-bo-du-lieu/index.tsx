@@ -45,7 +45,7 @@ import {
 } from "antd"
 import type { UploadFile } from "antd/es/upload/interface"
 import dayjs from "dayjs"
-import { ArrowDownToLine, ArrowUpFromLine, History, Info, Loader2, Lock } from "lucide-react"
+import { ArrowDownToLine, ArrowUpFromLine, History, Info, Loader2 } from "lucide-react"
 import { useRouter } from "next/router"
 import { ROUTER_PATH } from "@workspace/router"
 import { useCanAccessDongBoDuLieu } from "@hooks/use-can-access-dong-bo-du-lieu"
@@ -119,7 +119,9 @@ function DongBoDuLieuPage() {
       return hasPending ? 2000 : false
     },
   })
-  const { data: sessions = [], isLoading: sessionLoading } = useListDataSyncSessions()
+  const { data: sessions = [], isLoading: sessionLoading } = useListDataSyncSessions({
+    enabled: canAccess,
+  })
 
   const hasSessions = sessions.length > 0
 
