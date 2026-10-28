@@ -32,14 +32,21 @@ import {
 import dayjs from "dayjs"
 import { Search, TriangleAlert } from "lucide-react"
 import { useRouter } from "next/router"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import ChinhSuaDangKy from "./_components/chinh-sua-dang-ky"
 import ThongKeDangKy from "./_components/thong-ke-dang-ky"
+import LichSuDongBo from "./_components/lich-su-dong-bo"
 
 export default function ClassRegisterLogs() {
   const router = useRouter()
   const id = router.query.id as string
   const [activeTab, setActiveTab] = useState("danh-sach")
+
+  useEffect(() => {
+    if (router.query.tab && typeof router.query.tab === "string") {
+      setActiveTab(router.query.tab)
+    }
+  }, [router.query.tab])
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
@@ -363,13 +370,30 @@ export default function ClassRegisterLogs() {
                 .join(" - ") || "",
           },
           {
-            title: "Thời gian đăng ký",
+            title: (
+              <Tooltip title="Thời gian sinh viên thực hiện thao tác đăng ký trên cổng Portal">
+                <span>Thời gian đăng ký</span>
+              </Tooltip>
+            ),
             dataIndex: "createdAt",
             width: 150,
             align: "center",
             className: "!py-1.5 !px-2",
             render: (_, record) =>
-              record?.createdAt ? dayjs(record.createdAt).format("HH:mm DD/MM/YYYY") : "",
+              record?.createdAt ? dayjs(record.createdAt).format("HH:mm DD/MM/YYYY") : "—",
+          },
+          {
+            title: (
+              <Tooltip title="Thời gian bản ghi đăng ký được Import/đồng bộ vào hệ thống đào tạo nội bộ">
+                <span>Thời gian import</span>
+              </Tooltip>
+            ),
+            dataIndex: "updatedAt",
+            width: 150,
+            align: "center",
+            className: "!py-1.5 !px-2",
+            render: (_, record) =>
+              record?.updatedAt ? dayjs(record.updatedAt).format("HH:mm DD/MM/YYYY") : "—",
           },
           {
             title: "Trạng thái",
@@ -466,6 +490,13 @@ export default function ClassRegisterLogs() {
             key: "thong-ke",
             label: "Thống kê",
             children: <ThongKeDangKy sessionId={id} />,
+          },
+          {
+            key: "lich-su-dong-bo",
+            label: "Lịch sử đồng bộ",
+            children: (
+              <LichSuDongBo sessionId={id} sessionName={initialValue?.name || undefined} />
+            ),
           },
         ]}
       />
