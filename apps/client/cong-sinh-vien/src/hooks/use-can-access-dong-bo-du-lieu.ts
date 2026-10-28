@@ -109,8 +109,8 @@ export const useCanAccessDongBoDuLieu = () => {
     )
 
     for (const res of responses) {
-      const roles = res.data.Roles ?? []
-      const permissions = res.data.Permissions ?? []
+      const roles = (res.data as any)?.Roles ?? []
+      const permissions = (res.data as any)?.Permissions ?? []
 
       // Kiểm tra vai trò Admin từ mảng Roles trả về trong response
       if (roles.some(isAdminRole)) {

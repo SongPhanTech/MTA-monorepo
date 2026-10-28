@@ -104,7 +104,7 @@ const SubjectClassDropItem: React.FC<{
   const onRemoveSubjectClass = () => {
     if (item.hasStudentScores) {
       message.warning(
-        "Không thể xóa LMH đã có sinh viên đăng ký hoặc đã có điểm (StudentSubjectScore)"
+        "Không thể xóa lớp môn học đã có sinh viên đăng ký hoặc đã có điểm"
       )
       return
     }

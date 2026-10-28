@@ -54,17 +54,17 @@ const { Title, Paragraph, Text } = Typography
 const IMPORT_DATA_ITEMS = [
   "Đợt đăng ký học",
   "Lớp học phần, thời khóa biểu",
-  "Sinh viên, hồ sơ ",
-  "Danh mục hệ thống ",
-  "Chương trình đào tạo, môn học ",
+  "Sinh viên, hồ sơ",
+  "Danh mục hệ thống",
+  "Chương trình đào tạo, môn học",
 ]
 
 const EXPORT_DATA_ITEMS = [
-  "Nhật ký đăng ký học (ClassRegisterLogs)",
-  "Điểm môn học sau đăng ký (StudentSubjectScore)",
-  "Sinh viên / hồ sơ liên quan (Student, UserProfile)",
-  "Lớp học phần đã đăng ký (SubjectClass, SubjectVersion)",
-  "Thông tin đợt đăng ký (ClassRegisterSession)",
+  "Nhật ký đăng ký học",
+  "Điểm môn học sau đăng ký",
+  "Sinh viên / Hồ sơ liên quan",
+  "Lớp học phần đã đăng ký",
+  "Thông tin đợt đăng ký",
 ]
 
 function DongBoDuLieuPage() {

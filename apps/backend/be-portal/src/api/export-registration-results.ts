@@ -107,9 +107,22 @@ app.openapi(exportToInternal, async (c) => {
       syncHistoryId = history.id
     }
 
+    const TABLE_DISPLAY_NAMES: Record<string, string> = {
+      ClassRegisterLogs: "Nhật ký đăng ký học",
+      StudentSubjectScore: "Điểm môn học sau đăng ký",
+      Student: "Sinh viên",
+      UserProfile: "Hồ sơ liên quan",
+      SubjectClass: "Lớp học phần đã đăng ký",
+      SubjectVersion: "Môn học",
+      ClassRegisterSession: "Thông tin đợt đăng ký",
+      Semester: "Học kỳ",
+      SchoolYear: "Năm học",
+    }
+
     const exportedCount = Object.values(result.counts).reduce((total, count) => total + count, 0)
     const countDetail = Object.entries(result.counts)
-      .map(([name, count]) => `${name}: ${count}`)
+      .filter(([name]) => !name.startsWith("_"))
+      .map(([name, count]) => `${TABLE_DISPLAY_NAMES[name] || name}: ${count}`)
       .join(", ")
     await markDataSyncHistorySuccess(syncHistoryId, {
       description: `Đã xuất thành công ${exportedCount} bản ghi${countDetail ? ` (${countDetail})` : ""}.`,
