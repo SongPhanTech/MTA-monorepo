@@ -763,7 +763,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
             ...headerParagraphs,
             new Paragraph({ text: "" }),
             new Paragraph({
-              children: [new TextRun({ text: "Không có dữ liệu thống kê", italic: true })],
+              children: [new TextRun({ text: "Không có dữ liệu thống kê", italics: true })],
             }),
           ]
         }
