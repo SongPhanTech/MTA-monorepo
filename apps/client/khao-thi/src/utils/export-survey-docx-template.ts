@@ -447,17 +447,11 @@ const preserveLetterheadFormatting = (table: string) => {
     return setXmlAttribute(setXmlAttribute(spacing, "w:line", "360"), "w:lineRule", "auto")
   })
 
-  // The letterhead keeps its original full width and is centered on the page,
-  // independently of the narrower printable area used by the report body.
-  if (withOriginalSpacing.includes("<w:tblInd")) {
-    return withOriginalSpacing.replace(/<w:tblInd\b[^>]*\/>/g, (indent) => {
-      return setXmlAttribute(setXmlAttribute(indent, "w:w", "-1132"), "w:type", "dxa")
-    })
-  }
-  return withOriginalSpacing.replace(
-    "<w:tblPr>",
-    '<w:tblPr><w:tblInd w:w="-1132" w:type="dxa"/>'
-  )
+  // Word ignores tblInd when it appears before tblW in tblPr. Remove any
+  // existing indent and insert it after tblW, in schema order.
+  const withoutIndent = withOriginalSpacing.replace(/<w:tblInd\b[^>]*\/>/g, "")
+  const indent = '<w:tblInd w:w="-1132" w:type="dxa"/>'
+  return withoutIndent.replace(/(<w:tblW\b[^>]*\/>)/, `$1${indent}`)
 }
 
 const normalizeSurveyDocxLayout = (xml: string) => {
