@@ -91,6 +91,7 @@ export default function DangKyHocPage() {
             key: session?.id,
             children: (
               <DanhSachMonDangKy
+                key={session?.id}
                 sessionId={session?.id}
                 curriculumVersions={(session?.curriculumVersions ?? [])
                   .filter((cv): cv is NonNullable<typeof cv> => Boolean(cv?.id))
