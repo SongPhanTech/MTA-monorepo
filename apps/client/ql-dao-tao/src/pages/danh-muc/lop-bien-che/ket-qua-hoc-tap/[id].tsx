@@ -63,6 +63,9 @@ function formatGpa(value: unknown) {
   return Number.isFinite(n) ? n.toFixed(2) : "—"
 }
 
+const isDuKhoaClass = (cls?: { name?: string | null; trainingCourse?: { name?: string | null } | null } | null) =>
+  /dự\s*kh[oó]a|\bDK\b/i.test(`${cls?.name ?? ""} ${cls?.trainingCourse?.name ?? ""}`)
+
 export default function StudentScoreClassPage() {
   const router = useRouter()
   const { can } = useAbility()
@@ -92,6 +95,11 @@ export default function StudentScoreClassPage() {
       refetch()
     },
   })
+
+  const { onOpen: onOpenPrintBangDiemDuKhoa } = useDisclosure<{
+    studentIds: string[]
+    initialStudentId?: string
+  }>({ tag: "ModalPrintBangDiemDuKhoa" })
 
   const { data: student } = useFindUniqueStudent(
     {
@@ -694,6 +702,14 @@ export default function StudentScoreClassPage() {
                             label: "Bảng điểm cá nhân (Mẫu P7)",
                             key: "export-bang-diem-ca-nhan-P7",
                             onClick: async () => await exportTemplateP7(),
+                          },
+                          {
+                            label: "Bảng điểm cá nhân (đối tượng dự khoá)",
+                            key: "export-bang-diem-ca-nhan-du-khoa",
+                            onClick: () => {
+                              if (!studentId) return message.warning("Không tìm thấy học viên")
+                              onOpenPrintBangDiemDuKhoa({ studentIds: [studentId], initialStudentId: studentId })
+                            },
                           },
                         ],
                       }}

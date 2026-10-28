@@ -32,6 +32,12 @@ import { cn } from "@workspace/ui/lib/utils"
 
 dayjs.locale("vi")
 
+const isDuKhoaClass = (cls?: { name?: string | null; trainingCourse?: { name?: string | null } | null } | null): boolean => {
+  if (!cls) return false
+  const text = `${cls.name || ""} ${cls.trainingCourse?.name || ""}`
+  return /dự\s*kh[oó]a|\bDK\b/i.test(text)
+}
+
 export default function StudentFixedClassPage() {
   const router = useRouter()
   const fixedClassId = router.query.id as string
@@ -437,6 +443,10 @@ export default function StudentFixedClassPage() {
     tag: "GanCanBoLopModal",
   })
 
+  const { onOpen: onOpenPrintBangDiemDuKhoa } = useDisclosure({
+    tag: "ModalPrintBangDiemDuKhoa",
+  })
+
   const { showSpinner, hideSpinner } = useSpinner()
 
   const handleModal = () => {
@@ -745,7 +755,16 @@ export default function StudentFixedClassPage() {
                       {
                         label: "Bảng điểm cá nhân (đối tượng dự khoá)",
                         key: "export-bang-diem-ca-nhan-du-khoa",
-                        onClick: async () => await handleExportCaNhan([1, 2]),
+                        onClick: () => {
+                          if (!data.length) {
+                            message.warning("Không có học viên để xuất")
+                            return
+                          }
+                          onOpenPrintBangDiemDuKhoa({
+                            studentIds: data.map((item) => item.id),
+                            fixedClassId,
+                          })
+                        },
                       },
                       {
                         label: "Bảng điểm ngắn hạn, dài hạn",
