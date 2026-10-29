@@ -4,49 +4,12 @@ import { getRuntimeEnv } from "@workspace/libs/utils"
 import { CONG_SINH_VIEN_PERMISSION } from "@workspace/router"
 import { useEffect, useMemo, useState } from "react"
 
-const ADMIN_USERNAMES = new Set(["admin", "superadmin", "quantri", "administrator"])
-
-const isAdminRole = (role: { sCodeName?: string | null; sRoleName?: string | null }) => {
-  const code = (role.sCodeName ?? "").toUpperCase()
-  const name = (role.sRoleName ?? "").toUpperCase()
-  return (
-    code.includes("ADMIN") ||
-    code.includes("QUAN_TRI") ||
-    code.includes("QUANTRIVIEN") ||
-    code.includes("SUPER_ADMIN") ||
-    code.includes("ROOT") ||
-    code.includes("SYSADMIN") ||
-    code.includes("MANAGER") ||
-    code.includes("DAO_TAO") ||
-    code.includes("QLDT") ||
-    name.includes("ADMIN") ||
-    name.includes("QUẢN TRỊ") ||
-    name.includes("QUAN TRI") ||
-    name.includes("QUẢN LÝ") ||
-    name.includes("QUAN LY") ||
-    name.includes("ĐÀO TẠO") ||
-    name.includes("DAO TAO")
-  )
-}
-
-const isSyncPermission = (permission: { sFormName?: string | null }) => {
-  const formName = (permission.sFormName ?? "").toUpperCase()
-  return (
-    formName === CONG_SINH_VIEN_PERMISSION.CONG_SINH_VIEN_DONG_BO_DU_LIEU ||
-    formName === "CONG_SINH_VIEN_DONG_BO_DU_LIEU" ||
-    formName.includes("DONG_BO_DU_LIEU") ||
-    formName.includes("DONG_BO") ||
-    formName.includes("SYNC")
-  )
-}
-
 export const useCanAccessDongBoDuLieu = () => {
   const { data: session, status: sessionStatus } = useSession()
 
   // Lắng nghe window.contextData khi MTAMenuComponents (SSO Header) tải xong thông tin người dùng
-  const [contextData, setContextData] = useState<{ userId?: string; userName?: string }>(() => ({
+  const [contextData, setContextData] = useState<{ userId?: string }>(() => ({
     userId: typeof window !== "undefined" ? window.contextData?.userId : undefined,
-    userName: typeof window !== "undefined" ? window.contextData?.userName : undefined,
   }))
 
   useEffect(() => {
@@ -54,82 +17,41 @@ export const useCanAccessDongBoDuLieu = () => {
 
     const updateContext = () => {
       const wUserId = window.contextData?.userId
-      const wUserName = window.contextData?.userName
-      if (wUserId !== contextData.userId || wUserName !== contextData.userName) {
-        setContextData({ userId: wUserId, userName: wUserName })
+      if (wUserId !== contextData.userId) {
+        setContextData({ userId: wUserId })
       }
     }
 
     updateContext()
     const interval = setInterval(updateContext, 500)
     return () => clearInterval(interval)
-  }, [contextData.userId, contextData.userName])
+  }, [contextData.userId])
 
   const userId =
     contextData.userId || session?.sDM_NhanVienId || session?.userId || ""
-  const username = (
-    contextData.userName ||
-    session?.username ||
-    ""
-  ).trim().toLowerCase()
-
-  const envAppCode = getRuntimeEnv("NEXT_PUBLIC_APP_CODE") || "dangkyhoc"
-  const appCode = envAppCode === "congsinhvien" ? "dangkyhoc" : envAppCode
+  const appCode = getRuntimeEnv("NEXT_PUBLIC_APP_CODE")
 
   // Truy vấn quyền từ be-system theo appCode
-  const primaryQuery = useGetUserPermissionsPermissionAppCodeUserId(appCode, userId, {
+  const permissionQuery = useGetUserPermissionsPermissionAppCodeUserId(appCode, userId, {
     query: {
-      enabled: Boolean(userId),
-    },
-  })
-
-  // Dự phòng truy vấn theo "dangkyhoc" nếu appCode khác
-  const dangKyHocQuery = useGetUserPermissionsPermissionAppCodeUserId("dangkyhoc", userId, {
-    query: {
-      enabled: Boolean(userId && appCode !== "dangkyhoc"),
-    },
-  })
-
-  // Dự phòng truy vấn theo "lms" (quản lý đào tạo)
-  const lmsQuery = useGetUserPermissionsPermissionAppCodeUserId("lms", userId, {
-    query: {
-      enabled: Boolean(userId && appCode !== "lms"),
+      enabled: Boolean(appCode && userId),
     },
   })
 
   const canAccess = useMemo(() => {
-    // 1. Kiểm tra tài khoản admin/superadmin theo username
-    if (username && (ADMIN_USERNAMES.has(username) || username.includes("admin"))) {
-      return true
-    }
+    if (permissionQuery.data?.status !== 200) return false
 
-    // 2. Lấy dữ liệu trả về từ response API (be-system)
-    const responses = [primaryQuery.data, dangKyHocQuery.data, lmsQuery.data].filter(
-      (res): res is NonNullable<typeof res> => res?.status === 200 && Boolean(res?.data)
+    const permissions = (permissionQuery.data.data as any)?.Permissions ?? []
+    return permissions.some(
+      (permission: { sFormName?: string | null }) =>
+        permission.sFormName === CONG_SINH_VIEN_PERMISSION.CONG_SINH_VIEN_DONG_BO_DU_LIEU
     )
-
-    for (const res of responses) {
-      const roles = (res.data as any)?.Roles ?? []
-      const permissions = (res.data as any)?.Permissions ?? []
-
-      // Kiểm tra vai trò Admin từ mảng Roles trả về trong response
-      if (roles.some(isAdminRole)) {
-        return true
-      }
-
-      // Kiểm tra quyền chức năng Đồng bộ dữ liệu từ mảng Permissions trả về trong response
-      if (permissions.some(isSyncPermission)) {
-        return true
-      }
-    }
-
-    return false
-  }, [username, primaryQuery.data, dangKyHocQuery.data, lmsQuery.data])
+  }, [permissionQuery.data])
 
   const isQueryLoading =
-    Boolean(userId) &&
-    !primaryQuery.isFetched &&
-    primaryQuery.isLoading
+    Boolean(appCode && userId) &&
+    !permissionQuery.isFetched &&
+    permissionQuery.isLoading
 
   return {
     canAccess,
