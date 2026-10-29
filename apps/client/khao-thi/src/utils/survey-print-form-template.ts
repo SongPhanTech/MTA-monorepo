@@ -37,8 +37,11 @@ export function buildMinioApiBases(rawModelBase: string): string[] {
 
   const viaGateway = `${modelEndpoint}/api/minio`
   const direct = modelEndpoint.replace(/\/model$/, "/minio")
+  const bases = !trimmed.endsWith("/model")
+    ? [`${trimmed}/api/minio`, viaGateway, direct]
+    : [viaGateway, direct]
 
-  return Array.from(new Set([viaGateway, direct]))
+  return Array.from(new Set(bases))
 }
 
 export function surveyPrintProxyUrl(minioApiBase: string, objectName: string) {
@@ -54,7 +57,7 @@ export function surveyPrintCallbackUrl(minioApiBase: string, objectName: string)
 }
 
 const shouldTryNextMinioBase = (status: number) =>
-  status === 404 || status === 405 || status === 502 || status === 503
+  status === 400 || status === 404 || status === 405 || status === 502 || status === 503
 
 /** Upload DOCX via BE proxy (client → server → MinIO). */
 export async function uploadSurveyPrintViaServer(
@@ -65,21 +68,26 @@ export async function uploadSurveyPrintViaServer(
   if (!minioApiBases.length) throw new Error("Missing MinIO API base")
 
   let lastStatus = 0
+  let lastError: unknown = null
   for (const base of minioApiBases) {
-    const res = await fetch(surveyPrintProxyUrl(base, objectName), {
-      method: "PUT",
-      credentials: "include",
-      headers: { "Content-Type": DOCX_CONTENT_TYPE },
-      body: blob,
-    })
-    lastStatus = res.status
-    if (res.ok) {
-      const data = (await res.json()) as { filePath?: string }
-      return { filePath: data.filePath || objectName }
+    try {
+      const res = await fetch(surveyPrintProxyUrl(base, objectName), {
+        method: "PUT",
+        credentials: "include",
+        headers: { "Content-Type": DOCX_CONTENT_TYPE },
+        body: blob,
+      })
+      lastStatus = res.status
+      if (res.ok) {
+        const data = (await res.json()) as { filePath?: string }
+        return { filePath: data.filePath || objectName }
+      }
+      if (!shouldTryNextMinioBase(res.status)) break
+    } catch (err) {
+      lastError = err
     }
-    if (!shouldTryNextMinioBase(res.status)) break
   }
-  throw new Error(`Upload survey print failed: ${lastStatus}`)
+  throw lastError || new Error(`Upload survey print failed: ${lastStatus}`)
 }
 
 /** true = file đã có trên MinIO và GET proxy trả docx. */
@@ -88,21 +96,25 @@ export async function surveyPrintFileExists(
   objectName: string
 ): Promise<boolean> {
   for (const base of minioApiBases) {
-    const res = await fetch(surveyPrintProxyUrl(base, objectName), {
-      method: "GET",
-      credentials: "include",
-    })
-    const contentType = res.headers.get("content-type") || ""
-    if (
-      res.ok &&
-      (contentType.includes("officedocument") ||
-        contentType.includes("octet-stream") ||
-        contentType.includes("msword"))
-    ) {
-      return true
+    try {
+      const res = await fetch(surveyPrintProxyUrl(base, objectName), {
+        method: "GET",
+        credentials: "include",
+      })
+      const contentType = res.headers.get("content-type") || ""
+      if (
+        res.ok &&
+        (contentType.includes("officedocument") ||
+          contentType.includes("octet-stream") ||
+          contentType.includes("msword"))
+      ) {
+        return true
+      }
+      if (res.ok) return true
+      if (!shouldTryNextMinioBase(res.status)) break
+    } catch {
+      // try next base
     }
-    if (res.ok) return true
-    if (!shouldTryNextMinioBase(res.status)) break
   }
   return false
 }
