@@ -14,7 +14,12 @@ import {
   SurveyStatisticSchema,
   SurveyStatisticsByFieldResponseSchema,
   SurveyMajorCountResponseSchema,
+  GraduateSurveyReportResponseSchema,
 } from "../dto/survey-statistic.dto"
+import {
+  getGraduateSurveyReportDataService,
+  loadGraduateSurveyReportTemplate,
+} from "../services/graduate-survey-report.service"
 import {
   SURVEY_OBJECT_TYPE_INCLUDE,
   SURVEY_OBJECT_TYPE_REPORT_INCLUDE,
@@ -1075,6 +1080,91 @@ app.openapi(getSurveyMajorCount, async (c) => {
   })
 
   return c.json(data, 200)
+})
+
+
+const getGraduateSurveyReportData = createRoute({
+  operationId: "get-graduate-survey-report-data",
+  path: "/{id}/graduate-report-data",
+  method: "get",
+  tags: ["Khảo sát"],
+  summary: "Lấy dữ liệu báo cáo khảo sát tốt nghiệp theo biểu mẫu của Học viện",
+  request: {
+    params: z.object({
+      id: z.string().openapi({ description: "ID khảo sát" }),
+    }),
+  },
+  responses: {
+    ...standardErrorResponses(),
+    200: {
+      description: "Lấy dữ liệu báo cáo thành công",
+      content: {
+        "application/json": {
+          schema: GraduateSurveyReportResponseSchema,
+        },
+      },
+    },
+    404: {
+      description: "Không tìm thấy khảo sát.",
+      content: {
+        "application/json": {
+          schema: ErrorMessageResponseSchema,
+        },
+      },
+    },
+  },
+})
+
+app.openapi(getGraduateSurveyReportData, async (c) => {
+  const { id } = c.req.valid("param")
+  try {
+    const data = await getGraduateSurveyReportDataService(prisma, id)
+    return c.json(data, 200)
+  } catch (error: any) {
+    if (error?.message?.includes("Không tìm thấy")) {
+      return c.json({ message: "Không tìm thấy khảo sát" }, 404)
+    }
+    throw error
+  }
+})
+
+const getGraduateReportTemplate = createRoute({
+  operationId: "get-graduate-report-template",
+  path: "/template/graduate-report-docx",
+  method: "get",
+  tags: ["Khảo sát"],
+  summary: "Tải file biểu mẫu báo cáo khảo sát tốt nghiệp từ MinIO",
+  responses: {
+    ...standardErrorResponses(),
+    200: {
+      description: "Tải template thành công",
+    },
+    500: {
+      description: "Lỗi tải template",
+      content: {
+        "application/json": {
+          schema: ErrorMessageResponseSchema,
+        },
+      },
+    },
+  },
+})
+
+app.openapi(getGraduateReportTemplate, async (c) => {
+  try {
+    const buffer = await loadGraduateSurveyReportTemplate()
+    c.header(
+      "Content-Disposition",
+      'attachment; filename="BaoCaoLayYkienHocVienTotNghiep_Mau.docx"'
+    )
+    c.header(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    )
+    return c.body(buffer, 200)
+  } catch (error: any) {
+    return c.json({ message: error?.message || "Không thể tải biểu mẫu template" }, 500)
+  }
 })
 
 const getSurveysByProfile = createRoute({

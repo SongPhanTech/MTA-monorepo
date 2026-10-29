@@ -1,3 +1,4 @@
+import ModalGraduateSurveyReport from "./modal-graduate-survey-report"
 import { XemTaiLieu } from "@workspace/ui"
 import AddEvidenceToPeriod from "./add-minh-chung"
 import ConfirmModal from "./confirm-dialog"
@@ -126,4 +127,5 @@ export {
   ViewMinhChungModal,
   XemBangChungFilesModal,
   ModalThongKeKhaoSatCum,
+  ModalGraduateSurveyReport,
 }

@@ -44,3 +44,87 @@ export const SurveyStatisticsByFieldResponseSchema = z
     data: z.array(SurveyFieldGroupStatisticSchema),
   })
   .openapi("SurveyStatisticsByFieldResponse")
+
+export const GraduateSurveyReportResponseSchema = z
+  .object({
+    surveyInfo: z.object({
+      id: z.string(),
+      name: z.string(),
+      courseName: z.string(),
+      surveyDate: z.string(),
+      reportLocationDate: z.string(),
+      organizationHeader: z.string(),
+      departmentHeader: z.string(),
+      reportTitle: z.string(),
+    }),
+    sectionA: z.object({
+      title: z.string(),
+      introText: z.string(),
+      totalMajors: z.number(),
+      totalStudents: z.number(),
+      totalTaken: z.number(),
+      majors: z.array(
+        z.object({
+          name: z.string(),
+          taken: z.number(),
+          total: z.number(),
+          organization: z.string().optional(),
+        })
+      ),
+    }),
+    sectionB: z.object({
+      title: z.string(),
+      fields: z.array(
+        z.object({
+          id: z.string(),
+          key: z.string(),
+          order: z.number(),
+          title: z.string(),
+          generalText: z.string(),
+          standoutText: z.string(),
+          standoutMajors: z.array(z.string()),
+          agreeRatio: z.string(),
+        })
+      ),
+    }),
+    sectionC: z.object({
+      title: z.string(),
+      satisfactionPercent: z.number(),
+      satisfiedCount: z.number(),
+      totalCount: z.number(),
+      text: z.string(),
+    }),
+    sectionD: z.object({
+      title: z.string(),
+      introText: z.string(),
+      departments: z.array(
+        z.object({
+          name: z.string(),
+          romanIndex: z.string(),
+          majors: z.array(
+            z.object({
+              name: z.string(),
+              arabicIndex: z.number(),
+              categories: z.array(
+                z.object({
+                  title: z.string(),
+                  items: z.array(
+                    z.object({
+                      text: z.string(),
+                      countText: z.string(),
+                    })
+                  ),
+                })
+              ),
+            })
+          ),
+        })
+      ),
+    }),
+    recommendation: z.object({
+      title: z.string(),
+      text: z.string(),
+      signTitle: z.string(),
+    }),
+  })
+  .openapi("GraduateSurveyReportResponse")
