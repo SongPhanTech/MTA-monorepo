@@ -6,9 +6,11 @@ import { Button, Modal, Space, Spin, message } from "antd"
 import dayjs from "dayjs"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+import { presignedGetObject } from "@workspace/libs/api/model"
 import { buildSurveyFormDocxBlob, toDocxFileName } from "@/utils/export-survey-form-docx"
 import {
   LECTURER_SURVEY_PRINT_FORM_CONTENT,
+  parseSurveyFormDisplayContent,
   buildMinioApiBases,
   clusterSurveyPrintObjectName,
   parseSurveyPrintFormDocMeta,
@@ -31,6 +33,7 @@ const ModalPrintExamClusterSurvey = () => {
   const [docMeta, setDocMeta] = useState<SurveyPrintFormDocMeta | null>(null)
   const [preparing, setPreparing] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [editorUri, setEditorUri] = useState<string>("")
   const saveRequestRef = useRef(false)
 
   const { data: clusterSurvey, refetch } = useFindUniqueClusterSurvey(
@@ -44,6 +47,12 @@ const ModalPrintExamClusterSurvey = () => {
           include: {
             specificChoice: true,
           },
+        },
+        surveys: {
+          select: {
+            formContent: true,
+          },
+          take: 1,
         },
       },
     },
@@ -81,8 +90,14 @@ const ModalPrintExamClusterSurvey = () => {
     async (version: number): Promise<SurveyPrintFormDocMeta> => {
       if (!clusterSurvey?.id) throw new Error("ClusterSurvey missing")
 
+      const firstSurvey = clusterSurvey.surveys?.[0]
+      const formContent = parseSurveyFormDisplayContent(
+        firstSurvey?.formContent,
+        LECTURER_SURVEY_PRINT_FORM_CONTENT
+      )
+
       const blob = await buildSurveyFormDocxBlob({
-        ...LECTURER_SURVEY_PRINT_FORM_CONTENT,
+        ...formContent,
         title: clusterSurvey.name,
         choices: clusterSurvey.surveyChoice ?? [],
         groups: [{ questions: clusterSurvey.surveyQuestion ?? [] }],
@@ -146,14 +161,46 @@ const ModalPrintExamClusterSurvey = () => {
 
   const apiBase = getRuntimeEnv("NEXT_PUBLIC_API_MODEL_BASE_URL") || ""
   const minioApiBases = useMemo(() => buildMinioApiBases(apiBase), [apiBase])
-  const callbackUrl =
+  const rawCallbackUrl =
     docMeta && minioApiBases.length > 0
       ? surveyPrintCallbackUrl(minioApiBases[0], docMeta.objectName)
+      : undefined
+  const callbackUrl =
+    rawCallbackUrl &&
+    !rawCallbackUrl.startsWith("http://localhost") &&
+    !rawCallbackUrl.startsWith("http://127.0.0.1")
+      ? rawCallbackUrl
       : undefined
   const documentUrl =
     docMeta && minioApiBases.length > 0
       ? surveyPrintProxyUrl(minioApiBases[0], docMeta.objectName)
       : ""
+    useEffect(() => {
+    if (!isOpen || !docMeta?.objectName || !documentUrl) {
+      setEditorUri("")
+      return
+    }
+
+    const isLocal =
+      documentUrl.startsWith("http://localhost") || documentUrl.startsWith("http://127.0.0.1")
+
+    if (isLocal) {
+      void presignedGetObject({ objectName: docMeta.objectName })
+        .then((res) => {
+          if (res.status === 200 && res.data && "url" in res.data && res.data.url) {
+            setEditorUri(res.data.url)
+          } else {
+            setEditorUri(documentUrl)
+          }
+        })
+        .catch(() => {
+          setEditorUri(documentUrl)
+        })
+    } else {
+      setEditorUri(documentUrl)
+    }
+  }, [isOpen, docMeta?.objectName, documentUrl])
+
   const documentKey = docMeta ? `${clusterSurvey?.id || "cluster"}_${docMeta.version}` : undefined
 
   const handleDownload = () => {
@@ -210,7 +257,7 @@ const ModalPrintExamClusterSurvey = () => {
             saveOk = true
             break
           }
-          if (res.status !== 404) break
+          if (res.status !== 404 && res.status !== 400) break
         }
         if (!saveOk) throw new Error(`Save from URL failed: ${lastStatus}`)
 
@@ -313,14 +360,14 @@ const ModalPrintExamClusterSurvey = () => {
         </div>
       }
     >
-      {preparing || !docMeta || !documentUrl ? (
+      {preparing || !docMeta || !editorUri ? (
         <div className="flex items-center justify-center h-[calc(100%-2rem)]">
           <Spin tip="Đang chuẩn bị mẫu phiếu..." />
         </div>
       ) : (
         <OnlyOfficeViewer
           key={documentKey}
-          uri={documentUrl}
+          uri={editorUri}
           title={clusterSurvey?.name || "Phieu khao sat giang vien"}
           fileType="docx"
           mode="edit"
