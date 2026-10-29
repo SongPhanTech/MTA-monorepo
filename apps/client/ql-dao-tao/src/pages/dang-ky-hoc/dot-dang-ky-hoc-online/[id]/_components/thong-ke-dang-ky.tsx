@@ -27,7 +27,7 @@ import {
 import ExcelJS from "exceljs"
 import { saveAs } from "file-saver"
 import { BookOpen, ClipboardList, Download, Layers, UserCheck, UserX, Users } from "lucide-react"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 type Props = {
   sessionId: string
@@ -125,6 +125,13 @@ export default function ThongKeDangKy({ sessionId }: Props) {
   const { getClassRegisterStatusLabel, getClassRegisterStatusColor, classRegisterStatusOptions } =
     useClassRegisterStatus()
   const [detailTab, setDetailTab] = useState("sv-da-dk")
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      window.dispatchEvent(new Event("resize"))
+    }, 150)
+    return () => clearTimeout(timer)
+  }, [])
 
   const { data: session } = useFindUniqueClassRegisterSession(
     {
