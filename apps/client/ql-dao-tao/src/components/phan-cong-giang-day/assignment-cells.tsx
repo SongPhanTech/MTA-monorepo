@@ -746,6 +746,9 @@ export const ActionsCell = memo(function ActionsCell({
       {canDelete && (
         <DeleteIcon
           popConfirm={{
+            title: "Xác nhận xóa lớp môn học?",
+            description:
+              "Xóa lớp và dữ liệu liên quan (lịch sử phân công, thời khóa biểu, sinh viên, điểm danh…). Không thể hoàn tác.",
             onConfirm: () => onDelete(recordId),
           }}
           disabled={status !== $Enums.SubjectClassStatus.DRAFT}

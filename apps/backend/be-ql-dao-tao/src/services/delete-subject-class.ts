@@ -82,7 +82,6 @@ export async function deleteSubjectClassCascade(subjectClassId: string) {
       }
 
       await tx.subjectClassTime.deleteMany({ where: { subjectClassId } })
-      await tx.subjectClassHistory.deleteMany({ where: { subjectClassId } })
       await tx.classRegisterLogs.deleteMany({ where: { subjectClassId } })
 
       // --- ExamBank (+ ExamBankQuestion cascade) ---
@@ -177,6 +176,14 @@ export async function deleteSubjectClassCascade(subjectClassId: string) {
         where: { subjectClassId },
         data: { subjectClassId: null },
       })
+      await tx.studentPersonalEvent.updateMany({
+        where: { subjectClassId },
+        data: { subjectClassId: null },
+      })
+      await tx.documentFile.updateMany({
+        where: { subjectClassId },
+        data: { subjectClassId: null },
+      })
       await tx.subjectClass.update({
         where: { id: subjectClassId },
         data: {
@@ -198,6 +205,7 @@ export async function deleteSubjectClassCascade(subjectClassId: string) {
         })
       }
 
+      await tx.subjectClassHistory.deleteMany({ where: { subjectClassId } })
       await tx.subjectClass.delete({ where: { id: subjectClassId } })
     },
     { timeout: 120_000 }
