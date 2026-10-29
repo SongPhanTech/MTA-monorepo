@@ -20,7 +20,6 @@ import { $Enums, type Prisma } from "@workspace/db/client"
 import {
   useCountDM_DonVi,
   useCountSubjectClass,
-  useDeleteSubjectClass,
   useFindManyBuilding,
   useFindManyDM_DonVi,
   useFindManyTrainingLocation,
@@ -28,6 +27,7 @@ import {
   useFindManyTrainingCourse,
 } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
+import { useDeleteSubjectClassCascade } from "@workspace/libs/api/training-delete-subject-class"
 import { whereOrganization } from "@workspace/libs/constants"
 import { exportFromTemplate } from "@workspace/libs/template-excel"
 import { formatLecturerName, getMinioUrl } from "@workspace/libs/utils"
@@ -1419,24 +1419,32 @@ export default function PhanCongGiangDay({
     }
   }
 
-  const { mutateAsync: deleteSubjectClass } = useDeleteSubjectClass()
+  const { mutateAsync: deleteSubjectClassCascade } = useDeleteSubjectClassCascade()
 
   const handleDelete = useCallback(
     async (id: string) => {
       try {
         showSpinner()
-        await deleteSubjectClass({ where: { id } })
+        const res = await deleteSubjectClassCascade(id)
+        if (res.status !== 200) {
+          message.error(res.data?.message || "Xóa lớp môn học thất bại")
+          return
+        }
+        message.success(res.data.message || "Xóa lớp môn học thành công")
+        await refetch()
+        queryClient.invalidateQueries({ queryKey: ["zenstack", "SubjectClass"] })
+        queryClient.invalidateQueries({ queryKey: ["zenstack", "DM_DonVi"] })
       } catch (error: any) {
         if (error?.info?.message) {
           message.error(error?.info?.message)
         } else {
-          message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+          message.error(error?.message || "Đã xảy ra lỗi, vui lòng kiểm tra lại")
         }
       } finally {
         hideSpinner()
       }
     },
-    [deleteSubjectClass]
+    [deleteSubjectClassCascade, refetch]
   )
 
   const { onOpen: onOpenModalNhapTKB } = useDisclosure<{
