@@ -35248,6 +35248,54 @@ const metadata: ModelMeta = {
                 },
             },
         },
+        tuitionPaymentConfig: {
+            name: 'TuitionPaymentConfig', fields: {
+                tenantCode: {
+                    name: "tenantCode",
+                    type: "String",
+                    isId: true,
+                }, bankBin: {
+                    name: "bankBin",
+                    type: "String",
+                }, bankName: {
+                    name: "bankName",
+                    type: "String",
+                }, accountNumber: {
+                    name: "accountNumber",
+                    type: "String",
+                }, accountHolder: {
+                    name: "accountHolder",
+                    type: "String",
+                }, enabled: {
+                    name: "enabled",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, version: {
+                    name: "version",
+                    type: "BigInt",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 1 }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                }, updatedBy: {
+                    name: "updatedBy",
+                    type: "String",
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }, { "name": "@updatedAt", "args": [] }],
+                },
+            }, uniqueConstraints: {
+                tenantCode: {
+                    name: "tenantCode",
+                    fields: ["tenantCode"]
+                },
+            },
+        },
         templateFile: {
             name: 'TemplateFile', fields: {
                 id: {

@@ -3687,6 +3687,19 @@ const policy = {
                 update: {},
             },
         },
+        tuitionPaymentConfig: {
+            modelLevel: {
+                read: { guard: TuitionPaymentConfig_read, },
+                create: { guard: TuitionPaymentConfig_create, inputChecker: TuitionPaymentConfig_create_input, },
+                update: { guard: TuitionPaymentConfig_update, },
+                postUpdate: { guard: TuitionPaymentConfig_postUpdate, },
+                delete: { guard: TuitionPaymentConfig_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         templateFile: {
             modelLevel: {
                 read: { guard: TemplateFile_read, },
@@ -4024,6 +4037,7 @@ const policy = {
         dM_ToChucXaHoi: { hasValidation: false },
         dM_Ngach: { hasValidation: false },
         dM_BacLuong: { hasValidation: false },
+        tuitionPaymentConfig: { hasValidation: false },
         templateFile: { hasValidation: false },
         accessRoleGrant: { hasValidation: false },
         accessPermissionGrant: { hasValidation: false },
@@ -26069,6 +26083,51 @@ function $check_DM_BacLuong_delete(input, context) {
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
         return true;
+    }
+    return false;
+}
+function TuitionPaymentConfig_read(context, db) {
+    return { OR: [] };
+}
+function $check_TuitionPaymentConfig_read(input, context) {
+    if (true) {
+        return false;
+    }
+    return false;
+}
+function TuitionPaymentConfig_create(context, db) {
+    return { OR: [] };
+}
+function $check_TuitionPaymentConfig_create(input, context) {
+    if (true) {
+        return false;
+    }
+    return false;
+}
+function TuitionPaymentConfig_create_input(input, context) {
+    return false;
+}
+function TuitionPaymentConfig_update(context, db) {
+    return { OR: [] };
+}
+function $check_TuitionPaymentConfig_update(input, context) {
+    if (true) {
+        return false;
+    }
+    return false;
+}
+function TuitionPaymentConfig_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_TuitionPaymentConfig_postUpdate(input, context) {
+    return true;
+}
+function TuitionPaymentConfig_delete(context, db) {
+    return { OR: [] };
+}
+function $check_TuitionPaymentConfig_delete(input, context) {
+    if (true) {
+        return false;
     }
     return false;
 }
