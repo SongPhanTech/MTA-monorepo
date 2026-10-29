@@ -287,6 +287,7 @@ export * from './DM_NganhHoc.schema';
 export * from './DM_ToChucXaHoi.schema';
 export * from './DM_Ngach.schema';
 export * from './DM_BacLuong.schema';
+export * from './TuitionPaymentConfig.schema';
 export * from './TemplateFile.schema';
 export * from './AccessRoleGrant.schema';
 export * from './AccessPermissionGrant.schema';

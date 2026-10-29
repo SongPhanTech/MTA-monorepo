@@ -10176,6 +10176,24 @@ model DM_BacLuong {
   @@schema("ql-ho-so")
 }
 
+/// @@deny('all', true)
+model TuitionPaymentConfig {
+  tenantCode    String   @id() @map("tenant_code") @db.VarChar(128)
+  bankBin       String   @map("bank_bin") @db.Char(6)
+  bankName      String   @map("bank_name") @db.VarChar(200)
+  accountNumber String   @map("account_number") @db.VarChar(19)
+  accountHolder String   @map("account_holder") @db.VarChar(200)
+  enabled       Boolean  @default(false)
+  version       BigInt   @default(1)
+  createdBy     String   @map("created_by") @db.Uuid()
+  updatedBy     String   @map("updated_by") @db.Uuid()
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime @default(now()) @updatedAt() @map("updated_at") @db.Timestamptz(6)
+
+  @@map("tuition_payment_config")
+  @@schema("he-thong")
+}
+
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)

@@ -1,5 +1,6 @@
 import './he-thong/config'
 import './he-thong/changelog'
+import './he-thong/tuition-payment-config.zmodel'
 
 import './khao-thi/exam.zmodel'
 import './khao-thi/survey'
