@@ -465,7 +465,7 @@ export default function ClassRegisterLogs() {
           {
             key: "thong-ke",
             label: "Thống kê",
-            children: <ThongKeDangKy sessionId={id} />,
+            children: <ThongKeDangKy sessionId={id} isActive={activeTab === "thong-ke"} />,
           },
         ]}
       />

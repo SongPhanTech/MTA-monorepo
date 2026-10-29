@@ -926,7 +926,10 @@ export async function exportGraduateSurveyWord(data: GraduateReportData): Promis
     if (res.ok) {
       const templateBuffer = await res.arrayBuffer()
       const processed = fillGraduateSurveyReportTemplate(templateBuffer, data)
-      const blob = new Blob([processed], {
+      // Copy sang ArrayBuffer thuần — tránh lỗi TS BlobPart với Uint8Array<ArrayBufferLike>
+      const out = new ArrayBuffer(processed.byteLength)
+      new Uint8Array(out).set(processed)
+      const blob = new Blob([out], {
         type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       })
       saveAs(blob, fileName)

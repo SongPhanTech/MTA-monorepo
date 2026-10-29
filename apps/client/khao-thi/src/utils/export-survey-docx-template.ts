@@ -311,6 +311,16 @@ const makeChiefTitleBold = (xml: string) =>
     })
   })
 
+/** Bảng tiêu chí / dữ liệu khảo sát — không đụng layout bảng thông tin GV */
+const isCriteriaDataTable = (table: string) => {
+  const tableText = table.replace(/<[^>]+>/g, "")
+  return (
+    (tableText.includes("Mức") && tableText.includes("Tiêu chí")) ||
+    /ĐGTB|dataNormal|dataSpecial|#data\b|Rất không đồng ý|Rất không hài lòng/i.test(table) ||
+    /\{#data|\{#dataNormal|\{#dataSpecial|\{muc\d/i.test(table)
+  )
+}
+
 // Keep the report information in the compact two-column layout used in the
 // approved form: the organization, lecturer and criteria at left, its code at right.
 const adaptReportInfoLayout = (xml: string) => {
@@ -323,15 +333,20 @@ const adaptReportInfoLayout = (xml: string) => {
 
   while ((match = tblRegex.exec(xml)) !== null) {
     const text = match[0].replace(/<[^>]+>/g, "")
+    if (isCriteriaDataTable(match[0])) continue
     if (
       /(?:Khoa|Bộ môn|Giảng viên|Họ và tên giảng viên)/i.test(text) &&
       !text.includes("HỌC VIỆN KĨ THUẬT QUÂN SỰ")
     ) {
       table1Xml = match[0]
       table1Index = match.index
-      const nextMatch = tblRegex.exec(xml)
-      if (nextMatch) {
-        table2Index = nextMatch.index
+      // Bảng kế tiếp phải là bảng tiêu chí — bỏ qua nếu không phải
+      const afterInfo = xml.slice(match.index + match[0].length)
+      const nextMatch = /<w:tbl\b[\s\S]*?<\/w:tbl>/g.exec(afterInfo)
+      if (nextMatch && isCriteriaDataTable(nextMatch[0])) {
+        table2Index = match.index + match[0].length + (nextMatch.index ?? 0)
+      } else if (nextMatch) {
+        table2Index = match.index + match[0].length + (nextMatch.index ?? 0)
       }
       break
     }
@@ -532,6 +547,7 @@ const preserveLetterheadFormatting = (table: string) => {
 const formatReportInfoTable = (table: string) => {
   const tableText = table.replace(/<[^>]+>/g, "")
   if (
+    isCriteriaDataTable(table) ||
     !/(?:Khoa|Bộ môn|Giảng viên|Họ và tên giảng viên|Mã khoa|Mã bộ môn|Mã giảng viên)/i.test(
       tableText
     ) ||
@@ -700,8 +716,18 @@ const normalizeSurveyDocxLayout = (xml: string) => {
 }
 
 export function adaptSurveyDocxXml(originalXml: string): string {
-  if (originalXml.includes("{#hasSpecial}") || originalXml.includes("{#dataSpecial}")) {
-    const adaptedXml = originalXml.replace(/<w:tbl[\s\S]*?<\/w:tbl>/g, (tblXml) => {
+  // Gỡ conditional bọc ngoài bảng (nếu template MinIO đã bị bake sẵn) — tránh mất cả <w:tbl>
+  const stripOuterTableConditionals = (xml: string) =>
+    xml
+      .replace(/\{#hasNormal\}/g, "")
+      .replace(/\{\/hasNormal\}/g, "")
+      .replace(/\{#hasSpecial\}/g, "")
+      .replace(/\{\/hasSpecial\}/g, "")
+
+  const sourceXml = stripOuterTableConditionals(originalXml)
+
+  if (sourceXml.includes("{#dataSpecial}") || sourceXml.includes("{#dataNormal}")) {
+    const adaptedXml = sourceXml.replace(/<w:tbl[\s\S]*?<\/w:tbl>/g, (tblXml) => {
       if (!tblXml.includes("dataNormal") && !tblXml.includes("dataSpecial")) return tblXml
       let fixedTbl = tblXml
       if (!fixedTbl.includes("<w:tblBorders>")) {
@@ -717,21 +743,28 @@ export function adaptSurveyDocxXml(originalXml: string): string {
     return makeChiefTitleBold(adaptedXml)
   }
 
-  const marker = "{#data}"
-  const dataIdx = originalXml.indexOf(marker)
-  if (dataIdx === -1) return makeChiefTitleBold(originalXml)
+  // Hỗ trợ template cũ {#data} hoặc đã tách {#dataNormal}
+  const markerMatch = sourceXml.match(/\{#(dataNormal|data)\}/)
+  if (!markerMatch || markerMatch.index == null) return makeChiefTitleBold(sourceXml)
+  const dataIdx = markerMatch.index
 
-  const tblStart = originalXml.lastIndexOf("<w:tbl>", dataIdx)
-  const tblEnd = originalXml.indexOf("</w:tbl>", dataIdx) + "</w:tbl>".length
-  if (tblStart === -1 || tblEnd === -1) return makeChiefTitleBold(originalXml)
+  // <w:tbl> có thể kèm attribute — không dùng lastIndexOf("<w:tbl>") cứng
+  const before = sourceXml.slice(0, dataIdx)
+  const tblOpenMatches = [...before.matchAll(/<w:tbl\b[^>]*>/g)]
+  if (!tblOpenMatches.length) return makeChiefTitleBold(sourceXml)
+  const lastOpen = tblOpenMatches[tblOpenMatches.length - 1]
+  const tblStart = lastOpen.index ?? -1
+  const tblEndMarker = sourceXml.indexOf("</w:tbl>", dataIdx)
+  const tblEnd = tblEndMarker === -1 ? -1 : tblEndMarker + "</w:tbl>".length
+  if (tblStart === -1 || tblEnd === -1) return makeChiefTitleBold(sourceXml)
 
-  const originalTbl = originalXml.slice(tblStart, tblEnd)
+  const originalTbl = sourceXml.slice(tblStart, tblEnd)
 
   const rawRows = originalTbl.split("</w:tr>")
-  if (rawRows.length < 3) return makeChiefTitleBold(originalXml)
+  if (rawRows.length < 3) return makeChiefTitleBold(sourceXml)
 
-  const dataRowIdx = rawRows.findIndex((r) => r.includes("{#data}"))
-  if (dataRowIdx <= 0 || dataRowIdx >= rawRows.length) return makeChiefTitleBold(originalXml)
+  const dataRowIdx = rawRows.findIndex((r) => r.includes("{#data}") || r.includes("{#dataNormal}"))
+  if (dataRowIdx <= 0 || dataRowIdx >= rawRows.length) return makeChiefTitleBold(sourceXml)
 
   const headerRowIdx = dataRowIdx - 1
   const rHeader = rawRows[headerRowIdx]
@@ -821,11 +854,15 @@ export function adaptSurveyDocxXml(originalXml: string): string {
 
   const tbl2 = `<w:tbl>${dataTblPr}${tblGrid}${specHeaderRow}${makeDataRow("dataSpecial")}${makeDgtbRow("dgtbSpecial")}</w:tbl>`
 
-  const blockNormal = `<w:p><w:r><w:t>{#hasNormal}</w:t></w:r></w:p>${tbl1}<w:p><w:r><w:t>{/hasNormal}</w:t></w:r></w:p>`
-  const blockSpecial = `<w:p><w:r><w:t>{#hasSpecial}</w:t></w:r></w:p><w:p><w:pPr><w:spacing w:after="120" w:line="240" w:lineRule="auto"/></w:pPr></w:p>${tbl2}<w:p><w:r><w:t>{/hasSpecial}</w:t></w:r></w:p>`
+  // Không bọc {#hasNormal}/{#hasSpecial} ngoài <w:tbl>: easy-template-x/Word
+  // hay nuốt cả bảng khi conditional nằm ở paragraph tách khỏi table.
+  // Bảng trống khi không có dòng dữ liệu (loop rỗng) vẫn giữ header + ĐGTB.
+  const gap = `<w:p><w:pPr><w:spacing w:after="120" w:line="240" w:lineRule="auto"/></w:pPr></w:p>`
+  const blockNormal = tbl1
+  const blockSpecial = `${gap}${tbl2}`
 
   return makeChiefTitleBold(
-    originalXml.slice(0, tblStart) + leadingTable + blockNormal + blockSpecial + originalXml.slice(tblEnd)
+    sourceXml.slice(0, tblStart) + leadingTable + blockNormal + blockSpecial + sourceXml.slice(tblEnd)
   )
 }
 
@@ -1023,9 +1060,15 @@ export async function exportSurveyDocxTemplate(input: ExportSurveyDocxTemplateIn
     const outputZip = new PizZip(await doc.arrayBuffer())
     const outputXml = outputZip.file("word/document.xml")?.asText()
     if (outputXml) {
+      // Phòng hờ residual conditional tags nếu template/engine để lại
+      const cleanedOutput = outputXml
+        .replace(/\{#hasNormal\}/g, "")
+        .replace(/\{\/hasNormal\}/g, "")
+        .replace(/\{#hasSpecial\}/g, "")
+        .replace(/\{\/hasSpecial\}/g, "")
       outputZip.file(
         "word/document.xml",
-        makeChiefTitleBold(normalizeSurveyDocxLayout(adaptReportInfoLayout(outputXml)))
+        makeChiefTitleBold(normalizeSurveyDocxLayout(adaptReportInfoLayout(cleanedOutput)))
       )
     }
     const finalDoc = new Blob([outputZip.generate({ type: "arraybuffer" })], {

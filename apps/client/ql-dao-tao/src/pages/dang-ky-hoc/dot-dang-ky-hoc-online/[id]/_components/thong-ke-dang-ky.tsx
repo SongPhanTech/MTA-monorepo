@@ -27,10 +27,12 @@ import {
 import ExcelJS from "exceljs"
 import { saveAs } from "file-saver"
 import { BookOpen, ClipboardList, Download, Layers, UserCheck, UserX, Users } from "lucide-react"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 type Props = {
   sessionId: string
+  /** Tab Thống kê đang hiện — remount chart khi quay lại (tránh G2 đo size khi display:none) */
+  isActive?: boolean
 }
 
 type LogRow = {
@@ -120,11 +122,18 @@ function StatCard({
   )
 }
 
-export default function ThongKeDangKy({ sessionId }: Props) {
+export default function ThongKeDangKy({ sessionId, isActive = true }: Props) {
   const { showSpinner, hideSpinner } = useSpinner()
   const { getClassRegisterStatusLabel, getClassRegisterStatusColor, classRegisterStatusOptions } =
     useClassRegisterStatus()
   const [detailTab, setDetailTab] = useState("sv-da-dk")
+  // Ant Tabs ẩn pane bằng display:none → Ant Plots đo height=0; remount khi tab hiện lại
+  const [chartMountKey, setChartMountKey] = useState(0)
+  useEffect(() => {
+    if (!isActive) return
+    const t = window.setTimeout(() => setChartMountKey((k) => k + 1), 0)
+    return () => window.clearTimeout(t)
+  }, [isActive])
 
   const { data: session } = useFindUniqueClassRegisterSession(
     {
@@ -672,7 +681,9 @@ export default function ThongKeDangKy({ sessionId }: Props) {
         >
           {stats.barClassData.length ? (
             <div className="thong-ke-chart-wrap w-full min-h-[320px]">
+              {isActive ? (
               <Column
+                key={`bar-class-${chartMountKey}`}
                 autoFit
                 height={320}
                 data={stats.barClassData}
@@ -706,6 +717,7 @@ export default function ThongKeDangKy({ sessionId }: Props) {
                   title: (d: { fullName?: string; label?: string }) => d.fullName || d.label,
                 }}
               />
+              ) : null}
             </div>
           ) : (
             <Empty description="Chưa có dữ liệu đăng ký" />
@@ -716,32 +728,37 @@ export default function ThongKeDangKy({ sessionId }: Props) {
       <Col xs={24} lg={10}>
         <Card size="small" title="Tỷ lệ SV đăng ký" loading={loading}>
           {stats.totalCourseStudents > 0 ? (
-            <Pie
-              height={320}
-              data={stats.pieRegisterData}
-              angleField="value"
-              colorField="type"
-              scale={{
-                color: {
-                  range: ["#028850", "#8c8c8c"],
-                },
-              }}
-              label={{
-                text: (d: { type: string; value: number }) =>
-                  `${d.type}: ${d.value} (${Math.round(
-                    (d.value / Math.max(stats.totalCourseStudents, 1)) * 100
-                  )}%)`,
-                position: "outside",
-                connector: true,
-                style: {
-                  fill: "#1f1f1f",
-                  fontSize: 12,
-                  fontWeight: 600,
-                },
-              }}
-              legend={{ position: "bottom" }}
-              innerRadius={0.55}
-            />
+            isActive ? (
+              <Pie
+                key={`pie-register-${chartMountKey}`}
+                height={320}
+                data={stats.pieRegisterData}
+                angleField="value"
+                colorField="type"
+                scale={{
+                  color: {
+                    range: ["#028850", "#8c8c8c"],
+                  },
+                }}
+                label={{
+                  text: (d: { type: string; value: number }) =>
+                    `${d.type}: ${d.value} (${Math.round(
+                      (d.value / Math.max(stats.totalCourseStudents, 1)) * 100
+                    )}%)`,
+                  position: "outside",
+                  connector: true,
+                  style: {
+                    fill: "#1f1f1f",
+                    fontSize: 12,
+                    fontWeight: 600,
+                  },
+                }}
+                legend={{ position: "bottom" }}
+                innerRadius={0.55}
+              />
+            ) : (
+              <div className="min-h-[320px]" />
+            )
           ) : (
             <Empty description="Chưa có dữ liệu khóa" />
           )}
@@ -757,36 +774,39 @@ export default function ThongKeDangKy({ sessionId }: Props) {
         >
           {stats.barSubjectData.length ? (
             <div className="thong-ke-chart-wrap w-full min-h-[280px]">
-              <Column
-                autoFit
-                height={280}
-                data={stats.barSubjectData}
-                xField="label"
-                yField="value"
-                padding={[24, 12, 56, 40]}
-                columnWidthRatio={0.6}
-                label={{
-                  text: "value",
-                  style: { fontSize: 11, fill: "#1f1f1f" },
-                  position: "top",
-                }}
-                axis={{
-                  x: {
-                    labelAutoRotate: true,
-                    labelAutoHide: false,
-                    size: 48,
-                  },
-                }}
-                style={{
-                  fill: "#1677ff",
-                  maxWidth: 56,
-                  radiusTopLeft: 4,
-                  radiusTopRight: 4,
-                }}
-                tooltip={{
-                  title: (d: { fullName?: string; label?: string }) => d.fullName || d.label,
-                }}
-              />
+              {isActive ? (
+                <Column
+                  key={`bar-subject-${chartMountKey}`}
+                  autoFit
+                  height={280}
+                  data={stats.barSubjectData}
+                  xField="label"
+                  yField="value"
+                  padding={[24, 12, 56, 40]}
+                  columnWidthRatio={0.6}
+                  label={{
+                    text: "value",
+                    style: { fontSize: 11, fill: "#1f1f1f" },
+                    position: "top",
+                  }}
+                  axis={{
+                    x: {
+                      labelAutoRotate: true,
+                      labelAutoHide: false,
+                      size: 48,
+                    },
+                  }}
+                  style={{
+                    fill: "#1677ff",
+                    maxWidth: 56,
+                    radiusTopLeft: 4,
+                    radiusTopRight: 4,
+                  }}
+                  tooltip={{
+                    title: (d: { fullName?: string; label?: string }) => d.fullName || d.label,
+                  }}
+                />
+              ) : null}
             </div>
           ) : (
             <Empty description="Chưa có dữ liệu" />
@@ -797,23 +817,28 @@ export default function ThongKeDangKy({ sessionId }: Props) {
       <Col xs={24} lg={12}>
         <Card size="small" title="Trạng thái đơn đăng ký" loading={loading}>
           {stats.totalLogs > 0 ? (
-            <Pie
-              height={280}
-              data={stats.statusRows.filter((r) => r.value > 0)}
-              angleField="value"
-              colorField="type"
-              label={{
-                text: (d: { type: string; value: number }) => `${d.type}: ${d.value}`,
-                position: "outside",
-                connector: true,
-                style: {
-                  fill: "#1f1f1f",
-                  fontSize: 12,
-                  fontWeight: 600,
-                },
-              }}
-              legend={{ position: "bottom" }}
-            />
+            isActive ? (
+              <Pie
+                key={`pie-status-${chartMountKey}`}
+                height={280}
+                data={stats.statusRows.filter((r) => r.value > 0)}
+                angleField="value"
+                colorField="type"
+                label={{
+                  text: (d: { type: string; value: number }) => `${d.type}: ${d.value}`,
+                  position: "outside",
+                  connector: true,
+                  style: {
+                    fill: "#1f1f1f",
+                    fontSize: 12,
+                    fontWeight: 600,
+                  },
+                }}
+                legend={{ position: "bottom" }}
+              />
+            ) : (
+              <div className="min-h-[280px]" />
+            )
           ) : (
             <Empty description="Chưa có đơn đăng ký" />
           )}
