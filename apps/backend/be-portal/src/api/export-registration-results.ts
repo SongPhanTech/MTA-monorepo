@@ -112,6 +112,7 @@ app.openapi(exportToInternal, async (c) => {
       .map(([name, count]) => `${name}: ${count}`)
       .join(", ")
     await markDataSyncHistorySuccess(syncHistoryId, {
+      fileName,
       description: `Đã xuất thành công ${exportedCount} bản ghi${countDetail ? ` (${countDetail})` : ""}.`,
     })
 

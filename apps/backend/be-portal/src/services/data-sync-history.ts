@@ -62,7 +62,11 @@ export async function createDataSyncHistoryPending(input: CreateDataSyncHistoryI
 
 export async function markDataSyncHistorySuccess(
   id: string,
-  extra?: { classRegisterSessionId?: string | null; description?: string | null }
+  extra?: {
+    classRegisterSessionId?: string | null
+    description?: string | null
+    fileName?: string | null
+  }
 ) {
   const classRegisterSessionId = extra?.classRegisterSessionId
     ? await existingClassRegisterSessionId(extra.classRegisterSessionId)
@@ -76,6 +80,7 @@ export async function markDataSyncHistorySuccess(
       errorMessage: null,
       ...(classRegisterSessionId ? { classRegisterSessionId } : {}),
       ...(extra?.description != null ? { description: extra.description } : {}),
+      ...(extra?.fileName != null ? { fileName: extra.fileName } : {}),
     },
   })
 }
