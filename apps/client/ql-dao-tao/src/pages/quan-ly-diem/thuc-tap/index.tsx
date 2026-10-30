@@ -94,7 +94,7 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
       orgId || "0"
     ).map((org) => org.value),
     orgId,
-  ].filter(Boolean)
+  ].filter((id): id is string => typeof id === "string" && id.length > 0)
 
   const { data: subjectClassData = [] } = useFindManySubjectClass({
     where: {

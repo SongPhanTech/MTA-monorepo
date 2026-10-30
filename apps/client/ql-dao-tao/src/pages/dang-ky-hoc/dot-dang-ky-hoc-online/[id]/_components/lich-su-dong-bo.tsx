@@ -11,7 +11,6 @@ import {
   DataSyncStatus,
   DataSyncType,
   type DataSyncHistory,
-  type Prisma,
   type UserProfile,
 } from "@workspace/db"
 import {
@@ -219,43 +218,41 @@ export default function LichSuDongBo({ sessionId, sessionName }: LichSuDongBoPro
   const [searchKeyword, setSearchKeyword] = useState<string>("")
   const [detailModalRecord, setDetailModalRecord] = useState<SyncRecordWithRelations | null>(null)
 
-  const where = useMemo<Prisma.DataSyncHistoryWhereInput>(() => {
-    const base: Prisma.DataSyncHistoryWhereInput = {
+  // Không annotate Prisma từ @workspace/db (prisma-client) — hooks dùng logical-prisma-client
+  const where = useMemo(() => {
+    const keyword = searchKeyword.trim()
+    return {
       classRegisterSessionId: sessionId,
       deletedAt: null,
       ...(typeFilter ? { type: typeFilter } : {}),
       ...(statusFilter ? { status: statusFilter } : {}),
-    }
-
-    if (dateRange?.[0] || dateRange?.[1]) {
-      base.createdAt = {}
-      if (dateRange[0]) {
-        base.createdAt.gte = dateRange[0].startOf("day").toDate()
-      }
-      if (dateRange[1]) {
-        base.createdAt.lte = dateRange[1].endOf("day").toDate()
-      }
-    }
-
-    const keyword = searchKeyword.trim()
-    if (keyword) {
-      base.OR = [
-        { fileName: { contains: keyword, mode: "insensitive" } },
-        { sessionName: { contains: keyword, mode: "insensitive" } },
-        { description: { contains: keyword, mode: "insensitive" } },
-        { errorMessage: { contains: keyword, mode: "insensitive" } },
-        {
-          performedBy: {
+      ...(dateRange?.[0] || dateRange?.[1]
+        ? {
+            createdAt: {
+              ...(dateRange?.[0] ? { gte: dateRange[0].startOf("day").toDate() } : {}),
+              ...(dateRange?.[1] ? { lte: dateRange[1].endOf("day").toDate() } : {}),
+            },
+          }
+        : {}),
+      ...(keyword
+        ? {
             OR: [
-              { fullname: { contains: keyword, mode: "insensitive" } },
-              { code: { contains: keyword, mode: "insensitive" } },
+              { fileName: { contains: keyword, mode: "insensitive" as const } },
+              { sessionName: { contains: keyword, mode: "insensitive" as const } },
+              { description: { contains: keyword, mode: "insensitive" as const } },
+              { errorMessage: { contains: keyword, mode: "insensitive" as const } },
+              {
+                performedBy: {
+                  OR: [
+                    { fullname: { contains: keyword, mode: "insensitive" as const } },
+                    { code: { contains: keyword, mode: "insensitive" as const } },
+                  ],
+                },
+              },
             ],
-          },
-        },
-      ]
+          }
+        : {}),
     }
-
-    return base
   }, [sessionId, typeFilter, statusFilter, dateRange, searchKeyword])
 
   const {

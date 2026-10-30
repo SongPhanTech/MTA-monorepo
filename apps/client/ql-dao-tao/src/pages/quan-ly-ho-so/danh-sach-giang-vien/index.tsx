@@ -94,7 +94,7 @@ export default function UserProfilePageLecture() {
         orgId || "0"
       ).map((org) => org.value),
       orgId,
-    ]
+    ].filter((id): id is string => typeof id === "string" && id.length > 0)
   }, [orgId, dmDonViIds])
 
   const where = useMemo(() => {
