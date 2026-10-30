@@ -330,7 +330,7 @@ export async function processExportJob(
           counts,
           categories: buildSyncCategories(counts),
         },
-        description: `Đã xuất thành công ${totalCount} bản ghi dữ liệu.`,
+        description: `Đã xuất thành công `,
       }).catch((err) => {
         console.error(`[export-worker] Lỗi cập nhật DataSyncHistory:`, err)
       })

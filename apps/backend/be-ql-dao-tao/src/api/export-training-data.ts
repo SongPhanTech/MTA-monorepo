@@ -178,7 +178,7 @@ app.openapi(exportTrainingDataRoute, async (c) => {
           counts: result.counts,
           categories: buildSyncCategories(result.counts || {}),
         },
-        description: `Đã xuất thành công ${totalCount} bản ghi dữ liệu.`,
+        description: `Đã xuất thành công `,
       })
     }
     return c.json(result, 200)
