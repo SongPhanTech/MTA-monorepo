@@ -270,7 +270,7 @@ export const classRegisterCache = {
     isRegistered: boolean
   ) {
     const ver = await cacheGetNumber(this.userVersionKey(userId))
-    return `${PREFIX}:classes:${userId}:v${ver}:${sessionId}:${curriculumVersionId}:${byCurriculum}:${isRegistered}`
+    return `${PREFIX}:classes:v2:${userId}:v${ver}:${sessionId}:${curriculumVersionId}:${byCurriculum}:${isRegistered}`
   },
 
   /** Sau ĐK/huỷ: invalidate ngay cache cá nhân */

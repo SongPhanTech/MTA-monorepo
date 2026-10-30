@@ -1,14 +1,12 @@
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import Loading from "@components/commons/loading"
 import DefaultLayout from "@layouts/default-layout"
+import { PagePermissionGate } from "@components/commons/page-permission-gate"
 import { usePagination } from "@hooks/usePagination"
 import ModalPreviewImportJson from "@components/modal/modal-preview-import-json"
 import SyncProcessModal from "@components/modal/SyncProcessModal"
 import { AnimatedDownloadButton } from "@components/ui/animated-download-button"
-import {
-  CloudUploadPanel,
-  type CloudUploadPanelHandle,
-} from "@components/ui/cloud-upload-panel"
+import { CloudUploadPanel, type CloudUploadPanelHandle } from "@components/ui/cloud-upload-panel"
 import { type ImportJsonPreview, parseImportJsonFile } from "@/utils/parse-import-json"
 import {
   finishDataSync,
@@ -45,6 +43,7 @@ import {
 import type { UploadFile } from "antd/es/upload/interface"
 import dayjs from "dayjs"
 import { ArrowDownToLine, ArrowUpFromLine, History, Info, Loader2 } from "lucide-react"
+import { CONG_SINH_VIEN_PERMISSION } from "@workspace/router"
 import { useEffect, useMemo, useRef, useState } from "react"
 
 dayjs.locale("vi")
@@ -54,17 +53,17 @@ const { Title, Paragraph, Text } = Typography
 const IMPORT_DATA_ITEMS = [
   "Đợt đăng ký học",
   "Lớp học phần, thời khóa biểu",
-  "Sinh viên, hồ sơ ",
-  "Danh mục hệ thống ",
-  "Chương trình đào tạo, môn học ",
+  "Sinh viên, hồ sơ",
+  "Danh mục hệ thống",
+  "Chương trình đào tạo, môn học",
 ]
 
 const EXPORT_DATA_ITEMS = [
-  "Nhật ký đăng ký học (ClassRegisterLogs)",
-  "Điểm môn học sau đăng ký (StudentSubjectScore)",
-  "Sinh viên / hồ sơ liên quan (Student, UserProfile)",
-  "Lớp học phần đã đăng ký (SubjectClass, SubjectVersion)",
-  "Thông tin đợt đăng ký (ClassRegisterSession)",
+  "Nhật ký đăng ký học",
+  "Điểm môn học sau đăng ký",
+  "Sinh viên / Hồ sơ liên quan",
+  "Lớp học phần đã đăng ký",
+  "Thông tin đợt đăng ký",
 ]
 
 function DongBoDuLieuPage() {
@@ -150,10 +149,13 @@ function DongBoDuLieuPage() {
       setImportPreview(preview)
       setPreviewModalOpen(true)
     } catch (error) {
+      const detail = error instanceof Error && error.message ? error.message : "File không hợp lệ"
       setImportPreview(null)
       setPreviewModalOpen(false)
-      setImportParseError("Không nhập được dữ liệu")
-      message.error("Không nhập được dữ liệu")
+      setImportParseError(
+        `Không thể đọc file: ${detail}. Hãy xuất lại file từ hệ thống nguồn rồi thử lại.`
+      )
+      message.error("Không thể đọc file đồng bộ. Hãy kiểm tra và xuất lại file từ hệ thống nguồn.")
       cloudUploadRef.current?.reset()
       setImportFiles([])
     } finally {
@@ -266,14 +268,23 @@ function DongBoDuLieuPage() {
       }
 
       if (syncId && importRes.status >= 400) {
+        const errorMessage =
+          importRes.data?.message ||
+          "Không thể nhập dữ liệu. Hãy kiểm tra file và dữ liệu nguồn trước khi thử lại."
+        setImportParseError(errorMessage)
         await finishDataSync({
           id: syncId,
           status: "FAILED",
-          errorMessage: "Không nhập được dữ liệu",
+          errorMessage,
         })
         await refetchHistory()
+        message.error(errorMessage)
+        return false
       }
-      message.error("Không nhập được dữ liệu")
+      const fallbackMessage =
+        "Không thể nhập dữ liệu. Hãy kiểm tra file và dữ liệu nguồn trước khi thử lại."
+      setImportParseError(fallbackMessage)
+      message.error(fallbackMessage)
       return false
     } catch (error) {
       const errText = error instanceof Error ? error.message : String(error)
@@ -292,10 +303,13 @@ function DongBoDuLieuPage() {
         return true
       }
       if (syncId) {
+        const failureMessage =
+          "Không thể nhập dữ liệu do kết nối hoặc máy chủ bị gián đoạn. Vui lòng kiểm tra lại lịch sử đồng bộ trước khi thử lại."
+        setImportParseError(failureMessage)
         await finishDataSync({
           id: syncId,
           status: "FAILED",
-          errorMessage: "Không nhập được dữ liệu",
+          errorMessage: failureMessage,
         })
         await refetchHistory()
       }
@@ -472,6 +486,7 @@ function DongBoDuLieuPage() {
                         disabled={Boolean(pendingImport) || parsingImportFile || importing}
                         showUploadButton={false}
                         hint="Gói .dat / .sync xuất từ đợt đăng ký nội bộ"
+                        failureMessage={importParseError}
                         onFileSelected={handleCloudFileSelected}
                         onUpload={handleImportUpload}
                         onComplete={finishCloudImportUi}
@@ -747,7 +762,10 @@ function DongBoDuLieuPage() {
                         if (status === "SUCCESS") return <Tag color="success">Thành công</Tag>
                         if (status === "FAILED") return <Tag color="error">Thất bại</Tag>
                         return (
-                          <Tag color="processing" className="inline-flex items-center gap-1.5 font-medium">
+                          <Tag
+                            color="processing"
+                            className="inline-flex items-center gap-1.5 font-medium"
+                          >
                             <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-600" />
                             Đang xử lý
                           </Tag>
@@ -774,12 +792,25 @@ function DongBoDuLieuPage() {
                             record.type === "EXPORT"
                               ? "Không xuất được dữ liệu"
                               : "Không nhập được dữ liệu"
-                          return <span className="text-red-500">{failText}</span>
+                          const detail = record.errorMessage || failText
+                          return (
+                            <Paragraph
+                              className="!mb-0 !text-red-500 whitespace-pre-line"
+                              ellipsis={{ rows: 3, expandable: "collapsible", symbol: "Xem thêm" }}
+                              title={detail}
+                            >
+                              {detail}
+                            </Paragraph>
+                          )
                         }
                         return (
-                          <span className="text-gray-600" title={record.description ?? undefined}>
+                          <Paragraph
+                            className="!mb-0 !text-gray-600 whitespace-pre-line"
+                            ellipsis={{ rows: 3, expandable: "collapsible", symbol: "Xem thêm" }}
+                            title={record.description ?? undefined}
+                          >
                             {record.description || "—"}
-                          </span>
+                          </Paragraph>
                         )
                       },
                     },
@@ -814,7 +845,13 @@ function DongBoDuLieuPage() {
 }
 
 DongBoDuLieuPage.getLayout = function getLayout(page: React.ReactElement) {
-  return <DefaultLayout breadcrumbList={[{ title: "Đồng bộ dữ liệu" }]}>{page}</DefaultLayout>
+  return (
+    <DefaultLayout breadcrumbList={[{ title: "Đồng bộ dữ liệu" }]}>
+      <PagePermissionGate permission={CONG_SINH_VIEN_PERMISSION.CONG_SINH_VIEN_DONG_BO_DU_LIEU}>
+        {page}
+      </PagePermissionGate>
+    </DefaultLayout>
+  )
 }
 
 export default DongBoDuLieuPage

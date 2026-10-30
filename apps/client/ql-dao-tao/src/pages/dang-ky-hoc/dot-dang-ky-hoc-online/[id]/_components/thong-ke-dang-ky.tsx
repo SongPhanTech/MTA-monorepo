@@ -135,6 +135,13 @@ export default function ThongKeDangKy({ sessionId, isActive = true }: Props) {
     return () => window.clearTimeout(t)
   }, [isActive])
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      window.dispatchEvent(new Event("resize"))
+    }, 150)
+    return () => clearTimeout(timer)
+  }, [])
+
   const { data: session } = useFindUniqueClassRegisterSession(
     {
       where: { id: sessionId },

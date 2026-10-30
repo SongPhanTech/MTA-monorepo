@@ -5,7 +5,8 @@ import { standardErrorResponses } from "../dto/openapi-route-helpers"
 import { exportTrainingData } from "../services/export-training-data"
 import { enqueueExportJob, startExportConsumer } from "../services/export-kafka-queue"
 import { getExportPayloadBinary } from "../services/export-payload-store"
-import { SYNC_CONTENT_TYPE } from "../services/data-sync-pack"
+import { SYNC_CONTENT_TYPE, SYNC_FILE_EXT } from "../services/data-sync-pack"
+import dayjs from "dayjs"
 import {
   countActiveExportJobs,
   EXPORT_MAX_CONCURRENT,
@@ -13,10 +14,17 @@ import {
   setExportJob,
 } from "../services/export-redis-store"
 import { processExportJob } from "../services/export-worker"
+import { prisma } from ".."
+import { $Enums } from "@workspace/db"
+import {
+  createDataSyncHistoryPending,
+  markDataSyncHistoryFailed,
+  markDataSyncHistorySuccess,
+} from "../services/data-sync-history"
 
 // Khởi chạy Kafka Consumer lắng nghe job xuất dữ liệu (nếu Kafka khả dụng)
 startExportConsumer(async (job) => {
-  await processExportJob(job.jobId, job.classRegisterSessionId)
+  await processExportJob(job.jobId, job.classRegisterSessionId, job.syncHistoryId)
 })
 
 const app = new OpenAPIHono()
@@ -38,6 +46,26 @@ function assertJobOwner(
   if (!userId) return "Unauthorized"
   if (state.createdByUserId !== userId) return "Bạn không có quyền truy cập tác vụ xuất này"
   return null
+}
+
+export function buildExportFileName(
+  sessionName?: string | null,
+  classRegisterSessionId?: string | null,
+  jobId?: string
+): string {
+  const stamp = dayjs().format("YYYYMMDD-HHmm")
+  const idSuffix = jobId ? `-${jobId.slice(0, 8)}` : ""
+  if (classRegisterSessionId && sessionName) {
+    const safeName =
+      sessionName
+        .normalize("NFKD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^\w.-]+/g, "_")
+        .replace(/^_+|_+$/g, "")
+        .slice(0, 60) || "dot"
+    return `export-dot-dang-ky-${safeName}-${stamp}${idSuffix}${SYNC_FILE_EXT}`
+  }
+  return `export-toan-bo-du-lieu-${stamp}${idSuffix}${SYNC_FILE_EXT}`
 }
 
 const exportTrainingDataRequestSchema = z
@@ -98,18 +126,65 @@ const exportTrainingDataRoute = createRoute({
 })
 
 app.openapi(exportTrainingDataRoute, async (c) => {
+  const createdByUserId = currentUserId(c)
+  let classRegisterSessionId: string | undefined
   try {
-    let classRegisterSessionId: string | undefined
+    const body = c.req.valid("json") as { classRegisterSessionId?: string }
+    classRegisterSessionId = body?.classRegisterSessionId
+  } catch {
+    // Body optional
+  }
+
+  let sessionName = "Toàn bộ dữ liệu"
+  if (classRegisterSessionId) {
     try {
-      const body = c.req.valid("json") as { classRegisterSessionId?: string }
-      classRegisterSessionId = body?.classRegisterSessionId
-    } catch {
-      // Body optional
-    }
+      const session = await prisma.classRegisterSession.findFirst({
+        where: { id: classRegisterSessionId, deletedAt: null },
+        select: { name: true },
+      })
+      if (session?.name) sessionName = session.name
+    } catch {}
+  }
+
+  const fileName = buildExportFileName(sessionName, classRegisterSessionId)
+
+  let syncHistoryId: string | undefined
+  try {
+    const history = await createDataSyncHistoryPending({
+      type: $Enums.DataSyncType.EXPORT,
+      sessionName,
+      classRegisterSessionId,
+      fileName,
+      performedById: createdByUserId,
+    })
+    syncHistoryId = history.id
+  } catch {}
+
+  try {
     const result = await exportTrainingData({ classRegisterSessionId })
+    if (syncHistoryId) {
+      const totalCount = Object.values(result.counts || {}).reduce(
+        (sum, n) => sum + (typeof n === "number" ? n : 0),
+        0
+      )
+      await markDataSyncHistorySuccess(syncHistoryId, {
+        classRegisterSessionId,
+        fileName,
+        recordCounts: {
+          total: totalCount,
+          success: totalCount,
+          failed: 0,
+          counts: result.counts,
+        },
+        description: `Đã xuất thành công ${totalCount} bản ghi dữ liệu.`,
+      })
+    }
     return c.json(result, 200)
   } catch (error) {
     const message = "Không xuất được dữ liệu"
+    if (syncHistoryId) {
+      await markDataSyncHistoryFailed(syncHistoryId, message)
+    }
     return c.json({ message }, 500)
   }
 })
@@ -181,6 +256,33 @@ app.openapi(exportAsyncRoute, async (c) => {
   const now = new Date().toISOString()
   const createdByUserId = currentUserId(c)
 
+  let sessionName = "Toàn bộ dữ liệu"
+  if (classRegisterSessionId) {
+    try {
+      const session = await prisma.classRegisterSession.findFirst({
+        where: { id: classRegisterSessionId, deletedAt: null },
+        select: { name: true },
+      })
+      if (session?.name) sessionName = session.name
+    } catch {}
+  }
+
+  const fileName = buildExportFileName(sessionName, classRegisterSessionId, jobId)
+
+  let syncHistoryId: string | undefined
+  try {
+    const history = await createDataSyncHistoryPending({
+      type: $Enums.DataSyncType.EXPORT,
+      sessionName,
+      classRegisterSessionId,
+      fileName,
+      performedById: createdByUserId,
+    })
+    syncHistoryId = history.id
+  } catch (err) {
+    console.error("[export-training-data] Lỗi tạo DataSyncHistory PENDING:", err)
+  }
+
   await setExportJob({
     jobId,
     status: "PENDING",
@@ -188,6 +290,8 @@ app.openapi(exportAsyncRoute, async (c) => {
     message: "Đã xếp hàng đợi xuất dữ liệu",
     classRegisterSessionId,
     createdByUserId,
+    syncHistoryId,
+    fileName,
     createdAt: now,
     updatedAt: now,
   })
@@ -195,12 +299,13 @@ app.openapi(exportAsyncRoute, async (c) => {
   const enqueued = await enqueueExportJob({
     jobId,
     classRegisterSessionId,
+    syncHistoryId,
     timestamp: now,
   })
 
   if (!enqueued) {
     setTimeout(() => {
-      processExportJob(jobId, classRegisterSessionId)
+      processExportJob(jobId, classRegisterSessionId, syncHistoryId)
     }, 20)
   }
 

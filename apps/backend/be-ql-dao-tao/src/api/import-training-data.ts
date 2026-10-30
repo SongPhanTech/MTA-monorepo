@@ -1,4 +1,5 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
+import { jwtAuth } from "@workspace/auth/hono"
 import { fieldDesc } from "../dto/openapi-helpers"
 import { standardErrorResponses } from "../dto/openapi-route-helpers"
 import {
@@ -8,8 +9,25 @@ import {
   importRegistrationResultsFromJson,
   previewRegistrationResultsImport,
 } from "../services/import-registration-results"
+import { prisma } from ".."
+import { $Enums } from "@workspace/db"
+import {
+  createDataSyncHistoryFailedDirect,
+  createDataSyncHistoryPending,
+  markDataSyncHistoryFailed,
+  markDataSyncHistorySuccess,
+} from "../services/data-sync-history"
 
 const app = new OpenAPIHono({ strict: false })
+
+/** Hỗ trợ xác thực người dùng để lưu vết lịch sử */
+app.use("*", async (c, next) => {
+  const authHeader = c.req.header("Authorization")
+  if (authHeader) {
+    return jwtAuth("lms")(c, next)
+  }
+  return next()
+})
 
 const fileFieldSchema = z.instanceof(File).openapi({
   type: "string",
@@ -163,20 +181,82 @@ const confirmRoute = createRoute({
 
 app.openapi(confirmRoute, async (c) => {
   const { classRegisterSessionId, fileHash, file } = c.req.valid("form")
+  const user = c.get("user") as { id?: string } | undefined
+  let syncHistoryId: string | undefined
+  let sessionName = "Đợt đăng ký học"
+
   try {
+    const session = await prisma.classRegisterSession.findFirst({
+      where: { id: classRegisterSessionId, deletedAt: null },
+      select: { name: true },
+    })
+    if (session?.name) {
+      sessionName = session.name
+    }
+
+    try {
+      const history = await createDataSyncHistoryPending({
+        type: $Enums.DataSyncType.IMPORT,
+        sessionName,
+        classRegisterSessionId,
+        fileName: file?.name,
+        performedById: user?.id,
+        description: "Đang kiểm tra và nhập kết quả đăng ký...",
+      })
+      syncHistoryId = history.id
+    } catch (createErr) {
+      console.error("[import-training-data] Lỗi tạo DataSyncHistory PENDING:", createErr)
+    }
+
     const bytes = await readUploadBytes(file)
     const actualHash = hashImportFileBytes(bytes)
     if (!fileHash || fileHash !== actualHash) {
+      const err = "fileHash không khớp — hãy chạy lại preview với đúng file trước khi xác nhận import"
+      if (syncHistoryId) {
+        await markDataSyncHistoryFailed(syncHistoryId, err)
+      }
       return c.json(
         {
-          message:
-            "fileHash không khớp — hãy chạy lại preview với đúng file trước khi xác nhận import",
+          message: err,
         },
         400
       )
     }
+
     const parsed = decodeRegistrationResultsFile(bytes)
+
+    if (syncHistoryId && (parsed.version || parsed.exportedAt)) {
+      await prisma.dataSyncHistory.update({
+        where: { id: syncHistoryId },
+        data: {
+          fileVersion: parsed.version ?? undefined,
+          sourceExportedAt: parsed.exportedAt ? new Date(parsed.exportedAt) : undefined,
+        },
+      }).catch(() => undefined)
+    }
+
     const result = await importRegistrationResultsFromJson(classRegisterSessionId, parsed)
+
+    const total =
+      (result.details?.classRegisterLogs ?? 0) +
+      (result.details?.studentSubjectScore ?? 0) +
+      (result.failed ?? 0)
+
+    if (syncHistoryId) {
+      await markDataSyncHistorySuccess(syncHistoryId, {
+        classRegisterSessionId,
+        fileName: file?.name,
+        recordCounts: {
+          total,
+          success: result.imported,
+          failed: result.failed,
+          details: result.details,
+          warningsCount: result.warnings?.length,
+        },
+        description: result.message,
+      }).catch((err) => console.error("[import-training-data] Lỗi mark SUCCESS:", err))
+    }
+
     return c.json(
       {
         message: result.message,
@@ -188,8 +268,20 @@ app.openapi(confirmRoute, async (c) => {
       200
     )
   } catch (error) {
-    const message = "Không nhập được dữ liệu"
-    return c.json({ message }, 400)
+    const errorMsg = error instanceof Error ? error.message : "Không nhập được dữ liệu"
+    if (syncHistoryId) {
+      await markDataSyncHistoryFailed(syncHistoryId, errorMsg).catch(() => undefined)
+    } else {
+      await createDataSyncHistoryFailedDirect({
+        type: $Enums.DataSyncType.IMPORT,
+        sessionName,
+        classRegisterSessionId,
+        fileName: file?.name,
+        errorMessage: errorMsg,
+        performedById: user?.id,
+      }).catch(() => undefined)
+    }
+    return c.json({ message: errorMsg }, 400)
   }
 })
 

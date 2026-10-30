@@ -72,6 +72,8 @@ export async function markDataSyncHistorySuccess(
     where: { id },
     data: {
       status: $Enums.DataSyncStatus.SUCCESS,
+      // Một job có thể được chạy lại sau lỗi tạm thời; kết quả thành công không được giữ lỗi cũ.
+      errorMessage: null,
       ...(classRegisterSessionId ? { classRegisterSessionId } : {}),
       ...(extra?.description != null ? { description: extra.description } : {}),
     },
@@ -134,9 +136,7 @@ export async function findOtherPendingImport(
       status: $Enums.DataSyncStatus.PENDING,
       deletedAt: null,
       ...(excludeId ? { id: { not: excludeId } } : {}),
-      ...(classRegisterSessionId
-        ? { classRegisterSessionId }
-        : {}),
+      ...(classRegisterSessionId ? { classRegisterSessionId } : {}),
     },
     select: {
       id: true,

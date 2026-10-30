@@ -4,7 +4,7 @@ import { join } from "node:path"
 import { glob } from "glob"
 
 const routerPath = {}
-const ignorePages = ["_app", "_document", "404", "_"]
+const ignorePages = ["_app", "_document", "404", "403", "_"]
 const convertRouterPathToPermission = (subSystem, routerPath) => {
   // Nếu là path trực tiếp, tạo permission name từ path
   if (routerPath.startsWith("/")) {

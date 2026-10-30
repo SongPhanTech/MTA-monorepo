@@ -1,4 +1,4 @@
-import { EyeOutlined, UploadOutlined } from "@ant-design/icons"
+import { EyeOutlined, HistoryOutlined, UploadOutlined } from "@ant-design/icons"
 import Table from "@components/commons/table"
 import { ExportInternetDownloadButton } from "@components/ui/export-internet-download-button"
 import {
@@ -557,6 +557,20 @@ export default function ClassRegisterSession() {
                         />
                       </Tooltip>
                     )}
+                    <Tooltip title="Lịch sử đồng bộ Import/Export" placement="top">
+                      <HistoryOutlined
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          router.push(
+                            `${ROUTER_PATH.QL_DAO_TAO.DANG_KY_HOC_DOT_DANG_KY_HOC_ONLINE_ID.replace(
+                              "[id]",
+                              record.id
+                            )}?tab=lich-su-dong-bo`
+                          )
+                        }}
+                        className="text-sm cursor-pointer text-indigo-600 hover:text-indigo-800"
+                      />
+                    </Tooltip>
                     {can(
                       QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANG_KY_HOC_DOT_DANG_KY_HOC_ONLINE,
                       "SUA"

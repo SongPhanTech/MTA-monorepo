@@ -6,6 +6,8 @@ import { FIXED_CLASS_STUDENT_STATUS } from "@constants/constants"
 import { useAcademicRankingBaseTypeOptions } from "@hooks/academicRankingBaseType"
 import { useStudentTrainingTypeOptions } from "@hooks/studentTrainingType"
 import DefaultLayout from "@layouts/default-layout"
+import { PagePermissionGate } from "@components/commons/page-permission-gate"
+import { CONG_HOC_VIEN_PERMISSION } from "@workspace/router"
 import { useSession } from "@workspace/auth/react"
 import { useFindUniqueStudent, useFindUniqueUserProfile } from "@workspace/db/hooks"
 
@@ -1589,7 +1591,13 @@ const HoSoCaNhan = () => {
 }
 
 HoSoCaNhan.getLayout = function getLayout(page: React.ReactElement) {
-  return <DefaultLayout breadcrumbList={[{ title: "Hồ sơ cá nhân" }]}>{page}</DefaultLayout>
+  return (
+    <DefaultLayout breadcrumbList={[{ title: "Hồ sơ cá nhân" }]}>
+      <PagePermissionGate permission={CONG_HOC_VIEN_PERMISSION.CONG_HOC_VIEN_HO_SO_CA_NHAN}>
+        {page}
+      </PagePermissionGate>
+    </DefaultLayout>
+  )
 }
 
 export default HoSoCaNhan

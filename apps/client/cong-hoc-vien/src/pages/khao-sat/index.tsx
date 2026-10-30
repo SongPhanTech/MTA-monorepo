@@ -2,6 +2,8 @@ import DanhSachKhaoSat from "@components/khao-sat/danh-sach-khao-sat"
 import StatCardsKhaoSat from "@components/khao-sat/stat-cards-khao-sat"
 import { type TrangThaiKhaoSat, useKhaoSatGiangVien } from "@hooks/use-khao-sat-giang-vien"
 import DefaultLayout from "@layouts/default-layout"
+import { PagePermissionGate } from "@components/commons/page-permission-gate"
+import { CONG_HOC_VIEN_PERMISSION } from "@workspace/router"
 import { useFindFirstSemester } from "@workspace/db/hooks"
 import { TreeSelectFloat } from "@workspace/ui"
 import { Button, Input, Select } from "antd"
@@ -130,5 +132,11 @@ export default function KhaoSatHocVien() {
 }
 
 KhaoSatHocVien.getLayout = function getLayout(page: React.ReactElement) {
-  return <DefaultLayout breadcrumbList={[{ title: "Khảo sát" }]}>{page}</DefaultLayout>
+  return (
+    <DefaultLayout breadcrumbList={[{ title: "Khảo sát" }]}>
+      <PagePermissionGate permission={CONG_HOC_VIEN_PERMISSION.CONG_HOC_VIEN_KHAO_SAT}>
+        {page}
+      </PagePermissionGate>
+    </DefaultLayout>
+  )
 }

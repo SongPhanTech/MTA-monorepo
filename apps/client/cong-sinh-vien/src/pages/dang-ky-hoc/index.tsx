@@ -1,5 +1,7 @@
 import Loading from "@components/commons/loading"
 import DefaultLayout from "@layouts/default-layout"
+import { PagePermissionGate } from "@components/commons/page-permission-gate"
+import { CONG_SINH_VIEN_PERMISSION } from "@workspace/router"
 import { useGetClassRegisterSession } from "@workspace/libs/api/portal"
 import { Tabs } from "antd"
 import dayjs from "dayjs"
@@ -91,6 +93,7 @@ export default function DangKyHocPage() {
             key: session?.id,
             children: (
               <DanhSachMonDangKy
+                key={session?.id}
                 sessionId={session?.id}
                 curriculumVersions={(session?.curriculumVersions ?? [])
                   .filter((cv): cv is NonNullable<typeof cv> => Boolean(cv?.id))
@@ -112,5 +115,11 @@ export default function DangKyHocPage() {
 }
 
 DangKyHocPage.getLayout = function getLayout(page: React.ReactElement) {
-  return <DefaultLayout breadcrumbList={[{ title: "Đăng ký học" }]}>{page}</DefaultLayout>
+  return (
+    <DefaultLayout breadcrumbList={[{ title: "Đăng ký học" }]}>
+      <PagePermissionGate permission={CONG_SINH_VIEN_PERMISSION.CONG_SINH_VIEN_DANG_KY_HOC}>
+        {page}
+      </PagePermissionGate>
+    </DefaultLayout>
+  )
 }
