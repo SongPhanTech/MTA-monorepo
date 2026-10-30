@@ -5,6 +5,8 @@ import TableCollapse from "@components/commons/tableCollapse"
 import type { FilterProps } from "@constants/type"
 import { useScoreConverter } from "@hooks/scoreConverter"
 import DefaultLayout from "@layouts/default-layout"
+import { PagePermissionGate } from "@components/commons/page-permission-gate"
+import { CONG_HOC_VIEN_PERMISSION } from "@workspace/router"
 import { useSession } from "@workspace/auth/react"
 import {
   $Enums,
@@ -996,5 +998,11 @@ export default function StudentScoreClassPage() {
 }
 
 StudentScoreClassPage.getLayout = function getLayout(page: React.ReactElement) {
-  return <DefaultLayout breadcrumbList={[{ title: "Kết quả học tập" }]}>{page}</DefaultLayout>
+  return (
+    <DefaultLayout breadcrumbList={[{ title: "Kết quả học tập" }]}>
+      <PagePermissionGate permission={CONG_HOC_VIEN_PERMISSION.CONG_HOC_VIEN_KET_QUA_HOC_TAP}>
+        {page}
+      </PagePermissionGate>
+    </DefaultLayout>
+  )
 }

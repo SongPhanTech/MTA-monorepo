@@ -2,6 +2,8 @@ import TableCollapse from "@components/commons/tableCollapse"
 import type { FilterProps } from "@constants/type"
 import { useExamTypeOptions } from "@hooks/examType"
 import DefaultLayout from "@layouts/default-layout"
+import { PagePermissionGate } from "@components/commons/page-permission-gate"
+import { CONG_SINH_VIEN_PERMISSION } from "@workspace/router"
 import { buildOrgTree } from "@lib/utils"
 import { useSession } from "@workspace/auth/react"
 import { emptyObjectIf } from "@workspace/constant"
@@ -834,5 +836,11 @@ export default function TrainingProgramSubjects() {
   )
 }
 TrainingProgramSubjects.getLayout = function getLayout(page: React.ReactElement) {
-  return <DefaultLayout breadcrumbList={[{ title: "Chương trình đào tạo" }]}>{page}</DefaultLayout>
+  return (
+    <DefaultLayout breadcrumbList={[{ title: "Chương trình đào tạo" }]}>
+      <PagePermissionGate permission={CONG_SINH_VIEN_PERMISSION.CONG_SINH_VIEN_CHUONG_TRINH_DAO_TAO}>
+        {page}
+      </PagePermissionGate>
+    </DefaultLayout>
+  )
 }
