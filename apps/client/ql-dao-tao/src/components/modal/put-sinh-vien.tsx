@@ -8,6 +8,7 @@ import {
   useFindManyTrainingCourse,
   useFindManyUserProfile,
   useFindUniqueStudent,
+  useFindUniqueTrainingObjectType,
   useFindUniqueUserProfile,
   useUpdateUserProfile,
   useUpdateStudent,
@@ -21,6 +22,7 @@ import FormItem from "@components/commons/form-item"
 import Select from "@components/commons/select"
 import { STUDENT_STATUS_OPTIONS } from "@constants/constants"
 import { syncStudentDonViFromFixedClass } from "@lib/sync-student-don-vi"
+import { studentLsbRoles } from "@workspace/libs/utils"
 import { ROUTER_PATH } from "@workspace/router"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
 import { useCallback, useEffect, useMemo } from "react"
@@ -47,7 +49,9 @@ const PutStudentModal = () => {
   const { data: fixedClassData = [] } = useFindManyFixedClass({
     where: { trainingCourse: { trainingObjectTypeId } },
     include: {
-      trainingCourse: true,
+      trainingCourse: {
+        include: { trainingObjectType: { select: { type: true } } },
+      },
       curriculumVersion: true,
     },
   })
@@ -83,6 +87,11 @@ const PutStudentModal = () => {
     },
     orderBy: { name: "asc" },
   })
+
+  const { data: currentTrainingObjectType } = useFindUniqueTrainingObjectType(
+    { where: { id: trainingObjectTypeId ?? "" }, select: { type: true } },
+    { enabled: !!trainingObjectTypeId }
+  )
 
   const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
     where: { active: true, trainingObjectTypeId },
@@ -206,6 +215,13 @@ const PutStudentModal = () => {
     try {
       showSpinner()
 
+      const selectedClass = fixedClassData.find((cls) => cls.id === output.fixedClassId)
+      const studentRoles = studentLsbRoles(
+        selectedClass?.trainingCourse?.trainingObjectType?.type ??
+          studentData?.fixedClass?.trainingCourse?.trainingObjectType?.type ??
+          currentTrainingObjectType?.type
+      )
+
       if (id) {
         await updateUserProfile({
           data: {
@@ -213,6 +229,7 @@ const PutStudentModal = () => {
             lastName: output.lastName,
             dateOfBirth: output.dateOfBirth,
             code: output.code || undefined,
+            ...studentRoles,
           },
           where: {
             // The userProfileId is taken from the cccdUserProfileData
@@ -259,12 +276,13 @@ const PutStudentModal = () => {
             note: output.note,
           },
         })
-        if (output.code) {
-          await updateUserProfile({
-            where: { id: cccdUserProfileData.id },
-            data: { code: output.code },
-          })
-        }
+        await updateUserProfile({
+          where: { id: cccdUserProfileData.id },
+          data: {
+            ...(output.code ? { code: output.code } : {}),
+            ...studentRoles,
+          },
+        })
         if (output.fixedClassId && created?.id) {
           await syncStudentDonViFromFixedClass({ studentIds: [created.id] })
         }

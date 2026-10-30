@@ -4,7 +4,11 @@ import {
   exportStudentSemesterResultV2,
   exportStudentSemesterResultV3,
 } from "../services/student-result"
-import { exportBangDiemCaNhan, exportBangDiemQuaTrinh } from "../services/export-bang-diem-ca-nhan"
+import {
+  exportBangDiemCaNhan,
+  exportBangDiemQuaTrinh,
+  getBangDiemDuKhoaData,
+} from "../services/export-bang-diem-ca-nhan"
 import {
   exportBangDiemCaNhanP2,
   exportBangDiemCaNhanP7,
@@ -279,6 +283,14 @@ Khi truyền plannedSemesters (ví dụ [1, 2] đối tượng dự khoá), xu�
                     "Chỉ lấy môn có học kỳ dự kiến thuộc danh sách. Ví dụ [1, 2] cho bảng điểm đối tượng dự khoá."
                   )
                 ),
+              signatureDate: z.string().optional().openapi(fieldDesc("Ngày ký")),
+              signerTitle1: z.string().optional().openapi(fieldDesc("Chức danh người ký dòng 1")),
+              signerTitle2: z.string().optional().openapi(fieldDesc("Chức danh người ký dòng 2")),
+              signerName: z.string().optional().openapi(fieldDesc("Tên người ký")),
+              headerLeftLine1: z.string().optional().openapi(fieldDesc("Đơn vị dòng 1")),
+              headerLeftLine2: z.string().optional().openapi(fieldDesc("Đơn vị dòng 2")),
+              headerRightLine1: z.string().optional().openapi(fieldDesc("Quốc hiệu")),
+              headerRightLine2: z.string().optional().openapi(fieldDesc("Tiêu ngữ")),
             })
             .openapi("ExportBangDiemCaNhanRequest"),
         },
@@ -299,17 +311,80 @@ Khi truyền plannedSemesters (ví dụ [1, 2] đối tượng dự khoá), xu�
 })
 
 app.openapi(exportBangDiemCaNhanRoute, async (c) => {
-  const { studentIds, plannedSemesters } = c.req.valid("json")
+  const {
+    studentIds,
+    plannedSemesters,
+    signatureDate,
+    signerTitle1,
+    signerTitle2,
+    signerName,
+    headerLeftLine1,
+    headerLeftLine2,
+    headerRightLine1,
+    headerRightLine2,
+  } = c.req.valid("json")
 
-  const result = await exportBangDiemCaNhan({ studentIds, plannedSemesters })
+  const result = await exportBangDiemCaNhan({
+    studentIds,
+    plannedSemesters,
+    signatureDate,
+    signerTitle1,
+    signerTitle2,
+    signerName,
+    headerLeftLine1,
+    headerLeftLine2,
+    headerRightLine1,
+    headerRightLine2,
+  })
 
-  const fileName = "BDCN.xlsx"
+  const fileName = plannedSemesters?.length ? "BDCN-DuKhoa.xlsx" : "BDCN.xlsx"
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
   return c.body(excelBody(result), 200, {
     "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "Content-Disposition": disposition,
   })
+})
+
+const dataBangDiemDuKhoaRoute = createRoute({
+  operationId: "dataBangDiemDuKhoa",
+  tags: ["Kết quả học tập"],
+  path: "/data-bang-diem-du-khoa",
+  method: "post",
+  summary: "Lấy dữ liệu bảng điểm cá nhân đối tượng dự khoá",
+  description: "Lấy dữ liệu 7 môn thuộc kỳ dự khoá 1 và 2 để phục vụ in bảng điểm HTML.",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: z
+            .object({
+              studentIds: z.array(z.string()).min(1).openapi(fieldDesc("Danh sách ID học viên")),
+            })
+            .openapi("DataBangDiemDuKhoaRequest"),
+        },
+      },
+    },
+  },
+  responses: {
+    ...standardErrorResponses(),
+    200: {
+      description: "Dữ liệu bảng điểm dự khoá",
+      content: {
+        "application/json": {
+          schema: z.object({
+            data: z.array(z.any()),
+          }),
+        },
+      },
+    },
+  },
+})
+
+app.openapi(dataBangDiemDuKhoaRoute, async (c) => {
+  const { studentIds } = c.req.valid("json")
+  const data = await getBangDiemDuKhoaData({ studentIds })
+  return c.json({ data }, 200)
 })
 
 const exportBangDiemQuaTrinhRoute = createRoute({

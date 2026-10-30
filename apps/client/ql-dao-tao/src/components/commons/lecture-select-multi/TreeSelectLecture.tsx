@@ -3,7 +3,7 @@ import { formatLecturerName } from "@workspace/libs"
 import { message, TreeSelect as TreeSelectAnt, type TreeSelectProps, Switch, Divider } from "antd"
 import { UserIcon } from "lucide-react"
 import type React from "react"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { memo, useEffect, useMemo, useRef, useState } from "react"
 import type { TreeNodeType } from "@/utils/convertOrganizationToTree"
 import { whereOrganization } from "@workspace/libs/constants"
 
@@ -67,7 +67,7 @@ type LectureTreeSelectProps = {
   ignoreLectureIds?: string[]
 } & TreeSelectProps
 
-const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
+const LectureTreeSelect: React.FC<LectureTreeSelectProps> = memo(function LectureTreeSelect({
   placeholder = "Chọn giảng viên",
   style = { width: "100%" },
   dropdownStyle = { maxHeight: 400, overflow: "auto", width: 600 },
@@ -78,11 +78,12 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
   defaultOpen,
   open,
   ...rest
-}) => {
+}) {
   const [isSelectAllOrgs, setIsSelectAllOrgs] = useState(false)
   const lastAutoAdjustedValue = useRef<string | undefined>(undefined)
   const [expandedKeys, setExpandedKeys] = useState<string[]>([])
   const [dropdownOpen, setDropdownOpen] = useState(!!open || !!defaultOpen)
+  const [hasOpened, setHasOpened] = useState(!!open || !!defaultOpen)
 
   const {
     data: organizations = [],
@@ -93,7 +94,7 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
       where: whereOrganization,
       orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
     },
-    { refetchOnWindowFocus: false }
+    { enabled: hasOpened, refetchOnWindowFocus: false, staleTime: 60_000 }
   )
 
   const {
@@ -121,7 +122,7 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
         active: true,
       },
     },
-    { refetchOnWindowFocus: false }
+    { enabled: hasOpened, refetchOnWindowFocus: false, staleTime: 60_000 }
   )
 
   const ignoreOrgKey = ignoreOrgIds?.join("\0") ?? ""
@@ -255,11 +256,12 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
       defaultOpen={defaultOpen}
       open={open}
       onDropdownVisibleChange={(visible) => {
+        if (visible) setHasOpened(true)
         setDropdownOpen(visible)
         onDropdownVisibleChange?.(visible)
       }}
     />
   )
-}
+})
 
 export default LectureTreeSelect

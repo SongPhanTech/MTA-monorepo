@@ -111,6 +111,17 @@ function shouldShowSpecialization(nganh: string, chuyenNganh: string) {
   return specialization !== normalizeDisplayName(nganh)
 }
 
+/** "Ngành A (chuyên ngành B)" khi hai tên khác nhau; trùng thì chỉ "Ngành A". */
+function formatMajorLine(nganh: string, chuyenNganh: string) {
+  const field = nganh.trim()
+  const specialization = chuyenNganh.trim()
+  if (field && specialization && shouldShowSpecialization(field, specialization)) {
+    return `Ngành ${field} (chuyên ngành ${specialization})`
+  }
+  const label = field || specialization
+  return label ? `Ngành ${label}` : ""
+}
+
 function studentCourse(student: StudentRow) {
   return (student.fixedClass as any)?.trainingCourse ?? {}
 }
@@ -338,7 +349,7 @@ async function buildPhuLucDsLuanVan(rows: StudentRow[]) {
       height: 24,
       cells: [
         {
-          value: `${index + 1}. Ngành ${group.majorName} (chuyên ngành ${group.specializationName}): ${group.thesisProject.length} học viên`,
+          value: `${index + 1}. ${formatMajorLine(group.majorName, group.specializationName)}: ${group.thesisProject.length} học viên`,
           border: true,
           align: "center",
           colSpan: 6,
@@ -1319,17 +1330,6 @@ function appendixSupervisorLine(expert: any, orgById: Map<string, OrgUnitNode>) 
   return unit ? `${name}, ${unit}` : name
 }
 
-/** Câu trong từng hội đồng: Ngành ... (chuyên ngành ...) khi hai tên khác nhau. */
-function formatCouncilMajorLine(nganh: string, chuyenNganh: string) {
-  const field = nganh.trim()
-  const specialization = chuyenNganh.trim()
-  if (field && specialization && shouldShowSpecialization(field, specialization)) {
-    return `Ngành ${field} (chuyên ngành ${specialization})`
-  }
-  const label = field || specialization
-  return label ? `Ngành ${label}` : ""
-}
-
 /** Bỏ đoạn trống sau mỗi hội đồng và khoảng cách trên tiêu đề ngành. */
 function patchPhuLucQdHdTemplate(xml: string) {
   if (!xml.includes("{#items}") || xml.includes("{#groups}")) return xml
@@ -1377,7 +1377,7 @@ async function buildPhuLucQdHd(rows: StudentRow[]) {
     group.items.push({
       sttHoiDong: String(group.items.length + 1),
       loaiLuanVan: row.loaiLuanVan || "luận văn",
-      nganh: formatCouncilMajorLine(group.label, row.chuyennganh),
+      nganh: formatMajorLine(group.label, row.chuyennganh),
       tenDeTai: String(row.deTai || "")
         .trim()
         .replace(/\s+/g, " "),

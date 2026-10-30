@@ -118,6 +118,7 @@ export default function ThongTinCaNhanTab({
         lastName: userData.lastName,
         userProfileId: userData.id,
         organizationId: userData.sDM_DonViId,
+        TKPUcode: userData.lecturer?.TKPUcode,
       })
     },
     [form, type]
@@ -147,22 +148,29 @@ export default function ThongTinCaNhanTab({
             </FormItem>
           </Col>
           {type === "LECTURER" && (
-            <Col sm={12} lg={12}>
-              <FormItem
-                form={form}
-                name="code"
-                label="Mã định danh"
-                rules={[
-                  {
-                    required: true,
-                    message: "Vui lòng nhập Mã định danh",
-                  },
-                ]}
-                className="mb-0"
-              >
-                <Input placeholder="Nhập Mã định danh" />
-              </FormItem>
-            </Col>
+            <>
+              <Col sm={12} lg={12}>
+                <FormItem
+                  form={form}
+                  name="code"
+                  label="Mã định danh"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Vui lòng nhập Mã định danh",
+                    },
+                  ]}
+                  className="mb-0"
+                >
+                  <Input placeholder="Nhập Mã định danh" />
+                </FormItem>
+              </Col>
+              <Col sm={12} lg={12}>
+                <FormItem form={form} name="TKPUcode" label="Mã TKPU" className="mb-0">
+                  <Input placeholder="Nhập mã TKPU" />
+                </FormItem>
+              </Col>
+            </>
           )}
 
           {type === "STAFF" && (

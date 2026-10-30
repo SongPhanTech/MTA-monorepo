@@ -324,26 +324,19 @@ export type PlvbAppendixSubject = {
   useForFinalScore?: boolean | null
 }
 
-/**
- * Tổng tín chỉ phụ lục cộng học phần thỏa một trong hai điều kiện:
- * bắt buộc, hoặc `useForFinalScore = true` (kể cả tự chọn).
- * Chỉ bỏ học phần vừa không bắt buộc vừa không tính vào điểm tổng kết.
- */
-export function countsTowardPlvbTotalCredits(subject: {
-  requirementType?: string | null
-  useForFinalScore?: boolean | null
-}): boolean {
-  return subject.requirementType === "Mandatory" || subject.useForFinalScore === true
+export type PlvbGraduationSummary = {
+  gpaBase10: number
+  gpaBase4: number
+  totalPassCredit: number
 }
 
+/** GPA phụ lục cộng mọi học phần trong danh sách khi chưa có bảng điểm xét tốt nghiệp. */
 export function summarizePlvbCredits(
   semesters: Array<{
     subjects?: Array<{
       soTinChi?: number | string | null
       thangDiem10?: string | number | null
       thangDiem4?: string | number | null
-      requirementType?: string | null
-      useForFinalScore?: boolean | null
     }> | null
   }>
 ) {
@@ -352,7 +345,6 @@ export function summarizePlvbCredits(
   let weighted4 = 0
   for (const semester of semesters) {
     for (const subject of semester.subjects ?? []) {
-      if (!countsTowardPlvbTotalCredits(subject)) continue
       const credits = Number(subject.soTinChi ?? 0)
       if (!Number.isFinite(credits)) continue
       totalCredits += credits
@@ -361,6 +353,27 @@ export function summarizePlvbCredits(
     }
   }
   return { totalCredits, weighted10, weighted4 }
+}
+
+/** Tổng tín chỉ và GPA phụ lục lấy đúng số của xét tốt nghiệp. */
+export function resolvePlvbGraduationTotals(input: {
+  graduationSummary?: PlvbGraduationSummary | null
+  semesters: Parameters<typeof summarizePlvbCredits>[0]
+}) {
+  const summary = input.graduationSummary
+  if (summary) {
+    return {
+      tongTinChi: summary.totalPassCredit,
+      diemTBHe10: summary.gpaBase10,
+      diemTBHe4: summary.gpaBase4,
+    }
+  }
+  const { totalCredits, weighted10, weighted4 } = summarizePlvbCredits(input.semesters)
+  return {
+    tongTinChi: totalCredits,
+    diemTBHe10: totalCredits === 0 ? 0 : Number((weighted10 / totalCredits).toFixed(2)),
+    diemTBHe4: totalCredits === 0 ? 0 : Number((weighted4 / totalCredits).toFixed(2)),
+  }
 }
 
 /** Gắn "* " trước tên học phần điều kiện khi in PLVB. */

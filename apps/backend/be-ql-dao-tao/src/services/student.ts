@@ -1,4 +1,4 @@
-import { TrainingObjectTypes } from "@workspace/db"
+import { Prisma, TrainingObjectTypes } from "@workspace/db"
 import PizZip from "pizzip"
 import { getTemplateBuffer } from "@workspace/libs/server"
 import { formatDateVn, nowVn } from "@workspace/libs/timezone"
@@ -15,128 +15,256 @@ import {
 } from "./student-result.service"
 import { renderXlsxTemplate, loadTemplateBuffer } from "./render-xlsx-template"
 
-export async function exportStudentProfile({ trainingCourseId }: { trainingCourseId: string }) {
-  const trainingCourse = await prisma.trainingCourse.findUniqueOrThrow({
-    where: { id: trainingCourseId },
+const TRAINING_OBJECT_TYPE_LABEL = {
+  [TrainingObjectTypes.MILITARY]: "Quân sự",
+  [TrainingObjectTypes.CIVILIAN]: "Dân sự",
+  [TrainingObjectTypes.INTERNATIONAL_MILITARY]: "Quốc tế",
+} as const
+
+const curriculumVersionExportSelect = {
+  name: true,
+  curriculum: {
     select: {
-      name: true,
-      trainingObjectType: {
-        select: { name: true, type: true },
-      },
-    },
-  })
-
-  const students = await prisma.student.findMany({
-    where: { fixedClass: { trainingCourseId } },
-    select: {
-      registerNumber: true,
-      doctoralCode: true,
-      admissionCombination: true,
-      entryScore: true,
-      competencyScore: true,
-      description: true,
-      department: true,
-      careerYear: true,
-      universitySchool: true,
-      universityGraduationYear: true,
-      universityMajor: true,
-      universityRank: true,
-      universityTrainingType: true,
-      basic: true,
-      departmentAddress: true,
-      priorityReason: true,
-      foreignLanguage: true,
-
-      facility: true,
-      userProfile: {
-        select: {
-          code: true,
-          fullname: true,
-          dateOfBirth: true,
-          idCardNumber: true,
-          phoneNumber: true,
-          placeOfBirth: true,
-          gender: { select: { sTen: true } },
-          ethnicity: { select: { sTen: true } },
-          newProvinceOfBirth: {
-            select: {
-              sTen: true,
-            },
-          },
-          provinceOfBirth: { select: { sTen: true } },
-          nationality: { select: { sTen: true } },
-          officerNumber: true,
-          rank: { select: { sTen: true } },
-          chucVuChinhQuyen: { select: { sTen: true } },
-        },
-      },
-      fixedClass: {
-        select: {
-          code: true,
-          name: true,
-          curriculumVersion: {
-            select: {
-              name: true,
-
-              curriculum: {
-                select: {
-                  trainingMajor: {
-                    include: {
-                      trainingField: true,
-                    },
-                  },
-                  managementOrganization: {
-                    select: {
-                      sTen: true,
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-      curriculumVersion: {
+      trainingMajor: {
         select: {
           name: true,
-          curriculum: {
-            select: {
-              trainingMajor: {
-                include: {
-                  trainingField: true,
-                },
-              },
-              managementOrganization: {
-                select: {
-                  sTen: true,
-                },
-              },
-            },
-          },
+          trainingField: { select: { name: true } },
         },
       },
-      studentSemesterResult: {
-        select: {
-          cumulativeGpaBase10: true,
-          cumulativeGpaBase4: true,
-        },
-        take: 1,
-        orderBy: { semester: { startDate: "desc" } },
-      },
+      managementOrganization: { select: { sTen: true } },
     },
-    orderBy: { userProfile: { code: "asc" } },
-  })
+  },
+} as const
 
-  const TrainingObjectType = {
-    [TrainingObjectTypes.MILITARY]: "Quân sự",
-    [TrainingObjectTypes.CIVILIAN]: "Dân sự",
-    [TrainingObjectTypes.INTERNATIONAL_MILITARY]: "Quốc tế",
+type StudentExportRow = {
+  no: number
+  registerNumber: string | null
+  doctoralCode: string | null
+  code: string | null
+  fullname: string | null
+  dateOfBirth: string
+  gender: string
+  ethnicity: string
+  nationality: string
+  provinceHometown: string
+  idCardNumber: string | null
+  phoneNumber: string | null
+  admissionCombination: string | null
+  entryScore: number | null
+  competencyScore: number | null
+  fixedClassCode: string
+  fixedClassName: string
+  trainingField: string
+  trainingMajor: string
+  curriculum: string
+  curriculumOrg: string
+  trainingObjectType: string
+  officerNumber: string | null
+  rank: string
+  chucvu: string
+  provinceOfBirth: string
+  department: string | null
+  departmentAddress: string | null
+  priorityReason: string | null
+  foreignLanguage: string | null
+  careerYear: number | null
+  universitySchool: string | null
+  universityGraduationYear: number | null
+  universityMajor: string | null
+  universityRank: string | null
+  universityTrainingType: string | null
+  basic: number | null
+  facility: number | null
+  description: string | null
+  gpaBase10: number | undefined
+  gpaBase4: number | undefined
+}
+
+function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) => {
+      timer = setTimeout(() => reject(new Error(`${label} timeout after ${ms}ms`)), ms)
+    }),
+  ]).finally(() => {
+    if (timer) clearTimeout(timer)
+  })
+}
+
+function toExportNumber(value: unknown): number | undefined {
+  if (value == null) return undefined
+  if (typeof value === "number") return Number.isFinite(value) ? value : undefined
+  if (typeof value === "object" && value && "toNumber" in value) {
+    try {
+      const n = (value as { toNumber: () => number }).toNumber()
+      return Number.isFinite(n) ? n : undefined
+    } catch {
+      return undefined
+    }
   }
+  const n = Number(value)
+  return Number.isFinite(n) ? n : undefined
+}
 
-  const data = students.map((student, idx) => {
+async function loadLatestGpaByStudentIds(studentIds: string[]) {
+  const gpaByStudentId = new Map<string, { gpa10?: number; gpa4?: number }>()
+  if (studentIds.length === 0) return gpaByStudentId
+
+  const rows = await prisma.$queryRaw<
+    Array<{ studentId: string; gpa10: unknown; gpa4: unknown }>
+  >`
+    SELECT DISTINCT ON (ssr."studentId")
+      ssr."studentId",
+      ssr."cumulativeGpaBase10" AS "gpa10",
+      ssr."cumulativeGpaBase4" AS "gpa4"
+    FROM "ql-dao-tao"."StudentSemesterResult" ssr
+    INNER JOIN "ql-dao-tao"."Semester" sem ON sem."id" = ssr."semesterId"
+    WHERE ssr."deletedAt" IS NULL
+      AND ssr."studentId" IN (${Prisma.join(studentIds)})
+    ORDER BY ssr."studentId", sem."startDate" DESC NULLS LAST
+  `
+
+  for (const row of rows) {
+    gpaByStudentId.set(row.studentId, {
+      gpa10: toExportNumber(row.gpa10),
+      gpa4: toExportNumber(row.gpa4),
+    })
+  }
+  return gpaByStudentId
+}
+
+async function buildStudentProfileExcelFallback(
+  data: StudentExportRow[],
+  meta: { trainingCourse: string; trainingObjectType: string }
+) {
+  const workbook = new ExcelJS.Workbook()
+  const sheet = workbook.addWorksheet("DanhSachSV")
+  sheet.columns = [
+    { header: "STT", key: "no", width: 8 },
+    { header: "Mã SV", key: "code", width: 14 },
+    { header: "Họ và tên", key: "fullname", width: 28 },
+    { header: "Ngày sinh", key: "dateOfBirth", width: 14 },
+    { header: "Giới tính", key: "gender", width: 10 },
+    { header: "CCCD", key: "idCardNumber", width: 16 },
+    { header: "Lớp", key: "fixedClassCode", width: 14 },
+    { header: "Tên lớp", key: "fixedClassName", width: 22 },
+    { header: "Ngành", key: "trainingField", width: 22 },
+    { header: "Chuyên ngành", key: "trainingMajor", width: 24 },
+    { header: "CTĐT", key: "curriculum", width: 28 },
+    { header: "Khóa", key: "trainingCourse", width: 18 },
+    { header: "ĐTĐT", key: "trainingObjectType", width: 14 },
+    { header: "Cấp bậc", key: "rank", width: 14 },
+    { header: "ĐTBTL hệ 10", key: "gpaBase10", width: 12 },
+    { header: "ĐTBTL hệ 4", key: "gpaBase4", width: 12 },
+    { header: "SĐT", key: "phoneNumber", width: 14 },
+    { header: "Ghi chú", key: "description", width: 24 },
+  ]
+  sheet.insertRow(1, [`Khóa: ${meta.trainingCourse} — ${meta.trainingObjectType}`])
+  sheet.mergeCells(1, 1, 1, 8)
+  sheet.getRow(1).font = { bold: true }
+  sheet.getRow(2).font = { bold: true }
+  sheet.addRows(data.map((row) => ({ ...row, trainingCourse: meta.trainingCourse })))
+  return workbook.xlsx.writeBuffer()
+}
+
+export async function exportStudentProfile({
+  trainingCourseId,
+  fixedClassId,
+  fixedClassIds,
+}: {
+  trainingCourseId: string
+  fixedClassId?: string
+  fixedClassIds?: string[]
+}) {
+  const startedAt = Date.now()
+  const classIds = [...new Set([...(fixedClassId ? [fixedClassId] : []), ...(fixedClassIds ?? [])])]
+
+  const [trainingCourse, students, templateBuffer] = await Promise.all([
+    prisma.trainingCourse.findUniqueOrThrow({
+      where: { id: trainingCourseId },
+      select: {
+        name: true,
+        trainingObjectType: {
+          select: { name: true, type: true },
+        },
+      },
+    }),
+    prisma.student.findMany({
+      where: {
+        deletedAt: null,
+        ...(classIds.length
+          ? {
+              fixedClassId: { in: classIds },
+              fixedClass: { trainingCourseId, deletedAt: null },
+            }
+          : { fixedClass: { trainingCourseId, deletedAt: null } }),
+      },
+      select: {
+        id: true,
+        registerNumber: true,
+        doctoralCode: true,
+        admissionCombination: true,
+        entryScore: true,
+        competencyScore: true,
+        description: true,
+        department: true,
+        careerYear: true,
+        universitySchool: true,
+        universityGraduationYear: true,
+        universityMajor: true,
+        universityRank: true,
+        universityTrainingType: true,
+        basic: true,
+        departmentAddress: true,
+        priorityReason: true,
+        foreignLanguage: true,
+        facility: true,
+        userProfile: {
+          select: {
+            code: true,
+            fullname: true,
+            dateOfBirth: true,
+            idCardNumber: true,
+            phoneNumber: true,
+            placeOfBirth: true,
+            gender: { select: { sTen: true } },
+            ethnicity: { select: { sTen: true } },
+            newProvinceOfBirth: { select: { sTen: true } },
+            provinceOfBirth: { select: { sTen: true } },
+            nationality: { select: { sTen: true } },
+            officerNumber: true,
+            rank: { select: { sTen: true } },
+            chucVuChinhQuyen: { select: { sTen: true } },
+          },
+        },
+        fixedClass: {
+          select: {
+            code: true,
+            name: true,
+            curriculumVersion: { select: curriculumVersionExportSelect },
+          },
+        },
+        curriculumVersion: { select: curriculumVersionExportSelect },
+      },
+      orderBy: { userProfile: { code: "asc" } },
+    }),
+    withTimeout(
+      getTemplateBuffer(prisma, "DANH_SACH_SV"),
+      8_000,
+      "getTemplateBuffer(DANH_SACH_SV)"
+    ).catch((error) => {
+      console.error("[exportStudentProfile] Không tải được mẫu DANH_SACH_SV, dùng Excel fallback", error)
+      return null
+    }),
+  ])
+
+  const gpaByStudentId = await loadLatestGpaByStudentIds(students.map((student) => student.id))
+
+  const data: StudentExportRow[] = students.map((student, idx) => {
     const curriculumVersion = student.curriculumVersion || student.fixedClass?.curriculumVersion
-
     const dateOfBirth = student.userProfile.dateOfBirth
+    const gpa = gpaByStudentId.get(student.id)
 
     return {
       no: idx + 1,
@@ -145,26 +273,28 @@ export async function exportStudentProfile({ trainingCourseId }: { trainingCours
       code: student.userProfile.code,
       fullname: student.userProfile.fullname,
       dateOfBirth: dateOfBirth ? `'${formatDateVn(dateOfBirth)}` : "",
-      gender: student.userProfile.gender?.sTen,
-      ethnicity: student.userProfile.ethnicity?.sTen,
-      nationality: student.userProfile.nationality?.sTen,
+      gender: student.userProfile.gender?.sTen ?? "",
+      ethnicity: student.userProfile.ethnicity?.sTen ?? "",
+      nationality: student.userProfile.nationality?.sTen ?? "",
       provinceHometown: formatPlaceOfBirth(student.userProfile),
       idCardNumber: student.userProfile.idCardNumber,
       phoneNumber: student.userProfile.phoneNumber,
       admissionCombination: student.admissionCombination,
       entryScore: student.entryScore,
       competencyScore: student.competencyScore,
-      fixedClassCode: student.fixedClass?.code,
-      fixedClassName: student.fixedClass?.name,
-      trainingField: curriculumVersion?.curriculum.trainingMajor?.trainingField?.name,
-      trainingMajor: curriculumVersion?.curriculum.trainingMajor?.name,
-      curriculum: curriculumVersion?.name,
-      curriculumOrg: curriculumVersion?.curriculum.managementOrganization.sTen,
+      fixedClassCode: student.fixedClass?.code ?? "",
+      fixedClassName: student.fixedClass?.name ?? "",
+      trainingField: curriculumVersion?.curriculum.trainingMajor?.trainingField?.name ?? "",
+      trainingMajor: curriculumVersion?.curriculum.trainingMajor?.name ?? "",
+      curriculum: curriculumVersion?.name ?? "",
+      curriculumOrg: curriculumVersion?.curriculum.managementOrganization?.sTen ?? "",
       trainingObjectType:
-        TrainingObjectType[trainingCourse.trainingObjectType.type || TrainingObjectTypes.MILITARY],
+        TRAINING_OBJECT_TYPE_LABEL[
+          trainingCourse.trainingObjectType.type || TrainingObjectTypes.MILITARY
+        ],
       officerNumber: student.userProfile.officerNumber,
-      rank: student.userProfile.rank?.sTen,
-      chucvu: student.userProfile.chucVuChinhQuyen?.sTen,
+      rank: student.userProfile.rank?.sTen ?? "",
+      chucvu: student.userProfile.chucVuChinhQuyen?.sTen ?? "",
       provinceOfBirth: formatPlaceOfBirth(student.userProfile),
       department: student.department,
       departmentAddress: student.departmentAddress,
@@ -178,24 +308,43 @@ export async function exportStudentProfile({ trainingCourseId }: { trainingCours
       universityTrainingType: student.universityTrainingType,
       basic: student.basic,
       facility: student.facility,
-
       description: student.description,
-      gpaBase10: student.studentSemesterResult?.[0]?.cumulativeGpaBase10?.toNumber(),
-      gpaBase4: student.studentSemesterResult?.[0]?.cumulativeGpaBase4?.toNumber(),
+      gpaBase10: gpa?.gpa10,
+      gpaBase4: gpa?.gpa4,
     }
   })
 
-  const buffer = await getTemplateBuffer(prisma, "DANH_SACH_SV")
+  const useTemplate = Boolean(templateBuffer) && data.length <= 800
+  let result: ArrayBuffer
 
-  const template = new XlsxTemplate(buffer)
+  try {
+    if (!useTemplate || !templateBuffer) {
+      throw new Error(templateBuffer ? "skip-template-large-dataset" : "missing template")
+    }
+    const template = new XlsxTemplate(templateBuffer)
+    template.substitute(1, {
+      trainingCourse: trainingCourse.name,
+      trainingObjectType: trainingCourse.trainingObjectType.name,
+      data,
+    })
+    result = (await template.generate({ type: "arraybuffer" })) as ArrayBuffer
+  } catch (error) {
+    if (templateBuffer && data.length <= 800) {
+      console.error("[exportStudentProfile] xlsx-template thất bại, dùng Excel fallback", error)
+    }
+    result = (await buildStudentProfileExcelFallback(data, {
+      trainingCourse: trainingCourse.name,
+      trainingObjectType: trainingCourse.trainingObjectType.name,
+    })) as unknown as ArrayBuffer
+  }
 
-  template.substitute(1, {
-    trainingCourse: trainingCourse.name,
-    trainingObjectType: trainingCourse.trainingObjectType.name,
-    data,
+  console.info("[exportStudentProfile]", {
+    trainingCourseId,
+    fixedClassIds: classIds,
+    count: data.length,
+    usedTemplate: useTemplate,
+    ms: Date.now() - startedAt,
   })
-
-  const result = (await template.generate({ type: "arraybuffer" })) as ArrayBuffer
 
   return result
 }

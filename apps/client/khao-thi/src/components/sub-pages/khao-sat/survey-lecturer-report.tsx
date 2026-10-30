@@ -47,6 +47,7 @@ function SurveylecturerReport({
   trainingObjectTypeName,
   semesterName,
   trainingSystemName,
+  schoolYearName,
   organizationCode,
   organizationName,
   lecturerName,
@@ -62,6 +63,7 @@ function SurveylecturerReport({
   trainingObjectTypeName?: string
   semesterName?: string
   trainingSystemName?: string
+  schoolYearName?: string
   organizationCode?: string
   organizationName?: string
   lecturerName?: string
@@ -100,8 +102,7 @@ function SurveylecturerReport({
   )
 
   const questionsWithSpecific = useMemo(() => {
-    const questions =
-      dataLevel?.status === 200 ? dataLevel.data.data?.questions || [] : []
+    const questions = dataLevel?.status === 200 ? dataLevel.data.data?.questions || [] : []
     return questions.map((q: any) => ({
       ...q,
       specificChoice: specificChoiceByQuestionId[q.id] || [],
@@ -551,11 +552,7 @@ function SurveylecturerReport({
                         icon: <FileExcelOutlined />,
                         label: "Xuất báo cáo",
                         onClick: () => {
-                          exportTemplate(
-                            surveyName,
-                            questionsWithSpecific,
-                            dataLevel?.data?.data
-                          )
+                          exportTemplate(surveyName, questionsWithSpecific, dataLevel?.data?.data)
                         },
                       },
                       {
@@ -571,6 +568,7 @@ function SurveylecturerReport({
                               trainingObjectTypeName,
                               semesterName,
                               trainingSystemName,
+                              schoolYearName,
                               lecturerName,
                               lecturerCode,
                               departmentName,
@@ -592,6 +590,9 @@ function SurveylecturerReport({
                           onOpen({
                             surveyName,
                             trainingObjectTypeName,
+                            semesterName,
+                            schoolYearName,
+                            trainingSystemName,
                             lecturerName,
                             lecturerCode,
                             departmentName,

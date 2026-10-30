@@ -56,7 +56,7 @@ export default function LapKeHoach({ type }: { type?: $Enums.SubjectClassType })
   return (
     <Row gutter={[8, 0]}>
       <Col span={14}>
-        <Tabs activeKey={activeLeftTab} onChange={setActiveLeftTab}>
+        <Tabs activeKey={activeLeftTab} onChange={setActiveLeftTab} destroyInactiveTabPane>
           {leftTabs.map((tab) => (
             <Tabs.TabPane tab={tab.label} key={tab.key}>
               {tab.content}

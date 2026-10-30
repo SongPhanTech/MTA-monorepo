@@ -18,7 +18,7 @@ for (const profileData of profiles) {
       Id: profileData.id,
       sMa: profileData.idCardNumber,
       bLaHocVien: profileData.bLaHocVien || undefined,
-      bLaSinhVien: profileData.bLaHocVien || undefined,
+      bLaSinhVien: profileData.bLaSinhVien || undefined,
       bLaTaiKhoan: profileData.bLaNguoiDung || undefined,
       bLaGiangVien: profileData.bLaGiangVien || undefined,
       bLaCanBoNhanVien: profileData.bLaCanBoNhanVien || undefined,

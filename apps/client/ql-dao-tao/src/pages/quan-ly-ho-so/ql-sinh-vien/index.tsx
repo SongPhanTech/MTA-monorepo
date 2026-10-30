@@ -97,14 +97,24 @@ export default function UserProfilePageDs() {
     }
   }
   const handleExportStudentProfiles = async () => {
-    if (!filters.trainingCourseId) {
+    const trainingCourseId = filters.trainingCourseId || filters.trainingCourse?.[0]
+    const fixedClassIds = filters.fixedClassId
+      ? [filters.fixedClassId]
+      : filters.fixedClass?.length
+        ? filters.fixedClass
+        : undefined
+    if (!trainingCourseId) {
       message.error("Vui lòng chọn khoá học")
       return
     }
     try {
       showSpinner()
       const res = await exportStudentProfiles({
-        data: { trainingCourseId: filters.trainingCourseId },
+        data: {
+          trainingCourseId,
+          ...(fixedClassIds?.length === 1 ? { fixedClassId: fixedClassIds[0] } : {}),
+          ...(fixedClassIds?.length ? { fixedClassIds } : {}),
+        },
       })
 
       if (res.status === 200) {
@@ -381,6 +391,7 @@ export default function UserProfilePageDs() {
       handleFiltersChange({
         ...filters,
         fixedClassId: undefined,
+        fixedClass: undefined,
       })
       return
     }
@@ -390,6 +401,7 @@ export default function UserProfilePageDs() {
     handleFiltersChange({
       ...filters,
       fixedClassId: val,
+      fixedClass: [val],
       trainingCourseId: filters.trainingCourseId ?? selectedClass?.trainingCourseId,
     })
   }
@@ -493,6 +505,7 @@ export default function UserProfilePageDs() {
                         ...filters,
                         trainingCourseId: val,
                         fixedClassId: undefined,
+                        fixedClass: undefined,
                       })
                     }
                     allowClear

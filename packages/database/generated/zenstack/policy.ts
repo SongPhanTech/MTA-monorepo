@@ -5739,6 +5739,26 @@ const policy: PolicyDef = {
             },
 
         },
+        tuitionPaymentConfig: {
+            modelLevel: {
+                read: { guard: TuitionPaymentConfig_read, },
+                create: { guard: TuitionPaymentConfig_create, inputChecker: TuitionPaymentConfig_create_input, },
+                update: { guard: TuitionPaymentConfig_update, },
+                postUpdate: { guard: TuitionPaymentConfig_postUpdate, },
+                delete: { guard: TuitionPaymentConfig_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
         templateFile: {
             modelLevel: {
                 read: { guard: TemplateFile_read, },
@@ -6104,6 +6124,7 @@ const policy: PolicyDef = {
         dM_ToChucXaHoi: { hasValidation: false },
         dM_Ngach: { hasValidation: false },
         dM_BacLuong: { hasValidation: false },
+        tuitionPaymentConfig: { hasValidation: false },
         templateFile: { hasValidation: false },
         accessRoleGrant: { hasValidation: false },
         accessPermissionGrant: { hasValidation: false },
@@ -24489,6 +24510,58 @@ function DM_BacLuong_delete(context: QueryContext, db: CrudContract): any {
 function $check_DM_BacLuong_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TuitionPaymentConfig_read(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_TuitionPaymentConfig_read(input: any, context: QueryContext): any {
+    if (true) { return false; }
+
+    return false;
+}
+
+function TuitionPaymentConfig_create(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_TuitionPaymentConfig_create(input: any, context: QueryContext): any {
+    if (true) { return false; }
+
+    return false;
+}
+
+function TuitionPaymentConfig_create_input(input: any, context: QueryContext): boolean {
+    return false;
+}
+
+function TuitionPaymentConfig_update(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_TuitionPaymentConfig_update(input: any, context: QueryContext): any {
+    if (true) { return false; }
+
+    return false;
+}
+
+function TuitionPaymentConfig_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_TuitionPaymentConfig_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function TuitionPaymentConfig_delete(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_TuitionPaymentConfig_delete(input: any, context: QueryContext): any {
+    if (true) { return false; }
 
     return false;
 }

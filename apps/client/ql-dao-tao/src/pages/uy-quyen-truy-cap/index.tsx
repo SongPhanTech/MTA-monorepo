@@ -190,6 +190,7 @@ export default function UyQuyenTruyCapPage() {
     () => ({
       ...(currentUserId ? { id: { not: currentUserId } } : {}),
       bLaHocVien: { not: true },
+      bLaSinhVien: { not: true },
       OR: [
         { lecturer: { isNot: null } },
         { staffs: { isNot: null } },

@@ -228,6 +228,7 @@ function TabDoiTuongKhaoSat() {
         },
         data: {
           deletedAt: new Date(),
+          code: `${id}-deleted`,
         },
       })
       refetch()

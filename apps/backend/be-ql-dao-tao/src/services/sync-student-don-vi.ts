@@ -1,4 +1,5 @@
 import { putDMNhanViens } from "@workspace/libs/api/system"
+import { studentLsbRoles } from "@workspace/libs/utils"
 import { prisma } from ".."
 import { formatLsbError, type ErrorExtra } from "../types/error-extra"
 
@@ -49,12 +50,18 @@ export async function syncStudentsDonViFromFixedClass(params: {
           currentAddress: true,
           sDM_DonViId: true,
           bLaHocVien: true,
+          bLaSinhVien: true,
           bLaCanBoNhanVien: true,
           bLaGiangVien: true,
         },
       },
       fixedClass: {
-        select: { managementOrganizationId: true },
+        select: {
+          managementOrganizationId: true,
+          trainingCourse: {
+            select: { trainingObjectType: { select: { type: true } } },
+          },
+        },
       },
     },
   })
@@ -67,12 +74,17 @@ export async function syncStudentsDonViFromFixedClass(params: {
     if (!profile || !student.fixedClass) continue
 
     const donViId = student.fixedClass.managementOrganizationId ?? null
+    const studentRoles = studentLsbRoles(student.fixedClass.trainingCourse?.trainingObjectType?.type)
 
     try {
-      if (profile.sDM_DonViId !== donViId) {
+      if (
+        profile.sDM_DonViId !== donViId ||
+        profile.bLaHocVien !== studentRoles.bLaHocVien ||
+        profile.bLaSinhVien !== studentRoles.bLaSinhVien
+      ) {
         await prisma.userProfile.update({
           where: { id: profile.id },
-          data: { sDM_DonViId: donViId },
+          data: { sDM_DonViId: donViId, ...studentRoles },
         })
       }
 
@@ -95,9 +107,10 @@ export async function syncStudentsDonViFromFixedClass(params: {
           sSoHieuSQ: profile.officerNumber || undefined,
           sDM_QuocGiaId: profile.nationalityId || null,
           sDiaChi: profile.currentAddress || undefined,
-          bLaHocVien: profile.bLaHocVien || undefined,
-          bLaCanBoNhanVien: profile.bLaCanBoNhanVien || undefined,
-          bLaGiangVien: profile.bLaGiangVien || undefined,
+          bLaHocVien: studentRoles.bLaHocVien,
+          bLaSinhVien: studentRoles.bLaSinhVien,
+          bLaCanBoNhanVien: !!profile.bLaCanBoNhanVien,
+          bLaGiangVien: !!profile.bLaGiangVien,
         },
         lsbRequestOptions()
       )

@@ -875,7 +875,7 @@ const NhapDiemThiGiangDayPage = () => {
               { title: "Mã định danh", dataIndex: "mssv", width: 100, align: "center" },
               { title: "Họ và tên", dataIndex: "hoTen", width: 180 },
               {
-                title: "Chuyên cần",
+                title: "Thường xuyên",
                 dataIndex: "attendanceScore",
                 width: 120,
                 align: "center",
@@ -1070,7 +1070,7 @@ const NhapDiemThiGiangDayPage = () => {
               render: (_v, r) => r.updatedBy?.fullname ?? "—",
             },
             {
-              title: "Chuyên cần",
+              title: "Thường xuyên",
               dataIndex: "attendanceScore",
               align: "center",
               width: 100,

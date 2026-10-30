@@ -21,6 +21,7 @@ const baseSchema = z.object({
     sThietBiSua: z.string().nullish(),
     from: z.coerce.date().nullish(),
     lectureID: z.string().nullish(),
+    TKPUcode: z.string().nullish(),
     serviceDate: z.coerce.date().nullish(),
 }
 ).strict();
@@ -40,6 +41,7 @@ const baseSchemaWithoutDefaults = z.object({
     sThietBiSua: z.string().nullish(),
     from: z.coerce.date().nullish(),
     lectureID: z.string().nullish(),
+    TKPUcode: z.string().nullish(),
     serviceDate: z.coerce.date().nullish(),
 }
 ).strict();
@@ -117,6 +119,7 @@ export const LecturerPrismaUpdateSchema = z.object({
     sThietBiSua: z.string().nullish(),
     from: z.coerce.date().nullish(),
     lectureID: z.string().nullish(),
+    TKPUcode: z.string().nullish(),
     serviceDate: z.coerce.date().nullish()
 }).partial().passthrough();
 

@@ -324,6 +324,10 @@ const metadata: ModelMeta = {
                     name: "bLaHocVien",
                     type: "Boolean",
                     isOptional: true,
+                }, bLaSinhVien: {
+                    name: "bLaSinhVien",
+                    type: "Boolean",
+                    isOptional: true,
                 }, group: {
                     name: "group",
                     type: "Group",
@@ -14056,6 +14060,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'subjectClass',
+                }, documentFiles: {
+                    name: "documentFiles",
+                    type: "DocumentFile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subjectClass',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -17148,6 +17158,10 @@ const metadata: ModelMeta = {
                     name: "lectureID",
                     type: "String",
                     isOptional: true,
+                }, TKPUcode: {
+                    name: "TKPUcode",
+                    type: "String",
+                    isOptional: true,
                 }, serviceDate: {
                     name: "serviceDate",
                     type: "DateTime",
@@ -17329,6 +17343,9 @@ const metadata: ModelMeta = {
                 }, lectureID: {
                     name: "lectureID",
                     fields: ["lectureID"]
+                }, TKPUcode: {
+                    name: "TKPUcode",
+                    fields: ["TKPUcode"]
                 }, userProfileId: {
                     name: "userProfileId",
                     fields: ["userProfileId"]
@@ -22939,6 +22956,20 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'subjectVersion',
+                }, subjectClass: {
+                    name: "subjectClass",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectClassId" },
+                }, subjectClassId: {
+                    name: "subjectClassId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'subjectClass',
                 }, studentAcademicDecision: {
                     name: "studentAcademicDecision",
                     type: "StudentAcademicDecision",
@@ -35214,6 +35245,54 @@ const metadata: ModelMeta = {
                 }, name: {
                     name: "name",
                     fields: ["name"]
+                },
+            },
+        },
+        tuitionPaymentConfig: {
+            name: 'TuitionPaymentConfig', fields: {
+                tenantCode: {
+                    name: "tenantCode",
+                    type: "String",
+                    isId: true,
+                }, bankBin: {
+                    name: "bankBin",
+                    type: "String",
+                }, bankName: {
+                    name: "bankName",
+                    type: "String",
+                }, accountNumber: {
+                    name: "accountNumber",
+                    type: "String",
+                }, accountHolder: {
+                    name: "accountHolder",
+                    type: "String",
+                }, enabled: {
+                    name: "enabled",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, version: {
+                    name: "version",
+                    type: "BigInt",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 1 }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                }, updatedBy: {
+                    name: "updatedBy",
+                    type: "String",
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }, { "name": "@updatedAt", "args": [] }],
+                },
+            }, uniqueConstraints: {
+                tenantCode: {
+                    name: "tenantCode",
+                    fields: ["tenantCode"]
                 },
             },
         },

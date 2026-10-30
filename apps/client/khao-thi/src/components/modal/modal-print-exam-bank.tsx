@@ -3,7 +3,7 @@ import { renderWithMath } from "@components/commons/rich-text-editor/renderWithM
 import { formatDateVN } from "@lib/utils"
 import type { ExamBankQuestion, Question } from "@workspace/db"
 import { Docxtemplater, exportFile, loadFile } from "@workspace/libs/docxjs"
-import { getRuntimeEnv } from "@workspace/libs/utils"
+import { getMinioUrl } from "@workspace/libs/utils"
 import { Button, Modal, message, Space } from "antd"
 import dayjs from "dayjs"
 import { saveAs } from "file-saver"
@@ -40,7 +40,7 @@ export const ModalPrintExamBank = () => {
 
     try {
       const res = await loadFile(
-        `${getRuntimeEnv("NEXT_PUBLIC_ASSET_PREFIX")}/templates/InDeThi.docx`
+        getMinioUrl("mta/template/InDeThi.docx")
       )
 
       const doc = new Docxtemplater(res, {

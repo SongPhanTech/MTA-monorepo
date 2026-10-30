@@ -177,6 +177,7 @@ import type {
   ExportSubjectClassScoreParams,
   ExportThoiKhoaBieuRequest,
   ExportTrainingDataAsync202,
+  ExportTrainingDataAsync429,
   ExportTrainingDataRequest,
   ExportTrainingDataResponse,
   FailureBooleanResponse,
@@ -193,6 +194,7 @@ import type {
   GetDelegatedPermissions401,
   GetDelegatedPermissionsParams,
   GetExportStatus200,
+  GetExportStatus403,
   GetExportStatus404,
   GetGraduationStudentTranscriptParams,
   GetLecturerExamSchedule200,
@@ -221,9 +223,12 @@ import type {
   ImportPhanCongGiangDay,
   ImportPhienBanCTDT,
   ImportPhienBanCTDTSubjectBody,
+  ImportRegistrationConfirmRequest,
+  ImportRegistrationConfirmResponse,
+  ImportRegistrationPreviewRequest,
+  ImportRegistrationPreviewResponse,
   ImportStudentRequest,
-  ImportTrainingDataRequest,
-  ImportTrainingDataResponse,
+  ImportTrainingData400,
   InvalidateClassRegisterSessionCache200,
   InvalidateClassRegisterSessionCacheRequest,
   ListGrantedRoles200,
@@ -10830,11 +10835,11 @@ export function useDownloadStudentImportTemplate<TData = Awaited<ReturnType<type
 
 
 /**
- * Xuất Excel hồ sơ học viên theo khóa.
+ * Xuất Excel hồ sơ học viên theo khóa, có thể lọc thêm lớp quản lý.
 
 **Bảng dữ liệu nguồn:** Student, UserProfile, FixedClass.
 
-**Tham số:** trainingCourseId.
+**Tham số:** trainingCourseId, fixedClassId (tùy chọn).
  * @summary Xuất hồ sơ học viên
  */
 export type exportStudentProfilesResponse200 = {
@@ -18877,6 +18882,11 @@ export type exportTrainingDataAsyncResponse409 = {
   status: 409
 }
 
+export type exportTrainingDataAsyncResponse429 = {
+  data: ExportTrainingDataAsync429
+  status: 429
+}
+
 export type exportTrainingDataAsyncResponse500 = {
   data: ErrorMessageResponse
   status: 500
@@ -18885,7 +18895,7 @@ export type exportTrainingDataAsyncResponse500 = {
 export type exportTrainingDataAsyncResponseSuccess = (exportTrainingDataAsyncResponse202) & {
   headers: Headers;
 };
-export type exportTrainingDataAsyncResponseError = (exportTrainingDataAsyncResponse400 | exportTrainingDataAsyncResponse404 | exportTrainingDataAsyncResponse409 | exportTrainingDataAsyncResponse500) & {
+export type exportTrainingDataAsyncResponseError = (exportTrainingDataAsyncResponse400 | exportTrainingDataAsyncResponse404 | exportTrainingDataAsyncResponse409 | exportTrainingDataAsyncResponse429 | exportTrainingDataAsyncResponse500) & {
   headers: Headers;
 };
 
@@ -18914,7 +18924,7 @@ export const exportTrainingDataAsync = async (exportTrainingDataRequest?: Export
 
 
 
-export const getExportTrainingDataAsyncMutationOptions = <TError = ErrorMessageResponse,
+export const getExportTrainingDataAsyncMutationOptions = <TError = ErrorMessageResponse | ExportTrainingDataAsync429,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportTrainingDataAsync>>, TError,{data: ExportTrainingDataRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
 ): UseMutationOptions<Awaited<ReturnType<typeof exportTrainingDataAsync>>, TError,{data: ExportTrainingDataRequest}, TContext> => {
 
@@ -18941,12 +18951,12 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type ExportTrainingDataAsyncMutationResult = NonNullable<Awaited<ReturnType<typeof exportTrainingDataAsync>>>
     export type ExportTrainingDataAsyncMutationBody = ExportTrainingDataRequest
-    export type ExportTrainingDataAsyncMutationError = ErrorMessageResponse
+    export type ExportTrainingDataAsyncMutationError = ErrorMessageResponse | ExportTrainingDataAsync429
 
     /**
  * @summary Khởi tạo tiến trình xuất dữ liệu đào tạo nền (Bất đồng bộ - Asynchronous)
  */
-export const useExportTrainingDataAsync = <TError = ErrorMessageResponse,
+export const useExportTrainingDataAsync = <TError = ErrorMessageResponse | ExportTrainingDataAsync429,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportTrainingDataAsync>>, TError,{data: ExportTrainingDataRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof exportTrainingDataAsync>>,
@@ -18968,6 +18978,11 @@ export type getExportStatusResponse200 = {
   status: 200
 }
 
+export type getExportStatusResponse403 = {
+  data: GetExportStatus403
+  status: 403
+}
+
 export type getExportStatusResponse404 = {
   data: GetExportStatus404
   status: 404
@@ -18976,7 +18991,7 @@ export type getExportStatusResponse404 = {
 export type getExportStatusResponseSuccess = (getExportStatusResponse200) & {
   headers: Headers;
 };
-export type getExportStatusResponseError = (getExportStatusResponse404) & {
+export type getExportStatusResponseError = (getExportStatusResponse403 | getExportStatusResponse404) & {
   headers: Headers;
 };
 
@@ -19012,7 +19027,7 @@ export const getGetExportStatusQueryKey = (jobId?: string,) => {
     }
 
     
-export const getGetExportStatusQueryOptions = <TData = Awaited<ReturnType<typeof getExportStatus>>, TError = GetExportStatus404>(jobId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExportStatus>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+export const getGetExportStatusQueryOptions = <TData = Awaited<ReturnType<typeof getExportStatus>>, TError = GetExportStatus403 | GetExportStatus404>(jobId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExportStatus>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -19031,10 +19046,10 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GetExportStatusQueryResult = NonNullable<Awaited<ReturnType<typeof getExportStatus>>>
-export type GetExportStatusQueryError = GetExportStatus404
+export type GetExportStatusQueryError = GetExportStatus403 | GetExportStatus404
 
 
-export function useGetExportStatus<TData = Awaited<ReturnType<typeof getExportStatus>>, TError = GetExportStatus404>(
+export function useGetExportStatus<TData = Awaited<ReturnType<typeof getExportStatus>>, TError = GetExportStatus403 | GetExportStatus404>(
  jobId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExportStatus>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getExportStatus>>,
@@ -19044,7 +19059,7 @@ export function useGetExportStatus<TData = Awaited<ReturnType<typeof getExportSt
       >, request?: SecondParameter<typeof customTrainingFetch>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetExportStatus<TData = Awaited<ReturnType<typeof getExportStatus>>, TError = GetExportStatus404>(
+export function useGetExportStatus<TData = Awaited<ReturnType<typeof getExportStatus>>, TError = GetExportStatus403 | GetExportStatus404>(
  jobId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExportStatus>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getExportStatus>>,
@@ -19054,7 +19069,7 @@ export function useGetExportStatus<TData = Awaited<ReturnType<typeof getExportSt
       >, request?: SecondParameter<typeof customTrainingFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetExportStatus<TData = Awaited<ReturnType<typeof getExportStatus>>, TError = GetExportStatus404>(
+export function useGetExportStatus<TData = Awaited<ReturnType<typeof getExportStatus>>, TError = GetExportStatus403 | GetExportStatus404>(
  jobId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExportStatus>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -19062,7 +19077,7 @@ export function useGetExportStatus<TData = Awaited<ReturnType<typeof getExportSt
  * @summary Thăm dò (Polling) tiến độ xuất dữ liệu đào tạo từ Redis
  */
 
-export function useGetExportStatus<TData = Awaited<ReturnType<typeof getExportStatus>>, TError = GetExportStatus404>(
+export function useGetExportStatus<TData = Awaited<ReturnType<typeof getExportStatus>>, TError = GetExportStatus403 | GetExportStatus404>(
  jobId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExportStatus>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -19081,20 +19096,233 @@ export function useGetExportStatus<TData = Awaited<ReturnType<typeof getExportSt
 
 
 /**
- * Nhập file JSON (type registration-results) xuất từ cổng đăng ký học vào 1 đợt đăng ký online nội bộ.
-
-**Import:** ClassRegisterLogs, StudentSubjectScore.
-
-**Đồng bộ:** đăng ký có trên nội bộ nhưng không còn trong file sẽ bị gỡ (score trống, chưa phát sinh điểm).
- * @summary Nhập kết quả đăng ký từ internet
+ * Giải mã gói .dat và trả thống kê sẽ thêm/cập nhật/gỡ (soft-delete) mà chưa ghi DB.
+Dùng fileHash trả về khi gọi /confirm.
+ * @summary Xem trước nhập kết quả đăng ký (dry-run)
  */
-export type importTrainingDataResponse200 = {
-  data: ImportTrainingDataResponse
+export type previewImportRegistrationResultsResponse200 = {
+  data: ImportRegistrationPreviewResponse
   status: 200
 }
 
-export type importTrainingDataResponse400 = {
+export type previewImportRegistrationResultsResponse400 = {
   data: ErrorMessageResponse
+  status: 400
+}
+
+export type previewImportRegistrationResultsResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type previewImportRegistrationResultsResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type previewImportRegistrationResultsResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type previewImportRegistrationResultsResponseSuccess = (previewImportRegistrationResultsResponse200) & {
+  headers: Headers;
+};
+export type previewImportRegistrationResultsResponseError = (previewImportRegistrationResultsResponse400 | previewImportRegistrationResultsResponse404 | previewImportRegistrationResultsResponse409 | previewImportRegistrationResultsResponse500) & {
+  headers: Headers;
+};
+
+export type previewImportRegistrationResultsResponse = (previewImportRegistrationResultsResponseSuccess | previewImportRegistrationResultsResponseError)
+
+export const getPreviewImportRegistrationResultsUrl = () => {
+
+
+  
+
+  return `/api/import-training-data/preview`
+}
+
+export const previewImportRegistrationResults = async (importRegistrationPreviewRequest: ImportRegistrationPreviewRequest, options?: RequestInit): Promise<previewImportRegistrationResultsResponse> => {
+    const formData = new FormData();
+formData.append(`classRegisterSessionId`, importRegistrationPreviewRequest.classRegisterSessionId)
+formData.append(`file`, importRegistrationPreviewRequest.file)
+
+  return customTrainingFetch<previewImportRegistrationResultsResponse>(getPreviewImportRegistrationResultsUrl(),
+  {      
+    ...options,
+    method: 'POST'
+    ,
+    body: 
+      formData,
+  }
+);}
+
+
+
+
+export const getPreviewImportRegistrationResultsMutationOptions = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof previewImportRegistrationResults>>, TError,{data: ImportRegistrationPreviewRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof previewImportRegistrationResults>>, TError,{data: ImportRegistrationPreviewRequest}, TContext> => {
+
+const mutationKey = ['previewImportRegistrationResults'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof previewImportRegistrationResults>>, {data: ImportRegistrationPreviewRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  previewImportRegistrationResults(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PreviewImportRegistrationResultsMutationResult = NonNullable<Awaited<ReturnType<typeof previewImportRegistrationResults>>>
+    export type PreviewImportRegistrationResultsMutationBody = ImportRegistrationPreviewRequest
+    export type PreviewImportRegistrationResultsMutationError = ErrorMessageResponse
+
+    /**
+ * @summary Xem trước nhập kết quả đăng ký (dry-run)
+ */
+export const usePreviewImportRegistrationResults = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof previewImportRegistrationResults>>, TError,{data: ImportRegistrationPreviewRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof previewImportRegistrationResults>>,
+        TError,
+        {data: ImportRegistrationPreviewRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getPreviewImportRegistrationResultsMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * Upload lại cùng file .dat + fileHash từ /preview. Soft-delete các đăng ký không còn trong file.
+ * @summary Xác nhận nhập kết quả đăng ký sau preview
+ */
+export type confirmImportRegistrationResultsResponse200 = {
+  data: ImportRegistrationConfirmResponse
+  status: 200
+}
+
+export type confirmImportRegistrationResultsResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type confirmImportRegistrationResultsResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type confirmImportRegistrationResultsResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type confirmImportRegistrationResultsResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type confirmImportRegistrationResultsResponseSuccess = (confirmImportRegistrationResultsResponse200) & {
+  headers: Headers;
+};
+export type confirmImportRegistrationResultsResponseError = (confirmImportRegistrationResultsResponse400 | confirmImportRegistrationResultsResponse404 | confirmImportRegistrationResultsResponse409 | confirmImportRegistrationResultsResponse500) & {
+  headers: Headers;
+};
+
+export type confirmImportRegistrationResultsResponse = (confirmImportRegistrationResultsResponseSuccess | confirmImportRegistrationResultsResponseError)
+
+export const getConfirmImportRegistrationResultsUrl = () => {
+
+
+  
+
+  return `/api/import-training-data/confirm`
+}
+
+export const confirmImportRegistrationResults = async (importRegistrationConfirmRequest: ImportRegistrationConfirmRequest, options?: RequestInit): Promise<confirmImportRegistrationResultsResponse> => {
+    const formData = new FormData();
+formData.append(`classRegisterSessionId`, importRegistrationConfirmRequest.classRegisterSessionId)
+formData.append(`fileHash`, importRegistrationConfirmRequest.fileHash)
+formData.append(`file`, importRegistrationConfirmRequest.file)
+
+  return customTrainingFetch<confirmImportRegistrationResultsResponse>(getConfirmImportRegistrationResultsUrl(),
+  {      
+    ...options,
+    method: 'POST'
+    ,
+    body: 
+      formData,
+  }
+);}
+
+
+
+
+export const getConfirmImportRegistrationResultsMutationOptions = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof confirmImportRegistrationResults>>, TError,{data: ImportRegistrationConfirmRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof confirmImportRegistrationResults>>, TError,{data: ImportRegistrationConfirmRequest}, TContext> => {
+
+const mutationKey = ['confirmImportRegistrationResults'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof confirmImportRegistrationResults>>, {data: ImportRegistrationConfirmRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  confirmImportRegistrationResults(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ConfirmImportRegistrationResultsMutationResult = NonNullable<Awaited<ReturnType<typeof confirmImportRegistrationResults>>>
+    export type ConfirmImportRegistrationResultsMutationBody = ImportRegistrationConfirmRequest
+    export type ConfirmImportRegistrationResultsMutationError = ErrorMessageResponse
+
+    /**
+ * @summary Xác nhận nhập kết quả đăng ký sau preview
+ */
+export const useConfirmImportRegistrationResults = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof confirmImportRegistrationResults>>, TError,{data: ImportRegistrationConfirmRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof confirmImportRegistrationResults>>,
+        TError,
+        {data: ImportRegistrationConfirmRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getConfirmImportRegistrationResultsMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * Endpoint cũ đã tắt ghi trực tiếp. Gọi /preview → /confirm.
+ * @summary [Deprecated] Dùng /preview rồi /confirm
+ */
+export type importTrainingDataResponse400 = {
+  data: ImportTrainingData400
   status: 400
 }
 
@@ -19113,14 +19341,12 @@ export type importTrainingDataResponse500 = {
   status: 500
 }
     
-export type importTrainingDataResponseSuccess = (importTrainingDataResponse200) & {
-  headers: Headers;
-};
+;
 export type importTrainingDataResponseError = (importTrainingDataResponse400 | importTrainingDataResponse404 | importTrainingDataResponse409 | importTrainingDataResponse500) & {
   headers: Headers;
 };
 
-export type importTrainingDataResponse = (importTrainingDataResponseSuccess | importTrainingDataResponseError)
+export type importTrainingDataResponse = (importTrainingDataResponseError)
 
 export const getImportTrainingDataUrl = () => {
 
@@ -19130,10 +19356,10 @@ export const getImportTrainingDataUrl = () => {
   return `/api/import-training-data/import`
 }
 
-export const importTrainingData = async (importTrainingDataRequest: ImportTrainingDataRequest, options?: RequestInit): Promise<importTrainingDataResponse> => {
+export const importTrainingData = async (importRegistrationPreviewRequest: ImportRegistrationPreviewRequest, options?: RequestInit): Promise<importTrainingDataResponse> => {
     const formData = new FormData();
-formData.append(`classRegisterSessionId`, importTrainingDataRequest.classRegisterSessionId)
-formData.append(`file`, importTrainingDataRequest.file)
+formData.append(`classRegisterSessionId`, importRegistrationPreviewRequest.classRegisterSessionId)
+formData.append(`file`, importRegistrationPreviewRequest.file)
 
   return customTrainingFetch<importTrainingDataResponse>(getImportTrainingDataUrl(),
   {      
@@ -19148,9 +19374,9 @@ formData.append(`file`, importTrainingDataRequest.file)
 
 
 
-export const getImportTrainingDataMutationOptions = <TError = ErrorMessageResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importTrainingData>>, TError,{data: ImportTrainingDataRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof importTrainingData>>, TError,{data: ImportTrainingDataRequest}, TContext> => {
+export const getImportTrainingDataMutationOptions = <TError = ImportTrainingData400 | ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importTrainingData>>, TError,{data: ImportRegistrationPreviewRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof importTrainingData>>, TError,{data: ImportRegistrationPreviewRequest}, TContext> => {
 
 const mutationKey = ['importTrainingData'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
@@ -19162,7 +19388,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof importTrainingData>>, {data: ImportTrainingDataRequest}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof importTrainingData>>, {data: ImportRegistrationPreviewRequest}> = (props) => {
           const {data} = props ?? {};
 
           return  importTrainingData(data,requestOptions)
@@ -19174,18 +19400,18 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type ImportTrainingDataMutationResult = NonNullable<Awaited<ReturnType<typeof importTrainingData>>>
-    export type ImportTrainingDataMutationBody = ImportTrainingDataRequest
-    export type ImportTrainingDataMutationError = ErrorMessageResponse
+    export type ImportTrainingDataMutationBody = ImportRegistrationPreviewRequest
+    export type ImportTrainingDataMutationError = ImportTrainingData400 | ErrorMessageResponse
 
     /**
- * @summary Nhập kết quả đăng ký từ internet
+ * @summary [Deprecated] Dùng /preview rồi /confirm
  */
-export const useImportTrainingData = <TError = ErrorMessageResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importTrainingData>>, TError,{data: ImportTrainingDataRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+export const useImportTrainingData = <TError = ImportTrainingData400 | ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importTrainingData>>, TError,{data: ImportRegistrationPreviewRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof importTrainingData>>,
         TError,
-        {data: ImportTrainingDataRequest},
+        {data: ImportRegistrationPreviewRequest},
         TContext
       > => {
 

@@ -7,7 +7,6 @@
 import type { ExportToInternal200Filters } from './exportToInternal200Filters';
 import type { ExportToInternal200Meta } from './exportToInternal200Meta';
 import type { ExportToInternal200Counts } from './exportToInternal200Counts';
-import type { ExportToInternal200Data } from './exportToInternal200Data';
 
 export type ExportToInternal200 = {
   version: string;
@@ -16,6 +15,8 @@ export type ExportToInternal200 = {
   filters: ExportToInternal200Filters;
   meta: ExportToInternal200Meta;
   counts: ExportToInternal200Counts;
-  data: ExportToInternal200Data;
+  fileName: string;
+  fileBase64: string;
+  fileSize: number;
   syncHistoryId?: string;
 };

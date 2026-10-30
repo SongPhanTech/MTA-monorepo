@@ -382,6 +382,7 @@ export async function assignDelegation(
     where: {
       id: { in: uniqueRecipientIds },
       bLaHocVien: { not: true },
+      bLaSinhVien: { not: true },
       OR: [
         { lecturer: { isNot: null } },
         { staffs: { isNot: null } },

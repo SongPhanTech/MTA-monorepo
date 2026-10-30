@@ -205,19 +205,21 @@ const PutSurveyObjectTypeModal = () => {
     { enabled: !!id }
   )
 
-  const { data: surveyObjectTypes = [] } = useFindManySurveyObjectType({
-    where: {
-      deletedAt: null,
-    },
-  })
+  const { data: surveyObjectTypes = [], refetch: refetchSurveyObjectTypes } =
+    useFindManySurveyObjectType({
+      where: {
+        deletedAt: null,
+      },
+    })
 
   const validateCodeDuplicate = async (_: any, value?: string) => {
     if (!value?.trim()) return Promise.resolve()
 
     const codeTrimmed = value.trim()
+    const { data: latest = surveyObjectTypes } = await refetchSurveyObjectTypes()
 
-    const isDuplicate = surveyObjectTypes.some(
-      (item) => item.code === codeTrimmed && item.id !== id && item.deletedAt === null
+    const isDuplicate = latest.some(
+      (item) => item.code?.trim() === codeTrimmed && item.id !== id && item.deletedAt == null
     )
 
     if (isDuplicate) {

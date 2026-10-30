@@ -70,6 +70,7 @@ export type FilterProps = {
   academicDegreeType?: string[]
   rankId?: string[]
   officerNumber?: string
+  TKPUcode?: string
   lecturerType?: string[]
   staffType?: string[]
   bonusScore?: "asc" | "desc"

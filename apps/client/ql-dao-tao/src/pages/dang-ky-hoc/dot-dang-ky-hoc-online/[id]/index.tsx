@@ -489,8 +489,7 @@ export default function ClassRegisterLogs() {
           {
             key: "thong-ke",
             label: "Thống kê",
-            destroyInactiveTabPane: true,
-            children: <ThongKeDangKy sessionId={id} />,
+            children: <ThongKeDangKy sessionId={id} isActive={activeTab === "thong-ke"} />,
           },
           {
             key: "lich-su-dong-bo",

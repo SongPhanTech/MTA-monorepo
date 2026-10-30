@@ -53,7 +53,7 @@ import { emptyObjectIf } from "@workspace/constant"
 import type { Prisma } from "@workspace/db"
 import { useCreateLecturer, useCreateStaff, useUpsertUserProfile } from "@workspace/db/hooks"
 import { buildLsbNhanVienPayload, getLsbErrorMessage } from "@lib/lsb-nhan-vien"
-import { toHocHamCreateInput, toHocViCreateInput } from "@lib/utils"
+import { toHocHamCreateInput, toHocViCreateInput, toNullableISO } from "@lib/utils"
 import { postDMNhanViens } from "@workspace/libs/api/system"
 import { getRuntimeEnv } from "@workspace/libs/utils"
 import { useAbility } from "@workspace/permissions/hooks"
@@ -107,6 +107,7 @@ export type SubmitForm = Prisma.UserProfileGetPayload<{
   staffTypeId?: string
   staffPositionId?: string
   lectureCode?: string
+  TKPUcode?: string | null
   organizationId?: string
 }
 
@@ -435,6 +436,7 @@ export default function CreateUserPage() {
     staffTypeId,
     staffPositionId,
     lectureCode,
+    TKPUcode,
     organizationId,
     // Loại bỏ tất cả relation fields khỏi spread để tránh lỗi Prisma
     tinHoc,
@@ -509,10 +511,11 @@ export default function CreateUserPage() {
     try {
       showSpinner()
       const donViId = values.sDM_DonViId || organizationId || null
+      const profileCode = (values.code || lectureCode)?.trim()
       const res = await postDMNhanViens(
         buildLsbNhanVienPayload({
           donViId,
-          code: values.code,
+          code: profileCode,
           lastName: values.lastName,
           firstName: values.firstName,
           genderId: values.genderId,
@@ -533,6 +536,7 @@ export default function CreateUserPage() {
           newProvinceCurrentAddressId: values.newProvinceCurrentAddressId,
           newCommuneCurrentAddressId: values.newCommuneCurrentAddressId,
           bLaHocVien: values.bLaHocVien,
+          bLaSinhVien: values.bLaSinhVien,
           bLaCanBoNhanVien: values.bLaCanBoNhanVien,
           bLaGiangVien,
           bLaNguoiDung: values.bLaNguoiDung,
@@ -568,7 +572,7 @@ export default function CreateUserPage() {
         }
         const profileData = {
           ...values,
-          code: values.code || lectureCode,
+          code: profileCode,
           lastName: values.lastName?.trim(),
           firstName: values.firstName?.trim(),
           id: res?.data?.Id,
@@ -578,6 +582,7 @@ export default function CreateUserPage() {
           sDM_DonViId: donViId,
           dateOfBirth: values.dateOfBirth ? dayjs(values.dateOfBirth).toISOString() : null,
           idCardDate: values.idCardDate ? dayjs(values.idCardDate).toISOString() : null,
+          idCardExpirationDate: toNullableISO(values.idCardExpirationDate),
           unionDate: values.unionDate ? dayjs(values.unionDate).toISOString() : null,
           CPVJoinDate: values.CPVJoinDate ? dayjs(values.CPVJoinDate).toISOString() : null,
           officialCPVDate: values.officialCPVDate
@@ -592,7 +597,7 @@ export default function CreateUserPage() {
         }
 
         const resProfile = await upsertUserProfile({
-          where: { code: values.code ?? undefined },
+          where: { code: profileCode ?? undefined },
           create: {
             ...profileData,
             ...emptyObjectIf(
@@ -931,6 +936,7 @@ export default function CreateUserPage() {
             data: {
               userProfileId: resProfile?.id,
               lecturerTypeId: lecturerTypeId,
+              TKPUcode: TKPUcode?.trim() || null,
             },
           })
         }
