@@ -102,11 +102,29 @@ export function getImportFailureMessage(result: ImportTrainingDataResult): strin
   ].join("\n")
 }
 
+const IMPORT_TABLE_DISPLAY_NAMES: Record<string, string> = {
+  ClassRegisterSession: "Đợt đăng ký",
+  ClassRegisterLogs: "Nhật ký đăng ký học",
+  StudentSubjectScore: "Điểm môn học sau đăng ký",
+  Student: "Sinh viên",
+  UserProfile: "Hồ sơ liên quan",
+  SubjectClass: "Lớp học phần đã đăng ký",
+  SubjectVersion: "Môn học",
+  Semester: "Học kỳ",
+  SchoolYear: "Năm học",
+  FixedClass: "Lớp quản lý",
+  ClassSchedule: "Lịch học",
+  SubjectClassTime: "Thời khóa biểu",
+  Curriculum: "Chương trình đào tạo",
+  CurriculumVersion: "Khung CTĐT",
+  TrainingCourse: "Khóa đào tạo",
+}
+
 export function getImportSuccessDescription(result: ImportTrainingDataResult): string {
   const imported = result.steps.reduce((total, step) => total + step.count, 0)
   const detail = result.steps
-    .filter((step) => step.count > 0)
-    .map((step) => `${step.table}: ${step.count}`)
+    .filter((step) => step.count > 0 && !step.table.startsWith("_") && !step.table.includes("("))
+    .map((step) => `${IMPORT_TABLE_DISPLAY_NAMES[step.table] || step.table}: ${step.count}`)
     .join(", ")
   const warningCount = result.warnings.length
   return `Đã nhập/cập nhật thành công ${imported} bản ghi${detail ? ` (${detail})` : ""}.${warningCount ? ` Có ${warningCount} lưu ý đã được hệ thống xử lý.` : ""}`

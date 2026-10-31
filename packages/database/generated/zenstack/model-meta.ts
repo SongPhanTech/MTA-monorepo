@@ -344,6 +344,10 @@ const metadata: ModelMeta = {
                     name: "bLaHocVien",
                     type: "Boolean",
                     isOptional: true,
+                }, bLaSinhVien: {
+                    name: "bLaSinhVien",
+                    type: "Boolean",
+                    isOptional: true,
                 }, group: {
                     name: "group",
                     type: "Group",
@@ -14848,6 +14852,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'subjectClass',
+                }, documentFiles: {
+                    name: "documentFiles",
+                    type: "DocumentFile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subjectClass',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -18118,6 +18128,11 @@ const metadata: ModelMeta = {
                     type: "String",
                     isOptional: true,
                     attributes: [{ "name": "@unique", "args": [] }],
+                }, TKPUcode: {
+                    name: "TKPUcode",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
                 }, serviceDate: {
                     name: "serviceDate",
                     type: "DateTime",
@@ -18314,6 +18329,9 @@ const metadata: ModelMeta = {
                 }, lectureID: {
                     name: "lectureID",
                     fields: ["lectureID"]
+                }, TKPUcode: {
+                    name: "TKPUcode",
+                    fields: ["TKPUcode"]
                 }, userProfileId: {
                     name: "userProfileId",
                     fields: ["userProfileId"]
@@ -24277,6 +24295,21 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'subjectVersion',
+                }, subjectClass: {
+                    name: "subjectClass",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectClassId" },
+                }, subjectClassId: {
+                    name: "subjectClassId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'subjectClass',
                 }, studentAcademicDecision: {
                     name: "studentAcademicDecision",
                     type: "StudentAcademicDecision",
@@ -24562,7 +24595,7 @@ const metadata: ModelMeta = {
                     fields: ["diplomaVerificationBackId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-danh-muc" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-danh-muc" }] }],
         },
         academicActionConfig: {
             name: 'AcademicActionConfig', fields: {
@@ -37359,6 +37392,62 @@ const metadata: ModelMeta = {
                 },
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
+        },
+        tuitionPaymentConfig: {
+            name: 'TuitionPaymentConfig', fields: {
+                tenantCode: {
+                    name: "tenantCode",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@map", "args": [{ "name": "name", "value": "tenant_code" }] }, { "name": "@db.VarChar", "args": [{ "name": "x", "value": 128 }] }],
+                }, bankBin: {
+                    name: "bankBin",
+                    type: "String",
+                    attributes: [{ "name": "@map", "args": [{ "name": "name", "value": "bank_bin" }] }, { "name": "@db.Char", "args": [{ "name": "x", "value": 6 }] }],
+                }, bankName: {
+                    name: "bankName",
+                    type: "String",
+                    attributes: [{ "name": "@map", "args": [{ "name": "name", "value": "bank_name" }] }, { "name": "@db.VarChar", "args": [{ "name": "x", "value": 200 }] }],
+                }, accountNumber: {
+                    name: "accountNumber",
+                    type: "String",
+                    attributes: [{ "name": "@map", "args": [{ "name": "name", "value": "account_number" }] }, { "name": "@db.VarChar", "args": [{ "name": "x", "value": 19 }] }],
+                }, accountHolder: {
+                    name: "accountHolder",
+                    type: "String",
+                    attributes: [{ "name": "@map", "args": [{ "name": "name", "value": "account_holder" }] }, { "name": "@db.VarChar", "args": [{ "name": "x", "value": 200 }] }],
+                }, enabled: {
+                    name: "enabled",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, version: {
+                    name: "version",
+                    type: "BigInt",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 1 }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    attributes: [{ "name": "@map", "args": [{ "name": "name", "value": "created_by" }] }, { "name": "@db.Uuid", "args": [] }],
+                }, updatedBy: {
+                    name: "updatedBy",
+                    type: "String",
+                    attributes: [{ "name": "@map", "args": [{ "name": "name", "value": "updated_by" }] }, { "name": "@db.Uuid", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }, { "name": "@map", "args": [{ "name": "name", "value": "created_at" }] }, { "name": "@db.Timestamptz", "args": [{ "name": "x", "value": 6 }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }, { "name": "@updatedAt", "args": [] }, { "name": "@map", "args": [{ "name": "name", "value": "updated_at" }] }, { "name": "@db.Timestamptz", "args": [{ "name": "x", "value": 6 }] }],
+                },
+            }, uniqueConstraints: {
+                tenantCode: {
+                    name: "tenantCode",
+                    fields: ["tenantCode"]
+                },
+            },
+            attributes: [{ "name": "@@schema", "args": [{ "name": "name", "value": "he-thong" }] }, { "name": "@@map", "args": [{ "name": "name", "value": "tuition_payment_config" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "all" }, { "name": "condition", "value": true }] }],
         },
         templateFile: {
             name: 'TemplateFile', fields: {

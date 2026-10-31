@@ -125,6 +125,92 @@
   height: var(--gv-body-h, auto) !important;
 }
 
+/* Bảng fit chiều cao container: thân bảng giãn hết khoảng trống, phân trang sát đáy */
+.fit-height-table,
+.fit-height-table > .ant-table-wrapper,
+.fit-height-table > .ant-table-wrapper > .ant-spin-nested-loading,
+.fit-height-table > .ant-table-wrapper > .ant-spin-nested-loading > .ant-spin-container,
+.fit-height-table
+  > .ant-table-wrapper
+  > .ant-spin-nested-loading
+  > .ant-spin-container
+  > .ant-table,
+.fit-height-table
+  > .ant-table-wrapper
+  > .ant-spin-nested-loading
+  > .ant-spin-container
+  > .ant-table
+  > .ant-table-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 0;
+  min-width: 0;
+}
+
+.fit-height-table,
+.fit-height-table
+  > .ant-table-wrapper
+  > .ant-spin-nested-loading
+  > .ant-spin-container
+  > .ant-table,
+.fit-height-table
+  > .ant-table-wrapper
+  > .ant-spin-nested-loading
+  > .ant-spin-container
+  > .ant-table
+  > .ant-table-container {
+  overflow: hidden;
+}
+
+.fit-height-table > :not(.ant-table-wrapper),
+.fit-height-table
+  > .ant-table-wrapper
+  > .ant-spin-nested-loading
+  > .ant-spin-container
+  > .ant-table-pagination.ant-pagination,
+.fit-height-table
+  > .ant-table-wrapper
+  > .ant-spin-nested-loading
+  > .ant-spin-container
+  > .ant-table
+  > .ant-table-container
+  > .ant-table-header {
+  flex: none;
+  height: auto;
+}
+
+.fit-height-table
+  > .ant-table-wrapper
+  > .ant-spin-nested-loading
+  > .ant-spin-container
+  > .ant-table
+  > .ant-table-container
+  > .ant-table-body {
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 0;
+  max-height: none !important;
+}
+
+.fit-height-table
+  > .ant-table-wrapper
+  > .ant-spin-nested-loading
+  > .ant-spin-container
+  > .ant-table
+  > .ant-table-container {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.fit-height-table
+  > .ant-table-wrapper
+  > .ant-spin-nested-loading
+  > .ant-spin-container
+  > .ant-table-pagination.ant-pagination {
+  margin-block: 8px;
+}
+
 /* Bảng chi tiết lớp quản lý GV — tắt height 100% global để scroll.y hiển thị đúng hàng */
 .bang-lq-chi-tiet.ant-table-wrapper .ant-table,
 .bang-lq-chi-tiet.ant-table-wrapper .ant-spin-nested-loading,
@@ -263,14 +349,7 @@
 
 /* Biểu đồ thống kê đăng ký — full width, tránh thừa khoảng trắng */
 .thong-ke-chart-wrap {
-  width: 100% !important;
-}
-
-.thong-ke-chart-wrap > div,
-.thong-ke-chart-wrap canvas,
-.thong-ke-chart-wrap svg {
-  width: 100% !important;
-  max-width: 100% !important;
+  width: 100%;
 }
 
 /* Trang chi tiết đợt ĐK học — gọn 1 màn hình, chỉ scroll trong table */

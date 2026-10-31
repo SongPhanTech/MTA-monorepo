@@ -5,10 +5,15 @@ import {
 } from "@workspace/libs/bao-luu-diem"
 import { HTTPException } from "hono/http-exception"
 import { formatDateVn, formatNgayIn, formatThangIn, nowVn } from "@workspace/libs/timezone"
-import type { SheetExportOptions, TableCell, TableRow } from "@workspace/libs/template-excel-core"
-import { existsSync } from "node:fs"
-import { dirname, join } from "node:path"
-import { fileURLToPath } from "node:url"
+import {
+  DU_KHOA_PLANNED_SEMESTERS,
+  isValidDuKhoaSemesterRequest,
+} from "./du-khoa-policy"
+import type {
+  SheetExportOptions,
+  TableCell,
+  TableRow,
+} from "@workspace/libs/template-excel-core"
 import { prisma } from ".."
 import { buildFromTemplate } from "./build-from-template"
 
@@ -17,14 +22,6 @@ const BANG_DIEM_CA_NHAN_TEMPLATE = "/mta/template/BangDiemCaNhan(P2).xlsx"
 
 /** Mẫu kết quả học tập dự khoá tiếng Việt. */
 const BANG_DIEM_DU_KHOA_TEMPLATE = "/mta/template/KetQuaHocTapDuKhoa.xlsx"
-
-function resolveDuKhoaLocalTemplate() {
-  const candidates = [
-    join(process.cwd(), "templates/KetQuaHocTapDuKhoa.xlsx"),
-    join(dirname(fileURLToPath(import.meta.url)), "../../templates/KetQuaHocTapDuKhoa.xlsx"),
-  ]
-  return candidates.find((path) => existsSync(path)) ?? candidates[0]!
-}
 
 type ScoreRange = {
   base10Min: number
@@ -100,6 +97,7 @@ export function pickLatestYearResult<
 
 type CumulativeRankRange = {
   classification: string
+  context?: string | null
   baseScore?: string | null
   base10Min?: number | null
   base10Max?: number | null
@@ -122,17 +120,31 @@ export function classificationFromCumulativeGpa({
 }): string {
   if (!ranks?.length) return ""
   const useBase4 = baseScore === "Base4"
-  const gpa = useBase4 ? gpa4 : gpa10
-  if (gpa == null) return ""
-  const matched = [...ranks]
-    .filter((r) => !r.baseScore || !baseScore || r.baseScore === baseScore)
-    .sort((a, b) => (a.rankOrder ?? 99) - (b.rankOrder ?? 99))
-    .find((r) => {
-      if (useBase4) {
-        return r.base4Min != null && r.base4Max != null && gpa >= r.base4Min && gpa <= r.base4Max
-      }
-      return r.base10Min != null && r.base10Max != null && gpa >= r.base10Min && gpa <= r.base10Max
-    })
+
+  const studyingRanks = ranks.filter((r) => r.context === "STUDYING")
+  const candidateRanks = studyingRanks.length ? studyingRanks : ranks
+  const sortedRanks = [...candidateRanks].sort((a, b) => (a.rankOrder ?? 99) - (b.rankOrder ?? 99))
+
+  const matched = sortedRanks.find((r) => {
+    // 1. Ưu tiên kiểm tra theo hệ điểm quy định của khóa học
+    if (useBase4 && gpa4 != null && r.base4Min != null && r.base4Max != null) {
+      return gpa4 >= r.base4Min && gpa4 <= r.base4Max
+    }
+    if (!useBase4 && gpa10 != null && r.base10Min != null && r.base10Max != null) {
+      return gpa10 >= r.base10Min && gpa10 <= r.base10Max
+    }
+
+    // 2. Fallback nếu bậc xếp hạng chỉ có cấu hình của hệ điểm còn lại
+    if (gpa4 != null && r.base4Min != null && r.base4Max != null) {
+      return gpa4 >= r.base4Min && gpa4 <= r.base4Max
+    }
+    if (gpa10 != null && r.base10Min != null && r.base10Max != null) {
+      return gpa10 >= r.base10Min && gpa10 <= r.base10Max
+    }
+
+    return false
+  })
+
   return matched?.classification ?? ""
 }
 
@@ -428,10 +440,11 @@ async function loadBangDiemExportData(studentIds: string[]) {
               },
               scoreConverts: true,
               academicRankingConvert: {
-                where: { context: "STUDYING", deletedAt: null, active: true },
+                where: { deletedAt: null, active: true },
                 orderBy: { rankOrder: "asc" },
                 select: {
                   classification: true,
+                  context: true,
                   baseScore: true,
                   base10Min: true,
                   base10Max: true,
@@ -814,57 +827,83 @@ function courseAcademicYearLabel(course: {
   return ""
 }
 
-function duKhoaSignatureRows(signatureDate: string): TableRow[] {
-  const empty: TableRow = { cells: [{ value: null, colSpan: 7, border: false }] }
-  return [
-    {
-      cells: [
-        { value: null, colSpan: 3, border: false },
-        { value: signatureDate, colSpan: 4, border: false, align: "center" },
-      ],
-    },
-    {
-      cells: [
-        { value: null, colSpan: 3, border: false },
-        {
-          value: "TL. GIÁM ĐỐC",
-          colSpan: 4,
-          border: false,
-          align: "center",
-          bold: true,
-        },
-      ],
-    },
+function duKhoaSignatureRows({
+  signatureDate,
+  signerTitle1 = "KT. TRƯỞNG PHÒNG",
+  signerTitle2 = "PHÓ TRƯỞNG PHÒNG",
+  signerName = "Đại tá, TS Nguyễn Văn Bình",
+}: {
+  signatureDate: string
+  signerTitle1?: string
+  signerTitle2?: string
+  signerName?: string
+}): TableRow[] {
+  const empty: TableRow = {
+    height: 14,
+    cells: [{ value: null, colSpan: 7, border: false }],
+  }
+  const rows: TableRow[] = [
     {
       cells: [
         { value: null, colSpan: 3, border: false },
         {
-          value: "TRƯỞNG PHÒNG ĐÀO TẠO",
+          value: signatureDate,
           colSpan: 4,
           border: false,
           align: "center",
-          bold: true,
-        },
-      ],
-    },
-    // Chừa khoảng trống để ký trước khi in tên
-    empty,
-    empty,
-    empty,
-    empty,
-    {
-      cells: [
-        { value: null, colSpan: 3, border: false },
-        {
-          value: "Đại tá, PGS. TS Ngô Thành Long",
-          colSpan: 4,
-          border: false,
-          align: "center",
-          bold: true,
+          italic: true,
+          fontSize: 11,
         },
       ],
     },
   ]
+  if (signerTitle1) {
+    rows.push({
+      cells: [
+        { value: null, colSpan: 3, border: false },
+        {
+          value: signerTitle1,
+          colSpan: 4,
+          border: false,
+          align: "center",
+          bold: true,
+          fontSize: 11,
+        },
+      ],
+    })
+  }
+  if (signerTitle2) {
+    rows.push({
+      cells: [
+        { value: null, colSpan: 3, border: false },
+        {
+          value: signerTitle2,
+          colSpan: 4,
+          border: false,
+          align: "center",
+          bold: true,
+          fontSize: 11,
+        },
+      ],
+    })
+  }
+  rows.push(empty, empty, empty, empty)
+  if (signerName) {
+    rows.push({
+      cells: [
+        { value: null, colSpan: 3, border: false },
+        {
+          value: signerName,
+          colSpan: 4,
+          border: false,
+          align: "center",
+          bold: true,
+          fontSize: 11,
+        },
+      ],
+    })
+  }
+  return rows
 }
 
 /** Nhãn thường + giá trị in đậm trên cùng một ô (tổng kết dự khoá). */
@@ -877,17 +916,17 @@ function duKhoaSummaryRow(label: string, value: string | number): TableRow {
           richText: [
             {
               text: labelText,
-              font: { name: "Times New Roman", size: 12, bold: false },
+              font: { name: "Times New Roman", size: 11, bold: false },
             },
             {
               text: String(value ?? ""),
-              font: { name: "Times New Roman", size: 12, bold: true },
+              font: { name: "Times New Roman", size: 11, bold: true },
             },
           ],
         },
         colSpan: 7,
         border: false,
-        bold: false,
+        fontSize: 11,
       },
     ],
   }
@@ -970,22 +1009,133 @@ function studentSheetData(student: ExportStudent) {
   }
 }
 
-function studentSheetDataDuKhoa(student: ExportStudent) {
-  const fullname = student.userProfile?.fullname ?? ""
+function isDuKhoaStudentOrClass(student: ExportStudent): boolean {
+  const className = student.fixedClass?.name ?? ""
+  const courseName = student.fixedClass?.trainingCourse?.name ?? ""
+  return /dự\s*kh[oó]a|\bDK\b/i.test(`${className} ${courseName}`)
+}
+
+function extractSchoolYearFromScore(score: ScoreRow): string | null {
+  const name =
+    score.semester?.schoolYear?.name ||
+    score.subjectClass?.semester?.schoolYear?.name ||
+    score.semester?.name?.match(/\d{4}\s*[-–]\s*\d{4}/)?.[0] ||
+    score.subjectClass?.semester?.name?.match(/\d{4}\s*[-–]\s*\d{4}/)?.[0]
+  if (!name) return null
+  return name.trim().replace(/\s*[-–]\s*/, " - ")
+}
+
+function resolveDuKhoaAcademicYear({
+  studentScores,
+  course,
+  allowedSemesters,
+  curriculumVersionIds,
+  ctdtByKey,
+}: {
+  studentScores: ScoreRow[]
+  course?: ExportStudent["fixedClass"]["trainingCourse"]
+  allowedSemesters: Set<number>
+  curriculumVersionIds: string[]
+  ctdtByKey: BangDiemExportData["ctdtByKey"]
+}): string {
+  const years = new Set<string>()
+
+  // 1. Ưu tiên lấy năm học từ các môn học thuộc các kỳ được phép (kỳ 1 và 2)
+  for (const score of studentScores) {
+    const subjectId = score.subjectVersion?.id
+    if (subjectId && curriculumVersionIds.length) {
+      let isAllowed = false
+      for (const cvId of curriculumVersionIds) {
+        const planned = ctdtByKey.get(`${cvId}:${subjectId}`)?.semester
+        if (planned != null && allowedSemesters.has(planned)) {
+          isAllowed = true
+          break
+        }
+      }
+      if (!isAllowed) continue
+    }
+    const year = extractSchoolYearFromScore(score)
+    if (year) years.add(year)
+  }
+
+  if (years.size > 0) {
+    return [...years].sort().join(", ")
+  }
+
+  // 2. Fallback: duyệt qua tất cả môn học của sinh viên
+  for (const score of studentScores) {
+    const year = extractSchoolYearFromScore(score)
+    if (year) years.add(year)
+  }
+
+  if (years.size > 0) {
+    return [...years].sort().join(", ")
+  }
+
+  // 3. Fallback: lấy từ khóa học
+  return courseAcademicYearLabel(course).replace(/^Năm học:\s*|^Năm học\s*/i, "").replace(/\s*[-–]\s*/, " - ")
+}
+
+function resolveDuKhoaTrainingPeriod({
+  course,
+  studentScores,
+  allowedSemesters,
+  curriculumVersionIds,
+  ctdtByKey,
+}: {
+  course?: ExportStudent["fixedClass"]["trainingCourse"]
+  studentScores: ScoreRow[]
+  allowedSemesters: Set<number>
+  curriculumVersionIds: string[]
+  ctdtByKey: BangDiemExportData["ctdtByKey"]
+}): string {
+  return formatTrainingPeriod(course?.admissionStartDate, course?.admissionEndDate)
+}
+
+function studentSheetDataDuKhoa({
+  student,
+  academicYear,
+  trainingPeriod,
+  headerLeftLine1,
+  headerLeftLine2,
+  headerRightLine1,
+  headerRightLine2,
+}: {
+  student: ExportStudent
+  academicYear: string
+  trainingPeriod: string
+  headerLeftLine1?: string
+  headerLeftLine2?: string
+  headerRightLine1?: string
+  headerRightLine2?: string
+}) {
+  const fullname = (student.userProfile?.fullname ?? "").toLocaleUpperCase("vi-VN")
   const maSV = student.userProfile?.code ?? ""
   const course = student.fixedClass?.trainingCourse
+  const hinhThucDaoTao =
+    course?.trainingObjectType?.trainingForm?.name ||
+    course?.trainingForm?.name ||
+    student.fixedClass?.trainingForm?.name ||
+    ""
+  const namHocLine = academicYear ? `(Năm học ${academicYear})` : ""
   return {
     sheet: sanitizeSheetName(`${maSV} - ${fullname}`),
     data: {
       fullname,
       dateOfBirth: formatDateOfBirth(student.userProfile?.dateOfBirth),
       maSV,
-      quocTich: student.userProfile?.nationality?.sTen ?? "",
+      quocTich: student.userProfile?.nationality?.sTen || "—",
       lop: student.fixedClass?.name ?? "",
-      thoiGianDaoTao: formatTrainingPeriod(course?.admissionStartDate, course?.admissionEndDate),
+      thoiGianDaoTao: trainingPeriod,
       khoa: courseCohortLabel(course),
-      loaiHinhDaoTao: course?.trainingObjectType?.trainingForm?.name ?? "",
-      namHoc: courseAcademicYearLabel(course),
+      hinhThucDaoTao,
+      loaiHinhDaoTao: hinhThucDaoTao,
+      namHoc: academicYear,
+      namHocLine,
+      headerLeftLine1: headerLeftLine1 || "BỘ QUỐC PHÒNG",
+      headerLeftLine2: headerLeftLine2 || "HỌC VIỆN KỸ THUẬT QUÂN SỰ",
+      headerRightLine1: headerRightLine1 || "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM",
+      headerRightLine2: headerRightLine2 || "Độc lập - Tự do - Hạnh phúc",
     },
   }
 }
@@ -1037,27 +1187,52 @@ function collectBestMonHocs({
 export async function exportBangDiemCaNhan({
   studentIds,
   plannedSemesters,
+  signatureDate,
+  signerTitle1,
+  signerTitle2,
+  signerName,
+  headerLeftLine1,
+  headerLeftLine2,
+  headerRightLine1,
+  headerRightLine2,
 }: {
   studentIds: string[]
   /** Chỉ lấy môn có học kỳ dự kiến thuộc danh sách. Ví dụ [1, 2] cho đối tượng dự khoá. */
   plannedSemesters?: number[]
+  signatureDate?: string
+  signerTitle1?: string
+  signerTitle2?: string
+  signerName?: string
+  headerLeftLine1?: string
+  headerLeftLine2?: string
+  headerRightLine1?: string
+  headerRightLine2?: string
 }) {
   const exportData = await loadBangDiemExportData(studentIds)
   const { orderedStudents, scoresByStudent } = exportData
-  const allowedSemesters = plannedSemesters?.length
-    ? new Set(plannedSemesters.filter((semester) => Number.isInteger(semester)))
-    : null
-
-  if (allowedSemesters) {
+  if (plannedSemesters?.length) {
+    if (!isValidDuKhoaSemesterRequest(plannedSemesters)) {
+      throw new HTTPException(400, {
+        message: "Bảng điểm Dự khóa chỉ lấy các môn thuộc kỳ 1 và kỳ 2 trong CTĐT",
+      })
+    }
     return exportBangDiemDuKhoa({
       orderedStudents,
       scoresByStudent,
       exportData,
-      allowedSemesters,
+      allowedSemesters: new Set(DU_KHOA_PLANNED_SEMESTERS),
+      signatureDate,
+      signerTitle1,
+      signerTitle2,
+      signerName,
+      headerLeftLine1,
+      headerLeftLine2,
+      headerRightLine1,
+      headerRightLine2,
     })
   }
 
-  const signatureDate = signatureDateLabel()
+  const finalSignatureDate = signatureDate || signatureDateLabel()
   const gapRow: TableRow = {
     cells: [{ value: null, colSpan: 19, border: false }],
   }
@@ -1148,7 +1323,7 @@ export async function exportBangDiemCaNhan({
         {
           cells: [{ value: `Xếp loại: ${xeploai}`, colSpan: 19, border: false }],
         },
-        ...caNhanSignatureRows(signatureDate),
+        ...caNhanSignatureRows(finalSignatureDate),
       ],
       hiddenColumns: ["M", "N", "R", "J", "K", "L"],
     }
@@ -1163,19 +1338,105 @@ export async function exportBangDiemCaNhan({
   })
 }
 
+export async function getBangDiemDuKhoaData({ studentIds }: { studentIds: string[] }) {
+  const exportData = await loadBangDiemExportData(studentIds)
+  const students = exportData.orderedStudents
+
+  const allowedSemesters = new Set(DU_KHOA_PLANNED_SEMESTERS)
+  return students.map((student) => {
+    const monHocs = collectBestMonHocs({
+      student,
+      studentScores: exportData.scoresByStudent.get(student.id) ?? [],
+      exportData,
+      allowedSemesters,
+    })
+    const summary = summarizeWeightedGpa(monHocs)
+    const course = student.fixedClass?.trainingCourse
+    const curriculumVersionIds = [
+      student.fixedClass?.curriculumVersionId,
+      student.curriculumVersionId,
+    ].filter((id): id is string => Boolean(id))
+    const studentScores = exportData.scoresByStudent.get(student.id) ?? []
+    const thoiGianDaoTao = resolveDuKhoaTrainingPeriod({
+      course,
+      studentScores,
+      allowedSemesters,
+      curriculumVersionIds,
+      ctdtByKey: exportData.ctdtByKey,
+    })
+    const academicYear = resolveDuKhoaAcademicYear({
+      studentScores,
+      course,
+      allowedSemesters,
+      curriculumVersionIds,
+      ctdtByKey: exportData.ctdtByKey,
+    })
+    return {
+      studentId: student.id,
+      fullname: student.userProfile?.fullname ?? "",
+      maSV: student.userProfile?.code ?? "",
+      dateOfBirth: formatDateOfBirth(student.userProfile?.dateOfBirth),
+      quocTich: student.userProfile?.nationality?.sTen ?? "—",
+      lop: student.fixedClass?.name ?? "",
+      khoa: courseCohortLabel(course),
+      thoiGianDaoTao: thoiGianDaoTao || "—",
+      hinhThucDaoTao: course?.trainingObjectType?.trainingForm?.name ?? "",
+      namHoc: academicYear,
+      signatureDate: signatureDateLabel(),
+      monHocs: monHocs.map((monHoc, index) => ({
+        stt: index + 1,
+        tenMonHoc: monHoc.TenMonhoc ?? "",
+        soTC: monHoc.soTC,
+        diemhe10: roundScore(monHoc.diemhe10, 1),
+        diemhe4: roundScore(monHoc.diemhe4, 1),
+        diemchu: monHoc.diemchu ?? "",
+        ghichu: monHoc.ghichu ?? "",
+      })),
+      summary: {
+        tongTinChi: summary.credits,
+        gpa10: summary.gpa10,
+        gpa4: summary.gpa4,
+        xepLoai: classificationFromCumulativeGpa({
+          gpa10: summary.gpa10,
+          gpa4: summary.gpa4,
+          baseScore: course?.baseScore,
+          ranks: course?.academicRankingConvert,
+        }) || "",
+      },
+    }
+  })
+}
+
 async function exportBangDiemDuKhoa({
   orderedStudents,
   scoresByStudent,
   exportData,
   allowedSemesters,
+  signatureDate: customSignatureDate,
+  signerTitle1,
+  signerTitle2,
+  signerName,
+  headerLeftLine1,
+  headerLeftLine2,
+  headerRightLine1,
+  headerRightLine2,
 }: {
   orderedStudents: ExportStudent[]
   scoresByStudent: BangDiemExportData["scoresByStudent"]
   exportData: BangDiemExportData
   allowedSemesters: Set<number>
+  signatureDate?: string
+  signerTitle1?: string
+  signerTitle2?: string
+  signerName?: string
+  headerLeftLine1?: string
+  headerLeftLine2?: string
+  headerRightLine1?: string
+  headerRightLine2?: string
 }) {
-  const signatureDate = signatureDateLabel()
+  const signatureDate = customSignatureDate || signatureDateLabel()
   const gapRow: TableRow = {
+    height: 14,
     cells: [{ value: null, colSpan: 7, border: false }],
   }
 
@@ -1187,31 +1448,86 @@ async function exportBangDiemDuKhoa({
       allowedSemesters,
     })
 
-    const monHocRows: TableRow[] = monHocs.map((monHoc, index) => ({
-      cells: (
-        [
-          { value: index + 1, align: "center", border: true, bold: false },
-          { value: monHoc.TenMonhoc ?? "", border: true, bold: false },
-          { value: monHoc.soTC, align: "center", border: true, bold: false },
-          {
-            value: roundScore(monHoc.diemhe10, 1),
-            align: "center",
-            numFmt: "0.0",
-            border: true,
-            bold: false,
-          },
-          {
-            value: roundScore(monHoc.diemhe4, 1),
-            align: "center",
-            numFmt: "0.0",
-            border: true,
-            bold: false,
-          },
-          { value: monHoc.diemchu ?? "", align: "center", border: true, bold: false },
-          { value: monHoc.ghichu ?? "", border: true, bold: false },
-        ] satisfies TableCell[]
-      ).map((cell) => withBaoLuuColor(cell, monHoc.baoLuu)),
-    }))
+    // Tự động căn chỉnh độ rộng cột và chiều cao hàng theo nội dung dài ngắn để không bị che chữ
+    const maxSubjectNameLength = Math.max(
+      ...monHocs.map((m) => (m.TenMonhoc || "").length),
+      25
+    )
+    const col2Width = Math.max(38, Math.min(55, maxSubjectNameLength + 4))
+
+    const maxNoteLength = Math.max(
+      ...monHocs.map((m) => (m.ghichu || "").length),
+      0
+    )
+    const col7Width = Math.max(14, Math.min(30, maxNoteLength + 4))
+
+    const thinEdge = { style: "thin" as const, color: { argb: "FF000000" } }
+    const medEdge = { style: "medium" as const, color: { argb: "FF000000" } }
+
+    const monHocRows: TableRow[] = monHocs.map((monHoc, index) => {
+      const isFirst = index === 0
+      const isLast = index === monHocs.length - 1
+      const nameLen = monHoc.TenMonhoc?.length || 0
+      const estimatedLines = Math.max(1, Math.ceil(nameLen / (col2Width - 4)))
+      const rowHeight = Math.max(22, estimatedLines * 18)
+
+      return {
+        height: rowHeight,
+        cells: (
+          [
+            // Cột 1 (TT): Nét đậm hết (bên phải và bên dưới đều in đậm)
+            {
+              value: index + 1,
+              align: "center",
+              bold: false,
+              fontSize: 11,
+              borderDetails: {
+                left: medEdge,
+                right: medEdge,
+                top: medEdge,
+                bottom: medEdge,
+              },
+            },
+            // Cột 2 (Tên học phần): vách ngăn 2 bên đậm, ĐƯỜNG KẺ DƯỚI TÊN CÁC MÔN LÀ NÉT MẢNH (thin - không in đậm)
+            {
+              value: monHoc.TenMonhoc ?? "",
+              bold: false,
+              fontSize: 11,
+              align: "left",
+              wrapText: true,
+              borderDetails: {
+                left: medEdge,
+                right: medEdge,
+                top: isFirst ? medEdge : thinEdge,
+                bottom: isLast ? medEdge : thinEdge,
+              },
+            },
+            // Cột 3 (Số tín chỉ), Cột 4-6 (Điểm học phần), Cột 7 (Ghi chú): border ĐẬM HẾT (medium) toàn bộ 4 cạnh
+            { value: monHoc.soTC, align: "center", border: true, borderStyle: "medium", bold: false, fontSize: 11 },
+            {
+              value: roundScore(monHoc.diemhe10, 1),
+              align: "center",
+              numFmt: "0.0",
+              border: true,
+              borderStyle: "medium",
+              bold: false,
+              fontSize: 11,
+            },
+            {
+              value: roundScore(monHoc.diemhe4, 1),
+              align: "center",
+              numFmt: "0.0",
+              border: true,
+              borderStyle: "medium",
+              bold: false,
+              fontSize: 11,
+            },
+            { value: monHoc.diemchu ?? "", align: "center", border: true, borderStyle: "medium", bold: false, fontSize: 11 },
+            { value: monHoc.ghichu ?? "", border: true, borderStyle: "medium", bold: false, fontSize: 11, align: "left", wrapText: true },
+          ] satisfies TableCell[]
+        ).map((cell) => withBaoLuuColor(cell, monHoc.baoLuu)),
+      }
+    })
 
     const course = student.fixedClass?.trainingCourse
     const summary = summarizeWeightedGpa(monHocs)
@@ -1222,40 +1538,73 @@ async function exportBangDiemDuKhoa({
       ranks: course?.academicRankingConvert,
     })
 
+    const cvIds = [
+      student.fixedClass?.curriculumVersionId,
+      student.curriculumVersionId,
+    ].filter((id): id is string => Boolean(id))
+
+    const studentScores = scoresByStudent.get(student.id) ?? []
+    const academicYear = resolveDuKhoaAcademicYear({
+      studentScores,
+      course,
+      allowedSemesters,
+      curriculumVersionIds: cvIds,
+      ctdtByKey: exportData.ctdtByKey,
+    })
+    const trainingPeriod = resolveDuKhoaTrainingPeriod({
+      course,
+      studentScores,
+      allowedSemesters,
+      curriculumVersionIds: cvIds,
+      ctdtByKey: exportData.ctdtByKey,
+    })
+
     return {
-      ...studentSheetDataDuKhoa(student),
-      boldDataKeys: ["fullname", "maSV"],
+      ...studentSheetDataDuKhoa({
+        student,
+        academicYear,
+        trainingPeriod,
+        headerLeftLine1,
+        headerLeftLine2,
+        headerRightLine1,
+        headerRightLine2,
+      }),
+      boldDataKeys: [],
       tableStartCell: { row: 14, col: 1 },
-      columnWidths: [6, 36, 8, 12, 12, 12, 14],
+      columnWidths: [6, col2Width, 10, 13, 13, 13, col7Width],
       rows: [
         ...monHocRows,
         gapRow,
-        duKhoaSummaryRow("Tổng tín chỉ:", summary.credits),
+        duKhoaSummaryRow("Tổng tín chỉ: ", summary.credits),
         duKhoaSummaryRow(
-          "Điểm trung bình chung tích lũy toàn khóa (thang điểm 10):",
-          summary.gpa10
+          "Điểm trung bình chung tích lũy (hệ 10): ",
+          summary.gpa10 != null ? Number(summary.gpa10).toFixed(1) : ""
         ),
         duKhoaSummaryRow(
-          "Điểm trung bình chung tích lũy toàn khóa (thang điểm 4):",
-          summary.gpa4
+          "Điểm trung bình chung tích lũy (hệ 4): ",
+          summary.gpa4 != null ? Number(summary.gpa4).toFixed(1) : ""
         ),
-        duKhoaSummaryRow("Xếp hạng:", xeploai || ""),
+        duKhoaSummaryRow("Xếp hạng: ", xeploai || ""),
         gapRow,
         gapRow,
-        ...duKhoaSignatureRows(signatureDate),
+        ...duKhoaSignatureRows({
+          signatureDate,
+          signerTitle1,
+          signerTitle2,
+          signerName,
+        }),
       ],
     }
   })
 
   return buildFromTemplate(prisma, {
     templatePath: BANG_DIEM_DU_KHOA_TEMPLATE,
-    localTemplatePath: resolveDuKhoaLocalTemplate(),
     fileName: "BDCN-DuKhoa",
     mergeSheetsToOne: true,
     pageBreakBetweenSheets: true,
     sheetName: "BDCN-DuKhoa",
     fontFamily: "Times New Roman",
-    fontSize: 12,
+    fontSize: 11,
     pageSetup: {
       paperSize: 9, // A4
       orientation: "portrait",

@@ -3,6 +3,8 @@ import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import type { FilterProps } from "@constants/type"
 import { useClassRegisterStatus } from "@hooks/classRegisterStatus"
 import DefaultLayout from "@layouts/default-layout"
+import { PagePermissionGate } from "@components/commons/page-permission-gate"
+import { CONG_SINH_VIEN_PERMISSION } from "@workspace/router"
 import { useSession } from "@workspace/auth/react"
 import { ClassRegisterStatus } from "@workspace/db/client"
 import {
@@ -261,5 +263,11 @@ export default function LichSuDangKyHocPage() {
 }
 
 LichSuDangKyHocPage.getLayout = function getLayout(page: React.ReactElement) {
-  return <DefaultLayout breadcrumbList={[{ title: "Lịch sử đăng ký học" }]}>{page}</DefaultLayout>
+  return (
+    <DefaultLayout breadcrumbList={[{ title: "Lịch sử đăng ký học" }]}>
+      <PagePermissionGate permission={CONG_SINH_VIEN_PERMISSION.CONG_SINH_VIEN_LICH_SU_DANG_KY_HOC}>
+        {page}
+      </PagePermissionGate>
+    </DefaultLayout>
+  )
 }

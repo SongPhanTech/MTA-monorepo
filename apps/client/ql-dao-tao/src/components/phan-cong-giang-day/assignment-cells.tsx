@@ -4,16 +4,14 @@ import LectureTreeSelect from "@components/commons/lecture-select-multi/TreeSele
 import Select from "@components/commons/select"
 import DeleteIcon from "@components/icons/delete"
 import EditIcon from "@components/icons/edit"
-import { CopyOutlined } from "@ant-design/icons"
+import { CopyOutlined, DownOutlined } from "@ant-design/icons"
 import useSpinner from "@hooks/spinner"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { formatLecturerName } from "@workspace/libs/utils"
 import { $Enums } from "@workspace/db/client"
-import { useFindManyLecturer } from "@workspace/db/hooks"
 import { dayjs } from "@workspace/ui"
 import { cn } from "@workspace/ui/lib/utils"
 import { Flex, Form, message, Switch, Tooltip, TreeSelect, Row } from "antd"
-import type { FormInstance } from "antd/es/form"
 import type { Dayjs } from "dayjs"
 import {
   createContext,
@@ -59,60 +57,73 @@ const ROW_PAINT_CLASSES = [
   "border-blue-400",
 ]
 
-const LecturerNameContext = createContext<Map<string, string>>(new Map())
-
-export function LecturerNameProvider({ children }: { children: ReactNode }) {
-  const { data: lecturers = [] } = useFindManyLecturer(
-    {
-      include: {
-        userProfile: {
-          select: {
-            id: true,
-            code: true,
-            fullname: true,
-            sDM_DonViId: true,
-            academicRankType: true,
-            academicDegreeType: true,
-          },
-        },
-      },
-      where: {
-        userProfile: { active: true },
-        active: true,
-      },
-    },
-    { refetchOnWindowFocus: false }
-  )
-
-  const map = useMemo(() => {
-    const next = new Map<string, string>()
-    for (const lecturer of lecturers) {
-      next.set(lecturer.id, formatLecturerName(lecturer))
-    }
-    return next
-  }, [lecturers])
-
-  return <LecturerNameContext.Provider value={map}>{children}</LecturerNameContext.Provider>
+type LecturerNameStore = {
+  get: (id?: string | null) => string
+  register: (id: string, name: string) => void
 }
 
-export function FormStateGate({
-  form,
+const LecturerNameContext = createContext<LecturerNameStore>({
+  get: () => "",
+  register: () => {},
+})
+
+const CopySourceContext = createContext<string | null>(null)
+
+export function CopySourceProvider({
+  value,
   children,
 }: {
-  form: FormInstance<TeachingAssignmentForm>
-  children: (state: { hasUnsavedEdits: boolean; missingTrainingLocation: boolean }) => ReactNode
+  value: string | null
+  children: ReactNode
 }) {
-  return (
-    <Form.Item noStyle shouldUpdate>
-      {() => {
-        const values = Object.values(form.getFieldValue("subjectClass") || {})
-        return children({
-          hasUnsavedEdits: values.some((item: any) => item?.isEdit),
-          missingTrainingLocation: values.some((item: any) => !item?.trainingLocationId),
-        })
-      }}
-    </Form.Item>
+  return <CopySourceContext.Provider value={value}>{children}</CopySourceContext.Provider>
+}
+
+export function LecturerNameProvider({
+  seed,
+  children,
+}: {
+  seed?: Array<[string, string]>
+  children: ReactNode
+}) {
+  const mapRef = useRef(new Map<string, string>())
+
+  if (seed?.length) {
+    for (const [id, name] of seed) {
+      if (id && name && !mapRef.current.has(id)) {
+        mapRef.current.set(id, name)
+      }
+    }
+  }
+
+  const store = useMemo<LecturerNameStore>(
+    () => ({
+      get: (id) => (id ? mapRef.current.get(id) || "" : ""),
+      register: (id, name) => {
+        if (id && name) mapRef.current.set(id, name)
+      },
+    }),
+    []
   )
+
+  return <LecturerNameContext.Provider value={store}>{children}</LecturerNameContext.Provider>
+}
+
+export function getAssignmentRowClass(record?: object | null) {
+  const row = record as {
+    $type?: string
+    cancelled?: boolean | null
+    approveLecturerAssignmentAt?: Date | string | null
+    submitLecturerAssignmentAt?: Date | string | null
+    lecturerId?: string | null
+    enterGradeLecturerId?: string | null
+  } | null
+  if (row?.$type === "parent") return "bg-white"
+  if (row?.cancelled) return "bg-red-200"
+  if (row?.approveLecturerAssignmentAt) return "bg-green-200"
+  if (row?.submitLecturerAssignmentAt) return "bg-yellow-200"
+  if (!row?.lecturerId || !row?.enterGradeLecturerId) return "bg-slate-200"
+  return ""
 }
 
 type LecturerLike = {
@@ -124,14 +135,12 @@ type LecturerLike = {
   } | null
 } | null
 
-function useRowForm(recordId: string) {
-  const form = Form.useFormInstance<TeachingAssignmentForm>()
-  const cancelled = Form.useWatch(["subjectClass", recordId, "cancelled"], form)
-  const isLockLecturer = Form.useWatch(["subjectClass", recordId, "isLockLecturer"], form)
-  return { form, cancelled, isLockLecturer: isLockLecturer ?? true }
+type InjectedField<T> = {
+  value?: T
+  onChange?: (value: T) => void
 }
 
-function LazyTrigger({
+function FieldTrigger({
   disabled,
   label,
   placeholder,
@@ -147,41 +156,245 @@ function LazyTrigger({
       type="button"
       disabled={disabled}
       className={cn(
-        "w-full min-h-8 px-1 text-left text-sm truncate rounded border border-transparent bg-transparent",
-        !disabled && "hover:border-[#d9d9d9] hover:bg-white cursor-pointer",
-        disabled && "cursor-not-allowed opacity-70"
+        "flex h-8 w-full items-center justify-between gap-1 rounded-md border border-[#d9d9d9] bg-white px-2 text-left text-sm",
+        !disabled && "hover:border-[#4096ff] cursor-pointer",
+        disabled && "cursor-not-allowed bg-[#f5f5f5] text-black/25"
       )}
       onClick={() => {
         if (!disabled) onOpen()
       }}
     >
-      {label ? label : <span className="text-gray-400">{placeholder}</span>}
+      <span className={cn("min-w-0 truncate", !label && "text-gray-400")}>
+        {label || placeholder}
+      </span>
+      <DownOutlined className="shrink-0 text-[10px] text-black/25" />
     </button>
   )
 }
+
+const LazyDateField = memo(function LazyDateField({
+  value,
+  onChange,
+  disabled,
+  fallback,
+}: InjectedField<Dayjs | null> & {
+  disabled?: boolean
+  fallback?: string
+}) {
+  const [editing, setEditing] = useState(false)
+  const display = value ? dayjs(value).format("DD/MM/YYYY") : fallback || ""
+
+  if (editing && !disabled) {
+    return (
+      <DatePicker
+        suffixIcon={null}
+        className="px-1"
+        placeholder="Chọn ngày"
+        autoFocus
+        defaultOpen
+        value={value ?? undefined}
+        onChange={(next) => onChange?.(next)}
+        onOpenChange={(open) => {
+          if (!open) setEditing(false)
+        }}
+      />
+    )
+  }
+
+  return (
+    <FieldTrigger
+      disabled={disabled}
+      label={display}
+      placeholder="Chọn ngày"
+      onOpen={() => setEditing(true)}
+    />
+  )
+})
+
+const LazyOptionsField = memo(function LazyOptionsField({
+  value,
+  onChange,
+  options,
+  disabled,
+  placeholder,
+  fallback,
+  allowClear,
+  showSearch,
+  dropdownWidth,
+}: InjectedField<string | null> & {
+  options: { label: ReactNode; value: string | number }[]
+  disabled?: boolean
+  placeholder?: string
+  fallback?: ReactNode
+  allowClear?: boolean
+  showSearch?: boolean
+  dropdownWidth?: number
+}) {
+  const [editing, setEditing] = useState(false)
+  const label = options.find((item) => item.value === value)?.label ?? fallback
+
+  if (editing && !disabled) {
+    return (
+      <Select
+        value={value ?? undefined}
+        options={options}
+        allowClear={allowClear}
+        showSearch={showSearch}
+        autoFocus
+        defaultOpen
+        filterOption={
+          showSearch
+            ? (input, option) =>
+                (option?.label ?? "").toString().toLowerCase().includes(input.toLowerCase())
+            : undefined
+        }
+        dropdownStyle={dropdownWidth ? { width: dropdownWidth, maxHeight: 400 } : undefined}
+        onChange={onChange}
+        onDropdownVisibleChange={(open) => {
+          if (!open) setEditing(false)
+        }}
+      />
+    )
+  }
+
+  return (
+    <FieldTrigger
+      disabled={disabled}
+      label={label}
+      placeholder={placeholder}
+      onOpen={() => setEditing(true)}
+    />
+  )
+})
+
+const LazyLecturerField = memo(function LazyLecturerField({
+  value,
+  onChange,
+  disabled,
+  fallbackName,
+  organizationId,
+  ignoreLectureIds,
+}: InjectedField<string | null> & {
+  disabled?: boolean
+  fallbackName?: string
+  organizationId?: string | null
+  ignoreLectureIds?: string[]
+}) {
+  const names = useContext(LecturerNameContext)
+  const [editing, setEditing] = useState(false)
+  const label = (value && names.get(value)) || fallbackName || ""
+
+  if (editing && !disabled) {
+    return (
+      <LectureTreeSelect
+        placeholder="Chọn giảng viên"
+        ignoreLectureIds={ignoreLectureIds}
+        organizationId={organizationId}
+        defaultOpen
+        autoFocus
+        value={value ?? undefined}
+        onChange={(next, labelList) => {
+          const nextId = typeof next === "string" ? next : null
+          const rawLabel = Array.isArray(labelList) ? labelList[0] : labelList
+          if (nextId && typeof rawLabel === "string") {
+            names.register(nextId, rawLabel)
+          }
+          onChange?.(nextId)
+        }}
+        onDropdownVisibleChange={(open) => {
+          if (!open) setEditing(false)
+        }}
+      />
+    )
+  }
+
+  return (
+    <FieldTrigger
+      disabled={disabled}
+      label={label}
+      placeholder="Chọn giảng viên"
+      onOpen={() => setEditing(true)}
+    />
+  )
+})
+
+const LazyRoomField = memo(function LazyRoomField({
+  value,
+  onChange,
+  disabled,
+  treeData,
+}: InjectedField<string | null> & {
+  disabled?: boolean
+  treeData: any[]
+}) {
+  const [editing, setEditing] = useState(false)
+  const roomLabel = useMemo(() => {
+    if (!value) return ""
+    for (const building of treeData) {
+      const room = building.children?.find((item: any) => item.value === value)
+      if (room) return room.label || room.filterValue
+    }
+    return ""
+  }, [value, treeData])
+
+  if (editing && !disabled) {
+    return (
+      <TreeSelect
+        value={value ?? undefined}
+        treeData={treeData}
+        filterTreeNode={(input, option) =>
+          ((option as any)?.filterValue ?? "").toLowerCase().includes(input?.toLowerCase())
+        }
+        showSearch
+        allowClear
+        autoFocus
+        defaultOpen
+        treeNodeFilterProp="title"
+        treeNodeLabelProp="label"
+        multiple={false}
+        treeExpandAction="click"
+        showCheckedStrategy="SHOW_CHILD"
+        dropdownStyle={{ width: 400, maxHeight: 400 }}
+        onChange={(next) => onChange?.((next as string) ?? null)}
+        onDropdownVisibleChange={(open) => {
+          if (!open) setEditing(false)
+        }}
+      />
+    )
+  }
+
+  return (
+    <FieldTrigger
+      disabled={disabled}
+      label={roomLabel}
+      placeholder="Chọn phòng"
+      onOpen={() => setEditing(true)}
+    />
+  )
+})
 
 export const AssignmentRowPaint = memo(function AssignmentRowPaint({
   recordId,
   submitLecturerAssignmentAt,
   approveLecturerAssignmentAt,
   isParent,
-  copySourceId,
+  cancelled,
 }: {
   recordId: string
   submitLecturerAssignmentAt?: Date | string | null
   approveLecturerAssignmentAt?: Date | string | null
   isParent?: boolean
-  copySourceId: string | null
+  cancelled?: boolean
 }) {
   const ref = useRef<HTMLSpanElement>(null)
   const form = Form.useFormInstance<TeachingAssignmentForm>()
+  const copySourceId = useContext(CopySourceContext)
   const lecturerId = Form.useWatch(["subjectClass", recordId, "lecturerId"], form)
   const enterGradeLecturerId = Form.useWatch(
     ["subjectClass", recordId, "enterGradeLecturerId"],
     form
   )
   const isEdit = Form.useWatch(["subjectClass", recordId, "isEdit"], form)
-  const cancelled = Form.useWatch(["subjectClass", recordId, "cancelled"], form)
 
   useLayoutEffect(() => {
     const row = ref.current?.closest("tr")
@@ -217,19 +430,16 @@ export const DeadlineCell = memo(function DeadlineCell({
   canEdit,
   lecturerAssignmentDeadline,
   approveLecturerAssignmentAt,
+  cancelled,
 }: {
   recordId: string
   canEdit: boolean
   lecturerAssignmentDeadline?: Date | string | null
   approveLecturerAssignmentAt?: Date | string | null
+  cancelled?: boolean
 }) {
-  const { form, cancelled } = useRowForm(recordId)
-  const value = Form.useWatch(["subjectClass", recordId, "lecturerAssignmentDeadline"], form)
-  const [editing, setEditing] = useState(false)
+  const form = Form.useFormInstance<TeachingAssignmentForm>()
   const disabled = cancelled || !!approveLecturerAssignmentAt
-  const display = value ? dayjs(value).format("DD/MM/YYYY") : lecturerAssignmentDeadline
-    ? dayjs(lecturerAssignmentDeadline).format("DD/MM/YYYY")
-    : ""
 
   if (!canEdit) {
     if (!lecturerAssignmentDeadline) return ""
@@ -246,25 +456,12 @@ export const DeadlineCell = memo(function DeadlineCell({
 
   return (
     <FormItem form={form} name={["subjectClass", recordId, "lecturerAssignmentDeadline"]}>
-      {editing && !disabled ? (
-        <DatePicker
-          suffixIcon={null}
-          className="px-1"
-          placeholder="Chọn ngày"
-          autoFocus
-          defaultOpen
-          onOpenChange={(open) => {
-            if (!open) setEditing(false)
-          }}
-        />
-      ) : (
-        <LazyTrigger
-          disabled={disabled}
-          label={display}
-          placeholder="Chọn ngày"
-          onOpen={() => setEditing(true)}
-        />
-      )}
+      <LazyDateField
+        disabled={disabled}
+        fallback={
+          lecturerAssignmentDeadline ? dayjs(lecturerAssignmentDeadline).format("DD/MM/YYYY") : ""
+        }
+      />
     </FormItem>
   )
 })
@@ -272,35 +469,17 @@ export const DeadlineCell = memo(function DeadlineCell({
 export const ScheduleCell = memo(function ScheduleCell({
   recordId,
   options,
+  cancelled,
 }: {
   recordId: string
   options: { label: string; value: string }[]
+  cancelled?: boolean
 }) {
-  const { form, cancelled } = useRowForm(recordId)
-  const value = Form.useWatch(["subjectClass", recordId, "schedule"], form)
-  const [editing, setEditing] = useState(false)
-  const label = options.find((item) => item.value === value)?.label
+  const form = Form.useFormInstance<TeachingAssignmentForm>()
 
   return (
     <FormItem form={form} name={["subjectClass", recordId, "schedule"]}>
-      {editing && !cancelled ? (
-        <Select
-          options={options}
-          allowClear={false}
-          autoFocus
-          defaultOpen
-          onDropdownVisibleChange={(open) => {
-            if (!open) setEditing(false)
-          }}
-        />
-      ) : (
-        <LazyTrigger
-          disabled={cancelled}
-          label={label}
-          placeholder="Chọn kíp"
-          onOpen={() => setEditing(true)}
-        />
-      )}
+      <LazyOptionsField options={options} disabled={cancelled} placeholder="Chọn kíp" />
     </FormItem>
   )
 })
@@ -309,30 +488,30 @@ export const LockLecturerCell = memo(function LockLecturerCell({
   recordId,
   logText,
   refetch,
+  cancelled,
 }: {
   recordId: string
   logText: string
   refetch: () => void
+  cancelled?: boolean
 }) {
-  const { form, cancelled, isLockLecturer } = useRowForm(recordId)
+  const form = Form.useFormInstance<TeachingAssignmentForm>()
   const { showSpinner, hideSpinner } = useSpinner()
-  const row = Form.useWatch(["subjectClass", recordId], form)
 
-  if (!recordId || !row) return null
+  if (!recordId) return null
 
   return (
     <Flex vertical align="center" className="gap-1">
-      <FormItem
-        form={form}
-        name={["subjectClass", recordId, "isLockLecturer"]}
-        valuePropName="checked"
-        className="m-0"
-      >
-        <Tooltip title={logText || "Chưa có lịch sử khóa"}>
+      <Tooltip title={logText || "Chưa có lịch sử khóa"}>
+        <FormItem
+          form={form}
+          name={["subjectClass", recordId, "isLockLecturer"]}
+          valuePropName="checked"
+          className="m-0"
+        >
           <Switch
             checkedChildren="Khóa"
             unCheckedChildren="Mở"
-            checked={isLockLecturer}
             disabled={cancelled}
             onChange={async (checked) => {
               try {
@@ -350,14 +529,8 @@ export const LockLecturerCell = memo(function LockLecturerCell({
                 message.success(
                   checked ? "Đã khóa phân công giảng viên" : "Đã mở khóa phân công giảng viên"
                 )
-
-                const current = form.getFieldValue(["subjectClass", recordId])
-                form.setFieldValue(["subjectClass", recordId], {
-                  ...current,
-                  isLockLecturer: checked,
-                  isEdit: false,
-                })
-
+                form.setFieldValue(["subjectClass", recordId, "isLockLecturer"], checked)
+                form.setFieldValue(["subjectClass", recordId, "isEdit"], false)
                 refetch()
               } catch (err: any) {
                 message.error(err?.message || "Không thể cập nhật trạng thái khóa")
@@ -366,8 +539,8 @@ export const LockLecturerCell = memo(function LockLecturerCell({
               }
             }}
           />
-        </Tooltip>
-      </FormItem>
+        </FormItem>
+      </Tooltip>
     </Flex>
   )
 })
@@ -380,6 +553,7 @@ export const LecturerCell = memo(function LecturerCell({
   lecturer,
   canShowSelect,
   deadlinePassed,
+  cancelled,
 }: {
   recordId: string
   field: "lecturerId" | "extraLecturerId" | "enterGradeLecturerId"
@@ -388,47 +562,32 @@ export const LecturerCell = memo(function LecturerCell({
   lecturer?: LecturerLike
   canShowSelect: boolean
   deadlinePassed: boolean
+  cancelled?: boolean
 }) {
-  const { form, cancelled, isLockLecturer } = useRowForm(recordId)
-  const value = Form.useWatch(["subjectClass", recordId, field], form)
-  const ignoreId = Form.useWatch(["subjectClass", recordId, ignoreField ?? "cancelled"], form)
-  const names = useContext(LecturerNameContext)
-  const [editing, setEditing] = useState(false)
-
+  const form = Form.useFormInstance<TeachingAssignmentForm>()
+  const isLockLecturer = Form.useWatch(["subjectClass", recordId, "isLockLecturer"], form) ?? true
+  const ignoreId = ignoreField
+    ? Form.useWatch(["subjectClass", recordId, ignoreField], form)
+    : undefined
   const ignoreLectureIds = useMemo(() => {
     if (!ignoreField || !ignoreId || typeof ignoreId !== "string") return EMPTY_IDS
     return [ignoreId]
   }, [ignoreField, ignoreId])
 
-  const label =
-    (value && names.get(value)) || formatLecturerName(lecturer) || ""
-  const disabled = deadlinePassed || isLockLecturer
+  const label = formatLecturerName(lecturer)
 
   if (cancelled || !canShowSelect) {
-    return formatLecturerName(lecturer) || label
+    return label
   }
 
   return (
     <FormItem form={form} name={["subjectClass", recordId, field]}>
-      {editing && !disabled ? (
-        <LectureTreeSelect
-          placeholder="Chọn giảng viên"
-          ignoreLectureIds={field === "enterGradeLecturerId" ? undefined : ignoreLectureIds}
-          organizationId={organizationId}
-          defaultOpen
-          autoFocus
-          onDropdownVisibleChange={(open) => {
-            if (!open) setEditing(false)
-          }}
-        />
-      ) : (
-        <LazyTrigger
-          disabled={disabled}
-          label={label}
-          placeholder="Chọn giảng viên"
-          onOpen={() => setEditing(true)}
-        />
-      )}
+      <LazyLecturerField
+        disabled={deadlinePassed || isLockLecturer}
+        fallbackName={label}
+        organizationId={organizationId}
+        ignoreLectureIds={field === "enterGradeLecturerId" ? undefined : ignoreLectureIds}
+      />
     </FormItem>
   )
 })
@@ -453,34 +612,20 @@ export const ExamTypeCell = memo(function ExamTypeCell({
   initialValue?: string
 }) {
   const form = Form.useFormInstance<TeachingAssignmentForm>()
-  const value = Form.useWatch(["subjectClass", recordId, "examType"], form)
-  const [editing, setEditing] = useState(false)
   const disabled =
     !!cancelled ||
     hasGradedStudent ||
     (khoaBoMon && (!!submitLecturerAssignmentAt || deadlinePassed))
-  const label = options.find((item) => item.value === value)?.label ?? initialValue
 
   return (
-    <FormItem form={form} name={["subjectClass", recordId, "examType"]} initialValue={initialValue}>
-      {editing && !disabled ? (
-        <Select
-          dropdownStyle={{ width: 250 }}
-          options={options}
-          autoFocus
-          defaultOpen
-          onDropdownVisibleChange={(open) => {
-            if (!open) setEditing(false)
-          }}
-        />
-      ) : (
-        <LazyTrigger
-          disabled={disabled}
-          label={label}
-          placeholder="Chọn hình thức"
-          onOpen={() => setEditing(true)}
-        />
-      )}
+    <FormItem form={form} name={["subjectClass", recordId, "examType"]}>
+      <LazyOptionsField
+        options={options}
+        disabled={disabled}
+        placeholder="Chọn hình thức"
+        fallback={initialValue}
+        dropdownWidth={250}
+      />
     </FormItem>
   )
 })
@@ -490,44 +635,29 @@ export const LocationCell = memo(function LocationCell({
   options,
   canEdit,
   trainingLocationName,
+  cancelled,
 }: {
   recordId: string
   options: { label: string; value: string }[]
   canEdit: boolean
   trainingLocationName?: string | null
+  cancelled?: boolean
 }) {
-  const { form, cancelled } = useRowForm(recordId)
-  const value = Form.useWatch(["subjectClass", recordId, "trainingLocationId"], form)
-  const [editing, setEditing] = useState(false)
-  const label = options.find((item) => item.value === value)?.label || trainingLocationName
+  const form = Form.useFormInstance<TeachingAssignmentForm>()
 
   if (!canEdit) return trainingLocationName || "-"
 
   return (
     <FormItem form={form} name={["subjectClass", recordId, "trainingLocationId"]}>
-      {editing && !cancelled ? (
-        <Select
-          options={options}
-          allowClear
-          showSearch
-          autoFocus
-          defaultOpen
-          filterOption={(input, option) =>
-            (option?.label ?? "").toString().toLowerCase().includes(input.toLowerCase())
-          }
-          dropdownStyle={{ width: 400, maxHeight: 400 }}
-          onDropdownVisibleChange={(open) => {
-            if (!open) setEditing(false)
-          }}
-        />
-      ) : (
-        <LazyTrigger
-          disabled={cancelled}
-          label={label}
-          placeholder="Chọn khu vực"
-          onOpen={() => setEditing(true)}
-        />
-      )}
+      <LazyOptionsField
+        options={options}
+        disabled={cancelled}
+        placeholder="Chọn khu vực"
+        fallback={trainingLocationName}
+        allowClear
+        showSearch
+        dropdownWidth={400}
+      />
     </FormItem>
   )
 })
@@ -548,54 +678,14 @@ export const RoomCell = memo(function RoomCell({
   deadlinePassed: boolean
 }) {
   const form = Form.useFormInstance<TeachingAssignmentForm>()
-  const formCancelled = Form.useWatch(["subjectClass", recordId, "cancelled"], form)
   const trainingLocationId = Form.useWatch(["subjectClass", recordId, "trainingLocationId"], form)
-  const roomId = Form.useWatch(["subjectClass", recordId, "roomId"], form)
-  const [editing, setEditing] = useState(false)
   const treeData = trainingLocationId ? (treeDataByLocation[trainingLocationId] ?? []) : []
   const disabled =
-    !!(formCancelled ?? cancelled) ||
-    (khoaBoMon && (!!submitLecturerAssignmentAt || deadlinePassed))
-
-  const roomLabel = useMemo(() => {
-    if (!roomId) return ""
-    for (const building of treeData) {
-      const room = building.children?.find((item: any) => item.value === roomId)
-      if (room) return room.label || room.filterValue
-    }
-    return ""
-  }, [roomId, treeData])
+    !!cancelled || (khoaBoMon && (!!submitLecturerAssignmentAt || deadlinePassed))
 
   return (
     <FormItem form={form} name={["subjectClass", recordId, "roomId"]}>
-      {editing && !disabled ? (
-        <TreeSelect
-          treeData={treeData}
-          filterTreeNode={(input, option) =>
-            ((option as any)?.filterValue ?? "").toLowerCase().includes(input?.toLowerCase())
-          }
-          showSearch
-          allowClear
-          autoFocus
-          defaultOpen
-          treeNodeFilterProp="title"
-          treeNodeLabelProp="label"
-          multiple={false}
-          treeExpandAction="click"
-          showCheckedStrategy="SHOW_CHILD"
-          dropdownStyle={{ width: 400, maxHeight: 400 }}
-          onDropdownVisibleChange={(open) => {
-            if (!open) setEditing(false)
-          }}
-        />
-      ) : (
-        <LazyTrigger
-          disabled={disabled}
-          label={roomLabel}
-          placeholder="Chọn phòng"
-          onOpen={() => setEditing(true)}
-        />
-      )}
+      <LazyRoomField disabled={disabled} treeData={treeData} />
     </FormItem>
   )
 })
@@ -604,7 +694,6 @@ export const ActionsCell = memo(function ActionsCell({
   recordId,
   cancelled,
   status,
-  copySourceId,
   canEdit,
   canDelete,
   onCopyToggle,
@@ -614,7 +703,6 @@ export const ActionsCell = memo(function ActionsCell({
   recordId: string
   cancelled?: boolean
   status?: $Enums.SubjectClassStatus
-  copySourceId: string | null
   canEdit: boolean
   canDelete: boolean
   onCopyToggle: (id: string) => void
@@ -622,9 +710,9 @@ export const ActionsCell = memo(function ActionsCell({
   onDelete: (id: string) => void
 }) {
   const form = Form.useFormInstance<TeachingAssignmentForm>()
+  const copySourceId = useContext(CopySourceContext)
   const lecturerId = Form.useWatch(["subjectClass", recordId, "lecturerId"], form)
-  const formCancelled = Form.useWatch(["subjectClass", recordId, "cancelled"], form)
-  const canTriggerCopy = !!(lecturerId && !(formCancelled ?? cancelled))
+  const canTriggerCopy = !!(lecturerId && !cancelled)
 
   if (cancelled) return null
   if (!recordId) return ""
@@ -658,6 +746,9 @@ export const ActionsCell = memo(function ActionsCell({
       {canDelete && (
         <DeleteIcon
           popConfirm={{
+            title: "Xác nhận xóa lớp môn học?",
+            description:
+              "Xóa lớp và dữ liệu liên quan (lịch sử phân công, thời khóa biểu, sinh viên, điểm danh…). Không thể hoàn tác.",
             onConfirm: () => onDelete(recordId),
           }}
           disabled={status !== $Enums.SubjectClassStatus.DRAFT}

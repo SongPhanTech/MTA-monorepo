@@ -8,10 +8,16 @@ import { loadAllCatalogs } from "./export-all-catalogs"
 import { packSyncPayload, SYNC_FILE_EXT } from "./data-sync-pack"
 import { setExportPayloadBinary } from "./export-payload-store"
 import {
+  getExportJob,
   markExportJobFailed,
   markExportJobSuccess,
   updateExportJobProgress,
 } from "./export-redis-store"
+import {
+  markDataSyncHistoryFailed,
+  markDataSyncHistorySuccess,
+} from "./data-sync-history"
+import { buildSyncCategories } from "@workspace/constant"
 import {
   loadSessionScopedEntities,
   notDeleted,
@@ -21,8 +27,21 @@ import {
 import { loadWarningAndScholarshipData } from "./export-warning-scholarship"
 import { EXPORT_TRAINING_DATA_VERSION } from "./export-training-data"
 
-export async function processExportJob(jobId: string, classRegisterSessionId?: string): Promise<void> {
+export async function processExportJob(
+  jobId: string,
+  classRegisterSessionId?: string,
+  syncHistoryId?: string
+): Promise<void> {
   try {
+    if (!syncHistoryId) {
+      try {
+        const jobState = await getExportJob(jobId)
+        syncHistoryId = jobState?.syncHistoryId
+      } catch {
+        /* ignore */
+      }
+    }
+
     await updateExportJobProgress(jobId, 5, "Bắt đầu khởi tạo tiến trình trích xuất dữ liệu...")
 
     // Lấy thông tin đợt đăng ký nếu chỉ định xuất 1 đợt
@@ -296,6 +315,26 @@ export async function processExportJob(jobId: string, classRegisterSessionId?: s
     const fileSize = await setExportPayloadBinary(jobId, packed, fileName)
 
     await markExportJobSuccess(jobId, fileName, fileSize, counts)
+    if (syncHistoryId) {
+      const totalCount = Object.values(counts).reduce(
+        (sum, n) => sum + (typeof n === "number" ? n : 0),
+        0
+      )
+      await markDataSyncHistorySuccess(syncHistoryId, {
+        classRegisterSessionId,
+        fileName,
+        recordCounts: {
+          total: totalCount,
+          success: totalCount,
+          failed: 0,
+          counts,
+          categories: buildSyncCategories(counts),
+        },
+        description: `Đã xuất thành công `,
+      }).catch((err) => {
+        console.error(`[export-worker] Lỗi cập nhật DataSyncHistory:`, err)
+      })
+    }
     console.log(
       `[export-worker] Đã hoàn tất job ${jobId} -> ${fileName} ` +
         `(packed ${(fileSize / (1024 * 1024)).toFixed(2)} MB từ JSON ~${(Buffer.byteLength(json) / (1024 * 1024)).toFixed(1)} MB, redis)`
@@ -304,6 +343,11 @@ export async function processExportJob(jobId: string, classRegisterSessionId?: s
     const errorMsg = error instanceof Error ? error.message : String(error)
     console.error(`[export-worker] Lỗi xuất dữ liệu job ${jobId}:`, error)
     await markExportJobFailed(jobId, errorMsg)
+    if (syncHistoryId) {
+      await markDataSyncHistoryFailed(syncHistoryId, errorMsg).catch((err) => {
+        console.error(`[export-worker] Lỗi ghi DataSyncHistory FAILED:`, err)
+      })
+    }
   }
 }
 

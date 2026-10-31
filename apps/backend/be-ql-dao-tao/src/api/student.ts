@@ -793,11 +793,11 @@ const exportStudentProfiles = createRoute({
   path: "/export-student-profiles",
   method: "post",
   summary: "Xuất hồ sơ học viên",
-  description: `Xuất Excel hồ sơ học viên theo khóa.
+  description: `Xuất Excel hồ sơ học viên theo khóa, có thể lọc thêm lớp quản lý.
 
 **Bảng dữ liệu nguồn:** Student, UserProfile, FixedClass.
 
-**Tham số:** trainingCourseId.`,
+**Tham số:** trainingCourseId, fixedClassId (tùy chọn).`,
   request: {
     body: {
       content: {
@@ -805,6 +805,14 @@ const exportStudentProfiles = createRoute({
           schema: z
             .object({
               trainingCourseId: z.string().openapi(fieldDesc("ID khóa học.")),
+              fixedClassId: z
+                .string()
+                .optional()
+                .openapi(fieldDesc("ID lớp quản lý — nếu có thì chỉ xuất sinh viên lớp đó.")),
+              fixedClassIds: z
+                .array(z.string())
+                .optional()
+                .openapi(fieldDesc("Danh sách ID lớp quản lý — lọc theo cột Lớp trên bảng.")),
             })
             .openapi("ExportStudentProfilesRequest"),
         },
@@ -845,9 +853,9 @@ app.openapi(downloadStudentImportTemplate, async (c) => {
 })
 
 app.openapi(exportStudentProfiles, async (c) => {
-  const { trainingCourseId } = c.req.valid("json")
+  const { trainingCourseId, fixedClassId, fixedClassIds } = c.req.valid("json")
 
-  const result = await exportStudentProfile({ trainingCourseId })
+  const result = await exportStudentProfile({ trainingCourseId, fixedClassId, fixedClassIds })
 
   const fileName = "DANH_SACH_SV.xlsx"
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`

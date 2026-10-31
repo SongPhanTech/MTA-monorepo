@@ -5,7 +5,8 @@ const toBase64Url = (data: string | ArrayBuffer) => {
   return buf.toString("base64url")
 }
 
-export const getOnlyOfficeJwtSecret = () => process.env.ONLYOFFICE_JWT_SECRET?.trim() || ""
+export const getOnlyOfficeJwtSecret = () =>
+  process.env.ONLYOFFICE_JWT_SECRET?.trim() || "swantechKeyOnlyOffice38912wnsaiwe"
 
 export const getOnlyOfficeJwtHeader = () =>
   process.env.ONLYOFFICE_JWT_HEADER?.trim() || "AuthorizationJwt"

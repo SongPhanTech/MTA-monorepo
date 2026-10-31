@@ -1,3 +1,5 @@
+import { useQuery } from "@tanstack/react-query"
+import { customTrainingFetch } from "@workspace/libs/api/custom-instance"
 import { formatDateInSlash, formatNgayIn, formatThangIn } from "@workspace/libs/timezone"
 import FormItem from "@components/commons/form-item"
 import Select from "@components/commons/select"
@@ -77,8 +79,9 @@ import {
   PLVB_NOTE_FONT,
   getAppendixSubjectPrintName,
   getAppendixSubjectRowHeight as sharedGetAppendixSubjectRowHeight,
-  summarizePlvbCredits,
+  resolvePlvbGraduationTotals,
   wrapAppendixSubjectName as sharedWrapAppendixSubjectName,
+  type PlvbGraduationSummary,
 } from "../../../utils/phu-luc-van-bang/plvb-print-settings"
 
 type TSubjectItem = StudentSubjectScore & {
@@ -426,6 +429,7 @@ export interface SessionSignerInfo {
   graduationDecisionDate?: Date | string | null
   proposalGraduation?: string | null
   graduationReport?: string | null
+  councilMeetingBasis?: string | null
   graduationDecisionMaker?: string | null
   name?: string | null
 }
@@ -488,6 +492,7 @@ export type TStudentWithSubjects = Student &
   }
 
 export type TStudentWithSemesters = TStudentWithSubjects & {
+  graduationSummary?: PlvbGraduationSummary | null
   semesters: Array<{
     id: string
     name: string
@@ -832,6 +837,38 @@ export default function StudentGradeSystem() {
     }
   )
 
+  const studentIds = useMemo(() => (students || []).map((item) => item.id).filter(Boolean), [students])
+
+  const { data: graduationSummaryByStudent = {} } = useQuery({
+    queryKey: ["plvb-graduation-gpa", studentIds],
+    enabled: viewResult && studentIds.length > 0,
+    refetchOnWindowFocus: false,
+    queryFn: async () => {
+      const entries = await Promise.all(
+        studentIds.map(async (studentId) => {
+          const res = await customTrainingFetch<{
+            status: number
+            data: PlvbGraduationSummary | { message?: string }
+          }>(`/api/graduation/student-transcript?studentId=${encodeURIComponent(studentId)}`, {
+            method: "GET",
+          })
+          if (res.status !== 200 || !res.data || !("totalPassCredit" in res.data)) return null
+          return [
+            studentId,
+            {
+              gpaBase10: res.data.gpaBase10,
+              gpaBase4: res.data.gpaBase4,
+              totalPassCredit: res.data.totalPassCredit,
+            },
+          ] as const
+        })
+      )
+      return Object.fromEntries(
+        entries.filter((item): item is readonly [string, PlvbGraduationSummary] => item != null)
+      )
+    },
+  })
+
   const studentsWithSemesters = useMemo(() => {
     return (students || []).map((student) => {
       const { scoreConverts } = student?.fixedClass?.trainingCourse || {}
@@ -955,9 +992,10 @@ export default function StudentGradeSystem() {
       return {
         ...student,
         semesters,
+        graduationSummary: graduationSummaryByStudent[student.id] ?? null,
       }
     }) as TStudentWithSemesters[]
-  }, [students])
+  }, [students, graduationSummaryByStudent])
 
   const studentTableData = useMemo(() => {
     return (studentsWithSemesters || []).map((student, index) => ({
@@ -1237,9 +1275,9 @@ export default function StudentGradeSystem() {
       printDate,
       signerName: signerName ?? "",
       courseTextEn1: "FOR COMPLETING THE COURSE FOR TECHNICAL AND LOGISTICS",
-      courseTextEn2: fieldEn.toUpperCase(),
+      courseTextEn2: fieldEn,
       courseTextVi1: "ĐÀO TẠO",
-      courseTextVi2: (selectedObjectType?.name || "").toUpperCase(),
+      courseTextVi2: selectedObjectType?.name || "",
       includeNamePrefix: selectedObjectType?.type === "CIVILIAN",
     })
   }
@@ -1277,20 +1315,7 @@ export default function StudentGradeSystem() {
         .filter((semester) => isGraduationSemesterGroup(semester.id))
         .flatMap((semester) => semester?.subjects ?? [])
 
-      const {
-        totalCredits: tongTinChi,
-        weighted10: tongDiemNhanTinChiHe10,
-        weighted4: tongDiemNhanTinChiHe4,
-      } = summarizePlvbCredits(student.semesters)
-      const computedGpa10 =
-        tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe10 / tongTinChi).toFixed(2))
-      const officialGpa = student.graduationDecision?.finalGpa
-      const diemTBHe10 =
-        officialGpa != null && Number.isFinite(Number(officialGpa))
-          ? Number(Number(officialGpa).toFixed(2))
-          : computedGpa10
-      const diemTBHe4 =
-        tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe4 / tongTinChi).toFixed(2))
+      const { tongTinChi, diemTBHe10, diemTBHe4 } = resolvePlvbGraduationTotals(student)
       const xepLoai =
         student.graduationDecision?.finalRanking?.classification ??
         getGraduationClassification(diemTBHe10, diemTBHe4, academicRankingConvert || [])
@@ -1412,17 +1437,7 @@ export default function StudentGradeSystem() {
       }
       tableRows.splice(MAX_ROWS)
 
-      const {
-        totalCredits: tongTinChi,
-        weighted10: tongDiemNhanTinChiHe10,
-        weighted4: tongDiemNhanTinChiHe4,
-      } = summarizePlvbCredits(student.semesters)
-
-      const diemTBHe10 =
-        tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe10 / tongTinChi).toFixed(2))
-
-      const diemTBHe4 =
-        tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe4 / tongTinChi).toFixed(2))
+      const { tongTinChi, diemTBHe10, diemTBHe4 } = resolvePlvbGraduationTotals(student)
 
       const xepLoai =
         student.graduationDecision?.finalRanking?.classification ??
@@ -1676,8 +1691,11 @@ export default function StudentGradeSystem() {
     }
 
     const chiefName = session.chief?.trim() || session.graduationDecisionSigner?.trim() || ""
+    const deputyName = session.deputy?.trim() || ""
     setPendingSignKind("quyetDinhCongNhan")
     setSignRole(chiefName ? "chief" : "deputy")
+    setSignChiefName(chiefName)
+    setSignDeputyName(deputyName)
     const sidebarDate = form.getFieldValue("date")
     setSigningDate(sidebarDate ? dayjs(sidebarDate) : dayjs())
     setSignModalOpen(true)
@@ -1735,12 +1753,12 @@ export default function StudentGradeSystem() {
       | undefined
     if (!session) return
 
-    const chiefName = session.chief?.trim() || session.graduationDecisionSigner?.trim() || ""
-    const deputyName = session.deputy?.trim() || ""
+    const chiefName = signChiefName.trim()
+    const deputyName = signDeputyName.trim()
     const signerNameTS = signRole === "chief" ? chiefName : deputyName
-    if (!signerNameTS.trim()) {
+    if (!signerNameTS) {
       message.warning(
-        `Chưa có họ tên ${signRole === "chief" ? "Trưởng phòng" : "Phó trưởng phòng"} sau đại học trong đợt xét.`
+        `Vui lòng nhập họ tên ${signRole === "chief" ? "Trưởng phòng" : "Phó trưởng phòng"} sau đại học.`
       )
       return
     }
@@ -1751,7 +1769,7 @@ export default function StudentGradeSystem() {
     await doExportQuyetDinhCongNhan(signerNameTS, signingDate)
   }
 
-  const doExportQuyetDinhCongNhan = async (signerNameTS: string, dateTS: Dayjs) => {
+  const doExportQuyetDinhCongNhan = async (signerNameTS: string, _dateTS: Dayjs) => {
     const selectedSessionId = thesisSessionIds?.[0]
     const session = thesisSessionData.find((s) => s.id === selectedSessionId) as
       | SessionSignerInfo
@@ -1776,7 +1794,9 @@ export default function StudentGradeSystem() {
       titlePart = parts[0]
       namePart = parts[1]
     } else {
-      const match = (effectiveSignerName || "").match(/^(PGD|GD|GĐ|Phó Giám đốc|Giám đốc)\s+(.*)$/i)
+      const match = (effectiveSignerName || "").match(
+        /^(PGĐ|PGD|GD|GĐ|Phó Giám đốc|Giám đốc)\s+(.*)$/i
+      )
       if (match) {
         titlePart = match[1]
         namePart = match[2]
@@ -1807,27 +1827,27 @@ export default function StudentGradeSystem() {
     const thangQD = String(dateQD.month() + 1)
     const namQD = String(dateQD.year())
 
-    const ngayTS = String(dateTS.date())
-    const thangTS = String(dateTS.month() + 1)
-    const namTS = String(dateTS.year())
+    const today = dayjs()
+    const ngayTS = String(today.date())
+    const thangTS = String(today.month() + 1)
+    const namTS = String(today.year())
 
-    let soToTrinh = session?.graduationReport || session?.proposalGraduation || ""
-    let ngayToTrinh = ""
-    if (soToTrinh.toLowerCase().includes(" ngày ")) {
-      const reportParts = soToTrinh.split(/ ngày /i)
-      soToTrinh = reportParts[0].trim()
-      ngayToTrinh = reportParts[1].trim()
-    }
-
-    const firstStudentCourse = studentsWithSemesters?.[0]?.fixedClass?.trainingCourse
-    const namHocStr =
-      firstStudentCourse?.academicYear ||
-      (firstStudentCourse?.startYear && firstStudentCourse?.endYear
-        ? `${firstStudentCourse.startYear} - ${firstStudentCourse.endYear}`
-        : `${dayjs().year()} - ${dayjs().year() + 1}`)
+    const toTrinh = (session?.proposalGraduation || session?.graduationReport || "").trim()
+    const canCuHoiDong = (session?.councilMeetingBasis || "").trim()
+    const quyChe = [
+      ...new Set(
+        (studentsWithSemesters || [])
+          .map((student) => student.fixedClass?.trainingCourse?.regulation?.trim())
+          .filter((value): value is string => Boolean(value))
+      ),
+    ].join("; ")
+    const signerNameTrichSao = signerNameTS
 
     const items = studentsWithSemesters.map((student) => {
       const course = student.fixedClass?.trainingCourse
+      const trainingMajor =
+        student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor ||
+        student.graduationDecision?.trainingMajor
       let nienKhoaStr = ""
       if (course?.academicYear) {
         nienKhoaStr = `(${course.academicYear})`
@@ -1838,12 +1858,11 @@ export default function StudentGradeSystem() {
       return {
         hoTen: student.userProfile.fullname,
         ngaySinh: formatSpecialDate(student.userProfile.dateOfBirth ?? ""),
-        chuyenNganh: student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ?? "",
+        nganh: trainingMajor?.trainingField?.name ?? "",
+        chuyenNganh: trainingMajor?.name ?? "",
         tenKhoa: course ? `${course.name} ${nienKhoaStr}`.trim() : "",
-        soVanBang:
-          student.graduationDecision?.originalDiplomaNumber ??
-          student.graduationDecision?.diplomaNumber ??
-          "",
+        soHieuBang: student.graduationDecision?.diplomaNumber ?? "",
+        soVaoSoGoc: student.graduationDecision?.originalDiplomaNumber ?? "",
       }
     })
 
@@ -1859,16 +1878,13 @@ export default function StudentGradeSystem() {
           thangQD,
           namQD,
           dot: session?.name || "",
-          namHoc: namHocStr,
-          ngayHop: session?.graduationDecisionDate
-            ? formatSpecialDate(session.graduationDecisionDate.toString())
-            : "",
-          soToTrinh,
-          ngayToTrinh,
+          quyChe,
+          canCuHoiDong,
+          toTrinh,
           signerTitle,
           signerSubTitle,
           signerRankName,
-          signerNameTS,
+          signerNameTS: signerNameTrichSao,
           ngayTS,
           thangTS,
           namTS,
@@ -2354,61 +2370,40 @@ export default function StudentGradeSystem() {
             : (selectedThesisSession?.name ?? "—")}
           .
         </p>
-        <Radio.Group
-          value={signRole}
-          onChange={(e) => setSignRole(e.target.value)}
-          className="flex flex-col gap-3"
-        >
-          <Radio value="chief">
-            <span className="inline-flex flex-wrap items-center gap-2">
-              <span>Trưởng phòng sau đại học:</span>
-              {pendingSignKind === "phuLucVanBangCaoHoc" ||
-              pendingSignKind === "phuLucVanBangNganHan" ? (
-                <Input
-                  size="small"
-                  className="w-56"
-                  value={signChiefName}
-                  placeholder="Nhập họ tên"
-                  onClick={(e) => e.stopPropagation()}
-                  onChange={(e) => {
-                    setSignChiefName(e.target.value)
-                    setSignRole("chief")
-                  }}
-                />
-              ) : (
-                <strong>
-                  {(selectedThesisSession as SessionSignerInfo | undefined)?.chief?.trim() ||
-                    selectedThesisSession?.graduationDecisionSigner?.trim() ||
-                    "(chưa nhập)"}
-                </strong>
-              )}
-            </span>
-          </Radio>
-          <Radio value="deputy">
-            <span className="inline-flex flex-wrap items-center gap-2">
-              <span>Phó trưởng phòng sau đại học:</span>
-              {pendingSignKind === "phuLucVanBangCaoHoc" ||
-              pendingSignKind === "phuLucVanBangNganHan" ? (
-                <Input
-                  size="small"
-                  className="w-56"
-                  value={signDeputyName}
-                  placeholder="Nhập họ tên"
-                  onClick={(e) => e.stopPropagation()}
-                  onChange={(e) => {
-                    setSignDeputyName(e.target.value)
-                    setSignRole("deputy")
-                  }}
-                />
-              ) : (
-                <strong>
-                  {(selectedThesisSession as SessionSignerInfo | undefined)?.deputy?.trim() ||
-                    "(chưa nhập)"}
-                </strong>
-              )}
-            </span>
-          </Radio>
-        </Radio.Group>
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-wrap items-center gap-2">
+            <Radio checked={signRole === "chief"} onChange={() => setSignRole("chief")}>
+              Trưởng phòng sau đại học:
+            </Radio>
+            <Input
+              size="small"
+              className="w-56"
+              value={signChiefName}
+              placeholder="Nhập họ tên"
+              onFocus={() => setSignRole("chief")}
+              onChange={(e) => {
+                setSignChiefName(e.target.value)
+                setSignRole("chief")
+              }}
+            />
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <Radio checked={signRole === "deputy"} onChange={() => setSignRole("deputy")}>
+              Phó trưởng phòng sau đại học:
+            </Radio>
+            <Input
+              size="small"
+              className="w-56"
+              value={signDeputyName}
+              placeholder="Nhập họ tên"
+              onFocus={() => setSignRole("deputy")}
+              onChange={(e) => {
+                setSignDeputyName(e.target.value)
+                setSignRole("deputy")
+              }}
+            />
+          </div>
+        </div>
         <div className="mt-4">
           <div className="mb-2 text-gray-700">Ngày in</div>
           <DatePicker

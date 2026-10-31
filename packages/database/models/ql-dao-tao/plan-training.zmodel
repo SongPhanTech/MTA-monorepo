@@ -1166,6 +1166,7 @@ model SubjectClass extends BaseNoCode {
   subjectClassHistory         SubjectClassHistory[]
   examBank                    ExamBank[]
   subjectClassAttendances     SubjectClassAttendance[]
+  documentFiles               DocumentFile[]
 
   @@index([lecturerId])
   @@index([extraLecturerId])

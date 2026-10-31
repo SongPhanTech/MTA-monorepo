@@ -234,6 +234,12 @@ const ModalChiTietGiangVien = () => {
               </div>
             </Col>
             <Col span={6}>
+              <Text type="secondary">Mã TKPU</Text>
+              <div>
+                <Text strong>{lecturer.TKPUcode || "-"}</Text>
+              </div>
+            </Col>
+            <Col span={6}>
               <Text type="secondary">Loại giảng viên</Text>
               <div>
                 <Text strong>{lecturer.lecturerType?.name || "-"}</Text>

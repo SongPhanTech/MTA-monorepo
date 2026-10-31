@@ -2,7 +2,7 @@ import DefaultLayout from "@layouts/default-layout"
 import { buildOrgFlat } from "@lib/utils"
 import PhanCongGiangDay from "@pages/ke-hoach-giao-duc/_pages/phan-cong-giang-day"
 import { $Enums, type Prisma } from "@workspace/db/client"
-import { useFindManyDM_DonVi } from "@workspace/db/hooks"
+import { useCountSubjectClass, useFindManyDM_DonVi } from "@workspace/db/hooks"
 import { whereOrganization } from "@workspace/libs/constants"
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import { Tabs } from "antd"
@@ -38,162 +38,63 @@ export default function KhaoBoMonPhanCongGiangDay() {
     }
   )
 
-  const orgIds = [
-    ...buildOrgFlat(
-      dmDonViIds.map((e) => ({
-        Id: e.Id,
-        sTen: null,
-        sParentId: null,
-        sMa: null,
-      })),
-      orgId || "0"
-    ).map((org) => org.value),
-    orgId,
-  ].filter(Boolean)
-  const [{ data: scNormalCount = [] }, { data: scRetakeCount = [] }, { data: scReExamCount = [] }] =
-    [
-      useFindManyDM_DonVi(
-        {
-          select: {
-            subjectVersions: {
-              select: {
-                _count: {
-                  select: {
-                    subjectClass: {
-                      where: {
-                        ...where,
-                        type: $Enums.SubjectClassType.NORMAL,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-          where: {
-            bActive: true,
-            subjectVersions: {
-              some: {
-                subjectClass: {
-                  some: {
-                    ...where,
-                    type: $Enums.SubjectClassType.NORMAL,
-                  },
-                },
-              },
-            },
-            Id: {
-              in: orgIds,
-            },
-            ...whereOrganization,
-          },
-          orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
-        },
-        {
-          enabled: !!semesterId && !!trainingObjectTypeId,
-          refetchOnWindowFocus: false,
-        }
-      ),
-      useFindManyDM_DonVi(
-        {
-          select: {
-            subjectVersions: {
-              select: {
-                _count: {
-                  select: {
-                    subjectClass: {
-                      where: {
-                        ...where,
-                        type: $Enums.SubjectClassType.RETAKE,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-          where: {
-            bActive: true,
-            subjectVersions: {
-              some: {
-                subjectClass: {
-                  some: {
-                    ...where,
-                    type: $Enums.SubjectClassType.RETAKE,
-                  },
-                },
-              },
-            },
-            Id: {
-              in: orgIds,
-            },
-            ...whereOrganization,
-          },
-          orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
-        },
-        {
-          enabled: !!semesterId && !!trainingObjectTypeId,
-          refetchOnWindowFocus: false,
-        }
-      ),
-      useFindManyDM_DonVi(
-        {
-          select: {
-            subjectVersions: {
-              select: {
-                _count: {
-                  select: {
-                    subjectClass: {
-                      where: {
-                        ...where,
-                        type: $Enums.SubjectClassType.REEXAM,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-          where: {
-            bActive: true,
-            subjectVersions: {
-              some: {
-                subjectClass: {
-                  some: {
-                    ...where,
-                    type: $Enums.SubjectClassType.REEXAM,
-                  },
-                },
-              },
-            },
-            Id: {
-              in: orgIds,
-            },
-            ...whereOrganization,
-          },
-          orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
-        },
-        {
-          enabled: !!semesterId && !!trainingObjectTypeId,
-          refetchOnWindowFocus: false,
-        }
-      ),
-    ]
-  const countNormal = scNormalCount
-    .flatMap((e) => e.subjectVersions)
-    .map((e) => e._count.subjectClass)
-    .reduce((a, b) => a + b, 0)
-  const countRetake = scRetakeCount
-    .flatMap((e) => e.subjectVersions)
-    .map((e) => e._count.subjectClass)
-    .reduce((a, b) => a + b, 0)
-  const countReExam = scReExamCount
-    .flatMap((e) => e.subjectVersions)
-    .map((e) => e._count.subjectClass)
-    .reduce((a, b) => a + b, 0)
+  const orgIds = useMemo(
+    () =>
+      [
+        ...buildOrgFlat(
+          dmDonViIds.map((e) => ({
+            Id: e.Id,
+            sTen: null,
+            sParentId: null,
+            sMa: null,
+          })),
+          orgId || "0"
+        ).map((org) => org.value),
+        orgId,
+      ].filter(Boolean) as string[],
+    [dmDonViIds, orgId]
+  )
+
+  const countEnabled = !!semesterId && !!trainingObjectTypeId && orgIds.length > 0
+  const countByOrg = {
+    subject: {
+      managementOrganizationId: { in: orgIds },
+    },
+  }
+
+  const { data: countNormal = 0 } = useCountSubjectClass(
+    {
+      where: {
+        ...where,
+        type: $Enums.SubjectClassType.NORMAL,
+        ...countByOrg,
+      },
+    },
+    { enabled: countEnabled, refetchOnWindowFocus: false }
+  )
+  const { data: countRetake = 0 } = useCountSubjectClass(
+    {
+      where: {
+        ...where,
+        type: $Enums.SubjectClassType.RETAKE,
+        ...countByOrg,
+      },
+    },
+    { enabled: countEnabled, refetchOnWindowFocus: false }
+  )
+  const { data: countReExam = 0 } = useCountSubjectClass(
+    {
+      where: {
+        ...where,
+        type: $Enums.SubjectClassType.REEXAM,
+        ...countByOrg,
+      },
+    },
+    { enabled: countEnabled, refetchOnWindowFocus: false }
+  )
 
   return (
-    <Tabs>
+    <Tabs destroyInactiveTabPane>
       <Tabs.TabPane key={$Enums.SubjectClassType.NORMAL} tab={`Lớp môn học (${countNormal})`}>
         <PhanCongGiangDay khoaBoMon type={$Enums.SubjectClassType.NORMAL} />
       </Tabs.TabPane>

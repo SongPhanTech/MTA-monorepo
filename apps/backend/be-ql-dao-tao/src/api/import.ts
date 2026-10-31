@@ -9,7 +9,7 @@ import {
   parseSheetStudent,
   zParseSheetError,
 } from "@workspace/libs/parseExcel"
-import { normalizeCatalogName, splitFullName } from "@workspace/libs/utils"
+import { normalizeCatalogName, splitFullName, studentLsbRoles } from "@workspace/libs/utils"
 import { prisma } from ".."
 import { UploadExcelModel } from "../dto/upload-excel.dto"
 import {
@@ -254,11 +254,14 @@ const findLsbNhanVienId = async (code: string, idCardNumber: string) => {
   if (res.status !== 200) return undefined
 
   const rows = lsbRows(res.data)
-  const matched =
-    rows.find((row) => String(row.sCCCD ?? "") === idCardNumber.trim()) ??
-    rows.find((row) => String(row.sMa ?? "") === code.trim()) ??
-    rows[0]
-  return matched ? lsbRowId(matched) : undefined
+  const codeKey = code.trim()
+  const cccdKey = idCardNumber.trim()
+  const byCode = rows.find((row) => String(row.sMa ?? "").trim() === codeKey)
+  if (byCode) return lsbRowId(byCode)
+  const byCccd = rows.find((row) => String(row.sCCCD ?? "").trim() === cccdKey)
+  const byCccdCode = byCccd ? String(byCccd.sMa ?? "").trim() : ""
+  if (byCccd && (!byCccdCode || byCccdCode === codeKey)) return lsbRowId(byCccd)
+  return undefined
 }
 
 const importLecturer = createRoute({
@@ -349,11 +352,16 @@ app.openapi(importLecturer, async (c) => {
         in: data.lecturers.map((lecturer) => lecturer.idCardNumber),
       },
     },
-    select: { id: true, idCardNumber: true },
+    select: { id: true, idCardNumber: true, bLaNguoiDung: true },
   })
 
   const existingProfileMap = new Map(
     existingProfiles.map(({ idCardNumber, id }) => [idCardNumber, id])
+  )
+  const profileAccountByCccd = new Map(
+    existingProfiles.flatMap((profile) =>
+      profile.idCardNumber ? [[profile.idCardNumber, !!profile.bLaNguoiDung] as const] : []
+    )
   )
 
   const existingLecturer = await prisma.lecturer.findMany({
@@ -515,6 +523,7 @@ app.openapi(importLecturer, async (c) => {
                 sMa: lecturer.code,
                 bLaGiangVien: true,
                 bLaCanBoNhanVien: true,
+                bLaTaiKhoan: profileAccountByCccd.get(lecturer.idCardNumber) ?? false,
                 dNgaySinh: lecturer.dateOfBirth
                   ? new Date(lecturer.dateOfBirth)?.toISOString()
                   : null,
@@ -605,7 +614,7 @@ app.openapi(importLecturer, async (c) => {
                 sMa: lecturer.idCardNumber,
                 bLaGiangVien: true,
                 bLaCanBoNhanVien: true,
-                bLaTaiKhoan: true,
+                bLaTaiKhoan: false,
                 dNgaySinh: lecturer.dateOfBirth
                   ? new Date(lecturer.dateOfBirth)?.toISOString()
                   : null,
@@ -820,10 +829,15 @@ app.openapi(importGuestLecturer, async (c) => {
     where: {
       idCardNumber: { in: data.lecturers.map((lecturer) => lecturer.idCardNumber) },
     },
-    select: { id: true, idCardNumber: true },
+    select: { id: true, idCardNumber: true, bLaNguoiDung: true },
   })
   const existingProfileMap = new Map(
     existingProfiles.map(({ idCardNumber, id }) => [idCardNumber, id])
+  )
+  const profileAccountByCccd = new Map(
+    existingProfiles.flatMap((profile) =>
+      profile.idCardNumber ? [[profile.idCardNumber, !!profile.bLaNguoiDung] as const] : []
+    )
   )
 
   const existingLecturer = await prisma.lecturer.findMany({
@@ -971,6 +985,7 @@ app.openapi(importGuestLecturer, async (c) => {
                 sMa: lecturer.code,
                 bLaGiangVien: true,
                 bLaCanBoNhanVien: true,
+                bLaTaiKhoan: profileAccountByCccd.get(lecturer.idCardNumber) ?? false,
                 dNgaySinh: lecturer.dateOfBirth
                   ? new Date(lecturer.dateOfBirth)?.toISOString()
                   : null,
@@ -1046,7 +1061,7 @@ app.openapi(importGuestLecturer, async (c) => {
                 sMa: lecturer.idCardNumber,
                 bLaGiangVien: true,
                 bLaCanBoNhanVien: true,
-                bLaTaiKhoan: true,
+                bLaTaiKhoan: false,
                 dNgaySinh: lecturer.dateOfBirth
                   ? new Date(lecturer.dateOfBirth)?.toISOString()
                   : null,
@@ -1310,11 +1325,8 @@ app.openapi(importStudent, async (c) => {
   )
   const existingClasses = await prisma.fixedClass.findMany({
     where: { code: { in: classCodes } },
-    select: { code: true, trainingCourseId: true, managementOrganizationId: true },
+    select: { code: true, trainingCourseId: true },
   })
-  const existingClassByCode = new Map(
-    existingClasses.flatMap((row) => (row.code ? [[row.code, row] as const] : []))
-  )
   const foreignClassCodes = existingClasses
     .filter(
       (row): row is (typeof existingClasses)[number] & { code: string } =>
@@ -1356,6 +1368,7 @@ app.openapi(importStudent, async (c) => {
       email: true,
       phoneNumber: true,
       bLaGiangVien: true,
+      bLaNguoiDung: true,
     },
   })
   const profileByCode = new Map<string, (typeof existingProfiles)[number]>()
@@ -1370,25 +1383,15 @@ app.openapi(importStudent, async (c) => {
   for (const student of data.students) {
     const byCode = profileByCode.get(student.profileCode)
     const byCccd = student.idCardNumber ? profileByCccd.get(student.idCardNumber) : undefined
-    if (byCode && byCode.idCardNumber !== student.idCardNumber) {
+    // Cập nhật theo mã sinh viên. CCCD, họ tên và các trường khác lấy từ file.
+    // Chỉ chặn khi CCCD mới đang thuộc một hồ sơ khác.
+    if (byCccd && byCccd.id !== byCode?.id) {
       identityErrors.push({
         code: student.profileCode,
         name: student.fullname,
-        error: `Mã đã gắn với CCCD ${byCode.idCardNumber}`,
-      })
-    }
-    if (byCccd?.code && byCccd.code !== student.profileCode) {
-      identityErrors.push({
-        code: student.profileCode,
-        name: student.fullname,
-        error: `CCCD đã gắn với mã ${byCccd.code}`,
-      })
-    }
-    if (byCode && byCccd && byCode.id !== byCccd.id) {
-      identityErrors.push({
-        code: student.profileCode,
-        name: student.fullname,
-        error: "Mã và CCCD thuộc hai hồ sơ khác nhau",
+        error: byCccd.code
+          ? `CCCD đã gắn với mã ${byCccd.code}`
+          : "CCCD đã thuộc hồ sơ khác",
       })
     }
 
@@ -1455,23 +1458,18 @@ app.openapi(importStudent, async (c) => {
       continue
     }
 
-    const profileHit =
-      (student.idCardNumber ? profileByCccd.get(student.idCardNumber) : undefined) ||
-      profileByCode.get(student.profileCode)
-    const generatedEmail = studentLsbEmail(student.idCardNumber)
-    const filePhone = student.phoneNumber?.trim() || null
-    const email = profileHit?.email || generatedEmail
-    const phoneNumber = filePhone || profileHit?.phoneNumber || null
-    const classRow = existingClassByCode.get(student.fixedClassCode)
-    const fileOrgId = organizationMap.get(student.managementOrganization?.trim() || "") || null
-    const donViId = fileOrgId || classRow?.managementOrganizationId || null
+    const profileHit = profileByCode.get(student.profileCode)
+    const email = studentLsbEmail(student.idCardNumber)
+    const phoneNumber = student.phoneNumber?.trim() || null
+    const donViId = organizationMap.get(student.managementOrganization?.trim() || "") || null
+    const studentRoles = studentLsbRoles(trainingObjectType.type)
     const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput = {
       ...splitFullName(student.fullname),
       code: student.profileCode,
       fullname: student.fullname,
       email,
       bLaGiangVien: profileHit?.bLaGiangVien ?? false,
-      bLaHocVien: true,
+      ...studentRoles,
       dateOfBirth: student.dateOfBirth,
       idCardNumber: student.idCardNumber,
       genderId: student.gender ? (genderMap.get(student.gender) ?? null) : null,
@@ -1479,7 +1477,7 @@ app.openapi(importStudent, async (c) => {
       nationalityId: nationalityMap.get(student.nationality ?? "") || null,
       newProvinceOfBirthId: provinceMap.get(student.newProvinceOfBirth ?? "") || null,
       phoneNumber,
-      officerNumber: student.officerNumber,
+      officerNumber: student.officerNumber || null,
       rankId: rankMap.get(student.rank ?? "") || null,
       positionCPVId: positionMap.get(normalizeCatalogName(student.position)) || null,
       sDM_DonViId: donViId,
@@ -1489,8 +1487,7 @@ app.openapi(importStudent, async (c) => {
       // Không tự sinh SĐT từ mã SV khi file trống — số giả dạng 09x dễ trùng SĐT thật trên LSB.
       const lsbPayload = {
         sMa: student.profileCode,
-        bLaHocVien: true,
-        bLaTaiKhoan: true,
+        ...studentRoles,
         dNgaySinh: student.dateOfBirth ? new Date(student.dateOfBirth).toISOString() : null,
         sCCCD: student.idCardNumber,
         sHoVaDem: profileData.lastName,
@@ -1505,7 +1502,12 @@ app.openapi(importStudent, async (c) => {
       let lsbProfileId =
         profileHit?.id ?? (await findLsbNhanVienId(student.profileCode, student.idCardNumber))
       const sendLsb = (phone: string) => {
-        const payload = { ...lsbPayload, sSDTDiDong: phone }
+        const payload = {
+          ...lsbPayload,
+          sSDTDiDong: phone,
+          // Tạo mới: chưa có tài khoản. Cập nhật: giữ đúng tick "Bạn là người dùng" trên hồ sơ.
+          bLaTaiKhoan: lsbProfileId ? !!profileHit?.bLaNguoiDung : false,
+        }
         return lsbProfileId
           ? putDMNhanViens({ Id: lsbProfileId, ...payload }, lsbRequestOptions())
           : postDMNhanViens(payload, lsbRequestOptions())
@@ -1640,15 +1642,14 @@ app.openapi(importStudent, async (c) => {
             )
           }
 
-          const managementOrganizationId = organizationMap.get(
-            s.managementOrganization?.trim() || ""
-          )
+          const managementOrganizationId =
+            organizationMap.get(s.managementOrganization?.trim() || "") || null
           await tx.fixedClass.upsert({
             where: { code: s.fixedClassCode },
             update: {
               name: s.fixedClass,
               curriculumVersionId: cvId,
-              ...(managementOrganizationId ? { managementOrganizationId } : {}),
+              managementOrganizationId,
             },
             create: {
               name: s.fixedClass,
@@ -1656,7 +1657,7 @@ app.openapi(importStudent, async (c) => {
               trainingCourseId: trainingCourse.id,
               curriculumVersionId: cvId,
               startYear: new Date().getFullYear(),
-              ...(managementOrganizationId ? { managementOrganizationId } : {}),
+              managementOrganizationId,
             },
           })
         }
@@ -1689,19 +1690,19 @@ app.openapi(importStudent, async (c) => {
             competencyScore: item.competencyScore,
             fixedClass: { connect: { id: fixedClassId } },
             curriculumVersion: { connect: { id: cvId } },
-            department: student.department,
-            departmentAddress: student.departmentAddress,
+            department: student.department || null,
+            departmentAddress: student.departmentAddress || null,
             careerYear: item.careerYear,
-            universitySchool: student.universitySchool,
-            universityTrainingType: student.universityTrainingType,
+            universitySchool: student.universitySchool || null,
+            universityTrainingType: student.universityTrainingType || null,
             universityGraduationYear: item.universityGraduationYear,
-            universityMajor: student.universityMajor,
-            universityRank: student.universityRank,
+            universityMajor: student.universityMajor || null,
+            universityRank: student.universityRank || null,
             basic: item.basic,
             facility: item.facility,
-            foreignLanguage: student.foreignLanguage,
-            priorityReason: student.priorityReason,
-            description: student.description,
+            foreignLanguage: student.foreignLanguage || null,
+            priorityReason: student.priorityReason || null,
+            description: student.description || null,
           }
 
           await tx.userProfile.upsert({
@@ -1913,7 +1914,7 @@ app.openapi(importHeQuanSu, async (c) => {
           ...splitFullName(student.fullname),
           code: student.profileCode,
           bLaGiangVien: false,
-          bLaHocVien: true,
+          ...studentLsbRoles(trainingObjectType.type),
           dateOfBirth: student.dateOfBirth,
           // TODO: need to use idCardNumber
           idCardNumber: student.profileCode,

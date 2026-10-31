@@ -82,6 +82,6 @@ Một số endpoint đặc biệt:
  */
 
 export interface ExportTrainingDataRequest {
-  /** Tùy chọn, giữ tương thích. Xuất luôn toàn bộ dữ liệu, không lọc theo đợt. */
+  /** Tùy chọn: xuất theo đợt. Bỏ trống = xuất toàn bộ (có giới hạn kích thước Redis). */
   classRegisterSessionId?: string;
 }

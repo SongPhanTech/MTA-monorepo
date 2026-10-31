@@ -55,7 +55,7 @@ import { useSession } from "@workspace/auth/react"
 import { useFindUniqueUserProfile } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { buildLsbNhanVienPayload, getLsbErrorMessage } from "@lib/lsb-nhan-vien"
-import { toHocHamCreateInput, toHocViCreateInput } from "@lib/utils"
+import { toHocHamCreateInput, toHocViCreateInput, toNullableISO } from "@lib/utils"
 import { putDMNhanViens } from "@workspace/libs/api/system"
 import { getRuntimeEnv } from "@workspace/libs/utils"
 import { useAbility } from "@workspace/permissions/hooks"
@@ -404,6 +404,7 @@ export default function UpdateUserPage() {
     bLaGiangVien,
     lecturerTypeId,
     lectureCode,
+    TKPUcode,
     organizationId,
     tinhTrangHonNhanId,
     dM_ChucDanhCMNVGiangVienId,
@@ -443,7 +444,7 @@ export default function UpdateUserPage() {
 
     try {
       showSpinner()
-      const profileCode = (bLaGiangVien ? lectureCode || values.code : values.code)?.trim()
+      const profileCode = (values.code || lectureCode)?.trim()
       const donViId = values.sDM_DonViId || organizationId || null
       const lsbRes = await putDMNhanViens(
         buildLsbNhanVienPayload({
@@ -470,6 +471,7 @@ export default function UpdateUserPage() {
           newProvinceCurrentAddressId: values.newProvinceCurrentAddressId,
           newCommuneCurrentAddressId: values.newCommuneCurrentAddressId,
           bLaHocVien: values.bLaHocVien,
+          bLaSinhVien: values.bLaSinhVien,
           bLaCanBoNhanVien: values.bLaCanBoNhanVien,
           bLaGiangVien,
           bLaNguoiDung: values.bLaNguoiDung,
@@ -581,6 +583,7 @@ export default function UpdateUserPage() {
               lastName: values.lastName?.trim(),
               firstName: values.firstName?.trim(),
               bLaHocVien: values.bLaHocVien,
+              bLaSinhVien: values.bLaSinhVien,
               bLaCanBoNhanVien: values?.bLaCanBoNhanVien,
               bLaGiangVien: bLaGiangVien,
               bLaNguoiDung: values?.bLaNguoiDung,
@@ -588,6 +591,7 @@ export default function UpdateUserPage() {
               fullname: `${values.lastName?.trim() || ""} ${values.firstName?.trim() || ""}`.trim(),
               dateOfBirth: values.dateOfBirth ? dayjs(values.dateOfBirth).toISOString() : null,
               idCardDate: values.idCardDate ? dayjs(values.idCardDate).toISOString() : null,
+              idCardExpirationDate: toNullableISO(values.idCardExpirationDate),
               unionDate: values.unionDate ? dayjs(values.unionDate).toISOString() : null,
               CPVJoinDate: values.CPVJoinDate ? dayjs(values.CPVJoinDate).toISOString() : null,
               officialCPVDate: values.officialCPVDate
@@ -947,10 +951,12 @@ export default function UpdateUserPage() {
               create: {
                 userProfileId: id,
                 lecturerTypeId,
+                TKPUcode: TKPUcode?.trim() || null,
               },
               update: {
                 lecturerTypeId,
                 deletedAt: null,
+                TKPUcode: TKPUcode?.trim() || null,
               },
             },
           },
@@ -1113,6 +1119,7 @@ export default function UpdateUserPage() {
       form.setFieldsValue({
         ...userData,
         bLaHocVien: !!userData.bLaHocVien,
+        bLaSinhVien: !!userData.bLaSinhVien,
         bLaCanBoNhanVien: !!userData.bLaCanBoNhanVien,
         bLaGiangVien: !!userData.bLaGiangVien,
         bLaNguoiDung: !!userData.bLaNguoiDung,
@@ -1131,6 +1138,7 @@ export default function UpdateUserPage() {
         lecturerTypeId: userData.lecturer?.lecturerTypeId,
         organizationId: userData.sDM_DonViId,
         lectureCode: userData.code,
+        TKPUcode: userData.lecturer?.TKPUcode,
       })
       if (userData?.avatar) {
         const imageUrl = await getLInkImage()
@@ -1198,7 +1206,7 @@ export default function UpdateUserPage() {
   useEffect(() => {
     if (!id || !cccdUserProfileData) return
     const isStudentOnly =
-      !!cccdUserProfileData.bLaHocVien &&
+      !!(cccdUserProfileData.bLaHocVien || cccdUserProfileData.bLaSinhVien) &&
       !cccdUserProfileData.bLaGiangVien &&
       !cccdUserProfileData.bLaCanBoNhanVien
     if (isStudentOnly && router.pathname === "/quan-ly-ho-so/[id]") {

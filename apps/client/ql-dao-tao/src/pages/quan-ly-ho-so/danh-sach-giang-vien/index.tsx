@@ -53,6 +53,7 @@ export default function UserProfilePageLecture() {
   const router = useRouter()
   const [filters, setFilters] = useState<FilterProps>({
     code: "",
+    TKPUcode: "",
     name: "",
     dateOfBirth: undefined,
     academicRankType: undefined,
@@ -93,7 +94,7 @@ export default function UserProfilePageLecture() {
         orgId || "0"
       ).map((org) => org.value),
       orgId,
-    ]
+    ].filter((id): id is string => typeof id === "string" && id.length > 0)
   }, [orgId, dmDonViIds])
 
   const where = useMemo(() => {
@@ -137,6 +138,9 @@ export default function UserProfilePageLecture() {
     return {
       deletedAt: null,
       active: true,
+      ...(filters.TKPUcode
+        ? { TKPUcode: { contains: filters.TKPUcode, mode: "insensitive" as const } }
+        : {}),
       ...(filters.lecturerType
         ? {
             lecturerTypeId: {
@@ -359,6 +363,14 @@ export default function UserProfilePageLecture() {
                 type: "input",
                 render: (__, record: { userProfile?: { code?: string | null } }) =>
                   record.userProfile?.code || "",
+              },
+              {
+                title: "Mã TKPU",
+                dataIndex: "TKPUcode",
+                align: "center",
+                width: 110,
+                type: "input",
+                render: (__, record: { TKPUcode?: string | null }) => record.TKPUcode || "",
               },
               {
                 title: "Họ và tên",

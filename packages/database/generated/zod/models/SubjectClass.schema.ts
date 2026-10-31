@@ -123,6 +123,7 @@ const relationSchema = z.object({
     subjectClassHistory: z.array(z.unknown()).optional(),
     examBank: z.array(z.unknown()).optional(),
     subjectClassAttendances: z.array(z.unknown()).optional(),
+    documentFiles: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

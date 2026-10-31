@@ -120,7 +120,12 @@ const borderlessCell = (children: Paragraph[], columnSpan?: number) =>
 const headerBlock = (input: ExportSurveyFormDocxInput) => {
   const children: (Paragraph | Table)[] = []
 
-  if (input.headerLeft || input.formCode) {
+  const headerLeft =
+    !input.headerLeft || input.headerLeft === "HỌC VIỆN KTQS"
+      ? "HỌC VIỆN KỸ THUẬT QUÂN SỰ"
+      : input.headerLeft
+
+  if (headerLeft || input.formCode) {
     children.push(
       new Table({
         width: { size: 100, type: WidthType.PERCENTAGE },
@@ -128,7 +133,7 @@ const headerBlock = (input: ExportSurveyFormDocxInput) => {
         rows: [
           new TableRow({
             children: [
-              borderlessCell([text(input.headerLeft || "", { bold: true })]),
+              borderlessCell([text(headerLeft, { bold: true })]),
               borderlessCell([text(input.formCode || "", { italics: true, alignment: "right" })]),
             ],
           }),

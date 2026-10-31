@@ -71,6 +71,7 @@ import type {
   InvalidateRegistrationCache200,
   InvalidateRegistrationCache400,
   InvalidateRegistrationCacheBody,
+  ListDataSyncSessions200Item,
   RegistrationStats200,
   RegistrationStats400,
   RegistrationStats404,
@@ -1272,6 +1273,120 @@ export function useGetStudentExamSchedule<TData = Awaited<ReturnType<typeof getS
 
 
 /**
+ * Trả mọi đợt chưa xóa (kể cả đã kết thúc). Khác get-class-register-session (chỉ đợt đang mở + khớp khóa của SV).
+ * @summary Liệt kê đợt đăng ký để xuất kết quả về nội bộ
+ */
+export type listDataSyncSessionsResponse200 = {
+  data: ListDataSyncSessions200Item[]
+  status: 200
+}
+    
+export type listDataSyncSessionsResponseSuccess = (listDataSyncSessionsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type listDataSyncSessionsResponse = (listDataSyncSessionsResponseSuccess)
+
+export const getListDataSyncSessionsUrl = () => {
+
+
+  
+
+  return `/api/data-sync/list-sessions`
+}
+
+export const listDataSyncSessions = async ( options?: RequestInit): Promise<listDataSyncSessionsResponse> => {
+  
+  return customPortalFetch<listDataSyncSessionsResponse>(getListDataSyncSessionsUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+
+
+export const getListDataSyncSessionsQueryKey = () => {
+    return [
+    `/api/data-sync/list-sessions`
+    ] as const;
+    }
+
+    
+export const getListDataSyncSessionsQueryOptions = <TData = Awaited<ReturnType<typeof listDataSyncSessions>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listDataSyncSessions>>, TError, TData>>, request?: SecondParameter<typeof customPortalFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListDataSyncSessionsQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listDataSyncSessions>>> = ({ signal }) => listDataSyncSessions({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listDataSyncSessions>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ListDataSyncSessionsQueryResult = NonNullable<Awaited<ReturnType<typeof listDataSyncSessions>>>
+export type ListDataSyncSessionsQueryError = unknown
+
+
+export function useListDataSyncSessions<TData = Awaited<ReturnType<typeof listDataSyncSessions>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listDataSyncSessions>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listDataSyncSessions>>,
+          TError,
+          Awaited<ReturnType<typeof listDataSyncSessions>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customPortalFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListDataSyncSessions<TData = Awaited<ReturnType<typeof listDataSyncSessions>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listDataSyncSessions>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listDataSyncSessions>>,
+          TError,
+          Awaited<ReturnType<typeof listDataSyncSessions>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customPortalFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListDataSyncSessions<TData = Awaited<ReturnType<typeof listDataSyncSessions>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listDataSyncSessions>>, TError, TData>>, request?: SecondParameter<typeof customPortalFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Liệt kê đợt đăng ký để xuất kết quả về nội bộ
+ */
+
+export function useListDataSyncSessions<TData = Awaited<ReturnType<typeof listDataSyncSessions>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listDataSyncSessions>>, TError, TData>>, request?: SecondParameter<typeof customPortalFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getListDataSyncSessionsQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+/**
  * @summary Lấy lịch sử đồng bộ dữ liệu
  */
 export type getDataSyncHistoryResponse200 = {
@@ -1667,8 +1782,8 @@ export const useImportFromInternal = <TError = ImportFromInternal400 | ImportFro
     }
     
 /**
- * Xuất ClassRegisterLogs, StudentSubjectScore và dữ liệu liên quan của 1 đợt đăng ký thành file JSON.
- * @summary Xuất kết quả đăng ký học về phần mềm nội bộ
+ * Xuất ClassRegisterLogs, StudentSubjectScore và dữ liệu liên quan của 1 đợt đăng ký thành gói .dat (Gzip + AES-256-GCM).
+ * @summary Xuất kết quả đăng ký học về phần mềm nội bộ (.dat)
  */
 export type exportToInternalResponse200 = {
   data: ExportToInternal200
@@ -1742,7 +1857,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
     export type ExportToInternalMutationError = ExportToInternal400
 
     /**
- * @summary Xuất kết quả đăng ký học về phần mềm nội bộ
+ * @summary Xuất kết quả đăng ký học về phần mềm nội bộ (.dat)
  */
 export const useExportToInternal = <TError = ExportToInternal400,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportToInternal>>, TError,{data: ExportToInternalBody}, TContext>, request?: SecondParameter<typeof customPortalFetch>}

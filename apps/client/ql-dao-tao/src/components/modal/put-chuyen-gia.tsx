@@ -236,7 +236,16 @@ const PutExpert = () => {
             academicDegreeType: true,
           },
         },
-        lecturer: { include: { userProfile: true } },
+        lecturer: {
+          include: {
+            userProfile: {
+              include: {
+                academicRankType: true,
+                academicDegreeType: true,
+              },
+            },
+          },
+        },
       },
     },
     { enabled: !!input?.id }
@@ -1031,10 +1040,16 @@ const PutExpert = () => {
               {
                 title: "Học hàm / Học vị",
                 width: 140,
-                render: (_: unknown, record: (typeof versions)[number]) =>
-                  [record.academicRankType?.sMa, record.academicDegreeType?.sMa]
+                render: (_: unknown, record: (typeof versions)[number]) => {
+                  // Trong HV: học hàm/học vị nằm trên hồ sơ giảng viên, phiên bản để trống.
+                  const profile = record.inAcademy ? expert?.lecturer?.userProfile : null
+                  return [
+                    profile?.academicRankType?.sMa || record.academicRankType?.sMa,
+                    profile?.academicDegreeType?.sMa || record.academicDegreeType?.sMa,
+                  ]
                     .filter(Boolean)
-                    .join(".") || "—",
+                    .join(".") || "—"
+                },
               },
               {
                 title: "Trong HV",

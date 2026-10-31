@@ -19,7 +19,7 @@ export type SurveyFormDisplayContent = {
 }
 
 export const LECTURER_SURVEY_PRINT_FORM_CONTENT: SurveyFormDisplayContent = {
-  headerLeft: "HỌC VIỆN KTQS",
+  headerLeft: "HỌC VIỆN KỸ THUẬT QUÂN SỰ",
   formCode: "Mẫu số 11-ĐBCL",
   notes: [
     "Nhằm góp phần nâng cao chất lượng giảng dạy, phục vụ lợi ích của người học, Học viện đề nghị Anh/Chị với tinh thần trách nhiệm và xây dựng, cho ý kiến về hoạt động giảng dạy của giảng viên thông qua phiếu phản hồi này. Thông tin do Anh/Chị cung cấp sẽ được Học viện bảo mật và xử lý đảm bảo không làm ảnh hưởng đến kết quả học tập, rèn luyện của Anh/Chị",
@@ -40,7 +40,7 @@ export const LECTURER_SURVEY_PRINT_FORM_CONTENT: SurveyFormDisplayContent = {
 }
 
 export const DEFAULT_SURVEY_PRINT_FORM_CONTENT: SurveyFormDisplayContent = {
-  headerLeft: "HỌC VIỆN KTQS",
+  headerLeft: "HỌC VIỆN KỸ THUẬT QUÂN SỰ",
   formCode: "Mẫu số 11-ĐBCL",
   notes: [
     'Để đóng góp phần tìm ra những giải pháp nhằm nâng cao chất lượng đào tạo của Học viện đề nghị đồng chí (anh/chị) vui lòng điền đầy đủ thông tin trả lời các câu hỏi dưới dây bằng cách đánh dấu "X" vào một ô phù hợp nhất trong mục "các phương án trả lời".',
@@ -156,7 +156,10 @@ export function parseSurveyFormDisplayContent(
   if (!parsed) return clonedFallback
 
   return {
-    headerLeft: parsed.headerLeft ?? clonedFallback.headerLeft,
+    headerLeft:
+      !parsed.headerLeft || parsed.headerLeft === "HỌC VIỆN KTQS"
+        ? clonedFallback.headerLeft
+        : parsed.headerLeft,
     formCode: parsed.formCode ?? clonedFallback.formCode,
     notes: parsed.notes ?? clonedFallback.notes,
     notesAfterInfo: parsed.notesAfterInfo ?? clonedFallback.notesAfterInfo,

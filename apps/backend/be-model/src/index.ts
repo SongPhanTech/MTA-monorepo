@@ -25,6 +25,7 @@ import { startPreviewCleanupCron } from "./cron/cleanup-preview"
 import { checkIp } from "./middlewares/check-ip"
 import { createPrismaClient } from "./utils/db-pool"
 import { setupOpenApi } from "./utils/openapi"
+import { releaseSoftDeletedSurveyObjectCode } from "./utils/release-soft-deleted-survey-object-code"
 
 setupAppTimezone()
 
@@ -216,6 +217,24 @@ const errorTransformer = (err: unknown) => {
 
   return err
 }
+
+async function releaseDeletedSurveyObjectCode(c: Context) {
+  try {
+    const body = (await c.req.raw.clone().json()) as { data?: { code?: unknown } }
+    await releaseSoftDeletedSurveyObjectCode(prisma, body?.data?.code)
+  } catch {
+    // Body không phải JSON thì để handler model xử lý.
+  }
+}
+
+app.use("/api/model/surveyObjectType/create", async (c, next) => {
+  if (c.req.method === "POST") await releaseDeletedSurveyObjectCode(c)
+  await next()
+})
+app.use("/api/model/surveyObjectType/update", async (c, next) => {
+  if (c.req.method === "PUT") await releaseDeletedSurveyObjectCode(c)
+  await next()
+})
 
 app.use(
   "/api/model/*",

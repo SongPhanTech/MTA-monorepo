@@ -806,7 +806,10 @@ model UserProfile {
   bLaNguoiDung                         Boolean?
   bLaGiangVien                         Boolean?
   bLaCanBoNhanVien                     Boolean?
+  /// Học viên quân sự — map LSB bLaHocVien
   bLaHocVien                           Boolean?
+  /// Sinh viên dân sự — map LSB bLaSinhVien
+  bLaSinhVien                          Boolean?
   group                                Group?                              @relation(fields: [groupId], references: [id])
   groupId                              String?
   /// Đơn vị quản lý GV/cán bộ (nguồn duy nhất cho giảng viên)
@@ -4102,6 +4105,7 @@ model SubjectClass {
   subjectClassHistory         SubjectClassHistory[]
   examBank                    ExamBank[]
   subjectClassAttendances     SubjectClassAttendance[]
+  documentFiles               DocumentFile[]
 
   @@index([lecturerId])
   @@index([extraLecturerId])
@@ -4880,6 +4884,7 @@ model Lecturer {
   sThietBiSua                      String?
   from                             DateTime?
   lectureID                        String?                       @unique()
+  TKPUcode                         String?                       @unique()
   serviceDate                      DateTime?
   userProfile                      UserProfile                   @relation(fields: [userProfileId], references: [id])
   userProfileId                    String                        @unique() @db.Uuid()
@@ -6293,6 +6298,8 @@ model DocumentFile {
   curriculumVersionId        String?
   subjectVersion             SubjectVersion?                 @relation(fields: [subjectVersionId], references: [id])
   subjectVersionId           String?
+  subjectClass               SubjectClass?                   @relation(fields: [subjectClassId], references: [id])
+  subjectClassId             String?
   studentAcademicDecision    StudentAcademicDecision?        @relation(fields: [studentAcademicDecisionId], references: [id])
   studentAcademicDecisionId  String?
   notification               Notification?                   @relation(fields: [notificationId], references: [id])
@@ -6328,6 +6335,7 @@ model DocumentFile {
   knowledgeBlock             KnowledgeBlock?                 @relation(fields: [knowledgeBlockId], references: [id])
   knowledgeBlockId           String?
 
+  @@index([subjectClassId])
   @@schema("ql-danh-muc")
 }
 
@@ -9282,6 +9290,23 @@ model DM_BacLuong {
   quaTrinhLuong QuaTrinhLuong[]
 
   @@schema("ql-ho-so")
+}
+
+model TuitionPaymentConfig {
+  tenantCode    String   @id() @map("tenant_code") @db.VarChar(128)
+  bankBin       String   @map("bank_bin") @db.Char(6)
+  bankName      String   @map("bank_name") @db.VarChar(200)
+  accountNumber String   @map("account_number") @db.VarChar(19)
+  accountHolder String   @map("account_holder") @db.VarChar(200)
+  enabled       Boolean  @default(false)
+  version       BigInt   @default(1)
+  createdBy     String   @map("created_by") @db.Uuid()
+  updatedBy     String   @map("updated_by") @db.Uuid()
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime @default(now()) @updatedAt() @map("updated_at") @db.Timestamptz(6)
+
+  @@map("tuition_payment_config")
+  @@schema("he-thong")
 }
 
 model TemplateFile {

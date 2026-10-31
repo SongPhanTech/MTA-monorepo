@@ -287,6 +287,7 @@ export * from './dm-nganh-hoc';
 export * from './dm-to-chuc-xa-hoi';
 export * from './dm-ngach';
 export * from './dm-bac-luong';
+export * from './tuition-payment-config';
 export * from './template-file';
 export * from './access-role-grant';
 export * from './access-permission-grant';

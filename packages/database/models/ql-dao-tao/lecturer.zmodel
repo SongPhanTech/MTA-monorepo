@@ -17,6 +17,7 @@ model Lecturer extends BaseNoCode {
   
   // lecture/staff information
   lectureID                        String?                       @unique // giảng viên ID
+  TKPUcode                         String?                       @unique // mã TKPU
   serviceDate                      DateTime? // ngày vào ngành
 
   userProfile                      UserProfile                   @relation(fields: [userProfileId], references: [id])

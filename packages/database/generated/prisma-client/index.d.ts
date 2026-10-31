@@ -1431,6 +1431,11 @@ export type DM_Ngach = $Result.DefaultSelection<Prisma.$DM_NgachPayload>
  */
 export type DM_BacLuong = $Result.DefaultSelection<Prisma.$DM_BacLuongPayload>
 /**
+ * Model TuitionPaymentConfig
+ * 
+ */
+export type TuitionPaymentConfig = $Result.DefaultSelection<Prisma.$TuitionPaymentConfigPayload>
+/**
  * Model TemplateFile
  * 
  */
@@ -5457,6 +5462,16 @@ export class PrismaClient<
   get dM_BacLuong(): Prisma.DM_BacLuongDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.tuitionPaymentConfig`: Exposes CRUD operations for the **TuitionPaymentConfig** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TuitionPaymentConfigs
+    * const tuitionPaymentConfigs = await prisma.tuitionPaymentConfig.findMany()
+    * ```
+    */
+  get tuitionPaymentConfig(): Prisma.TuitionPaymentConfigDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.templateFile`: Exposes CRUD operations for the **TemplateFile** model.
     * Example usage:
     * ```ts
@@ -6218,6 +6233,7 @@ export namespace Prisma {
     DM_ToChucXaHoi: 'DM_ToChucXaHoi',
     DM_Ngach: 'DM_Ngach',
     DM_BacLuong: 'DM_BacLuong',
+    TuitionPaymentConfig: 'TuitionPaymentConfig',
     TemplateFile: 'TemplateFile',
     AccessRoleGrant: 'AccessRoleGrant',
     AccessPermissionGrant: 'AccessPermissionGrant',
@@ -6240,7 +6256,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "chucVuChinhQuyen" | "chucVuDang" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "conversationFeedback" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingPractice" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "studentInternship" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedCertificateSubjectScore" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "classRegisterAttempt" | "subjectClass" | "subjectClassAttendance" | "subjectClassAttendanceStudent" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "scoreCorrectionTicket" | "scoreCorrectionItem" | "dataSyncHistory" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "studentPersonalEvent" | "student" | "trainingActivity" | "studentSemesterResult" | "studentYearResult" | "notification" | "personalWorkTag" | "individualSchedule" | "lecturer" | "lecturerHistory" | "guestTeachingRateConfig" | "guestTeachingRate" | "guestTeachingPayment" | "lecturerType" | "staffType" | "staffPosition" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "availableTrainingTime" | "certificate" | "certificateOnSubject" | "award" | "officerBonusScore" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "trainingScoreSession" | "studentTrainingScore" | "semesterTrainingScore" | "schoolYearTrainingScore" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expert" | "expertProfileVersion" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "configPaymentSession" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "scoreLinkSheet" | "scoreLinkSubjectVersion" | "scoreLinkStudent" | "evaluationPeriod" | "evaluationStandardSet" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "questionBank" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "examBank" | "examBankQuestion" | "examPaper" | "examFramework" | "examMatrix" | "knowledgeBlock" | "configExam" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "specificChoice" | "surveyChoice" | "surveySession" | "surveyResponse" | "staff" | "staffHistory" | "researchProject" | "studentResearchRegistration" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "accessRoleGrant" | "accessPermissionGrant" | "blockedIp"
+      modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "chucVuChinhQuyen" | "chucVuDang" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "conversationFeedback" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingPractice" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "studentInternship" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedCertificateSubjectScore" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "classRegisterAttempt" | "subjectClass" | "subjectClassAttendance" | "subjectClassAttendanceStudent" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "scoreCorrectionTicket" | "scoreCorrectionItem" | "dataSyncHistory" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "studentPersonalEvent" | "student" | "trainingActivity" | "studentSemesterResult" | "studentYearResult" | "notification" | "personalWorkTag" | "individualSchedule" | "lecturer" | "lecturerHistory" | "guestTeachingRateConfig" | "guestTeachingRate" | "guestTeachingPayment" | "lecturerType" | "staffType" | "staffPosition" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "availableTrainingTime" | "certificate" | "certificateOnSubject" | "award" | "officerBonusScore" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "trainingScoreSession" | "studentTrainingScore" | "semesterTrainingScore" | "schoolYearTrainingScore" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expert" | "expertProfileVersion" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "configPaymentSession" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "scoreLinkSheet" | "scoreLinkSubjectVersion" | "scoreLinkStudent" | "evaluationPeriod" | "evaluationStandardSet" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "questionBank" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "examBank" | "examBankQuestion" | "examPaper" | "examFramework" | "examMatrix" | "knowledgeBlock" | "configExam" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "specificChoice" | "surveyChoice" | "surveySession" | "surveyResponse" | "staff" | "staffHistory" | "researchProject" | "studentResearchRegistration" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "tuitionPaymentConfig" | "templateFile" | "accessRoleGrant" | "accessPermissionGrant" | "blockedIp"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -27186,6 +27202,80 @@ export namespace Prisma {
           }
         }
       }
+      TuitionPaymentConfig: {
+        payload: Prisma.$TuitionPaymentConfigPayload<ExtArgs>
+        fields: Prisma.TuitionPaymentConfigFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TuitionPaymentConfigFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TuitionPaymentConfigPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TuitionPaymentConfigFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TuitionPaymentConfigPayload>
+          }
+          findFirst: {
+            args: Prisma.TuitionPaymentConfigFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TuitionPaymentConfigPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TuitionPaymentConfigFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TuitionPaymentConfigPayload>
+          }
+          findMany: {
+            args: Prisma.TuitionPaymentConfigFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TuitionPaymentConfigPayload>[]
+          }
+          create: {
+            args: Prisma.TuitionPaymentConfigCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TuitionPaymentConfigPayload>
+          }
+          createMany: {
+            args: Prisma.TuitionPaymentConfigCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TuitionPaymentConfigCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TuitionPaymentConfigPayload>[]
+          }
+          delete: {
+            args: Prisma.TuitionPaymentConfigDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TuitionPaymentConfigPayload>
+          }
+          update: {
+            args: Prisma.TuitionPaymentConfigUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TuitionPaymentConfigPayload>
+          }
+          deleteMany: {
+            args: Prisma.TuitionPaymentConfigDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TuitionPaymentConfigUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TuitionPaymentConfigUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TuitionPaymentConfigPayload>[]
+          }
+          upsert: {
+            args: Prisma.TuitionPaymentConfigUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TuitionPaymentConfigPayload>
+          }
+          aggregate: {
+            args: Prisma.TuitionPaymentConfigAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTuitionPaymentConfig>
+          }
+          groupBy: {
+            args: Prisma.TuitionPaymentConfigGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TuitionPaymentConfigGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TuitionPaymentConfigCountArgs<ExtArgs>
+            result: $Utils.Optional<TuitionPaymentConfigCountAggregateOutputType> | number
+          }
+        }
+      }
       TemplateFile: {
         payload: Prisma.$TemplateFilePayload<ExtArgs>
         fields: Prisma.TemplateFileFieldRefs
@@ -27853,6 +27943,7 @@ export namespace Prisma {
     dM_ToChucXaHoi?: DM_ToChucXaHoiOmit
     dM_Ngach?: DM_NgachOmit
     dM_BacLuong?: DM_BacLuongOmit
+    tuitionPaymentConfig?: TuitionPaymentConfigOmit
     templateFile?: TemplateFileOmit
     accessRoleGrant?: AccessRoleGrantOmit
     accessPermissionGrant?: AccessPermissionGrantOmit
@@ -31113,6 +31204,7 @@ export namespace Prisma {
     subjectClassHistory: number
     examBank: number
     subjectClassAttendances: number
+    documentFiles: number
   }
 
   export type SubjectClassCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -31130,6 +31222,7 @@ export namespace Prisma {
     subjectClassHistory?: boolean | SubjectClassCountOutputTypeCountSubjectClassHistoryArgs
     examBank?: boolean | SubjectClassCountOutputTypeCountExamBankArgs
     subjectClassAttendances?: boolean | SubjectClassCountOutputTypeCountSubjectClassAttendancesArgs
+    documentFiles?: boolean | SubjectClassCountOutputTypeCountDocumentFilesArgs
   }
 
   // Custom InputTypes
@@ -31239,6 +31332,13 @@ export namespace Prisma {
    */
   export type SubjectClassCountOutputTypeCountSubjectClassAttendancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SubjectClassAttendanceWhereInput
+  }
+
+  /**
+   * SubjectClassCountOutputType without action
+   */
+  export type SubjectClassCountOutputTypeCountDocumentFilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DocumentFileWhereInput
   }
 
 
@@ -40197,6 +40297,7 @@ export namespace Prisma {
     bLaGiangVien: boolean | null
     bLaCanBoNhanVien: boolean | null
     bLaHocVien: boolean | null
+    bLaSinhVien: boolean | null
     groupId: string | null
     sDM_DonViId: string | null
     sDM_ViTriCongViecId: string | null
@@ -40331,6 +40432,7 @@ export namespace Prisma {
     bLaGiangVien: boolean | null
     bLaCanBoNhanVien: boolean | null
     bLaHocVien: boolean | null
+    bLaSinhVien: boolean | null
     groupId: string | null
     sDM_DonViId: string | null
     sDM_ViTriCongViecId: string | null
@@ -40465,6 +40567,7 @@ export namespace Prisma {
     bLaGiangVien: number
     bLaCanBoNhanVien: number
     bLaHocVien: number
+    bLaSinhVien: number
     groupId: number
     sDM_DonViId: number
     sDM_ViTriCongViecId: number
@@ -40615,6 +40718,7 @@ export namespace Prisma {
     bLaGiangVien?: true
     bLaCanBoNhanVien?: true
     bLaHocVien?: true
+    bLaSinhVien?: true
     groupId?: true
     sDM_DonViId?: true
     sDM_ViTriCongViecId?: true
@@ -40749,6 +40853,7 @@ export namespace Prisma {
     bLaGiangVien?: true
     bLaCanBoNhanVien?: true
     bLaHocVien?: true
+    bLaSinhVien?: true
     groupId?: true
     sDM_DonViId?: true
     sDM_ViTriCongViecId?: true
@@ -40883,6 +40988,7 @@ export namespace Prisma {
     bLaGiangVien?: true
     bLaCanBoNhanVien?: true
     bLaHocVien?: true
+    bLaSinhVien?: true
     groupId?: true
     sDM_DonViId?: true
     sDM_ViTriCongViecId?: true
@@ -41104,6 +41210,7 @@ export namespace Prisma {
     bLaGiangVien: boolean | null
     bLaCanBoNhanVien: boolean | null
     bLaHocVien: boolean | null
+    bLaSinhVien: boolean | null
     groupId: string | null
     sDM_DonViId: string | null
     sDM_ViTriCongViecId: string | null
@@ -41257,6 +41364,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean
     bLaCanBoNhanVien?: boolean
     bLaHocVien?: boolean
+    bLaSinhVien?: boolean
     groupId?: boolean
     sDM_DonViId?: boolean
     sDM_ViTriCongViecId?: boolean
@@ -41485,6 +41593,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean
     bLaCanBoNhanVien?: boolean
     bLaHocVien?: boolean
+    bLaSinhVien?: boolean
     groupId?: boolean
     sDM_DonViId?: boolean
     sDM_ViTriCongViecId?: boolean
@@ -41665,6 +41774,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean
     bLaCanBoNhanVien?: boolean
     bLaHocVien?: boolean
+    bLaSinhVien?: boolean
     groupId?: boolean
     sDM_DonViId?: boolean
     sDM_ViTriCongViecId?: boolean
@@ -41845,6 +41955,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean
     bLaCanBoNhanVien?: boolean
     bLaHocVien?: boolean
+    bLaSinhVien?: boolean
     groupId?: boolean
     sDM_DonViId?: boolean
     sDM_ViTriCongViecId?: boolean
@@ -41960,7 +42071,7 @@ export namespace Prisma {
     trinhDoHocVanId?: boolean
   }
 
-  export type UserProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "sNguoiTao" | "sNguoiSua" | "dNgayTao" | "dNgaySua" | "sThietBiTao" | "sThietBiSua" | "bLaNguoiDung" | "bLaGiangVien" | "bLaCanBoNhanVien" | "bLaHocVien" | "groupId" | "sDM_DonViId" | "sDM_ViTriCongViecId" | "sQuanlyTrucTiepId" | "iDictionaryKey" | "bSystem" | "avatar" | "firstName" | "lastName" | "idCardNumber" | "placeOfIdCardNumber" | "fullname" | "healthInsuranceNumber" | "bankAccountNumber" | "bankName" | "currentAddress" | "newCurrentAddress" | "occupationWhenRecruiting" | "thuongBinh" | "benh" | "tinhHinhNhaO" | "truocKhiNhapNgu" | "thanhPhanGiaDinh" | "soTruong" | "hoTenThuongDung" | "lichSuBanThan" | "conThuMay" | "chieuCao" | "canNang" | "soACE" | "kinhTeGiaDinh" | "chinhTriGiaDinh" | "fSoACE" | "fKinhTeGiaDinh" | "fThanhPhanGiaDinh" | "fChinhTriGiaDinh" | "fBanThan" | "nationalId" | "provinceCurrentAddressId" | "districtCurrentAddressId" | "communeCurrentAddressId" | "newProvinceCurrentAddressId" | "newCommuneCurrentAddressId" | "dateOfBirth" | "placeOfBirth" | "provinceOfBirthId" | "districtOfBirthId" | "communeOfBirthId" | "newProvinceOfBirthId" | "newCommuneOfBirthId" | "homeTown" | "idCardDate" | "idCardExpirationDate" | "genderId" | "permanentAddress" | "provincePermanentAddressId" | "districtPermanentAddressId" | "communePermanentAddressId" | "newProvincePermanentAddressId" | "newCommunePermanentAddressId" | "temporaryAddress" | "contactAddress" | "phoneNumber" | "officePhone" | "email" | "nationalityId" | "religionId" | "ethnicityId" | "provinceHometownId" | "districtHometownId" | "communeHometownId" | "newProvinceHometownId" | "newCommuneHometownId" | "officerNumber" | "rankId" | "rankDate" | "academicDegreeTypeId" | "academicDegreeDate" | "academicRankTypeId" | "academicRankDate" | "levelId" | "positionId" | "chiHuyQuanLyId" | "chuyenMonKyThuatId" | "sucKhoeId" | "nhomMauId" | "tinhTrangHonNhanId" | "trangThaiLamViecId" | "dM_ChucDanhCMNVGiangVienId" | "dM_ChucDanhCMNVNghienCuuVienId" | "dM_ChucDanhCMNVKySuId" | "dM_XepLoaiDanhGiaChatLuongDangVienId" | "dM_XepLoaiDanhGiaCanBoId" | "dM_HinhThucKhenThuongDangId" | "unionDate" | "unionPlace" | "CPVJoinDate" | "officialCPVDate" | "CPVJoinPlace" | "positionCPVId" | "chucVuChinhQuyenId" | "tenureDate" | "enlistmentDate" | "reEnlistmentDate" | "dischargeDate" | "recruitmentDate" | "recruitmentAgency" | "mainJobAssigned" | "revolutionaryDate" | "originalPlace" | "familyPhone" | "familyName" | "trinhDoHocVanId", ExtArgs["result"]["userProfile"]>
+  export type UserProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "sNguoiTao" | "sNguoiSua" | "dNgayTao" | "dNgaySua" | "sThietBiTao" | "sThietBiSua" | "bLaNguoiDung" | "bLaGiangVien" | "bLaCanBoNhanVien" | "bLaHocVien" | "bLaSinhVien" | "groupId" | "sDM_DonViId" | "sDM_ViTriCongViecId" | "sQuanlyTrucTiepId" | "iDictionaryKey" | "bSystem" | "avatar" | "firstName" | "lastName" | "idCardNumber" | "placeOfIdCardNumber" | "fullname" | "healthInsuranceNumber" | "bankAccountNumber" | "bankName" | "currentAddress" | "newCurrentAddress" | "occupationWhenRecruiting" | "thuongBinh" | "benh" | "tinhHinhNhaO" | "truocKhiNhapNgu" | "thanhPhanGiaDinh" | "soTruong" | "hoTenThuongDung" | "lichSuBanThan" | "conThuMay" | "chieuCao" | "canNang" | "soACE" | "kinhTeGiaDinh" | "chinhTriGiaDinh" | "fSoACE" | "fKinhTeGiaDinh" | "fThanhPhanGiaDinh" | "fChinhTriGiaDinh" | "fBanThan" | "nationalId" | "provinceCurrentAddressId" | "districtCurrentAddressId" | "communeCurrentAddressId" | "newProvinceCurrentAddressId" | "newCommuneCurrentAddressId" | "dateOfBirth" | "placeOfBirth" | "provinceOfBirthId" | "districtOfBirthId" | "communeOfBirthId" | "newProvinceOfBirthId" | "newCommuneOfBirthId" | "homeTown" | "idCardDate" | "idCardExpirationDate" | "genderId" | "permanentAddress" | "provincePermanentAddressId" | "districtPermanentAddressId" | "communePermanentAddressId" | "newProvincePermanentAddressId" | "newCommunePermanentAddressId" | "temporaryAddress" | "contactAddress" | "phoneNumber" | "officePhone" | "email" | "nationalityId" | "religionId" | "ethnicityId" | "provinceHometownId" | "districtHometownId" | "communeHometownId" | "newProvinceHometownId" | "newCommuneHometownId" | "officerNumber" | "rankId" | "rankDate" | "academicDegreeTypeId" | "academicDegreeDate" | "academicRankTypeId" | "academicRankDate" | "levelId" | "positionId" | "chiHuyQuanLyId" | "chuyenMonKyThuatId" | "sucKhoeId" | "nhomMauId" | "tinhTrangHonNhanId" | "trangThaiLamViecId" | "dM_ChucDanhCMNVGiangVienId" | "dM_ChucDanhCMNVNghienCuuVienId" | "dM_ChucDanhCMNVKySuId" | "dM_XepLoaiDanhGiaChatLuongDangVienId" | "dM_XepLoaiDanhGiaCanBoId" | "dM_HinhThucKhenThuongDangId" | "unionDate" | "unionPlace" | "CPVJoinDate" | "officialCPVDate" | "CPVJoinPlace" | "positionCPVId" | "chucVuChinhQuyenId" | "tenureDate" | "enlistmentDate" | "reEnlistmentDate" | "dischargeDate" | "recruitmentDate" | "recruitmentAgency" | "mainJobAssigned" | "revolutionaryDate" | "originalPlace" | "familyPhone" | "familyName" | "trinhDoHocVanId", ExtArgs["result"]["userProfile"]>
   export type UserProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     group?: boolean | UserProfile$groupArgs<ExtArgs>
     donVi?: boolean | UserProfile$donViArgs<ExtArgs>
@@ -42284,7 +42395,14 @@ export namespace Prisma {
       bLaNguoiDung: boolean | null
       bLaGiangVien: boolean | null
       bLaCanBoNhanVien: boolean | null
+      /**
+       * Học viên quân sự — map LSB bLaHocVien
+       */
       bLaHocVien: boolean | null
+      /**
+       * Sinh viên dân sự — map LSB bLaSinhVien
+       */
+      bLaSinhVien: boolean | null
       groupId: string | null
       sDM_DonViId: string | null
       sDM_ViTriCongViecId: string | null
@@ -42932,6 +43050,7 @@ export namespace Prisma {
     readonly bLaGiangVien: FieldRef<"UserProfile", 'Boolean'>
     readonly bLaCanBoNhanVien: FieldRef<"UserProfile", 'Boolean'>
     readonly bLaHocVien: FieldRef<"UserProfile", 'Boolean'>
+    readonly bLaSinhVien: FieldRef<"UserProfile", 'Boolean'>
     readonly groupId: FieldRef<"UserProfile", 'String'>
     readonly sDM_DonViId: FieldRef<"UserProfile", 'String'>
     readonly sDM_ViTriCongViecId: FieldRef<"UserProfile", 'String'>
@@ -181946,6 +182065,7 @@ export namespace Prisma {
     subjectClassHistory?: boolean | SubjectClass$subjectClassHistoryArgs<ExtArgs>
     examBank?: boolean | SubjectClass$examBankArgs<ExtArgs>
     subjectClassAttendances?: boolean | SubjectClass$subjectClassAttendancesArgs<ExtArgs>
+    documentFiles?: boolean | SubjectClass$documentFilesArgs<ExtArgs>
     _count?: boolean | SubjectClassCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["subjectClass"]>
 
@@ -182157,6 +182277,7 @@ export namespace Prisma {
     subjectClassHistory?: boolean | SubjectClass$subjectClassHistoryArgs<ExtArgs>
     examBank?: boolean | SubjectClass$examBankArgs<ExtArgs>
     subjectClassAttendances?: boolean | SubjectClass$subjectClassAttendancesArgs<ExtArgs>
+    documentFiles?: boolean | SubjectClass$documentFilesArgs<ExtArgs>
     _count?: boolean | SubjectClassCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SubjectClassIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -182211,6 +182332,7 @@ export namespace Prisma {
       subjectClassHistory: Prisma.$SubjectClassHistoryPayload<ExtArgs>[]
       examBank: Prisma.$ExamBankPayload<ExtArgs>[]
       subjectClassAttendances: Prisma.$SubjectClassAttendancePayload<ExtArgs>[]
+      documentFiles: Prisma.$DocumentFilePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -182703,6 +182825,7 @@ export namespace Prisma {
     subjectClassHistory<T extends SubjectClass$subjectClassHistoryArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClass$subjectClassHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectClassHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     examBank<T extends SubjectClass$examBankArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClass$examBankArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamBankPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     subjectClassAttendances<T extends SubjectClass$subjectClassAttendancesArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClass$subjectClassAttendancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectClassAttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    documentFiles<T extends SubjectClass$documentFilesArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClass$documentFilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentFilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -183645,6 +183768,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SubjectClassAttendanceScalarFieldEnum | SubjectClassAttendanceScalarFieldEnum[]
+  }
+
+  /**
+   * SubjectClass.documentFiles
+   */
+  export type SubjectClass$documentFilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentFile
+     */
+    select?: DocumentFileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DocumentFile
+     */
+    omit?: DocumentFileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentFileInclude<ExtArgs> | null
+    where?: DocumentFileWhereInput
+    orderBy?: DocumentFileOrderByWithRelationInput | DocumentFileOrderByWithRelationInput[]
+    cursor?: DocumentFileWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DocumentFileScalarFieldEnum | DocumentFileScalarFieldEnum[]
   }
 
   /**
@@ -212890,6 +213037,7 @@ export namespace Prisma {
     sThietBiSua: string | null
     from: Date | null
     lectureID: string | null
+    TKPUcode: string | null
     serviceDate: Date | null
     userProfileId: string | null
     lecturerTypeId: string | null
@@ -212911,6 +213059,7 @@ export namespace Prisma {
     sThietBiSua: string | null
     from: Date | null
     lectureID: string | null
+    TKPUcode: string | null
     serviceDate: Date | null
     userProfileId: string | null
     lecturerTypeId: string | null
@@ -212932,6 +213081,7 @@ export namespace Prisma {
     sThietBiSua: number
     from: number
     lectureID: number
+    TKPUcode: number
     serviceDate: number
     userProfileId: number
     lecturerTypeId: number
@@ -212955,6 +213105,7 @@ export namespace Prisma {
     sThietBiSua?: true
     from?: true
     lectureID?: true
+    TKPUcode?: true
     serviceDate?: true
     userProfileId?: true
     lecturerTypeId?: true
@@ -212976,6 +213127,7 @@ export namespace Prisma {
     sThietBiSua?: true
     from?: true
     lectureID?: true
+    TKPUcode?: true
     serviceDate?: true
     userProfileId?: true
     lecturerTypeId?: true
@@ -212997,6 +213149,7 @@ export namespace Prisma {
     sThietBiSua?: true
     from?: true
     lectureID?: true
+    TKPUcode?: true
     serviceDate?: true
     userProfileId?: true
     lecturerTypeId?: true
@@ -213091,6 +213244,7 @@ export namespace Prisma {
     sThietBiSua: string | null
     from: Date | null
     lectureID: string | null
+    TKPUcode: string | null
     serviceDate: Date | null
     userProfileId: string
     lecturerTypeId: string
@@ -213129,6 +213283,7 @@ export namespace Prisma {
     sThietBiSua?: boolean
     from?: boolean
     lectureID?: boolean
+    TKPUcode?: boolean
     serviceDate?: boolean
     userProfileId?: boolean
     lecturerTypeId?: boolean
@@ -213177,6 +213332,7 @@ export namespace Prisma {
     sThietBiSua?: boolean
     from?: boolean
     lectureID?: boolean
+    TKPUcode?: boolean
     serviceDate?: boolean
     userProfileId?: boolean
     lecturerTypeId?: boolean
@@ -213200,6 +213356,7 @@ export namespace Prisma {
     sThietBiSua?: boolean
     from?: boolean
     lectureID?: boolean
+    TKPUcode?: boolean
     serviceDate?: boolean
     userProfileId?: boolean
     lecturerTypeId?: boolean
@@ -213223,12 +213380,13 @@ export namespace Prisma {
     sThietBiSua?: boolean
     from?: boolean
     lectureID?: boolean
+    TKPUcode?: boolean
     serviceDate?: boolean
     userProfileId?: boolean
     lecturerTypeId?: boolean
   }
 
-  export type LecturerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "sNguoiTao" | "sNguoiSua" | "dNgayTao" | "dNgaySua" | "sThietBiTao" | "sThietBiSua" | "from" | "lectureID" | "serviceDate" | "userProfileId" | "lecturerTypeId", ExtArgs["result"]["lecturer"]>
+  export type LecturerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "sNguoiTao" | "sNguoiSua" | "dNgayTao" | "dNgaySua" | "sThietBiTao" | "sThietBiSua" | "from" | "lectureID" | "TKPUcode" | "serviceDate" | "userProfileId" | "lecturerTypeId", ExtArgs["result"]["lecturer"]>
   export type LecturerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
     lecturerType?: boolean | LecturerTypeDefaultArgs<ExtArgs>
@@ -213313,6 +213471,7 @@ export namespace Prisma {
       sThietBiSua: string | null
       from: Date | null
       lectureID: string | null
+      TKPUcode: string | null
       serviceDate: Date | null
       userProfileId: string
       lecturerTypeId: string
@@ -213780,6 +213939,7 @@ export namespace Prisma {
     readonly sThietBiSua: FieldRef<"Lecturer", 'String'>
     readonly from: FieldRef<"Lecturer", 'DateTime'>
     readonly lectureID: FieldRef<"Lecturer", 'String'>
+    readonly TKPUcode: FieldRef<"Lecturer", 'String'>
     readonly serviceDate: FieldRef<"Lecturer", 'DateTime'>
     readonly userProfileId: FieldRef<"Lecturer", 'String'>
     readonly lecturerTypeId: FieldRef<"Lecturer", 'String'>
@@ -276067,6 +276227,7 @@ export namespace Prisma {
     curriculumId: string | null
     curriculumVersionId: string | null
     subjectVersionId: string | null
+    subjectClassId: string | null
     studentAcademicDecisionId: string | null
     notificationId: string | null
     decisionId: string | null
@@ -276111,6 +276272,7 @@ export namespace Prisma {
     curriculumId: string | null
     curriculumVersionId: string | null
     subjectVersionId: string | null
+    subjectClassId: string | null
     studentAcademicDecisionId: string | null
     notificationId: string | null
     decisionId: string | null
@@ -276155,6 +276317,7 @@ export namespace Prisma {
     curriculumId: number
     curriculumVersionId: number
     subjectVersionId: number
+    subjectClassId: number
     studentAcademicDecisionId: number
     notificationId: number
     decisionId: number
@@ -276209,6 +276372,7 @@ export namespace Prisma {
     curriculumId?: true
     curriculumVersionId?: true
     subjectVersionId?: true
+    subjectClassId?: true
     studentAcademicDecisionId?: true
     notificationId?: true
     decisionId?: true
@@ -276253,6 +276417,7 @@ export namespace Prisma {
     curriculumId?: true
     curriculumVersionId?: true
     subjectVersionId?: true
+    subjectClassId?: true
     studentAcademicDecisionId?: true
     notificationId?: true
     decisionId?: true
@@ -276297,6 +276462,7 @@ export namespace Prisma {
     curriculumId?: true
     curriculumVersionId?: true
     subjectVersionId?: true
+    subjectClassId?: true
     studentAcademicDecisionId?: true
     notificationId?: true
     decisionId?: true
@@ -276428,6 +276594,7 @@ export namespace Prisma {
     curriculumId: string | null
     curriculumVersionId: string | null
     subjectVersionId: string | null
+    subjectClassId: string | null
     studentAcademicDecisionId: string | null
     notificationId: string | null
     decisionId: string | null
@@ -276491,6 +276658,7 @@ export namespace Prisma {
     curriculumId?: boolean
     curriculumVersionId?: boolean
     subjectVersionId?: boolean
+    subjectClassId?: boolean
     studentAcademicDecisionId?: boolean
     notificationId?: boolean
     decisionId?: boolean
@@ -276514,6 +276682,7 @@ export namespace Prisma {
     curriculum?: boolean | DocumentFile$curriculumArgs<ExtArgs>
     curriculumVersion?: boolean | DocumentFile$curriculumVersionArgs<ExtArgs>
     subjectVersion?: boolean | DocumentFile$subjectVersionArgs<ExtArgs>
+    subjectClass?: boolean | DocumentFile$subjectClassArgs<ExtArgs>
     studentAcademicDecision?: boolean | DocumentFile$studentAcademicDecisionArgs<ExtArgs>
     notification?: boolean | DocumentFile$notificationArgs<ExtArgs>
     decision?: boolean | DocumentFile$decisionArgs<ExtArgs>
@@ -276558,6 +276727,7 @@ export namespace Prisma {
     curriculumId?: boolean
     curriculumVersionId?: boolean
     subjectVersionId?: boolean
+    subjectClassId?: boolean
     studentAcademicDecisionId?: boolean
     notificationId?: boolean
     decisionId?: boolean
@@ -276581,6 +276751,7 @@ export namespace Prisma {
     curriculum?: boolean | DocumentFile$curriculumArgs<ExtArgs>
     curriculumVersion?: boolean | DocumentFile$curriculumVersionArgs<ExtArgs>
     subjectVersion?: boolean | DocumentFile$subjectVersionArgs<ExtArgs>
+    subjectClass?: boolean | DocumentFile$subjectClassArgs<ExtArgs>
     studentAcademicDecision?: boolean | DocumentFile$studentAcademicDecisionArgs<ExtArgs>
     notification?: boolean | DocumentFile$notificationArgs<ExtArgs>
     decision?: boolean | DocumentFile$decisionArgs<ExtArgs>
@@ -276625,6 +276796,7 @@ export namespace Prisma {
     curriculumId?: boolean
     curriculumVersionId?: boolean
     subjectVersionId?: boolean
+    subjectClassId?: boolean
     studentAcademicDecisionId?: boolean
     notificationId?: boolean
     decisionId?: boolean
@@ -276648,6 +276820,7 @@ export namespace Prisma {
     curriculum?: boolean | DocumentFile$curriculumArgs<ExtArgs>
     curriculumVersion?: boolean | DocumentFile$curriculumVersionArgs<ExtArgs>
     subjectVersion?: boolean | DocumentFile$subjectVersionArgs<ExtArgs>
+    subjectClass?: boolean | DocumentFile$subjectClassArgs<ExtArgs>
     studentAcademicDecision?: boolean | DocumentFile$studentAcademicDecisionArgs<ExtArgs>
     notification?: boolean | DocumentFile$notificationArgs<ExtArgs>
     decision?: boolean | DocumentFile$decisionArgs<ExtArgs>
@@ -276692,6 +276865,7 @@ export namespace Prisma {
     curriculumId?: boolean
     curriculumVersionId?: boolean
     subjectVersionId?: boolean
+    subjectClassId?: boolean
     studentAcademicDecisionId?: boolean
     notificationId?: boolean
     decisionId?: boolean
@@ -276711,7 +276885,7 @@ export namespace Prisma {
     knowledgeBlockId?: boolean
   }
 
-  export type DocumentFileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "sNguoiTao" | "sNguoiSua" | "dNgayTao" | "dNgaySua" | "sThietBiTao" | "sThietBiSua" | "name" | "path" | "size" | "mimeType" | "archivedCertificateId" | "trainingCourseId" | "archivedAwardId" | "curriculumId" | "curriculumVersionId" | "subjectVersionId" | "studentAcademicDecisionId" | "notificationId" | "decisionId" | "defenseRecordId" | "librarySubmissionId" | "diplomaFrontId" | "diplomaBackId" | "diplomaVerificationId" | "diplomaVerificationFrontId" | "diplomaVerificationBackId" | "trainingFieldId" | "studentScoreConvertId" | "scoreLinkSheetId" | "examFrameworkId" | "noteId" | "evaluationPeriodId" | "knowledgeBlockId", ExtArgs["result"]["documentFile"]>
+  export type DocumentFileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "sNguoiTao" | "sNguoiSua" | "dNgayTao" | "dNgaySua" | "sThietBiTao" | "sThietBiSua" | "name" | "path" | "size" | "mimeType" | "archivedCertificateId" | "trainingCourseId" | "archivedAwardId" | "curriculumId" | "curriculumVersionId" | "subjectVersionId" | "subjectClassId" | "studentAcademicDecisionId" | "notificationId" | "decisionId" | "defenseRecordId" | "librarySubmissionId" | "diplomaFrontId" | "diplomaBackId" | "diplomaVerificationId" | "diplomaVerificationFrontId" | "diplomaVerificationBackId" | "trainingFieldId" | "studentScoreConvertId" | "scoreLinkSheetId" | "examFrameworkId" | "noteId" | "evaluationPeriodId" | "knowledgeBlockId", ExtArgs["result"]["documentFile"]>
   export type DocumentFileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     archivedCertificate?: boolean | DocumentFile$archivedCertificateArgs<ExtArgs>
     trainingCourse?: boolean | DocumentFile$trainingCourseArgs<ExtArgs>
@@ -276719,6 +276893,7 @@ export namespace Prisma {
     curriculum?: boolean | DocumentFile$curriculumArgs<ExtArgs>
     curriculumVersion?: boolean | DocumentFile$curriculumVersionArgs<ExtArgs>
     subjectVersion?: boolean | DocumentFile$subjectVersionArgs<ExtArgs>
+    subjectClass?: boolean | DocumentFile$subjectClassArgs<ExtArgs>
     studentAcademicDecision?: boolean | DocumentFile$studentAcademicDecisionArgs<ExtArgs>
     notification?: boolean | DocumentFile$notificationArgs<ExtArgs>
     decision?: boolean | DocumentFile$decisionArgs<ExtArgs>
@@ -276744,6 +276919,7 @@ export namespace Prisma {
     curriculum?: boolean | DocumentFile$curriculumArgs<ExtArgs>
     curriculumVersion?: boolean | DocumentFile$curriculumVersionArgs<ExtArgs>
     subjectVersion?: boolean | DocumentFile$subjectVersionArgs<ExtArgs>
+    subjectClass?: boolean | DocumentFile$subjectClassArgs<ExtArgs>
     studentAcademicDecision?: boolean | DocumentFile$studentAcademicDecisionArgs<ExtArgs>
     notification?: boolean | DocumentFile$notificationArgs<ExtArgs>
     decision?: boolean | DocumentFile$decisionArgs<ExtArgs>
@@ -276769,6 +276945,7 @@ export namespace Prisma {
     curriculum?: boolean | DocumentFile$curriculumArgs<ExtArgs>
     curriculumVersion?: boolean | DocumentFile$curriculumVersionArgs<ExtArgs>
     subjectVersion?: boolean | DocumentFile$subjectVersionArgs<ExtArgs>
+    subjectClass?: boolean | DocumentFile$subjectClassArgs<ExtArgs>
     studentAcademicDecision?: boolean | DocumentFile$studentAcademicDecisionArgs<ExtArgs>
     notification?: boolean | DocumentFile$notificationArgs<ExtArgs>
     decision?: boolean | DocumentFile$decisionArgs<ExtArgs>
@@ -276797,6 +276974,7 @@ export namespace Prisma {
       curriculum: Prisma.$CurriculumPayload<ExtArgs> | null
       curriculumVersion: Prisma.$CurriculumVersionPayload<ExtArgs> | null
       subjectVersion: Prisma.$SubjectVersionPayload<ExtArgs> | null
+      subjectClass: Prisma.$SubjectClassPayload<ExtArgs> | null
       studentAcademicDecision: Prisma.$StudentAcademicDecisionPayload<ExtArgs> | null
       notification: Prisma.$NotificationPayload<ExtArgs> | null
       decision: Prisma.$DecisionPayload<ExtArgs> | null
@@ -276840,6 +277018,7 @@ export namespace Prisma {
       curriculumId: string | null
       curriculumVersionId: string | null
       subjectVersionId: string | null
+      subjectClassId: string | null
       studentAcademicDecisionId: string | null
       notificationId: string | null
       decisionId: string | null
@@ -277257,6 +277436,7 @@ export namespace Prisma {
     curriculum<T extends DocumentFile$curriculumArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$curriculumArgs<ExtArgs>>): Prisma__CurriculumClient<$Result.GetResult<Prisma.$CurriculumPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     curriculumVersion<T extends DocumentFile$curriculumVersionArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$curriculumVersionArgs<ExtArgs>>): Prisma__CurriculumVersionClient<$Result.GetResult<Prisma.$CurriculumVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     subjectVersion<T extends DocumentFile$subjectVersionArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$subjectVersionArgs<ExtArgs>>): Prisma__SubjectVersionClient<$Result.GetResult<Prisma.$SubjectVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    subjectClass<T extends DocumentFile$subjectClassArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$subjectClassArgs<ExtArgs>>): Prisma__SubjectClassClient<$Result.GetResult<Prisma.$SubjectClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     studentAcademicDecision<T extends DocumentFile$studentAcademicDecisionArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$studentAcademicDecisionArgs<ExtArgs>>): Prisma__StudentAcademicDecisionClient<$Result.GetResult<Prisma.$StudentAcademicDecisionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     notification<T extends DocumentFile$notificationArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$notificationArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     decision<T extends DocumentFile$decisionArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$decisionArgs<ExtArgs>>): Prisma__DecisionClient<$Result.GetResult<Prisma.$DecisionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -277327,6 +277507,7 @@ export namespace Prisma {
     readonly curriculumId: FieldRef<"DocumentFile", 'String'>
     readonly curriculumVersionId: FieldRef<"DocumentFile", 'String'>
     readonly subjectVersionId: FieldRef<"DocumentFile", 'String'>
+    readonly subjectClassId: FieldRef<"DocumentFile", 'String'>
     readonly studentAcademicDecisionId: FieldRef<"DocumentFile", 'String'>
     readonly notificationId: FieldRef<"DocumentFile", 'String'>
     readonly decisionId: FieldRef<"DocumentFile", 'String'>
@@ -277851,6 +278032,25 @@ export namespace Prisma {
      */
     include?: SubjectVersionInclude<ExtArgs> | null
     where?: SubjectVersionWhereInput
+  }
+
+  /**
+   * DocumentFile.subjectClass
+   */
+  export type DocumentFile$subjectClassArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubjectClass
+     */
+    select?: SubjectClassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubjectClass
+     */
+    omit?: SubjectClassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubjectClassInclude<ExtArgs> | null
+    where?: SubjectClassWhereInput
   }
 
   /**
@@ -418219,6 +418419,1113 @@ export namespace Prisma {
 
 
   /**
+   * Model TuitionPaymentConfig
+   */
+
+  export type AggregateTuitionPaymentConfig = {
+    _count: TuitionPaymentConfigCountAggregateOutputType | null
+    _avg: TuitionPaymentConfigAvgAggregateOutputType | null
+    _sum: TuitionPaymentConfigSumAggregateOutputType | null
+    _min: TuitionPaymentConfigMinAggregateOutputType | null
+    _max: TuitionPaymentConfigMaxAggregateOutputType | null
+  }
+
+  export type TuitionPaymentConfigAvgAggregateOutputType = {
+    version: number | null
+  }
+
+  export type TuitionPaymentConfigSumAggregateOutputType = {
+    version: bigint | null
+  }
+
+  export type TuitionPaymentConfigMinAggregateOutputType = {
+    tenantCode: string | null
+    bankBin: string | null
+    bankName: string | null
+    accountNumber: string | null
+    accountHolder: string | null
+    enabled: boolean | null
+    version: bigint | null
+    createdBy: string | null
+    updatedBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TuitionPaymentConfigMaxAggregateOutputType = {
+    tenantCode: string | null
+    bankBin: string | null
+    bankName: string | null
+    accountNumber: string | null
+    accountHolder: string | null
+    enabled: boolean | null
+    version: bigint | null
+    createdBy: string | null
+    updatedBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TuitionPaymentConfigCountAggregateOutputType = {
+    tenantCode: number
+    bankBin: number
+    bankName: number
+    accountNumber: number
+    accountHolder: number
+    enabled: number
+    version: number
+    createdBy: number
+    updatedBy: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type TuitionPaymentConfigAvgAggregateInputType = {
+    version?: true
+  }
+
+  export type TuitionPaymentConfigSumAggregateInputType = {
+    version?: true
+  }
+
+  export type TuitionPaymentConfigMinAggregateInputType = {
+    tenantCode?: true
+    bankBin?: true
+    bankName?: true
+    accountNumber?: true
+    accountHolder?: true
+    enabled?: true
+    version?: true
+    createdBy?: true
+    updatedBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TuitionPaymentConfigMaxAggregateInputType = {
+    tenantCode?: true
+    bankBin?: true
+    bankName?: true
+    accountNumber?: true
+    accountHolder?: true
+    enabled?: true
+    version?: true
+    createdBy?: true
+    updatedBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TuitionPaymentConfigCountAggregateInputType = {
+    tenantCode?: true
+    bankBin?: true
+    bankName?: true
+    accountNumber?: true
+    accountHolder?: true
+    enabled?: true
+    version?: true
+    createdBy?: true
+    updatedBy?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type TuitionPaymentConfigAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TuitionPaymentConfig to aggregate.
+     */
+    where?: TuitionPaymentConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TuitionPaymentConfigs to fetch.
+     */
+    orderBy?: TuitionPaymentConfigOrderByWithRelationInput | TuitionPaymentConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TuitionPaymentConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TuitionPaymentConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TuitionPaymentConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TuitionPaymentConfigs
+    **/
+    _count?: true | TuitionPaymentConfigCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: TuitionPaymentConfigAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TuitionPaymentConfigSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TuitionPaymentConfigMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TuitionPaymentConfigMaxAggregateInputType
+  }
+
+  export type GetTuitionPaymentConfigAggregateType<T extends TuitionPaymentConfigAggregateArgs> = {
+        [P in keyof T & keyof AggregateTuitionPaymentConfig]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTuitionPaymentConfig[P]>
+      : GetScalarType<T[P], AggregateTuitionPaymentConfig[P]>
+  }
+
+
+
+
+  export type TuitionPaymentConfigGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TuitionPaymentConfigWhereInput
+    orderBy?: TuitionPaymentConfigOrderByWithAggregationInput | TuitionPaymentConfigOrderByWithAggregationInput[]
+    by: TuitionPaymentConfigScalarFieldEnum[] | TuitionPaymentConfigScalarFieldEnum
+    having?: TuitionPaymentConfigScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TuitionPaymentConfigCountAggregateInputType | true
+    _avg?: TuitionPaymentConfigAvgAggregateInputType
+    _sum?: TuitionPaymentConfigSumAggregateInputType
+    _min?: TuitionPaymentConfigMinAggregateInputType
+    _max?: TuitionPaymentConfigMaxAggregateInputType
+  }
+
+  export type TuitionPaymentConfigGroupByOutputType = {
+    tenantCode: string
+    bankBin: string
+    bankName: string
+    accountNumber: string
+    accountHolder: string
+    enabled: boolean
+    version: bigint
+    createdBy: string
+    updatedBy: string
+    createdAt: Date
+    updatedAt: Date
+    _count: TuitionPaymentConfigCountAggregateOutputType | null
+    _avg: TuitionPaymentConfigAvgAggregateOutputType | null
+    _sum: TuitionPaymentConfigSumAggregateOutputType | null
+    _min: TuitionPaymentConfigMinAggregateOutputType | null
+    _max: TuitionPaymentConfigMaxAggregateOutputType | null
+  }
+
+  type GetTuitionPaymentConfigGroupByPayload<T extends TuitionPaymentConfigGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TuitionPaymentConfigGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TuitionPaymentConfigGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TuitionPaymentConfigGroupByOutputType[P]>
+            : GetScalarType<T[P], TuitionPaymentConfigGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TuitionPaymentConfigSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    tenantCode?: boolean
+    bankBin?: boolean
+    bankName?: boolean
+    accountNumber?: boolean
+    accountHolder?: boolean
+    enabled?: boolean
+    version?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["tuitionPaymentConfig"]>
+
+  export type TuitionPaymentConfigSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    tenantCode?: boolean
+    bankBin?: boolean
+    bankName?: boolean
+    accountNumber?: boolean
+    accountHolder?: boolean
+    enabled?: boolean
+    version?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["tuitionPaymentConfig"]>
+
+  export type TuitionPaymentConfigSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    tenantCode?: boolean
+    bankBin?: boolean
+    bankName?: boolean
+    accountNumber?: boolean
+    accountHolder?: boolean
+    enabled?: boolean
+    version?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["tuitionPaymentConfig"]>
+
+  export type TuitionPaymentConfigSelectScalar = {
+    tenantCode?: boolean
+    bankBin?: boolean
+    bankName?: boolean
+    accountNumber?: boolean
+    accountHolder?: boolean
+    enabled?: boolean
+    version?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type TuitionPaymentConfigOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"tenantCode" | "bankBin" | "bankName" | "accountNumber" | "accountHolder" | "enabled" | "version" | "createdBy" | "updatedBy" | "createdAt" | "updatedAt", ExtArgs["result"]["tuitionPaymentConfig"]>
+
+  export type $TuitionPaymentConfigPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TuitionPaymentConfig"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      tenantCode: string
+      bankBin: string
+      bankName: string
+      accountNumber: string
+      accountHolder: string
+      enabled: boolean
+      version: bigint
+      createdBy: string
+      updatedBy: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["tuitionPaymentConfig"]>
+    composites: {}
+  }
+
+  type TuitionPaymentConfigGetPayload<S extends boolean | null | undefined | TuitionPaymentConfigDefaultArgs> = $Result.GetResult<Prisma.$TuitionPaymentConfigPayload, S>
+
+  type TuitionPaymentConfigCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TuitionPaymentConfigFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TuitionPaymentConfigCountAggregateInputType | true
+    }
+
+  export interface TuitionPaymentConfigDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TuitionPaymentConfig'], meta: { name: 'TuitionPaymentConfig' } }
+    /**
+     * Find zero or one TuitionPaymentConfig that matches the filter.
+     * @param {TuitionPaymentConfigFindUniqueArgs} args - Arguments to find a TuitionPaymentConfig
+     * @example
+     * // Get one TuitionPaymentConfig
+     * const tuitionPaymentConfig = await prisma.tuitionPaymentConfig.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TuitionPaymentConfigFindUniqueArgs>(args: SelectSubset<T, TuitionPaymentConfigFindUniqueArgs<ExtArgs>>): Prisma__TuitionPaymentConfigClient<$Result.GetResult<Prisma.$TuitionPaymentConfigPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one TuitionPaymentConfig that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TuitionPaymentConfigFindUniqueOrThrowArgs} args - Arguments to find a TuitionPaymentConfig
+     * @example
+     * // Get one TuitionPaymentConfig
+     * const tuitionPaymentConfig = await prisma.tuitionPaymentConfig.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TuitionPaymentConfigFindUniqueOrThrowArgs>(args: SelectSubset<T, TuitionPaymentConfigFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TuitionPaymentConfigClient<$Result.GetResult<Prisma.$TuitionPaymentConfigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TuitionPaymentConfig that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TuitionPaymentConfigFindFirstArgs} args - Arguments to find a TuitionPaymentConfig
+     * @example
+     * // Get one TuitionPaymentConfig
+     * const tuitionPaymentConfig = await prisma.tuitionPaymentConfig.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TuitionPaymentConfigFindFirstArgs>(args?: SelectSubset<T, TuitionPaymentConfigFindFirstArgs<ExtArgs>>): Prisma__TuitionPaymentConfigClient<$Result.GetResult<Prisma.$TuitionPaymentConfigPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TuitionPaymentConfig that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TuitionPaymentConfigFindFirstOrThrowArgs} args - Arguments to find a TuitionPaymentConfig
+     * @example
+     * // Get one TuitionPaymentConfig
+     * const tuitionPaymentConfig = await prisma.tuitionPaymentConfig.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TuitionPaymentConfigFindFirstOrThrowArgs>(args?: SelectSubset<T, TuitionPaymentConfigFindFirstOrThrowArgs<ExtArgs>>): Prisma__TuitionPaymentConfigClient<$Result.GetResult<Prisma.$TuitionPaymentConfigPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more TuitionPaymentConfigs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TuitionPaymentConfigFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TuitionPaymentConfigs
+     * const tuitionPaymentConfigs = await prisma.tuitionPaymentConfig.findMany()
+     * 
+     * // Get first 10 TuitionPaymentConfigs
+     * const tuitionPaymentConfigs = await prisma.tuitionPaymentConfig.findMany({ take: 10 })
+     * 
+     * // Only select the `tenantCode`
+     * const tuitionPaymentConfigWithTenantCodeOnly = await prisma.tuitionPaymentConfig.findMany({ select: { tenantCode: true } })
+     * 
+     */
+    findMany<T extends TuitionPaymentConfigFindManyArgs>(args?: SelectSubset<T, TuitionPaymentConfigFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TuitionPaymentConfigPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a TuitionPaymentConfig.
+     * @param {TuitionPaymentConfigCreateArgs} args - Arguments to create a TuitionPaymentConfig.
+     * @example
+     * // Create one TuitionPaymentConfig
+     * const TuitionPaymentConfig = await prisma.tuitionPaymentConfig.create({
+     *   data: {
+     *     // ... data to create a TuitionPaymentConfig
+     *   }
+     * })
+     * 
+     */
+    create<T extends TuitionPaymentConfigCreateArgs>(args: SelectSubset<T, TuitionPaymentConfigCreateArgs<ExtArgs>>): Prisma__TuitionPaymentConfigClient<$Result.GetResult<Prisma.$TuitionPaymentConfigPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many TuitionPaymentConfigs.
+     * @param {TuitionPaymentConfigCreateManyArgs} args - Arguments to create many TuitionPaymentConfigs.
+     * @example
+     * // Create many TuitionPaymentConfigs
+     * const tuitionPaymentConfig = await prisma.tuitionPaymentConfig.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TuitionPaymentConfigCreateManyArgs>(args?: SelectSubset<T, TuitionPaymentConfigCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TuitionPaymentConfigs and returns the data saved in the database.
+     * @param {TuitionPaymentConfigCreateManyAndReturnArgs} args - Arguments to create many TuitionPaymentConfigs.
+     * @example
+     * // Create many TuitionPaymentConfigs
+     * const tuitionPaymentConfig = await prisma.tuitionPaymentConfig.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many TuitionPaymentConfigs and only return the `tenantCode`
+     * const tuitionPaymentConfigWithTenantCodeOnly = await prisma.tuitionPaymentConfig.createManyAndReturn({
+     *   select: { tenantCode: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TuitionPaymentConfigCreateManyAndReturnArgs>(args?: SelectSubset<T, TuitionPaymentConfigCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TuitionPaymentConfigPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a TuitionPaymentConfig.
+     * @param {TuitionPaymentConfigDeleteArgs} args - Arguments to delete one TuitionPaymentConfig.
+     * @example
+     * // Delete one TuitionPaymentConfig
+     * const TuitionPaymentConfig = await prisma.tuitionPaymentConfig.delete({
+     *   where: {
+     *     // ... filter to delete one TuitionPaymentConfig
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TuitionPaymentConfigDeleteArgs>(args: SelectSubset<T, TuitionPaymentConfigDeleteArgs<ExtArgs>>): Prisma__TuitionPaymentConfigClient<$Result.GetResult<Prisma.$TuitionPaymentConfigPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one TuitionPaymentConfig.
+     * @param {TuitionPaymentConfigUpdateArgs} args - Arguments to update one TuitionPaymentConfig.
+     * @example
+     * // Update one TuitionPaymentConfig
+     * const tuitionPaymentConfig = await prisma.tuitionPaymentConfig.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TuitionPaymentConfigUpdateArgs>(args: SelectSubset<T, TuitionPaymentConfigUpdateArgs<ExtArgs>>): Prisma__TuitionPaymentConfigClient<$Result.GetResult<Prisma.$TuitionPaymentConfigPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more TuitionPaymentConfigs.
+     * @param {TuitionPaymentConfigDeleteManyArgs} args - Arguments to filter TuitionPaymentConfigs to delete.
+     * @example
+     * // Delete a few TuitionPaymentConfigs
+     * const { count } = await prisma.tuitionPaymentConfig.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TuitionPaymentConfigDeleteManyArgs>(args?: SelectSubset<T, TuitionPaymentConfigDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TuitionPaymentConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TuitionPaymentConfigUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TuitionPaymentConfigs
+     * const tuitionPaymentConfig = await prisma.tuitionPaymentConfig.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TuitionPaymentConfigUpdateManyArgs>(args: SelectSubset<T, TuitionPaymentConfigUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TuitionPaymentConfigs and returns the data updated in the database.
+     * @param {TuitionPaymentConfigUpdateManyAndReturnArgs} args - Arguments to update many TuitionPaymentConfigs.
+     * @example
+     * // Update many TuitionPaymentConfigs
+     * const tuitionPaymentConfig = await prisma.tuitionPaymentConfig.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more TuitionPaymentConfigs and only return the `tenantCode`
+     * const tuitionPaymentConfigWithTenantCodeOnly = await prisma.tuitionPaymentConfig.updateManyAndReturn({
+     *   select: { tenantCode: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TuitionPaymentConfigUpdateManyAndReturnArgs>(args: SelectSubset<T, TuitionPaymentConfigUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TuitionPaymentConfigPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one TuitionPaymentConfig.
+     * @param {TuitionPaymentConfigUpsertArgs} args - Arguments to update or create a TuitionPaymentConfig.
+     * @example
+     * // Update or create a TuitionPaymentConfig
+     * const tuitionPaymentConfig = await prisma.tuitionPaymentConfig.upsert({
+     *   create: {
+     *     // ... data to create a TuitionPaymentConfig
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TuitionPaymentConfig we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TuitionPaymentConfigUpsertArgs>(args: SelectSubset<T, TuitionPaymentConfigUpsertArgs<ExtArgs>>): Prisma__TuitionPaymentConfigClient<$Result.GetResult<Prisma.$TuitionPaymentConfigPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of TuitionPaymentConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TuitionPaymentConfigCountArgs} args - Arguments to filter TuitionPaymentConfigs to count.
+     * @example
+     * // Count the number of TuitionPaymentConfigs
+     * const count = await prisma.tuitionPaymentConfig.count({
+     *   where: {
+     *     // ... the filter for the TuitionPaymentConfigs we want to count
+     *   }
+     * })
+    **/
+    count<T extends TuitionPaymentConfigCountArgs>(
+      args?: Subset<T, TuitionPaymentConfigCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TuitionPaymentConfigCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TuitionPaymentConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TuitionPaymentConfigAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TuitionPaymentConfigAggregateArgs>(args: Subset<T, TuitionPaymentConfigAggregateArgs>): Prisma.PrismaPromise<GetTuitionPaymentConfigAggregateType<T>>
+
+    /**
+     * Group by TuitionPaymentConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TuitionPaymentConfigGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TuitionPaymentConfigGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TuitionPaymentConfigGroupByArgs['orderBy'] }
+        : { orderBy?: TuitionPaymentConfigGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TuitionPaymentConfigGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTuitionPaymentConfigGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TuitionPaymentConfig model
+   */
+  readonly fields: TuitionPaymentConfigFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TuitionPaymentConfig.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TuitionPaymentConfigClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the TuitionPaymentConfig model
+   */
+  interface TuitionPaymentConfigFieldRefs {
+    readonly tenantCode: FieldRef<"TuitionPaymentConfig", 'String'>
+    readonly bankBin: FieldRef<"TuitionPaymentConfig", 'String'>
+    readonly bankName: FieldRef<"TuitionPaymentConfig", 'String'>
+    readonly accountNumber: FieldRef<"TuitionPaymentConfig", 'String'>
+    readonly accountHolder: FieldRef<"TuitionPaymentConfig", 'String'>
+    readonly enabled: FieldRef<"TuitionPaymentConfig", 'Boolean'>
+    readonly version: FieldRef<"TuitionPaymentConfig", 'BigInt'>
+    readonly createdBy: FieldRef<"TuitionPaymentConfig", 'String'>
+    readonly updatedBy: FieldRef<"TuitionPaymentConfig", 'String'>
+    readonly createdAt: FieldRef<"TuitionPaymentConfig", 'DateTime'>
+    readonly updatedAt: FieldRef<"TuitionPaymentConfig", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * TuitionPaymentConfig findUnique
+   */
+  export type TuitionPaymentConfigFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TuitionPaymentConfig
+     */
+    select?: TuitionPaymentConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TuitionPaymentConfig
+     */
+    omit?: TuitionPaymentConfigOmit<ExtArgs> | null
+    /**
+     * Filter, which TuitionPaymentConfig to fetch.
+     */
+    where: TuitionPaymentConfigWhereUniqueInput
+  }
+
+  /**
+   * TuitionPaymentConfig findUniqueOrThrow
+   */
+  export type TuitionPaymentConfigFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TuitionPaymentConfig
+     */
+    select?: TuitionPaymentConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TuitionPaymentConfig
+     */
+    omit?: TuitionPaymentConfigOmit<ExtArgs> | null
+    /**
+     * Filter, which TuitionPaymentConfig to fetch.
+     */
+    where: TuitionPaymentConfigWhereUniqueInput
+  }
+
+  /**
+   * TuitionPaymentConfig findFirst
+   */
+  export type TuitionPaymentConfigFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TuitionPaymentConfig
+     */
+    select?: TuitionPaymentConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TuitionPaymentConfig
+     */
+    omit?: TuitionPaymentConfigOmit<ExtArgs> | null
+    /**
+     * Filter, which TuitionPaymentConfig to fetch.
+     */
+    where?: TuitionPaymentConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TuitionPaymentConfigs to fetch.
+     */
+    orderBy?: TuitionPaymentConfigOrderByWithRelationInput | TuitionPaymentConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TuitionPaymentConfigs.
+     */
+    cursor?: TuitionPaymentConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TuitionPaymentConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TuitionPaymentConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TuitionPaymentConfigs.
+     */
+    distinct?: TuitionPaymentConfigScalarFieldEnum | TuitionPaymentConfigScalarFieldEnum[]
+  }
+
+  /**
+   * TuitionPaymentConfig findFirstOrThrow
+   */
+  export type TuitionPaymentConfigFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TuitionPaymentConfig
+     */
+    select?: TuitionPaymentConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TuitionPaymentConfig
+     */
+    omit?: TuitionPaymentConfigOmit<ExtArgs> | null
+    /**
+     * Filter, which TuitionPaymentConfig to fetch.
+     */
+    where?: TuitionPaymentConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TuitionPaymentConfigs to fetch.
+     */
+    orderBy?: TuitionPaymentConfigOrderByWithRelationInput | TuitionPaymentConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TuitionPaymentConfigs.
+     */
+    cursor?: TuitionPaymentConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TuitionPaymentConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TuitionPaymentConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TuitionPaymentConfigs.
+     */
+    distinct?: TuitionPaymentConfigScalarFieldEnum | TuitionPaymentConfigScalarFieldEnum[]
+  }
+
+  /**
+   * TuitionPaymentConfig findMany
+   */
+  export type TuitionPaymentConfigFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TuitionPaymentConfig
+     */
+    select?: TuitionPaymentConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TuitionPaymentConfig
+     */
+    omit?: TuitionPaymentConfigOmit<ExtArgs> | null
+    /**
+     * Filter, which TuitionPaymentConfigs to fetch.
+     */
+    where?: TuitionPaymentConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TuitionPaymentConfigs to fetch.
+     */
+    orderBy?: TuitionPaymentConfigOrderByWithRelationInput | TuitionPaymentConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TuitionPaymentConfigs.
+     */
+    cursor?: TuitionPaymentConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TuitionPaymentConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TuitionPaymentConfigs.
+     */
+    skip?: number
+    distinct?: TuitionPaymentConfigScalarFieldEnum | TuitionPaymentConfigScalarFieldEnum[]
+  }
+
+  /**
+   * TuitionPaymentConfig create
+   */
+  export type TuitionPaymentConfigCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TuitionPaymentConfig
+     */
+    select?: TuitionPaymentConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TuitionPaymentConfig
+     */
+    omit?: TuitionPaymentConfigOmit<ExtArgs> | null
+    /**
+     * The data needed to create a TuitionPaymentConfig.
+     */
+    data: XOR<TuitionPaymentConfigCreateInput, TuitionPaymentConfigUncheckedCreateInput>
+  }
+
+  /**
+   * TuitionPaymentConfig createMany
+   */
+  export type TuitionPaymentConfigCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TuitionPaymentConfigs.
+     */
+    data: TuitionPaymentConfigCreateManyInput | TuitionPaymentConfigCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * TuitionPaymentConfig createManyAndReturn
+   */
+  export type TuitionPaymentConfigCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TuitionPaymentConfig
+     */
+    select?: TuitionPaymentConfigSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TuitionPaymentConfig
+     */
+    omit?: TuitionPaymentConfigOmit<ExtArgs> | null
+    /**
+     * The data used to create many TuitionPaymentConfigs.
+     */
+    data: TuitionPaymentConfigCreateManyInput | TuitionPaymentConfigCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * TuitionPaymentConfig update
+   */
+  export type TuitionPaymentConfigUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TuitionPaymentConfig
+     */
+    select?: TuitionPaymentConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TuitionPaymentConfig
+     */
+    omit?: TuitionPaymentConfigOmit<ExtArgs> | null
+    /**
+     * The data needed to update a TuitionPaymentConfig.
+     */
+    data: XOR<TuitionPaymentConfigUpdateInput, TuitionPaymentConfigUncheckedUpdateInput>
+    /**
+     * Choose, which TuitionPaymentConfig to update.
+     */
+    where: TuitionPaymentConfigWhereUniqueInput
+  }
+
+  /**
+   * TuitionPaymentConfig updateMany
+   */
+  export type TuitionPaymentConfigUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TuitionPaymentConfigs.
+     */
+    data: XOR<TuitionPaymentConfigUpdateManyMutationInput, TuitionPaymentConfigUncheckedUpdateManyInput>
+    /**
+     * Filter which TuitionPaymentConfigs to update
+     */
+    where?: TuitionPaymentConfigWhereInput
+    /**
+     * Limit how many TuitionPaymentConfigs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TuitionPaymentConfig updateManyAndReturn
+   */
+  export type TuitionPaymentConfigUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TuitionPaymentConfig
+     */
+    select?: TuitionPaymentConfigSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TuitionPaymentConfig
+     */
+    omit?: TuitionPaymentConfigOmit<ExtArgs> | null
+    /**
+     * The data used to update TuitionPaymentConfigs.
+     */
+    data: XOR<TuitionPaymentConfigUpdateManyMutationInput, TuitionPaymentConfigUncheckedUpdateManyInput>
+    /**
+     * Filter which TuitionPaymentConfigs to update
+     */
+    where?: TuitionPaymentConfigWhereInput
+    /**
+     * Limit how many TuitionPaymentConfigs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TuitionPaymentConfig upsert
+   */
+  export type TuitionPaymentConfigUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TuitionPaymentConfig
+     */
+    select?: TuitionPaymentConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TuitionPaymentConfig
+     */
+    omit?: TuitionPaymentConfigOmit<ExtArgs> | null
+    /**
+     * The filter to search for the TuitionPaymentConfig to update in case it exists.
+     */
+    where: TuitionPaymentConfigWhereUniqueInput
+    /**
+     * In case the TuitionPaymentConfig found by the `where` argument doesn't exist, create a new TuitionPaymentConfig with this data.
+     */
+    create: XOR<TuitionPaymentConfigCreateInput, TuitionPaymentConfigUncheckedCreateInput>
+    /**
+     * In case the TuitionPaymentConfig was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TuitionPaymentConfigUpdateInput, TuitionPaymentConfigUncheckedUpdateInput>
+  }
+
+  /**
+   * TuitionPaymentConfig delete
+   */
+  export type TuitionPaymentConfigDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TuitionPaymentConfig
+     */
+    select?: TuitionPaymentConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TuitionPaymentConfig
+     */
+    omit?: TuitionPaymentConfigOmit<ExtArgs> | null
+    /**
+     * Filter which TuitionPaymentConfig to delete.
+     */
+    where: TuitionPaymentConfigWhereUniqueInput
+  }
+
+  /**
+   * TuitionPaymentConfig deleteMany
+   */
+  export type TuitionPaymentConfigDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TuitionPaymentConfigs to delete
+     */
+    where?: TuitionPaymentConfigWhereInput
+    /**
+     * Limit how many TuitionPaymentConfigs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * TuitionPaymentConfig without action
+   */
+  export type TuitionPaymentConfigDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TuitionPaymentConfig
+     */
+    select?: TuitionPaymentConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TuitionPaymentConfig
+     */
+    omit?: TuitionPaymentConfigOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Model TemplateFile
    */
 
@@ -423166,6 +424473,7 @@ export namespace Prisma {
     bLaGiangVien: 'bLaGiangVien',
     bLaCanBoNhanVien: 'bLaCanBoNhanVien',
     bLaHocVien: 'bLaHocVien',
+    bLaSinhVien: 'bLaSinhVien',
     groupId: 'groupId',
     sDM_DonViId: 'sDM_DonViId',
     sDM_ViTriCongViecId: 'sDM_ViTriCongViecId',
@@ -426605,6 +427913,7 @@ export namespace Prisma {
     sThietBiSua: 'sThietBiSua',
     from: 'from',
     lectureID: 'lectureID',
+    TKPUcode: 'TKPUcode',
     serviceDate: 'serviceDate',
     userProfileId: 'userProfileId',
     lecturerTypeId: 'lecturerTypeId'
@@ -427806,6 +429115,7 @@ export namespace Prisma {
     curriculumId: 'curriculumId',
     curriculumVersionId: 'curriculumVersionId',
     subjectVersionId: 'subjectVersionId',
+    subjectClassId: 'subjectClassId',
     studentAcademicDecisionId: 'studentAcademicDecisionId',
     notificationId: 'notificationId',
     decisionId: 'decisionId',
@@ -430471,6 +431781,23 @@ export namespace Prisma {
   export type DM_BacLuongScalarFieldEnum = (typeof DM_BacLuongScalarFieldEnum)[keyof typeof DM_BacLuongScalarFieldEnum]
 
 
+  export const TuitionPaymentConfigScalarFieldEnum: {
+    tenantCode: 'tenantCode',
+    bankBin: 'bankBin',
+    bankName: 'bankName',
+    accountNumber: 'accountNumber',
+    accountHolder: 'accountHolder',
+    enabled: 'enabled',
+    version: 'version',
+    createdBy: 'createdBy',
+    updatedBy: 'updatedBy',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type TuitionPaymentConfigScalarFieldEnum = (typeof TuitionPaymentConfigScalarFieldEnum)[keyof typeof TuitionPaymentConfigScalarFieldEnum]
+
+
   export const TemplateFileScalarFieldEnum: {
     id: 'id',
     code: 'code',
@@ -432945,6 +434272,7 @@ export namespace Prisma {
     sThietBiTao: 'sThietBiTao',
     sThietBiSua: 'sThietBiSua',
     lectureID: 'lectureID',
+    TKPUcode: 'TKPUcode',
     userProfileId: 'userProfileId',
     lecturerTypeId: 'lecturerTypeId'
   };
@@ -433749,6 +435077,7 @@ export namespace Prisma {
     curriculumId: 'curriculumId',
     curriculumVersionId: 'curriculumVersionId',
     subjectVersionId: 'subjectVersionId',
+    subjectClassId: 'subjectClassId',
     studentAcademicDecisionId: 'studentAcademicDecisionId',
     notificationId: 'notificationId',
     decisionId: 'decisionId',
@@ -435580,6 +436909,19 @@ export namespace Prisma {
   export type DM_BacLuongOrderByRelevanceFieldEnum = (typeof DM_BacLuongOrderByRelevanceFieldEnum)[keyof typeof DM_BacLuongOrderByRelevanceFieldEnum]
 
 
+  export const TuitionPaymentConfigOrderByRelevanceFieldEnum: {
+    tenantCode: 'tenantCode',
+    bankBin: 'bankBin',
+    bankName: 'bankName',
+    accountNumber: 'accountNumber',
+    accountHolder: 'accountHolder',
+    createdBy: 'createdBy',
+    updatedBy: 'updatedBy'
+  };
+
+  export type TuitionPaymentConfigOrderByRelevanceFieldEnum = (typeof TuitionPaymentConfigOrderByRelevanceFieldEnum)[keyof typeof TuitionPaymentConfigOrderByRelevanceFieldEnum]
+
+
   export const TemplateFileOrderByRelevanceFieldEnum: {
     id: 'id',
     code: 'code',
@@ -437047,6 +438389,7 @@ export namespace Prisma {
     bLaGiangVien?: BoolNullableFilter<"UserProfile"> | boolean | null
     bLaCanBoNhanVien?: BoolNullableFilter<"UserProfile"> | boolean | null
     bLaHocVien?: BoolNullableFilter<"UserProfile"> | boolean | null
+    bLaSinhVien?: BoolNullableFilter<"UserProfile"> | boolean | null
     groupId?: StringNullableFilter<"UserProfile"> | string | null
     sDM_DonViId?: UuidNullableFilter<"UserProfile"> | string | null
     sDM_ViTriCongViecId?: UuidNullableFilter<"UserProfile"> | string | null
@@ -437274,6 +438617,7 @@ export namespace Prisma {
     bLaGiangVien?: SortOrderInput | SortOrder
     bLaCanBoNhanVien?: SortOrderInput | SortOrder
     bLaHocVien?: SortOrderInput | SortOrder
+    bLaSinhVien?: SortOrderInput | SortOrder
     groupId?: SortOrderInput | SortOrder
     sDM_DonViId?: SortOrderInput | SortOrder
     sDM_ViTriCongViecId?: SortOrderInput | SortOrder
@@ -437506,6 +438850,7 @@ export namespace Prisma {
     bLaGiangVien?: BoolNullableFilter<"UserProfile"> | boolean | null
     bLaCanBoNhanVien?: BoolNullableFilter<"UserProfile"> | boolean | null
     bLaHocVien?: BoolNullableFilter<"UserProfile"> | boolean | null
+    bLaSinhVien?: BoolNullableFilter<"UserProfile"> | boolean | null
     groupId?: StringNullableFilter<"UserProfile"> | string | null
     sDM_DonViId?: UuidNullableFilter<"UserProfile"> | string | null
     sDM_ViTriCongViecId?: UuidNullableFilter<"UserProfile"> | string | null
@@ -437732,6 +439077,7 @@ export namespace Prisma {
     bLaGiangVien?: SortOrderInput | SortOrder
     bLaCanBoNhanVien?: SortOrderInput | SortOrder
     bLaHocVien?: SortOrderInput | SortOrder
+    bLaSinhVien?: SortOrderInput | SortOrder
     groupId?: SortOrderInput | SortOrder
     sDM_DonViId?: SortOrderInput | SortOrder
     sDM_ViTriCongViecId?: SortOrderInput | SortOrder
@@ -437874,6 +439220,7 @@ export namespace Prisma {
     bLaGiangVien?: BoolNullableWithAggregatesFilter<"UserProfile"> | boolean | null
     bLaCanBoNhanVien?: BoolNullableWithAggregatesFilter<"UserProfile"> | boolean | null
     bLaHocVien?: BoolNullableWithAggregatesFilter<"UserProfile"> | boolean | null
+    bLaSinhVien?: BoolNullableWithAggregatesFilter<"UserProfile"> | boolean | null
     groupId?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
     sDM_DonViId?: UuidNullableWithAggregatesFilter<"UserProfile"> | string | null
     sDM_ViTriCongViecId?: UuidNullableWithAggregatesFilter<"UserProfile"> | string | null
@@ -452093,6 +453440,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryListRelationFilter
     examBank?: ExamBankListRelationFilter
     subjectClassAttendances?: SubjectClassAttendanceListRelationFilter
+    documentFiles?: DocumentFileListRelationFilter
   }
 
   export type SubjectClassOrderByWithRelationInput = {
@@ -452171,6 +453519,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryOrderByRelationAggregateInput
     examBank?: ExamBankOrderByRelationAggregateInput
     subjectClassAttendances?: SubjectClassAttendanceOrderByRelationAggregateInput
+    documentFiles?: DocumentFileOrderByRelationAggregateInput
     _relevance?: SubjectClassOrderByRelevanceInput
   }
 
@@ -452253,6 +453602,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryListRelationFilter
     examBank?: ExamBankListRelationFilter
     subjectClassAttendances?: SubjectClassAttendanceListRelationFilter
+    documentFiles?: DocumentFileListRelationFilter
   }, "id" | "scoreLinkSubjectVersionId">
 
   export type SubjectClassOrderByWithAggregationInput = {
@@ -455802,6 +457152,7 @@ export namespace Prisma {
     sThietBiSua?: StringNullableFilter<"Lecturer"> | string | null
     from?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
     lectureID?: StringNullableFilter<"Lecturer"> | string | null
+    TKPUcode?: StringNullableFilter<"Lecturer"> | string | null
     serviceDate?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
     userProfileId?: UuidFilter<"Lecturer"> | string
     lecturerTypeId?: StringFilter<"Lecturer"> | string
@@ -455849,6 +457200,7 @@ export namespace Prisma {
     sThietBiSua?: SortOrderInput | SortOrder
     from?: SortOrderInput | SortOrder
     lectureID?: SortOrderInput | SortOrder
+    TKPUcode?: SortOrderInput | SortOrder
     serviceDate?: SortOrderInput | SortOrder
     userProfileId?: SortOrder
     lecturerTypeId?: SortOrder
@@ -455884,6 +457236,7 @@ export namespace Prisma {
   export type LecturerWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     lectureID?: string
+    TKPUcode?: string
     userProfileId?: string
     AND?: LecturerWhereInput | LecturerWhereInput[]
     OR?: LecturerWhereInput[]
@@ -455929,7 +457282,7 @@ export namespace Prisma {
     personalWorkTags?: PersonalWorkTagListRelationFilter
     individualSchedules?: IndividualScheduleListRelationFilter
     guestTeachingPayments?: GuestTeachingPaymentListRelationFilter
-  }, "id" | "lectureID" | "userProfileId">
+  }, "id" | "lectureID" | "TKPUcode" | "userProfileId">
 
   export type LecturerOrderByWithAggregationInput = {
     id?: SortOrder
@@ -455947,6 +457300,7 @@ export namespace Prisma {
     sThietBiSua?: SortOrderInput | SortOrder
     from?: SortOrderInput | SortOrder
     lectureID?: SortOrderInput | SortOrder
+    TKPUcode?: SortOrderInput | SortOrder
     serviceDate?: SortOrderInput | SortOrder
     userProfileId?: SortOrder
     lecturerTypeId?: SortOrder
@@ -455974,6 +457328,7 @@ export namespace Prisma {
     sThietBiSua?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
     from?: DateTimeNullableWithAggregatesFilter<"Lecturer"> | Date | string | null
     lectureID?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
+    TKPUcode?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
     serviceDate?: DateTimeNullableWithAggregatesFilter<"Lecturer"> | Date | string | null
     userProfileId?: UuidWithAggregatesFilter<"Lecturer"> | string
     lecturerTypeId?: StringWithAggregatesFilter<"Lecturer"> | string
@@ -462286,6 +463641,7 @@ export namespace Prisma {
     curriculumId?: StringNullableFilter<"DocumentFile"> | string | null
     curriculumVersionId?: StringNullableFilter<"DocumentFile"> | string | null
     subjectVersionId?: StringNullableFilter<"DocumentFile"> | string | null
+    subjectClassId?: StringNullableFilter<"DocumentFile"> | string | null
     studentAcademicDecisionId?: StringNullableFilter<"DocumentFile"> | string | null
     notificationId?: StringNullableFilter<"DocumentFile"> | string | null
     decisionId?: StringNullableFilter<"DocumentFile"> | string | null
@@ -462309,6 +463665,7 @@ export namespace Prisma {
     curriculum?: XOR<CurriculumNullableScalarRelationFilter, CurriculumWhereInput> | null
     curriculumVersion?: XOR<CurriculumVersionNullableScalarRelationFilter, CurriculumVersionWhereInput> | null
     subjectVersion?: XOR<SubjectVersionNullableScalarRelationFilter, SubjectVersionWhereInput> | null
+    subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
     studentAcademicDecision?: XOR<StudentAcademicDecisionNullableScalarRelationFilter, StudentAcademicDecisionWhereInput> | null
     notification?: XOR<NotificationNullableScalarRelationFilter, NotificationWhereInput> | null
     decision?: XOR<DecisionNullableScalarRelationFilter, DecisionWhereInput> | null
@@ -462353,6 +463710,7 @@ export namespace Prisma {
     curriculumId?: SortOrderInput | SortOrder
     curriculumVersionId?: SortOrderInput | SortOrder
     subjectVersionId?: SortOrderInput | SortOrder
+    subjectClassId?: SortOrderInput | SortOrder
     studentAcademicDecisionId?: SortOrderInput | SortOrder
     notificationId?: SortOrderInput | SortOrder
     decisionId?: SortOrderInput | SortOrder
@@ -462376,6 +463734,7 @@ export namespace Prisma {
     curriculum?: CurriculumOrderByWithRelationInput
     curriculumVersion?: CurriculumVersionOrderByWithRelationInput
     subjectVersion?: SubjectVersionOrderByWithRelationInput
+    subjectClass?: SubjectClassOrderByWithRelationInput
     studentAcademicDecision?: StudentAcademicDecisionOrderByWithRelationInput
     notification?: NotificationOrderByWithRelationInput
     decision?: DecisionOrderByWithRelationInput
@@ -462429,6 +463788,7 @@ export namespace Prisma {
     curriculumId?: StringNullableFilter<"DocumentFile"> | string | null
     curriculumVersionId?: StringNullableFilter<"DocumentFile"> | string | null
     subjectVersionId?: StringNullableFilter<"DocumentFile"> | string | null
+    subjectClassId?: StringNullableFilter<"DocumentFile"> | string | null
     studentAcademicDecisionId?: StringNullableFilter<"DocumentFile"> | string | null
     notificationId?: StringNullableFilter<"DocumentFile"> | string | null
     decisionId?: StringNullableFilter<"DocumentFile"> | string | null
@@ -462447,6 +463807,7 @@ export namespace Prisma {
     curriculum?: XOR<CurriculumNullableScalarRelationFilter, CurriculumWhereInput> | null
     curriculumVersion?: XOR<CurriculumVersionNullableScalarRelationFilter, CurriculumVersionWhereInput> | null
     subjectVersion?: XOR<SubjectVersionNullableScalarRelationFilter, SubjectVersionWhereInput> | null
+    subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
     studentAcademicDecision?: XOR<StudentAcademicDecisionNullableScalarRelationFilter, StudentAcademicDecisionWhereInput> | null
     notification?: XOR<NotificationNullableScalarRelationFilter, NotificationWhereInput> | null
     decision?: XOR<DecisionNullableScalarRelationFilter, DecisionWhereInput> | null
@@ -462491,6 +463852,7 @@ export namespace Prisma {
     curriculumId?: SortOrderInput | SortOrder
     curriculumVersionId?: SortOrderInput | SortOrder
     subjectVersionId?: SortOrderInput | SortOrder
+    subjectClassId?: SortOrderInput | SortOrder
     studentAcademicDecisionId?: SortOrderInput | SortOrder
     notificationId?: SortOrderInput | SortOrder
     decisionId?: SortOrderInput | SortOrder
@@ -462543,6 +463905,7 @@ export namespace Prisma {
     curriculumId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
     curriculumVersionId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
     subjectVersionId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
+    subjectClassId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
     studentAcademicDecisionId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
     notificationId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
     decisionId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
@@ -476542,6 +477905,91 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"DM_BacLuong"> | string
   }
 
+  export type TuitionPaymentConfigWhereInput = {
+    AND?: TuitionPaymentConfigWhereInput | TuitionPaymentConfigWhereInput[]
+    OR?: TuitionPaymentConfigWhereInput[]
+    NOT?: TuitionPaymentConfigWhereInput | TuitionPaymentConfigWhereInput[]
+    tenantCode?: StringFilter<"TuitionPaymentConfig"> | string
+    bankBin?: StringFilter<"TuitionPaymentConfig"> | string
+    bankName?: StringFilter<"TuitionPaymentConfig"> | string
+    accountNumber?: StringFilter<"TuitionPaymentConfig"> | string
+    accountHolder?: StringFilter<"TuitionPaymentConfig"> | string
+    enabled?: BoolFilter<"TuitionPaymentConfig"> | boolean
+    version?: BigIntFilter<"TuitionPaymentConfig"> | bigint | number
+    createdBy?: UuidFilter<"TuitionPaymentConfig"> | string
+    updatedBy?: UuidFilter<"TuitionPaymentConfig"> | string
+    createdAt?: DateTimeFilter<"TuitionPaymentConfig"> | Date | string
+    updatedAt?: DateTimeFilter<"TuitionPaymentConfig"> | Date | string
+  }
+
+  export type TuitionPaymentConfigOrderByWithRelationInput = {
+    tenantCode?: SortOrder
+    bankBin?: SortOrder
+    bankName?: SortOrder
+    accountNumber?: SortOrder
+    accountHolder?: SortOrder
+    enabled?: SortOrder
+    version?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _relevance?: TuitionPaymentConfigOrderByRelevanceInput
+  }
+
+  export type TuitionPaymentConfigWhereUniqueInput = Prisma.AtLeast<{
+    tenantCode?: string
+    AND?: TuitionPaymentConfigWhereInput | TuitionPaymentConfigWhereInput[]
+    OR?: TuitionPaymentConfigWhereInput[]
+    NOT?: TuitionPaymentConfigWhereInput | TuitionPaymentConfigWhereInput[]
+    bankBin?: StringFilter<"TuitionPaymentConfig"> | string
+    bankName?: StringFilter<"TuitionPaymentConfig"> | string
+    accountNumber?: StringFilter<"TuitionPaymentConfig"> | string
+    accountHolder?: StringFilter<"TuitionPaymentConfig"> | string
+    enabled?: BoolFilter<"TuitionPaymentConfig"> | boolean
+    version?: BigIntFilter<"TuitionPaymentConfig"> | bigint | number
+    createdBy?: UuidFilter<"TuitionPaymentConfig"> | string
+    updatedBy?: UuidFilter<"TuitionPaymentConfig"> | string
+    createdAt?: DateTimeFilter<"TuitionPaymentConfig"> | Date | string
+    updatedAt?: DateTimeFilter<"TuitionPaymentConfig"> | Date | string
+  }, "tenantCode">
+
+  export type TuitionPaymentConfigOrderByWithAggregationInput = {
+    tenantCode?: SortOrder
+    bankBin?: SortOrder
+    bankName?: SortOrder
+    accountNumber?: SortOrder
+    accountHolder?: SortOrder
+    enabled?: SortOrder
+    version?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: TuitionPaymentConfigCountOrderByAggregateInput
+    _avg?: TuitionPaymentConfigAvgOrderByAggregateInput
+    _max?: TuitionPaymentConfigMaxOrderByAggregateInput
+    _min?: TuitionPaymentConfigMinOrderByAggregateInput
+    _sum?: TuitionPaymentConfigSumOrderByAggregateInput
+  }
+
+  export type TuitionPaymentConfigScalarWhereWithAggregatesInput = {
+    AND?: TuitionPaymentConfigScalarWhereWithAggregatesInput | TuitionPaymentConfigScalarWhereWithAggregatesInput[]
+    OR?: TuitionPaymentConfigScalarWhereWithAggregatesInput[]
+    NOT?: TuitionPaymentConfigScalarWhereWithAggregatesInput | TuitionPaymentConfigScalarWhereWithAggregatesInput[]
+    tenantCode?: StringWithAggregatesFilter<"TuitionPaymentConfig"> | string
+    bankBin?: StringWithAggregatesFilter<"TuitionPaymentConfig"> | string
+    bankName?: StringWithAggregatesFilter<"TuitionPaymentConfig"> | string
+    accountNumber?: StringWithAggregatesFilter<"TuitionPaymentConfig"> | string
+    accountHolder?: StringWithAggregatesFilter<"TuitionPaymentConfig"> | string
+    enabled?: BoolWithAggregatesFilter<"TuitionPaymentConfig"> | boolean
+    version?: BigIntWithAggregatesFilter<"TuitionPaymentConfig"> | bigint | number
+    createdBy?: UuidWithAggregatesFilter<"TuitionPaymentConfig"> | string
+    updatedBy?: UuidWithAggregatesFilter<"TuitionPaymentConfig"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"TuitionPaymentConfig"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"TuitionPaymentConfig"> | Date | string
+  }
+
   export type TemplateFileWhereInput = {
     AND?: TemplateFileWhereInput | TemplateFileWhereInput[]
     OR?: TemplateFileWhereInput[]
@@ -477438,6 +478886,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -477619,6 +479068,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -477800,6 +479250,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -477981,6 +479432,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -478162,6 +479614,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -478296,6 +479749,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -478384,6 +479838,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -495355,6 +496810,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateInput = {
@@ -495423,6 +496879,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUpdateInput = {
@@ -495491,6 +496948,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateInput = {
@@ -495559,6 +497017,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassCreateManyInput = {
@@ -499874,6 +501333,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -499919,6 +501379,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
     lecturerTypeId: string
@@ -499964,6 +501425,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -500009,6 +501471,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -500054,6 +501517,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
     lecturerTypeId: string
@@ -500075,6 +501539,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
@@ -500094,6 +501559,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -507628,6 +509094,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -507672,6 +509139,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -507716,6 +509184,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -507760,6 +509229,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -507804,6 +509274,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -507869,6 +509340,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -524591,6 +526063,104 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
   }
 
+  export type TuitionPaymentConfigCreateInput = {
+    tenantCode: string
+    bankBin: string
+    bankName: string
+    accountNumber: string
+    accountHolder: string
+    enabled?: boolean
+    version?: bigint | number
+    createdBy: string
+    updatedBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TuitionPaymentConfigUncheckedCreateInput = {
+    tenantCode: string
+    bankBin: string
+    bankName: string
+    accountNumber: string
+    accountHolder: string
+    enabled?: boolean
+    version?: bigint | number
+    createdBy: string
+    updatedBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TuitionPaymentConfigUpdateInput = {
+    tenantCode?: StringFieldUpdateOperationsInput | string
+    bankBin?: StringFieldUpdateOperationsInput | string
+    bankName?: StringFieldUpdateOperationsInput | string
+    accountNumber?: StringFieldUpdateOperationsInput | string
+    accountHolder?: StringFieldUpdateOperationsInput | string
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    version?: BigIntFieldUpdateOperationsInput | bigint | number
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TuitionPaymentConfigUncheckedUpdateInput = {
+    tenantCode?: StringFieldUpdateOperationsInput | string
+    bankBin?: StringFieldUpdateOperationsInput | string
+    bankName?: StringFieldUpdateOperationsInput | string
+    accountNumber?: StringFieldUpdateOperationsInput | string
+    accountHolder?: StringFieldUpdateOperationsInput | string
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    version?: BigIntFieldUpdateOperationsInput | bigint | number
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TuitionPaymentConfigCreateManyInput = {
+    tenantCode: string
+    bankBin: string
+    bankName: string
+    accountNumber: string
+    accountHolder: string
+    enabled?: boolean
+    version?: bigint | number
+    createdBy: string
+    updatedBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TuitionPaymentConfigUpdateManyMutationInput = {
+    tenantCode?: StringFieldUpdateOperationsInput | string
+    bankBin?: StringFieldUpdateOperationsInput | string
+    bankName?: StringFieldUpdateOperationsInput | string
+    accountNumber?: StringFieldUpdateOperationsInput | string
+    accountHolder?: StringFieldUpdateOperationsInput | string
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    version?: BigIntFieldUpdateOperationsInput | bigint | number
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TuitionPaymentConfigUncheckedUpdateManyInput = {
+    tenantCode?: StringFieldUpdateOperationsInput | string
+    bankBin?: StringFieldUpdateOperationsInput | string
+    bankName?: StringFieldUpdateOperationsInput | string
+    accountNumber?: StringFieldUpdateOperationsInput | string
+    accountHolder?: StringFieldUpdateOperationsInput | string
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    version?: BigIntFieldUpdateOperationsInput | bigint | number
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type TemplateFileCreateInput = {
     id?: string
     code?: string | null
@@ -526253,6 +527823,7 @@ export namespace Prisma {
     bLaGiangVien?: SortOrder
     bLaCanBoNhanVien?: SortOrder
     bLaHocVien?: SortOrder
+    bLaSinhVien?: SortOrder
     groupId?: SortOrder
     sDM_DonViId?: SortOrder
     sDM_ViTriCongViecId?: SortOrder
@@ -526394,6 +527965,7 @@ export namespace Prisma {
     bLaGiangVien?: SortOrder
     bLaCanBoNhanVien?: SortOrder
     bLaHocVien?: SortOrder
+    bLaSinhVien?: SortOrder
     groupId?: SortOrder
     sDM_DonViId?: SortOrder
     sDM_ViTriCongViecId?: SortOrder
@@ -526528,6 +528100,7 @@ export namespace Prisma {
     bLaGiangVien?: SortOrder
     bLaCanBoNhanVien?: SortOrder
     bLaHocVien?: SortOrder
+    bLaSinhVien?: SortOrder
     groupId?: SortOrder
     sDM_DonViId?: SortOrder
     sDM_ViTriCongViecId?: SortOrder
@@ -539265,6 +540838,7 @@ export namespace Prisma {
     sThietBiSua?: SortOrder
     from?: SortOrder
     lectureID?: SortOrder
+    TKPUcode?: SortOrder
     serviceDate?: SortOrder
     userProfileId?: SortOrder
     lecturerTypeId?: SortOrder
@@ -539286,6 +540860,7 @@ export namespace Prisma {
     sThietBiSua?: SortOrder
     from?: SortOrder
     lectureID?: SortOrder
+    TKPUcode?: SortOrder
     serviceDate?: SortOrder
     userProfileId?: SortOrder
     lecturerTypeId?: SortOrder
@@ -539307,6 +540882,7 @@ export namespace Prisma {
     sThietBiSua?: SortOrder
     from?: SortOrder
     lectureID?: SortOrder
+    TKPUcode?: SortOrder
     serviceDate?: SortOrder
     userProfileId?: SortOrder
     lecturerTypeId?: SortOrder
@@ -543545,6 +545121,7 @@ export namespace Prisma {
     curriculumId?: SortOrder
     curriculumVersionId?: SortOrder
     subjectVersionId?: SortOrder
+    subjectClassId?: SortOrder
     studentAcademicDecisionId?: SortOrder
     notificationId?: SortOrder
     decisionId?: SortOrder
@@ -543593,6 +545170,7 @@ export namespace Prisma {
     curriculumId?: SortOrder
     curriculumVersionId?: SortOrder
     subjectVersionId?: SortOrder
+    subjectClassId?: SortOrder
     studentAcademicDecisionId?: SortOrder
     notificationId?: SortOrder
     decisionId?: SortOrder
@@ -543637,6 +545215,7 @@ export namespace Prisma {
     curriculumId?: SortOrder
     curriculumVersionId?: SortOrder
     subjectVersionId?: SortOrder
+    subjectClassId?: SortOrder
     studentAcademicDecisionId?: SortOrder
     notificationId?: SortOrder
     decisionId?: SortOrder
@@ -552818,6 +554397,62 @@ export namespace Prisma {
     sThietBiTao?: SortOrder
     sThietBiSua?: SortOrder
     name?: SortOrder
+  }
+
+  export type TuitionPaymentConfigOrderByRelevanceInput = {
+    fields: TuitionPaymentConfigOrderByRelevanceFieldEnum | TuitionPaymentConfigOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type TuitionPaymentConfigCountOrderByAggregateInput = {
+    tenantCode?: SortOrder
+    bankBin?: SortOrder
+    bankName?: SortOrder
+    accountNumber?: SortOrder
+    accountHolder?: SortOrder
+    enabled?: SortOrder
+    version?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TuitionPaymentConfigAvgOrderByAggregateInput = {
+    version?: SortOrder
+  }
+
+  export type TuitionPaymentConfigMaxOrderByAggregateInput = {
+    tenantCode?: SortOrder
+    bankBin?: SortOrder
+    bankName?: SortOrder
+    accountNumber?: SortOrder
+    accountHolder?: SortOrder
+    enabled?: SortOrder
+    version?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TuitionPaymentConfigMinOrderByAggregateInput = {
+    tenantCode?: SortOrder
+    bankBin?: SortOrder
+    bankName?: SortOrder
+    accountNumber?: SortOrder
+    accountHolder?: SortOrder
+    enabled?: SortOrder
+    version?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TuitionPaymentConfigSumOrderByAggregateInput = {
+    version?: SortOrder
   }
 
   export type EnumTemplateFileTypeNullableFilter<$PrismaModel = never> = {
@@ -566198,6 +567833,13 @@ export namespace Prisma {
     connect?: SubjectClassAttendanceWhereUniqueInput | SubjectClassAttendanceWhereUniqueInput[]
   }
 
+  export type DocumentFileCreateNestedManyWithoutSubjectClassInput = {
+    create?: XOR<DocumentFileCreateWithoutSubjectClassInput, DocumentFileUncheckedCreateWithoutSubjectClassInput> | DocumentFileCreateWithoutSubjectClassInput[] | DocumentFileUncheckedCreateWithoutSubjectClassInput[]
+    connectOrCreate?: DocumentFileCreateOrConnectWithoutSubjectClassInput | DocumentFileCreateOrConnectWithoutSubjectClassInput[]
+    createMany?: DocumentFileCreateManySubjectClassInputEnvelope
+    connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+  }
+
   export type StudentSubjectScoreUncheckedCreateNestedManyWithoutSubjectClassInput = {
     create?: XOR<StudentSubjectScoreCreateWithoutSubjectClassInput, StudentSubjectScoreUncheckedCreateWithoutSubjectClassInput> | StudentSubjectScoreCreateWithoutSubjectClassInput[] | StudentSubjectScoreUncheckedCreateWithoutSubjectClassInput[]
     connectOrCreate?: StudentSubjectScoreCreateOrConnectWithoutSubjectClassInput | StudentSubjectScoreCreateOrConnectWithoutSubjectClassInput[]
@@ -566290,6 +567932,13 @@ export namespace Prisma {
     connectOrCreate?: SubjectClassAttendanceCreateOrConnectWithoutSubjectClassInput | SubjectClassAttendanceCreateOrConnectWithoutSubjectClassInput[]
     createMany?: SubjectClassAttendanceCreateManySubjectClassInputEnvelope
     connect?: SubjectClassAttendanceWhereUniqueInput | SubjectClassAttendanceWhereUniqueInput[]
+  }
+
+  export type DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput = {
+    create?: XOR<DocumentFileCreateWithoutSubjectClassInput, DocumentFileUncheckedCreateWithoutSubjectClassInput> | DocumentFileCreateWithoutSubjectClassInput[] | DocumentFileUncheckedCreateWithoutSubjectClassInput[]
+    connectOrCreate?: DocumentFileCreateOrConnectWithoutSubjectClassInput | DocumentFileCreateOrConnectWithoutSubjectClassInput[]
+    createMany?: DocumentFileCreateManySubjectClassInputEnvelope
+    connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
   }
 
   export type NullableEnumSubjectClassScheduleFieldUpdateOperationsInput = {
@@ -566586,6 +568235,20 @@ export namespace Prisma {
     deleteMany?: SubjectClassAttendanceScalarWhereInput | SubjectClassAttendanceScalarWhereInput[]
   }
 
+  export type DocumentFileUpdateManyWithoutSubjectClassNestedInput = {
+    create?: XOR<DocumentFileCreateWithoutSubjectClassInput, DocumentFileUncheckedCreateWithoutSubjectClassInput> | DocumentFileCreateWithoutSubjectClassInput[] | DocumentFileUncheckedCreateWithoutSubjectClassInput[]
+    connectOrCreate?: DocumentFileCreateOrConnectWithoutSubjectClassInput | DocumentFileCreateOrConnectWithoutSubjectClassInput[]
+    upsert?: DocumentFileUpsertWithWhereUniqueWithoutSubjectClassInput | DocumentFileUpsertWithWhereUniqueWithoutSubjectClassInput[]
+    createMany?: DocumentFileCreateManySubjectClassInputEnvelope
+    set?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+    disconnect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+    delete?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+    connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+    update?: DocumentFileUpdateWithWhereUniqueWithoutSubjectClassInput | DocumentFileUpdateWithWhereUniqueWithoutSubjectClassInput[]
+    updateMany?: DocumentFileUpdateManyWithWhereWithoutSubjectClassInput | DocumentFileUpdateManyWithWhereWithoutSubjectClassInput[]
+    deleteMany?: DocumentFileScalarWhereInput | DocumentFileScalarWhereInput[]
+  }
+
   export type StudentSubjectScoreUncheckedUpdateManyWithoutSubjectClassNestedInput = {
     create?: XOR<StudentSubjectScoreCreateWithoutSubjectClassInput, StudentSubjectScoreUncheckedCreateWithoutSubjectClassInput> | StudentSubjectScoreCreateWithoutSubjectClassInput[] | StudentSubjectScoreUncheckedCreateWithoutSubjectClassInput[]
     connectOrCreate?: StudentSubjectScoreCreateOrConnectWithoutSubjectClassInput | StudentSubjectScoreCreateOrConnectWithoutSubjectClassInput[]
@@ -566776,6 +568439,20 @@ export namespace Prisma {
     update?: SubjectClassAttendanceUpdateWithWhereUniqueWithoutSubjectClassInput | SubjectClassAttendanceUpdateWithWhereUniqueWithoutSubjectClassInput[]
     updateMany?: SubjectClassAttendanceUpdateManyWithWhereWithoutSubjectClassInput | SubjectClassAttendanceUpdateManyWithWhereWithoutSubjectClassInput[]
     deleteMany?: SubjectClassAttendanceScalarWhereInput | SubjectClassAttendanceScalarWhereInput[]
+  }
+
+  export type DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput = {
+    create?: XOR<DocumentFileCreateWithoutSubjectClassInput, DocumentFileUncheckedCreateWithoutSubjectClassInput> | DocumentFileCreateWithoutSubjectClassInput[] | DocumentFileUncheckedCreateWithoutSubjectClassInput[]
+    connectOrCreate?: DocumentFileCreateOrConnectWithoutSubjectClassInput | DocumentFileCreateOrConnectWithoutSubjectClassInput[]
+    upsert?: DocumentFileUpsertWithWhereUniqueWithoutSubjectClassInput | DocumentFileUpsertWithWhereUniqueWithoutSubjectClassInput[]
+    createMany?: DocumentFileCreateManySubjectClassInputEnvelope
+    set?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+    disconnect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+    delete?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+    connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+    update?: DocumentFileUpdateWithWhereUniqueWithoutSubjectClassInput | DocumentFileUpdateWithWhereUniqueWithoutSubjectClassInput[]
+    updateMany?: DocumentFileUpdateManyWithWhereWithoutSubjectClassInput | DocumentFileUpdateManyWithWhereWithoutSubjectClassInput[]
+    deleteMany?: DocumentFileScalarWhereInput | DocumentFileScalarWhereInput[]
   }
 
   export type SubjectClassCreateNestedOneWithoutSubjectClassAttendancesInput = {
@@ -575313,6 +576990,12 @@ export namespace Prisma {
     connect?: SubjectVersionWhereUniqueInput
   }
 
+  export type SubjectClassCreateNestedOneWithoutDocumentFilesInput = {
+    create?: XOR<SubjectClassCreateWithoutDocumentFilesInput, SubjectClassUncheckedCreateWithoutDocumentFilesInput>
+    connectOrCreate?: SubjectClassCreateOrConnectWithoutDocumentFilesInput
+    connect?: SubjectClassWhereUniqueInput
+  }
+
   export type StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput = {
     create?: XOR<StudentAcademicDecisionCreateWithoutDocumentEvidenceInput, StudentAcademicDecisionUncheckedCreateWithoutDocumentEvidenceInput>
     connectOrCreate?: StudentAcademicDecisionCreateOrConnectWithoutDocumentEvidenceInput
@@ -575481,6 +577164,16 @@ export namespace Prisma {
     delete?: SubjectVersionWhereInput | boolean
     connect?: SubjectVersionWhereUniqueInput
     update?: XOR<XOR<SubjectVersionUpdateToOneWithWhereWithoutDocumentFilesInput, SubjectVersionUpdateWithoutDocumentFilesInput>, SubjectVersionUncheckedUpdateWithoutDocumentFilesInput>
+  }
+
+  export type SubjectClassUpdateOneWithoutDocumentFilesNestedInput = {
+    create?: XOR<SubjectClassCreateWithoutDocumentFilesInput, SubjectClassUncheckedCreateWithoutDocumentFilesInput>
+    connectOrCreate?: SubjectClassCreateOrConnectWithoutDocumentFilesInput
+    upsert?: SubjectClassUpsertWithoutDocumentFilesInput
+    disconnect?: SubjectClassWhereInput | boolean
+    delete?: SubjectClassWhereInput | boolean
+    connect?: SubjectClassWhereUniqueInput
+    update?: XOR<XOR<SubjectClassUpdateToOneWithWhereWithoutDocumentFilesInput, SubjectClassUpdateWithoutDocumentFilesInput>, SubjectClassUncheckedUpdateWithoutDocumentFilesInput>
   }
 
   export type StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput = {
@@ -585795,6 +587488,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -585975,6 +587669,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -586171,6 +587866,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -586351,6 +588047,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -590390,6 +592087,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
     mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
@@ -590434,6 +592132,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     lecturerTypeId: string
     mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
@@ -595299,6 +596998,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
     mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
@@ -595343,6 +597043,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
     mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
@@ -596220,6 +597921,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -596400,6 +598102,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -596649,6 +598352,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -596829,6 +598533,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -597064,6 +598769,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -597244,6 +598950,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -597501,6 +599208,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -597681,6 +599389,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -597916,6 +599625,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -598096,6 +599806,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -598353,6 +600064,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -598533,6 +600245,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -598850,6 +600563,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -599030,6 +600744,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -599381,6 +601096,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -599561,6 +601277,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -599782,6 +601499,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -599962,6 +601680,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -600205,6 +601924,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -600385,6 +602105,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -600565,6 +602286,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -600745,6 +602467,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -600982,6 +602705,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -601162,6 +602886,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -601389,6 +603114,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -601569,6 +603295,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -601806,6 +603533,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -601986,6 +603714,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -602297,6 +604026,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -602477,6 +604207,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -602769,6 +604500,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -602949,6 +604681,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -603170,6 +604903,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -603350,6 +605084,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -603593,6 +605328,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -603773,6 +605509,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -603953,6 +605690,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -604133,6 +605871,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -604329,6 +606068,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -604509,6 +606249,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -604732,6 +606473,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -604912,6 +606654,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -605157,6 +606900,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -605337,6 +607081,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -605613,6 +607358,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -605793,6 +607539,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -606097,6 +607844,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -606277,6 +608025,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -606635,6 +608384,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -606815,6 +608565,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -607213,6 +608964,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -607393,6 +609145,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -607655,6 +609408,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -607835,6 +609589,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -608125,6 +609880,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -608305,6 +610061,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -608526,6 +610283,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -608706,6 +610464,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -608949,6 +610708,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -609129,6 +610889,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -609309,6 +611070,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -609489,6 +611251,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -609685,6 +611448,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -609865,6 +611629,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -610045,6 +611810,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -610225,6 +611991,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -610421,6 +612188,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -610601,6 +612369,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -610781,6 +612550,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -610961,6 +612731,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -611157,6 +612928,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -611337,6 +613109,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -611564,6 +613337,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -611744,6 +613518,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -611993,6 +613768,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -612173,6 +613949,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -612353,6 +614130,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -612533,6 +614311,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -612729,6 +614508,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -612909,6 +614689,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -613136,6 +614917,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -613316,6 +615098,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -613565,6 +615348,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -613745,6 +615529,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -613966,6 +615751,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -614146,6 +615932,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -614389,6 +616176,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -614569,6 +616357,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -614749,6 +616538,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -614929,6 +616719,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -615125,6 +616916,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -615305,6 +617097,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -615610,6 +617403,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -615790,6 +617584,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -616129,6 +617924,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -616309,6 +618105,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -616530,6 +618327,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -616710,6 +618508,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -616953,6 +618752,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -617133,6 +618933,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -617395,6 +619196,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -617575,6 +619377,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -617865,6 +619668,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -618045,6 +619849,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -618356,6 +620161,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -618536,6 +620342,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
@@ -618840,6 +620647,7 @@ export namespace Prisma {
     bLaGiangVien?: BoolNullableFilter<"UserProfile"> | boolean | null
     bLaCanBoNhanVien?: BoolNullableFilter<"UserProfile"> | boolean | null
     bLaHocVien?: BoolNullableFilter<"UserProfile"> | boolean | null
+    bLaSinhVien?: BoolNullableFilter<"UserProfile"> | boolean | null
     groupId?: StringNullableFilter<"UserProfile"> | string | null
     sDM_DonViId?: UuidNullableFilter<"UserProfile"> | string | null
     sDM_ViTriCongViecId?: UuidNullableFilter<"UserProfile"> | string | null
@@ -619310,6 +621118,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -619490,6 +621299,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -619675,6 +621485,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -619855,6 +621666,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -620144,6 +621956,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -620324,6 +622137,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -620515,6 +622329,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -620695,6 +622510,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -621196,6 +623012,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -621376,6 +623193,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -621561,6 +623379,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -621741,6 +623560,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -621994,6 +623814,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -622174,6 +623995,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -622365,6 +624187,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -622545,6 +624368,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -622833,6 +624657,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -623013,6 +624838,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -623411,6 +625237,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -623591,6 +625418,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -624732,6 +626560,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -624912,6 +626741,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -625186,6 +627016,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -625366,6 +627197,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -625572,6 +627404,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -625752,6 +627585,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -625942,6 +627776,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -626122,6 +627957,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -626312,6 +628148,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -626492,6 +628329,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -627012,6 +628850,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -627192,6 +629031,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -627715,6 +629555,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -627895,6 +629736,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -628355,6 +630197,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -628535,6 +630378,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -628973,6 +630817,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -629153,6 +630998,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
@@ -631216,6 +633062,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -631396,6 +633243,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -631744,6 +633592,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -631924,6 +633773,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -632372,6 +634222,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -632552,6 +634403,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -632842,6 +634694,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -633022,6 +634875,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -633212,6 +635066,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -633392,6 +635247,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -633582,6 +635438,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -633762,6 +635619,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -633952,6 +635810,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -634132,6 +635991,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -634479,6 +636339,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -634659,6 +636520,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -634849,6 +636711,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -635029,6 +636892,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -635219,6 +637083,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -635399,6 +637264,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -635589,6 +637455,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -635769,6 +637636,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -636093,6 +637961,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -636273,6 +638142,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -636463,6 +638333,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -636643,6 +638514,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -636833,6 +638705,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -637013,6 +638886,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -637203,6 +639077,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -637383,6 +639258,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -637637,6 +639513,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -637817,6 +639694,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -638007,6 +639885,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -638187,6 +640066,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -638377,6 +640257,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -638557,6 +640438,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -638747,6 +640629,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -638927,6 +640810,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -639181,6 +641065,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -639361,6 +641246,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -639551,6 +641437,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -639731,6 +641618,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -639921,6 +641809,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -640101,6 +641990,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -640291,6 +642181,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -640471,6 +642362,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -642549,6 +644441,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -642592,6 +644485,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -642895,6 +644789,7 @@ export namespace Prisma {
     curriculumId?: StringNullableFilter<"DocumentFile"> | string | null
     curriculumVersionId?: StringNullableFilter<"DocumentFile"> | string | null
     subjectVersionId?: StringNullableFilter<"DocumentFile"> | string | null
+    subjectClassId?: StringNullableFilter<"DocumentFile"> | string | null
     studentAcademicDecisionId?: StringNullableFilter<"DocumentFile"> | string | null
     notificationId?: StringNullableFilter<"DocumentFile"> | string | null
     decisionId?: StringNullableFilter<"DocumentFile"> | string | null
@@ -643375,6 +645270,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutSubjectClassStudentInput = {
@@ -643442,6 +645338,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutSubjectClassStudentInput = {
@@ -644565,6 +646462,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutSubjectClassStudentInput = {
@@ -644632,6 +646530,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectVersionUpsertWithoutStudentSubjectScoreInput = {
@@ -645595,6 +647494,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -645775,6 +647675,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -646074,6 +647975,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -646254,6 +648156,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -648391,6 +650294,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -648434,6 +650338,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -649830,6 +651735,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -649873,6 +651779,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -651136,6 +653043,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutSemesterInput = {
@@ -651203,6 +653111,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutSemesterInput = {
@@ -654667,6 +656576,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -654710,6 +656620,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -657005,6 +658916,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -657049,6 +658961,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
     lecturerTypeId: string
@@ -657481,6 +659394,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutFixedClassesInput = {
@@ -657548,6 +659462,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutFixedClassesInput = {
@@ -658779,6 +660694,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -658823,6 +660739,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -659476,6 +661393,7 @@ export namespace Prisma {
     archivedAward?: ArchivedAwardCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -659519,6 +661437,7 @@ export namespace Prisma {
     archivedAwardId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -660588,6 +662507,7 @@ export namespace Prisma {
     archivedAward?: ArchivedAwardCreateNestedOneWithoutDocumentFilesInput
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -660631,6 +662551,7 @@ export namespace Prisma {
     archivedAwardId?: string | null
     curriculumId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -663506,6 +665427,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutSubjectInput = {
@@ -663573,6 +665495,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutSubjectInput = {
@@ -663711,6 +665634,7 @@ export namespace Prisma {
     archivedAward?: ArchivedAwardCreateNestedOneWithoutDocumentFilesInput
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -663754,6 +665678,7 @@ export namespace Prisma {
     archivedAwardId?: string | null
     curriculumId?: string | null
     curriculumVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -665082,6 +667007,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -665262,6 +667188,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -665593,6 +667520,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -665773,6 +667701,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -667728,6 +669657,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutClassRegisterLogsInput = {
@@ -667795,6 +669725,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutClassRegisterLogsInput = {
@@ -668116,6 +670047,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutClassRegisterLogsInput = {
@@ -668183,6 +670115,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type StudentUpsertWithoutClassRegisterLogsInput = {
@@ -669320,6 +671253,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -669364,6 +671298,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
     lecturerTypeId: string
@@ -669413,6 +671348,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -669457,6 +671393,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
     lecturerTypeId: string
@@ -669506,6 +671443,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -669550,6 +671488,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
     lecturerTypeId: string
@@ -670638,6 +672577,104 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type DocumentFileCreateWithoutSubjectClassInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    dNgayTao?: Date | string | null
+    dNgaySua?: Date | string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    name: string
+    path: string
+    size: bigint | number
+    mimeType?: string | null
+    archivedCertificate?: ArchivedCertificateCreateNestedOneWithoutDocumentFilesInput
+    trainingCourse?: TrainingCourseCreateNestedOneWithoutDocumentFilesInput
+    archivedAward?: ArchivedAwardCreateNestedOneWithoutDocumentFilesInput
+    curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
+    curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
+    notification?: NotificationCreateNestedOneWithoutAttachmentsInput
+    decision?: DecisionCreateNestedOneWithoutDocumentFileInput
+    defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
+    librarySubmission?: LibrarySubmissionCreateNestedOneWithoutDocumentFileInput
+    diplomaFront?: GraduationDecisionCreateNestedOneWithoutDiplomaFrontInput
+    diplomaBack?: GraduationDecisionCreateNestedOneWithoutDiplomaBackInput
+    diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
+    diplomaVerificationFront?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaFrontInput
+    diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
+    trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
+    studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
+    scoreLinkSheet?: ScoreLinkSheetCreateNestedOneWithoutDocumentsInput
+    examFramework?: ExamFrameworkCreateNestedOneWithoutDocumentFilesInput
+    note?: NoteCreateNestedOneWithoutAttachmentsInput
+    evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
+    knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutDocumentFilesInput
+  }
+
+  export type DocumentFileUncheckedCreateWithoutSubjectClassInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    dNgayTao?: Date | string | null
+    dNgaySua?: Date | string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    name: string
+    path: string
+    size: bigint | number
+    mimeType?: string | null
+    archivedCertificateId?: string | null
+    trainingCourseId?: string | null
+    archivedAwardId?: string | null
+    curriculumId?: string | null
+    curriculumVersionId?: string | null
+    subjectVersionId?: string | null
+    studentAcademicDecisionId?: string | null
+    notificationId?: string | null
+    decisionId?: string | null
+    defenseRecordId?: string | null
+    librarySubmissionId?: string | null
+    diplomaFrontId?: string | null
+    diplomaBackId?: string | null
+    diplomaVerificationId?: string | null
+    diplomaVerificationFrontId?: string | null
+    diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
+    studentScoreConvertId?: string | null
+    scoreLinkSheetId?: string | null
+    examFrameworkId?: string | null
+    noteId?: string | null
+    evaluationPeriodId?: string | null
+    knowledgeBlockId?: string | null
+  }
+
+  export type DocumentFileCreateOrConnectWithoutSubjectClassInput = {
+    where: DocumentFileWhereUniqueInput
+    create: XOR<DocumentFileCreateWithoutSubjectClassInput, DocumentFileUncheckedCreateWithoutSubjectClassInput>
+  }
+
+  export type DocumentFileCreateManySubjectClassInputEnvelope = {
+    data: DocumentFileCreateManySubjectClassInput | DocumentFileCreateManySubjectClassInput[]
+    skipDuplicates?: boolean
+  }
+
   export type SubjectVersionUpsertWithoutSubjectClassInput = {
     update: XOR<SubjectVersionUpdateWithoutSubjectClassInput, SubjectVersionUncheckedUpdateWithoutSubjectClassInput>
     create: XOR<SubjectVersionCreateWithoutSubjectClassInput, SubjectVersionUncheckedCreateWithoutSubjectClassInput>
@@ -671163,6 +673200,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -671207,6 +673245,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -671262,6 +673301,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -671306,6 +673346,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -671361,6 +673402,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -671405,6 +673447,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -671845,6 +673888,22 @@ export namespace Prisma {
     data: XOR<SubjectClassAttendanceUpdateManyMutationInput, SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassInput>
   }
 
+  export type DocumentFileUpsertWithWhereUniqueWithoutSubjectClassInput = {
+    where: DocumentFileWhereUniqueInput
+    update: XOR<DocumentFileUpdateWithoutSubjectClassInput, DocumentFileUncheckedUpdateWithoutSubjectClassInput>
+    create: XOR<DocumentFileCreateWithoutSubjectClassInput, DocumentFileUncheckedCreateWithoutSubjectClassInput>
+  }
+
+  export type DocumentFileUpdateWithWhereUniqueWithoutSubjectClassInput = {
+    where: DocumentFileWhereUniqueInput
+    data: XOR<DocumentFileUpdateWithoutSubjectClassInput, DocumentFileUncheckedUpdateWithoutSubjectClassInput>
+  }
+
+  export type DocumentFileUpdateManyWithWhereWithoutSubjectClassInput = {
+    where: DocumentFileScalarWhereInput
+    data: XOR<DocumentFileUpdateManyMutationInput, DocumentFileUncheckedUpdateManyWithoutSubjectClassInput>
+  }
+
   export type SubjectClassCreateWithoutSubjectClassAttendancesInput = {
     id?: string
     active?: boolean
@@ -671910,6 +673969,7 @@ export namespace Prisma {
     survey?: SurveyCreateNestedManyWithoutSubjectClassInput
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutSubjectClassAttendancesInput = {
@@ -671977,6 +674037,7 @@ export namespace Prisma {
     survey?: SurveyUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutSubjectClassAttendancesInput = {
@@ -672003,6 +674064,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -672183,6 +674245,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -672548,6 +674611,7 @@ export namespace Prisma {
     survey?: SurveyUpdateManyWithoutSubjectClassNestedInput
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutSubjectClassAttendancesInput = {
@@ -672615,6 +674679,7 @@ export namespace Prisma {
     survey?: SurveyUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type UserProfileUpsertWithoutSubjectClassAttendanceInput = {
@@ -672647,6 +674712,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -672827,6 +674893,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -673632,6 +675699,7 @@ export namespace Prisma {
     survey?: SurveyCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutSubjectClassHistoryInput = {
@@ -673699,6 +675767,7 @@ export namespace Prisma {
     survey?: SurveyUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutSubjectClassHistoryInput = {
@@ -673725,6 +675794,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -673905,6 +675975,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -674147,6 +676218,7 @@ export namespace Prisma {
     survey?: SurveyUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutSubjectClassHistoryInput = {
@@ -674214,6 +676286,7 @@ export namespace Prisma {
     survey?: SurveyUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type UserProfileUpsertWithoutSubjectClassHistoryInput = {
@@ -674246,6 +676319,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -674426,6 +676500,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -674652,6 +676727,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutSubjectClassTimesInput = {
@@ -674719,6 +676795,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutSubjectClassTimesInput = {
@@ -674802,6 +676879,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutSubjectClassTimesInput = {
@@ -674869,6 +676947,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassCreateWithoutClassSchedulesInput = {
@@ -674936,6 +677015,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutClassSchedulesInput = {
@@ -675003,6 +677083,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutClassSchedulesInput = {
@@ -675089,6 +677170,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -675133,6 +677215,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
     lecturerTypeId: string
@@ -675182,6 +677265,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -675226,6 +677310,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
     lecturerTypeId: string
@@ -675278,6 +677363,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -675458,6 +677544,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -675900,6 +677987,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutClassSchedulesInput = {
@@ -675967,6 +678055,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type RoomUpsertWithoutClassSchedulesInput = {
@@ -676065,6 +678154,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -676109,6 +678199,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -676164,6 +678255,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -676208,6 +678300,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -677060,6 +679153,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -677240,6 +679334,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -677499,6 +679594,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -677679,6 +679775,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -678134,6 +680231,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -678177,6 +680275,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -679668,6 +681767,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutStudentPersonalEventsInput = {
@@ -679735,6 +681835,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutStudentPersonalEventsInput = {
@@ -679999,6 +682100,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutStudentPersonalEventsInput = {
@@ -680066,6 +682168,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type TrainingFieldCreateWithoutStudentsInput = {
@@ -680743,6 +682846,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -680923,6 +683027,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -683424,6 +685529,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -683604,6 +685710,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -686817,6 +688924,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -686861,6 +688969,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
     lecturerTypeId: string
@@ -686919,6 +689028,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
     defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
@@ -686962,6 +689072,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     decisionId?: string | null
     defenseRecordId?: string | null
@@ -687065,6 +689176,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -687109,6 +689221,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -687169,6 +689282,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -687213,6 +689327,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
     lecturerTypeId: string
@@ -687334,6 +689449,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -687378,6 +689494,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -687438,6 +689555,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -687482,6 +689600,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
     lecturerTypeId: string
@@ -687581,6 +689700,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -687761,6 +689881,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -687954,6 +690075,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -687998,6 +690120,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -688101,6 +690224,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -688281,6 +690405,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -688557,6 +690682,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutMainLecturerInput = {
@@ -688624,6 +690750,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutMainLecturerInput = {
@@ -688701,6 +690828,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutExtraLecturerInput = {
@@ -688768,6 +690896,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutExtraLecturerInput = {
@@ -688845,6 +690974,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutEnterGradeLecturerInput = {
@@ -688912,6 +691042,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutEnterGradeLecturerInput = {
@@ -690502,6 +692633,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -690682,6 +692814,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -691432,6 +693565,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -691612,6 +693746,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -691944,6 +694079,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -692124,6 +694260,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -692927,6 +695064,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -692971,6 +695109,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
     lecturerTypeId: string
@@ -693207,6 +695346,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -693251,6 +695391,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -693483,6 +695624,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
     mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
@@ -693527,6 +695669,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
     mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
@@ -693658,6 +695801,7 @@ export namespace Prisma {
     sThietBiSua?: StringNullableFilter<"Lecturer"> | string | null
     from?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
     lectureID?: StringNullableFilter<"Lecturer"> | string | null
+    TKPUcode?: StringNullableFilter<"Lecturer"> | string | null
     serviceDate?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
     userProfileId?: UuidFilter<"Lecturer"> | string
     lecturerTypeId?: StringFilter<"Lecturer"> | string
@@ -694564,6 +696708,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutTrainingObjectTypeInput = {
@@ -694631,6 +696776,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutTrainingObjectTypeInput = {
@@ -696990,6 +699136,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutTrainingLocationInput = {
@@ -697057,6 +699204,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutTrainingLocationInput = {
@@ -697560,6 +699708,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutRoomInput = {
@@ -697627,6 +699776,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutRoomInput = {
@@ -697704,6 +699854,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutDefenseRoomsInput = {
@@ -697771,6 +699922,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutDefenseRoomsInput = {
@@ -698573,6 +700725,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -698616,6 +700769,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -707509,6 +709663,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -707552,6 +709707,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -707600,6 +709756,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -707643,6 +709800,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -708205,6 +710363,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -708248,6 +710407,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -708302,6 +710462,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -708345,6 +710506,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -709992,6 +712154,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -710035,6 +712198,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -710088,6 +712252,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -710131,6 +712296,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -710179,6 +712345,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -710222,6 +712389,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -710472,6 +712640,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -710515,6 +712684,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -710569,6 +712739,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -710612,6 +712783,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -713241,6 +715413,147 @@ export namespace Prisma {
     create: XOR<SubjectVersionCreateWithoutDocumentFilesInput, SubjectVersionUncheckedCreateWithoutDocumentFilesInput>
   }
 
+  export type SubjectClassCreateWithoutDocumentFilesInput = {
+    id?: string
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    dNgayTao?: Date | string | null
+    dNgaySua?: Date | string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    code: string
+    name: string
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    schedule?: $Enums.SubjectClassSchedule | null
+    maxStudent: number
+    enrolledCount?: number
+    version?: number
+    type?: $Enums.SubjectClassType
+    status?: $Enums.SubjectClassStatus
+    cancelled?: boolean
+    lecturerAssignmentDeadline?: Date | string | null
+    sendLecturerAssignmentAt?: Date | string | null
+    submitLecturerAssignmentAt?: Date | string | null
+    approveLecturerAssignmentAt?: Date | string | null
+    examDate?: Date | string | null
+    examType: $Enums.ExamType
+    scoreDeadLineStart?: Date | string | null
+    scoreDeadline?: Date | string | null
+    examScoreDeadline?: Date | string | null
+    enteredScore?: boolean
+    enteredExamScore?: boolean
+    issuedScoreAt?: Date | string | null
+    isLockScore?: boolean
+    isLockExamScore?: boolean
+    isLockLecturer?: boolean
+    scoreSubmitted?: boolean
+    scoreChecked?: boolean
+    subject: SubjectVersionCreateNestedOneWithoutSubjectClassInput
+    trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutSubjectClassInput
+    semester: SemesterCreateNestedOneWithoutSubjectClassesInput
+    exam?: ExamCreateNestedOneWithoutSubjectClassInput
+    room?: RoomCreateNestedOneWithoutSubjectClassesInput
+    trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
+    mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
+    extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
+    enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
+    scoreLinkSubjectVersion?: ScoreLinkSubjectVersionCreateNestedOneWithoutSubjectClassInput
+    subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutSubjectClassInput
+    fixedClasses?: FixedClassCreateNestedManyWithoutSubjectClassesInput
+    classSchedules?: ClassScheduleCreateNestedManyWithoutSubjectClassInput
+    studentPersonalEvents?: StudentPersonalEventCreateNestedManyWithoutSubjectClassInput
+    thesisProjects?: ThesisProjectCreateNestedManyWithoutSubjectClassInput
+    expert?: ExpertCreateNestedManyWithoutSubjectClassInput
+    defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
+    surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
+    subjectClassTimes?: SubjectClassTimeCreateNestedManyWithoutSubjectClassInput
+    survey?: SurveyCreateNestedManyWithoutSubjectClassInput
+    subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
+    examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
+    subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+  }
+
+  export type SubjectClassUncheckedCreateWithoutDocumentFilesInput = {
+    id?: string
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    dNgayTao?: Date | string | null
+    dNgaySua?: Date | string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    code: string
+    name: string
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    subjectId: string
+    schedule?: $Enums.SubjectClassSchedule | null
+    maxStudent: number
+    enrolledCount?: number
+    version?: number
+    type?: $Enums.SubjectClassType
+    status?: $Enums.SubjectClassStatus
+    trainingObjectTypeId: string
+    semesterId: string
+    cancelled?: boolean
+    lecturerAssignmentDeadline?: Date | string | null
+    sendLecturerAssignmentAt?: Date | string | null
+    submitLecturerAssignmentAt?: Date | string | null
+    approveLecturerAssignmentAt?: Date | string | null
+    examDate?: Date | string | null
+    examType: $Enums.ExamType
+    examId?: string | null
+    scoreDeadLineStart?: Date | string | null
+    scoreDeadline?: Date | string | null
+    examScoreDeadline?: Date | string | null
+    enteredScore?: boolean
+    enteredExamScore?: boolean
+    issuedScoreAt?: Date | string | null
+    isLockScore?: boolean
+    isLockExamScore?: boolean
+    isLockLecturer?: boolean
+    scoreSubmitted?: boolean
+    scoreChecked?: boolean
+    roomId?: string | null
+    trainingLocationId?: string | null
+    lecturerId?: string | null
+    extraLecturerId?: string | null
+    enterGradeLecturerId?: string | null
+    scoreLinkSubjectVersionId?: string | null
+    subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSubjectClassInput
+    fixedClasses?: FixedClassUncheckedCreateNestedManyWithoutSubjectClassesInput
+    classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutSubjectClassInput
+    studentPersonalEvents?: StudentPersonalEventUncheckedCreateNestedManyWithoutSubjectClassInput
+    thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutSubjectClassInput
+    expert?: ExpertUncheckedCreateNestedManyWithoutSubjectClassInput
+    defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
+    surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
+    subjectClassTimes?: SubjectClassTimeUncheckedCreateNestedManyWithoutSubjectClassInput
+    survey?: SurveyUncheckedCreateNestedManyWithoutSubjectClassInput
+    subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
+    examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
+    subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+  }
+
+  export type SubjectClassCreateOrConnectWithoutDocumentFilesInput = {
+    where: SubjectClassWhereUniqueInput
+    create: XOR<SubjectClassCreateWithoutDocumentFilesInput, SubjectClassUncheckedCreateWithoutDocumentFilesInput>
+  }
+
   export type StudentAcademicDecisionCreateWithoutDocumentEvidenceInput = {
     id?: string
     code?: string | null
@@ -714822,6 +717135,153 @@ export namespace Prisma {
     scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutSubjectVersionNestedInput
     certificate?: CertificateUncheckedUpdateManyWithoutSubjectVersionsNestedInput
     archivedCertificateSubjectScores?: ArchivedCertificateSubjectScoreUncheckedUpdateManyWithoutSubjectVersionNestedInput
+  }
+
+  export type SubjectClassUpsertWithoutDocumentFilesInput = {
+    update: XOR<SubjectClassUpdateWithoutDocumentFilesInput, SubjectClassUncheckedUpdateWithoutDocumentFilesInput>
+    create: XOR<SubjectClassCreateWithoutDocumentFilesInput, SubjectClassUncheckedCreateWithoutDocumentFilesInput>
+    where?: SubjectClassWhereInput
+  }
+
+  export type SubjectClassUpdateToOneWithWhereWithoutDocumentFilesInput = {
+    where?: SubjectClassWhereInput
+    data: XOR<SubjectClassUpdateWithoutDocumentFilesInput, SubjectClassUncheckedUpdateWithoutDocumentFilesInput>
+  }
+
+  export type SubjectClassUpdateWithoutDocumentFilesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
+    maxStudent?: IntFieldUpdateOperationsInput | number
+    enrolledCount?: IntFieldUpdateOperationsInput | number
+    version?: IntFieldUpdateOperationsInput | number
+    type?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
+    status?: EnumSubjectClassStatusFieldUpdateOperationsInput | $Enums.SubjectClassStatus
+    cancelled?: BoolFieldUpdateOperationsInput | boolean
+    lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approveLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
+    scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    enteredScore?: BoolFieldUpdateOperationsInput | boolean
+    enteredExamScore?: BoolFieldUpdateOperationsInput | boolean
+    issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isLockScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
+    scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
+    scoreChecked?: BoolFieldUpdateOperationsInput | boolean
+    subject?: SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput
+    trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutSubjectClassNestedInput
+    semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
+    exam?: ExamUpdateOneWithoutSubjectClassNestedInput
+    room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+    trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
+    mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
+    extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
+    enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
+    scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUpdateOneWithoutSubjectClassNestedInput
+    subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutSubjectClassNestedInput
+    fixedClasses?: FixedClassUpdateManyWithoutSubjectClassesNestedInput
+    classSchedules?: ClassScheduleUpdateManyWithoutSubjectClassNestedInput
+    studentPersonalEvents?: StudentPersonalEventUpdateManyWithoutSubjectClassNestedInput
+    thesisProjects?: ThesisProjectUpdateManyWithoutSubjectClassNestedInput
+    expert?: ExpertUpdateManyWithoutSubjectClassNestedInput
+    defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
+    surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
+    subjectClassTimes?: SubjectClassTimeUpdateManyWithoutSubjectClassNestedInput
+    survey?: SurveyUpdateManyWithoutSubjectClassNestedInput
+    subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
+    examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
+    subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+  }
+
+  export type SubjectClassUncheckedUpdateWithoutDocumentFilesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    subjectId?: StringFieldUpdateOperationsInput | string
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
+    maxStudent?: IntFieldUpdateOperationsInput | number
+    enrolledCount?: IntFieldUpdateOperationsInput | number
+    version?: IntFieldUpdateOperationsInput | number
+    type?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
+    status?: EnumSubjectClassStatusFieldUpdateOperationsInput | $Enums.SubjectClassStatus
+    trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+    semesterId?: StringFieldUpdateOperationsInput | string
+    cancelled?: BoolFieldUpdateOperationsInput | boolean
+    lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approveLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
+    examId?: NullableStringFieldUpdateOperationsInput | string | null
+    scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    enteredScore?: BoolFieldUpdateOperationsInput | boolean
+    enteredExamScore?: BoolFieldUpdateOperationsInput | boolean
+    issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isLockScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
+    scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
+    scoreChecked?: BoolFieldUpdateOperationsInput | boolean
+    roomId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+    extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+    enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+    scoreLinkSubjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutSubjectClassNestedInput
+    fixedClasses?: FixedClassUncheckedUpdateManyWithoutSubjectClassesNestedInput
+    classSchedules?: ClassScheduleUncheckedUpdateManyWithoutSubjectClassNestedInput
+    studentPersonalEvents?: StudentPersonalEventUncheckedUpdateManyWithoutSubjectClassNestedInput
+    thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutSubjectClassNestedInput
+    expert?: ExpertUncheckedUpdateManyWithoutSubjectClassNestedInput
+    defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
+    surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
+    subjectClassTimes?: SubjectClassTimeUncheckedUpdateManyWithoutSubjectClassNestedInput
+    survey?: SurveyUncheckedUpdateManyWithoutSubjectClassNestedInput
+    subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
+    examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
+    subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type StudentAcademicDecisionUpsertWithoutDocumentEvidenceInput = {
@@ -717045,6 +719505,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
     defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
@@ -717088,6 +719549,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     notificationId?: string | null
     decisionId?: string | null
     defenseRecordId?: string | null
@@ -719338,6 +721800,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -719382,6 +721845,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
     lecturerTypeId: string
@@ -719431,6 +721895,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -719475,6 +721940,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
     lecturerTypeId: string
@@ -719668,6 +722134,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutThesisProjectsInput = {
@@ -719735,6 +722202,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutThesisProjectsInput = {
@@ -720651,6 +723119,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -720695,6 +723164,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -720750,6 +723220,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -720794,6 +723265,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -720999,6 +723471,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutThesisProjectsInput = {
@@ -721066,6 +723539,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type ThesisSessionUpsertWithoutThesisProjectInput = {
@@ -722564,6 +725038,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -722608,6 +725083,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
     lecturerTypeId: string
@@ -723152,6 +725628,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -723196,6 +725673,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -723293,6 +725771,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -723337,6 +725816,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
     lecturerTypeId: string
@@ -723701,6 +726181,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutExpertInput = {
@@ -723768,6 +726249,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutExpertInput = {
@@ -723856,6 +726338,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -723900,6 +726383,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -725565,6 +728049,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
@@ -725608,6 +728093,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     defenseRecordId?: string | null
@@ -727186,6 +729672,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -727229,6 +729716,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -727598,6 +730086,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -727641,6 +730130,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -729242,6 +731732,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -729285,6 +731776,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -729903,6 +732395,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutScoreLinkSubjectVersionInput = {
@@ -729970,6 +732463,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutScoreLinkSubjectVersionInput = {
@@ -730263,6 +732757,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutScoreLinkSubjectVersionInput = {
@@ -730330,6 +732825,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type ScoreLinkSubjectVersionCreateWithoutScoreLinkStudentsInput = {
@@ -730963,6 +733459,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -731006,6 +733503,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -732197,6 +734695,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -732377,6 +734876,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -732740,6 +735240,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -732920,6 +735421,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -733992,6 +736494,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -734036,6 +736539,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
     lecturerTypeId: string
@@ -734259,6 +736763,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -734303,6 +736808,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -734452,6 +736958,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -734496,6 +737003,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
     lecturerTypeId: string
@@ -734592,6 +737100,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -734636,6 +737145,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
     lecturerTypeId: string
@@ -734801,6 +737311,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -734845,6 +737356,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -735673,6 +738185,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -735717,6 +738230,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
     lecturerTypeId: string
@@ -735896,6 +738410,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -735940,6 +738455,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -736054,6 +738570,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -736234,6 +738751,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -736487,6 +739005,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -736667,6 +739186,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -738684,6 +741204,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutExamInput = {
@@ -738751,6 +741272,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutExamInput = {
@@ -739532,6 +742054,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -739576,6 +742099,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
     lecturerTypeId: string
@@ -739625,6 +742149,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -739669,6 +742194,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
     lecturerTypeId: string
@@ -739828,6 +742354,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -739872,6 +742399,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -739927,6 +742455,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -739971,6 +742500,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -740156,6 +742686,7 @@ export namespace Prisma {
     survey?: SurveyCreateNestedManyWithoutSubjectClassInput
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutExamBankInput = {
@@ -740223,6 +742754,7 @@ export namespace Prisma {
     survey?: SurveyUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutExamBankInput = {
@@ -740460,6 +742992,7 @@ export namespace Prisma {
     survey?: SurveyUpdateManyWithoutSubjectClassNestedInput
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutExamBankInput = {
@@ -740527,6 +743060,7 @@ export namespace Prisma {
     survey?: SurveyUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type ExamBankQuestionUpsertWithWhereUniqueWithoutExamBankInput = {
@@ -741384,6 +743918,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -741427,6 +743962,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -742041,6 +744577,7 @@ export namespace Prisma {
     curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
     subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutDocumentFilesInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
     notification?: NotificationCreateNestedOneWithoutAttachmentsInput
     decision?: DecisionCreateNestedOneWithoutDocumentFileInput
@@ -742084,6 +744621,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -743231,6 +745769,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutSurveyObjectTypesInput = {
@@ -743298,6 +745837,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutSurveyObjectTypesInput = {
@@ -744335,6 +746875,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -744379,6 +746920,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
     lecturerTypeId: string
@@ -744826,6 +747368,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -744870,6 +747413,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
     lecturerTypeId: string
@@ -744968,6 +747512,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutSurveyInput = {
@@ -745035,6 +747580,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutSubjectClassInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutSubjectClassInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutSubjectClassInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutSurveyInput = {
@@ -745519,6 +748065,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -745563,6 +748110,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -745667,6 +748215,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutSurveyInput = {
@@ -745734,6 +748283,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SemesterUpsertWithoutSurveyInput = {
@@ -747017,6 +749567,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -747197,6 +749748,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -747762,6 +750314,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -747942,6 +750495,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -748706,6 +751260,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -748886,6 +751441,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -749341,6 +751897,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -749521,6 +752078,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -749912,6 +752470,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -750092,6 +752651,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -750465,6 +753025,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -750645,6 +753206,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -751017,6 +753579,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -751061,6 +753624,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
     lecturerTypeId: string
@@ -751272,6 +753836,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -751316,6 +753881,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -751717,6 +754283,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
@@ -751761,6 +754328,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
     lecturerTypeId: string
@@ -752077,6 +754645,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -752121,6 +754690,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -753966,6 +756536,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -754146,6 +756717,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -754492,6 +757064,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -754672,6 +757245,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -754952,6 +757526,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -755132,6 +757707,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -755410,6 +757986,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -755590,6 +758167,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -755796,6 +758374,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -755976,6 +758555,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -756182,6 +758762,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -756362,6 +758943,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -757018,6 +759600,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -757198,6 +759781,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -757404,6 +759988,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -757584,6 +760169,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -757790,6 +760376,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -757970,6 +760557,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -758396,6 +760984,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -758576,6 +761165,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -758782,6 +761372,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -758962,6 +761553,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -759168,6 +761760,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -759348,6 +761941,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -759554,6 +762148,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
@@ -759734,6 +762329,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -764792,6 +767388,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
@@ -765097,6 +767694,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -765277,6 +767875,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -765457,6 +768056,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -766608,6 +769208,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -766762,6 +769363,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -766942,6 +769544,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -767122,6 +769725,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -767318,6 +769922,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -767451,6 +770056,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -767631,6 +770237,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -767811,6 +770418,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -767944,6 +770552,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -768077,6 +770686,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -768210,6 +770820,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -768432,6 +771043,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -768612,6 +771224,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -768792,6 +771405,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -768925,6 +771539,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -769105,6 +771720,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -769285,6 +771901,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -769418,6 +772035,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -769598,6 +772216,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -769778,6 +772397,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -770178,6 +772798,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -770389,6 +773010,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -770569,6 +773191,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -770749,6 +773372,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -771136,6 +773760,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -771347,6 +773972,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -771527,6 +774153,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -771707,6 +774334,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -772094,6 +774722,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -772248,6 +774877,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -772428,6 +775058,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -772608,6 +775239,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -772870,6 +775502,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
@@ -773548,6 +776181,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -773728,6 +776362,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -773908,6 +776543,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -775632,6 +778268,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -775765,6 +778402,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -775945,6 +778583,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -776125,6 +778764,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -776438,6 +779078,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -776571,6 +779212,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -776751,6 +779393,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -776931,6 +779574,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -777167,6 +779811,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -777390,6 +780035,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -777570,6 +780216,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -777750,6 +780397,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -777946,6 +780594,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -778079,6 +780728,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -778212,6 +780862,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -778345,6 +780996,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -778497,6 +781149,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -778677,6 +781330,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -778857,6 +781511,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -778990,6 +781645,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -779170,6 +781826,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -779350,6 +782007,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -779483,6 +782141,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -779663,6 +782322,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -779843,6 +782503,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -779976,6 +782637,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -780156,6 +782818,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -780336,6 +782999,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -780532,6 +783196,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -780665,6 +783330,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -780798,6 +783464,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -780931,6 +783598,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -781083,6 +783751,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -781263,6 +783932,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -781443,6 +784113,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -781576,6 +784247,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -781756,6 +784428,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -781936,6 +784609,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -782069,6 +784743,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -782249,6 +784924,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -782429,6 +785105,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -782562,6 +785239,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -782742,6 +785420,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -782922,6 +785601,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -783118,6 +785798,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -783251,6 +785932,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -783384,6 +786066,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -783517,6 +786200,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -783650,6 +786334,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -783830,6 +786515,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -784010,6 +786696,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -784143,6 +786830,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -784323,6 +787011,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -784503,6 +787192,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -784636,6 +787326,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -784816,6 +787507,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -784996,6 +787688,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -785129,6 +787822,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -785309,6 +788003,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -785489,6 +788184,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -785622,6 +788318,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -785755,6 +788452,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -785888,6 +788586,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -786021,6 +788720,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -786154,6 +788854,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -786334,6 +789035,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -786514,6 +789216,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -786647,6 +789350,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -786827,6 +789531,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -787007,6 +789712,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -787140,6 +789846,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -787320,6 +790027,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -787500,6 +790208,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -787633,6 +790342,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -787813,6 +790523,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -787993,6 +790704,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -788126,6 +790838,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -788259,6 +790972,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -788392,6 +791106,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -788525,6 +791240,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -788658,6 +791374,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -788838,6 +791555,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -789018,6 +791736,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -789151,6 +791870,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -789331,6 +792051,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -789511,6 +792232,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -789644,6 +792366,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -789824,6 +792547,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -790004,6 +792728,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -790137,6 +792862,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -790317,6 +793043,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -790497,6 +793224,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -790848,6 +793576,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -790911,6 +793640,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -790954,6 +793684,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -790997,6 +793728,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -791861,6 +794593,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -791941,6 +794674,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -791984,6 +794718,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -792027,6 +794762,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -792181,6 +794917,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -792243,6 +794980,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -792286,6 +795024,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -792329,6 +795068,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -793740,6 +796480,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutSemesterInput = {
@@ -793807,6 +796548,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutSemesterInput = {
@@ -795960,6 +798702,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -797011,6 +799754,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -797054,6 +799798,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -797097,6 +799842,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -797839,6 +800585,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutFixedClassesInput = {
@@ -797906,6 +800653,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutFixedClassesInput = {
@@ -798225,6 +800973,7 @@ export namespace Prisma {
     archivedAwardId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -798313,6 +801062,7 @@ export namespace Prisma {
     archivedAward?: ArchivedAwardUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -798356,6 +801106,7 @@ export namespace Prisma {
     archivedAwardId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -798399,6 +801150,7 @@ export namespace Prisma {
     archivedAwardId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -798609,6 +801361,7 @@ export namespace Prisma {
     archivedAwardId?: string | null
     curriculumId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -798867,6 +801620,7 @@ export namespace Prisma {
     archivedAward?: ArchivedAwardUpdateOneWithoutDocumentFilesNestedInput
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -798910,6 +801664,7 @@ export namespace Prisma {
     archivedAwardId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -798953,6 +801708,7 @@ export namespace Prisma {
     archivedAwardId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -800316,6 +803072,7 @@ export namespace Prisma {
     archivedAwardId?: string | null
     curriculumId?: string | null
     curriculumVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -801399,6 +804156,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutSubjectInput = {
@@ -801466,6 +804224,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutSubjectInput = {
@@ -801673,6 +804432,7 @@ export namespace Prisma {
     archivedAward?: ArchivedAwardUpdateOneWithoutDocumentFilesNestedInput
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -801716,6 +804476,7 @@ export namespace Prisma {
     archivedAwardId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -801759,6 +804520,7 @@ export namespace Prisma {
     archivedAwardId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -803301,6 +806063,50 @@ export namespace Prisma {
     note?: string | null
   }
 
+  export type DocumentFileCreateManySubjectClassInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    dNgayTao?: Date | string | null
+    dNgaySua?: Date | string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    name: string
+    path: string
+    size: bigint | number
+    mimeType?: string | null
+    archivedCertificateId?: string | null
+    trainingCourseId?: string | null
+    archivedAwardId?: string | null
+    curriculumId?: string | null
+    curriculumVersionId?: string | null
+    subjectVersionId?: string | null
+    studentAcademicDecisionId?: string | null
+    notificationId?: string | null
+    decisionId?: string | null
+    defenseRecordId?: string | null
+    librarySubmissionId?: string | null
+    diplomaFrontId?: string | null
+    diplomaBackId?: string | null
+    diplomaVerificationId?: string | null
+    diplomaVerificationFrontId?: string | null
+    diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
+    studentScoreConvertId?: string | null
+    scoreLinkSheetId?: string | null
+    examFrameworkId?: string | null
+    noteId?: string | null
+    evaluationPeriodId?: string | null
+    knowledgeBlockId?: string | null
+  }
+
   export type StudentSubjectScoreUpdateWithoutSubjectClassInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -804594,6 +807400,138 @@ export namespace Prisma {
     note?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type DocumentFileUpdateWithoutSubjectClassInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    size?: BigIntFieldUpdateOperationsInput | bigint | number
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedCertificate?: ArchivedCertificateUpdateOneWithoutDocumentFilesNestedInput
+    trainingCourse?: TrainingCourseUpdateOneWithoutDocumentFilesNestedInput
+    archivedAward?: ArchivedAwardUpdateOneWithoutDocumentFilesNestedInput
+    curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
+    curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
+    notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
+    decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
+    defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
+    librarySubmission?: LibrarySubmissionUpdateOneWithoutDocumentFileNestedInput
+    diplomaFront?: GraduationDecisionUpdateOneWithoutDiplomaFrontNestedInput
+    diplomaBack?: GraduationDecisionUpdateOneWithoutDiplomaBackNestedInput
+    diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
+    diplomaVerificationFront?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaFrontNestedInput
+    diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
+    trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
+    studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
+    scoreLinkSheet?: ScoreLinkSheetUpdateOneWithoutDocumentsNestedInput
+    examFramework?: ExamFrameworkUpdateOneWithoutDocumentFilesNestedInput
+    note?: NoteUpdateOneWithoutAttachmentsNestedInput
+    evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
+    knowledgeBlock?: KnowledgeBlockUpdateOneWithoutDocumentFilesNestedInput
+  }
+
+  export type DocumentFileUncheckedUpdateWithoutSubjectClassInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    size?: BigIntFieldUpdateOperationsInput | bigint | number
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedCertificateId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedAwardId?: NullableStringFieldUpdateOperationsInput | string | null
+    curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
+    curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
+    notificationId?: NullableStringFieldUpdateOperationsInput | string | null
+    decisionId?: NullableStringFieldUpdateOperationsInput | string | null
+    defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
+    studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+    scoreLinkSheetId?: NullableStringFieldUpdateOperationsInput | string | null
+    examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
+    noteId?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
+    knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type DocumentFileUncheckedUpdateManyWithoutSubjectClassInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    size?: BigIntFieldUpdateOperationsInput | bigint | number
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedCertificateId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedAwardId?: NullableStringFieldUpdateOperationsInput | string | null
+    curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
+    curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
+    notificationId?: NullableStringFieldUpdateOperationsInput | string | null
+    decisionId?: NullableStringFieldUpdateOperationsInput | string | null
+    defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
+    studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+    scoreLinkSheetId?: NullableStringFieldUpdateOperationsInput | string | null
+    examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
+    noteId?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
+    knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type SubjectClassAttendanceStudentCreateManySubjectClassAttendanceInput = {
     id?: string
     code?: string | null
@@ -804714,6 +807652,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -804894,6 +807833,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -805074,6 +808014,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -805375,6 +808316,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -805498,6 +808440,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -805541,6 +808484,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -805584,6 +808528,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -809422,6 +812367,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     decisionId?: string | null
     defenseRecordId?: string | null
@@ -809975,6 +812921,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
     defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
@@ -810018,6 +812965,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
     defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -810061,6 +813009,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
     defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -810244,6 +813193,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -810424,6 +813374,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -810604,6 +813555,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -811515,6 +814467,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutMainLecturerInput = {
@@ -811582,6 +814535,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutMainLecturerInput = {
@@ -811702,6 +814656,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutExtraLecturerInput = {
@@ -811769,6 +814724,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutExtraLecturerInput = {
@@ -811889,6 +814845,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutEnterGradeLecturerInput = {
@@ -811956,6 +814913,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutEnterGradeLecturerInput = {
@@ -814081,6 +817039,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     from?: Date | string | null
     lectureID?: string | null
+    TKPUcode?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
   }
@@ -814125,6 +817084,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
     mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
@@ -814169,6 +817129,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
     mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
@@ -814213,6 +817174,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
   }
@@ -815792,6 +818754,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutTrainingObjectTypeInput = {
@@ -815859,6 +818822,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutTrainingObjectTypeInput = {
@@ -818198,6 +821162,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutTrainingLocationInput = {
@@ -818265,6 +821230,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutTrainingLocationInput = {
@@ -818661,6 +821627,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutRoomInput = {
@@ -818728,6 +821695,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutRoomInput = {
@@ -818848,6 +821816,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutDefenseRoomsInput = {
@@ -818915,6 +821884,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutDefenseRoomsInput = {
@@ -819432,6 +822402,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -819826,6 +822797,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -819869,6 +822841,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -819912,6 +822885,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -824391,6 +827365,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -824434,6 +827409,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -824477,6 +827453,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -824520,6 +827497,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -824919,6 +827897,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     notificationId?: string | null
     decisionId?: string | null
     defenseRecordId?: string | null
@@ -824962,6 +827941,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
     defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
@@ -825005,6 +827985,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
     defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -825048,6 +828029,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
     defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -826508,6 +829490,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutExpertInput = {
@@ -826575,6 +829558,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutExpertInput = {
@@ -828136,6 +831120,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     defenseRecordId?: string | null
@@ -828179,6 +831164,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
@@ -828222,6 +831208,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -828265,6 +831252,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -828668,6 +831656,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -828711,6 +831700,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -828754,6 +831744,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -828797,6 +831788,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -828840,6 +831832,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -828883,6 +831876,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -828926,6 +831920,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -828969,6 +831964,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -830170,6 +833166,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -830271,6 +833268,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -830314,6 +833312,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -830357,6 +833356,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -830497,6 +833497,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -830605,6 +833606,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -830648,6 +833650,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -830691,6 +833694,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -831637,6 +834641,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -831681,6 +834686,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -831725,6 +834731,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -832851,6 +835858,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutExamInput = {
@@ -832918,6 +835926,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutExamInput = {
@@ -833405,6 +836414,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -833509,6 +836519,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -833552,6 +836563,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -833595,6 +836607,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -833856,6 +836869,7 @@ export namespace Prisma {
     curriculumId?: string | null
     curriculumVersionId?: string | null
     subjectVersionId?: string | null
+    subjectClassId?: string | null
     studentAcademicDecisionId?: string | null
     notificationId?: string | null
     decisionId?: string | null
@@ -834008,6 +837022,7 @@ export namespace Prisma {
     curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
     subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutDocumentFilesNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
     notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
     decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
@@ -834051,6 +837066,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -834094,6 +837110,7 @@ export namespace Prisma {
     curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
     notificationId?: NullableStringFieldUpdateOperationsInput | string | null
     decisionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -834933,6 +837950,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutSurveyObjectTypesInput = {
@@ -835000,6 +838018,7 @@ export namespace Prisma {
     subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutSubjectClassNestedInput
     subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutSurveyObjectTypesInput = {
@@ -835786,6 +838805,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
@@ -835830,6 +838850,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -835874,6 +838895,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    TKPUcode?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
@@ -837536,6 +840558,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -837669,6 +840692,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -837849,6 +840873,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -838029,6 +841054,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -838338,6 +841364,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -838471,6 +841498,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -838651,6 +841679,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -838831,6 +841860,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -839060,6 +842090,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -839193,6 +842224,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -839373,6 +842405,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -839553,6 +842586,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -839778,6 +842812,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -839911,6 +842946,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -840091,6 +843127,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -840271,6 +843308,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -840404,6 +843442,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -840537,6 +843576,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -840717,6 +843757,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -840897,6 +843938,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -841030,6 +844072,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -841163,6 +844206,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -841343,6 +844387,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -841523,6 +844568,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -842244,6 +845290,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -842377,6 +845424,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -842557,6 +845605,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -842737,6 +845786,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -842870,6 +845920,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -843003,6 +846054,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -843183,6 +846235,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -843363,6 +846416,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -843496,6 +846550,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -843629,6 +846684,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -843809,6 +846865,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -843989,6 +847046,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -844406,6 +847464,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -844539,6 +847598,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -844719,6 +847779,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -844899,6 +847960,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -845032,6 +848094,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -845165,6 +848228,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -845345,6 +848409,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -845525,6 +848590,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -845658,6 +848724,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -845791,6 +848858,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -845971,6 +849039,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -846151,6 +849220,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -846284,6 +849354,7 @@ export namespace Prisma {
     bLaGiangVien?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
+    bLaSinhVien?: boolean | null
     groupId?: string | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
@@ -846417,6 +849488,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -846597,6 +849669,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -846777,6 +849850,7 @@ export namespace Prisma {
     bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null

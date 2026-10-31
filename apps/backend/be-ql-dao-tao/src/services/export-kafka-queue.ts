@@ -20,6 +20,7 @@ export const KAFKA_ENABLED = hasKafkaBrokers && process.env.EXPORT_ASYNC_KAFKA !
 export type ExportJobMessage = {
   jobId: string
   classRegisterSessionId?: string
+  syncHistoryId?: string
   timestamp: string
 }
 

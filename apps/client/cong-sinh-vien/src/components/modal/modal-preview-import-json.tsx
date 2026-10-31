@@ -296,7 +296,7 @@ export default function ModalPreviewImportJson({
                   <Descriptions.Item label="Sinh viên">
                     {preview.summary.studentCount}
                   </Descriptions.Item>
-                  <Descriptions.Item label="Hồ sơ UserProfile">
+                  <Descriptions.Item label="Hồ sơ liên quan">
                     {preview.summary.userProfileCount}
                   </Descriptions.Item>
                   <Descriptions.Item label="Lớp quản lý">

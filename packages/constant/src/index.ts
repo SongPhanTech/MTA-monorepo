@@ -10,3 +10,4 @@ export const STORAGE_KEY = {
 
 export * from "./libs"
 export * from "./lecturer-deadline-cron-schedule"
+export * from "./table-names"

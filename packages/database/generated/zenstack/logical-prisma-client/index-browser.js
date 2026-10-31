@@ -196,6 +196,7 @@ exports.Prisma.UserProfileScalarFieldEnum = {
   bLaGiangVien: 'bLaGiangVien',
   bLaCanBoNhanVien: 'bLaCanBoNhanVien',
   bLaHocVien: 'bLaHocVien',
+  bLaSinhVien: 'bLaSinhVien',
   groupId: 'groupId',
   sDM_DonViId: 'sDM_DonViId',
   sDM_ViTriCongViecId: 'sDM_ViTriCongViecId',
@@ -3263,6 +3264,7 @@ exports.Prisma.LecturerScalarFieldEnum = {
   sThietBiSua: 'sThietBiSua',
   from: 'from',
   lectureID: 'lectureID',
+  TKPUcode: 'TKPUcode',
   serviceDate: 'serviceDate',
   userProfileId: 'userProfileId',
   lecturerTypeId: 'lecturerTypeId'
@@ -4323,6 +4325,7 @@ exports.Prisma.DocumentFileScalarFieldEnum = {
   curriculumId: 'curriculumId',
   curriculumVersionId: 'curriculumVersionId',
   subjectVersionId: 'subjectVersionId',
+  subjectClassId: 'subjectClassId',
   studentAcademicDecisionId: 'studentAcademicDecisionId',
   notificationId: 'notificationId',
   decisionId: 'decisionId',
@@ -6661,6 +6664,20 @@ exports.Prisma.DM_BacLuongScalarFieldEnum = {
   name: 'name'
 };
 
+exports.Prisma.TuitionPaymentConfigScalarFieldEnum = {
+  tenantCode: 'tenantCode',
+  bankBin: 'bankBin',
+  bankName: 'bankName',
+  accountNumber: 'accountNumber',
+  accountHolder: 'accountHolder',
+  enabled: 'enabled',
+  version: 'version',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.TemplateFileScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -8727,6 +8744,7 @@ exports.Prisma.LecturerOrderByRelevanceFieldEnum = {
   sThietBiTao: 'sThietBiTao',
   sThietBiSua: 'sThietBiSua',
   lectureID: 'lectureID',
+  TKPUcode: 'TKPUcode',
   userProfileId: 'userProfileId',
   lecturerTypeId: 'lecturerTypeId'
 };
@@ -9390,6 +9408,7 @@ exports.Prisma.DocumentFileOrderByRelevanceFieldEnum = {
   curriculumId: 'curriculumId',
   curriculumVersionId: 'curriculumVersionId',
   subjectVersionId: 'subjectVersionId',
+  subjectClassId: 'subjectClassId',
   studentAcademicDecisionId: 'studentAcademicDecisionId',
   notificationId: 'notificationId',
   decisionId: 'decisionId',
@@ -10894,6 +10913,16 @@ exports.Prisma.DM_BacLuongOrderByRelevanceFieldEnum = {
   name: 'name'
 };
 
+exports.Prisma.TuitionPaymentConfigOrderByRelevanceFieldEnum = {
+  tenantCode: 'tenantCode',
+  bankBin: 'bankBin',
+  bankName: 'bankName',
+  accountNumber: 'accountNumber',
+  accountHolder: 'accountHolder',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
 exports.Prisma.TemplateFileOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -11767,6 +11796,7 @@ exports.Prisma.ModelName = {
   DM_ToChucXaHoi: 'DM_ToChucXaHoi',
   DM_Ngach: 'DM_Ngach',
   DM_BacLuong: 'DM_BacLuong',
+  TuitionPaymentConfig: 'TuitionPaymentConfig',
   TemplateFile: 'TemplateFile',
   AccessRoleGrant: 'AccessRoleGrant',
   AccessPermissionGrant: 'AccessPermissionGrant',

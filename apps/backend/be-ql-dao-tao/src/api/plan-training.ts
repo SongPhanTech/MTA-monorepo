@@ -16,6 +16,84 @@ import { ExamType } from "@workspace/db/client"
 dayjs.extend(customParseFormat)
 const app = new OpenAPIHono({ strict: false })
 
+type GiangVienImport = {
+  id: string
+  TKPUcode?: string | null
+  lectureID?: string | null
+  userProfile: {
+    code?: string | null
+    fullname?: string | null
+  }
+}
+
+const chuanHoaMaGv = (ma?: string | number | null) => String(ma ?? "").trim().toLowerCase()
+
+const maGvBangNhau = (a?: string | number | null, b?: string | number | null) => {
+  const left = chuanHoaMaGv(a)
+  const right = chuanHoaMaGv(b)
+  if (!left || !right) return false
+  if (left === right) return true
+  if (/^\d+$/.test(left) && /^\d+$/.test(right)) {
+    return left.replace(/^0+/, "") === right.replace(/^0+/, "")
+  }
+  return false
+}
+
+const taiDanhSachGiangVienImport = (maList: Iterable<string>, tenList: Iterable<string>) => {
+  const ma = Array.from(maList).map(chuanHoaMaGv).filter(Boolean)
+  const ten = Array.from(tenList)
+    .map((item) => String(item ?? "").trim())
+    .filter(Boolean)
+  return prisma.lecturer.findMany({
+    where: {
+      deletedAt: null,
+      OR: [
+        { TKPUcode: { not: null } },
+        ...(ma.length
+          ? [
+              { TKPUcode: { in: ma } },
+              { lectureID: { in: ma } },
+              { userProfile: { code: { in: ma } } },
+            ]
+          : []),
+        ...(ten.length ? [{ userProfile: { fullname: { in: ten } } }] : []),
+      ],
+    },
+    select: {
+      id: true,
+      TKPUcode: true,
+      lectureID: true,
+      userProfile: {
+        select: {
+          code: true,
+          fullname: true,
+        },
+      },
+    },
+  })
+}
+
+const timGiangVienImport = (
+  danhSachGV: GiangVienImport[],
+  ma?: string | number | null,
+  ten?: string | null
+) => {
+  if (ma != null && chuanHoaMaGv(ma)) {
+    const gvTheoTkpu = danhSachGV.find((gv) => maGvBangNhau(gv.TKPUcode, ma))
+    if (gvTheoTkpu) return gvTheoTkpu
+    const gvTheoLectureId = danhSachGV.find((gv) => maGvBangNhau(gv.lectureID, ma))
+    if (gvTheoLectureId) return gvTheoLectureId
+    const gvTheoMaDinhDanh = danhSachGV.find((gv) => maGvBangNhau(gv.userProfile.code, ma))
+    if (gvTheoMaDinhDanh) return gvTheoMaDinhDanh
+  }
+  const tenChuan = String(ten ?? "").trim().toLowerCase()
+  if (!tenChuan) return undefined
+  const trungTen = danhSachGV.filter(
+    (gv) => gv.userProfile.fullname?.trim().toLowerCase() === tenChuan
+  )
+  return trungTen.length === 1 ? trungTen[0] : undefined
+}
+
 const importPhanCongGiangDay = createRoute({
   operationId: "importPhanCongGiangDay",
   path: "/import-phan-cong-giang-day",
@@ -100,6 +178,7 @@ const importFileGiaoVienCoGioGiay = async (
   console.log("Số lượng bản ghi:", rowData.length)
 
   const danhSachTenGV = new Set<string>()
+  const danhSachMaGV = new Set<string>()
   const danhSachMaTKBMonHoc = new Set<string>()
   const danhSachMaLopNienChe = new Set<string>()
   const danhSachMaPhongHoc = new Set<string>()
@@ -117,6 +196,9 @@ const importFileGiaoVienCoGioGiay = async (
     const maPhongHoc = row[8]
     const tenPhong = row[9]
     const hocChung = row[14]
+    if (maGV) {
+      danhSachMaGV.add(String(maGV).trim())
+    }
     if (tenGV && maGV) {
       tenGV
         .split(",")
@@ -147,24 +229,7 @@ const importFileGiaoVienCoGioGiay = async (
     }
   }
 
-  const danhSachGV = await prisma.lecturer.findMany({
-    where: {
-      userProfile: {
-        fullname: {
-          in: Array.from(danhSachTenGV),
-        },
-      },
-    },
-    select: {
-      id: true,
-      userProfile: {
-        select: {
-          code: true,
-          fullname: true,
-        },
-      },
-    },
-  })
+  const danhSachGV = await taiDanhSachGiangVienImport(danhSachMaGV, danhSachTenGV)
 
   const danhSachMonHoc = await prisma.subjectVersion.findMany({
     where: {
@@ -302,22 +367,19 @@ const importFileGiaoVienCoGioGiay = async (
         }
 
         if (maGV && tenGV) {
-          const [, tenGvPhu] = tenGV.split(",").map((e) => e.replace(/\([^)]*\)/g, "").trim())
-          const gvChinh = danhSachGV.find(
-            (gv) => gv.userProfile.code?.toLowerCase() === String(maGV).trim().toLowerCase()
-          )
+          const [tenGvChinh, tenGvPhu] = tenGV
+            .split(",")
+            .map((e) => e.replace(/\([^)]*\)/g, "").trim())
+          const gvChinh = timGiangVienImport(danhSachGV, maGV, tenGvChinh)
           if (gvChinh) {
             subjectClass.gvChinh = gvChinh.id
           } else {
             error.push({
-              message: `Không tìm thấy giảng viên chính với mã: ${maGV}`,
+              message: `Không tìm thấy giảng viên chính với mã TKPU: ${maGV}`,
             })
           }
           if (tenGvPhu) {
-            const gvPhu = danhSachGV.find(
-              (gv) =>
-                gv.userProfile.fullname?.toLowerCase() === String(tenGvPhu).trim().toLowerCase()
-            )
+            const gvPhu = timGiangVienImport(danhSachGV, null, tenGvPhu)
             if (gvPhu) {
               subjectClass.gvPhu = gvPhu.id
             } else {
@@ -717,23 +779,7 @@ const importFileTKBTheoLopHocPhan = async (
       danhSachMaPhongHoc.add(maPhongHoc.trim())
     }
   }
-  const danhSachGV = await prisma.lecturer.findMany({
-    where: {
-      OR: [
-        { userProfile: { fullname: { in: Array.from(danhSachTenGV) } } },
-        { userProfile: { code: { in: Array.from(danhSachMaGV) } } },
-      ],
-    },
-    select: {
-      id: true,
-      userProfile: {
-        select: {
-          code: true,
-          fullname: true,
-        },
-      },
-    },
-  })
+  const danhSachGV = await taiDanhSachGiangVienImport(danhSachMaGV, danhSachTenGV)
 
   const danhSachMonHoc = await prisma.subjectVersion.findMany({
     where: {
@@ -828,24 +874,19 @@ const importFileTKBTheoLopHocPhan = async (
             if (!raw) return undefined
             const ma = raw.match(/\(([^)]*)\)/)?.[1]?.trim()
             const ten = raw.replace(/\([^)]*\)/g, "").trim()
-            if (ma) {
-              const gvTheoMa = danhSachGV.find(
-                (gv) => gv.userProfile.code?.toLowerCase() === ma.toLowerCase()
-              )
-              if (gvTheoMa) return gvTheoMa
-            }
-            return danhSachGV.find(
-              (gv) => gv.userProfile.fullname?.toLowerCase() === ten.toLowerCase()
-            )
+            return timGiangVienImport(danhSachGV, ma, ten)
           }
           const tenGVChinh = rawGvChinh?.replace(/\([^)]*\)/g, "").trim()
           const tenGvPhu = rawGvPhu?.replace(/\([^)]*\)/g, "").trim()
+          const maGVChinh = rawGvChinh?.match(/\(([^)]*)\)/)?.[1]?.trim()
           const gvChinh = timGiangVien(rawGvChinh)
           if (gvChinh) {
             subjectClass.gvChinh = gvChinh.id
           } else {
             error.push({
-              message: `Không tìm thấy giảng viên chính với tên: ${tenGVChinh}`,
+              message: maGVChinh
+                ? `Không tìm thấy giảng viên chính với mã TKPU: ${maGVChinh}`
+                : `Không tìm thấy giảng viên chính với tên: ${tenGVChinh}`,
             })
           }
           if (tenGvPhu) {

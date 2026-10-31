@@ -9,7 +9,7 @@ import { useReactToPrint } from "react-to-print"
 import {
   filterSubjectsForPlvbPrint,
   formatAppendixScoreDisplay,
-  summarizePlvbCredits,
+  resolvePlvbGraduationTotals,
   getAppendixSubjectPrintName,
   getAppendixSubjectRowHeight,
   getDefaultPlvbPrintSettings,
@@ -144,19 +144,7 @@ function buildStudentSummary(student: PlvbPrintStudent) {
     .filter((semester) => isGraduationSemesterGroup(semester.id))
     .flatMap((semester) => semester?.subjects ?? [])
 
-  const {
-    totalCredits: tongTinChi,
-    weighted10: tongDiemNhanTinChiHe10,
-    weighted4: tongDiemNhanTinChiHe4,
-  } = summarizePlvbCredits(student.semesters)
-  const computedGpa10 =
-    tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe10 / tongTinChi).toFixed(2))
-  const officialGpa = student.graduationDecision?.finalGpa
-  const diemTBHe10 =
-    officialGpa != null && Number.isFinite(Number(officialGpa))
-      ? Number(Number(officialGpa).toFixed(2))
-      : computedGpa10
-  const diemTBHe4 = tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe4 / tongTinChi).toFixed(2))
+  const { tongTinChi, diemTBHe10, diemTBHe4 } = resolvePlvbGraduationTotals(student)
   const xepLoai =
     student.graduationDecision?.finalRanking?.classification ??
     getGraduationClassification(diemTBHe10, diemTBHe4, academicRankingConvert || [])

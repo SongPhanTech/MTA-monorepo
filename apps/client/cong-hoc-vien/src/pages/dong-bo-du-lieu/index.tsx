@@ -1,6 +1,7 @@
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import Loading from "@components/commons/loading"
 import DefaultLayout from "@layouts/default-layout"
+import { PagePermissionGate } from "@components/commons/page-permission-gate"
 import { usePagination } from "@hooks/usePagination"
 import ModalPreviewImportJson from "@components/modal/modal-preview-import-json"
 import SyncProcessModal from "@components/modal/SyncProcessModal"
@@ -28,6 +29,7 @@ import {
 } from "@workspace/libs/api/portal-export-registration-results"
 import { getGetClassRegisterSessionQueryKey } from "@workspace/libs/api/portal"
 import { useQueryClient } from "@tanstack/react-query"
+import { CONG_HOC_VIEN_PERMISSION } from "@workspace/router"
 import {
   Alert,
   Button,
@@ -54,17 +56,17 @@ const { Title, Paragraph, Text } = Typography
 const IMPORT_DATA_ITEMS = [
   "Đợt đăng ký học",
   "Lớp học phần, thời khóa biểu",
-  "Sinh viên, hồ sơ ",
-  "Danh mục hệ thống ",
-  "Chương trình đào tạo, môn học ",
+  "Sinh viên, hồ sơ",
+  "Danh mục hệ thống",
+  "Chương trình đào tạo, môn học",
 ]
 
 const EXPORT_DATA_ITEMS = [
-  "Nhật ký đăng ký học (ClassRegisterLogs)",
-  "Điểm môn học sau đăng ký (StudentSubjectScore)",
-  "Sinh viên / hồ sơ liên quan (Student, UserProfile)",
-  "Lớp học phần đã đăng ký (SubjectClass, SubjectVersion)",
-  "Thông tin đợt đăng ký (ClassRegisterSession)",
+  "Nhật ký đăng ký học",
+  "Điểm môn học sau đăng ký",
+  "Sinh viên / Hồ sơ liên quan",
+  "Lớp học phần đã đăng ký",
+  "Thông tin đợt đăng ký",
 ]
 
 function DongBoDuLieuPage() {
@@ -805,7 +807,13 @@ function DongBoDuLieuPage() {
 }
 
 DongBoDuLieuPage.getLayout = function getLayout(page: React.ReactElement) {
-  return <DefaultLayout breadcrumbList={[{ title: "Đồng bộ dữ liệu" }]}>{page}</DefaultLayout>
+  return (
+    <DefaultLayout breadcrumbList={[{ title: "Đồng bộ dữ liệu" }]}>
+      <PagePermissionGate permission={CONG_HOC_VIEN_PERMISSION.CONG_HOC_VIEN_DONG_BO_DU_LIEU}>
+        {page}
+      </PagePermissionGate>
+    </DefaultLayout>
+  )
 }
 
 export default DongBoDuLieuPage

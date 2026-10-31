@@ -4,6 +4,8 @@ import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import type { FilterProps } from "@constants/type"
 import { useExamTypeOptions } from "@hooks/examType"
 import DefaultLayout from "@layouts/default-layout"
+import { PagePermissionGate } from "@components/commons/page-permission-gate"
+import { CONG_SINH_VIEN_PERMISSION } from "@workspace/router"
 import { formatDate } from "@lib/utils"
 import { useSession } from "@workspace/auth/react"
 import { emptyObjectIf } from "@workspace/constant"
@@ -441,5 +443,11 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
 }
 
 ThoiKhoaBieu.getLayout = function getLayout(page: React.ReactElement) {
-  return <DefaultLayout>{page}</DefaultLayout>
+  return (
+    <DefaultLayout>
+      <PagePermissionGate permission={CONG_SINH_VIEN_PERMISSION.CONG_SINH_VIEN_THOI_KHOA_BIEU}>
+        {page}
+      </PagePermissionGate>
+    </DefaultLayout>
+  )
 }
