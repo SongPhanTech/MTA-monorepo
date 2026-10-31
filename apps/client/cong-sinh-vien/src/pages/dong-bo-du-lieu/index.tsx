@@ -353,7 +353,9 @@ function DongBoDuLieuPage() {
         onProgress(fake)
       }, 350)
 
-      const safeName = (selectedExportSession?.name || "dot-dang-ky").replace(/[\\/:*?"<>|]/g, "_").trim()
+      const safeName = (selectedExportSession?.name || "dot-dang-ky")
+        .replace(/[\\/:*?"<>|]/g, "_")
+        .trim()
       const exportFileName = `export-ket-qua-dang-ky-${safeName}.dat`
 
       const startRes = await startDataSync({
@@ -439,6 +441,7 @@ function DongBoDuLieuPage() {
         activeKey={activeTab}
         onChange={setActiveTab}
         type="card"
+        tabBarStyle={{ marginBottom: 0 }}
         destroyInactiveTabPane={false}
         items={[
           {
@@ -450,27 +453,28 @@ function DongBoDuLieuPage() {
               </span>
             ),
             children: (
-              <Row gutter={[16, 16]}>
-                <Col xs={24} lg={14}>
-                  <Card title="Nhập dữ liệu từ phần mềm nội bộ" className="h-full">
-                    {/* <Alert
+              <Card className="!border-t-0 !rounded-t-none">
+                <Row gutter={[16, 16]}>
+                  <Col xs={24} lg={14}>
+                    <Card title="Nhập dữ liệu từ phần mềm nội bộ" className="h-full">
+                      {/* <Alert
                       type="info"
                       showIcon
                       className="mb-4"
                       message="Hệ thống internet chưa có đợt đăng ký"
                       description="File lớn được nhập nền (bất đồng bộ) để tránh lỗi 504. Sau khi bấm nhập, theo dõi tab Lịch sử đồng bộ."
                     /> */}
-                    {pendingImport && (
-                      <Alert
-                        type="warning"
-                        showIcon
-                        className="mb-4"
-                        message="Đang nhập dữ liệu"
-                        description={`Đợt «${pendingImport.sessionName}» đang được xử lý. Có thể chuyển tab hoặc rời trang — tiến trình vẫn chạy trên server.`}
-                      />
-                    )}
+                      {pendingImport && (
+                        <Alert
+                          type="warning"
+                          showIcon
+                          className="mb-4"
+                          message="Đang nhập dữ liệu"
+                          description={`Đợt «${pendingImport.sessionName}» đang được xử lý. Có thể chuyển tab hoặc rời trang — tiến trình vẫn chạy trên server.`}
+                        />
+                      )}
 
-                    {/* <Steps
+                      {/* <Steps
                       direction="vertical"
                       size="small"
                       current={importPreview ? 1 : 0}
@@ -481,113 +485,116 @@ function DongBoDuLieuPage() {
                       ]}
                     /> */}
 
-                    <div className="mb-4">
-                      <Text strong className="block mb-2">
-                        File đồng bộ từ QL đào tạo
-                      </Text>
-                      <CloudUploadPanel
-                        ref={cloudUploadRef}
-                        disabled={Boolean(pendingImport) || parsingImportFile || importing}
-                        showUploadButton={false}
-                        hint="Gói .dat / .sync xuất từ đợt đăng ký nội bộ"
-                        failureMessage={importParseError}
-                        onFileSelected={handleCloudFileSelected}
-                        onUpload={handleImportUpload}
-                        onComplete={finishCloudImportUi}
-                      />
-                      {parsingImportFile ? (
-                        <div className="mt-2 flex items-center gap-2 text-sm text-slate-500">
-                          <Loader2 className="size-4 animate-spin" />
-                          Đang đọc file…
-                        </div>
-                      ) : null}
-                    </div>
-
-                    <div className="flex flex-wrap gap-2">
-                      <Button
-                        onClick={() => setPreviewModalOpen(true)}
-                        disabled={!importPreview || parsingImportFile}
-                      >
-                        Xem dữ liệu file
-                      </Button>
-                    </div>
-                  </Card>
-                </Col>
-
-                <Col xs={24} lg={10}>
-                  <Card title="Thông tin nhập" className="h-full">
-                    {importParseError && (
-                      <Alert type="error" showIcon message={importParseError} className="mb-4" />
-                    )}
-
-                    <Descriptions column={1} size="small" bordered className="mb-4">
-                      <Descriptions.Item label="File đã chọn">
-                        {importFiles[0]?.name ?? "Chưa chọn"}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Kích thước">
-                        {importFiles[0]?.size
-                          ? importFiles[0].size >= 1024 * 1024
-                            ? `${(importFiles[0].size / (1024 * 1024)).toFixed(1)} MB`
-                            : `${(importFiles[0].size / 1024).toFixed(1)} KB`
-                          : "—"}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Phiên bản file">
-                        {parsingImportFile ? "Đang đọc..." : (importPreview?.version ?? "—")}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Đợt đăng ký">
+                      <div className="mb-4">
+                        <Text strong className="block mb-2">
+                          File đồng bộ từ QL đào tạo
+                        </Text>
+                        <CloudUploadPanel
+                          ref={cloudUploadRef}
+                          disabled={Boolean(pendingImport) || parsingImportFile || importing}
+                          showUploadButton={false}
+                          hint="Gói .dat / .sync xuất từ đợt đăng ký nội bộ"
+                          failureMessage={importParseError}
+                          onFileSelected={handleCloudFileSelected}
+                          onUpload={handleImportUpload}
+                          onComplete={finishCloudImportUi}
+                        />
                         {parsingImportFile ? (
-                          "Đang đọc..."
-                        ) : importPreview ? (
-                          <Text strong>{importPreview.sessionName}</Text>
-                        ) : (
-                          <Text type="secondary">—</Text>
-                        )}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Học kỳ">
-                        {parsingImportFile ? "Đang đọc..." : (importPreview?.semesterName ?? "—")}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Năm học">
-                        {parsingImportFile ? "Đang đọc..." : (importPreview?.schoolYearName ?? "—")}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Thời gian đăng ký">
-                        {parsingImportFile ? (
-                          "Đang đọc..."
-                        ) : importPreview?.startDate && importPreview?.endDate ? (
-                          <>
-                            {dayjs(importPreview.startDate).format("DD/MM/YYYY")}
-                            {" — "}
-                            {dayjs(importPreview.endDate).format("DD/MM/YYYY")}
-                          </>
-                        ) : (
-                          "—"
-                        )}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Trạng thái">
-                        {parsingImportFile ? (
-                          "Đang đọc..."
-                        ) : importPreview?.active != null ? (
-                          importPreview.active ? (
-                            <Tag color="success">Đang mở</Tag>
+                          <div className="mt-2 flex items-center gap-2 text-sm text-slate-500">
+                            <Loader2 className="size-4 animate-spin" />
+                            Đang đọc file…
+                          </div>
+                        ) : null}
+                      </div>
+
+                      <div className="flex flex-wrap gap-2">
+                        <Button
+                          onClick={() => setPreviewModalOpen(true)}
+                          disabled={!importPreview || parsingImportFile}
+                        >
+                          Xem dữ liệu file
+                        </Button>
+                      </div>
+                    </Card>
+                  </Col>
+
+                  <Col xs={24} lg={10}>
+                    <Card title="Thông tin nhập" className="h-full">
+                      {importParseError && (
+                        <Alert type="error" showIcon message={importParseError} className="mb-4" />
+                      )}
+
+                      <Descriptions column={1} size="small" bordered className="mb-4">
+                        <Descriptions.Item label="File đã chọn">
+                          {importFiles[0]?.name ?? "Chưa chọn"}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Kích thước">
+                          {importFiles[0]?.size
+                            ? importFiles[0].size >= 1024 * 1024
+                              ? `${(importFiles[0].size / (1024 * 1024)).toFixed(1)} MB`
+                              : `${(importFiles[0].size / 1024).toFixed(1)} KB`
+                            : "—"}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Phiên bản file">
+                          {parsingImportFile ? "Đang đọc..." : (importPreview?.version ?? "—")}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Đợt đăng ký">
+                          {parsingImportFile ? (
+                            "Đang đọc..."
+                          ) : importPreview ? (
+                            <Text strong>{importPreview.sessionName}</Text>
                           ) : (
-                            <Tag color="error">Đã đóng</Tag>
-                          )
-                        ) : (
-                          "—"
-                        )}
-                      </Descriptions.Item>
-                    </Descriptions>
+                            <Text type="secondary">—</Text>
+                          )}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Học kỳ">
+                          {parsingImportFile ? "Đang đọc..." : (importPreview?.semesterName ?? "—")}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Năm học">
+                          {parsingImportFile
+                            ? "Đang đọc..."
+                            : (importPreview?.schoolYearName ?? "—")}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Thời gian đăng ký">
+                          {parsingImportFile ? (
+                            "Đang đọc..."
+                          ) : importPreview?.startDate && importPreview?.endDate ? (
+                            <>
+                              {dayjs(importPreview.startDate).format("DD/MM/YYYY")}
+                              {" — "}
+                              {dayjs(importPreview.endDate).format("DD/MM/YYYY")}
+                            </>
+                          ) : (
+                            "—"
+                          )}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Trạng thái">
+                          {parsingImportFile ? (
+                            "Đang đọc..."
+                          ) : importPreview?.active != null ? (
+                            importPreview.active ? (
+                              <Tag color="success">Đang mở</Tag>
+                            ) : (
+                              <Tag color="error">Đã đóng</Tag>
+                            )
+                          ) : (
+                            "—"
+                          )}
+                        </Descriptions.Item>
+                      </Descriptions>
 
-                    <Text strong className="block mb-2">
-                      Dữ liệu sẽ được nhập
-                    </Text>
-                    <ul className="pl-4 list-disc space-y-1 text-sm text-gray-600">
-                      {IMPORT_DATA_ITEMS.map((item) => (
-                        <li key={item}>{item}</li>
-                      ))}
-                    </ul>
-                  </Card>
-                </Col>
-              </Row>
+                      <Text strong className="block mb-2">
+                        Dữ liệu sẽ được nhập
+                      </Text>
+                      <ul className="pl-4 list-disc space-y-1 text-sm text-gray-600">
+                        {IMPORT_DATA_ITEMS.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
+                    </Card>
+                  </Col>
+                </Row>
+              </Card>
             ),
           },
           {
@@ -601,83 +608,87 @@ function DongBoDuLieuPage() {
             children: exportTabLoading ? (
               <Loading />
             ) : (
-              <Row gutter={[16, 16]}>
-                <Col xs={24} lg={14}>
-                  <Card title="Xuất kết quả đăng ký về phần mềm nội bộ" className="h-full">
-                    <Paragraph type="secondary">
-                      Sau khi học viên hoàn tất đăng ký trên internet, xuất gói .dat (mã hóa) để
-                      nhập lại vào QL đào tạo (đợt đăng ký học online → Nhập dữ liệu).
-                    </Paragraph>
+              <Card className="!border-t-0 !rounded-t-none">
+                <Row gutter={[16, 16]}>
+                  <Col xs={24} lg={14}>
+                    <Card title="Xuất kết quả đăng ký về phần mềm nội bộ" className="h-full">
+                      <Paragraph type="secondary">
+                        Sau khi học viên hoàn tất đăng ký trên internet, xuất gói .dat (mã hóa) để
+                        nhập lại vào QL đào tạo (đợt đăng ký học online → Nhập dữ liệu).
+                      </Paragraph>
 
-                    {!hasSessions ? (
+                      {!hasSessions ? (
+                        <Alert
+                          type="warning"
+                          showIcon
+                          className="mb-4"
+                          message="Chưa có đợt đăng ký học"
+                          description="Danh sách đợt sẽ xuất hiện sau khi bạn nhập dữ liệu từ phần mềm nội bộ ở tab «Nhập từ nội bộ»."
+                        />
+                      ) : (
+                        <>
+                          <div className="mb-4">
+                            <Text strong className="block mb-2">
+                              Đợt đăng ký học
+                            </Text>
+                            <Select
+                              className="w-full"
+                              placeholder="Chọn đợt đăng ký cần xuất kết quả"
+                              options={sessionOptions}
+                              value={exportSessionId}
+                              onChange={setExportSessionId}
+                              allowClear
+                              showSearch
+                              optionFilterProp="label"
+                            />
+                          </div>
+
+                          {selectedExportSession && (
+                            <Descriptions column={1} size="small" bordered className="mb-4">
+                              <Descriptions.Item label="Đợt đăng ký">
+                                {selectedExportSession.name}
+                              </Descriptions.Item>
+                              <Descriptions.Item label="Học kỳ">
+                                {selectedExportSession.semester?.name ?? "—"}
+                              </Descriptions.Item>
+                              <Descriptions.Item label="Kết thúc đăng ký">
+                                {selectedExportSession.endDate
+                                  ? dayjs(selectedExportSession.endDate).format(
+                                      "HH:mm — DD/MM/YYYY"
+                                    )
+                                  : "—"}
+                              </Descriptions.Item>
+                            </Descriptions>
+                          )}
+                        </>
+                      )}
+
+                      <AnimatedDownloadButton
+                        label="Xuất file .dat"
+                        disabled={!hasSessions || !exportSessionId || exporting}
+                        onDownload={handleExport}
+                      />
+                    </Card>
+                  </Col>
+
+                  <Col xs={24} lg={10}>
+                    <Card title="Nội dung xuất" className="h-full">
+                      <ul className="pl-4 list-disc space-y-1 text-sm text-gray-600 mb-4">
+                        {EXPORT_DATA_ITEMS.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
+
                       <Alert
                         type="warning"
                         showIcon
-                        className="mb-4"
-                        message="Chưa có đợt đăng ký học"
-                        description="Danh sách đợt sẽ xuất hiện sau khi bạn nhập dữ liệu từ phần mềm nội bộ ở tab «Nhập từ nội bộ»."
+                        message="Lưu ý"
+                        description="Chỉ xuất sau khi đợt đăng ký đã kết thúc hoặc khi cần đồng bộ kết quả về hệ thống nội bộ."
                       />
-                    ) : (
-                      <>
-                        <div className="mb-4">
-                          <Text strong className="block mb-2">
-                            Đợt đăng ký học
-                          </Text>
-                          <Select
-                            className="w-full"
-                            placeholder="Chọn đợt đăng ký cần xuất kết quả"
-                            options={sessionOptions}
-                            value={exportSessionId}
-                            onChange={setExportSessionId}
-                            allowClear
-                            showSearch
-                            optionFilterProp="label"
-                          />
-                        </div>
-
-                        {selectedExportSession && (
-                          <Descriptions column={1} size="small" bordered className="mb-4">
-                            <Descriptions.Item label="Đợt đăng ký">
-                              {selectedExportSession.name}
-                            </Descriptions.Item>
-                            <Descriptions.Item label="Học kỳ">
-                              {selectedExportSession.semester?.name ?? "—"}
-                            </Descriptions.Item>
-                            <Descriptions.Item label="Kết thúc đăng ký">
-                              {selectedExportSession.endDate
-                                ? dayjs(selectedExportSession.endDate).format("HH:mm — DD/MM/YYYY")
-                                : "—"}
-                            </Descriptions.Item>
-                          </Descriptions>
-                        )}
-                      </>
-                    )}
-
-                    <AnimatedDownloadButton
-                      label="Xuất file .dat"
-                      disabled={!hasSessions || !exportSessionId || exporting}
-                      onDownload={handleExport}
-                    />
-                  </Card>
-                </Col>
-
-                <Col xs={24} lg={10}>
-                  <Card title="Nội dung xuất" className="h-full">
-                    <ul className="pl-4 list-disc space-y-1 text-sm text-gray-600 mb-4">
-                      {EXPORT_DATA_ITEMS.map((item) => (
-                        <li key={item}>{item}</li>
-                      ))}
-                    </ul>
-
-                    <Alert
-                      type="warning"
-                      showIcon
-                      message="Lưu ý"
-                      description="Chỉ xuất sau khi đợt đăng ký đã kết thúc hoặc khi cần đồng bộ kết quả về hệ thống nội bộ."
-                    />
-                  </Card>
-                </Col>
-              </Row>
+                    </Card>
+                  </Col>
+                </Row>
+              </Card>
             ),
           },
           {
@@ -689,7 +700,7 @@ function DongBoDuLieuPage() {
               </span>
             ),
             children: (
-              <Card>
+              <Card className="!border-t-0 !rounded-t-none">
                 {/* {pendingImport && (
                   <Alert
                     type="info"
