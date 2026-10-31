@@ -47,6 +47,8 @@ export type ColumnsType<RecordType = AnyObject> = ((
     | "date"
     | "cmp"
     | (string & {})
+  options?: any[]
+  distinctFilters?: string[]
 })[]
 
 type TableProps<T = AnyObject> = {
