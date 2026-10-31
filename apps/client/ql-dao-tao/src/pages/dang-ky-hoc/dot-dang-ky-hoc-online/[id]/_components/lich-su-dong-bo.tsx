@@ -371,7 +371,7 @@ export default function LichSuDongBo({ sessionId, sessionName }: LichSuDongBoPro
           setFilters(val)
           setCurrentPage(1)
         }}
-        columns={columns}
+        columns={columns as any}
         data={syncHistories}
         pagination={{
           size: "small",
