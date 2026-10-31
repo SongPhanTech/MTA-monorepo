@@ -75,16 +75,19 @@ export const getUrl = (baseUrl: string, contextUrl: string): string => {
       try {
         const parsed = new URL(cleanBase)
         if (parsed.hostname !== currentHost && parsed.hostname.includes("swantech.vn")) {
+          // Keep app mount prefix when present (e.g. /cong-sinh-vien/api/system on mta_online)
+          const mountMatch = parsed.pathname.match(/^(\/[^/]+)\/api\//)
+          const mountPrefix = mountMatch?.[1] && mountMatch[1] !== "/api" ? mountMatch[1] : ""
           const apiPath = parsed.pathname.includes("/api/portal")
-            ? "/api/portal"
+            ? `${mountPrefix}/api/portal`
             : parsed.pathname.includes("/api/model")
-              ? "/api/model"
+              ? `${mountPrefix}/api/model`
               : parsed.pathname.includes("/api/lms")
-                ? "/api/lms"
+                ? `${mountPrefix}/api/lms`
                 : parsed.pathname.includes("/api/ems")
-                  ? "/api/ems"
+                  ? `${mountPrefix}/api/ems`
                   : parsed.pathname.includes("/api/system")
-                    ? "/api/system"
+                    ? `${mountPrefix}/api/system`
                     : parsed.pathname.replace(/\/+$/, "")
           cleanBase = `${window.location.origin}${apiPath}`
         }
@@ -134,18 +137,38 @@ export const customPortalFetch = async <T>(url: string, options: RequestInit): P
   return { status: response.status, data, headers: response.headers } as T
 }
 
+const getClientCredentialHeaders = (): Record<string, string> => {
+  const clientId =
+    getRuntimeEnv("NEXT_PUBLIC_CLIENT_ID") || process.env.NEXT_PUBLIC_CLIENT_ID || ""
+  const clientSecret =
+    getRuntimeEnv("NEXT_PUBLIC_CLIENT_SECRET") || process.env.NEXT_PUBLIC_CLIENT_SECRET || ""
+  if (!clientId || !clientSecret) return {}
+  return {
+    "x-clientid": clientId,
+    "x-clientsecret": clientSecret,
+  }
+}
+
 export const customSystemFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
   const appCode = getRuntimeEnv("NEXT_PUBLIC_APP_CODE") || process.env.NEXT_PUBLIC_APP_CODE
-  const requestUrl = getUrl(
-    process.env.SYSTEM_BASE_URL
+  // Prefer explicit SYSTEM_BASE_URL (server) or NEXT_PUBLIC_API_SYSTEM_BASE_URL (browser).
+  // Fallback must NOT go through /api/model/... (that hits be-model → 404 on mta_online).
+  const systemBase =
+    (typeof process !== "undefined" && process.env.SYSTEM_BASE_URL
       ? `${process.env.SYSTEM_BASE_URL}/api/system/public`
-      : getRuntimeEnv("NEXT_PUBLIC_API_SYSTEM_BASE_URL")
-        ? `${getRuntimeEnv("NEXT_PUBLIC_API_SYSTEM_BASE_URL")}/${appCode}/public`
-        : `/api/model/api/system/${appCode}/public`,
-    url
-  )
+      : null) ||
+    (getRuntimeEnv("NEXT_PUBLIC_API_SYSTEM_BASE_URL")
+      ? `${getRuntimeEnv("NEXT_PUBLIC_API_SYSTEM_BASE_URL")}/${appCode}/public`
+      : `/api/system/${appCode}/public`)
+  const requestUrl = getUrl(systemBase, url)
 
-  const response = await fetchInstance(requestUrl, options)
+  const response = await fetchInstance(requestUrl, {
+    ...options,
+    headers: {
+      ...getClientCredentialHeaders(),
+      ...options?.headers,
+    },
+  })
   const data = await getBody<T>(response)
 
   return { status: response.status, data, headers: response.headers } as T
@@ -153,16 +176,22 @@ export const customSystemFetch = async <T>(url: string, options: RequestInit): P
 
 export const customSystemShareFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
   const appCode = getRuntimeEnv("NEXT_PUBLIC_APP_CODE") || process.env.NEXT_PUBLIC_APP_CODE
-  const requestUrl = getUrl(
-    process.env.SYSTEM_BASE_URL
+  const systemBase =
+    (typeof process !== "undefined" && process.env.SYSTEM_BASE_URL
       ? `${process.env.SYSTEM_BASE_URL}/api/system/share`
-      : getRuntimeEnv("NEXT_PUBLIC_API_SYSTEM_BASE_URL")
-        ? `${getRuntimeEnv("NEXT_PUBLIC_API_SYSTEM_BASE_URL")}/${appCode}/share`
-        : `/api/model/api/system/${appCode}`,
-    url
-  )
+      : null) ||
+    (getRuntimeEnv("NEXT_PUBLIC_API_SYSTEM_BASE_URL")
+      ? `${getRuntimeEnv("NEXT_PUBLIC_API_SYSTEM_BASE_URL")}/${appCode}/share`
+      : `/api/system/${appCode}/share`)
+  const requestUrl = getUrl(systemBase, url)
 
-  const response = await fetchInstance(requestUrl, options)
+  const response = await fetchInstance(requestUrl, {
+    ...options,
+    headers: {
+      ...getClientCredentialHeaders(),
+      ...options?.headers,
+    },
+  })
   const data = await getBody<T>(response)
 
   return { status: response.status, data, headers: response.headers } as T
@@ -170,16 +199,22 @@ export const customSystemShareFetch = async <T>(url: string, options: RequestIni
 
 export const customStorageFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
   const appCode = getRuntimeEnv("NEXT_PUBLIC_APP_CODE") || process.env.NEXT_PUBLIC_APP_CODE
-  const requestUrl = getUrl(
-    process.env.SYSTEM_BASE_URL
+  const systemBase =
+    (typeof process !== "undefined" && process.env.SYSTEM_BASE_URL
       ? `${process.env.SYSTEM_BASE_URL}/api/system/storage`
-      : getRuntimeEnv("NEXT_PUBLIC_API_SYSTEM_BASE_URL")
-        ? `${getRuntimeEnv("NEXT_PUBLIC_API_SYSTEM_BASE_URL")}/${appCode}/storage`
-        : `/api/model/api/system/${appCode}/storage`,
-    url
-  )
+      : null) ||
+    (getRuntimeEnv("NEXT_PUBLIC_API_SYSTEM_BASE_URL")
+      ? `${getRuntimeEnv("NEXT_PUBLIC_API_SYSTEM_BASE_URL")}/${appCode}/storage`
+      : `/api/system/${appCode}/storage`)
+  const requestUrl = getUrl(systemBase, url)
 
-  const response = await fetchInstance(requestUrl, options)
+  const response = await fetchInstance(requestUrl, {
+    ...options,
+    headers: {
+      ...getClientCredentialHeaders(),
+      ...options?.headers,
+    },
+  })
   const data = await getBody<T>(response)
 
   return { status: response.status, data, headers: response.headers } as T

@@ -184,6 +184,22 @@ APP_URL_SUFFIX_tro-ly-ao    = /chatbot/?mode=tro-ly-ao
 APP_URL_SUFFIX_cong-giang-vien = /conggiangvien/home
 APP_URL_SUFFIX_cong-hoc-vien = /conghocvien/home
 
+# Public-api client credentials (x-clientid / x-clientsecret) per SERVER_PROFILE + portal app.
+# Injected at FE build time so .env can stay as local/x52 defaults.
+ifeq ($(SERVER_PROFILE),mta_online)
+  # mta_online public-api → mta_coredb
+  FE_CLIENT_ID_cong-sinh-vien     := CongHocVien
+  FE_CLIENT_SECRET_cong-sinh-vien := FpYxCRyJHViZ3gKDv1UrDhEe5OmU7vGH
+  FE_CLIENT_ID_cong-hoc-vien      := CongHocVien
+  FE_CLIENT_SECRET_cong-hoc-vien  := FpYxCRyJHViZ3gKDv1UrDhEe5OmU7vGH
+else
+  # swantech_x52 / swan1 / local → mta_core_db
+  FE_CLIENT_ID_cong-sinh-vien     := CongSinhVien
+  FE_CLIENT_SECRET_cong-sinh-vien := I3WvcIx3PkvME9bW5Ctqs4W5vwh2VEkI
+  FE_CLIENT_ID_cong-hoc-vien      := dangkyhoc
+  FE_CLIENT_SECRET_cong-hoc-vien  := FpYxCRyJHViZ3gKDv1UrDhEe5OmU7vGH
+endif
+
 # Targets
 .PHONY: all clean push deploy release all-be build-all-be build-all-fe ship-fe \
 	build-% all-% save-docker-images package-cdn _package-fe-cdn-copy \
@@ -399,7 +415,9 @@ _build-be:
 _build-fe:
 	$(eval CDN_NAME := $(CDN_NAME_$(PACKAGE)))
 	$(eval APP_URL  := $(FE_APP_URL)$(APP_URL_SUFFIX_$(PACKAGE)))
-	@echo "Building FE package $(PACKAGE) -> $(CDN_NAME) [APP_URL=$(APP_URL)] [API=$(FE_APP_URL)$(FE_API_PREFIX)/api/...] [ONLY_OFFICE=$(ONLY_OFFICE_ENDPOINT)]"
+	$(eval FE_CLIENT_ID := $(FE_CLIENT_ID_$(PACKAGE)))
+	$(eval FE_CLIENT_SECRET := $(FE_CLIENT_SECRET_$(PACKAGE)))
+	@echo "Building FE package $(PACKAGE) -> $(CDN_NAME) [APP_URL=$(APP_URL)] [API=$(FE_APP_URL)$(FE_API_PREFIX)/api/...] [ONLY_OFFICE=$(ONLY_OFFICE_ENDPOINT)]$(if $(FE_CLIENT_ID), [CLIENT=$(FE_CLIENT_ID)])"
 	cd apps/client/$(PACKAGE) && \
 	pnpm i && \
 	NEXT_PUBLIC_APP_URL=$(APP_URL) \
@@ -408,6 +426,8 @@ _build-fe:
 	NEXT_PUBLIC_API_MODEL_BASE_URL="$(FE_APP_URL)$(FE_API_PREFIX)/api/model" \
 	NEXT_PUBLIC_API_LMS_BASE_URL="$(FE_APP_URL)$(FE_API_PREFIX)/api/lms" \
 	NEXT_PUBLIC_API_SYSTEM_BASE_URL="$(FE_APP_URL)$(FE_API_PREFIX)/api/system" \
+	$(if $(FE_CLIENT_ID),NEXT_PUBLIC_CLIENT_ID="$(FE_CLIENT_ID)") \
+	$(if $(FE_CLIENT_SECRET),NEXT_PUBLIC_CLIENT_SECRET="$(FE_CLIENT_SECRET)") \
 	pnpm build && \
 	rm -rf $(CDN_NAME) && \
 	mv out $(CDN_NAME) && \
