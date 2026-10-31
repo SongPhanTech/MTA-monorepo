@@ -125,7 +125,16 @@ app.openapi(exportToInternal, async (c) => {
       .map(([name, count]) => `${TABLE_DISPLAY_NAMES[name] || name}: ${count}`)
       .join(", ")
     await markDataSyncHistorySuccess(syncHistoryId, {
-      description: `Đã xuất thành công ${exportedCount} bản ghi${countDetail ? ` (${countDetail})` : ""}.`,
+      description: `Đã xuất thành công `,
+      recordCounts: {
+        ...result.counts,
+        categories: Object.keys(result.counts)
+          .filter((name) => !name.startsWith("_"))
+          .map((name) => ({
+            key: name,
+            label: TABLE_DISPLAY_NAMES[name] || name,
+          })),
+      },
     })
 
     return c.json(

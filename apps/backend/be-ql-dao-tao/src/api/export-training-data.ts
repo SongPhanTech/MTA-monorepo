@@ -21,6 +21,7 @@ import {
   markDataSyncHistoryFailed,
   markDataSyncHistorySuccess,
 } from "../services/data-sync-history"
+import { buildSyncCategories } from "@workspace/constant"
 
 // Khởi chạy Kafka Consumer lắng nghe job xuất dữ liệu (nếu Kafka khả dụng)
 startExportConsumer(async (job) => {
@@ -175,8 +176,9 @@ app.openapi(exportTrainingDataRoute, async (c) => {
           success: totalCount,
           failed: 0,
           counts: result.counts,
+          categories: buildSyncCategories(result.counts || {}),
         },
-        description: `Đã xuất thành công ${totalCount} bản ghi dữ liệu.`,
+        description: `Đã xuất thành công `,
       })
     }
     return c.json(result, 200)

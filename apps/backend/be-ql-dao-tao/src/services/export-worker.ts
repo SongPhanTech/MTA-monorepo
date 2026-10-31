@@ -17,6 +17,7 @@ import {
   markDataSyncHistoryFailed,
   markDataSyncHistorySuccess,
 } from "./data-sync-history"
+import { buildSyncCategories } from "@workspace/constant"
 import {
   loadSessionScopedEntities,
   notDeleted,
@@ -327,8 +328,9 @@ export async function processExportJob(
           success: totalCount,
           failed: 0,
           counts,
+          categories: buildSyncCategories(counts),
         },
-        description: `Đã xuất thành công ${totalCount} bản ghi dữ liệu.`,
+        description: `Đã xuất thành công `,
       }).catch((err) => {
         console.error(`[export-worker] Lỗi cập nhật DataSyncHistory:`, err)
       })

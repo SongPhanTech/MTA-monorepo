@@ -17,6 +17,7 @@ import {
   markDataSyncHistoryFailed,
   markDataSyncHistorySuccess,
 } from "../services/data-sync-history"
+import { buildSyncCategories } from "@workspace/constant"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -252,6 +253,7 @@ app.openapi(confirmRoute, async (c) => {
           failed: result.failed,
           details: result.details,
           warningsCount: result.warnings?.length,
+          categories: buildSyncCategories(["ClassRegisterLogs", "StudentSubjectScore"]),
         },
         description: result.message,
       }).catch((err) => console.error("[import-training-data] Lỗi mark SUCCESS:", err))
