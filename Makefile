@@ -268,10 +268,11 @@ all-clients:
 	done
 
 # Build + deploy bộ đang chạy trên mta_online.
-# BE: model, ql-dao-tao, portal, shared. FE: cong-sinh-vien-cdn + router-cong-sinh-vien-api.
+# BE: model, khao-thi, ql-dao-tao, portal, shared. FE: cong-sinh-vien-cdn + router-cong-sinh-vien-api.
 # Worker import dùng chung image portal; recreate sau khi image mới đã được load.
 all-mta-online:
 	$(MAKE) all-be-model SERVER_PROFILE=mta_online
+	$(MAKE) all-be-khao-thi SERVER_PROFILE=mta_online
 	$(MAKE) all-be-ql-dao-tao SERVER_PROFILE=mta_online
 	$(MAKE) all-be-portal SERVER_PROFILE=mta_online
 	$(MAKE) recreate-portal-data-sync-worker SERVER_PROFILE=mta_online
@@ -424,6 +425,7 @@ _build-fe:
 	NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT=$(ONLY_OFFICE_ENDPOINT) \
 	NEXT_PUBLIC_API_PORTAL_BASE_URL="$(FE_APP_URL)$(FE_API_PREFIX)/api/portal" \
 	NEXT_PUBLIC_API_MODEL_BASE_URL="$(FE_APP_URL)$(FE_API_PREFIX)/api/model" \
+	NEXT_PUBLIC_API_EMS_BASE_URL="$(FE_APP_URL)$(FE_API_PREFIX)/api/ems" \
 	NEXT_PUBLIC_API_LMS_BASE_URL="$(FE_APP_URL)$(FE_API_PREFIX)/api/lms" \
 	NEXT_PUBLIC_API_SYSTEM_BASE_URL="$(FE_APP_URL)$(FE_API_PREFIX)/api/system" \
 	$(if $(FE_CLIENT_ID),NEXT_PUBLIC_CLIENT_ID="$(FE_CLIENT_ID)") \

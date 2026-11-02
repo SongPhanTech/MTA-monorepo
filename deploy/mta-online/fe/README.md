@@ -171,12 +171,13 @@ Ports hiện tại trên host:
 | Service              | Port        |
 | -------------------- | ----------- |
 | be-model             | 3041        |
+| be-khao-thi          | 3043        |
 | be-ql-dao-tao        | 3042        |
 | be-portal            | 3044        |
 | be-ql-dao-tao-shared | 3045        |
 | minio                | 9000 / 9001 |
 
-File: `nginx-mta-be-apis.conf` → path `/api/portal|model|lms|shared|lms-shared/` + `/minio/`.
+File: `nginx-mta-be-apis.conf` → path `/api/portal|model|ems|lms|shared|lms-shared/` + `/minio/`.
 
 ```bash
 # Local → server
