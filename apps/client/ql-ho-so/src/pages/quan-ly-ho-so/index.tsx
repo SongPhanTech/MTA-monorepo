@@ -482,7 +482,10 @@ export default function UserProfilePageDs() {
                     {can(QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO, "SUA") && (
                       <EditIcon
                         onClick={() => {
-                          router.push(`${ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO}/${id}`)
+                          router.push({
+                            pathname: ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_ID,
+                            query: { id },
+                          })
                         }}
                         className="text-sm text-blue-700 cursor-pointer"
                       />
