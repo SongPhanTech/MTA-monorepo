@@ -76,6 +76,9 @@ type TableProps<T = AnyObject> = {
   rowSelection?: TableRowSelection<T>
 } & Omit<TableAntdProps, "pagination">
 
+/** Đúng kiểu prop `columns` của Table — dùng khi khai báo columns thành biến riêng */
+export type TableColumns<T = AnyObject> = NonNullable<TableProps<T>["columns"]>
+
 export const Table = <T extends AnyObject>({
   columns = [],
   data,

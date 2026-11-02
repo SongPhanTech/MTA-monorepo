@@ -122,6 +122,8 @@ import type {
   CreateReExamsRequest,
   CurriculumImportErrorResponse,
   CurriculumSubjectImportErrorResponse,
+  DataBangDiemDuKhoa200,
+  DataBangDiemDuKhoaRequest,
   DataListReExamStudentItem,
   DataListRetakeStudentItem,
   DataSuccessEnrollFixedClassOnSubjectClass,
@@ -190,6 +192,7 @@ import type {
   GetDanhSachHVChuaTotNghiepTAParams,
   GetDanhSachTotNghiepData200,
   GetDanhSachTotNghiepDataParams,
+  GetDataSyncHistoryDetail200,
   GetDelegatedPermissions200,
   GetDelegatedPermissions401,
   GetDelegatedPermissionsParams,
@@ -231,8 +234,13 @@ import type {
   ImportTrainingData400,
   InvalidateClassRegisterSessionCache200,
   InvalidateClassRegisterSessionCacheRequest,
+  ListDataSyncHistory200,
+  ListDataSyncHistoryParams,
   ListGrantedRoles200,
   ListGrantedRolesParams,
+  ListNhanVien200,
+  ListNhanVien401,
+  ListNhanVienBody,
   MergeExamBadResponse,
   MergeExamRequest,
   MergeExamResponse,
@@ -11276,6 +11284,97 @@ export const useExportLecturerProfile = <TError = ErrorMessageResponse,
     }
     
 /**
+ * @summary Danh sách nhân viên (dữ liệu test)
+ */
+export type listNhanVienResponse200 = {
+  data: ListNhanVien200
+  status: 200
+}
+
+export type listNhanVienResponse401 = {
+  data: ListNhanVien401
+  status: 401
+}
+    
+export type listNhanVienResponseSuccess = (listNhanVienResponse200) & {
+  headers: Headers;
+};
+export type listNhanVienResponseError = (listNhanVienResponse401) & {
+  headers: Headers;
+};
+
+export type listNhanVienResponse = (listNhanVienResponseSuccess | listNhanVienResponseError)
+
+export const getListNhanVienUrl = () => {
+
+
+  
+
+  return `//NhanViens/list`
+}
+
+export const listNhanVien = async (listNhanVienBody: ListNhanVienBody, options?: RequestInit): Promise<listNhanVienResponse> => {
+  
+  return customTrainingFetch<listNhanVienResponse>(getListNhanVienUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      listNhanVienBody,)
+  }
+);}
+
+
+
+
+export const getListNhanVienMutationOptions = <TError = ListNhanVien401,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listNhanVien>>, TError,{data: ListNhanVienBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof listNhanVien>>, TError,{data: ListNhanVienBody}, TContext> => {
+
+const mutationKey = ['listNhanVien'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof listNhanVien>>, {data: ListNhanVienBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  listNhanVien(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ListNhanVienMutationResult = NonNullable<Awaited<ReturnType<typeof listNhanVien>>>
+    export type ListNhanVienMutationBody = ListNhanVienBody
+    export type ListNhanVienMutationError = ListNhanVien401
+
+    /**
+ * @summary Danh sách nhân viên (dữ liệu test)
+ */
+export const useListNhanVien = <TError = ListNhanVien401,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listNhanVien>>, TError,{data: ListNhanVienBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof listNhanVien>>,
+        TError,
+        {data: ListNhanVienBody},
+        TContext
+      > => {
+
+      const mutationOptions = getListNhanVienMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
  * Xuất Excel danh sách hồ sơ xác minh văn bằng trong khoảng thời gian.
 
 **Bảng dữ liệu nguồn:** DiplomaVerificationApplication.
@@ -17533,6 +17632,113 @@ export const useExportBangDiemCaNhan = <TError = ErrorMessageResponse,
     }
     
 /**
+ * Lấy dữ liệu 7 môn thuộc kỳ dự khoá 1 và 2 để phục vụ in bảng điểm HTML.
+ * @summary Lấy dữ liệu bảng điểm cá nhân đối tượng dự khoá
+ */
+export type dataBangDiemDuKhoaResponse200 = {
+  data: DataBangDiemDuKhoa200
+  status: 200
+}
+
+export type dataBangDiemDuKhoaResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type dataBangDiemDuKhoaResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type dataBangDiemDuKhoaResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type dataBangDiemDuKhoaResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type dataBangDiemDuKhoaResponseSuccess = (dataBangDiemDuKhoaResponse200) & {
+  headers: Headers;
+};
+export type dataBangDiemDuKhoaResponseError = (dataBangDiemDuKhoaResponse400 | dataBangDiemDuKhoaResponse404 | dataBangDiemDuKhoaResponse409 | dataBangDiemDuKhoaResponse500) & {
+  headers: Headers;
+};
+
+export type dataBangDiemDuKhoaResponse = (dataBangDiemDuKhoaResponseSuccess | dataBangDiemDuKhoaResponseError)
+
+export const getDataBangDiemDuKhoaUrl = () => {
+
+
+  
+
+  return `/api/student-result/data-bang-diem-du-khoa`
+}
+
+export const dataBangDiemDuKhoa = async (dataBangDiemDuKhoaRequest: DataBangDiemDuKhoaRequest, options?: RequestInit): Promise<dataBangDiemDuKhoaResponse> => {
+  
+  return customTrainingFetch<dataBangDiemDuKhoaResponse>(getDataBangDiemDuKhoaUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      dataBangDiemDuKhoaRequest,)
+  }
+);}
+
+
+
+
+export const getDataBangDiemDuKhoaMutationOptions = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof dataBangDiemDuKhoa>>, TError,{data: DataBangDiemDuKhoaRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof dataBangDiemDuKhoa>>, TError,{data: DataBangDiemDuKhoaRequest}, TContext> => {
+
+const mutationKey = ['dataBangDiemDuKhoa'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof dataBangDiemDuKhoa>>, {data: DataBangDiemDuKhoaRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  dataBangDiemDuKhoa(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DataBangDiemDuKhoaMutationResult = NonNullable<Awaited<ReturnType<typeof dataBangDiemDuKhoa>>>
+    export type DataBangDiemDuKhoaMutationBody = DataBangDiemDuKhoaRequest
+    export type DataBangDiemDuKhoaMutationError = ErrorMessageResponse
+
+    /**
+ * @summary Lấy dữ liệu bảng điểm cá nhân đối tượng dự khoá
+ */
+export const useDataBangDiemDuKhoa = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof dataBangDiemDuKhoa>>, TError,{data: DataBangDiemDuKhoaRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof dataBangDiemDuKhoa>>,
+        TError,
+        {data: DataBangDiemDuKhoaRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getDataBangDiemDuKhoaMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
  * Xuất file Excel bảng điểm quá trình (mẫu quatrinh.xlsx / BDQT).
 
 **Bảng dữ liệu nguồn:** Student, StudentSubjectScore, SubjectVersion, Semester, ScoreConvert.
@@ -19420,6 +19626,283 @@ export const useImportTrainingData = <TError = ImportTrainingData400 | ErrorMess
       return useMutation(mutationOptions, queryClient);
     }
     
+/**
+ * @summary Tra cứu danh sách lịch sử đồng bộ dữ liệu Import/Export
+ */
+export type listDataSyncHistoryResponse200 = {
+  data: ListDataSyncHistory200
+  status: 200
+}
+
+export type listDataSyncHistoryResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type listDataSyncHistoryResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type listDataSyncHistoryResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type listDataSyncHistoryResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type listDataSyncHistoryResponseSuccess = (listDataSyncHistoryResponse200) & {
+  headers: Headers;
+};
+export type listDataSyncHistoryResponseError = (listDataSyncHistoryResponse400 | listDataSyncHistoryResponse404 | listDataSyncHistoryResponse409 | listDataSyncHistoryResponse500) & {
+  headers: Headers;
+};
+
+export type listDataSyncHistoryResponse = (listDataSyncHistoryResponseSuccess | listDataSyncHistoryResponseError)
+
+export const getListDataSyncHistoryUrl = (params?: ListDataSyncHistoryParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/data-sync-history?${stringifiedParams}` : `/api/data-sync-history`
+}
+
+export const listDataSyncHistory = async (params?: ListDataSyncHistoryParams, options?: RequestInit): Promise<listDataSyncHistoryResponse> => {
+  
+  return customTrainingFetch<listDataSyncHistoryResponse>(getListDataSyncHistoryUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+
+
+export const getListDataSyncHistoryQueryKey = (params?: ListDataSyncHistoryParams,) => {
+    return [
+    `/api/data-sync-history`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getListDataSyncHistoryQueryOptions = <TData = Awaited<ReturnType<typeof listDataSyncHistory>>, TError = ErrorMessageResponse>(params?: ListDataSyncHistoryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listDataSyncHistory>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListDataSyncHistoryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listDataSyncHistory>>> = ({ signal }) => listDataSyncHistory(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listDataSyncHistory>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ListDataSyncHistoryQueryResult = NonNullable<Awaited<ReturnType<typeof listDataSyncHistory>>>
+export type ListDataSyncHistoryQueryError = ErrorMessageResponse
+
+
+export function useListDataSyncHistory<TData = Awaited<ReturnType<typeof listDataSyncHistory>>, TError = ErrorMessageResponse>(
+ params: undefined |  ListDataSyncHistoryParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listDataSyncHistory>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listDataSyncHistory>>,
+          TError,
+          Awaited<ReturnType<typeof listDataSyncHistory>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListDataSyncHistory<TData = Awaited<ReturnType<typeof listDataSyncHistory>>, TError = ErrorMessageResponse>(
+ params?: ListDataSyncHistoryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listDataSyncHistory>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listDataSyncHistory>>,
+          TError,
+          Awaited<ReturnType<typeof listDataSyncHistory>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListDataSyncHistory<TData = Awaited<ReturnType<typeof listDataSyncHistory>>, TError = ErrorMessageResponse>(
+ params?: ListDataSyncHistoryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listDataSyncHistory>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Tra cứu danh sách lịch sử đồng bộ dữ liệu Import/Export
+ */
+
+export function useListDataSyncHistory<TData = Awaited<ReturnType<typeof listDataSyncHistory>>, TError = ErrorMessageResponse>(
+ params?: ListDataSyncHistoryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listDataSyncHistory>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getListDataSyncHistoryQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+/**
+ * @summary Lấy chi tiết một bản ghi lịch sử đồng bộ
+ */
+export type getDataSyncHistoryDetailResponse200 = {
+  data: GetDataSyncHistoryDetail200
+  status: 200
+}
+
+export type getDataSyncHistoryDetailResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type getDataSyncHistoryDetailResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type getDataSyncHistoryDetailResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type getDataSyncHistoryDetailResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type getDataSyncHistoryDetailResponseSuccess = (getDataSyncHistoryDetailResponse200) & {
+  headers: Headers;
+};
+export type getDataSyncHistoryDetailResponseError = (getDataSyncHistoryDetailResponse400 | getDataSyncHistoryDetailResponse404 | getDataSyncHistoryDetailResponse409 | getDataSyncHistoryDetailResponse500) & {
+  headers: Headers;
+};
+
+export type getDataSyncHistoryDetailResponse = (getDataSyncHistoryDetailResponseSuccess | getDataSyncHistoryDetailResponseError)
+
+export const getGetDataSyncHistoryDetailUrl = () => {
+
+
+  
+
+  return `/api/data-sync-history/:id`
+}
+
+export const getDataSyncHistoryDetail = async ( options?: RequestInit): Promise<getDataSyncHistoryDetailResponse> => {
+  
+  return customTrainingFetch<getDataSyncHistoryDetailResponse>(getGetDataSyncHistoryDetailUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+
+
+export const getGetDataSyncHistoryDetailQueryKey = () => {
+    return [
+    `/api/data-sync-history/:id`
+    ] as const;
+    }
+
+    
+export const getGetDataSyncHistoryDetailQueryOptions = <TData = Awaited<ReturnType<typeof getDataSyncHistoryDetail>>, TError = ErrorMessageResponse>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDataSyncHistoryDetail>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetDataSyncHistoryDetailQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDataSyncHistoryDetail>>> = ({ signal }) => getDataSyncHistoryDetail({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDataSyncHistoryDetail>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDataSyncHistoryDetailQueryResult = NonNullable<Awaited<ReturnType<typeof getDataSyncHistoryDetail>>>
+export type GetDataSyncHistoryDetailQueryError = ErrorMessageResponse
+
+
+export function useGetDataSyncHistoryDetail<TData = Awaited<ReturnType<typeof getDataSyncHistoryDetail>>, TError = ErrorMessageResponse>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDataSyncHistoryDetail>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDataSyncHistoryDetail>>,
+          TError,
+          Awaited<ReturnType<typeof getDataSyncHistoryDetail>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDataSyncHistoryDetail<TData = Awaited<ReturnType<typeof getDataSyncHistoryDetail>>, TError = ErrorMessageResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDataSyncHistoryDetail>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDataSyncHistoryDetail>>,
+          TError,
+          Awaited<ReturnType<typeof getDataSyncHistoryDetail>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDataSyncHistoryDetail<TData = Awaited<ReturnType<typeof getDataSyncHistoryDetail>>, TError = ErrorMessageResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDataSyncHistoryDetail>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Lấy chi tiết một bản ghi lịch sử đồng bộ
+ */
+
+export function useGetDataSyncHistoryDetail<TData = Awaited<ReturnType<typeof getDataSyncHistoryDetail>>, TError = ErrorMessageResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDataSyncHistoryDetail>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetDataSyncHistoryDetailQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
 /**
  * Xóa Redis cache (portal:crs) sau khi chỉnh sửa đợt đăng ký học để SV thấy thông tin mới ngay.
  * @summary Reset cache cổng đăng ký theo đợt

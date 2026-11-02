@@ -1,5 +1,5 @@
 import { CopyOutlined } from "@ant-design/icons"
-import Table, { type ColumnsType } from "@components/commons/table"
+import Table, { type ColumnsType, type TableColumns } from "@components/commons/table"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import { getTableDisplayName, isDatabaseTable } from "@constants/table-names"
 import type { FilterProps } from "@constants/type"
@@ -371,7 +371,8 @@ export default function LichSuDongBo({ sessionId, sessionName }: LichSuDongBoPro
           setFilters(val)
           setCurrentPage(1)
         }}
-        columns={columns}
+        // Table yêu cầu thêm ColumnsType<AnyObject> (từ TableAntdProps) — ép về đúng kiểu prop
+        columns={columns as TableColumns<SyncRecordWithRelations>}
         data={syncHistories}
         pagination={{
           size: "small",
@@ -385,7 +386,6 @@ export default function LichSuDongBo({ sessionId, sessionName }: LichSuDongBoPro
           },
         }}
       />
-
       {/* Modal chi tiết lần đồng bộ */}
       <Modal
         title={

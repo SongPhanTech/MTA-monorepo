@@ -1877,6 +1877,7 @@ export const applyPhoiBangNganHanCourseLabelStyles = async (
     fontFamily?: string
     fontSize?: number
     rowHeight?: number
+    verticalAlign?: "top" | "middle" | "bottom"
   }
 ) => {
   const workbook = new ExcelJS.Workbook()
@@ -1909,8 +1910,10 @@ export const applyPhoiBangNganHanCourseLabelStyles = async (
       const isSerif = /times|georgia|garamond|cambria|palatino|antiqua|schoolbook|constantia|calisto|baskerville|liberation serif|\.vntime|vni-times/i.test(
         fontName
       )
+      // Bỏ `scheme` (font theme major/minor) — nếu giữ, Excel bỏ qua `name` và luôn dùng font theme
+      const { scheme: _scheme, ...baseFont } = cell.font || {}
       cell.font = {
-        ...(cell.font || {}),
+        ...baseFont,
         bold: cell.font?.bold ?? true,
         name: fontName,
         family: isSerif ? 1 : 2,
@@ -1920,7 +1923,7 @@ export const applyPhoiBangNganHanCourseLabelStyles = async (
         ...(cell.alignment || {}),
         wrapText: true,
         horizontal: cell.alignment?.horizontal || "center",
-        vertical: cell.alignment?.vertical || "middle",
+        vertical: options.verticalAlign || cell.alignment?.vertical || "middle",
       }
     })
   })

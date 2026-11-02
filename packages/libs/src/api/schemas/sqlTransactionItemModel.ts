@@ -349,6 +349,7 @@ export const SqlTransactionItemModel = {
   DM_ToChucXaHoi: 'DM_ToChucXaHoi',
   DM_Ngach: 'DM_Ngach',
   DM_BacLuong: 'DM_BacLuong',
+  TuitionPaymentConfig: 'TuitionPaymentConfig',
   TemplateFile: 'TemplateFile',
   AccessRoleGrant: 'AccessRoleGrant',
   AccessPermissionGrant: 'AccessPermissionGrant',
