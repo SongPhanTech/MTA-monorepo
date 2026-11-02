@@ -125,6 +125,7 @@ app.openapi(exportToInternal, async (c) => {
       .map(([name, count]) => `${TABLE_DISPLAY_NAMES[name] || name}: ${count}`)
       .join(", ")
     await markDataSyncHistorySuccess(syncHistoryId, {
+      fileName,
       description: `Đã xuất thành công `,
       recordCounts: {
         ...result.counts,
