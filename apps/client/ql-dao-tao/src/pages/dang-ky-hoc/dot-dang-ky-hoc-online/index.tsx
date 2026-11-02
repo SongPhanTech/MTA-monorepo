@@ -283,11 +283,11 @@ export default function ClassRegisterSession() {
                 Nhật ký đăng ký: thêm {s.createLogs}, cập nhật {s.updateLogs}
               </li>
               <li>
-                Điểm môn (placeholder): thêm {s.createScores}, cập nhật {s.updateScores}, bỏ qua đã
-                có điểm {s.skipScoresWithGrade}
+                Điểm môn: thêm {s.createScores}, cập nhật {s.updateScores}, bỏ qua đã có điểm{" "}
+                {s.skipScoresWithGrade}
               </li>
               <li>
-                Sẽ ẩn (soft-delete): {s.removeLogs} đăng ký, {s.removeScores} điểm trống
+                Số bản ghi đăng ký sẽ được ẩn: {s.removeLogs} đăng ký, {s.removeScores} điểm trống
               </li>
               {s.failed > 0 ? <li>Bản ghi lỗi / bỏ qua: {s.failed}</li> : null}
             </ul>
@@ -495,7 +495,7 @@ export default function ClassRegisterSession() {
               },
               {
                 title: "Thao tác",
-                width: 150,
+                width: 170,
                 align: "center",
                 fixed: "right",
                 render: (_, record) => (
