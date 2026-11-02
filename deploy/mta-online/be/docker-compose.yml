@@ -112,6 +112,23 @@ services:
     networks:
       - mta-net
 
+  mta-be-khao-thi:
+    image: ghcr.io/songphantech/mta-be-khao-thi:latest
+    pull_policy: never
+    container_name: mta-be-khao-thi
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      TZ: Asia/Ho_Chi_Minh
+    ports:
+      - "3043:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - mta-net
+
   mta-be-ql-dao-tao:
     image: ghcr.io/songphantech/mta-be-ql-dao-tao:latest
     pull_policy: never
