@@ -80,9 +80,7 @@ app.openapi(exportToInternal, async (c) => {
   try {
     const result = await exportRegistrationResults(classRegisterSessionId)
 
-    const safeName = (result.meta.sessionName || "dot-dang-ky")
-      .replace(/[\\/:*?"<>|]/g, "_")
-      .trim()
+    const safeName = (result.meta.sessionName || "dot-dang-ky").replace(/[\\/:*?"<>|]/g, "_").trim()
     const fileName = `export-ket-qua-dang-ky-${safeName}${SYNC_FILE_EXT}`
 
     // Không trả plaintext data — chỉ gói mã hóa
@@ -109,7 +107,36 @@ app.openapi(exportToInternal, async (c) => {
       syncHistoryId = history.id
     }
 
-    await markDataSyncHistorySuccess(syncHistoryId)
+    const TABLE_DISPLAY_NAMES: Record<string, string> = {
+      ClassRegisterLogs: "Nhật ký đăng ký học",
+      StudentSubjectScore: "Điểm môn học sau đăng ký",
+      Student: "Sinh viên",
+      UserProfile: "Hồ sơ liên quan",
+      SubjectClass: "Lớp học phần đã đăng ký",
+      SubjectVersion: "Môn học",
+      ClassRegisterSession: "Thông tin đợt đăng ký",
+      Semester: "Học kỳ",
+      SchoolYear: "Năm học",
+    }
+
+    const exportedCount = Object.values(result.counts).reduce((total, count) => total + count, 0)
+    const countDetail = Object.entries(result.counts)
+      .filter(([name]) => !name.startsWith("_"))
+      .map(([name, count]) => `${TABLE_DISPLAY_NAMES[name] || name}: ${count}`)
+      .join(", ")
+    await markDataSyncHistorySuccess(syncHistoryId, {
+      fileName,
+      description: `Đã xuất thành công `,
+      recordCounts: {
+        ...result.counts,
+        categories: Object.keys(result.counts)
+          .filter((name) => !name.startsWith("_"))
+          .map((name) => ({
+            key: name,
+            label: TABLE_DISPLAY_NAMES[name] || name,
+          })),
+      },
+    })
 
     return c.json(
       {

@@ -61,8 +61,6 @@ import type { GetPublicSurveysV2ResultDataItemSurveyTopicType } from './getPubli
  */
 export type GetPublicSurveysV2ResultDataItemSurveyTopic = {
   id: string;
-  /** @nullable */
-  code?: string | null;
   active?: boolean;
   /** @nullable */
   description?: string | null;
@@ -86,6 +84,8 @@ export type GetPublicSurveysV2ResultDataItemSurveyTopic = {
   sThietBiTao?: string | null;
   /** @nullable */
   sThietBiSua?: string | null;
+  /** @nullable */
+  code?: string | null;
   name: string;
   /** @nullable */
   type?: GetPublicSurveysV2ResultDataItemSurveyTopicType;

@@ -495,7 +495,7 @@ export default function ClassRegisterSession() {
               },
               {
                 title: "Thao tác",
-                width: 170,
+                width: 150,
                 align: "center",
                 fixed: "right",
                 render: (_, record) => (

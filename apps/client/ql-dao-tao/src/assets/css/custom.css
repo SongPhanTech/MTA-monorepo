@@ -349,14 +349,7 @@
 
 /* Biểu đồ thống kê đăng ký — full width, tránh thừa khoảng trắng */
 .thong-ke-chart-wrap {
-  width: 100% !important;
-}
-
-.thong-ke-chart-wrap > div,
-.thong-ke-chart-wrap canvas,
-.thong-ke-chart-wrap svg {
-  width: 100% !important;
-  max-width: 100% !important;
+  width: 100%;
 }
 
 /* Trang chi tiết đợt ĐK học — gọn 1 màn hình, chỉ scroll trong table */

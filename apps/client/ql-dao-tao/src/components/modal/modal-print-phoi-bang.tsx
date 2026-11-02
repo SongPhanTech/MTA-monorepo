@@ -1,5 +1,6 @@
 import useSpinner from "@hooks/spinner"
 import { exportPhoiBangNganHan } from "@workspace/libs/api/training"
+import { ExportPhoiBangNganHanBodyVerticalAlign } from "@workspace/libs/api/schemas"
 import { Button, Form, Input, InputNumber, Modal, Radio, Select, message } from "antd"
 import { saveAs } from "file-saver"
 import { useEffect } from "react"
@@ -30,11 +31,17 @@ type FormValues = {
   courseTextVi2: string
   fontFamily: string
   fontSize: number
+  verticalAlign: ExportPhoiBangNganHanBodyVerticalAlign
   printVariant: "civilian" | "military"
 }
 
 const DEFAULT_EN_1 = "FOR COMPLETING THE COURSE FOR TECHNICAL AND LOGISTICS"
 const DEFAULT_VI_1 = "ĐÀO TẠO"
+const VERTICAL_ALIGN_OPTIONS = [
+  { label: "Top — căn trên", value: ExportPhoiBangNganHanBodyVerticalAlign.top },
+  { label: "Middle — căn giữa", value: ExportPhoiBangNganHanBodyVerticalAlign.middle },
+  { label: "Bottom — căn dưới", value: ExportPhoiBangNganHanBodyVerticalAlign.bottom },
+]
 const FONT_OPTIONS = [
   {
     label: "Serif (có chân)",
@@ -97,6 +104,7 @@ const ModalPrintPhoiBang = () => {
       courseTextVi2: input.courseTextVi2 || "",
       fontFamily: "Cambria",
       fontSize: 12,
+      verticalAlign: ExportPhoiBangNganHanBodyVerticalAlign.middle,
       printVariant: input.includeNamePrefix ? "civilian" : "military",
     })
   }, [form, input, isOpen])
@@ -123,6 +131,7 @@ const ModalPrintPhoiBang = () => {
         courseTextVi2: values.courseTextVi2,
         fontFamily: values.fontFamily,
         fontSize: values.fontSize,
+        verticalAlign: values.verticalAlign,
       })
 
       if (res.status === 200) {
@@ -161,7 +170,7 @@ const ModalPrintPhoiBang = () => {
       <Form form={form} layout="vertical" className="mt-2">
         <div className="mb-4 rounded border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900">
           Cụm trái (English) = tên ngành tiếng Anh · Cụm phải (dưới ĐÀO TẠO) = tên đối tượng đào
-          tạo. Có thể sửa nội dung, font và cỡ chữ trước khi xuất. Chiều cao dòng lấy theo mẫu.
+          tạo. Có thể sửa nội dung, font, cỡ chữ và căn dọc trước khi xuất. Chiều cao dòng lấy theo mẫu.
         </div>
 
         <Form.Item
@@ -213,7 +222,7 @@ const ModalPrintPhoiBang = () => {
           </div>
         </div>
 
-        <div className="mt-2 grid grid-cols-1 gap-3 md:grid-cols-2">
+        <div className="mt-2 grid grid-cols-1 gap-3 md:grid-cols-3">
           <Form.Item
             name="fontFamily"
             label="Font chữ 2 dòng tiêu đề"
@@ -247,6 +256,13 @@ const ModalPrintPhoiBang = () => {
           </Form.Item>
           <Form.Item name="fontSize" label="Cỡ chữ (pt)" rules={[{ required: true }]}>
             <InputNumber className="w-full" min={8} max={36} step={0.5} />
+          </Form.Item>
+          <Form.Item
+            name="verticalAlign"
+            label="Căn lề dọc 2 dòng tiêu đề"
+            rules={[{ required: true, message: "Chọn kiểu căn lề dọc" }]}
+          >
+            <Select options={VERTICAL_ALIGN_OPTIONS} />
           </Form.Item>
         </div>
       </Form>

@@ -36,6 +36,109 @@ export type ImportTrainingDataResult = {
   sessionName: string
   steps: ImportStepResult[]
   warnings: string[]
+  /** Các bản ghi không thể nhập; dùng để quyết định trạng thái lịch sử đồng bộ. */
+  errors: string[]
+}
+
+const MODEL_LABELS: Record<string, string> = {
+  AcademicRankingConvert: "quy đổi xếp loại",
+  TrainingCourse: "khóa đào tạo",
+  TrainingField: "ngành đào tạo",
+  TrainingMajor: "chuyên ngành",
+  Student: "sinh viên",
+  SubjectClass: "lớp học phần",
+  ClassRegisterSession: "đợt đăng ký học",
+}
+
+function fieldLabel(field: string) {
+  return field
+    .replace(/Id$/, "")
+    .replace(/([A-Z])/g, " $1")
+    .trim()
+}
+
+/** Không đưa lỗi Prisma ra màn hình: nêu bản ghi, dữ liệu tham chiếu và cách xử lý. */
+function importRowError(modelName: string, row: JsonRecord, error: unknown): string {
+  const id = row[pkField(modelName)]
+  const location = `${MODEL_LABELS[modelName] ?? modelName}${id ? ` (mã: ${String(id)})` : ""}`
+  const technical = error instanceof Error ? error.message : String(error)
+  const constraintField = technical.match(
+    /constraint:\s*`?[^`"\s]*?_([A-Za-z][A-Za-z0-9]*Id)_fkey/i
+  )?.[1]
+  const references = Object.entries(row)
+    .filter(
+      ([key, value]) =>
+        key !== pkField(modelName) &&
+        key.endsWith("Id") &&
+        value != null &&
+        value !== "" &&
+        (!constraintField || key === constraintField)
+    )
+    .map(([key, value]) => `${fieldLabel(key)} = ${String(value)}`)
+
+  if (/foreign key|P2003|constraint/i.test(technical)) {
+    const referenceText =
+      references.length > 0 ? ` Giá trị cần đối chiếu: ${references.join("; ")}.` : ""
+    return `Bản ghi ${location} không thể nhập vì thiếu hoặc sai dữ liệu tham chiếu.${referenceText} Kiểm tra danh mục/bản ghi liên quan tại nguồn hoặc bổ sung danh mục đó vào hệ thống đích, sau đó xuất file và đồng bộ lại.`
+  }
+  if (/unique|P2002/i.test(technical)) {
+    return `Bản ghi ${location} bị trùng với dữ liệu hiện có. Kiểm tra mã định danh của bản ghi ở dữ liệu nguồn rồi đồng bộ lại.`
+  }
+  return `Bản ghi ${location} có dữ liệu không hợp lệ hoặc thiếu trường bắt buộc. Kiểm tra lại dữ liệu nguồn của bản ghi này rồi đồng bộ lại.`
+}
+
+export function getImportFailureMessage(result: ImportTrainingDataResult): string | undefined {
+  if (result.errors.length === 0) return undefined
+  const displayed = result.errors.slice(0, 20)
+  const remaining = result.errors.length - displayed.length
+  return [
+    `Không hoàn tất đồng bộ: có ${result.errors.length} bản ghi cần xử lý.`,
+    ...displayed.map((error, index) => `${index + 1}. ${error}`),
+    ...(remaining > 0
+      ? [
+          `Còn ${remaining} lỗi khác. Vui lòng chỉnh dữ liệu nguồn/danh mục tham chiếu trước khi đồng bộ lại.`,
+        ]
+      : []),
+  ].join("\n")
+}
+
+const IMPORT_TABLE_DISPLAY_NAMES: Record<string, string> = {
+  ClassRegisterSession: "Đợt đăng ký",
+  ClassRegisterLogs: "Nhật ký đăng ký học",
+  StudentSubjectScore: "Điểm môn học sau đăng ký",
+  Student: "Sinh viên",
+  UserProfile: "Hồ sơ liên quan",
+  SubjectClass: "Lớp học phần đã đăng ký",
+  SubjectVersion: "Môn học",
+  Semester: "Học kỳ",
+  SchoolYear: "Năm học",
+  FixedClass: "Lớp quản lý",
+  ClassSchedule: "Lịch học",
+  SubjectClassTime: "Thời khóa biểu",
+  Curriculum: "Chương trình đào tạo",
+  CurriculumVersion: "Khung CTĐT",
+  TrainingCourse: "Khóa đào tạo",
+}
+
+export function getImportSuccessDescription(result: ImportTrainingDataResult): string {
+  const imported = result.steps.reduce((total, step) => total + step.count, 0)
+  const detail = result.steps
+    .filter((step) => step.count > 0 && !step.table.startsWith("_") && !step.table.includes("("))
+    .map((step) => `${IMPORT_TABLE_DISPLAY_NAMES[step.table] || step.table}: ${step.count}`)
+    .join(", ")
+  const warningCount = result.warnings.length
+  return `Đã nhập/cập nhật thành công ${imported} bản ghi${detail ? ` (${detail})` : ""}.${warningCount ? ` Có ${warningCount} lưu ý đã được hệ thống xử lý.` : ""}`
+}
+
+export function getImportExceptionMessage(error: unknown): string {
+  const message = error instanceof Error ? error.message : ""
+  if (/phiên bản file|version/i.test(message))
+    return `${message}. Hãy xuất lại file từ phiên bản hệ thống được hỗ trợ rồi đồng bộ lại.`
+  if (/ClassRegisterSession|đợt đăng ký/i.test(message))
+    return "File đồng bộ thiếu thông tin đợt đăng ký học. Kiểm tra dữ liệu nguồn và xuất lại file trước khi đồng bộ."
+  if (/khối data|parse|decrypt|signature/i.test(message))
+    return "File đồng bộ không hợp lệ hoặc đã bị thay đổi. Hãy xuất lại file từ hệ thống nguồn rồi thử lại."
+  return "Không thể nhập dữ liệu do file hoặc dữ liệu nguồn không hợp lệ. Kiểm tra lại file xuất và các danh mục tham chiếu trước khi đồng bộ lại."
 }
 
 const FIXED_CLASS_ROLE_FIELDS = [
@@ -339,11 +442,7 @@ async function importCreateMany(
           await delegate.createMany({ data: [row], skipDuplicates: true })
           imported += 1
         } catch (rowError) {
-          warnings.push(
-            `${modelName}/${String(row[pkField(modelName)])}: ${
-              rowError instanceof Error ? rowError.message : "import thất bại"
-            }`
-          )
+          warnings.push(`LỖI: ${importRowError(modelName, row, rowError)}`)
         }
       }
     }
@@ -383,7 +482,9 @@ async function importUpsert(
     let prepared = prepareRow(modelName, raw, options)
     const id = prepared[pk]
     if (!id) {
-      warnings.push(`${modelName}: bỏ qua bản ghi thiếu ${pk}`)
+      warnings.push(
+        `LỖI: Bản ghi ${MODEL_LABELS[modelName] ?? modelName} không có mã ${pk}. Bổ sung mã định danh ở dữ liệu nguồn rồi đồng bộ lại.`
+      )
       continue
     }
 
@@ -478,15 +579,11 @@ async function importUpsert(
                 })
                 imported += 1
                 warnings.push(
-                  `${modelName}/${String(id)}: upsert lại sau khi null FK tùy chọn (${
-                    error instanceof Error ? error.message : "lỗi"
-                  })`
+                  `CẢNH BÁO: Bản ghi ${MODEL_LABELS[modelName] ?? modelName} (mã: ${String(id)}) đã được nhập sau khi bỏ qua một liên kết tùy chọn không còn tồn tại.`
                 )
               } catch (retryError) {
                 warnings.push(
-                  `${modelName}/${String(id)}: ${
-                    retryError instanceof Error ? retryError.message : "upsert thất bại"
-                  }`
+                  `LỖI: ${importRowError(modelName, rawMap.get(String(id)) ?? prepared, retryError)}`
                 )
               }
             }
@@ -524,7 +621,9 @@ async function ensureMissingTrainingFields(
       (asRows(data, "DM_DonVi")[0]?.Id as string | undefined)
 
     if (!organizationId) {
-      warnings.push(`TrainingField/${id}: không tạo được stub vì thiếu organizationId`)
+      warnings.push(
+        `LỖI: Không thể tạo danh mục ngành đào tạo (mã: ${id}) vì thiếu đơn vị quản lý. Bổ sung đơn vị quản lý hoặc danh mục ngành đào tạo ở dữ liệu nguồn rồi đồng bộ lại.`
+      )
       continue
     }
 
@@ -544,9 +643,7 @@ async function ensureMissingTrainingFields(
       created += 1
       warnings.push(`TrainingField/${id}: đã tạo stub vì file JSON thiếu danh mục ngành`)
     } catch (error) {
-      warnings.push(
-        `TrainingField/${id}: ${error instanceof Error ? error.message : "không tạo được stub"}`
-      )
+      warnings.push(`LỖI: ${importRowError("TrainingField", { id }, error)}`)
     }
   }
 
@@ -572,9 +669,7 @@ async function patchFixedClassRoles(rows: JsonRecord[], warnings: string[]): Pro
           await prisma.fixedClass.update({ where: { id }, data })
           updated += 1
         } catch (error) {
-          warnings.push(
-            `FixedClass/${id} roles: ${error instanceof Error ? error.message : "update thất bại"}`
-          )
+          warnings.push(`LỖI: ${importRowError("FixedClass", raw, error)}`)
         }
       })
     )
@@ -628,7 +723,7 @@ async function importJoinTable(
           imported += 1
         } catch (rowError) {
           warnings.push(
-            `${table}/${row.A}-${row.B}: ${rowError instanceof Error ? rowError.message : "import thất bại"}`
+            `LỖI: Không thể liên kết dữ liệu ${table} (${row.A} – ${row.B}) vì một bản ghi tham chiếu chưa có. Bổ sung các bản ghi liên quan từ dữ liệu nguồn rồi đồng bộ lại.`
           )
         }
       }
@@ -688,7 +783,9 @@ export async function importTrainingDataFromJson(
     currentTableIndex++
     const rows = asRows(data, table)
     if (rows.length > 0 && progressCb) {
-      await progressCb(`Đang nhập ${table} (${rows.length} dòng)... [${currentTableIndex}/${totalTables}]`)
+      await progressCb(
+        `Đang nhập ${table} (${rows.length} dòng)... [${currentTableIndex}/${totalTables}]`
+      )
     }
     if (table === "DM_DonVi" && rows.length > 0) {
       const withoutParent = rows.map((row) => ({ ...row, sParentId: null, sTruongDonVi: null }))
@@ -708,7 +805,9 @@ export async function importTrainingDataFromJson(
     currentTableIndex++
     const rows = asRows(data, table)
     if (rows.length > 0 && progressCb) {
-      await progressCb(`Đang nhập ${table} (${rows.length} dòng)... [${currentTableIndex}/${totalTables}]`)
+      await progressCb(
+        `Đang nhập ${table} (${rows.length} dòng)... [${currentTableIndex}/${totalTables}]`
+      )
     }
     const count = await importUpsert(table, rows, warnings)
     if (count > 0 || rows.length > 0) {
@@ -727,9 +826,13 @@ export async function importTrainingDataFromJson(
     currentTableIndex++
     const rows = asRows(data, table)
     if (rows.length > 0) {
-      console.log(`[data-sync] bắt đầu ${table} (${rows.length} dòng) [${currentTableIndex}/${totalTables}]...`)
+      console.log(
+        `[data-sync] bắt đầu ${table} (${rows.length} dòng) [${currentTableIndex}/${totalTables}]...`
+      )
       if (progressCb) {
-        await progressCb(`Đang nhập ${table} (${rows.length} dòng)... [${currentTableIndex}/${totalTables}]`)
+        await progressCb(
+          `Đang nhập ${table} (${rows.length} dòng)... [${currentTableIndex}/${totalTables}]`
+        )
       }
     }
     const nullFields =
@@ -762,7 +865,8 @@ export async function importTrainingDataFromJson(
   // 6) Patch ClassSchedule self-FK
   if (progressCb) await progressCb("Đang liên kết thời khóa biểu...")
   const schedules = asRows(data, "ClassSchedule").filter(
-    (s) => s.originalScheduleId && typeof s.id === "string" && typeof s.originalScheduleId === "string"
+    (s) =>
+      s.originalScheduleId && typeof s.id === "string" && typeof s.originalScheduleId === "string"
   )
   let scheduleLinks = 0
   const CONCURRENCY = 15
@@ -777,11 +881,7 @@ export async function importTrainingDataFromJson(
           })
           scheduleLinks += 1
         } catch (error) {
-          warnings.push(
-            `ClassSchedule/${row.id} original: ${
-              error instanceof Error ? error.message : "update thất bại"
-            }`
-          )
+          warnings.push(`LỖI: ${importRowError("ClassSchedule", row, error)}`)
         }
       })
     )
@@ -831,10 +931,7 @@ export async function importTrainingDataFromJson(
     asRows(data, "_AcademicWarningToAcademicWarningRule") as Array<{ A?: string; B?: string }>,
     warnings
   )
-  if (
-    academicWarningJoin > 0 ||
-    asRows(data, "_AcademicWarningToAcademicWarningRule").length > 0
-  ) {
+  if (academicWarningJoin > 0 || asRows(data, "_AcademicWarningToAcademicWarningRule").length > 0) {
     steps.push({ table: "_AcademicWarningToAcademicWarningRule", count: academicWarningJoin })
   }
 
@@ -861,6 +958,7 @@ export async function importTrainingDataFromJson(
     sessionName: String(session.name),
     steps,
     warnings,
+    errors: warnings.filter((warning) => warning.startsWith("LỖI:")),
   }
 }
 
@@ -887,13 +985,14 @@ export async function processImportFromFile(
 }
 
 async function finishImportJob(syncHistoryId: string, result: ImportTrainingDataResult) {
-  const description =
-    result.warnings.length > 0
-      ? result.warnings.slice(0, 80).join("\n")
-      : result.steps.map((s) => `${s.table}: ${s.count}`).join(", ")
+  const failureMessage = getImportFailureMessage(result)
+  if (failureMessage) {
+    await markDataSyncHistoryFailed(syncHistoryId, failureMessage)
+    return
+  }
   await markDataSyncHistorySuccess(syncHistoryId, {
     classRegisterSessionId: result.sessionId,
-    description,
+    description: getImportSuccessDescription(result),
   })
   console.log(
     `[data-sync] import xong history=${syncHistoryId} session=${result.sessionName} warnings=${result.warnings.length}`
@@ -917,7 +1016,7 @@ export function runImportTrainingDataJob(syncHistoryId: string, payload: unknown
       })
       await finishImportJob(syncHistoryId, result)
     } catch (error) {
-      const message = "Không nhập được dữ liệu"
+      const message = getImportExceptionMessage(error)
       console.error(`[data-sync] import lỗi history=${syncHistoryId}`, error)
       await markDataSyncHistoryFailed(syncHistoryId, message).catch((e) => {
         console.error("[data-sync] không ghi được FAILED", e)
@@ -937,7 +1036,7 @@ export function runImportTrainingDataJobFromRedis(syncHistoryId: string) {
       })
       await finishImportJob(syncHistoryId, result)
     } catch (error) {
-      const message = "Không nhập được dữ liệu"
+      const message = getImportExceptionMessage(error)
       console.error(`[data-sync] import lỗi history=${syncHistoryId}`, error)
       await markDataSyncHistoryFailed(syncHistoryId, message).catch((e) => {
         console.error("[data-sync] không ghi được FAILED", e)

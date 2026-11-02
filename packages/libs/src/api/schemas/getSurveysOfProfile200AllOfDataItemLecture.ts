@@ -90,6 +90,8 @@ export type GetSurveysOfProfile200AllOfDataItemLecture = {
   /** @nullable */
   lectureID?: string | null;
   /** @nullable */
+  TKPUcode?: string | null;
+  /** @nullable */
   serviceDate?: string | null;
   /** @nullable */
   organization: GetSurveysOfProfile200AllOfDataItemLectureOrganization;

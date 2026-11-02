@@ -10,11 +10,11 @@ import { EquivalencySide } from "@workspace/db/client"
 import { classRegister, useGetClassesInfo, useGetStudentInfo } from "@workspace/libs/api/portal"
 import type { GetClassesInfo200ItemSubjectClassItem } from "@workspace/libs/api/schemas/getClassesInfo200ItemSubjectClassItem"
 import type { GetClassRegisterSession200ItemCreditLimitItem } from "@workspace/libs/api/schemas/getClassRegisterSession200ItemCreditLimitItem"
-import { Button, Checkbox, message, Popconfirm, Spin } from "antd"
+import { Button, Checkbox, message, Popconfirm, Spin, Tooltip } from "antd"
 import clsx from "clsx"
 import dayjs from "dayjs"
-import { CircleAlertIcon, LogOutIcon } from "lucide-react"
-import { useMemo, useRef, useState } from "react"
+import { CheckCircle2, CircleAlertIcon, LogOutIcon } from "lucide-react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import registeredCoursesListHelper from "./helper"
 
 export interface ClassRegisterSessionProps {
@@ -45,6 +45,17 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
   const [curriculumVersionId, setCurriculumVersionId] = useState(
     curriculumVersions.length > 0 ? curriculumVersions[0].id : ""
   )
+
+  useEffect(() => {
+    if (curriculumVersions.length > 0) {
+      setCurriculumVersionId((prev) => {
+        if (prev && curriculumVersions.some((cv) => cv.id === prev)) {
+          return prev
+        }
+        return curriculumVersions[0].id
+      })
+    }
+  }, [curriculumVersions])
   const [byCurriculum, setByCurriculum] = useState(1)
   /** Chỉ khóa đúng dòng lớp đang chờ job — không overlay toàn trang */
   const [pendingSubjectClassIds, setPendingSubjectClassIds] = useState<Set<string>>(() => new Set())
@@ -192,31 +203,11 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
 
       return res
     },
-    onSuccess: (res, subjectClassIds) => {
+    onSuccess: (res) => {
       const status = Number(res?.status)
       if (status === 200) {
         refetchClassesInfo()
         message.success("Đăng ký thành công")
-
-        const registeredIds = new Set(
-          (registeredClasses ?? []).map((c) => c.id).filter((id): id is string => Boolean(id))
-        )
-        const newlyRegistered = classesInfoList
-          .flatMap((e) => (Array.isArray(e?.subjectClass) ? e.subjectClass : []))
-          .filter((sc) => subjectClassIds.includes(sc?.id ?? ""))
-
-        const nextRegistered = [
-          ...(registeredClasses ?? []),
-          ...newlyRegistered.filter((sc) => sc?.id && !registeredIds.has(sc.id)),
-        ]
-
-        const conflicts = registrationScheduleHelper.getConflictSummaries(nextRegistered)
-        if (conflicts.some((c) => subjectClassIds.includes(c.courseId))) {
-          message.warning(
-            "Lịch học bị trùng tiết với môn đã đăng ký. Vui lòng hủy đăng ký hoặc chọn lớp khác để thay đổi.",
-            6
-          )
-        }
       } else if (status === 429 || status === 503) {
         const data = (res as { data?: { message?: string } }).data
         message.warning(
@@ -232,13 +223,11 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
       message.error(error?.message || "Đăng ký thất bại")
     },
     onSettled: (_data, _error, subjectClassIds) => {
-      const subjectClassId = subjectClassIds[0]
-      if (!subjectClassId) return
-      pendingLockRef.current.delete(subjectClassId)
+      subjectClassIds.forEach((subjectClassId) => pendingLockRef.current.delete(subjectClassId))
       setPendingSubjectClassIds((prev) => {
-        if (!prev.has(subjectClassId)) return prev
+        if (!subjectClassIds.some((subjectClassId) => prev.has(subjectClassId))) return prev
         const next = new Set(prev)
-        next.delete(subjectClassId)
+        subjectClassIds.forEach((subjectClassId) => next.delete(subjectClassId))
         return next
       })
     },
@@ -580,7 +569,13 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
                   registeredClasses?.reduce((acc, curr) => acc + (curr?.credit || 0), 0) ?? 0
                 const isRowPending = pendingSubjectClassIds.has(record?.id ?? "")
 
-                const { isDisabled } = registeredCoursesListHelper.getRegisterState({
+                const {
+                  isDisabled,
+                  isRegistered,
+                  isMaxed,
+                  isOverMaxCredit,
+                  siblingAlreadyRegistered,
+                } = registeredCoursesListHelper.getRegisterState({
                   record,
                   maxCredit: studentData?.maxCredit as number,
                   totalRegisteredCredit: totalCredit,
@@ -589,15 +584,14 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
                   isRowPending,
                 })
 
-                const handleConfirm = () => {
-                  if (!record?.id || isDisabled || pendingLockRef.current.has(record.id)) return
-                  handleClassRegister([record.id])
+                if (isRegistered) {
+                  return (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-200">
+                      <CheckCircle2 size={13} className="text-emerald-600" />
+                      Đã đăng ký
+                    </span>
+                  )
                 }
-
-                const willConflict = registrationScheduleHelper.wouldConflictWithRegistered(
-                  record as GetClassesInfo200ItemSubjectClassItem,
-                  registeredClasses ?? []
-                )
 
                 if (isRowPending) {
                   return (
@@ -612,35 +606,59 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
                   )
                 }
 
+                const hasScheduleConflict = registrationScheduleHelper.wouldConflictWithRegistered(
+                  record as GetClassesInfo200ItemSubjectClassItem,
+                  registeredClasses ?? []
+                )
+                const isRegisterDisabled = isDisabled || hasScheduleConflict
+
+                let disabledReason = ""
+                if (isMaxed) {
+                  disabledReason = "Lớp học phần đã đủ số lượng sinh viên"
+                } else if (siblingAlreadyRegistered) {
+                  disabledReason = "Bạn đã đăng ký một lớp khác của học phần này"
+                } else if (isOverMaxCredit) {
+                  disabledReason = `Vượt quá số tín chỉ tối đa (${studentData?.maxCredit ?? ""})`
+                } else if (hasScheduleConflict) {
+                  disabledReason = "Trùng tiết học với học phần đã đăng ký"
+                }
+
+                const handleConfirm = () => {
+                  if (!record?.id || isRegisterDisabled || pendingLockRef.current.has(record.id))
+                    return
+                  handleClassRegister([record.id])
+                }
+
+                const registerButton = (
+                  <Button
+                    disabled={isRegisterDisabled}
+                    type="text"
+                    className={cn(
+                      "flex items-center justify-center gap-2 text-primary",
+                      isRegisterDisabled && "cursor-not-allowed opacity-50"
+                    )}
+                  >
+                    <LogOutIcon />
+                    Đăng ký
+                  </Button>
+                )
+
+                if (isRegisterDisabled) {
+                  return (
+                    <Tooltip title={disabledReason}>
+                      <span>{registerButton}</span>
+                    </Tooltip>
+                  )
+                }
+
                 return (
                   <Popconfirm
-                    title={
-                      willConflict
-                        ? "Lớp này trùng tiết với môn đã đăng ký. Vẫn đăng ký?"
-                        : "Xác nhận đăng ký học phần?"
-                    }
-                    description={
-                      willConflict
-                        ? "Sau khi đăng ký, vui lòng hủy một trong các lớp trùng lịch hoặc chọn lớp khác."
-                        : undefined
-                    }
+                    title="Xác nhận đăng ký học phần?"
                     okText="Đăng ký"
                     cancelText="Đóng"
-                    okButtonProps={willConflict ? { danger: true } : undefined}
-                    disabled={isDisabled}
                     onConfirm={handleConfirm}
                   >
-                    <Button
-                      disabled={isDisabled}
-                      type="text"
-                      className={cn(
-                        "flex items-center justify-center gap-2 text-primary",
-                        isDisabled && "cursor-not-allowed opacity-50"
-                      )}
-                    >
-                      <LogOutIcon />
-                      Đăng ký
-                    </Button>
+                    {registerButton}
                   </Popconfirm>
                 )
               },

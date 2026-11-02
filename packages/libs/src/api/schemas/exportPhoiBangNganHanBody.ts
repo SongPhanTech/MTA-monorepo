@@ -80,6 +80,7 @@ Một số endpoint đặc biệt:
 - Ngày giờ theo chuẩn **ISO 8601** (UTC) khi có trong response.
  * OpenAPI spec version: 1.0.0
  */
+import type { ExportPhoiBangNganHanBodyVerticalAlign } from './exportPhoiBangNganHanBodyVerticalAlign';
 
 export type ExportPhoiBangNganHanBody = {
   trainingObjectTypeId?: string;
@@ -97,4 +98,5 @@ export type ExportPhoiBangNganHanBody = {
   fontFamily?: string;
   fontSize?: number;
   rowHeight?: number;
+  verticalAlign?: ExportPhoiBangNganHanBodyVerticalAlign;
 };

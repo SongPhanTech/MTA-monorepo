@@ -311,30 +311,116 @@ const makeChiefTitleBold = (xml: string) =>
     })
   })
 
+/** Bảng tiêu chí / dữ liệu khảo sát — không đụng layout bảng thông tin GV */
+const isCriteriaDataTable = (table: string) => {
+  const tableText = table.replace(/<[^>]+>/g, "")
+  return (
+    (tableText.includes("Mức") && tableText.includes("Tiêu chí")) ||
+    /ĐGTB|dataNormal|dataSpecial|#data\b|Rất không đồng ý|Rất không hài lòng/i.test(table) ||
+    /\{#data|\{#dataNormal|\{#dataSpecial|\{muc\d/i.test(table)
+  )
+}
+
 // Keep the report information in the compact two-column layout used in the
-// approved form: the organization and criteria at left, its code at right.
-const adaptReportInfoLayout = (xml: string) =>
-  xml.replace(/<w:p\b[^>]*>[\s\S]*?<\/w:p>/g, (paragraph) => {
+// approved form: the organization, lecturer and criteria at left, its code at right.
+const adaptReportInfoLayout = (xml: string) => {
+  // Move "Kết quả đánh giá theo" into Table 1 if it is outside (e.g. from older templates)
+  const tblRegex = /<w:tbl\b[\s\S]*?<\/w:tbl>/g
+  let match: RegExpExecArray | null
+  let table1Xml: string | null = null
+  let table1Index = -1
+  let table2Index = -1
+
+  while ((match = tblRegex.exec(xml)) !== null) {
+    const text = match[0].replace(/<[^>]+>/g, "")
+    if (isCriteriaDataTable(match[0])) continue
+    if (
+      /(?:Khoa|Bộ môn|Giảng viên|Họ và tên giảng viên)/i.test(text) &&
+      !text.includes("HỌC VIỆN KĨ THUẬT QUÂN SỰ")
+    ) {
+      table1Xml = match[0]
+      table1Index = match.index
+      // Bảng kế tiếp phải là bảng tiêu chí — bỏ qua nếu không phải
+      const afterInfo = xml.slice(match.index + match[0].length)
+      const nextMatch = /<w:tbl\b[\s\S]*?<\/w:tbl>/g.exec(afterInfo)
+      if (nextMatch && isCriteriaDataTable(nextMatch[0])) {
+        table2Index = match.index + match[0].length + (nextMatch.index ?? 0)
+      } else if (nextMatch) {
+        table2Index = match.index + match[0].length + (nextMatch.index ?? 0)
+      }
+      break
+    }
+  }
+
+  let adjustedXml = xml
+  if (table1Xml && table1Index !== -1) {
+    const table1Text = table1Xml.replace(/<[^>]+>/g, "")
+    const hasCriteriaInside = /Kết quả đánh giá theo/i.test(table1Text)
+
+    if (!hasCriteriaInside && table2Index > table1Index) {
+      const betweenXml = adjustedXml.substring(table1Index + table1Xml.length, table2Index)
+      const criteriaMatch = betweenXml.match(
+        /<w:p\b[\s\S]*?Kết quả đánh giá theo[\s\S]*?<\/w:p>/
+      )
+      if (criteriaMatch) {
+        const cleanBetweenXml = betweenXml.replace(criteriaMatch[0], "")
+        const pPr =
+          '<w:pPr><w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="auto"/><w:ind w:left="0" w:hanging="0"/><w:rPr><w:rFonts w:cs="Times New Roman"/><w:sz w:val="26"/><w:szCs w:val="26"/></w:rPr></w:pPr>'
+        const rPr =
+          '<w:rPr><w:rFonts w:cs="Times New Roman"/><w:sz w:val="26"/><w:szCs w:val="26"/></w:rPr>'
+        const criteriaRow = `
+          <w:tr w:rsidR="005B284C">
+            <w:tc>
+              <w:tcPr><w:tcW w:w="9072" w:type="dxa"/><w:gridSpan w:val="2"/><w:vAlign w:val="center"/></w:tcPr>
+              <w:p>${pPr}<w:r>${rPr}<w:t xml:space="preserve">Kết quả đánh giá theo {soTieuChi} tiêu chí</w:t></w:r></w:p>
+            </w:tc>
+          </w:tr>`
+
+        const newTable1 = table1Xml.replace("</w:tbl>", criteriaRow + "</w:tbl>")
+        adjustedXml =
+          adjustedXml.substring(0, table1Index) +
+          newTable1 +
+          cleanBetweenXml +
+          adjustedXml.substring(table2Index)
+      }
+    }
+  }
+
+  return adjustedXml.replace(/<w:p\b[^>]*>[\s\S]*?<\/w:p>/g, (paragraph) => {
     const paragraphText = paragraph.replace(/<[^>]+>/g, "").replace(/\s+/g, " ")
 
-    if (/^(?:\d+\.\s*)?(?:Khoa|Bộ môn|Đơn vị)\s*:/i.test(paragraphText)) {
+    if (
+      /^(?:\d+\.\s*)?(?:Họ và tên giảng viên|Giảng viên|Khoa|Bộ môn|Đơn vị)\s*:/i.test(
+        paragraphText
+      )
+    ) {
       return paragraph
         .replace(/<w:pStyle\b[^>]*\/>/g, "")
         .replace(/<w:numPr>[\s\S]*?<\/w:numPr>/g, "")
+        .replace(/<w:ind\b[^>]*\/>/g, '<w:ind w:left="0" w:hanging="0"/>')
+        .replace(/<w:spacing\b[^>]*\/>/g, '<w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="auto"/>')
     }
 
-    if (/^Mã\s*(?:khoa|bộ môn|đơn vị)/i.test(paragraphText)) {
-      return paragraph.replace(/<w:jc w:val="center"\/>/g, '<w:jc w:val="left"/>')
+    if (/^Mã\s*(?:giảng viên|khoa|bộ môn|đơn vị)/i.test(paragraphText)) {
+      return paragraph
+        .replace(/<w:jc w:val="center"\/>/g, '<w:jc w:val="left"/>')
+        .replace(/<w:pStyle\b[^>]*\/>/g, "")
+        .replace(/<w:numPr>[\s\S]*?<\/w:numPr>/g, "")
+        .replace(/<w:ind\b[^>]*\/>/g, '<w:ind w:left="0" w:hanging="0"/>')
+        .replace(/<w:spacing\b[^>]*\/>/g, '<w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="auto"/>')
     }
 
     if (/^Kết quả đánh giá theo/i.test(paragraphText)) {
       return paragraph
         .replace(/<w:pStyle\b[^>]*\/>/g, "")
         .replace(/<w:numPr>[\s\S]*?<\/w:numPr>/g, "")
+        .replace(/<w:ind\b[^>]*\/>/g, '<w:ind w:left="0" w:hanging="0"/>')
+        .replace(/<w:spacing\b[^>]*\/>/g, '<w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="auto"/>')
     }
 
     return paragraph
   })
+}
 
 const setXmlAttribute = (tag: string, name: string, value: string) => {
   const attribute = new RegExp(`\\s${name}="[^"]*"`)
@@ -364,8 +450,12 @@ const applySingleLineSpacing = (paragraph: string) => {
 
 const centerTableParagraphs = (table: string) => {
   const tableText = table.replace(/<[^>]+>/g, "")
-  // The organization information table follows the approved left/right layout.
-  if (/(?:Khoa|Bộ môn|Mã khoa|Mã bộ môn|Kết quả đánh giá theo)/i.test(tableText)) {
+  // The organization and lecturer information table follows the approved left/right layout.
+  if (
+    /(?:Khoa|Bộ môn|Giảng viên|Họ và tên giảng viên|Mã khoa|Mã bộ môn|Mã giảng viên|Kết quả đánh giá theo)/i.test(
+      tableText
+    )
+  ) {
     return table
   }
 
@@ -454,6 +544,151 @@ const preserveLetterheadFormatting = (table: string) => {
   return withoutIndent.replace(/(<w:tblW\b[^>]*\/>)/, `$1${indent}`)
 }
 
+const formatReportInfoTable = (table: string) => {
+  const tableText = table.replace(/<[^>]+>/g, "")
+  if (
+    isCriteriaDataTable(table) ||
+    !/(?:Khoa|Bộ môn|Giảng viên|Họ và tên giảng viên|Mã khoa|Mã bộ môn|Mã giảng viên)/i.test(
+      tableText
+    ) ||
+    isLetterheadTable(table) ||
+    /CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM/i.test(tableText)
+  ) {
+    return table
+  }
+
+  // Ensure table indent is 0
+  let res = table.replace(/<w:tblInd\b[^>]*\/>/g, '<w:tblInd w:w="0" w:type="dxa"/>')
+  if (!res.includes("<w:tblInd")) {
+    res = res.replace(/(<w:tblPr>)/, '$1<w:tblInd w:w="0" w:type="dxa"/>')
+  }
+
+  // Ensure table width is 9072
+  res = res.replace(/<w:tblW\b[^>]*\/>/g, '<w:tblW w:w="9072" w:type="dxa"/>')
+
+  // Ensure left cell margin is 0 so text aligns flush with left margin
+  const cellMarXml =
+    '<w:tblCellMar><w:top w:w="80" w:type="dxa"/><w:left w:w="0" w:type="dxa"/><w:bottom w:w="60" w:type="dxa"/><w:right w:w="100" w:type="dxa"/></w:tblCellMar>'
+  if (res.includes("<w:tblCellMar>")) {
+    res = res.replace(/<w:tblCellMar>[\s\S]*?<\/w:tblCellMar>/g, cellMarXml)
+  } else {
+    res = res.replace(/(<w:tblPr>)/, "$1" + cellMarXml)
+  }
+
+  // Ensure single line spacing (1.0) and 0 before/after for all paragraphs in Table 1
+  res = res.replace(
+    /<w:spacing\b[^>]*\/>/g,
+    '<w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="auto"/>'
+  )
+
+  // Determine optimal column widths:
+  // - For Khoa (only Khoa and Mã khoa, no Giảng viên/Bộ môn): Col 1 = 6000 dxa (~10.58 cm), Col 2 = 3072 dxa (~5.42 cm)
+  //   Provides generous room so long Institute names never wrap, and Mã khoa is never broken.
+  // - For Bộ môn & Giảng viên: Col 1 = 5772 dxa (~10.18 cm), Col 2 = 3300 dxa (~5.82 cm)
+  //   Col 2 has ample space for 8-digit lecturer codes ("Mã giảng viên: 00022320") without wrapping,
+  //   while Col 1 is well-balanced and does not push Col 2 too far right.
+  const isOnlyKhoa =
+    /Khoa\s*:/i.test(tableText) &&
+    !/Bộ môn\s*:/i.test(tableText) &&
+    !/Giảng viên\s*:/i.test(tableText)
+
+  const col1W = isOnlyKhoa ? 6000 : 5772
+  const col2W = isOnlyKhoa ? 3072 : 3300
+
+  // Ensure 2-column grid
+  const tblGridXml = `<w:tblGrid><w:gridCol w:w="${col1W}"/><w:gridCol w:w="${col2W}"/></w:tblGrid>`
+  if (res.includes("<w:tblGrid>")) {
+    res = res.replace(/<w:tblGrid>[\s\S]*?<\/w:tblGrid>/, tblGridXml)
+  } else {
+    res = res.replace(/(<\/w:tblPr>)/, "$1" + tblGridXml)
+  }
+
+  // Normalize row cells
+  res = res.replace(/<w:tr\b[\s\S]*?<\/w:tr>/g, (rowXml) => {
+    const rowText = rowXml.replace(/<[^>]+>/g, "")
+    if (/Kết quả đánh giá theo/i.test(rowText)) {
+      const cell = rowXml.match(/<w:tc\b[\s\S]*?<\/w:tc>/)?.[0]
+      if (cell) {
+        let fixedCell = cell
+          .replace(/<w:tcW\b[^>]*\/>/, '<w:tcW w:w="9072" w:type="dxa"/>')
+          .replace(/<w:ind\b[^>]*\/>/g, '<w:ind w:left="0" w:hanging="0"/>')
+
+        if (!fixedCell.includes("<w:gridSpan")) {
+          fixedCell = fixedCell.replace(/(<w:tcPr>)/, '$1<w:gridSpan w:val="2"/>')
+        } else {
+          fixedCell = fixedCell.replace(/<w:gridSpan\b[^>]*\/>/, '<w:gridSpan w:val="2"/>')
+        }
+
+        // Replace all cells in this row with the single full-width span-2 cell
+        return rowXml.replace(/<w:tc\b[\s\S]*?<\/w:tc>[\s\S]*?(?=<\/w:tr>)/, fixedCell)
+      }
+      return rowXml
+    }
+
+    const cells = rowXml.match(/<w:tc\b[\s\S]*?<\/w:tc>/g)
+    if (cells && cells.length >= 2) {
+      const cell1 = cells[0]
+        .replace(/<w:gridSpan\b[^>]*\/>/g, "")
+        .replace(/<w:tcW\b[^>]*\/>/, `<w:tcW w:w="${col1W}" w:type="dxa"/>`)
+        .replace(/<w:ind\b[^>]*\/>/g, '<w:ind w:left="0" w:hanging="0"/>')
+
+      let cell2 = cells[1]
+        .replace(/<w:gridSpan\b[^>]*\/>/g, "")
+        .replace(/<w:tcW\b[^>]*\/>/, `<w:tcW w:w="${col2W}" w:type="dxa"/>`)
+        .replace(/<w:ind\b[^>]*\/>/g, '<w:ind w:left="0" w:hanging="0"/>')
+        .replace(/<w:jc\b[^>]*\/>/g, '<w:jc w:val="left"/>')
+
+      if (!cell2.includes("<w:jc")) {
+        cell2 = cell2.replace(/(<w:pPr>)/, '$1<w:jc w:val="left"/>')
+      }
+
+      let updatedRow = rowXml.replace(cells[0], cell1).replace(cells[1], cell2)
+      if (cells.length > 2) {
+        for (let i = 2; i < cells.length; i++) {
+          updatedRow = updatedRow.replace(cells[i], "")
+        }
+      }
+      return updatedRow
+    }
+
+    return rowXml
+  })
+
+  return res
+}
+
+const formatReportTitleSpacing = (xml: string) => {
+  return xml.replace(/<w:p\b[^>]*>[\s\S]*?<\/w:p>/g, (pXml) => {
+    const text = pXml.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim()
+
+    if (/^TỔNG HỢP PHIẾU LẤY Ý KIẾN NGƯỜI HỌC/i.test(text)) {
+      return pXml.replace(
+        /<w:spacing\b[^>]*\/>/g,
+        '<w:spacing w:before="160" w:after="40" w:line="280" w:lineRule="auto"/>'
+      )
+    }
+
+    if (/^VỀ HOẠT ĐỘNG GIẢNG DẠY CỦA GIẢNG VIÊN/i.test(text)) {
+      return pXml.replace(
+        /<w:spacing\b[^>]*\/>/g,
+        '<w:spacing w:before="0" w:after="40" w:line="280" w:lineRule="auto"/>'
+      )
+    }
+
+    if (
+      /^(?:HỌC KỲ|\{reportTitleSemester\}|H[ĐD]GD)/i.test(text) ||
+      pXml.includes("reportTitleSemester")
+    ) {
+      return pXml.replace(
+        /<w:spacing\b[^>]*\/>/g,
+        '<w:spacing w:before="40" w:after="240" w:line="280" w:lineRule="auto"/>'
+      )
+    }
+
+    return pXml
+  })
+}
+
 const normalizeSurveyDocxLayout = (xml: string) => {
   const withRequiredMargins = xml.replace(/<w:pgMar\b[^>]*\/>/g, (margins) => {
     return [
@@ -469,16 +704,30 @@ const normalizeSurveyDocxLayout = (xml: string) => {
     applySingleLineSpacing
   )
 
-  return withSingleSpacing.replace(/<w:tbl\b[\s\S]*?<\/w:tbl>/g, (table) => {
+  const withTitleSpacing = formatReportTitleSpacing(withSingleSpacing)
+
+  return withTitleSpacing.replace(/<w:tbl\b[\s\S]*?<\/w:tbl>/g, (table) => {
     return preserveLetterheadFormatting(
-      formatSurveyHeaderRow(centerTableParagraphs(fitTableToPrintableWidth(table)))
+      formatReportInfoTable(
+        formatSurveyHeaderRow(centerTableParagraphs(fitTableToPrintableWidth(table)))
+      )
     )
   })
 }
 
 export function adaptSurveyDocxXml(originalXml: string): string {
-  if (originalXml.includes("{#hasSpecial}") || originalXml.includes("{#dataSpecial}")) {
-    const adaptedXml = originalXml.replace(/<w:tbl[\s\S]*?<\/w:tbl>/g, (tblXml) => {
+  // Gỡ conditional bọc ngoài bảng (nếu template MinIO đã bị bake sẵn) — tránh mất cả <w:tbl>
+  const stripOuterTableConditionals = (xml: string) =>
+    xml
+      .replace(/\{#hasNormal\}/g, "")
+      .replace(/\{\/hasNormal\}/g, "")
+      .replace(/\{#hasSpecial\}/g, "")
+      .replace(/\{\/hasSpecial\}/g, "")
+
+  const sourceXml = stripOuterTableConditionals(originalXml)
+
+  if (sourceXml.includes("{#dataSpecial}") || sourceXml.includes("{#dataNormal}")) {
+    const adaptedXml = sourceXml.replace(/<w:tbl[\s\S]*?<\/w:tbl>/g, (tblXml) => {
       if (!tblXml.includes("dataNormal") && !tblXml.includes("dataSpecial")) return tblXml
       let fixedTbl = tblXml
       if (!fixedTbl.includes("<w:tblBorders>")) {
@@ -494,21 +743,28 @@ export function adaptSurveyDocxXml(originalXml: string): string {
     return makeChiefTitleBold(adaptedXml)
   }
 
-  const marker = "{#data}"
-  const dataIdx = originalXml.indexOf(marker)
-  if (dataIdx === -1) return makeChiefTitleBold(originalXml)
+  // Hỗ trợ template cũ {#data} hoặc đã tách {#dataNormal}
+  const markerMatch = sourceXml.match(/\{#(dataNormal|data)\}/)
+  if (!markerMatch || markerMatch.index == null) return makeChiefTitleBold(sourceXml)
+  const dataIdx = markerMatch.index
 
-  const tblStart = originalXml.lastIndexOf("<w:tbl>", dataIdx)
-  const tblEnd = originalXml.indexOf("</w:tbl>", dataIdx) + "</w:tbl>".length
-  if (tblStart === -1 || tblEnd === -1) return makeChiefTitleBold(originalXml)
+  // <w:tbl> có thể kèm attribute — không dùng lastIndexOf("<w:tbl>") cứng
+  const before = sourceXml.slice(0, dataIdx)
+  const tblOpenMatches = [...before.matchAll(/<w:tbl\b[^>]*>/g)]
+  if (!tblOpenMatches.length) return makeChiefTitleBold(sourceXml)
+  const lastOpen = tblOpenMatches[tblOpenMatches.length - 1]
+  const tblStart = lastOpen.index ?? -1
+  const tblEndMarker = sourceXml.indexOf("</w:tbl>", dataIdx)
+  const tblEnd = tblEndMarker === -1 ? -1 : tblEndMarker + "</w:tbl>".length
+  if (tblStart === -1 || tblEnd === -1) return makeChiefTitleBold(sourceXml)
 
-  const originalTbl = originalXml.slice(tblStart, tblEnd)
+  const originalTbl = sourceXml.slice(tblStart, tblEnd)
 
   const rawRows = originalTbl.split("</w:tr>")
-  if (rawRows.length < 3) return makeChiefTitleBold(originalXml)
+  if (rawRows.length < 3) return makeChiefTitleBold(sourceXml)
 
-  const dataRowIdx = rawRows.findIndex((r) => r.includes("{#data}"))
-  if (dataRowIdx <= 0 || dataRowIdx >= rawRows.length) return makeChiefTitleBold(originalXml)
+  const dataRowIdx = rawRows.findIndex((r) => r.includes("{#data}") || r.includes("{#dataNormal}"))
+  if (dataRowIdx <= 0 || dataRowIdx >= rawRows.length) return makeChiefTitleBold(sourceXml)
 
   const headerRowIdx = dataRowIdx - 1
   const rHeader = rawRows[headerRowIdx]
@@ -598,11 +854,15 @@ export function adaptSurveyDocxXml(originalXml: string): string {
 
   const tbl2 = `<w:tbl>${dataTblPr}${tblGrid}${specHeaderRow}${makeDataRow("dataSpecial")}${makeDgtbRow("dgtbSpecial")}</w:tbl>`
 
-  const blockNormal = `<w:p><w:r><w:t>{#hasNormal}</w:t></w:r></w:p>${tbl1}<w:p><w:r><w:t>{/hasNormal}</w:t></w:r></w:p>`
-  const blockSpecial = `<w:p><w:r><w:t>{#hasSpecial}</w:t></w:r></w:p><w:p><w:pPr><w:spacing w:after="120" w:line="240" w:lineRule="auto"/></w:pPr></w:p>${tbl2}<w:p><w:r><w:t>{/hasSpecial}</w:t></w:r></w:p>`
+  // Không bọc {#hasNormal}/{#hasSpecial} ngoài <w:tbl>: easy-template-x/Word
+  // hay nuốt cả bảng khi conditional nằm ở paragraph tách khỏi table.
+  // Bảng trống khi không có dòng dữ liệu (loop rỗng) vẫn giữ header + ĐGTB.
+  const gap = `<w:p><w:pPr><w:spacing w:after="120" w:line="240" w:lineRule="auto"/></w:pPr></w:p>`
+  const blockNormal = tbl1
+  const blockSpecial = `${gap}${tbl2}`
 
   return makeChiefTitleBold(
-    originalXml.slice(0, tblStart) + leadingTable + blockNormal + blockSpecial + originalXml.slice(tblEnd)
+    sourceXml.slice(0, tblStart) + leadingTable + blockNormal + blockSpecial + sourceXml.slice(tblEnd)
   )
 }
 
@@ -765,24 +1025,14 @@ export async function exportSurveyDocxTemplate(input: ExportSurveyDocxTemplateIn
   }
 
   try {
-    let templateBuffer: ArrayBuffer | null = null
-
-    // fetchMinio: cache: no-store + query v=timestamp để lấy bản template mới sau khi upload đè
-    try {
-      const res = await fetchMinio(TEMPLATE_KEYS[input.variant])
-      if (res.ok) {
-        templateBuffer = await res.arrayBuffer()
-      } else {
-        console.error("Could not fetch template from MinIO:", res.status, res.statusText)
-      }
-    } catch (err) {
-      console.error("Could not fetch template from MinIO:", err)
-    }
-
-    if (!templateBuffer) {
+    const res = await fetchMinio(TEMPLATE_KEYS[input.variant])
+    if (!res.ok) {
+      console.error("Could not fetch template from MinIO:", res.status, res.statusText)
       message.error("Không tải được file mẫu từ MinIO")
       return
     }
+
+    const templateBuffer = await res.arrayBuffer()
 
     const payload = buildDocxData({
       ...input,
@@ -810,9 +1060,15 @@ export async function exportSurveyDocxTemplate(input: ExportSurveyDocxTemplateIn
     const outputZip = new PizZip(await doc.arrayBuffer())
     const outputXml = outputZip.file("word/document.xml")?.asText()
     if (outputXml) {
+      // Phòng hờ residual conditional tags nếu template/engine để lại
+      const cleanedOutput = outputXml
+        .replace(/\{#hasNormal\}/g, "")
+        .replace(/\{\/hasNormal\}/g, "")
+        .replace(/\{#hasSpecial\}/g, "")
+        .replace(/\{\/hasSpecial\}/g, "")
       outputZip.file(
         "word/document.xml",
-        makeChiefTitleBold(normalizeSurveyDocxLayout(adaptReportInfoLayout(outputXml)))
+        makeChiefTitleBold(normalizeSurveyDocxLayout(adaptReportInfoLayout(cleanedOutput)))
       )
     }
     const finalDoc = new Blob([outputZip.generate({ type: "arraybuffer" })], {

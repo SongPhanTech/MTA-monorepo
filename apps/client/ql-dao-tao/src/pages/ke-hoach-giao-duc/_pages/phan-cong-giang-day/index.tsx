@@ -156,6 +156,7 @@ const LECTURER_USER_PROFILE_SELECT = {
 const LECTURER_SELECT = {
   select: {
     id: true,
+    TKPUcode: true,
     userProfile: {
       select: LECTURER_USER_PROFILE_SELECT,
     },
@@ -400,7 +401,7 @@ export default function PhanCongGiangDay({
           orgId || "0"
         ).map((org) => org.value),
         orgId,
-      ].filter(Boolean),
+      ].filter((id): id is string => typeof id === "string" && id.length > 0),
     [dmDonViIds, orgId]
   )
 

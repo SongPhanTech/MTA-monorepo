@@ -2001,6 +2001,8 @@ const exportPhoiBangNganHan = createRoute({
             fontFamily: z.string().optional(),
             fontSize: z.number().optional(),
             rowHeight: z.number().optional(),
+            /** Căn dọc 2 dòng tiêu đề trong ô */
+            verticalAlign: z.enum(["top", "middle", "bottom"]).optional(),
           }),
         },
       },
@@ -2042,6 +2044,7 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
     fontFamily,
     fontSize,
     rowHeight,
+    verticalAlign,
   } = c.req.valid("json")
 
   const students = await prisma.student.findMany({
@@ -2249,6 +2252,7 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
       fontFamily: fontFamily?.trim() || "Cambria",
       fontSize,
       rowHeight,
+      verticalAlign,
     })
     const result = applyPhoiBangStudentPrintAreas(toNodeBuffer(styled), generated.studentPrintBlocks)
 

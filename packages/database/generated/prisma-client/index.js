@@ -11801,7 +11801,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/swantech/Code/mta-payment-qr-wt/packages/database/generated/prisma-client",
+      "value": "/Users/swantech/Documents/MTA/MTA-monorepo/packages/database/generated/prisma-client",
       "fromEnvVar": null
     },
     "config": {
@@ -11839,11 +11839,12 @@ const config = {
       "multiSchema",
       "typedSql"
     ],
-    "sourceFilePath": "/Users/swantech/Code/mta-payment-qr-wt/packages/database/prisma/schema.prisma",
+    "sourceFilePath": "/Users/swantech/Documents/MTA/MTA-monorepo/packages/database/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null
+    "rootEnvPath": null,
+    "schemaEnvPath": "../../.env"
   },
   "relativePath": "../../prisma",
   "clientVersion": "6.10.1",
@@ -11852,7 +11853,6 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
