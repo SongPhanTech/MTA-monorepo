@@ -33,28 +33,35 @@ export const prisma: PrismaClient = createPrismaClient()
 const app = new OpenAPIHono({ strict: false })
 
 const originEnv = process.env.ORIGIN || ""
-const originList = originEnv.split(",").map((item) => item.trim())
+const originList = originEnv
+  .split(",")
+  .map((item) => item.trim())
+  .filter(Boolean)
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:3001",
+  "http://localhost:3002",
+  "http://localhost:8081",
+  "https://localhost:8081",
+  "https://daotao.swantech.vn",
+  "https://user.mta.swantech.vn",
+  "https://daotao.mta.swantech.vn",
+  "https://chatbot.mta.swantech.vn",
+  "https://khaothi.mta.swantech.vn",
+  "https://am.swantech.vn",
+  "https://14.224.217.69:8243",
+  ...originList,
+]
 
 app.use(
   "*",
   cors({
-    origin: [
-      "http://localhost:3001",
-      "http://localhost:3000",
-      "http://localhost:8081",
-      "https://localhost:8081",
-      "https://daotao.swantech.vn",
-      "https://user.mta.swantech.vn",
-      "https://daotao.mta.swantech.vn",
-      "https://chatbot.mta.swantech.vn",
-      "https://khaothi.mta.swantech.vn",
-      "https://am.swantech.vn",
-      "https://14.224.217.69:8243",
-      "https://*.swantech.vn",
-      "https://*.swantech.vn",
-      ...originList,
-      "*",
-    ],
+    origin: (origin) => {
+      if (allowedOrigins.includes(origin)) return origin
+      if (/^https:\/\/[a-zA-Z0-9-]+\.swantech\.vn$/.test(origin)) return origin
+      return null
+    },
     credentials: true,
   })
 )
@@ -279,7 +286,7 @@ Bun.serve({
   idleTimeout: 60,
   fetch: app.fetch,
   hostname: "0.0.0.0",
-  port: process.env.PORT || 3000,
+  port: Number(process.env.PORT || 3041),
 })
 
 startPreviewCleanupCron()

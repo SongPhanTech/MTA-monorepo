@@ -63,6 +63,7 @@ const originList = originEnv
 const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:3001",
+  "http://localhost:3002",
   "https://user.mta.swantech.vn",
   "https://daotao.swantech.vn",
   "https://daotao.mta.swantech.vn",
@@ -183,7 +184,7 @@ export default {
   idleTimeout: 255, // giây — tổng kết 500+ SV có thể > 10s (mặc định Bun)
   fetch: app.fetch,
   hostname: "0.0.0.0",
-  port: process.env.PORT || 3000,
+  port: Number(process.env.PORT || 3042),
 }
 
 process.on("SIGINT", () => {
