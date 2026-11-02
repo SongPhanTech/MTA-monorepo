@@ -529,6 +529,7 @@ export function splitFullName(fullName?: string): {
 
 export function formatLecturerName(
   lecturer?: {
+    TKPUcode?: string | null
     userProfile?: {
       code?: string | null
       fullname?: string | null
@@ -547,7 +548,16 @@ export function formatLecturerName(
     .join(".")
 
   const fullname = lecturer.userProfile?.fullname ?? ""
-  const codeSuffix = lecturer.userProfile?.code ? ` - ${lecturer.userProfile.code}` : ""
+  const tkpuCode = lecturer.TKPUcode?.trim() || ""
+  const userCode = lecturer.userProfile?.code?.trim() || ""
+  const codes = tkpuCode
+    ? userCode && userCode !== tkpuCode
+      ? [tkpuCode, userCode]
+      : [tkpuCode]
+    : userCode
+      ? [userCode]
+      : []
+  const codeSuffix = codes.length ? ` - ${codes.join(" - ")}` : ""
 
   return `${prefix ? `${prefix} ` : ""}${fullname}${codeSuffix}`.trim()
 }

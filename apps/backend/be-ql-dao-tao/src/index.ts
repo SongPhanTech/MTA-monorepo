@@ -30,6 +30,7 @@ import GuestTeachingPaymentApp from "./api/guest-teaching-payment"
 import ImportApp from "./api/import"
 import InternshipApp from "./api/internship"
 import LecturerApp from "./api/lecturer"
+import NhanVienApp from "./api/nhan-vien"
 import PlanTraining from "./api/plan-training"
 import RoomApp from "./api/room"
 import ScoreCorrectionApp from "./api/score-correction"
@@ -114,6 +115,7 @@ app.route("/api/subject-class", SubjectClassApp)
 app.route("/api/subject-class", ReSubjectClassApp)
 app.route("/api/student", StudentApp)
 app.route("/api/lecturer", LecturerApp)
+app.route("", NhanVienApp)
 app.route("/api/diploma-verification", DiplomaVerificationApp)
 app.route("/api/training-score", TrainingScoreApp)
 app.route("/api/curriculum", CurriculumApp)

@@ -156,6 +156,7 @@ const LECTURER_USER_PROFILE_SELECT = {
 const LECTURER_SELECT = {
   select: {
     id: true,
+    TKPUcode: true,
     userProfile: {
       select: LECTURER_USER_PROFILE_SELECT,
     },
