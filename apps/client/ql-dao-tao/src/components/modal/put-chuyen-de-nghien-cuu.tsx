@@ -19,7 +19,7 @@ import { getSupervisorName } from "@pages/quan-ly-luan-van/dm-luan-van"
 import { fuzzyMatch } from "@workspace/libs/utils"
 import { flattenExpertForSelect } from "@/utils/expert-select"
 import { buildOrgTree } from "@lib/utils"
-import { whereOrganization } from "@workspace/libs/constants"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 
 dayjs.locale("vi")
 const { TextArea } = Input
@@ -72,7 +72,7 @@ const PutResearchTopicModal = () => {
   })
 
   const { data: organizationData = [] } = useFindManyDM_DonVi({
-    where: whereOrganization,
+    where: whereActiveOrganization,
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
   const treeOrgData = useMemo(() => buildOrgTree(organizationData ?? [], "0"), [organizationData])

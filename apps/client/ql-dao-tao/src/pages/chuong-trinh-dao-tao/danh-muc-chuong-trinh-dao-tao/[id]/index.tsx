@@ -21,7 +21,7 @@ import {
   useFindManyTrainingBlockOnCurriculumVersion,
   useFindUniqueCurriculumVersion,
 } from "@workspace/db/hooks"
-import { whereOrganization } from "@workspace/libs/constants"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 import { getMinioUrl } from "@workspace/libs/utils"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from "@workspace/router"
@@ -355,7 +355,7 @@ export default function TrainingProgramSubjects() {
   })
 
   const { data: manageOrgData = [] } = useFindManyDM_DonVi({
-    where: whereOrganization,
+    where: whereActiveOrganization,
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
 

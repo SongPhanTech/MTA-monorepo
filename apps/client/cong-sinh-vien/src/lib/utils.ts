@@ -8,6 +8,7 @@ import { normalizeVietnamese } from "@workspace/libs/utils"
 import clsx, { type ClassValue } from "clsx"
 import dayjs, { type Dayjs } from "dayjs"
 import { twMerge } from "tailwind-merge"
+import { buildOrgTree } from "@workspace/libs/org-tree"
 
 const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs))
@@ -122,24 +123,7 @@ function generatePassword(length = 12): string {
     .join("")
 }
 
-export type OrgTreeItem = {
-  value: string
-  label: string
-  children?: OrgTreeItem[]
-}
-
-function buildOrgTree(
-  list: Array<{ Id: string; sTen: string | null; sParentId: string | null; sMa: string | null }>,
-  parentId = "0"
-): OrgTreeItem[] {
-  return list
-    .filter((item) => (item.sParentId ?? "0") === parentId)
-    .map((item) => ({
-      label: [item.sMa, item.sTen].filter(Boolean).join(" - ") || "",
-      value: item.Id,
-      children: buildOrgTree(list, item.Id),
-    }))
-}
+export type { OrgTreeItem } from "@workspace/libs/org-tree"
 // function buildOrgTree(
 //     list: Array<{ id: string; name: string; parentId: string | null }>,
 //     parentId = '0'

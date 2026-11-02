@@ -15,7 +15,7 @@ import {
 import { Col, Form, Input, InputNumber, message } from "antd"
 import dayjs from "dayjs"
 import "dayjs/locale/vi"
-import { whereOrganization } from "@workspace/libs/constants"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
 import { useEffect } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -104,7 +104,7 @@ const PutSubjectModal = () => {
     }
   }, [level])
   const { data: manageOrgData = [] } = useFindManyDM_DonVi({
-    where: whereOrganization,
+    where: whereActiveOrganization,
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
   const treeData = buildOrgTree(manageOrgData)

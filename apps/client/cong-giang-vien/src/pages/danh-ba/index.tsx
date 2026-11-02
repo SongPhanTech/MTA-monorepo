@@ -7,6 +7,7 @@ import { useFindManyDM_DonVi } from "@workspace/db/hooks"
 import { Breadcrumb, Col, Row } from "antd"
 import Link from "next/link"
 import { useEffect, useState } from "react"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 
 export default function DanhBa() {
   const [selectedOrgId, setSelectedOrgId] = useState<string | null>(null)
@@ -17,11 +18,7 @@ export default function DanhBa() {
     isLoading,
     refetch,
   } = useFindManyDM_DonVi({
-    where: {
-      iLoaiDonVi: {
-        in: [0, 1, 2, 3, 4, 5, 6, 7],
-      },
-    },
+    where: whereActiveOrganization,
     include: {
       userProfiles: {
         where: {

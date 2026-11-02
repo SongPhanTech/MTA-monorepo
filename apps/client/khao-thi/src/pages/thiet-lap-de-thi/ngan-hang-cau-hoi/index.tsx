@@ -9,6 +9,7 @@ import QuestionBankTree from "./_component/question-bank-tree"
 import QuestionList from "./_component/question-list"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { queryClient } from "@api/index"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 
 export type PutQuestionBankInput = {
   id?: string
@@ -24,6 +25,7 @@ export default function QuestionBank() {
 
   const { data: donViData = [] } = useFindManyDM_DonVi({
     where: {
+      ...whereActiveOrganization,
       iLoaiDonVi: {
         in: [5, 6, 7],
       },

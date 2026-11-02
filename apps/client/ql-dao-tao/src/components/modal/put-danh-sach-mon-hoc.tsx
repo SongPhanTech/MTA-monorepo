@@ -17,7 +17,7 @@ import { useDisclosure } from "react-hook-disclosure-modal"
 import "dayjs/locale/vi"
 import useTrimText from "@hooks/trimText"
 import { buildOrgTree } from "@lib/utils"
-import { whereOrganization } from "@workspace/libs/constants"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 import TreeSelect from "@/components/commons/tree-select"
 export type PutSubject = Subject
 dayjs.locale("vi")
@@ -35,7 +35,7 @@ const PutSubjectListModal = () => {
   const { showSpinner, hideSpinner } = useSpinner()
 
   const { data: manageOrgData = [] } = useFindManyDM_DonVi({
-    where: whereOrganization,
+    where: whereActiveOrganization,
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
   const treeData = buildOrgTree(manageOrgData)

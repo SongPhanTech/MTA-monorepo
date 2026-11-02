@@ -10,7 +10,8 @@ const TreeSelect = (props: TreeSelectProps) => {
       filterTreeNode={(input, treeNode) =>
         fuzzyMatch(
           input,
-          treeNode?.title?.toString?.() ||
+          treeNode?.searchText?.toString?.() ||
+            treeNode?.title?.toString?.() ||
             treeNode?.label?.toString?.() ||
             String(treeNode?.value ?? "")
         )

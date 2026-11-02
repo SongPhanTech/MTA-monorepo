@@ -17,7 +17,7 @@ import { useDisclosure } from "react-hook-disclosure-modal"
 import "dayjs/locale/vi"
 import { useSubjectRequirementTypeOptions } from "@hooks/subjectRequirementType"
 import { buildOrgTree, limitTreeDepth } from "@lib/utils"
-import { whereOrganization } from "@workspace/libs/constants"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 import { normalizeVietnamese } from "@workspace/libs/utils"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
 import _ from "lodash"
@@ -99,7 +99,7 @@ const PutTrainingBlockSubject = () => {
     }
   )
   const { data: manageOrgData = [] } = useFindManyDM_DonVi({
-    where: whereOrganization,
+    where: whereActiveOrganization,
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
 

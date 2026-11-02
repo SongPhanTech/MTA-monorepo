@@ -18,6 +18,7 @@ import { Col, Form, Input, message } from "antd"
 import { useEffect, useMemo } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { buildOrgProfileTree } from "@/utils/buildOrgProfileTree"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 export type PutEvaluationCouncilMemberType = EvaluationCouncilMember
 const PutEvaluationCouncilMember = () => {
   const [form] = Form.useForm<PutEvaluationCouncilMemberType>()
@@ -107,6 +108,7 @@ const PutEvaluationCouncilMember = () => {
   }
 
   const { data: organizations = [] } = useFindManyDM_DonVi({
+    where: whereActiveOrganization,
     include: {
       userProfiles: {
         where: {

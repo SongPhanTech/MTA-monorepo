@@ -29,7 +29,7 @@ import { syncStudentDonViFromFixedClass } from "@lib/sync-student-don-vi"
 import TreeSelectDepartment from "@components/commons/department-select/TreeSelectDepartment"
 import LectureTreeSelect from "@components/commons/lecture-select-multi/TreeSelectLecture"
 import { buildOrgTree } from "@lib/utils"
-import { whereOrganization } from "@workspace/libs/constants"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 import { normalizeVietnamese } from "@workspace/libs/utils"
 import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from "@workspace/ui"
 import TreeSelect from "@/components/commons/tree-select"
@@ -52,7 +52,7 @@ const PutFixedClassModal = () => {
   const { showSpinner, hideSpinner } = useSpinner()
   const [dataOutput, setDataOutput] = useState<PutFixedClass>()
   const { data: manageOrgData = [] } = useFindManyDM_DonVi({
-    where: whereOrganization,
+    where: whereActiveOrganization,
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
   const { onOpen: onOpenModalConfirm } = useDisclosure<string>({

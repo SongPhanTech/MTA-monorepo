@@ -26,7 +26,7 @@ import {
   useFindManyThesisProject,
   useUpdateThesisProject,
 } from "@workspace/db/hooks"
-import { whereOrganization } from "@workspace/libs/constants"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from "@workspace/router"
 import { useSemesterStore } from "@workspace/ui"
@@ -62,7 +62,7 @@ export default function ThesisProject() {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
   const { mutateAsync: createManyInvitation } = useCreateManyInvitation()
   const { data: manageOrgData = [] } = useFindManyDM_DonVi({
-    where: whereOrganization,
+    where: whereActiveOrganization,
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
   const treeData = buildOrgTree(manageOrgData)

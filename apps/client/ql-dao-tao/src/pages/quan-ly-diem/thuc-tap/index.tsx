@@ -21,7 +21,7 @@ import {
 } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { exportInternshipProfile } from "@workspace/libs/api/training"
-import { whereOrganization } from "@workspace/libs/constants"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import { cn } from "@workspace/ui/lib/utils"
 import { Button, Col, Flex, Form, Modal, message, Row, Tooltip } from "antd"
@@ -78,7 +78,7 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
 
   const { data: organizationData = [] } = useFindManyDM_DonVi({
     where: {
-      ...whereOrganization,
+      ...whereActiveOrganization,
     },
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })

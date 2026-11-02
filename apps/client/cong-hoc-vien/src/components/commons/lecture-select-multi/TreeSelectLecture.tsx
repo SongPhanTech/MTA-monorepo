@@ -5,6 +5,7 @@ import { message, TreeSelect as TreeSelectAnt } from "antd"
 import type React from "react"
 import { useEffect, useMemo, useState } from "react"
 import type { TreeNodeType } from "@/utils/convertOrganizationToTree"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 
 // Hàm tạo cây đơn vị và giảng viên
 function buildOrgAndLectureTree(
@@ -61,17 +62,7 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
     isLoading: organizationsLoading,
     error: organizationsError,
   } = useFindManyDM_DonVi({
-    where: {
-      OR: [
-        { iLoaiDonVi: 0 }, // TODO: fix
-        { iLoaiDonVi: 2 }, // Trung tâm
-        { iLoaiDonVi: 5 }, // Khoa
-        { iLoaiDonVi: 6 }, // Viện
-        { iLoaiDonVi: 7 }, // Bộ môn
-        { sParentId: null },
-        { userProfiles: { some: { lecturer: { is: { active: true } } } } },
-      ],
-    },
+    where: whereActiveOrganization,
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
 

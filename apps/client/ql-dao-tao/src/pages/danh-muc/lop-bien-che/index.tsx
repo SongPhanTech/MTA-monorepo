@@ -21,7 +21,7 @@ import {
   useUpdateFixedClass,
 } from "@workspace/db/hooks"
 import { fixedClassStudentCount } from "@workspace/libs/api/training"
-import { whereOrganization } from "@workspace/libs/constants"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 import { getFilenameFromContentDisposition } from "@workspace/libs/utils"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from "@workspace/router"
@@ -171,7 +171,7 @@ export default function FixedClassPage() {
   const { data: count } = useCountFixedClass({ where: { ...where, deletedAt: null } })
 
   const { data: manageOrgData = [] } = useFindManyDM_DonVi({
-    where: whereOrganization,
+    where: whereActiveOrganization,
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
   const treeData = buildOrgTree(manageOrgData)

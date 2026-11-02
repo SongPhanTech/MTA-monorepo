@@ -15,7 +15,7 @@ import {
   useFindUniqueCurriculumVersion,
   useFindUniqueUserProfile,
 } from "@workspace/db/hooks"
-import { whereOrganization } from "@workspace/libs/constants"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 import { cn } from "@workspace/ui/lib/utils"
 import { Col, Divider, Row, Tooltip } from "antd"
 import type React from "react"
@@ -351,7 +351,7 @@ export default function TrainingProgramSubjects() {
   })
 
   const { data: manageOrgData = [] } = useFindManyDM_DonVi({
-    where: whereOrganization,
+    where: whereActiveOrganization,
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
 
@@ -838,7 +838,9 @@ export default function TrainingProgramSubjects() {
 TrainingProgramSubjects.getLayout = function getLayout(page: React.ReactElement) {
   return (
     <DefaultLayout breadcrumbList={[{ title: "Chương trình đào tạo" }]}>
-      <PagePermissionGate permission={CONG_SINH_VIEN_PERMISSION.CONG_SINH_VIEN_CHUONG_TRINH_DAO_TAO}>
+      <PagePermissionGate
+        permission={CONG_SINH_VIEN_PERMISSION.CONG_SINH_VIEN_CHUONG_TRINH_DAO_TAO}
+      >
         {page}
       </PagePermissionGate>
     </DefaultLayout>

@@ -34,6 +34,7 @@ import {
   buildFacultySummarySectionTitle,
   clusterTrainingCourseWhere,
 } from "@/utils/export-faculty-survey-summary-docx"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 
 function trainingSystemNameFromDbType(type: $Enums.TrainingObjectTypes | undefined): string {
   if (type === $Enums.TrainingObjectTypes.MILITARY) return "Quân sự"
@@ -112,6 +113,7 @@ export default function BaoCaoGiangVien() {
   const { data: organizations = [], isFetching } = useFindManyDM_DonVi(
     {
       where: {
+        ...whereActiveOrganization,
         OR: [
           { sMa: getRuntimeEnv("NEXT_PUBLIC_ROOT_ORG_CODE") || "HD" },
           { iCapDonVi: 0, iLoaiDonVi: 0 },

@@ -26,7 +26,7 @@ import {
   useFindManyTrainingField,
   useFindManyTrainingMajor,
 } from "@workspace/db/hooks"
-import { whereOrganization } from "@workspace/libs/constants"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
 import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from "@workspace/ui"
@@ -267,7 +267,7 @@ export default function GraduationDecisionDiploma() {
   const { data: diplomaTypeData = [] } = useFindManyDiplomaType()
   const { data: organization = [] } = useFindManyDM_DonVi({
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
-    where: whereOrganization,
+    where: whereActiveOrganization,
   })
   const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectTypePermission({
     orderBy: { name: "asc" },

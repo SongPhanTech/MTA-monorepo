@@ -8,7 +8,13 @@ const TreeSelect = (props: TreeSelectProps) => {
       treeDefaultExpandAll
       popupMatchSelectWidth={false}
       filterTreeNode={(input, treeNode) =>
-        fuzzyMatch(input, treeNode?.title?.toString?.() || treeNode?.label?.toString?.() || "")
+        fuzzyMatch(
+          input,
+          treeNode?.searchText?.toString?.() ||
+            treeNode?.title?.toString?.() ||
+            treeNode?.label?.toString?.() ||
+            ""
+        )
       }
       {...props}
     />

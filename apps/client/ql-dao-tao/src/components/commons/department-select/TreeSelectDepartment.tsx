@@ -1,6 +1,6 @@
 import { buildOrgTree } from "@lib/utils"
 import { useFindManyDM_DonVi } from "@workspace/db/hooks"
-import { whereOrganization } from "@workspace/libs/constants"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 import type { TreeSelectProps } from "antd"
 import { TreeSelect as TreeSelectAnt } from "antd"
 
@@ -21,10 +21,7 @@ const TreeSelectDepartment: React.FC<TreeSelectDepartmentProps> = ({
   ...rest
 }) => {
   const { data: organizationData = [] } = useFindManyDM_DonVi({
-    where: {
-      bActive: true,
-      ...whereOrganization,
-    },
+    where: whereActiveOrganization,
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
   // Tạo treeData từ schoolYears và semesters
@@ -32,7 +29,7 @@ const TreeSelectDepartment: React.FC<TreeSelectDepartmentProps> = ({
 
   // Hàm lọc tùy chỉnh cho tìm kiếm
   const filterTreeNode = (input: string, treeNode: any) => {
-    return treeNode?.label?.toLowerCase()?.includes(input?.toLowerCase())
+    return (treeNode?.searchText ?? treeNode?.label)?.toLowerCase()?.includes(input?.toLowerCase())
   }
 
   return (

@@ -8,6 +8,7 @@ import ExcelJS from "exceljs"
 import { saveAs } from "file-saver"
 import { useRouter } from "next/router"
 import { useMemo } from "react"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 
 const { Title } = Typography
 
@@ -38,6 +39,7 @@ function ClusterSurveyReport({
 
   const { data: dataLevel } = useGetLectureSurveyStatistics(selectedId as string)
   const { data: organizations = [] } = useFindManyDM_DonVi({
+    where: whereActiveOrganization,
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
   const treeData = buildOrgTree(organizations)

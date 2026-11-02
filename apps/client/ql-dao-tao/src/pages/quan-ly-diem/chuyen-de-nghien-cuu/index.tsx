@@ -21,7 +21,7 @@ import {
 } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { renderXlsxTemplate } from "@workspace/libs/api/training"
-import { whereOrganization } from "@workspace/libs/constants"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 import { previewExcelTemplate } from "../../../utils/excel-template"
 import { versionInAcademy, versionToPersonLike } from "@/utils/expert-select"
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
@@ -82,7 +82,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
 
   const { data: organizationData = [] } = useFindManyDM_DonVi({
     where: {
-      ...whereOrganization,
+      ...whereActiveOrganization,
     },
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })

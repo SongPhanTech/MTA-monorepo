@@ -18,7 +18,7 @@ import { useEffect, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import "dayjs/locale/vi"
 import DocumentPaths from "@components/commons/documentPaths"
-import { whereOrganization } from "@workspace/libs/constants"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 import { useFindManyTrainingObjectTypePermission } from "@workspace/ui"
 import TreeSelect from "@/components/commons/tree-select"
 export type PutTrainingField = TrainingField & {
@@ -40,7 +40,7 @@ const PutTrainingFieldModal = () => {
   const { showSpinner, hideSpinner } = useSpinner()
   const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectTypePermission()
   const { data: organizations = [] } = useFindManyDM_DonVi({
-    where: whereOrganization,
+    where: whereActiveOrganization,
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
   const treeData = buildOrgTree(organizations)

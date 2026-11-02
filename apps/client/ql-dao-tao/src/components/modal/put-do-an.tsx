@@ -17,7 +17,7 @@ import DatePicker from "@components/commons/date-picker"
 import Tabs from "@components/commons/tabar"
 import { useThesisProjectStatusOptions } from "@hooks/thesisProjectStatus"
 import { buildOrgTree } from "@lib/utils"
-import { whereOrganization } from "@workspace/libs/constants"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 import { debounce } from "lodash"
 import { useCallback, useEffect, useState } from "react"
 import TreeSelect from "@/components/commons/tree-select"
@@ -60,7 +60,7 @@ const PutThesisProject = () => {
             sTen: { contains: searchOrganization, mode: "insensitive" },
           }
         : {}),
-      ...whereOrganization,
+      ...whereActiveOrganization,
     },
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
