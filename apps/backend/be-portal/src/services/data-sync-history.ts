@@ -66,6 +66,7 @@ export async function markDataSyncHistorySuccess(
     classRegisterSessionId?: string | null
     description?: string | null
     fileName?: string | null
+    recordCounts?: Prisma.InputJsonValue
   }
 ) {
   const classRegisterSessionId = extra?.classRegisterSessionId
@@ -81,6 +82,7 @@ export async function markDataSyncHistorySuccess(
       ...(classRegisterSessionId ? { classRegisterSessionId } : {}),
       ...(extra?.description != null ? { description: extra.description } : {}),
       ...(extra?.fileName != null ? { fileName: extra.fileName } : {}),
+      ...(extra?.recordCounts != null ? { recordCounts: extra.recordCounts } : {}),
     },
   })
 }
