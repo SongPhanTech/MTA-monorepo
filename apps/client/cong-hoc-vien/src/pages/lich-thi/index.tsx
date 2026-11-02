@@ -1,4 +1,6 @@
 import DefaultLayout from "@layouts/default-layout"
+import { PagePermissionGate } from "@components/commons/page-permission-gate"
+import { CONG_HOC_VIEN_PERMISSION } from "@workspace/router"
 import { useSession } from "@workspace/auth/react"
 import { useFindManySchoolYear } from "@workspace/db/hooks"
 import {
@@ -262,5 +264,11 @@ export default function LichThiPage() {
 }
 
 LichThiPage.getLayout = function getLayout(page: React.ReactElement) {
-  return <DefaultLayout>{page}</DefaultLayout>
+  return (
+    <DefaultLayout>
+      <PagePermissionGate permission={CONG_HOC_VIEN_PERMISSION.CONG_HOC_VIEN_LICH_THI}>
+        {page}
+      </PagePermissionGate>
+    </DefaultLayout>
+  )
 }

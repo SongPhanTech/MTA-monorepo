@@ -29,6 +29,8 @@ type Props = {
   /** Sau UPLOAD COMPLETE ~1s */
   onComplete?: (file: File) => void
   validateFile?: (file: File) => string | null
+  /** Nguyên nhân lỗi do màn hình cha xác định sau khi gửi file. */
+  failureMessage?: string | null
   /** Hiện nút «Nhập dữ liệu» nội bộ (false nếu confirm qua modal ngoài) */
   showUploadButton?: boolean
 }
@@ -80,6 +82,7 @@ export const CloudUploadPanel = forwardRef<CloudUploadPanelHandle, Props>(functi
     onUpload,
     onComplete,
     validateFile,
+    failureMessage,
     showUploadButton = true,
   },
   ref
@@ -95,7 +98,12 @@ export const CloudUploadPanel = forwardRef<CloudUploadPanelHandle, Props>(functi
   async function runUploadSequence(): Promise<boolean> {
     const current = fileRef.current
     if (!current || disabled) return false
-    if (phase === "lifting" || phase === "swallowing" || phase === "progress" || phase === "complete") {
+    if (
+      phase === "lifting" ||
+      phase === "swallowing" ||
+      phase === "progress" ||
+      phase === "complete"
+    ) {
       return false
     }
 
@@ -172,7 +180,12 @@ export const CloudUploadPanel = forwardRef<CloudUploadPanelHandle, Props>(functi
   }
 
   function clearFile() {
-    if (phase === "lifting" || phase === "swallowing" || phase === "progress" || phase === "complete") {
+    if (
+      phase === "lifting" ||
+      phase === "swallowing" ||
+      phase === "progress" ||
+      phase === "complete"
+    ) {
       return
     }
     fileRef.current = null
@@ -308,7 +321,9 @@ export const CloudUploadPanel = forwardRef<CloudUploadPanelHandle, Props>(functi
         )}
 
         {phase === "failed" ? (
-          <div className="mb-3 text-center text-sm text-red-600">Không nhập được dữ liệu</div>
+          <div className="mb-3 text-center text-sm text-red-600">
+            {failureMessage || "Không thể nhập dữ liệu. Vui lòng kiểm tra lại file và thử lại."}
+          </div>
         ) : null}
         {error ? <div className="mb-3 text-center text-sm text-red-600">{error}</div> : null}
 

@@ -1,6 +1,8 @@
 import CardStudyResult from "@components/commons/card-study-result"
 
 import DefaultLayout from "@layouts/default-layout"
+import { PagePermissionGate } from "@components/commons/page-permission-gate"
+import { CONG_HOC_VIEN_PERMISSION } from "@workspace/router"
 import { useSession } from "@workspace/auth/react"
 import { useFindUniqueCurriculumVersion, useFindUniqueUserProfile } from "@workspace/db/hooks"
 import { LichCongTac } from "@workspace/ui"
@@ -187,5 +189,11 @@ function Page() {
 export default Page
 
 Page.getLayout = function getLayout(page: React.ReactElement) {
-  return <DefaultLayout>{page}</DefaultLayout>
+  return (
+    <DefaultLayout>
+      <PagePermissionGate permission={CONG_HOC_VIEN_PERMISSION.CONG_HOC_VIEN_HOME}>
+        {page}
+      </PagePermissionGate>
+    </DefaultLayout>
+  )
 }

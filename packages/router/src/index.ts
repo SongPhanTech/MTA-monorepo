@@ -135,7 +135,6 @@ const NAVIGATION: NavigationType = {
         icon: ArrowLeftRight,
         path: ROUTER_PATH.CONG_SINH_VIEN.DONG_BO_DU_LIEU,
         description: "Nhập/xuất dữ liệu giữa phần mềm nội bộ và cổng đăng ký học",
-        hidden: true,
       },
       {
         id: CONG_SINH_VIEN_PERMISSION.CONG_SINH_VIEN_KHAO_SAT,
@@ -203,7 +202,6 @@ const NAVIGATION: NavigationType = {
         icon: ArrowLeftRight,
         path: ROUTER_PATH.CONG_HOC_VIEN.DONG_BO_DU_LIEU,
         description: "Nhập/xuất dữ liệu giữa phần mềm nội bộ và cổng đăng ký học",
-        hidden: true,
       },
       {
         id: CONG_HOC_VIEN_PERMISSION.CONG_HOC_VIEN_KHAO_SAT,

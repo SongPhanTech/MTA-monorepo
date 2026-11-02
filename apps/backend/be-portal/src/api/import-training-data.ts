@@ -1,12 +1,13 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { $Enums } from "@workspace/db"
-import { createDataSyncHistoryPending, findOtherPendingImport } from "../services/data-sync-history"
+import {
+  createDataSyncHistoryPending,
+  findOtherPendingImport,
+  markDataSyncHistoryFailed,
+} from "../services/data-sync-history"
 import { decodeImportBytes } from "../services/data-sync-pack"
 import { saveImportPayload } from "../services/data-sync/import-file-store"
-import {
-  DATA_SYNC_KAFKA_ENABLED,
-  enqueueDataSyncImport,
-} from "../services/data-sync/kafka-queue"
+import { DATA_SYNC_KAFKA_ENABLED, enqueueDataSyncImport } from "../services/data-sync/kafka-queue"
 import {
   markImportJobProcessing,
   runImportTrainingDataJobFromRedis,
@@ -102,7 +103,7 @@ app.openapi(importFromInternal, async (c) => {
   let syncHistoryId = form.syncHistoryId
 
   if (!file || file.size === 0) {
-    return c.json({ message: "Không nhập được dữ liệu" }, 400)
+    return c.json({ message: "Chưa chọn file hoặc file không có dữ liệu." }, 400)
   }
 
   // Giải mã .dat (hoặc parse JSON cũ) để lấy session + phát hiện file hỏng sớm
@@ -116,8 +117,15 @@ app.openapi(importFromInternal, async (c) => {
     const s = parsed?.data?.ClassRegisterSession?.[0]
     if (s?.id) sessionIdFromFile = s.id
     if (s?.name) sessionNameFromFile = String(s.name)
-  } catch {
-    return c.json({ message: "Không nhập được dữ liệu" }, 400)
+  } catch (error) {
+    const message =
+      error instanceof Error && error.message
+        ? error.message
+        : "Không thể đọc file đồng bộ. Hãy xuất lại file từ hệ thống nguồn."
+    if (syncHistoryId) {
+      await markDataSyncHistoryFailed(syncHistoryId, message).catch(() => undefined)
+    }
+    return c.json({ message }, 400)
   }
 
   // Nếu FE đã tạo history, lấy session từ DB; không thì dùng từ file

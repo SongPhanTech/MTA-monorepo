@@ -23,7 +23,12 @@ export async function assertNotAlreadyRegistered(
   params: RegisterParams
 ): Promise<void> {
   const existing = await tx.studentSubjectScore.findMany({
-    where: { studentId: params.studentId, subjectClassId: { in: params.classIds } },
+    where: {
+      studentId: params.studentId,
+      subjectClassId: { in: params.classIds },
+      deletedAt: null,
+      withdrew: false,
+    },
     select: { subjectClassId: true },
   })
   if (existing.length > 0) {
@@ -43,6 +48,7 @@ export async function insertRegistrations(
       studentId: params.studentId,
       subjectVersionId: params.classLookup.get(subjectClassId)!.subjectVersionId,
     })),
+    skipDuplicates: true,
   })
 
   await tx.classRegisterLogs.createMany({
@@ -50,6 +56,8 @@ export async function insertRegistrations(
       classRegisterSessionId: params.sessionId,
       studentId: params.studentId,
       subjectClassId,
+      status: "SUCCESS",
     })),
+    skipDuplicates: true,
   })
 }

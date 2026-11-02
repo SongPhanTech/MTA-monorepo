@@ -89,4 +89,20 @@ export interface ExportBangDiemCaNhanRequest {
   studentIds: string[];
   /** Chỉ lấy môn có học kỳ dự kiến thuộc danh sách. Ví dụ [1, 2] cho bảng điểm đối tượng dự khoá. */
   plannedSemesters?: number[];
+  /** Ngày ký */
+  signatureDate?: string;
+  /** Chức danh người ký dòng 1 */
+  signerTitle1?: string;
+  /** Chức danh người ký dòng 2 */
+  signerTitle2?: string;
+  /** Tên người ký */
+  signerName?: string;
+  /** Đơn vị dòng 1 */
+  headerLeftLine1?: string;
+  /** Đơn vị dòng 2 */
+  headerLeftLine2?: string;
+  /** Quốc hiệu */
+  headerRightLine1?: string;
+  /** Tiêu ngữ */
+  headerRightLine2?: string;
 }

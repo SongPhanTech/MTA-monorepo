@@ -94,7 +94,7 @@ export default function UserProfilePageLecture() {
         orgId || "0"
       ).map((org) => org.value),
       orgId,
-    ]
+    ].filter((id): id is string => typeof id === "string" && id.length > 0)
   }, [orgId, dmDonViIds])
 
   const where = useMemo(() => {
@@ -497,7 +497,7 @@ export default function UserProfilePageLecture() {
                               type="link"
                               target="_blank"
                               rel="noopener noreferrer"
-                              href={`/hrm/${ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO}/${userProfileId}`}
+                              href={`/hrm${ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO}/${userProfileId}`}
                               className="text-green-600 border-none"
                             >
                               <ExportOutlined />

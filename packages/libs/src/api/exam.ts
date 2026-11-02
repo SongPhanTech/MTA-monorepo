@@ -119,6 +119,7 @@ import type {
   GetSurveyStatisticsToFieldParams,
   GetSurveysOfProfile200,
   GetSurveysOfProfileParams,
+  GraduateSurveyReportResponse,
   PaginatedDataItem,
   SaveSurveyRequest,
   SingleTopicGenerationBody,
@@ -2254,6 +2255,286 @@ export function useGetSurveyMajorCount<TData = Awaited<ReturnType<typeof getSurv
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = getGetSurveyMajorCountQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+/**
+ * @summary Lấy dữ liệu báo cáo khảo sát tốt nghiệp theo biểu mẫu của Học viện
+ */
+export type getGraduateSurveyReportDataResponse200 = {
+  data: GraduateSurveyReportResponse
+  status: 200
+}
+
+export type getGraduateSurveyReportDataResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type getGraduateSurveyReportDataResponse403 = {
+  data: ErrorMessageResponse
+  status: 403
+}
+
+export type getGraduateSurveyReportDataResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type getGraduateSurveyReportDataResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type getGraduateSurveyReportDataResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type getGraduateSurveyReportDataResponseSuccess = (getGraduateSurveyReportDataResponse200) & {
+  headers: Headers;
+};
+export type getGraduateSurveyReportDataResponseError = (getGraduateSurveyReportDataResponse400 | getGraduateSurveyReportDataResponse403 | getGraduateSurveyReportDataResponse404 | getGraduateSurveyReportDataResponse409 | getGraduateSurveyReportDataResponse500) & {
+  headers: Headers;
+};
+
+export type getGraduateSurveyReportDataResponse = (getGraduateSurveyReportDataResponseSuccess | getGraduateSurveyReportDataResponseError)
+
+export const getGetGraduateSurveyReportDataUrl = (id: string,) => {
+
+
+  
+
+  return `/api/survey/${id}/graduate-report-data`
+}
+
+export const getGraduateSurveyReportData = async (id: string, options?: RequestInit): Promise<getGraduateSurveyReportDataResponse> => {
+  
+  return customExamFetch<getGraduateSurveyReportDataResponse>(getGetGraduateSurveyReportDataUrl(id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+
+
+export const getGetGraduateSurveyReportDataQueryKey = (id?: string,) => {
+    return [
+    `/api/survey/${id}/graduate-report-data`
+    ] as const;
+    }
+
+    
+export const getGetGraduateSurveyReportDataQueryOptions = <TData = Awaited<ReturnType<typeof getGraduateSurveyReportData>>, TError = ErrorMessageResponse>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGraduateSurveyReportData>>, TError, TData>>, request?: SecondParameter<typeof customExamFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetGraduateSurveyReportDataQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGraduateSurveyReportData>>> = ({ signal }) => getGraduateSurveyReportData(id, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getGraduateSurveyReportData>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetGraduateSurveyReportDataQueryResult = NonNullable<Awaited<ReturnType<typeof getGraduateSurveyReportData>>>
+export type GetGraduateSurveyReportDataQueryError = ErrorMessageResponse
+
+
+export function useGetGraduateSurveyReportData<TData = Awaited<ReturnType<typeof getGraduateSurveyReportData>>, TError = ErrorMessageResponse>(
+ id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGraduateSurveyReportData>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getGraduateSurveyReportData>>,
+          TError,
+          Awaited<ReturnType<typeof getGraduateSurveyReportData>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customExamFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetGraduateSurveyReportData<TData = Awaited<ReturnType<typeof getGraduateSurveyReportData>>, TError = ErrorMessageResponse>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGraduateSurveyReportData>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getGraduateSurveyReportData>>,
+          TError,
+          Awaited<ReturnType<typeof getGraduateSurveyReportData>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customExamFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetGraduateSurveyReportData<TData = Awaited<ReturnType<typeof getGraduateSurveyReportData>>, TError = ErrorMessageResponse>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGraduateSurveyReportData>>, TError, TData>>, request?: SecondParameter<typeof customExamFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Lấy dữ liệu báo cáo khảo sát tốt nghiệp theo biểu mẫu của Học viện
+ */
+
+export function useGetGraduateSurveyReportData<TData = Awaited<ReturnType<typeof getGraduateSurveyReportData>>, TError = ErrorMessageResponse>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGraduateSurveyReportData>>, TError, TData>>, request?: SecondParameter<typeof customExamFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetGraduateSurveyReportDataQueryOptions(id,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+/**
+ * @summary Tải file biểu mẫu báo cáo khảo sát tốt nghiệp từ MinIO
+ */
+export type getGraduateReportTemplateResponse200 = {
+  data: void
+  status: 200
+}
+
+export type getGraduateReportTemplateResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type getGraduateReportTemplateResponse403 = {
+  data: ErrorMessageResponse
+  status: 403
+}
+
+export type getGraduateReportTemplateResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type getGraduateReportTemplateResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type getGraduateReportTemplateResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type getGraduateReportTemplateResponseSuccess = (getGraduateReportTemplateResponse200) & {
+  headers: Headers;
+};
+export type getGraduateReportTemplateResponseError = (getGraduateReportTemplateResponse400 | getGraduateReportTemplateResponse403 | getGraduateReportTemplateResponse404 | getGraduateReportTemplateResponse409 | getGraduateReportTemplateResponse500) & {
+  headers: Headers;
+};
+
+export type getGraduateReportTemplateResponse = (getGraduateReportTemplateResponseSuccess | getGraduateReportTemplateResponseError)
+
+export const getGetGraduateReportTemplateUrl = () => {
+
+
+  
+
+  return `/api/survey/template/graduate-report-docx`
+}
+
+export const getGraduateReportTemplate = async ( options?: RequestInit): Promise<getGraduateReportTemplateResponse> => {
+  
+  return customExamFetch<getGraduateReportTemplateResponse>(getGetGraduateReportTemplateUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+
+
+export const getGetGraduateReportTemplateQueryKey = () => {
+    return [
+    `/api/survey/template/graduate-report-docx`
+    ] as const;
+    }
+
+    
+export const getGetGraduateReportTemplateQueryOptions = <TData = Awaited<ReturnType<typeof getGraduateReportTemplate>>, TError = ErrorMessageResponse>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGraduateReportTemplate>>, TError, TData>>, request?: SecondParameter<typeof customExamFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetGraduateReportTemplateQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGraduateReportTemplate>>> = ({ signal }) => getGraduateReportTemplate({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getGraduateReportTemplate>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetGraduateReportTemplateQueryResult = NonNullable<Awaited<ReturnType<typeof getGraduateReportTemplate>>>
+export type GetGraduateReportTemplateQueryError = ErrorMessageResponse
+
+
+export function useGetGraduateReportTemplate<TData = Awaited<ReturnType<typeof getGraduateReportTemplate>>, TError = ErrorMessageResponse>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGraduateReportTemplate>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getGraduateReportTemplate>>,
+          TError,
+          Awaited<ReturnType<typeof getGraduateReportTemplate>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customExamFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetGraduateReportTemplate<TData = Awaited<ReturnType<typeof getGraduateReportTemplate>>, TError = ErrorMessageResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGraduateReportTemplate>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getGraduateReportTemplate>>,
+          TError,
+          Awaited<ReturnType<typeof getGraduateReportTemplate>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customExamFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetGraduateReportTemplate<TData = Awaited<ReturnType<typeof getGraduateReportTemplate>>, TError = ErrorMessageResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGraduateReportTemplate>>, TError, TData>>, request?: SecondParameter<typeof customExamFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Tải file biểu mẫu báo cáo khảo sát tốt nghiệp từ MinIO
+ */
+
+export function useGetGraduateReportTemplate<TData = Awaited<ReturnType<typeof getGraduateReportTemplate>>, TError = ErrorMessageResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGraduateReportTemplate>>, TError, TData>>, request?: SecondParameter<typeof customExamFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetGraduateReportTemplateQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

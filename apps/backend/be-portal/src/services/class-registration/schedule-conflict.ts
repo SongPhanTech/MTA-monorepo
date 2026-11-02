@@ -73,6 +73,8 @@ export async function assertNoScheduleConflict(
   const registeredRows = await prisma.studentSubjectScore.findMany({
     where: {
       studentId,
+      deletedAt: null,
+      withdrew: false,
       subjectClassId: { not: null, notIn: newClassIds },
       subjectClass: { semesterId, cancelled: false, deletedAt: null },
     },

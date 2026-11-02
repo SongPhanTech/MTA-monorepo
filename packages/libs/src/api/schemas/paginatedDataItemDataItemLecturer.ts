@@ -89,6 +89,8 @@ export type PaginatedDataItemDataItemLecturer = {
   /** @nullable */
   lectureID?: string | null;
   /** @nullable */
+  TKPUcode?: string | null;
+  /** @nullable */
   serviceDate?: string | null;
   organization: PaginatedDataItemDataItemLecturerOrganization;
 } | null;

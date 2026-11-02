@@ -58,8 +58,6 @@ import type { GetSurveysOfProfile200AllOfDataItemSurveyTopicType } from './getSu
 
 export type GetSurveysOfProfile200AllOfDataItemSurveyTopic = {
   id: string;
-  /** @nullable */
-  code?: string | null;
   active?: boolean;
   /** @nullable */
   description?: string | null;
@@ -83,6 +81,8 @@ export type GetSurveysOfProfile200AllOfDataItemSurveyTopic = {
   sThietBiTao?: string | null;
   /** @nullable */
   sThietBiSua?: string | null;
+  /** @nullable */
+  code?: string | null;
   name: string;
   /** @nullable */
   type?: GetSurveysOfProfile200AllOfDataItemSurveyTopicType;

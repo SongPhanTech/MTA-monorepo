@@ -8,6 +8,7 @@ CLAUDE.md
 node_modules
 .pnp
 .pnp.js
+.pnpm-store/
 
 # Local env files
 .env
@@ -44,9 +45,35 @@ yarn-error.log*
 *.pem
 
 .idea
-.vscode
+.vscode/
 ~$*
 
 # Temporary Exports
 tmp-exports/
-**/tmp-exports/
+**/tmp-exports/
+
+# Prisma / engine temp junk
+**/*.node.tmp*
+**/query_engine-*.tmp*
+packages/database/scripts/_tmp-*.mjs
+
+# DB dumps
+pg_backup.sql
+pg_backup.tar
+/pg_backup.*
+
+# Catalog import dumps / backups
+packages/database/scripts/import-catalog.json
+packages/database/scripts/import-catalog.backup-*.json
+
+# Local data dumps
+*.custom
+categories.custom
+data_tro_ly_ao.custom
+
+# Office / sample templates (keep out of git)
+*.xlsx
+*.xls
+*.doc
+*.docx
+/template/

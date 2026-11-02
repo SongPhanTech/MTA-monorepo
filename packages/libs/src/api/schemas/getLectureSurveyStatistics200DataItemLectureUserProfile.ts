@@ -94,6 +94,8 @@ export type GetLectureSurveyStatistics200DataItemLectureUserProfile = {
   /** @nullable */
   bLaHocVien?: boolean | null;
   /** @nullable */
+  bLaSinhVien?: boolean | null;
+  /** @nullable */
   sDM_ViTriCongViecId?: string | null;
   /** @nullable */
   sQuanlyTrucTiepId?: string | null;

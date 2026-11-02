@@ -377,14 +377,56 @@ app.openapi(getClassesInfo, async (c) => {
     registerSession.trainingCourses.find((tc) => tc.trainingObjectTypeId)?.trainingObjectTypeId ??
     undefined
 
+  const enrolledSubjectCondition = {
+    subjectClass: {
+      some: {
+        semesterId: registerSession.semesterId,
+        cancelled: false,
+        deletedAt: null,
+        OR: [
+          {
+            classRegisterLogs: {
+              some: {
+                student: {
+                  userProfileId: session.id,
+                },
+              },
+            },
+          },
+          {
+            subjectClassStudent: {
+              some: {
+                deletedAt: null,
+                withdrew: false,
+                student: {
+                  userProfileId: session.id,
+                },
+              },
+            },
+          },
+        ],
+      },
+    },
+  }
+
   // byCurriculum=false: chỉ lọc theo SubjectClass.trainingObjectTypeId
   // (không lọc SubjectVersion.trainingObjectTypeId — học phần gốc có thể lệch TOT với lớp mở)
   const subjectVersions = await prisma.subjectVersion.findMany({
     where: {
-      ...(byCurriculumBool ? { id: { in: curriculumSubjects.map((item) => item.subjectId) } } : {}),
+      ...(byCurriculumBool
+        ? {
+            OR: [
+              { id: { in: curriculumSubjects.map((item) => item.subjectId) } },
+              enrolledSubjectCondition,
+            ],
+          }
+        : {}),
       subjectClass: {
         some: {
           semesterId: registerSession.semesterId,
+          active: true,
+          deletedAt: null,
+          cancelled: false,
           ...(studentTrainingObjectTypeId && !byCurriculumBool
             ? { trainingObjectTypeId: studentTrainingObjectTypeId }
             : {}),
@@ -403,6 +445,8 @@ app.openapi(getClassesInfo, async (c) => {
                   {
                     subjectClassStudent: {
                       some: {
+                        deletedAt: null,
+                        withdrew: false,
                         student: {
                           userProfileId: session.id,
                         },
@@ -495,6 +539,22 @@ app.openapi(getClassesInfo, async (c) => {
               },
             },
           },
+          subjectClassStudent: {
+            select: {
+              student: {
+                select: {
+                  userProfileId: true,
+                },
+              },
+            },
+            where: {
+              deletedAt: null,
+              withdrew: false,
+              student: {
+                userProfileId: session.id,
+              },
+            },
+          },
           subjectClassTimes: {
             select: {
               dayOfWeek: true,
@@ -552,14 +612,25 @@ app.openapi(getClassesInfo, async (c) => {
 
       return {
         ...version,
-        subjectClass: version.subjectClass.map((subjectClass) => ({
-          ...subjectClass,
-          credit: version.credit ?? 0,
-          type: subjectVersion?.type,
-          prerequisiteSubject: version.prerequisiteSubject,
-          coRequisiteSubject: version.coRequisiteSubject,
-          equivalencyGroups: version.equivalencyGroups,
-        })),
+        subjectClass: version.subjectClass.map((subjectClass) => {
+          const isEnrolled =
+            (subjectClass.classRegisterLogs?.length || 0) > 0 ||
+            ((subjectClass as any).subjectClassStudent?.length || 0) > 0
+
+          return {
+            ...subjectClass,
+            classRegisterLogs: isEnrolled
+              ? subjectClass.classRegisterLogs && subjectClass.classRegisterLogs.length > 0
+                ? subjectClass.classRegisterLogs
+                : [{ student: { userProfileId: session.id } }]
+              : [],
+            credit: version.credit ?? 0,
+            type: subjectVersion?.type,
+            prerequisiteSubject: version.prerequisiteSubject,
+            coRequisiteSubject: version.coRequisiteSubject,
+            equivalencyGroups: version.equivalencyGroups,
+          }
+        }),
       }
     })
     .filter((version) => {

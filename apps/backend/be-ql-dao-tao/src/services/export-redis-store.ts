@@ -14,6 +14,8 @@ export type ExportJobState = {
   classRegisterSessionId?: string
   /** User tạo job — dùng kiểm tra quyền download */
   createdByUserId?: string
+  /** ID bản ghi DataSyncHistory tương ứng */
+  syncHistoryId?: string
   /** @deprecated Không còn ghi file disk */
   filePath?: string
   fileName?: string

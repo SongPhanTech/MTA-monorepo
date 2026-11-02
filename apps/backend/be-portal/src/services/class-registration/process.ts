@@ -50,6 +50,7 @@ export async function processRegistration(
           fixedClass: {
             include: {
               trainingCourse: true,
+              curriculumVersion: true,
             },
           },
         },
@@ -64,7 +65,10 @@ export async function processRegistration(
 
   const studentId =
     profile.educationAndTraining.find(
-      (item) => curriculumVersionId && item.curriculumVersionId === curriculumVersionId
+      (item) =>
+        curriculumVersionId &&
+        (item.curriculumVersionId === curriculumVersionId ||
+          item.fixedClass?.curriculumVersionId === curriculumVersionId)
     )?.id ?? (profile.educationAndTraining[0]?.id as string)
 
   const studentCourse =
@@ -72,17 +76,24 @@ export async function processRegistration(
     profile.educationAndTraining[0]
   const trainingCourse = studentCourse?.fixedClass?.trainingCourse
   const courseBaseScore = trainingCourse?.baseScore ?? AcademicRankingBaseType.Base10
-  const scoreToPass = trainingCourse?.scoreToPass ?? 5
+  const scoreToPass =
+    trainingCourse?.scoreToPass && trainingCourse.scoreToPass > 0
+      ? trainingCourse.scoreToPass
+      : courseBaseScore === AcademicRankingBaseType.Base4
+        ? 2.0
+        : 4.0
 
   const semester = await prisma.semester.findUniqueOrThrow({
     where: { id: registerSession.semesterId },
     select: { startDate: true },
   })
 
-  const nearestSemesterResult = await prisma.studentSemesterResult.findFirst({
+  let nearestSemesterResult = await prisma.studentSemesterResult.findFirst({
     select: {
       gpaBase10: true,
       gpaBase4: true,
+      cumulativeGpaBase4: true,
+      cumulativeGpaBase10: true,
     },
     where: {
       studentId,
@@ -91,8 +102,29 @@ export async function processRegistration(
     orderBy: { semester: { startDate: "desc" } },
   })
 
+  if (!nearestSemesterResult) {
+    nearestSemesterResult = await prisma.studentSemesterResult.findFirst({
+      select: {
+        gpaBase10: true,
+        gpaBase4: true,
+        cumulativeGpaBase4: true,
+        cumulativeGpaBase10: true,
+      },
+      where: { studentId },
+      orderBy: { semesterIndexInCourse: "desc" },
+    })
+  }
+
   const subjectClasses = await prisma.subjectClass.findMany({
-    where: { id: { in: subjectClassIds } },
+    // IDs from the browser are untrusted: only accept classes available in
+    // this registration session's semester.
+    where: {
+      id: { in: subjectClassIds },
+      semesterId: registerSession.semesterId,
+      active: true,
+      cancelled: false,
+      deletedAt: null,
+    },
     include: {
       subject: {
         include: {
@@ -102,6 +134,23 @@ export async function processRegistration(
       },
     },
   })
+
+  // ===== Chuẩn hóa và kiểm tra danh sách lớp =====
+  const sortedClassIds = [...new Set(subjectClassIds)].sort()
+  if (sortedClassIds.length === 0) {
+    throw new RegistrationError("Danh sách lớp đăng ký trống", 400, "EMPTY_CLASS_LIST")
+  }
+
+  const subjectClassLookup = new Map(subjectClasses.map((sc) => [sc.id, sc]))
+  for (const id of sortedClassIds) {
+    if (!subjectClassLookup.has(id)) {
+      throw new RegistrationError(
+        "Lớp học phần không tồn tại hoặc không thuộc đợt đăng ký này",
+        400,
+        "CLASS_NOT_FOUND"
+      )
+    }
+  }
 
   // ===== Kiểm tra môn tiên quyết / môn học trước =====
   const allPrerequisiteIds = [
@@ -174,59 +223,67 @@ export async function processRegistration(
   }
 
   // ===== Kiểm tra giới hạn tín chỉ theo GPA kỳ gần nhất + hệ điểm của khóa =====
-  if (nearestSemesterResult) {
-    const creditLimits = await prisma.classRegisterSessionCredit.findMany({
-      where: { classRegisterSessionId: sessionId, deletedAt: null },
-    })
+  const creditLimits = await prisma.classRegisterSessionCredit.findMany({
+    where: { classRegisterSessionId: sessionId, deletedAt: null },
+    orderBy: [{ base10Min: "asc" }, { base4Min: "asc" }],
+  })
 
-    if (creditLimits.length > 0) {
-      const creditLimit = matchCreditLimitByCourseBaseScore(
+  if (creditLimits.length > 0) {
+    let creditLimit: (typeof creditLimits)[number] | null = null
+
+    if (nearestSemesterResult) {
+      const gpa4 =
+        Number(nearestSemesterResult.gpaBase4 ?? nearestSemesterResult.cumulativeGpaBase4) || 0
+      const gpa10 =
+        Number(nearestSemesterResult.gpaBase10 ?? nearestSemesterResult.cumulativeGpaBase10) || 0
+
+      creditLimit = matchCreditLimitByCourseBaseScore(
         creditLimits,
         courseBaseScore,
-        nearestSemesterResult.gpaBase4.toNumber(),
-        nearestSemesterResult.gpaBase10.toNumber()
+        gpa4,
+        gpa10
       )
-
-      if (creditLimit) {
-        const registeredScores = await prisma.studentSubjectScore.findMany({
-          where: {
-            studentId,
-            subjectClass: { semesterId: registerSession.semesterId },
-          },
-          select: { subjectVersion: { select: { credit: true } } },
-        })
-
-        const registeredCredit = registeredScores.reduce(
-          (acc, curr) => acc + (curr.subjectVersion?.credit ?? 0),
-          0
-        )
-
-        const newTotalCredit =
-          registeredCredit +
-          subjectClasses.reduce((acc, curr) => acc + (curr.subject?.credit ?? 0), 0)
-
-        if (creditLimit.maxCredit && newTotalCredit > creditLimit.maxCredit) {
-          throw new RegistrationError(
-            `Số tín chỉ tối đa là ${creditLimit.maxCredit}`,
-            400,
-            "CREDIT_LIMIT_EXCEEDED"
-          )
-        }
-      }
+    } else {
+      creditLimit =
+        matchCreditLimitByCourseBaseScore(creditLimits, courseBaseScore, 2.5, 7.0) ??
+        creditLimits.find((c) => (c.maxCredit || 0) >= 20) ??
+        creditLimits[creditLimits.length - 1]
     }
-  }
 
-  // ===== Chuẩn hóa danh sách lớp =====
-  const subjectClassLookup = new Map(subjectClasses.map((sc) => [sc.id, sc]))
-  const sortedClassIds = [...new Set(subjectClassIds)].sort()
+    const effectiveMaxCredit =
+      creditLimit?.maxCredit ??
+      creditLimits.find((c) => (c.maxCredit || 0) >= 20)?.maxCredit ??
+      20
 
-  if (sortedClassIds.length === 0) {
-    throw new RegistrationError("Danh sách lớp đăng ký trống", 400, "EMPTY_CLASS_LIST")
-  }
+    const registeredScores = await prisma.studentSubjectScore.findMany({
+      where: {
+        studentId,
+        deletedAt: null,
+        withdrew: false,
+        subjectClass: {
+          semesterId: registerSession.semesterId,
+          cancelled: false,
+          deletedAt: null,
+        },
+      },
+      select: { subjectVersion: { select: { credit: true } } },
+    })
 
-  for (const id of sortedClassIds) {
-    if (!subjectClassLookup.has(id)) {
-      throw new RegistrationError("Không tìm thấy lớp học phần", 400, "CLASS_NOT_FOUND")
+    const registeredCredit = registeredScores.reduce(
+      (acc, curr) => acc + (curr.subjectVersion?.credit ?? 0),
+      0
+    )
+
+    const newTotalCredit =
+      registeredCredit +
+      subjectClasses.reduce((acc, curr) => acc + (curr.subject?.credit ?? 0), 0)
+
+    if (effectiveMaxCredit && newTotalCredit > effectiveMaxCredit) {
+      throw new RegistrationError(
+        `Số tín chỉ tối đa là ${effectiveMaxCredit}`,
+        400,
+        "CREDIT_LIMIT_EXCEEDED"
+      )
     }
   }
 

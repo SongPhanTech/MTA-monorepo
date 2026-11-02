@@ -47,6 +47,8 @@ export type ColumnsType<RecordType = AnyObject> = ((
     | "date"
     | "cmp"
     | (string & {})
+  options?: any[]
+  distinctFilters?: string[]
 })[]
 
 type TableProps<T = AnyObject> = {
@@ -74,6 +76,9 @@ type TableProps<T = AnyObject> = {
   rowSelection?: TableRowSelection<T>
 } & Omit<TableAntdProps, "pagination">
 
+/** Đúng kiểu prop `columns` của Table — dùng khi khai báo columns thành biến riêng */
+export type TableColumns<T = AnyObject> = NonNullable<TableProps<T>["columns"]>
+
 export const Table = <T extends AnyObject>({
   columns = [],
   data,
@@ -90,7 +95,6 @@ export const Table = <T extends AnyObject>({
   maxHeight,
   rowSelection,
   header,
-  className,
   ...rest
 }: TableProps<T>) => {
   const [filtersTable, setFiltersTable] = useState<FilterProps>(filters || {})
@@ -882,7 +886,7 @@ export const Table = <T extends AnyObject>({
   }
 
   return (
-    <div className={clsx("flex min-h-0 min-w-0 w-full flex-col", className)}>
+    <div className={clsx("flex flex-col", rest?.className)}>
       {header && (
         <div className="mt-5 border-gray-200 border border-b-0 px-2.5 py-2.5">{header}</div>
       )}

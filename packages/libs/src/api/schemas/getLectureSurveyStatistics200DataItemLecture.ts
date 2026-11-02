@@ -86,6 +86,8 @@ export type GetLectureSurveyStatistics200DataItemLecture = {
   /** @nullable */
   lectureID?: string | null;
   /** @nullable */
+  TKPUcode?: string | null;
+  /** @nullable */
   serviceDate?: string | null;
   /** @nullable */
   userProfile?: GetLectureSurveyStatistics200DataItemLectureUserProfile;

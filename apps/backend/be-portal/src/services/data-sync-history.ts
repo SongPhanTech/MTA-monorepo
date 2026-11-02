@@ -62,7 +62,12 @@ export async function createDataSyncHistoryPending(input: CreateDataSyncHistoryI
 
 export async function markDataSyncHistorySuccess(
   id: string,
-  extra?: { classRegisterSessionId?: string | null; description?: string | null }
+  extra?: {
+    classRegisterSessionId?: string | null
+    description?: string | null
+    fileName?: string | null
+    recordCounts?: Prisma.InputJsonValue
+  }
 ) {
   const classRegisterSessionId = extra?.classRegisterSessionId
     ? await existingClassRegisterSessionId(extra.classRegisterSessionId)
@@ -72,8 +77,12 @@ export async function markDataSyncHistorySuccess(
     where: { id },
     data: {
       status: $Enums.DataSyncStatus.SUCCESS,
+      // Một job có thể được chạy lại sau lỗi tạm thời; kết quả thành công không được giữ lỗi cũ.
+      errorMessage: null,
       ...(classRegisterSessionId ? { classRegisterSessionId } : {}),
       ...(extra?.description != null ? { description: extra.description } : {}),
+      ...(extra?.fileName != null ? { fileName: extra.fileName } : {}),
+      ...(extra?.recordCounts != null ? { recordCounts: extra.recordCounts } : {}),
     },
   })
 }
@@ -134,9 +143,7 @@ export async function findOtherPendingImport(
       status: $Enums.DataSyncStatus.PENDING,
       deletedAt: null,
       ...(excludeId ? { id: { not: excludeId } } : {}),
-      ...(classRegisterSessionId
-        ? { classRegisterSessionId }
-        : {}),
+      ...(classRegisterSessionId ? { classRegisterSessionId } : {}),
     },
     select: {
       id: true,

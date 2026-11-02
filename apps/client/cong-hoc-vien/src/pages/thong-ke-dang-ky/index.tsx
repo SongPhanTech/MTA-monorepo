@@ -1,4 +1,6 @@
 import DefaultLayout from "@layouts/default-layout"
+import { PagePermissionGate } from "@components/commons/page-permission-gate"
+import { CONG_HOC_VIEN_PERMISSION } from "@workspace/router"
 import {
   type RegistrationStatsPayload,
   useRegistrationStats,
@@ -248,5 +250,11 @@ export default function ThongKeDangKyHocPage() {
 }
 
 ThongKeDangKyHocPage.getLayout = function getLayout(page: React.ReactElement) {
-  return <DefaultLayout breadcrumbList={[{ title: "Thống kê đăng ký học" }]}>{page}</DefaultLayout>
+  return (
+    <DefaultLayout breadcrumbList={[{ title: "Thống kê đăng ký học" }]}>
+      <PagePermissionGate permission={CONG_HOC_VIEN_PERMISSION.CONG_HOC_VIEN_THONG_KE_DANG_KY}>
+        {page}
+      </PagePermissionGate>
+    </DefaultLayout>
+  )
 }
