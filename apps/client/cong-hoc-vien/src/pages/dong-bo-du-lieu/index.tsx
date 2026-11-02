@@ -341,14 +341,10 @@ function DongBoDuLieuPage() {
         onProgress(fake)
       }, 350)
 
-      const safeName = (selectedExportSession?.name || "dot-dang-ky").replace(/[\\/:*?"<>|]/g, "_").trim()
-      const exportFileName = `export-ket-qua-dang-ky-${safeName}.dat`
-
       const startRes = await startDataSync({
         type: "EXPORT",
         sessionName: selectedExportSession?.name ?? "",
         classRegisterSessionId: exportSessionId,
-        fileName: exportFileName,
       })
 
       if (startRes.status !== 200) {
@@ -716,11 +712,10 @@ function DongBoDuLieuPage() {
                   rowKey="id"
                   dataSource={history}
                   bordered={true}
-                  scroll={{ x: 960 }}
                   columns={[
                     {
                       title: "STT",
-                      width: 65,
+                      width: 70,
                       align: "center",
                       render: (_: unknown, __: unknown, index: number) =>
                         (currentPage - 1) * pageSize + index + 1,
@@ -728,8 +723,7 @@ function DongBoDuLieuPage() {
                     {
                       title: "Loại",
                       dataIndex: "type",
-                      width: 90,
-                      align: "center",
+                      width: 110,
                       render: (type: "IMPORT" | "EXPORT") =>
                         type === "IMPORT" ? (
                           <Tag color="blue">Nhập</Tag>
@@ -740,35 +734,22 @@ function DongBoDuLieuPage() {
                     {
                       title: "Đợt đăng ký",
                       dataIndex: "sessionName",
-                      render: (value: string | null) => value || "—",
+                      width: 180,
                     },
                     {
                       title: "Tên file",
                       dataIndex: "fileName",
-                      render: (value: string | null, record: DataSyncHistoryItem) => {
-                        if (value) return value
-                        if (record.type === "EXPORT") {
-                          const safe = (record.sessionName || "dot-dang-ky")
-                            .replace(/[\\/:*?"<>|]/g, "_")
-                            .trim()
-                          return `export-ket-qua-dang-ky-${safe}.dat`
-                        }
-                        return "—"
-                      },
+                      render: (value: string | null) => value ?? "—",
                     },
                     {
                       title: "Trạng thái",
                       dataIndex: "status",
-                      width: 130,
-                      align: "center",
+                      width: 135,
                       render: (status: "PENDING" | "SUCCESS" | "FAILED") => {
                         if (status === "SUCCESS") return <Tag color="success">Thành công</Tag>
                         if (status === "FAILED") return <Tag color="error">Thất bại</Tag>
                         return (
-                          <Tag
-                            color="processing"
-                            className="inline-flex items-center gap-1.5 font-medium"
-                          >
+                          <Tag color="processing" className="inline-flex items-center gap-1.5 font-medium">
                             <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-600" />
                             Đang xử lý
                           </Tag>
@@ -776,10 +757,38 @@ function DongBoDuLieuPage() {
                       },
                     },
                     {
+                      title: "Ghi chú/ Lỗi",
+                      dataIndex: "description",
+                      ellipsis: true,
+                      render: (_: unknown, record: DataSyncHistoryItem) => {
+                        if (record.status === "PENDING") {
+                          const pendingText =
+                            record.type === "EXPORT" ? "Đang xuất dữ liệu" : "Đang nhập dữ liệu"
+                          return (
+                            <span className="text-blue-600 font-medium inline-flex items-center gap-1.5">
+                              <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0 text-blue-600" />
+                              <span className="truncate">{pendingText}</span>
+                            </span>
+                          )
+                        }
+                        if (record.status === "FAILED") {
+                          const failText =
+                            record.type === "EXPORT"
+                              ? "Không xuất được dữ liệu"
+                              : "Không nhập được dữ liệu"
+                          return <span className="text-red-500">{failText}</span>
+                        }
+                        return (
+                          <span className="text-gray-600" title={record.description ?? undefined}>
+                            {record.description || "—"}
+                          </span>
+                        )
+                      },
+                    },
+                    {
                       title: "Thời gian",
                       dataIndex: "createdAt",
-                      width: 175,
-                      align: "center",
+                      width: 180,
                       render: (value: string) =>
                         value ? dayjs(value).format("HH:mm — DD/MM/YYYY") : "—",
                     },
