@@ -1559,9 +1559,7 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
         record.manualFinalScore ?? (record.finalScore ? Number(record.finalScore) : null)
       if (newScore === null) continue
       const existing = bestScoreMap.get(record.subjectVersionId)
-      const isRetake =
-        record.subjectClass?.type === "RETAKE" || record.subjectClass?.type === "REEXAM"
-      if (!existing || newScore > existing.score || isRetake) {
+      if (!existing || newScore > existing.score) {
         bestScoreMap.set(record.subjectVersionId, {
           score: newScore,
           credit: record.subjectVersion?.credit || 0,

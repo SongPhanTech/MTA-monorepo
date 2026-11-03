@@ -284,7 +284,7 @@ const ThongTinTichLuy = async (
       return planned <= currentSemesterIndex
     })
 
-    // Nhóm theo môn học và lấy điểm cao nhất (ưu tiên lớp học lại có điểm cao hơn)
+    // Nhóm theo môn học và lấy điểm cao nhất (kể cả lớp học lại / thi lại)
     type ScoreRecord = (typeof allSubjectScores)[number]
     const bestScoreMap = new Map<string, ScoreRecord>()
     for (const record of allSubjectScores) {
@@ -295,10 +295,7 @@ const ThongTinTichLuy = async (
       }
       const newScore = record.manualFinalScore ?? record.finalScore?.toNumber() ?? null
       const existingScore = existing.manualFinalScore ?? existing.finalScore?.toNumber() ?? null
-      // Ưu tiên lớp học lại hoặc điểm cao hơn
-      const isRetake =
-        record.subjectClass?.type === "RETAKE" || record.subjectClass?.type === "REEXAM"
-      if (newScore !== null && (existingScore === null || newScore > existingScore || isRetake)) {
+      if (newScore !== null && (existingScore === null || newScore > existingScore)) {
         bestScoreMap.set(record.subjectVersionId, record)
       }
     }
