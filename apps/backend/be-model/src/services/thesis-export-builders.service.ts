@@ -875,14 +875,11 @@ type OrgNode = {
   iCapDonVi: number | null
 }
 
+/** Tiêu đề (BỘ QUỐC PHÒNG / HỌC VIỆN KTQS) giữ nguyên theo template; chỉ đổi hệ đào tạo. */
 function guideDecisionHeader(type?: string | null) {
-  if (type === TrainingObjectTypes.CIVILIAN) {
-    return { coQuanCapTren: "BỘ GIÁO DỤC VÀ ĐÀO TẠO", heDaoTao: "hệ dân sự" }
-  }
-  if (type === TrainingObjectTypes.INTERNATIONAL_MILITARY) {
-    return { coQuanCapTren: "BỘ QUỐC PHÒNG", heDaoTao: "hệ quốc tế" }
-  }
-  return { coQuanCapTren: "BỘ QUỐC PHÒNG", heDaoTao: "hệ quân sự" }
+  if (type === TrainingObjectTypes.CIVILIAN) return { heDaoTao: "hệ dân sự" }
+  if (type === TrainingObjectTypes.INTERNATIONAL_MILITARY) return { heDaoTao: "hệ quốc tế" }
+  return { heDaoTao: "hệ quân sự" }
 }
 
 function formatQuyChe(value?: string | null) {
@@ -954,6 +951,7 @@ function resolveKhoa(
   return "Khoa"
 }
 
+/** Chỉ đánh STT khi có từ 2 cán bộ hướng dẫn trở lên (index = 0 → không đánh số). */
 function guideSupervisorLine(expert: any, index: number) {
   if (!expert) return ""
   const profile = expert.expert?.lecturer?.userProfile || expert.lecturer?.userProfile
@@ -962,17 +960,24 @@ function guideSupervisorLine(expert: any, index: number) {
   const title = [academicRank, degree].filter(Boolean).join(".")
   const fullname = expert.name || profile?.fullname || ""
   const name = [title, fullname].filter(Boolean).join(" ").trim()
-  const militaryRank = profile?.rank?.sTen || profile?.rank?.sMa || ""
-  const position = String(expert.position || profile?.position?.sTen || "").trim()
+  // Giảng viên trong học viện: chỉ học hàm, học vị và tên (không cấp bậc, chức vụ)
   const lecturerId = expert.expert?.lecturerId || expert.lecturerId
-  const parts = lecturerId ? [militaryRank, name, position] : [name, resolveExpertWorkplace(expert)]
+  const parts = lecturerId ? [name] : [name, resolveExpertWorkplace(expert)]
   const text = parts.filter(Boolean).join(", ")
-  return text ? `${index}. ${text}` : ""
+  if (!text) return ""
+  return index > 0 ? `${index}. ${text}` : text
+}
+
+function guideSupervisorLines(project: Project | undefined) {
+  const numbered = Boolean(project?.supervisor && project?.coSupervisor)
+  const lines = [project?.supervisor, project?.coSupervisor]
+    .filter(Boolean)
+    .map((expert, idx) => guideSupervisorLine(expert, numbered ? idx + 1 : 0))
+  return { canbohuongdan1: lines[0] || "", canbohuongdan2: lines[1] || "" }
 }
 
 function patchSaoQdHuongDanTemplate(xml: string) {
   return xml
-    .replaceAll("BỘ QUỐC PHÒNG", "{coQuanCapTren}")
     .replaceAll("hệ quân sự", "{heDaoTao}")
     .replaceAll(
       "ăn cứ Quy chế số 923/QC-HV ngày 28/3/2022 của Học viện Kỹ thuật quân sự về tuyển sinh và đào tạo trình độ thạc sĩ tại Học viện;",
@@ -1015,7 +1020,6 @@ async function buildSaoQdHuongDan(rows: StudentRow[], filters: ThesisExportFilte
       councilReport: session?.councilReport || "",
       proposalReport: session?.proposalReport || "",
       quyChe: formatQuyChe(courseRegulation),
-      coQuanCapTren: header.coQuanCapTren,
       heDaoTao: header.heDaoTao,
       ngayQD: qd.day,
       thangQD: qd.month,
@@ -1029,8 +1033,7 @@ async function buildSaoQdHuongDan(rows: StudentRow[], filters: ThesisExportFilte
       hoten: r.hoTen,
       ngaySinh: r.ngaySinh,
       khoaHoc: r.khoaHoc,
-      canbohuongdan1: guideSupervisorLine(project?.supervisor, 1),
-      canbohuongdan2: guideSupervisorLine(project?.coSupervisor, 2),
+      ...guideSupervisorLines(project),
       khoaquanli: resolveKhoa(r.student, project, orgMap),
       text1: maker.text1,
       text2: maker.text2,

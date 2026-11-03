@@ -1949,7 +1949,7 @@ app.openapi(exportPhoiBangCaoHoc, async (c) => {
     const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhoiBangCaoHoc_v1.xlsx")
     const generated = await generateExcelFromTemplate(templateBuffer, payload, {
       showGridLines: true,
-      wrapText: true,
+      wrapText: false,
     })
     const result = applyPhoiBangStudentPrintAreas(generated.buffer, generated.studentPrintBlocks)
 
@@ -2224,7 +2224,7 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
       Buffer.from(data instanceof ArrayBuffer ? new Uint8Array(data) : data)
     const generated = await generateExcelFromTemplate(templateBuffer, payload, {
       showGridLines: true,
-      wrapText: true,
+      wrapText: false,
     })
     const rawResult = toNodeBuffer(generated.buffer)
     const withEndDateFix = toNodeBuffer(await fixPhoiBangNganHanEndDateEnDisplay(rawResult))

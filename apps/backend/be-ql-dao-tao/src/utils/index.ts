@@ -1620,8 +1620,8 @@ export const generateExcelFromTemplate = async (
             protection: cell.protection ? { ...cell.protection } : undefined,
           } as ExcelJS.Style
 
-          if (wrapText && newCell.alignment) {
-            newCell.alignment.wrapText = true
+          if (newCell.alignment) {
+            newCell.alignment.wrapText = wrapText
           }
         }
       })
@@ -1921,7 +1921,7 @@ export const applyPhoiBangNganHanCourseLabelStyles = async (
       }
       cell.alignment = {
         ...(cell.alignment || {}),
-        wrapText: true,
+        wrapText: false,
         horizontal: cell.alignment?.horizontal || "center",
         vertical: options.verticalAlign || cell.alignment?.vertical || "middle",
       }
