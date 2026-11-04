@@ -41,6 +41,7 @@ export const GraduationTranscriptSubjectSchema = z
     scoreBase4: z.number().nullable(),
     letter: z.string().nullable(),
     passed: z.boolean(),
+    exempted: z.boolean(),
     usedForGpa: z.boolean(),
     equivalentNote: z.string().nullable(),
   })

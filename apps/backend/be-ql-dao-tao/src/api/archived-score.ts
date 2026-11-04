@@ -80,19 +80,23 @@ app.openapi(certificateScore, async (c) => {
       active: true,
     },
     include: {
+      certificate: { select: { isUsingScore: true } },
       subjectScores: {
         where: { deletedAt: null, active: true },
       },
     },
   })
 
+  // Chứng chỉ Đạt/Không đạt (VD: GDQP-AN của SV chuyển trường): không có điểm, ghi nhận miễn học
   const translateSubjectScore = archivedCertificates.flatMap((archived) =>
     archived.subjectScores.map(({ subjectVersionId, finalScore }) => ({
       id: createId(),
       archivedCertificateId: archived.id,
       studentId: archived.studentId,
       subjectVersionId,
-      manualFinalScore: finalScore,
+      ...(archived.certificate.isUsingScore
+        ? { manualFinalScore: finalScore }
+        : { manualFinalScore: null, exempted: true }),
     }))
   )
 

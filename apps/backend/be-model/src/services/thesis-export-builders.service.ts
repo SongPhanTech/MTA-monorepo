@@ -873,6 +873,7 @@ type OrgNode = {
   sParentId: string | null
   iLoaiDonVi: number | null
   iCapDonVi: number | null
+  iSTT: number | null
 }
 
 /** Tiêu đề (BỘ QUỐC PHÒNG / HỌC VIỆN KTQS) giữ nguyên theo template; chỉ đổi hệ đào tạo. */
@@ -907,7 +908,14 @@ async function loadOrgChain(ids: string[]) {
   for (let depth = 0; depth < 5 && pending.length; depth++) {
     const rows = await prisma.dM_DonVi.findMany({
       where: { Id: { in: pending } },
-      select: { Id: true, sTen: true, sParentId: true, iLoaiDonVi: true, iCapDonVi: true },
+      select: {
+        Id: true,
+        sTen: true,
+        sParentId: true,
+        iLoaiDonVi: true,
+        iCapDonVi: true,
+        iSTT: true,
+      },
     })
     pending = []
     for (const row of rows) {
@@ -919,18 +927,19 @@ async function loadOrgChain(ids: string[]) {
   return map
 }
 
-function managingUnitName(startId: string | undefined, map: Map<string, OrgNode>) {
-  if (!startId) return ""
+/** Đơn vị quản lý (khoa/viện) kèm STT của đơn vị đó để sắp xếp. */
+function managingUnit(startId: string | undefined, map: Map<string, OrgNode>) {
+  if (!startId) return null
   const start = map.get(startId)
-  if (!start?.sTen?.trim()) return ""
+  if (!start?.sTen?.trim()) return null
   let current: OrgNode | undefined = start
   for (let i = 0; i < 5 && current; i++) {
     const name = current.sTen?.trim() || ""
     if (isFacultyOrg(current) || /^(khoa|viện)\s+/i.test(name))
-      return formatManagingUnit(name, true)
+      return { name: formatManagingUnit(name, true), order: current.iSTT }
     current = current.sParentId ? map.get(current.sParentId) : undefined
   }
-  return formatManagingUnit(start.sTen || "", false)
+  return { name: formatManagingUnit(start.sTen || "", false), order: start.iSTT }
 }
 
 function resolveKhoa(
@@ -945,10 +954,10 @@ function resolveKhoa(
     project?.organization?.Id,
   ].filter(Boolean) as string[]
   for (const id of ids) {
-    const name = managingUnitName(id, orgMap)
-    if (name) return name
+    const unit = managingUnit(id, orgMap)
+    if (unit?.name) return unit
   }
-  return "Khoa"
+  return { name: "Khoa", order: null }
 }
 
 /** Chỉ đánh STT khi có từ 2 cán bộ hướng dẫn trở lên (index = 0 → không đánh số). */
@@ -1002,7 +1011,20 @@ async function buildSaoQdHuongDan(rows: StudentRow[], filters: ThesisExportFilte
     ]
   })
   const orgMap = await loadOrgChain(orgIds)
-  const items = studentRows.map((r) => {
+  // Sắp xếp: STT khoa quản lý → ngành → chuyên ngành → tên (alphabet tiếng Việt).
+  // Sắp theo tên trước rồi sort ổn định theo các khóa còn lại.
+  const sortedRows = studentRows
+    .map((r) => ({ ...r, khoaQuanLy: resolveKhoa(r.student, r.project, orgMap) }))
+    .sortVietnameseName("hoTen")
+    .sort(
+      (a, b) =>
+        (a.khoaQuanLy.order ?? Number.MAX_SAFE_INTEGER) -
+          (b.khoaQuanLy.order ?? Number.MAX_SAFE_INTEGER) ||
+        a.khoaQuanLy.name.localeCompare(b.khoaQuanLy.name, "vi") ||
+        a.nganh.localeCompare(b.nganh, "vi") ||
+        a.chuyennganh.localeCompare(b.chuyennganh, "vi")
+    )
+  const items = sortedRows.map((r) => {
     const project = r.project
     const session = project?.thesisSession
     const qd = formatDocDate(session?.decisionDate)
@@ -1034,7 +1056,7 @@ async function buildSaoQdHuongDan(rows: StudentRow[], filters: ThesisExportFilte
       ngaySinh: r.ngaySinh,
       khoaHoc: r.khoaHoc,
       ...guideSupervisorLines(project),
-      khoaquanli: resolveKhoa(r.student, project, orgMap),
+      khoaquanli: r.khoaQuanLy.name,
       text1: maker.text1,
       text2: maker.text2,
       nguoiky1: maker.name,
