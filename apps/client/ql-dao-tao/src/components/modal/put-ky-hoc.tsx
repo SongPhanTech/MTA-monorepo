@@ -94,6 +94,17 @@ const PutSemesterModal = () => {
     return data.find((i) => i.id === schoolYearIdForm)
   }, [schoolYearIdForm, data])
 
+  const isOutsideSchoolYear = (date: dayjs.Dayjs) =>
+    !!schoolYear &&
+    (date < dayjs(schoolYear.startDate).startOf("day") ||
+      date > dayjs(schoolYear.endDate).endOf("day"))
+
+  // Mở lịch ở tháng đầu năm học khi giá trị hiện tại nằm ngoài năm học (dữ liệu cũ sai)
+  const getDefaultPickerValue = (value?: Date | dayjs.Dayjs | null) =>
+    schoolYear && (!value || isOutsideSchoolYear(dayjs(value)))
+      ? dayjs(schoolYear.startDate)
+      : undefined
+
   const { data: initialData } = useFindUniqueSemester(
     {
       where: { id: input?.semesterId },
@@ -187,27 +198,30 @@ const PutSemesterModal = () => {
             className="w-full"
             placeholder="Chọn ngày bắt đầu"
             disabled={!schoolYear}
-            disabledDate={(date) => {
-              if (!date || !schoolYear) return false
-
-              if (
-                date < dayjs(schoolYear.startDate).startOf("day") ||
-                date > dayjs(schoolYear.endDate).endOf("day")
-              ) {
-                return true
-              }
-
-              if (endDate && date > dayjs(endDate).startOf("day")) {
-                return true
-              }
-
-              return false
-            }}
+            defaultPickerValue={getDefaultPickerValue(startDate)}
+            disabledDate={(date) => !!date && isOutsideSchoolYear(date)}
           />
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="endDate" label="Ngày kết thúc" required>
+        <FormItem
+          form={form}
+          name="endDate"
+          label="Ngày kết thúc"
+          required
+          dependencies={["startDate"]}
+          rules={[
+            { required: true, message: "Vui lòng nhập ngày kết thúc" },
+            {
+              validator: (_, value) => {
+                if (value && startDate && dayjs(value).isBefore(dayjs(startDate), "day")) {
+                  return Promise.reject("Ngày kết thúc phải sau ngày bắt đầu")
+                }
+                return Promise.resolve()
+              },
+            },
+          ]}
+        >
           <DatePicker
             format={{
               format: "DD/MM/YYYY",
@@ -215,19 +229,12 @@ const PutSemesterModal = () => {
             }}
             className="w-full"
             placeholder="Chọn ngày kết thúc"
-            disabled={!schoolYear || !startDate}
+            disabled={!schoolYear}
+            defaultPickerValue={getDefaultPickerValue(endDate)}
             disabledDate={(date) => {
-              if (!date || !schoolYear || !startDate) return false
-
-              if (date < dayjs(startDate).startOf("day")) {
-                return true
-              }
-
-              if (date > dayjs(schoolYear.endDate).endOf("day")) {
-                return true
-              }
-
-              return false
+              if (!date) return false
+              if (isOutsideSchoolYear(date)) return true
+              return !!startDate && date < dayjs(startDate).startOf("day")
             }}
           />
         </FormItem>

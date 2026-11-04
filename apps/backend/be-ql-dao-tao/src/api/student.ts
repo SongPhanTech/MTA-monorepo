@@ -430,8 +430,11 @@ app.openapi(PheDuyetLuuBan, async (c) => {
 
   const studentIds = decisions.map((decision) => decision.studentId)
 
+  // Lưu ban: SV vẫn tiếp tục học ở lớp khoá sau (Điều 29.1d) nên giữ trạng thái đang học (ENROLLED),
+  // việc lưu ban được ghi nhận qua quyết định đã duyệt + chuyển lớp. Nếu đổi sang REPEATED,
+  // SV sẽ bị loại khỏi các chức năng chỉ lấy ENROLLED (xét cảnh cáo / thôi học / lưu ban lần 2, đăng ký học lại, kế hoạch đào tạo...)
   const actionMap = {
-    [AcademicActionType.REPEAT_YEAR]: StudentStatus.REPEATED,
+    [AcademicActionType.REPEAT_YEAR]: StudentStatus.ENROLLED,
     [AcademicActionType.SUSPENSION]: StudentStatus.ACADEMIC_SUSPENSION,
     [AcademicActionType.EXPULSION]: StudentStatus.WITHDRAWN,
   }
@@ -445,7 +448,10 @@ app.openapi(PheDuyetLuuBan, async (c) => {
     const { count } = await tx.student.updateMany({
       where: {
         id: { in: studentIds },
-        status: { not: StudentStatus.GRADUATED },
+        status:
+          academicActionType === AcademicActionType.REPEAT_YEAR
+            ? StudentStatus.ENROLLED // chỉ giữ nguyên SV đang học, không đổi trạng thái khác
+            : { not: StudentStatus.GRADUATED },
       },
       data: {
         status: actionMap[academicActionType],
