@@ -286,7 +286,8 @@ Bun.serve({
   idleTimeout: 60,
   fetch: app.fetch,
   hostname: "0.0.0.0",
-  port: Number(process.env.PORT || 3041),
+  // port: Number(process.env.PORT || 3041),
+  port: process.env.PORT || 3000,
 })
 
 startPreviewCleanupCron()

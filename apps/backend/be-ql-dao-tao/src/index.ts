@@ -184,7 +184,8 @@ export default {
   idleTimeout: 255, // giây — tổng kết 500+ SV có thể > 10s (mặc định Bun)
   fetch: app.fetch,
   hostname: "0.0.0.0",
-  port: Number(process.env.PORT || 3042),
+  // port: Number(process.env.PORT || 3042),
+  port: process.env.PORT || 3000,
 }
 
 process.on("SIGINT", () => {

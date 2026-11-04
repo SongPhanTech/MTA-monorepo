@@ -101,7 +101,8 @@ showRoutes(app, { verbose: true })
 export default {
   fetch: app.fetch,
   hostname: "0.0.0.0",
-  port: Number(process.env.PORT || 3045),
+  // port: Number(process.env.PORT || 3045),
+  port: process.env.PORT || 3000,
 }
 
 process.on("SIGINT", () => {
