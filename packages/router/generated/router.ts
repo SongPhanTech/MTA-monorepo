@@ -25,10 +25,10 @@ export default {
     "THONG_BAO": "/thong-bao"
   },
   "CONG_HOC_VIEN": {
+    "FORBIDDEN": "/403",
     "CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao",
     "DANG_KY_HOC": "/dang-ky-hoc",
     "DONG_BO_DU_LIEU": "/dong-bo-du-lieu",
-    "FORBIDDEN": "/403",
     "HO_SO_CA_NHAN": "/ho-so-ca-nhan",
     "HOME": "/home",
     "INDEX": "/",
@@ -40,10 +40,10 @@ export default {
     "THONG_KE_DANG_KY": "/thong-ke-dang-ky"
   },
   "CONG_SINH_VIEN": {
+    "FORBIDDEN": "/403",
     "CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao",
     "DANG_KY_HOC": "/dang-ky-hoc",
     "DONG_BO_DU_LIEU": "/dong-bo-du-lieu",
-    "FORBIDDEN": "/403",
     "HO_SO_CA_NHAN": "/ho-so-ca-nhan",
     "HOME": "/home",
     "INDEX": "/",
@@ -54,6 +54,7 @@ export default {
     "THOI_KHOA_BIEU": "/thoi-khoa-bieu",
     "THONG_KE_DANG_KY": "/thong-ke-dang-ky"
   },
+  "DANG_KY_HOC": {},
   "KHAO_THI": {
     "BAO_CAO_KHAO_SAT_GIANG_VIEN": "/bao-cao-khao-sat-giang-vien",
     "HOME": "/home",
@@ -188,11 +189,11 @@ export default {
     "QUAN_LY_LUAN_VAN_QUAN_LY_MAU_BIEU": "/quan-ly-luan-van/quan-ly-mau-bieu",
     "QUAN_LY_THANH_TOAN": "/quan-ly-thanh-toan",
     "THONG_BAO": "/thong-bao",
-    "UY_QUYEN_TRUY_CAP": "/uy-quyen-truy-cap",
     "THONG_KE_HOC_LAI": "/thong-ke-hoc-lai",
     "THONG_KE_THI_LAI": "/thong-ke-thi-lai",
     "TO_CHUC_THI_DANH_SACH_THI": "/to-chuc-thi/danh-sach-thi",
     "TO_CHUC_THI_LAP_DANH_SANH_THI": "/to-chuc-thi/lap-danh-sanh-thi",
+    "UY_QUYEN_TRUY_CAP": "/uy-quyen-truy-cap",
     "XET_TOT_NGHIEP_PHU_LUC_VAN_BANG": "/xet-tot-nghiep/phu-luc-van-bang",
     "XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP_ID": "/xet-tot-nghiep/ql-dot-xet-tot-nghiep/[id]",
     "XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP": "/xet-tot-nghiep/ql-dot-xet-tot-nghiep"
@@ -233,12 +234,14 @@ export default {
     "HOME": "/home",
     "INDEX": "/",
     "QL_CAN_BO": "/ql-can-bo",
-    "QUAN_LY_HO_SO_HOC_VIEN": "/quan-ly-ho-so/hoc-vien",
     "QUAN_LY_HO_SO_ID": "/quan-ly-ho-so/[id]",
+    "QUAN_LY_HO_SO_HOC_VIEN_ID": "/quan-ly-ho-so/hoc-vien/[id]",
+    "QUAN_LY_HO_SO_HOC_VIEN": "/quan-ly-ho-so/hoc-vien",
     "QUAN_LY_HO_SO": "/quan-ly-ho-so",
     "QUAN_LY_HO_SO_ME": "/quan-ly-ho-so/me",
     "QUAN_LY_HO_SO_TAO_MOI": "/quan-ly-ho-so/tao-moi"
   },
+  "QL_LICH_CONG_TAC": {},
   "TRO_LY_AO": {
     "CAU_HOI_THUONG_GAP": "/cau-hoi-thuong-gap",
     "HOI_THOAI_ID": "/hoi-thoai/[id]",
