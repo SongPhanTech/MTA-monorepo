@@ -26,8 +26,9 @@ import {
   useUpdateQuestion,
 } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
-import { Button, Checkbox, Col, Form, Input, InputNumber, message, Radio, Row, Tooltip } from "antd"
+import { Button, Checkbox, Col, Form, Input, InputNumber, message, Row, Tooltip } from "antd"
 import { Trash2 } from "lucide-react"
+import useEnsureQuestionBank from "@hooks/question-bank"
 import { useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
@@ -100,7 +101,8 @@ export type PutQuestionType = Prisma.QuestionGetPayload<{
 
 const PutQuestionModal = () => {
   const [form] = Form.useForm<PutQuestionType>()
-  const [storageType, setStorageType] = useState<"khung" | "kho">("khung")
+  // Bỏ tính năng "Lưu tại kho": câu hỏi luôn được lưu tại khung đề
+  // const [storageType, setStorageType] = useState<"khung" | "kho">("khung")
   const [dataOptions, setDataOptions] = useState<any>([
     {
       key: "1",
@@ -126,8 +128,9 @@ const PutQuestionModal = () => {
 
   const { isOpen, onClose, input } = useDisclosure<{
     id: string
-    questionBankId: string
+    questionBankId?: string
     subjectVersionId: string
+    examFrameworkId?: string
   }>({
     tag: "PutQuestionModal",
     onClose: form.resetFields,
@@ -192,18 +195,31 @@ const PutQuestionModal = () => {
     where: {
       deletedAt: null,
       examMatrix: {
-        examFramework: {
-          subjectVersionId: input?.subjectVersionId,
-        },
+        deletedAt: null,
+        ...(input?.examFrameworkId
+          ? { examFrameworkId: input.examFrameworkId }
+          : {
+              examFramework: {
+                subjectVersionId: input?.subjectVersionId,
+              },
+            }),
       },
     },
   })
 
+  const { ensureQuestionBankId } = useEnsureQuestionBank(input?.subjectVersionId)
+
   async function onOk(output?: PutQuestionType) {
     if (!output) return
     try {
-      if (!input?.questionBankId) {
+      const questionBankId =
+        input?.questionBankId || initialValue?.questionBankId || (await ensureQuestionBankId())
+      if (!questionBankId) {
         message.error("Thiếu mã ngân hàng câu hỏi")
+        return
+      }
+      if (!output.knowledgeBlockId) {
+        message.error("Vui lòng chọn chuẩn đầu ra của khung đề")
         return
       }
       const data = {
@@ -211,7 +227,7 @@ const PutQuestionModal = () => {
         type: output.type,
         explanation: output.explanation,
         isAutoGraded: output.isAutoGraded,
-        questionBankId: input?.questionBankId,
+        questionBankId,
         knowledgeBlockId: output.knowledgeBlockId,
         difficult: output.difficult,
         point: output.point ?? 0,
@@ -422,10 +438,10 @@ const PutQuestionModal = () => {
           for (let i = 0; i < subQuestions.length; i++) {
             const sq = subQuestions[i]
             if (sq.id) {
-              await updateSubQuestion(sq.id, sq, i + 1, input.questionBankId, updateQuestion)
+              await updateSubQuestion(sq.id, sq, i + 1, questionBankId, updateQuestion)
             } else {
               await createQuestion({
-                data: buildSubQuestionCreateData(sq, i + 1, input.questionBankId, input.id),
+                data: buildSubQuestionCreateData(sq, i + 1, questionBankId, input.id),
               })
             }
           }
@@ -436,7 +452,7 @@ const PutQuestionModal = () => {
               ...clusterData,
               subQuestions: {
                 create: subQuestions.map((sq, i) =>
-                  buildSubQuestionCreateData(sq, i + 1, input.questionBankId)
+                  buildSubQuestionCreateData(sq, i + 1, questionBankId)
                 ),
               },
             },
@@ -525,7 +541,7 @@ const PutQuestionModal = () => {
     if (!isOpen) return
     if (input?.id) return
     form.setFieldsValue({ point: 0, isAutoGraded: false })
-    setStorageType("khung")
+    // setStorageType("khung")
   }, [isOpen, input?.id, form])
 
   useEffect(() => {
@@ -678,7 +694,8 @@ const PutQuestionModal = () => {
                   />
                 </FormItem>
               </Col>
-              <Col span={12}>
+              {/* Bỏ tính năng "Lưu tại kho": câu hỏi luôn được lưu tại khung đề */}
+              {/* <Col span={12}>
                 <div>
                   <div className="text-sm font-medium mb-3">Vị trí lưu trữ</div>
                   <Radio.Group value={storageType} onChange={(e) => setStorageType(e.target.value)}>
@@ -686,21 +703,19 @@ const PutQuestionModal = () => {
                     <Radio value="kho">Lưu tại kho</Radio>
                   </Radio.Group>
                 </div>
+              </Col> */}
+              <Col span={12}>
+                <FormItem form={form} name="knowledgeBlockId" label="Chuẩn đầu ra" required>
+                  <Select
+                    maxTagCount={"responsive"}
+                    placeholder="Chọn chuẩn đầu ra"
+                    options={knowledgeBlockData?.map(({ id, name }) => ({
+                      value: id,
+                      label: name,
+                    }))}
+                  />
+                </FormItem>
               </Col>
-              {storageType === "khung" && (
-                <Col span={12}>
-                  <FormItem form={form} name="knowledgeBlockId" label="Chuẩn đầu ra">
-                    <Select
-                      maxTagCount={"responsive"}
-                      placeholder="Chọn chuẩn đầu ra"
-                      options={knowledgeBlockData?.map(({ id, name }) => ({
-                        value: id,
-                        label: name,
-                      }))}
-                    />
-                  </FormItem>
-                </Col>
-              )}
               <Col span={12}>
                 <FormItem form={form} name="difficult" label="Mức độ tư duy" required>
                   <Select

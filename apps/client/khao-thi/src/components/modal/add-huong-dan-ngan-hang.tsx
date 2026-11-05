@@ -102,7 +102,13 @@ const AddHuongDanNganHang = () => {
             Bắt đầu mỗi câu bằng <Text code>Câu X:</Text>
           </li>
           <li>
-            Format: <Text code>( Loại câu hỏi- Độ khó) ( Điểm đ)</Text>
+            Format: <Text code>( Loại câu hỏi- Độ khó) ( Điểm đ) [Mã chuẩn đầu ra]</Text>
+          </li>
+          <li>
+            <Text code>[Mã chuẩn đầu ra]</Text> <Text strong>tuỳ chọn</Text>: mã của chuẩn đầu ra
+            đã tạo trong khung đề (ví dụ <Text code>[CDR1]</Text>). Không ghi thì câu hỏi dùng chuẩn
+            đầu ra mặc định chọn trên màn hình import. Câu con của câu hỏi chùm theo chuẩn đầu ra
+            của câu chùm
           </li>
           <li>Các đáp án xuống dòng (A, B, C...)</li>
           <li>
@@ -181,7 +187,7 @@ const AddHuongDanNganHang = () => {
             fontFamily: "Times New Roman, serif",
           }}
         >
-          {`Câu 1: (TN-NB) (8.25 đ) Kế hoạch Barbarossa của Đức Quốc Xã nhằm tấn công quốc gia nào?
+          {`Câu 1: (TN-NB) (8.25 đ) [CDR1] Kế hoạch Barbarossa của Đức Quốc Xã nhằm tấn công quốc gia nào?
 A. Ba Lan
 B. Pháp
 C. Anh
@@ -189,7 +195,7 @@ D. Liên Xô
 
 *Đáp án: D. Liên Xô
 
-Câu 2: (TNN-NB) (0.25 đ) Những nội dung nào thuộc vấn đề cơ bản của triết học?
+Câu 2: (TNN-NB) (0.25 đ) [CDR2] Những nội dung nào thuộc vấn đề cơ bản của triết học?
 A. Vật chất và ý thức cái nào có trước
 B. Con người sống bao lâu
 C. Con người có khả năng nhận thức thế giới hay không
@@ -215,7 +221,7 @@ Câu 5: (TL-TH) (0.5 đ) Phân tích vấn đề cơ bản của triết học
 
 *Đáp án: Gợi ý: Trình bày 2 mặt (vật chất – ý thức, khả năng nhận thức) và ý nghĩa của nó.
 
-Câu 6: (CH-NB) (0.75 đ) Hãy chọn từ khác biệt:
+Câu 6: (CH-NB) (0.75 đ) [CDR1] Hãy chọn từ khác biệt:
 a) (TN-NB) (0.25 đ)
 A. rough
 B. sum

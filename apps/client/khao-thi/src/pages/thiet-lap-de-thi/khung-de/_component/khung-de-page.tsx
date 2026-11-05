@@ -7,11 +7,8 @@ import EditIcon from "@components/icons/edit"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import { cn } from "@lib/utils"
 import { useStore } from "@tanstack/react-store"
-import {
-  useCountExamFramework,
-  useFindManyExamFramework,
-  useUpdateExamFramework,
-} from "@workspace/db/hooks"
+import { useCountExamFramework, useFindManyExamFramework } from "@workspace/db/hooks"
+import { softDeleteExamFramework } from "@/utils/soft-delete-exam-framework"
 import { Button, Col, Flex, Input, message, Row, Space, Tooltip, Typography } from "antd"
 import { useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -20,7 +17,6 @@ import type { UploadedFileItem } from "@components/commons/documentPaths"
 import { ChevronDown, ChevronUp } from "lucide-react"
 import { getMinioUrl } from "@workspace/libs/utils"
 import type { Prisma } from "@workspace/db/client"
-import { queryClient } from "@api/index"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
 
 type ExamFrameworkType = Prisma.ExamFrameworkGetPayload<{
@@ -111,11 +107,6 @@ export default function KhungDeList({ defaultSubjectVersionId }: KhungDeListProp
     where: queryWhere,
   })
 
-  const deleteExamFramework = useUpdateExamFramework({
-    onSuccess: () => message.success("Đã xóa khung đề"),
-    onError: () => message.error("Không thể xóa khung đề"),
-  })
-
   const filteredList = examFrameworkList.filter((item) => {
     const keyword = filters.name?.trim().toLowerCase()
 
@@ -129,17 +120,9 @@ export default function KhungDeList({ defaultSubjectVersionId }: KhungDeListProp
 
   const handleDelete = async (id: string) => {
     try {
-      await deleteExamFramework.mutateAsync({
-        where: { id },
-        data: {
-          active: false,
-          deletedAt: new Date(),
-        },
-      })
+      await softDeleteExamFramework(id)
 
       message.success("Xóa khung đề thành công")
-
-      queryClient.invalidateQueries({ queryKey: ["examFramework"] })
     } catch (error) {
       message.error("Đã xảy ra lỗi, vui lòng thử lại")
     }
@@ -275,6 +258,7 @@ export default function KhungDeList({ defaultSubjectVersionId }: KhungDeListProp
                 store.setState((s) => ({
                   ...s,
                   examFrameworkId: record.id,
+                  ...(s.examFrameworkId !== record.id ? { matrixId: undefined } : {}),
                 }))
               },
               className: cn(

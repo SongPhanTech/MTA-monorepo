@@ -8,21 +8,26 @@ import type { FilterProps } from "@components/commons/typeFilter"
 import { DIFFICULT_LABELS, QUESTION_TYPE_LABELS } from "@constants/constants"
 import { CLUSTER_QUESTION_TYPE, formatClusterSubLabel } from "@/utils/cluster-question-utils"
 import useSpinner from "@hooks/spinner"
+import useEnsureQuestionBank from "@hooks/question-bank"
 import { createId, type Difficult, QuestionType } from "@workspace/db"
 import { useFindManyKnowledgeBlock } from "@workspace/db/hooks"
 import { generatePresignedUrl, sqlTransaction } from "@workspace/libs/api/model"
 import { env, getRuntimeEnv } from "@workspace/libs/utils"
-import { Button, Col, Form, Modal, message, Radio, Row, Select } from "antd"
+import { Button, Col, Form, Modal, message, Row, Select } from "antd"
 import { XMLParser } from "fast-xml-parser"
 import PizZip from "pizzip"
 import type React from "react"
 import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
+// Chuẩn hoá mã chuẩn đầu ra giống khi import CĐR: viết hoa, bỏ khoảng trắng
+const normalizeOutcomeCode = (code: string) => code.toUpperCase().replace(/\s+/g, "")
+
 interface WordImportModalInput {
-  questionBankId: string
+  questionBankId?: string
   knowledgeBlockId: string
   subjectVersionId: string
+  examFrameworkId?: string
 }
 
 const WordImportModal: React.FC = () => {
@@ -30,7 +35,8 @@ const WordImportModal: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
   const { showSpinner, hideSpinner } = useSpinner()
-  const [storageType, setStorageType] = useState<"khung" | "kho">("khung")
+  // Bỏ tính năng "Lưu tại kho": câu hỏi luôn được lưu tại khung đề
+  // const [storageType, setStorageType] = useState<"khung" | "kho">("khung")
   const [form] = Form.useForm()
   const [isAllSelected, setIsAllSelected] = useState(false)
   const [importErrors, setImportErrors] = useState<{ rowIndex: number; message: string }[]>([])
@@ -135,7 +141,7 @@ const WordImportModal: React.FC = () => {
     },
   })
 
-  const questionBankId = input?.questionBankId
+  const { ensureQuestionBankId } = useEnsureQuestionBank(input?.subjectVersionId)
 
   const parser = new XMLParser({
     ignoreAttributes: false,
@@ -421,13 +427,15 @@ const WordImportModal: React.FC = () => {
     typeCode: string
     difficultCode: string
     point: number
+    outcomeCode?: string
     questionText: string
   } | null => {
-    // Pattern: Câu N: ( TYPE- DIFFICULTY) ( POINT đ) Question text
+    // Pattern: Câu N: ( TYPE- DIFFICULTY) ( POINT đ) [MÃ CĐR] Question text
     // TYPE can be: TN, TNN, DK, SX, TL
     // DIFFICULTY can be: NB, TH, VD, VDC
+    // [MÃ CĐR] tuỳ chọn: mã chuẩn đầu ra của khung đề
     const headerRegex =
-      /^Câu\s*(\d+)\s*:\s*\(\s*(TNN|TN|DK|SX|TL|CH)\s*-\s*(NB|TH|VD|VDC)\s*\)\s*\(\s*([\d.,]+)\s*đ\s*\)\s*(.+)?$/i
+      /^Câu\s*(\d+)\s*:\s*\(\s*(TNN|TN|DK|SX|TL|CH)\s*-\s*(NB|TH|VD|VDC)\s*\)\s*\(\s*([\d.,]+)\s*đ\s*\)\s*(?:\[\s*([^\]]*?)\s*\])?\s*(.+)?$/i
 
     const match = line.match(headerRegex)
     if (!match) return null
@@ -437,9 +445,10 @@ const WordImportModal: React.FC = () => {
     const difficultCode = match[3].toUpperCase()
     const pointStr = match[4].replace(",", ".")
     const point = Number.parseFloat(pointStr)
-    const questionText = match[5]?.trim() || ""
+    const outcomeCode = match[5]?.trim() || undefined
+    const questionText = match[6]?.trim() || ""
 
-    return { questionNumber, typeCode, difficultCode, point, questionText }
+    return { questionNumber, typeCode, difficultCode, point, outcomeCode, questionText }
   }
 
   const subQuestionStartRegex = /^([a-z])\)\s*(.*)$/i
@@ -848,6 +857,8 @@ const WordImportModal: React.FC = () => {
 
       const extractedQuestions: any[] = []
       const errors: { rowIndex: number; message: string }[] = []
+      const knowledgeBlockByCode = await fetchKnowledgeBlockByCode()
+      const validOutcomeCodes = [...knowledgeBlockByCode.keys()].join(", ") || "khung chưa có mã nào"
 
       for (const block of questionBlocks) {
         const allText = block.lines.map((l) => l.text).join("\n")
@@ -886,6 +897,18 @@ const WordImportModal: React.FC = () => {
           errors.push({ rowIndex: headerInfo.questionNumber, message: pointCheck.warning })
         }
 
+        // Mã chuẩn đầu ra ghi ở đầu dòng, phải thuộc khung đề đang import
+        let knowledgeBlockId: string | undefined
+        if (headerInfo.outcomeCode) {
+          knowledgeBlockId = knowledgeBlockByCode.get(normalizeOutcomeCode(headerInfo.outcomeCode))
+          if (!knowledgeBlockId) {
+            errors.push({
+              rowIndex: headerInfo.questionNumber,
+              message: `Câu ${headerInfo.questionNumber}: Mã chuẩn đầu ra "${headerInfo.outcomeCode}" không thuộc khung đề này (mã hợp lệ: ${validOutcomeCodes})`,
+            })
+          }
+        }
+
         if (type === CLUSTER_QUESTION_TYPE) {
           const clusterParsed = parseClusterSubQuestions(
             blockLines.slice(1),
@@ -913,6 +936,7 @@ const WordImportModal: React.FC = () => {
           extractedQuestions.push({
             type,
             difficult,
+            knowledgeBlockId,
             contentImagesRaw: allImages,
             explanationImagesRaw: [],
             pointRaw: headerInfo.point,
@@ -987,6 +1011,7 @@ const WordImportModal: React.FC = () => {
         const question: any = {
           type,
           difficult,
+          knowledgeBlockId,
           contentImagesRaw: allImages,
           explanationImagesRaw: [],
           pointRaw: headerInfo.point,
@@ -1160,6 +1185,26 @@ const WordImportModal: React.FC = () => {
     },
 
     {
+      title: "Chuẩn đầu ra",
+      dataIndex: "knowledgeBlockId",
+      width: 200,
+      key: "knowledgeBlockId",
+      render: (value: string | undefined, record: any) => (
+        <Select
+          className="w-full"
+          allowClear
+          value={value}
+          placeholder="Theo chuẩn đầu ra mặc định"
+          options={knowledgeBlockOptions}
+          onChange={(knowledgeBlockId) =>
+            setQuestions((prev) =>
+              prev.map((q) => (q.key === record.key ? { ...q, knowledgeBlockId } : q))
+            )
+          }
+        />
+      ),
+    },
+    {
       title: "Điểm",
       dataIndex: "point",
       width: 80,
@@ -1174,18 +1219,59 @@ const WordImportModal: React.FC = () => {
     },
   ]
 
-  const { data: knowledgeBlockData } = useFindManyKnowledgeBlock({
-    where: {
+  const knowledgeBlockWhere = {
+    deletedAt: null,
+    examMatrix: {
       deletedAt: null,
-      examMatrix: {
-        examFramework: {
-          subjectVersionId: input?.subjectVersionId,
-        },
-      },
+      ...(input?.examFrameworkId
+        ? { examFrameworkId: input.examFrameworkId }
+        : {
+            examFramework: {
+              subjectVersionId: input?.subjectVersionId,
+            },
+          }),
     },
-  })
+  }
 
-  const buildQuestionPayload = async (q: any, knowledgeBlockId?: string) => {
+  const { data: knowledgeBlockData, refetch: refetchKnowledgeBlocks } = useFindManyKnowledgeBlock(
+    { where: knowledgeBlockWhere },
+    { enabled: isOpen }
+  )
+
+  const knowledgeBlockOptions = useMemo(
+    () =>
+      (knowledgeBlockData ?? []).map(({ id, name, code }) => ({
+        value: id,
+        label: code ? `${code} - ${name}` : name,
+      })),
+    [knowledgeBlockData]
+  )
+
+  // Lấy mới danh sách chuẩn đầu ra của khung ngay lúc đọc file, không dùng dữ liệu cache
+  const fetchKnowledgeBlockByCode = async () => {
+    const res = await sqlTransaction([
+      {
+        model: "KnowledgeBlock",
+        operation: "findMany",
+        data: { where: knowledgeBlockWhere, select: { id: true, code: true } },
+      },
+    ])
+    const rows: { id: string; code: string | null }[] =
+      res?.status === 200 ? ((res.data as any)?.[0] ?? []) : (knowledgeBlockData ?? [])
+    refetchKnowledgeBlocks()
+
+    const map = new Map<string, string>()
+    for (const kb of rows) {
+      if (kb.code) map.set(normalizeOutcomeCode(kb.code), kb.id)
+    }
+    return map
+  }
+
+  const buildQuestionPayload = async (
+    q: any,
+    questionBankId: string,
+    knowledgeBlockId?: string
+  ) => {
     if (q.type === CLUSTER_QUESTION_TYPE) {
       let content = ""
       try {
@@ -1204,7 +1290,7 @@ const WordImportModal: React.FC = () => {
           point: q.point,
           isAutoGraded: true,
           questionBankId,
-          ...(storageType === "khung" ? { knowledgeBlockId } : {}),
+          knowledgeBlockId,
         },
         subQuestionsRaw: q.subQuestionsRaw || [],
       }
@@ -1232,7 +1318,7 @@ const WordImportModal: React.FC = () => {
       isAutoGraded: false,
       questionBankId,
       id: createId(),
-      ...(storageType === "khung" ? { knowledgeBlockId } : {}),
+      knowledgeBlockId,
     }
 
     if (
@@ -1299,23 +1385,24 @@ const WordImportModal: React.FC = () => {
   const onOk = async () => {
     try {
       const { knowledgeBlockId } = await form.validateFields()
-      if (storageType === "khung" && !knowledgeBlockId) {
-        message.error("Bạn phải chọn Chuẩn đầu ra khi lưu tại khung")
+      const selectedQuestions = questions.filter((q) => selectedRowKeys.includes(q.key))
+      if (!knowledgeBlockId && selectedQuestions.some((q) => !q.knowledgeBlockId)) {
+        message.error("Có câu hỏi chưa có mã chuẩn đầu ra, vui lòng chọn Chuẩn đầu ra mặc định")
         return
       }
 
+      const questionBankId = input?.questionBankId || (await ensureQuestionBankId())
       if (!questionBankId) {
         message.error("Bạn phải chọn Ngân hàng câu hỏi (Question Bank)!")
         return
       }
 
       showSpinner()
-      const selectedQuestions = questions.filter((q) => selectedRowKeys.includes(q.key))
       const clusterSelected = selectedQuestions.filter((q) => q.type === CLUSTER_QUESTION_TYPE)
       const normalSelected = selectedQuestions.filter((q) => q.type !== CLUSTER_QUESTION_TYPE)
 
       const payloads = await Promise.all(
-        normalSelected.map((q) => buildQuestionPayload(q, knowledgeBlockId))
+        normalSelected.map((q) => buildQuestionPayload(q, questionBankId, q.knowledgeBlockId || knowledgeBlockId))
       )
 
       const questionsData: any[] = []
@@ -1401,13 +1488,18 @@ const WordImportModal: React.FC = () => {
       }
 
       for (const cq of clusterSelected) {
-        const clusterPayload = (await buildQuestionPayload(cq, knowledgeBlockId)) as {
+        const clusterPayload = (await buildQuestionPayload(
+          cq,
+          questionBankId,
+          cq.knowledgeBlockId || knowledgeBlockId
+        )) as {
           isCluster: true
           parent: Record<string, unknown>
           subQuestionsRaw: any[]
         }
 
         const parentId = clusterPayload.parent.id as string
+        const clusterKnowledgeBlockId = clusterPayload.parent.knowledgeBlockId
         const clusterOps: any[] = [
           {
             model: "Question",
@@ -1434,7 +1526,7 @@ const WordImportModal: React.FC = () => {
             questionBankId,
             parentQuestionId: parentId,
             order: index + 1,
-            ...(storageType === "khung" ? { knowledgeBlockId } : {}),
+            knowledgeBlockId: clusterKnowledgeBlockId,
           })
 
           const relations = buildSubQuestionRelationRows(sq, subId)
@@ -1508,10 +1600,10 @@ const WordImportModal: React.FC = () => {
       open={isOpen}
       width="90vw"
       onCancel={onClose}
-      style={{ top: storageType === "khung" ? 8 : 20 }}
+      style={{ top: 8 }}
       styles={{
         body: {
-          height: questions.length === 0 ? "auto" : storageType === "khung" ? "88vh" : "82vh",
+          height: questions.length === 0 ? "auto" : "88vh",
           overflow: "hidden",
         },
       }}
@@ -1563,7 +1655,8 @@ const WordImportModal: React.FC = () => {
               Hướng dẫn điền file Word
             </Button>
           </Col>
-          <Col span={24}>
+          {/* Bỏ tính năng "Lưu tại kho": câu hỏi luôn được lưu tại khung đề */}
+          {/* <Col span={24}>
             <div className="mt-2 mb-2">
               <div className="text-sm font-medium">Vị trí lưu trữ</div>
               <Radio.Group
@@ -1581,30 +1674,26 @@ const WordImportModal: React.FC = () => {
                 <Radio value="kho">Lưu tại kho</Radio>
               </Radio.Group>
             </div>
-          </Col>
+          </Col> */}
 
-          {storageType === "khung" && (
-            <Col span={24}>
-              <Col span={6}>
-                <FormItem
-                  form={form}
-                  name="knowledgeBlockId"
-                  label="Chuẩn đầu ra"
-                  layout="vertical"
-                  required
-                >
-                  <Select
-                    maxTagCount={"responsive"}
-                    placeholder="Chọn chuẩn đầu ra"
-                    options={knowledgeBlockData?.map(({ id, name }) => ({
-                      value: id,
-                      label: name,
-                    }))}
-                  />
-                </FormItem>
-              </Col>
+          <Col span={24}>
+            <Col span={6}>
+              <FormItem
+                form={form}
+                name="knowledgeBlockId"
+                label="Chuẩn đầu ra mặc định"
+                tooltip="Áp dụng cho các câu không ghi mã chuẩn đầu ra [MÃ] ở đầu dòng"
+                layout="vertical"
+              >
+                <Select
+                  maxTagCount={"responsive"}
+                  allowClear
+                  placeholder="Chọn chuẩn đầu ra"
+                  options={knowledgeBlockOptions}
+                />
+              </FormItem>
             </Col>
-          )}
+          </Col>
         </Row>
       </Form>
 

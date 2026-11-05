@@ -1,5 +1,6 @@
 import { PlusOutlined, UploadOutlined } from "@ant-design/icons"
 import { queryClient } from "@api/index"
+import { softDeleteKnowledgeBlock } from "@/utils/soft-delete-exam-framework"
 import Table from "@components/commons/table"
 import DeleteIcon from "@components/icons/delete"
 import EditIcon from "@components/icons/edit"
@@ -9,7 +10,6 @@ import {
   useCreateDocumentFile,
   useDeleteDocumentFile,
   useFindManyKnowledgeBlock,
-  useUpdateKnowledgeBlock,
 } from "@workspace/db/hooks"
 import { Button, Flex, message, Tooltip, Upload } from "antd"
 import { useState } from "react"
@@ -54,22 +54,10 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
     }
   )
 
-  const { mutateAsync: updateKnowledgeBlock } = useUpdateKnowledgeBlock()
 
   const handleDeleteKnowledgeBlock = async (id: string) => {
     try {
-      await updateKnowledgeBlock({
-        where: {
-          id,
-        },
-        data: {
-          deletedAt: new Date(),
-        },
-      })
-
-      queryClient.invalidateQueries({
-        queryKey: ["KnowledgeBlock"],
-      })
+      await softDeleteKnowledgeBlock(id)
       message.success("Xóa chuẩn đầu ra thành công")
     } catch (error) {
       message.error("Xóa chuẩn đầu ra thất bại")

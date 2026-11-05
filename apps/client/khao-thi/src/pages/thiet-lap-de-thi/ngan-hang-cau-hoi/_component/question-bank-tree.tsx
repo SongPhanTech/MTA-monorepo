@@ -1,12 +1,12 @@
 import DeleteIcon from "@components/icons/delete"
 import EditIcon from "@components/icons/edit"
 import { buildOrgTree, type OrgTreeItem } from "@lib/utils"
-import type { Prisma, QuestionBank } from "@workspace/db/client"
+import type { ExamFramework, Prisma } from "@workspace/db/client"
 import { Space, Tooltip, Tree } from "antd"
 import { BookOpen, BookPlus, Building2, Database, FileText } from "lucide-react"
 import type React from "react"
 import { memo, useCallback, useEffect, useMemo, useRef } from "react"
-import type { PutQuestionBankInput } from ".."
+import type { PutExamFrameworkInput } from ".."
 
 type DonViType = Prisma.DM_DonViGetPayload<{
   include: {
@@ -14,7 +14,7 @@ type DonViType = Prisma.DM_DonViGetPayload<{
       include: {
         subjectVersion: {
           include: {
-            questionBanks: true
+            examFramework: true
             _count: {
               select: {
                 examFramework: true
@@ -31,10 +31,10 @@ interface QuestionBankTreeProps {
   searchName: string
   expandedKeys: React.Key[]
   setExpandedKeys: (keys: React.Key[]) => void
-  setSelectedQuestionBankId: (id: string) => void
+  setSelectedExamFramework: (value: { id: string; subjectVersionId: string }) => void
   donViData: DonViType[]
-  onOpenPutQuestionBank: (input?: PutQuestionBankInput) => void
-  handleDeleteQuestionBank: (id: string) => void
+  onOpenExamFramework: (input?: PutExamFrameworkInput) => void
+  handleDeleteExamFramework: (id: string) => void
   onOpenNganHangKhungDe: (input: { subjectVersionId: string }) => void
 }
 
@@ -66,22 +66,22 @@ const SubjectVersionTitle = memo(
     name,
     versionId,
     examFrameworkCount,
-    onOpenPutQuestionBank,
+    onOpenExamFramework,
     onOpenNganHangKhungDe,
   }: {
     code: string | null
     name: string
     versionId: string
     examFrameworkCount: number
-    onOpenPutQuestionBank: (input?: PutQuestionBankInput) => void
+    onOpenExamFramework: (input?: PutExamFrameworkInput) => void
     onOpenNganHangKhungDe: (input: { subjectVersionId: string }) => void
   }) => {
     const handleAddClick = useCallback(
       (e: React.MouseEvent) => {
         e.stopPropagation()
-        onOpenPutQuestionBank({ subjectVersionId: versionId })
+        onOpenExamFramework({ subjectVersionId: versionId })
       },
-      [versionId, onOpenPutQuestionBank]
+      [versionId, onOpenExamFramework]
     )
 
     const handleBadgeClick = useCallback(
@@ -111,7 +111,7 @@ const SubjectVersionTitle = memo(
             </Tooltip>
           )}
         </Space>
-        <Tooltip title="Thêm mới" placement="top">
+        <Tooltip title="Thêm mới khung đề" placement="top">
           <BookPlus
             className="text-[#028850] flex-shrink-0 cursor-pointer absolute right-0"
             size={17}
@@ -124,37 +124,37 @@ const SubjectVersionTitle = memo(
 )
 SubjectVersionTitle.displayName = "SubjectVersionTitle"
 
-const QuestionBankTitle = memo(
+const ExamFrameworkTitle = memo(
   ({
-    qb,
-    onOpenPutQuestionBank,
-    handleDeleteQuestionBank,
+    ef,
+    onOpenExamFramework,
+    handleDeleteExamFramework,
   }: {
-    qb: QuestionBank
-    onOpenPutQuestionBank: (input?: PutQuestionBankInput) => void
-    handleDeleteQuestionBank: (id: string) => void
+    ef: ExamFramework
+    onOpenExamFramework: (input?: PutExamFrameworkInput) => void
+    handleDeleteExamFramework: (id: string) => void
   }) => {
     const handleEditClick = useCallback(
       (e: React.MouseEvent) => {
         e.stopPropagation()
-        onOpenPutQuestionBank({ id: qb.id })
+        onOpenExamFramework({ id: ef.id })
       },
-      [qb.id, onOpenPutQuestionBank]
+      [ef.id, onOpenExamFramework]
     )
 
     const handleDeleteConfirm = useCallback(
       (e?: React.MouseEvent) => {
         e?.stopPropagation()
-        handleDeleteQuestionBank(qb.id)
+        handleDeleteExamFramework(ef.id)
       },
-      [qb.id, handleDeleteQuestionBank]
+      [ef.id, handleDeleteExamFramework]
     )
 
     return (
       <div className="flex items-center justify-between w-full py-2">
         <Space size="middle" align="center">
           <Database className="w-4 h-4 flex-shrink-0 text-green-600" />
-          <span className="font-medium">{qb.name}</span>
+          <span className="font-medium">{ef.name}</span>
         </Space>
         <div className="flex items-center gap-2 ml-5" onClick={(e) => e.stopPropagation()}>
           <EditIcon
@@ -171,16 +171,16 @@ const QuestionBankTitle = memo(
     )
   }
 )
-QuestionBankTitle.displayName = "QuestionBankTitle"
+ExamFrameworkTitle.displayName = "ExamFrameworkTitle"
 
 export default function QuestionBankTree({
   searchName,
   expandedKeys,
   setExpandedKeys,
-  setSelectedQuestionBankId,
+  setSelectedExamFramework,
   donViData,
-  onOpenPutQuestionBank,
-  handleDeleteQuestionBank,
+  onOpenExamFramework,
+  handleDeleteExamFramework,
   onOpenNganHangKhungDe,
 }: QuestionBankTreeProps) {
   const processedData = useMemo(() => {
@@ -216,15 +216,15 @@ export default function QuestionBankTree({
                 const versionKey = `ver-${version.id}`
                 const versionMatches = matchesSearch(version.name, version.code)
 
-                const bankData = (version.questionBanks || [])
-                  .filter((qb: QuestionBank) => qb.deletedAt === null)
-                  .map((qb: QuestionBank) => {
-                    const qbMatches = matchesSearch(qb.name, qb.code)
+                const bankData = (version.examFramework || [])
+                  .filter((ef: ExamFramework) => ef.deletedAt === null)
+                  .map((ef: ExamFramework) => {
+                    const efMatches = matchesSearch(ef.name, ef.code)
                     return {
-                      key: `qb-${qb.id}`,
+                      key: `ef-${ef.id}`,
                       isLeaf: true,
-                      qb,
-                      matches: qbMatches,
+                      ef,
+                      matches: efMatches,
                     }
                   })
                   .filter(
@@ -232,7 +232,7 @@ export default function QuestionBankTree({
                       matches: boolean
                       key: string
                       isLeaf: boolean
-                      qb: QuestionBank
+                      ef: ExamFramework
                     }) => {
                       if (!normalizedSearch) return true
                       return orgMatches || subjectMatches || versionMatches || item.matches
@@ -331,18 +331,18 @@ export default function QuestionBankTree({
   const treeData = useMemo(() => {
     const convertToTreeNodes = (nodes: any[]): any[] => {
       return nodes.map((node) => {
-        if (node.qb) {
+        if (node.ef) {
           return {
             key: node.key,
             title: (
-              <QuestionBankTitle
-                qb={node.qb}
-                onOpenPutQuestionBank={onOpenPutQuestionBank}
-                handleDeleteQuestionBank={handleDeleteQuestionBank}
+              <ExamFrameworkTitle
+                ef={node.ef}
+                onOpenExamFramework={onOpenExamFramework}
+                handleDeleteExamFramework={handleDeleteExamFramework}
               />
             ),
             isLeaf: true,
-            data: node.qb,
+            data: node.ef,
           }
         }
 
@@ -355,7 +355,7 @@ export default function QuestionBankTree({
                 name={node.version.name}
                 versionId={node.version.id}
                 examFrameworkCount={node.version._count?.examFramework ?? 0}
-                onOpenPutQuestionBank={onOpenPutQuestionBank}
+                onOpenExamFramework={onOpenExamFramework}
                 onOpenNganHangKhungDe={onOpenNganHangKhungDe}
               />
             ),
@@ -389,8 +389,8 @@ export default function QuestionBankTree({
     return convertToTreeNodes(processedData.dataStructure)
   }, [
     processedData.dataStructure,
-    onOpenPutQuestionBank,
-    handleDeleteQuestionBank,
+    onOpenExamFramework,
+    handleDeleteExamFramework,
     onOpenNganHangKhungDe,
   ])
 
@@ -423,9 +423,9 @@ export default function QuestionBankTree({
     (_: React.Key[], info: any) => {
       const key = info.node.key as string
 
-      if (key.startsWith("qb-")) {
-        const qbId = key.replace("qb-", "")
-        setSelectedQuestionBankId(qbId)
+      if (key.startsWith("ef-")) {
+        const ef = info.node.data as ExamFramework
+        setSelectedExamFramework({ id: ef.id, subjectVersionId: ef.subjectVersionId })
       } else {
         const isExpanded = expandedKeys.includes(key)
         if (isExpanded) {
@@ -435,7 +435,7 @@ export default function QuestionBankTree({
         }
       }
     },
-    [expandedKeys, setExpandedKeys, setSelectedQuestionBankId]
+    [expandedKeys, setExpandedKeys, setSelectedExamFramework]
   )
 
   return (

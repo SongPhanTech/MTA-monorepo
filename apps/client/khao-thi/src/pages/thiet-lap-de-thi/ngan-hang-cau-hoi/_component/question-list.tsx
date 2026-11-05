@@ -9,11 +9,7 @@ import EditIcon from "@components/icons/edit"
 import { CLUSTER_QUESTION_TYPE, formatClusterSubLabel } from "@/utils/cluster-question-utils"
 import { LEVEL_COLUMNS, QUESTION_TYPE_LABELS, QUESTION_TYPE_OPTIONS } from "@constants/constants"
 import type { QuestionType } from "@workspace/db/client"
-import {
-  useFindManyKnowledgeBlock,
-  useFindManyQuestion,
-  useFindUniqueQuestionBank,
-} from "@workspace/db/hooks"
+import { useFindManyKnowledgeBlock, useFindManyQuestion } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { Button, Col, Flex, message, Popconfirm, Row } from "antd"
 import { BookPlus } from "lucide-react"
@@ -21,10 +17,11 @@ import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
 interface QuestionListProps {
-  questionBankId: string
+  examFrameworkId: string
+  subjectVersionId: string
 }
 
-export default function QuestionList({ questionBankId }: QuestionListProps) {
+export default function QuestionList({ examFrameworkId, subjectVersionId }: QuestionListProps) {
   const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([])
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys as string[])
@@ -38,19 +35,21 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
 
   const { onOpen: onOpenPutQuestion } = useDisclosure<{
     id: string
-    questionBankId: string
     subjectVersionId: string
+    examFrameworkId: string
   }>({
     tag: "PutQuestionModal",
   })
 
   const { onOpen: onOpenWordImport } = useDisclosure<{
-    questionBankId: string
     knowledgeBlockId: string
+    subjectVersionId: string
+    examFrameworkId: string
   }>({
     tag: "WordImportModal",
   })
 
+  // Sao chép / chuyển câu hỏi sang khung đề khác để dùng ở nhiều khung
   const { onOpen: onOpenMoveQuestion } = useDisclosure<{
     questionIds: string[]
     onDone?: () => void
@@ -60,34 +59,29 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
 
   const { onOpen: onOpenNganHangKhungDe } = useDisclosure<{
     subjectVersionId?: string
+    examFrameworkId?: string
   }>({
     tag: "AddNganHangKhungDe",
   })
 
-  const { data: initialValue } = useFindUniqueQuestionBank(
+  const { data: knowledgeBlockData = [] } = useFindManyKnowledgeBlock(
     {
-      where: { id: questionBankId },
-      include: {
-        subjectVersion: true,
-        questions: {
-          include: {
-            multipleChoiceOptions: true,
-            fillInBlankSlots: true,
-            orderingItems: true,
-          },
-        },
+      where: {
+        deletedAt: null,
+        examMatrix: { examFrameworkId, deletedAt: null },
       },
     },
-    { enabled: !!questionBankId }
+    { enabled: !!examFrameworkId }
   )
-
-  const { data: knowledgeBlockData = [] } = useFindManyKnowledgeBlock()
 
   const where = useMemo(
     () =>
       ({
         deletedAt: null as null,
-        questionBankId,
+        knowledgeBlock: {
+          deletedAt: null,
+          examMatrix: { examFrameworkId, deletedAt: null },
+        },
         parentQuestionId: null,
         ...(filters.questionType && filters.questionType.length > 0
           ? {
@@ -116,14 +110,14 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
             }
           : {}),
       }) as any,
-    [questionBankId, filters.questionType, filters.content, filters.explanation, filters.difficult]
+    [examFrameworkId, filters.questionType, filters.content, filters.explanation, filters.difficult]
   )
 
   const queryOptions = useMemo(
     () => ({
-      enabled: !!questionBankId,
+      enabled: !!examFrameworkId,
     }),
-    [questionBankId]
+    [examFrameworkId]
   )
 
   const { data } = useFindManyQuestion(
@@ -259,27 +253,24 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
                         })
                       }
                     >
-                      Chuyển tới
+                      Sao chép / chuyển tới
                     </Button>
                   </>
                 )}
                 <Button
                   type="primary"
-                  onClick={() =>
-                    onOpenNganHangKhungDe({
-                      subjectVersionId: initialValue?.subjectVersionId || undefined,
-                    })
-                  }
+                  onClick={() => onOpenNganHangKhungDe({ subjectVersionId, examFrameworkId })}
                 >
-                  Thêm mới khung đề
+                  Thiết lập khung đề
                 </Button>
                 <Button
                   size="middle"
                   icon={<FileWordOutlined />}
                   onClick={() =>
                     onOpenWordImport({
-                      questionBankId: questionBankId,
                       knowledgeBlockId: "",
+                      subjectVersionId,
+                      examFrameworkId,
                     })
                   }
                   type="primary"
@@ -293,8 +284,8 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
                   onClick={() =>
                     onOpenPutQuestion({
                       id: "",
-                      questionBankId,
-                      subjectVersionId: initialValue?.subjectVersionId || "",
+                      subjectVersionId,
+                      examFrameworkId,
                     })
                   }
                 >
@@ -422,6 +413,13 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
                 },
               },
               {
+                title: "Điểm",
+                dataIndex: "point",
+                width: 80,
+                align: "center",
+                render: (point: number) => point ?? 0,
+              },
+              {
                 title: "Chuẩn đầu ra",
                 dataIndex: "knowledgeBlockId",
                 width: 150,
@@ -447,8 +445,8 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
                           onClick={() =>
                             onOpenPutQuestion({
                               id: record.id,
-                              questionBankId,
-                              subjectVersionId: initialValue?.subjectVersionId || "",
+                              subjectVersionId,
+                              examFrameworkId,
                             })
                           }
                         />

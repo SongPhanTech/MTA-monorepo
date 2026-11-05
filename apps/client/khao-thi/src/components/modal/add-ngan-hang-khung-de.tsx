@@ -5,7 +5,7 @@ import QuestionBankLite from "@pages/thiet-lap-de-thi/khung-de/_component/ngan-h
 import { useStore } from "@tanstack/react-store"
 import { Modal, Tabs } from "antd"
 import { TabsProps } from "antd/lib"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
 const AddNganHangKhungDe = () => {
@@ -13,9 +13,17 @@ const AddNganHangKhungDe = () => {
   const { examFrameworkId, matrixId } = useStore(store)
   const { isOpen, onClose, input } = useDisclosure<{
     subjectVersionId?: string
+    examFrameworkId?: string
   }>({
     tag: "AddNganHangKhungDe",
   })
+
+  // store dùng chung với trang Khung đề: mỗi lần mở phải đặt lại, tránh hiện khung/ma trận cũ
+  useEffect(() => {
+    if (!isOpen) return
+    store.setState((s) => ({ ...s, examFrameworkId: input?.examFrameworkId, matrixId: undefined }))
+    setActiveKey(input?.examFrameworkId ? "2" : "1")
+  }, [isOpen, input?.examFrameworkId])
 
   const items: TabsProps["items"] = useMemo(() => {
     return [
