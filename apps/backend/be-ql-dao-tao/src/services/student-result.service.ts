@@ -1617,6 +1617,14 @@ export async function calculateStudentYearResult({
   const semesterIds = schoolYear.semesters.map((s) => s.id)
   const yearEnd = schoolYear.endDate || new Date()
 
+  // Tổng kết năm học chỉ tính 2 học kỳ chính (HK1, HK2), không tính học kỳ hè / phụ / thi lại / chưa phân loại
+  const mainSemestersInYear = schoolYear.semesters.filter(
+    (s) =>
+      !s.deletedAt &&
+      (s.semesterType === SemesterType.FIRST || s.semesterType === SemesterType.SECOND)
+  )
+  const mainSemesterIds = mainSemestersInYear.map((s) => s.id)
+
   // 3.1 Lấy thông tin môn học trong CTĐT của sinh viên
   const curriculumVersionId = student.curriculumVersionId || student.fixedClass?.curriculumVersionId
   if (!curriculumVersionId) throw new Error("Sinh viên chưa được gán CTĐT")
@@ -1691,7 +1699,7 @@ export async function calculateStudentYearResult({
     const index = plannedIndexBySubject.get(subjectVersionId)
     if (index == null) return false
     const mapped = semesterByIndex.get(index)
-    return mapped != null && semesterIds.includes(mapped.semesterId)
+    return mapped != null && mainSemesterIds.includes(mapped.semesterId)
   }
 
   const manualScoreInCumulative = (subjectVersionId: string) => {
@@ -1718,9 +1726,9 @@ export async function calculateStudentYearResult({
       : 0
 
   // A. Phân loại điểm
-  // Điểm trong năm học hiện tại
+  // Điểm trong năm học hiện tại (chỉ học kỳ chính)
   const scoresInYear = allScores.filter((s) => {
-    if (s.subjectClass && semesterIds.includes(s.subjectClass.semesterId)) return true
+    if (s.subjectClass && mainSemesterIds.includes(s.subjectClass.semesterId)) return true
     if (!s.subjectClass) return manualScoreInYear(s.subjectVersionId)
     return false
   })
@@ -1740,21 +1748,23 @@ export async function calculateStudentYearResult({
   let courseGradeLowest: number | null = null
   let lowestGraduationScore: number | null = null
 
+  // Gộp theo môn gốc (subjectId): học lại / thi lại cùng môn trong năm chỉ tính tín chỉ 1 lần
+  const yearSubjectsMap = new Map<
+    string,
+    {
+      credit: number
+      graduation: boolean
+      score10: number | null
+      failed: boolean
+      isRetake: boolean
+      isReExam: boolean
+    }
+  >()
+
   for (const record of scoresInYear) {
     // Check if subject is in curriculum and useForFinalScore
     const config = subjectConfigMap.get(record.subjectVersionId)
     if (!config || !config.useForFinalScore) continue
-
-    const credit = record.subjectVersion.credit
-    yearTotalCredits += credit
-
-    if (record.subjectClass?.type === "RETAKE") {
-      retakingCredits += credit
-    }
-
-    if (record.subjectClass?.type === "REEXAM") {
-      reExamCredits += credit
-    }
 
     // Cấm thi / đình chỉ: tính là không đạt với điểm 0
     const bannedOrSuspended = record.examBanned || record.suspended
@@ -1762,17 +1772,59 @@ export async function calculateStudentYearResult({
     const score10 = bannedOrSuspended
       ? 0
       : (record.manualFinalScore ?? (record.finalScore != null ? Number(record.finalScore) : null))
-    if (score10 == null) continue
 
     const failed =
-      bannedOrSuspended ||
-      isFailedByCourseConfig(
-        courseScoreConfigFrom(student.fixedClass.trainingCourse, record, {
-          isGraduation: config.graduation,
-          isConditional: !config.graduation && !config.useForFinalScore,
-        }),
-        score10
-      )
+      score10 != null &&
+      (bannedOrSuspended ||
+        isFailedByCourseConfig(
+          courseScoreConfigFrom(student.fixedClass.trainingCourse, record, {
+            isGraduation: config.graduation,
+            isConditional: !config.graduation && !config.useForFinalScore,
+          }),
+          score10
+        ))
+
+    const subjectKey = record.subjectVersion.subjectId
+    const isRetake = record.subjectClass?.type === "RETAKE"
+    const isReExam = record.subjectClass?.type === "REEXAM"
+    const existing = yearSubjectsMap.get(subjectKey)
+    if (!existing) {
+      yearSubjectsMap.set(subjectKey, {
+        credit: record.subjectVersion.credit,
+        graduation: config.graduation,
+        score10,
+        failed,
+        isRetake,
+        isReExam,
+      })
+      continue
+    }
+
+    existing.isRetake ||= isRetake
+    existing.isReExam ||= isReExam
+    // Ưu tiên lần có điểm; rồi lần đạt; cùng trạng thái thì lấy điểm cao hơn
+    const passed = score10 != null && !failed
+    const existingPassed = existing.score10 != null && !existing.failed
+    if (
+      score10 != null &&
+      (existing.score10 == null ||
+        (passed && !existingPassed) ||
+        (passed === existingPassed && score10 > existing.score10))
+    ) {
+      existing.credit = record.subjectVersion.credit
+      existing.graduation = config.graduation
+      existing.score10 = score10
+      existing.failed = failed
+    }
+  }
+
+  for (const subject of yearSubjectsMap.values()) {
+    const { credit, score10, failed } = subject
+    yearTotalCredits += credit
+    if (subject.isRetake) retakingCredits += credit
+    if (subject.isReExam) reExamCredits += credit
+    if (score10 == null) continue
+
     const score4 = failed ? 0 : convertScore10to4(score10)
 
     yearTotalScore10 = yearTotalScore10.plus(new Decimal(score10).mul(credit))
@@ -1788,7 +1840,7 @@ export async function calculateStudentYearResult({
     }
 
     // Kiểm tra môn tốt nghiệp
-    if (config.graduation) {
+    if (subject.graduation) {
       if (lowestGraduationScore === null || score10 < lowestGraduationScore) {
         lowestGraduationScore = score10
       }
@@ -1867,13 +1919,6 @@ export async function calculateStudentYearResult({
   let studyYear = 1
   let isLastStudyYear = false
 
-  const mainSemestersInYear = schoolYear.semesters.filter(
-    (s) =>
-      !s.deletedAt &&
-      (s.semesterType === SemesterType.FIRST ||
-        s.semesterType === SemesterType.SECOND ||
-        s.semesterType == null)
-  )
   const lastMainSemester =
     [...mainSemestersInYear].sort((a, b) => b.startDate.getTime() - a.startDate.getTime())[0] ??
     [...schoolYear.semesters]

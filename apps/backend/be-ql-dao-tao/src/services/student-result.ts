@@ -668,7 +668,8 @@ export async function exportStudentYearResult({
       studentTrainingType: result.studentTrainingType,
       rank: result.rank?.classification,
       lowestFinalScore: formatGpa(result.lowestFinalScore),
-      totalCredits: result.totalCredits,
+      // Template KET_QUA_HOC_TAP_NAM: cột "TC đăng ký" dùng ${table:data.totalCredits}
+      totalCredits: result.registeredCredits,
       retakingCredits: result.retakingCredits,
       reExamCredits: result.reExamCredits,
       failedCredits: result.failedCredits,
