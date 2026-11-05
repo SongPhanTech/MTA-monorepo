@@ -294,7 +294,6 @@ export default function UserProfilePageLecture() {
         </Col>
         <Col span={24}>
           <Table
-            className="h-[calc(100vh-250px)]"
             rowSelection={{
               selectedRowKeys: selection.isSelectAll
                 ? (lecturerData

@@ -20,7 +20,8 @@ import type { ColumnGroupType, ColumnType, TablePaginationConfig } from "antd/es
 import type { FilterDropdownProps, TableRowSelection } from "antd/es/table/interface"
 import dayjs from "dayjs"
 import { Search } from "lucide-react"
-import { Key, useCallback, useState } from "react"
+import { Key, useCallback, useRef, useState } from "react"
+import { useFitTableHeight } from "@hooks/use-fit-table-height"
 import FilterSelect from "./filter-select"
 import clsx from "clsx"
 
@@ -73,10 +74,10 @@ type TableProps<T = AnyObject> = {
   selectedRow?: string | null
   scrollable?: boolean
   maxHeight?: number | string
+  autoHeight?: boolean
   rowSelection?: TableRowSelection<T>
 } & Omit<TableAntdProps, "pagination">
 
-/** Đúng kiểu prop `columns` của Table — dùng khi khai báo columns thành biến riêng */
 export type TableColumns<T = AnyObject> = NonNullable<TableProps<T>["columns"]>
 
 export const Table = <T extends AnyObject>({
@@ -93,10 +94,15 @@ export const Table = <T extends AnyObject>({
   selectedRow,
   scrollable,
   maxHeight,
+  autoHeight = true,
   rowSelection,
   header,
+  scroll,
   ...rest
 }: TableProps<T>) => {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const fixedScrollY = scroll?.y ?? (scrollable ? maxHeight : undefined)
+  const fitHeight = useFitTableHeight(containerRef, autoHeight && fixedScrollY === undefined)
   const [filtersTable, setFiltersTable] = useState<FilterProps>(filters || {})
 
   const onCheckAllChange = (item: ColumnTypeProps, e: CheckboxChangeEvent) => {
@@ -886,7 +892,11 @@ export const Table = <T extends AnyObject>({
   }
 
   return (
-    <div className={clsx("flex flex-col", rest?.className)}>
+    <div
+      ref={containerRef}
+      data-fit-table
+      className={clsx("flex flex-col", rest?.className)}
+    >
       {header && (
         <div className="mt-5 border-gray-200 border border-b-0 px-2.5 py-2.5">{header}</div>
       )}
@@ -907,7 +917,7 @@ export const Table = <T extends AnyObject>({
             ...genFilter(column as ColumnTypeProps),
           })) as ColumnsType<T>
         }
-        scroll={{ x: "100%", y: scrollable ? maxHeight : undefined }}
+        scroll={{ x: "100%", ...scroll, y: fixedScrollY ?? fitHeight }}
         bordered
         dataSource={data}
         locale={{
