@@ -221,8 +221,10 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
         },
       },
     },
+    // Nhóm theo lớp quản lý, trong lớp xếp ĐTBTL cao → thấp (bấm cột ĐTBTL để đổi chiều)
     orderBy: [
-      { finalGpa: filters.finalGpa },
+      { student: { fixedClass: { code: "asc" } } },
+      { finalGpa: filters.finalGpa ?? "desc" },
       { originalDiplomaNumber: "asc" },
       { student: { userProfile: { firstName: "asc" } } },
     ],
