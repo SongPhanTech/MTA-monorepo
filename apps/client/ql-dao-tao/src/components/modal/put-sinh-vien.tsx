@@ -479,7 +479,7 @@ const PutStudentModal = () => {
                 rel="noopener noreferrer"
                 loading={isPending || !studentData}
                 target="_blank"
-                href={`/hrm/${ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO}/${studentData?.userProfileId}`}
+                href={`/hrm${ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO}/${studentData?.userProfileId}`}
               >
                 Hồ sơ <ExportOutlined />
               </Button>
