@@ -54,7 +54,6 @@ export default {
     "THOI_KHOA_BIEU": "/thoi-khoa-bieu",
     "THONG_KE_DANG_KY": "/thong-ke-dang-ky"
   },
-  "DANG_KY_HOC": {},
   "KHAO_THI": {
     "BAO_CAO_KHAO_SAT_GIANG_VIEN": "/bao-cao-khao-sat-giang-vien",
     "HOME": "/home",
@@ -241,7 +240,6 @@ export default {
     "QUAN_LY_HO_SO_ME": "/quan-ly-ho-so/me",
     "QUAN_LY_HO_SO_TAO_MOI": "/quan-ly-ho-so/tao-moi"
   },
-  "QL_LICH_CONG_TAC": {},
   "TRO_LY_AO": {
     "CAU_HOI_THUONG_GAP": "/cau-hoi-thuong-gap",
     "HOI_THOAI_ID": "/hoi-thoai/[id]",
