@@ -19,6 +19,7 @@ import {
 
 import { Col, Collapse, Form, Input, Row, Typography } from "antd"
 import dayjs from "dayjs"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 
 const { Title, Text } = Typography
 dayjs.locale("vi")
@@ -33,6 +34,7 @@ export default function ThongTinLienHe({ expland, setExpland }: DomProps) {
   const { data: bloodType = [] } = useFindManyDM_NhomMau()
   const { data: trinhDoHocVan = [] } = useFindManyDM_TrinhDoHocVan()
   const { data: organizations = [] } = useFindManyDM_DonVi({
+    where: whereActiveOrganization,
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
 

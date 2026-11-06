@@ -65,8 +65,13 @@ for (const subsystem of subsystems.sort()) {
     posix: true,
   })
   for (const page of pages.sort()) {
-    if (ignorePages.some((ignorePage) => page.includes(ignorePage))) continue
     const key = page.replace(`${subsystem}/src/pages`, "")
+    // Trang 403 cần route để chuyển hướng nhưng không cần permission
+    if (key === "/403.tsx") {
+      routerPath[subsystemKey].FORBIDDEN = cleanRouter(key)
+      continue
+    }
+    if (ignorePages.some((ignorePage) => page.includes(ignorePage))) continue
     routerPath[subsystemKey][cleanPath(key)] = cleanRouter(key)
     permission = {
       ...permission,

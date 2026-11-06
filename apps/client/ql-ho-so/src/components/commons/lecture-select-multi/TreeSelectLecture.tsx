@@ -5,6 +5,7 @@ import { message, TreeSelect as TreeSelectAnt } from "antd"
 import type React from "react"
 import { useEffect, useMemo, useState } from "react"
 import type { TreeNodeType } from "@/utils/convertOrganizationToTree"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 
 // Hàm tạo cây đơn vị và giảng viên
 function buildOrgTree(
@@ -61,6 +62,7 @@ const TreeSelect: React.FC<CustomTreeSelectProps> = ({
     isLoading: organizationsLoading,
     error: organizationsError,
   } = useFindManyDM_DonVi({
+    where: whereActiveOrganization,
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
 

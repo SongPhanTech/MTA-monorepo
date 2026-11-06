@@ -194,6 +194,9 @@ export default function Certificate() {
                 width: 200,
                 align: "center",
                 type: "order",
+                // Chứng chỉ Đạt/Không đạt: môn được ghi nhận miễn, điểm phiên không dùng
+                render: (__, record) =>
+                  record?.certificate?.isUsingScore === false ? "Miễn" : record?.finalScore,
               },
 
               {

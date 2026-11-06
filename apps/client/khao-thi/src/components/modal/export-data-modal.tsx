@@ -18,6 +18,7 @@ import { saveAs } from "file-saver"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import * as XLSX from "xlsx"
 import { EXPORT_MAP, type ExportKey } from "@/types/sheet_excel"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 
 type ExportInput = {
   selectedItems: string[]
@@ -33,6 +34,7 @@ export default function ExportExcelModal() {
   })
 
   const { data: donVis = [] } = useFindManyDM_DonVi({
+    where: whereActiveOrganization,
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
 

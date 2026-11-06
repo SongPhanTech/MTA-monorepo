@@ -13,6 +13,7 @@ import { useSession } from "@workspace/auth/react"
 import { CurriculumVersionType, Prisma, TrainingMajor, TrainingTime } from "@workspace/db/client"
 import {
   useCountCurriculum,
+  useCountCurriculumVersion,
   useFindManyCurriculum,
   useFindManyTrainingCourse,
   useFindManyTrainingMajor,
@@ -149,8 +150,8 @@ export default function TrainingProgramCatalog() {
     "XEM_TAT_CA"
   )
 
-  const where = useMemo(() => {
-    const curriculumVersionFilter = {
+  const curriculumVersionFilter = useMemo(() => {
+    return {
       ...(filters.name && {
         name: { contains: filters.name, mode: "insensitive" as const },
       }),
@@ -222,7 +223,20 @@ export default function TrainingProgramCatalog() {
           }
         : {}),
     } satisfies Prisma.CurriculumVersionWhereInput
+  }, [filters])
 
+  // Dùng chung cho đếm, lọc khung và danh sách phiên bản: bỏ phiên bản đã xoá / khác đối tượng
+  const curriculumVersionWhere = useMemo(
+    () =>
+      ({
+        deletedAt: null,
+        trainingObjectTypeId,
+        ...curriculumVersionFilter,
+      }) satisfies Prisma.CurriculumVersionWhereInput,
+    [trainingObjectTypeId, curriculumVersionFilter]
+  )
+
+  const where = useMemo(() => {
     return {
       deletedAt: null,
       trainingObjectTypeId,
@@ -249,10 +263,17 @@ export default function TrainingProgramCatalog() {
         ],
       }),
       ...(Object.keys(curriculumVersionFilter).length > 0 && {
-        curriculumVersion: { some: curriculumVersionFilter },
+        curriculumVersion: { some: curriculumVersionWhere },
       }),
     }
-  }, [trainingObjectTypeId, filters, donViId, isViewAll])
+  }, [
+    trainingObjectTypeId,
+    filters,
+    donViId,
+    isViewAll,
+    curriculumVersionFilter,
+    curriculumVersionWhere,
+  ])
 
   const { data = [] } = useFindManyCurriculum({
     where,
@@ -264,52 +285,7 @@ export default function TrainingProgramCatalog() {
       managementOrganization: { select: { sTen: true } },
       trainingMajor: { select: { name: true } },
       curriculumVersion: {
-        where: {
-          ...(filters.name
-            ? {
-                name: {
-                  contains: filters.name,
-                  mode: "insensitive",
-                },
-              }
-            : {}),
-          ...(filters.code
-            ? {
-                code: {
-                  contains: filters.code,
-                  mode: "insensitive",
-                },
-              }
-            : {}),
-          trainingObjectTypeId,
-          ...(filters.trainingCourses && filters.trainingCourses.length > 0
-            ? {
-                OR: [
-                  {
-                    trainingCourseId: {
-                      in: filters.trainingCourses,
-                    },
-                  },
-                  {
-                    fixedClasses: {
-                      some: {
-                        trainingCourseId: {
-                          in: filters.trainingCourses,
-                        },
-                      },
-                    },
-                  },
-                ],
-              }
-            : {}),
-          ...(filters.trainingTime
-            ? {
-                trainingTimeId: {
-                  in: filters.trainingTime,
-                },
-              }
-            : {}),
-        },
+        where: curriculumVersionWhere,
         select: {
           id: true,
           active: true,
@@ -393,6 +369,10 @@ export default function TrainingProgramCatalog() {
   }, [data])
 
   const { data: count } = useCountCurriculum({ where })
+  // Phân trang theo khung (bảng nhóm theo khung), tổng hiển thị theo phiên bản
+  const { data: versionCount } = useCountCurriculumVersion({
+    where: { ...curriculumVersionWhere, curriculum: where },
+  })
   const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
     orderBy: {
       semesterStart: {
@@ -954,6 +934,7 @@ export default function TrainingProgramCatalog() {
               current: currentPage,
               pageSize: numberOfPages,
               total: count,
+              showTotal: () => `Tổng số ${versionCount ?? 0} phiên bản CTĐT (${count ?? 0} khung)`,
               onChange: (page, pageSize) => {
                 if (numberOfPages === pageSize) {
                   setCurrentPage(page)

@@ -84,9 +84,9 @@ const DefaultLayout = ({
       onIdle={() => {}}
     >
       <Layout
+        className="h-screen overflow-hidden"
         style={{
           transition: "margin-inline-start 0.2s", // Hiệu ứng mượt
-          minHeight: "100vh",
         }}
       >
         <Header
@@ -115,9 +115,13 @@ const DefaultLayout = ({
           </div>
         </Header>
         <SidebarMenuLayout items={menus} theme={"light"} />
-        <Content className="pb-[35px] mt-[110px] p-2 bg-white">
+
+        <Content
+          data-fit-viewport
+          className="mt-[110px] h-[calc(100vh-145px)] flex-none overflow-auto px-2 pt-2 bg-white"
+        >
           {unLayout ? (
-            children
+            <div>{children}</div>
           ) : (
             <div
               className={cn(
@@ -132,7 +136,7 @@ const DefaultLayout = ({
             </div>
           )}
         </Content>
-        <Footer className="fixed bottom-0 w-full z-[1000] flex items-center p-2">
+        <Footer className="fixed bottom-0 w-full z-[1000] flex items-center h-[35px] px-2 py-0">
           <div>
             {unitInfo?.sTenDayDu || "Học viện Kỹ thuật Quân sự"} - Địa chỉ:{" "}
             {unitInfo?.sDiaChi || "Số 236, Hoàng Quốc Việt, Cầu Giấy, Hà Nội"}

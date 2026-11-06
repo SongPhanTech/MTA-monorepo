@@ -281,13 +281,19 @@ async function exportBangDiemCaNhanMau({
         studentId,
         subjectClassId: null,
         deletedAt: null,
-        OR: [{ manualFinalScore: { not: null } }, { finalScore: { not: null } }],
+        OR: [
+          { manualFinalScore: { not: null } },
+          { finalScore: { not: null } },
+          // miễn học từ chứng chỉ Đạt/Không đạt (VD: GDQP-AN của SV chuyển trường)
+          { exempted: true, certificates: { some: {} } },
+        ],
       },
       select: {
         semesterId: true,
         subjectVersionId: true,
         manualFinalScore: true,
         finalScore: true,
+        exempted: true,
         description: true,
         subjectVersion: {
           select: { id: true, name: true, code: true, credit: true },
@@ -356,11 +362,13 @@ async function exportBangDiemCaNhanMau({
     diem01: number | null
     diem02: number | null
     diem07: number | null
-    diemhe10: number
-    diemhe4: number
+    diemhe10: number | null
+    diemhe4: number | null
     diemchu: string
     ghichu: string
     baoLuu: boolean
+    pass: boolean
+    exempted: boolean
   }
 
   type HocKiBuilder = {
@@ -436,6 +444,8 @@ async function exportBangDiemCaNhanMau({
       diemchu: converted.letter ?? "",
       ghichu: visibleScoreNote(description),
       baoLuu: isBaoLuuScoreDescription(description),
+      pass: converted.pass,
+      exempted: false,
     }
   }
 
@@ -548,6 +558,28 @@ async function exportBangDiemCaNhanMau({
   for (const score of phienDiemScores) {
     const subject = score.subjectVersion
     if (!subject?.id) continue
+
+    // Miễn học không điểm: luôn đưa vào, ưu tiên hơn lần học trượt (chọn ở bestBySubject)
+    if (score.exempted && score.manualFinalScore == null && score.finalScore == null) {
+      resolvePhienDiemBuilder(score).monHocs.push({
+        subjectVersionId: subject.id,
+        TenMonhoc: subject.name,
+        MaMH: subject.code ?? "",
+        soTC: subject.credit,
+        diem01: null,
+        diem02: null,
+        diem07: null,
+        diemhe10: null,
+        diemhe4: null,
+        diemchu: "Miễn",
+        ghichu: visibleScoreNote(score.description) || "Miễn học theo chứng chỉ",
+        baoLuu: false,
+        pass: true,
+        exempted: true,
+      })
+      classSubjectIds.add(subject.id)
+      continue
+    }
     if (classSubjectIds.has(subject.id)) continue
 
     const ctdt = ctdtBySubject.get(subject.id)
@@ -601,7 +633,15 @@ async function exportBangDiemCaNhanMau({
   for (const hocKi of hocKis) {
     for (const monHoc of hocKi.monHocs) {
       const existing = bestBySubject.get(monHoc.subjectVersionId)
-      if (!existing || (monHoc.diemhe10 ?? 0) >= (existing.diemhe10 ?? 0)) {
+      // Miễn học thay cho lần học chưa đạt, nhưng không đè lên lần học đã đạt
+      const replace =
+        !existing ||
+        (monHoc.exempted
+          ? !existing.pass
+          : existing.exempted
+            ? monHoc.pass
+            : (monHoc.diemhe10 ?? 0) >= (existing.diemhe10 ?? 0))
+      if (replace) {
         bestBySubject.set(monHoc.subjectVersionId, monHoc)
       }
     }

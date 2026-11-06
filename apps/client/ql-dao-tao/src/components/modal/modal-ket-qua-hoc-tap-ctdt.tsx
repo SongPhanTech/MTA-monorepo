@@ -26,6 +26,7 @@ type TranscriptSubject = {
   scoreBase4: number | null
   letter: string | null
   passed: boolean
+  exempted?: boolean
   usedForGpa: boolean
   equivalentNote: string | null
 }
@@ -106,7 +107,7 @@ const subjectColumns: ColumnType<TranscriptSubject>[] = [
     title: "Điểm học phần",
     width: 120,
     align: "center",
-    render: (_value, record) => formatScore(record?.finalScore),
+    render: (_value, record) => (record?.exempted ? "Miễn" : formatScore(record?.finalScore)),
   },
   {
     title: "Loại môn",

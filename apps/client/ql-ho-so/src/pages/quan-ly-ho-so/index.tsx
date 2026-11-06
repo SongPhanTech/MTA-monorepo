@@ -25,6 +25,7 @@ import type React from "react"
 import { useCallback, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import TreeSelect from "@/components/commons/tree-select"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 
 // import { deleteDMNhanViensId } from '@workspace/libs/api/system'
 
@@ -155,6 +156,7 @@ export default function UserProfilePageDs() {
 
   const { data: genderData = [] } = useFindManyDM_GioiTinh()
   const { data: organizations = [] } = useFindManyDM_DonVi({
+    where: whereActiveOrganization,
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
   const treeData = buildOrgTree(organizations)
@@ -482,7 +484,10 @@ export default function UserProfilePageDs() {
                     {can(QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO, "SUA") && (
                       <EditIcon
                         onClick={() => {
-                          router.push(`${ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO}/${id}`)
+                          router.push({
+                            pathname: ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_ID,
+                            query: { id },
+                          })
                         }}
                         className="text-sm text-blue-700 cursor-pointer"
                       />

@@ -224,13 +224,19 @@ export async function exportBangDiemQuaTrinhHocVien({ studentId }: { studentId: 
         studentId,
         subjectClassId: null,
         deletedAt: null,
-        OR: [{ manualFinalScore: { not: null } }, { finalScore: { not: null } }],
+        OR: [
+          { manualFinalScore: { not: null } },
+          { finalScore: { not: null } },
+          // miễn học từ chứng chỉ Đạt/Không đạt (VD: GDQP-AN của SV chuyển trường)
+          { exempted: true, certificates: { some: {} } },
+        ],
       },
       select: {
         semesterId: true,
         subjectVersionId: true,
         manualFinalScore: true,
         finalScore: true,
+        exempted: true,
         description: true,
         subjectVersion: {
           select: {
@@ -415,13 +421,30 @@ export async function exportBangDiemQuaTrinhHocVien({ studentId }: { studentId: 
   for (const score of phienDiemScores) {
     const subject = score.subjectVersion
     if (!subject?.id) continue
-    if (includedSubjectIds.has(subject.id)) continue
 
     const rawScore = toNumber(score.manualFinalScore) ?? toNumber(score.finalScore)
-    const ctdt = ctdtBySubject.get(subject.id)
-    const trainingBlock = subject.trainingBlocks?.[0]
     const groupKey = resolvePhienDiemGroupKey(score)
     const rows = phienRowsByGroup.get(groupKey) ?? []
+
+    // Miễn học không điểm: thêm dòng riêng, kể cả khi môn đã có lần học trong lớp
+    if (score.exempted && rawScore == null) {
+      rows.push({
+        tenMonHoc: `${subject.name} (Miễn)`,
+        soTC: toNumber(subject.credit),
+        diemhe10: null,
+        diemhe4: null,
+        diemchu: "Miễn",
+        pass: true,
+        baoLuu: false,
+      })
+      phienRowsByGroup.set(groupKey, rows)
+      includedSubjectIds.add(subject.id)
+      continue
+    }
+    if (includedSubjectIds.has(subject.id)) continue
+
+    const ctdt = ctdtBySubject.get(subject.id)
+    const trainingBlock = subject.trainingBlocks?.[0]
     rows.push(
       toRow({
         tenMonHoc: subject.name,

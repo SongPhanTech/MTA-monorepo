@@ -190,6 +190,10 @@ export default function StudentGraduationApplication() {
           },
           trainingMajor: true,
           diplomaType: true,
+          // Các môn dùng tính ĐTBTL khi xét → tổng TC tích luỹ
+          gpaScore: {
+            select: { subjectVersion: { select: { credit: true } } },
+          },
         },
         orderBy: { createdAt: "asc" },
         take: numberOfPages,
@@ -348,10 +352,13 @@ export default function StudentGraduationApplication() {
       return {
         ...item,
         gpa: item.gpa?.toNumber(),
+        totalCredits: item.gpaScore.reduce(
+          (sum, score) => sum + (score.subjectVersion?.credit || 0),
+          0
+        ),
         trainingMajor: item.trainingMajor?.name,
         diplomaType: item.diplomaType?.name,
         hasAllRequiredCerts,
-        // Lưu Set thay vì object để tiết kiệm bộ nhớ
         _studentCertificateSet: studentCertificateSet,
       }
     })
@@ -994,6 +1001,12 @@ export default function StudentGraduationApplication() {
                             }
                             return null
                           },
+                        },
+                        {
+                          title: "Tổng số TC tích luỹ",
+                          width: 80,
+                          align: "center",
+                          render: (_, record) => record?.totalCredits || null,
                         },
                         {
                           title: "Hệ số xét",

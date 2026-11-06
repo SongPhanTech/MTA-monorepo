@@ -951,7 +951,8 @@ export default function ArchivedCertificate() {
                     {scores.map((s: any) => (
                       <div key={s.id}>
                         {s.subjectVersion?.code ? `${s.subjectVersion.code} - ` : ""}
-                        {s.subjectVersion?.name || "?"}: <b>{s.finalScore}</b>
+                        {s.subjectVersion?.name || "?"}:{" "}
+                        <b>{record?.certificate?.isUsingScore === false ? "Miễn" : s.finalScore}</b>
                       </div>
                     ))}
                   </div>
@@ -990,7 +991,8 @@ export default function ArchivedCertificate() {
               title: "Điểm",
               align: "center",
               width: 80,
-              render: (__, record) => record?.score ?? "-",
+              render: (__, record) =>
+                record?.certificate?.isUsingScore === false ? "Đạt" : (record?.score ?? "-"),
             },
             {
               title: "Nơi cấp",

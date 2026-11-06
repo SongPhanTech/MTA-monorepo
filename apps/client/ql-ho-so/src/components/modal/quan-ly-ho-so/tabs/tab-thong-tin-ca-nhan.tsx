@@ -14,6 +14,7 @@ import { Col, Collapse, Form, Input, Row } from "antd"
 import { useCallback, useEffect, useMemo } from "react"
 import TreeSelect from "@/components/commons/tree-select"
 import type { PutModalType } from "../type"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 
 const { Panel } = Collapse
 
@@ -61,6 +62,7 @@ export default function ThongTinCaNhanTab({
 
   const { data: manageOrgData = [] } = useFindManyDM_DonVi(
     {
+      where: whereActiveOrganization,
       orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
     },
     { enabled: type === "LECTURER" }

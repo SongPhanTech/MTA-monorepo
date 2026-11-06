@@ -576,7 +576,6 @@ export default function UserProfilePageDs() {
         </Col>
         <Col span={24}>
           <Table
-            className="h-[calc(100vh-250px)]"
             loading={isFetchingStudents || isLoadingStudents}
             filters={filters}
             setFilters={handleFiltersChange}

@@ -22,7 +22,7 @@ import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } f
 import { useEffect, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import "./index.css"
-import { whereOrganization } from "@workspace/libs/constants"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 export type PutCurriculum = Curriculum & {
   documentFiles?: DocumentFile[]
 }
@@ -43,7 +43,7 @@ const PutCurriculum = () => {
   const { showSpinner, hideSpinner } = useSpinner()
 
   const { data: manageOrgData = [] } = useFindManyDM_DonVi({
-    where: whereOrganization,
+    where: whereActiveOrganization,
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
 

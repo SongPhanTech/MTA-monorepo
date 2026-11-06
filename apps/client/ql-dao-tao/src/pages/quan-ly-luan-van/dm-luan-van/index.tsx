@@ -33,7 +33,7 @@ import {
   exportThesisTemplate,
   importCouncilFromExcel,
 } from "@workspace/libs/api/thesis"
-import { whereOrganization } from "@workspace/libs/constants"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 import { SearchOutlined, WalletOutlined } from "@ant-design/icons"
 import { dayjs, useTrainingObjectTypeStore } from "@workspace/ui"
 import {
@@ -843,7 +843,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     tag: "ModalChuyenDotXetLuanVan",
   })
   const { data: sDm_Donvi = [] } = useFindManyDM_DonVi({
-    where: whereOrganization,
+    where: whereActiveOrganization,
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
   const { data: roomData } = useFindManyRoom()

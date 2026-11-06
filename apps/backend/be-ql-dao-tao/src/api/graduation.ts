@@ -1559,9 +1559,7 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
         record.manualFinalScore ?? (record.finalScore ? Number(record.finalScore) : null)
       if (newScore === null) continue
       const existing = bestScoreMap.get(record.subjectVersionId)
-      const isRetake =
-        record.subjectClass?.type === "RETAKE" || record.subjectClass?.type === "REEXAM"
-      if (!existing || newScore > existing.score || isRetake) {
+      if (!existing || newScore > existing.score) {
         bestScoreMap.set(record.subjectVersionId, {
           score: newScore,
           credit: record.subjectVersion?.credit || 0,
@@ -1949,7 +1947,7 @@ app.openapi(exportPhoiBangCaoHoc, async (c) => {
     const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhoiBangCaoHoc_v1.xlsx")
     const generated = await generateExcelFromTemplate(templateBuffer, payload, {
       showGridLines: true,
-      wrapText: true,
+      wrapText: false,
     })
     const result = applyPhoiBangStudentPrintAreas(generated.buffer, generated.studentPrintBlocks)
 
@@ -2119,12 +2117,9 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
     const vi2 = (courseTextVi2 ?? trainingObjectTypeName).trim()
 
     const dobParts = getReportDateParts(user?.dateOfBirth)
-    const startDateParts = getReportDateParts(
-      course?.semesterStart?.startDate || student.fixedClass?.createdAt
-    )
-    const endDateParts = getReportDateParts(
-      course?.semesterStart?.endDate || gD?.decisionDate || new Date()
-    )
+    // Chỉ lấy Ngày nhập học / Ngày kết thúc trong cấu hình khoá
+    const startDateParts = getReportDateParts(course?.admissionStartDate)
+    const endDateParts = getReportDateParts(course?.admissionEndDate)
     const pDateParts = getReportDateParts(printDate || new Date())
 
     const subjectScores = student.subjectClassStudent || []
@@ -2224,7 +2219,7 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
       Buffer.from(data instanceof ArrayBuffer ? new Uint8Array(data) : data)
     const generated = await generateExcelFromTemplate(templateBuffer, payload, {
       showGridLines: true,
-      wrapText: true,
+      wrapText: false,
     })
     const rawResult = toNodeBuffer(generated.buffer)
     const withEndDateFix = toNodeBuffer(await fixPhoiBangNganHanEndDateEnDisplay(rawResult))

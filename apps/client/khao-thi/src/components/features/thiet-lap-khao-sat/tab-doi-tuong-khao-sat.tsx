@@ -31,6 +31,7 @@ import { useTrainingObjectTypeStore } from "@workspace/ui"
 import { Button, Col, Flex, message, Row } from "antd"
 import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 
 function TabDoiTuongKhaoSat() {
   const { can, canSome } = useAbility()
@@ -49,6 +50,7 @@ function TabDoiTuongKhaoSat() {
   })
 
   const { data: manageOrgData = [] } = useFindManyDM_DonVi({
+    where: whereActiveOrganization,
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
   const treeData = buildOrgTree(manageOrgData)

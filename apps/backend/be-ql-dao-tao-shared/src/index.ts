@@ -27,22 +27,31 @@ export const prisma: PrismaClient = new PrismaClient()
 const app = new OpenAPIHono({ strict: false })
 
 const originEnv = process.env.ORIGIN || ""
-const originList = originEnv.split(",").map((item) => item.trim())
+const originList = originEnv
+  .split(",")
+  .map((item) => item.trim())
+  .filter(Boolean)
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:3001",
+  "http://localhost:3002",
+  "https://user.mta.swantech.vn",
+  "https://daotao.swantech.vn",
+  "https://daotao.mta.swantech.vn",
+  "https://am.swantech.vn",
+  "https://api.am.swantech.vn",
+  ...originList,
+]
 
 app.use(
   "*",
   cors({
-    origin: [
-      "http://localhost:3000",
-      "https://user.mta.swantech.vn",
-      "https://daotao.swantech.vn",
-      "https://daotao.mta.swantech.vn",
-      "https://am.swantech.vn",
-      "https://api.am.swantech.vn",
-      "https://*.swantech.vn",
-      ...originList,
-      "*",
-    ],
+    origin: (origin) => {
+      if (allowedOrigins.includes(origin)) return origin
+      if (/^https:\/\/[a-zA-Z0-9-]+\.swantech\.vn$/.test(origin)) return origin
+      return null
+    },
     credentials: true,
   })
 )
@@ -92,6 +101,7 @@ showRoutes(app, { verbose: true })
 export default {
   fetch: app.fetch,
   hostname: "0.0.0.0",
+  // port: Number(process.env.PORT || 3045),
   port: process.env.PORT || 3000,
 }
 

@@ -21,6 +21,7 @@ import {
 import { exportLecturerProfile } from "@workspace/libs/api/training"
 import useSpinner from "@hooks/spinner"
 import { whereOrganization } from "@workspace/libs/constants"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from "@workspace/router"
 import { Button, Col, Row, Tooltip } from "antd"
@@ -187,7 +188,7 @@ export default function UserProfilePageLecture() {
   const { data: academicDegreeTypes = [] } = useFindManyDM_HocVi()
   const { data: lecturerTypeData = [] } = useFindManyLecturerType()
   const { data: manageOrgData = [] } = useFindManyDM_DonVi({
-    where: whereOrganization,
+    where: whereActiveOrganization,
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
   const treeData = buildOrgTree(manageOrgData, canXemTatCa ? "0" : orgId || "0")
@@ -293,7 +294,6 @@ export default function UserProfilePageLecture() {
         </Col>
         <Col span={24}>
           <Table
-            className="h-[calc(100vh-250px)]"
             rowSelection={{
               selectedRowKeys: selection.isSelectAll
                 ? (lecturerData
@@ -497,7 +497,7 @@ export default function UserProfilePageLecture() {
                               type="link"
                               target="_blank"
                               rel="noopener noreferrer"
-                              href={`/hrm/${ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO}/${userProfileId}`}
+                              href={`/hrm${ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO}/${userProfileId}`}
                               className="text-green-600 border-none"
                             >
                               <ExportOutlined />

@@ -234,10 +234,21 @@ export default function StudentScoreClassPage() {
     {
       where: {
         studentId: studentId,
-        manualFinalScore: { gt: 0 },
         deletedAt: null,
+        OR: [
+          { manualFinalScore: { gt: 0 } },
+          // miễn học từ chứng chỉ Đạt/Không đạt (VD: GDQP-AN của SV chuyển trường)
+          { exempted: true, certificates: { some: {} } },
+        ],
       },
-      include: { subjectVersion: true },
+      include: {
+        subjectVersion: true,
+        certificates: {
+          include: {
+            archivedCertificate: { include: { certificate: { select: { name: true } } } },
+          },
+        },
+      },
     },
     { enabled: !!studentId }
   )
@@ -1187,12 +1198,12 @@ export default function StudentScoreClassPage() {
                   render: (value, record) => (
                     <span
                       style={
-                        isBaoLuuScoreDescription(record.description)
+                        isBaoLuuScoreDescription(record.description) || record.exempted
                           ? { color: "#15803d" }
                           : undefined
                       }
                     >
-                      {value}
+                      {record.exempted && value == null ? "Miễn" : value}
                     </span>
                   ),
                 },
@@ -1201,7 +1212,18 @@ export default function StudentScoreClassPage() {
                   dataIndex: "description",
                   align: "center",
                   width: 250,
-                  render: (value: string) => visibleScoreNote(value),
+                  render: (value: string, record) => {
+                    const certificates: (typeof manualScoreData)[number]["certificates"] =
+                      record.certificates ?? []
+                    const certificateNames = certificates
+                      .map((item) => item.archivedCertificate?.certificate?.name)
+                      .filter(Boolean)
+                      .join(", ")
+                    return (
+                      visibleScoreNote(value) ||
+                      (certificateNames ? `Phiên từ chứng chỉ: ${certificateNames}` : "")
+                    )
+                  },
                 },
               ]}
               data={manualScoreData}

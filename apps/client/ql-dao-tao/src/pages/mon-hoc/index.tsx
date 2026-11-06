@@ -11,7 +11,7 @@ import {
   useFindManySubjectVersion,
   useUpdateSubjectVersion,
 } from "@workspace/db/hooks"
-import { whereOrganization } from "@workspace/libs/constants"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 import { Button, Col, Divider, Flex, Form, Input, message, Row } from "antd"
 import _ from "lodash"
 import { useCallback, useEffect, useState } from "react"
@@ -109,7 +109,7 @@ export default function SubjectVersionPage({ subjectInfo }: any) {
     }
   }, [dataSchoolYear])
   const { data: manageOrgData = [] } = useFindManyDM_DonVi({
-    where: whereOrganization,
+    where: whereActiveOrganization,
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
   const treeData = buildOrgTree(manageOrgData)

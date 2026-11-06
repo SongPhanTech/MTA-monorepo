@@ -2,6 +2,7 @@ import { FolderOpenOutlined, UserOutlined } from "@ant-design/icons"
 import type { ProgressRow } from "@components/sub-pages/khao-sat/survey-progress-table"
 import type { Prisma } from "@workspace/db/client"
 import { lecturerDonViId } from "@workspace/libs"
+import { orgLabel } from "@workspace/libs/org-tree"
 import type { DataNode } from "antd/es/tree"
 
 export const ORG_SELECT = {
@@ -117,7 +118,7 @@ export function buildOrgLecturerTree(orgs: Org[], lecturers: ClusterLecturer[]):
     byId.set(org.Id, {
       kind: "org",
       key: org.Id,
-      title: orgTitle(org),
+      title: orgLabel(org) || "Đơn vị không tên",
       icon: <FolderOpenOutlined />,
       selectable: true,
       org,

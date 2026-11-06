@@ -1,10 +1,10 @@
 import { PlusOutlined } from "@ant-design/icons"
-import { queryClient } from "@api/index"
 import DeleteIcon from "@components/icons/delete"
 import EditIcon from "@components/icons/edit"
 import { store } from "@pages/thiet-lap-de-thi/khung-de"
 import { useStore } from "@tanstack/react-store"
-import { useFindManyExamMatrix, useUpdateExamMatrix } from "@workspace/db/hooks"
+import { useFindManyExamMatrix } from "@workspace/db/hooks"
+import { softDeleteExamMatrix } from "@/utils/soft-delete-exam-framework"
 import { Button, Col, message, Row, Typography } from "antd"
 import clsx from "clsx"
 import { LayoutGrid } from "lucide-react"
@@ -35,22 +35,9 @@ export default function MaTranDePage({ id }: { id?: string }) {
     }
   )
 
-  const { mutateAsync: updateExamMatrix } = useUpdateExamMatrix()
-
   const handleDeleteExamMatrix = async (matrixId: string) => {
     try {
-      await updateExamMatrix({
-        where: {
-          id: matrixId,
-        },
-        data: {
-          deletedAt: new Date(),
-        },
-      })
-
-      queryClient.invalidateQueries({
-        queryKey: ["ExamMatrix"],
-      })
+      await softDeleteExamMatrix(matrixId)
 
       message.success("Xoá ma trận đề thành công!")
     } catch (error) {

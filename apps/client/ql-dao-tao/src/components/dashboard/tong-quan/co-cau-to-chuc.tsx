@@ -77,7 +77,6 @@ export function CoCauToChucDonVi({
     const toNode = (item: OrgTreeItem): DataNode => {
       const children = (item.children || []).map((child) => toNode(child))
       const displayCount = sumLecturersInBranch(item, orgMap)
-      const label = item.label.split(" - ").slice(-1)[0] || item.label
       const isLeaf = !children.length
 
       return {
@@ -89,7 +88,7 @@ export function CoCauToChucDonVi({
           <div className="org-tree-row flex w-full min-w-0 items-start justify-between gap-1.5 py-1">
             <div className="flex min-w-0 items-start gap-2">
               <span className="org-tree-label break-words text-[11.5px] leading-[18px] text-[#1f2937]">
-                {label}
+                {item.label}
               </span>
             </div>
             <span className="org-tree-count shrink-0 tabular-nums text-[11.5px] leading-[18px] text-[#6b7280]">
@@ -106,7 +105,6 @@ export function CoCauToChucDonVi({
       return { rootHeader: null, childTreeData: [] as DataNode[], rootKey: undefined }
     }
 
-    const rootLabel = root.label.split(" - ").slice(-1)[0] || root.label
     const rootCount = sumLecturersInBranch(root, orgMap)
     const childTreeData = [
       ...(root.children || []).map((c) => toNode(c)),
@@ -115,7 +113,7 @@ export function CoCauToChucDonVi({
 
     return {
       rootKey: root.value,
-      rootHeader: { key: root.value, label: rootLabel, count: rootCount },
+      rootHeader: { key: root.value, label: root.label, count: rootCount },
       childTreeData,
     }
   }, [orgs])

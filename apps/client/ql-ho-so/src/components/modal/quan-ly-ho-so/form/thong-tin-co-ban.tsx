@@ -26,6 +26,7 @@ import {
 import { Checkbox, Col, Collapse, Flex, Form, Input, InputNumber, Row, Typography } from "antd"
 import dayjs from "dayjs"
 import { useRouter } from "next/router"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 
 dayjs.locale("vi")
 const { Title, Text } = Typography
@@ -185,6 +186,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
   //     { enabled: !!bLaCanBoNhanVien }
   // )
   const { data: organizations = [] } = useFindManyDM_DonVi({
+    where: whereActiveOrganization,
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
   const treeData = buildOrgTree(organizations)
@@ -1221,7 +1223,9 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                 showSearch
                 disabled={!watchedProvincePermanentAddressId}
                 placeholder={
-                  watchedProvincePermanentAddressId ? "Chọn quận/huyện" : "Chọn tỉnh/thành phố trước"
+                  watchedProvincePermanentAddressId
+                    ? "Chọn quận/huyện"
+                    : "Chọn tỉnh/thành phố trước"
                 }
                 className="h-9"
                 onChange={() => {

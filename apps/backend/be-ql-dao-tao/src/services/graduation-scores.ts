@@ -62,6 +62,8 @@ export type ResolvedGraduationScore = {
   scoreBase4: Decimal
   letter: string | null
   canImprove: boolean
+  /** miễn học theo chứng chỉ Đạt/Không đạt, không có điểm */
+  exempted?: boolean
   subjectVersion: {
     id: string
     name: string
@@ -143,6 +145,11 @@ function isPassedByCourseRules(
   return true
 }
 
+/** Môn điều kiện: không tính điểm tổng kết, không phải môn tốt nghiệp (VD: GDQP-AN) */
+function isConditionalSubject(curriculumSubject: GraduationCurriculumSubjectInput | undefined) {
+  return !!curriculumSubject && !curriculumSubject.graduation && !curriculumSubject.useForFinalScore
+}
+
 function keepHighestScore(
   map: Map<string, ResolvedGraduationScore>,
   score: ResolvedGraduationScore
@@ -164,12 +171,16 @@ function findScoreForCurriculumSubject(
   map: Map<string, ResolvedGraduationScore>,
   usedScoreIds: Set<string>
 ) {
+  // điểm miễn chỉ dùng cho môn điều kiện, không bao giờ cho môn tính GPA
+  const usable = (item: ResolvedGraduationScore) =>
+    !usedScoreIds.has(item.id) && (!item.exempted || isConditionalSubject(subject))
+
   const exact = map.get(subject.subjectId)
-  if (exact && !usedScoreIds.has(exact.id)) return exact
+  if (exact && usable(exact)) return exact
 
   const matches = [...map.values()]
     .filter((item) => sameSubjectCode(item.subjectVersion.code, subject.subject.code))
-    .filter((item) => !usedScoreIds.has(item.id))
+    .filter(usable)
     .sort((a, b) => b.scoreBase10.cmp(a.scoreBase10))
   return matches[0]
 }
@@ -252,7 +263,12 @@ export async function loadGraduationScoreSources(input: {
             OR: [{ subjectClassId: null }, { subjectClass: { cancelled: false } }],
           },
           {
-            OR: [{ manualFinalScore: { not: null } }, { finalScore: { not: null } }],
+            OR: [
+              { manualFinalScore: { not: null } },
+              { finalScore: { not: null } },
+              // miễn học từ phiên chứng chỉ Đạt/Không đạt (không có điểm)
+              { exempted: true, certificates: { some: {} } },
+            ],
           },
         ],
       },
@@ -322,10 +338,38 @@ export function computeGraduationSubjectScores(input: {
 
   const displayScoresMap = new Map<string, ResolvedGraduationScore>()
   const subjectScoresMap = new Map<string, ResolvedGraduationScore>()
+  // bản ghi miễn học không điểm nhưng môn trong CTĐT không phải môn điều kiện (để ghi lý do)
+  const ignoredExemptions: LoadedSubjectScore[] = []
 
   for (const subjectScore of rawSubjectScores) {
+    const curriculumSubject =
+      curriculumSubjects.find((subject) => subject.subjectId === subjectScore.subjectVersionId) ||
+      curriculumSubjects.find((subject) =>
+        sameSubjectCode(subject.subject.code, subjectScore.subjectVersion.code)
+      )
     const scoreBase10 = toScoreBase10(subjectScore)
-    if (!scoreBase10) continue
+
+    // Miễn học không điểm chỉ công nhận đạt cho môn điều kiện, không vào GPA/tín chỉ
+    if (!scoreBase10 && subjectScore.exempted && isConditionalSubject(curriculumSubject)) {
+      keepHighestScore(subjectScoresMap, {
+        id: subjectScore.id,
+        subjectVersionId: subjectScore.subjectVersionId,
+        attendanceScore: null,
+        midtermScore: null,
+        examScore: null,
+        scoreBase10: new Decimal(0),
+        scoreBase4: new Decimal(0),
+        letter: null,
+        canImprove: false,
+        exempted: true,
+        subjectVersion: subjectScore.subjectVersion,
+      })
+      continue
+    }
+    if (!scoreBase10) {
+      if (subjectScore.exempted) ignoredExemptions.push(subjectScore)
+      continue
+    }
 
     const scoreConvert = scoreConverts.find(
       (item) =>
@@ -356,11 +400,6 @@ export function computeGraduationSubjectScores(input: {
     }
     if (subjectScore.repeated && scoreBase10.lt(scoreToRetain)) continue
 
-    const curriculumSubject =
-      curriculumSubjects.find((subject) => subject.subjectId === subjectScore.subjectVersionId) ||
-      curriculumSubjects.find((subject) =>
-        sameSubjectCode(subject.subject.code, subjectScore.subjectVersion.code)
-      )
     if (
       !isPassedByCourseRules(
         curriculumSubject,
@@ -384,6 +423,16 @@ export function computeGraduationSubjectScores(input: {
   const curriculumDisplayScores = new Map<string, ResolvedGraduationScore>()
   const usedScoreIds = new Set<string>()
   const subjectReasons: string[] = []
+  const missingSubjectReason = (subject: GraduationCurriculumSubjectInput) => {
+    const hasIgnoredExemption = ignoredExemptions.some(
+      (item) =>
+        item.subjectVersionId === subject.subjectId ||
+        sameSubjectCode(item.subjectVersion.code, subject.subject.code)
+    )
+    return hasIgnoredExemption
+      ? `Chưa đạt môn bắt buộc (${subject.subject.name}): có miễn học theo chứng chỉ nhưng CTĐT đang cấu hình môn tính điểm tổng kết/môn tốt nghiệp`
+      : `Chưa đạt môn bắt buộc (${subject.subject.name})`
+  }
 
   const assignScore = (subjectId: string, score: ResolvedGraduationScore) => {
     const subjectInCurriculum = curriculumSubjects.find((item) => item.subjectId === subjectId)
@@ -453,7 +502,7 @@ export function computeGraduationSubjectScores(input: {
 
     if (!subjectScore && !equivGroups.length) {
       if (subject.type === SubjectRequirementType.Mandatory) {
-        subjectReasons.push(`Chưa đạt môn bắt buộc (${subject.subject.name})`)
+        subjectReasons.push(missingSubjectReason(subject))
       }
       continue
     }
@@ -509,7 +558,7 @@ export function computeGraduationSubjectScores(input: {
     }
 
     if (!hasEquivalencyGroup && subject.type === SubjectRequirementType.Mandatory) {
-      subjectReasons.push(`Chưa đạt môn bắt buộc (${subject.subject.name})`)
+      subjectReasons.push(missingSubjectReason(subject))
     }
   }
 
@@ -702,6 +751,8 @@ export type GraduationTranscriptSubject = {
   scoreBase4: number | null
   letter: string | null
   passed: boolean
+  /** miễn học theo chứng chỉ Đạt/Không đạt: hiển thị "Miễn" thay cho điểm */
+  exempted: boolean
   usedForGpa: boolean
   equivalentNote: string | null
 }
@@ -750,10 +801,11 @@ function toTranscriptSubject(input: {
     attendanceScore: input.score?.attendanceScore ?? null,
     midtermScore: input.score?.midtermScore ?? null,
     examScore: input.score?.examScore ?? null,
-    finalScore: input.score ? input.score.scoreBase10.toNumber() : null,
-    scoreBase4: input.score ? input.score.scoreBase4.toNumber() : null,
+    finalScore: input.score && !input.score.exempted ? input.score.scoreBase10.toNumber() : null,
+    scoreBase4: input.score && !input.score.exempted ? input.score.scoreBase4.toNumber() : null,
     letter: input.score?.letter ?? null,
     passed: !!input.score,
+    exempted: !!input.score?.exempted,
     usedForGpa: input.usedForGpa,
     equivalentNote: input.equivalentNote ?? null,
   }
@@ -848,9 +900,11 @@ export async function buildGraduationTranscript(
   const conditionalSubjects = curriculumSubjects
     .filter((subject) => subject.useForFinalScore === false)
     .map((subject) => {
+      const doneScore = resolved.markDoneScores.get(subject.subjectId)
       const score =
+        (doneScore?.exempted ? doneScore : undefined) ||
         resolved.curriculumDisplayScores.get(subject.subjectId) ||
-        resolved.markDoneScores.get(subject.subjectId) ||
+        doneScore ||
         resolved.subjectScoresMap.get(subject.subjectId)
       return toTranscriptSubject({
         id: subject.id,

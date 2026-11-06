@@ -14,6 +14,47 @@ import { Col, Form, message, Row, Switch } from "antd"
 import { useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
+type CopyableQuestion = {
+  multipleChoiceOptions?: { content: string; isCorrect: boolean; order: number | null }[]
+  orderingItems?: { content: string; correctOrder: number }[]
+  fillInBlankSlots?: { order: number | null; correctAnswer: string }[]
+}
+
+// Dữ liệu đáp án đi kèm khi sao chép câu hỏi
+const buildAnswerCreateData = (q: CopyableQuestion) => ({
+  multipleChoiceOptions: q.multipleChoiceOptions?.length
+    ? {
+        createMany: {
+          data: q.multipleChoiceOptions.map((opt, index) => ({
+            content: opt.content,
+            isCorrect: opt.isCorrect,
+            order: opt.order ?? index + 1,
+          })),
+        },
+      }
+    : undefined,
+  orderingItems: q.orderingItems?.length
+    ? {
+        createMany: {
+          data: q.orderingItems.map((item) => ({
+            content: item.content,
+            correctOrder: item.correctOrder,
+          })),
+        },
+      }
+    : undefined,
+  fillInBlankSlots: q.fillInBlankSlots?.length
+    ? {
+        createMany: {
+          data: q.fillInBlankSlots.map((slot, index) => ({
+            order: slot.order ?? index + 1,
+            correctAnswer: slot.correctAnswer,
+          })),
+        },
+      }
+    : undefined,
+})
+
 interface MoveQuestionForm {
   examFrameworkId: string
   examMatrixId: string
@@ -51,6 +92,15 @@ const MoveQuestionModal = () => {
         multipleChoiceOptions: true,
         orderingItems: true,
         fillInBlankSlots: true,
+        subQuestions: {
+          where: { deletedAt: null },
+          orderBy: { order: "asc" },
+          include: {
+            multipleChoiceOptions: true,
+            orderingItems: true,
+            fillInBlankSlots: true,
+          },
+        },
       },
     },
     {
@@ -58,12 +108,17 @@ const MoveQuestionModal = () => {
     }
   )
 
-  const { data: examFrameworks = [] } = useFindManyExamFramework()
+  const { data: examFrameworks = [] } = useFindManyExamFramework({
+    where: { active: true },
+    include: { subjectVersion: true },
+    orderBy: { createdAt: "desc" },
+  })
 
   const { data: examMatrixs = [] } = useFindManyExamMatrix(
     {
       where: {
         examFrameworkId,
+        deletedAt: null,
       },
     },
     {
@@ -75,6 +130,7 @@ const MoveQuestionModal = () => {
     {
       where: {
         examMatrixId,
+        deletedAt: null,
       },
     },
     {
@@ -107,43 +163,24 @@ const MoveQuestionModal = () => {
               isAutoGraded: q.isAutoGraded ?? false,
               knowledgeBlockId,
               questionBankId: q.questionBankId,
-
-              multipleChoiceOptions:
-                q.multipleChoiceOptions?.length > 0
-                  ? {
-                      createMany: {
-                        data: q.multipleChoiceOptions.map((opt, index) => ({
-                          content: opt.content,
-                          isCorrect: opt.isCorrect,
-                          order: opt.order ?? index + 1,
-                        })),
-                      },
-                    }
-                  : undefined,
-
-              orderingItems:
-                q.orderingItems?.length > 0
-                  ? {
-                      createMany: {
-                        data: q.orderingItems.map((item) => ({
-                          content: item.content,
-                          correctOrder: item.correctOrder,
-                        })),
-                      },
-                    }
-                  : undefined,
-
-              fillInBlankSlots:
-                q.fillInBlankSlots?.length > 0
-                  ? {
-                      createMany: {
-                        data: q.fillInBlankSlots.map((slot, index) => ({
-                          order: slot.order ?? index + 1,
-                          correctAnswer: slot.correctAnswer,
-                        })),
-                      },
-                    }
-                  : undefined,
+              ...buildAnswerCreateData(q),
+              // Câu hỏi chùm: sao chép kèm các câu con
+              subQuestions: q.subQuestions?.length
+                ? {
+                    create: q.subQuestions.map((sq) => ({
+                      content: sq.content,
+                      explanation: sq.explanation,
+                      type: sq.type,
+                      difficult: sq.difficult,
+                      point: sq.point,
+                      isAutoGraded: sq.isAutoGraded,
+                      order: sq.order,
+                      knowledgeBlockId,
+                      questionBankId: sq.questionBankId,
+                      ...buildAnswerCreateData(sq),
+                    })),
+                  }
+                : undefined,
             },
           })
         )
@@ -153,7 +190,10 @@ const MoveQuestionModal = () => {
           input.questionIds.map((id) =>
             updateQuestion({
               where: { id },
-              data: { deletedAt: new Date() },
+              data: {
+                deletedAt: new Date(),
+                subQuestions: { updateMany: { where: {}, data: { deletedAt: new Date() } } },
+              },
             })
           )
         )
@@ -180,7 +220,7 @@ const MoveQuestionModal = () => {
       form={form}
       onFinish={onSubmit}
       onCancel={onClose}
-      title="Chuyển câu hỏi tới"
+      title="Sao chép / chuyển câu hỏi tới khung đề"
       width={520}
       maskClosable
     >
@@ -189,9 +229,10 @@ const MoveQuestionModal = () => {
           <FormItem form={form} name="examFrameworkId" label="Khung đề" required>
             <Select
               placeholder="Chọn khung đề"
+              onChange={() => form.resetFields(["examMatrixId", "knowledgeBlockId"])}
               options={examFrameworks.map((i) => ({
                 value: i.id,
-                label: i.name,
+                label: i.subjectVersion?.name ? `${i.name} (${i.subjectVersion.name})` : i.name,
               }))}
             />
           </FormItem>
@@ -201,6 +242,7 @@ const MoveQuestionModal = () => {
             <Select
               placeholder="Chọn ma trận đề"
               disabled={!examFrameworkId}
+              onChange={() => form.resetFields(["knowledgeBlockId"])}
               options={examMatrixs.map((i) => ({
                 value: i.id,
                 label: i.name,
@@ -223,7 +265,7 @@ const MoveQuestionModal = () => {
         <Col span={24}>
           <div className="flex items-center gap-2">
             <Switch checked={keepOld} onChange={setKeepOld} />
-            <span>Giữ lại câu hỏi cũ</span>
+            <span>Giữ lại câu hỏi cũ (sao chép, dùng được ở nhiều khung)</span>
           </div>
         </Col>
       </Row>

@@ -20,6 +20,7 @@ import { Button, Col, Flex, Menu, message, Row } from "antd"
 import dayjs from "dayjs"
 import { useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 export default function StaffManagement() {
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -224,6 +225,7 @@ export default function StaffManagement() {
 
   const { data: staffTypeData = [] } = useFindManyStaffType()
   const { data: manageOrgData = [] } = useFindManyDM_DonVi({
+    where: whereActiveOrganization,
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
   const treeData = buildOrgTree(manageOrgData)

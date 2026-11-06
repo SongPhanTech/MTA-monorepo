@@ -143,7 +143,11 @@ const PutCertificateOnSubjectScoreModal = () => {
             placeholder="Chọn môn học"
             options={subjectData.map((item) => {
               const version = item.subjectVersion?.[0]
-              const code = item.code || version?.code
+              // Hiển thị cả mã môn gốc và mã các phiên bản (VD: 06303151 | 55AO) để tìm được theo mã trong CTĐT
+              const versionCodes = (item.subjectVersion || [])
+                .map((v) => v.code)
+                .filter((c): c is string => !!c && c !== item.code)
+              const code = [...new Set([item.code, ...versionCodes].filter(Boolean))].join(" | ")
               const credit = version?.credit
               const extras = [code, credit != null ? `${credit} TC` : null]
                 .filter(Boolean)

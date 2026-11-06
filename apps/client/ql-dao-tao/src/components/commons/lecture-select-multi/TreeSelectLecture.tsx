@@ -5,7 +5,7 @@ import { UserIcon } from "lucide-react"
 import type React from "react"
 import { memo, useEffect, useMemo, useRef, useState } from "react"
 import type { TreeNodeType } from "@/utils/convertOrganizationToTree"
-import { whereOrganization } from "@workspace/libs/constants"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 
 type OrgNode = { id: string; name: string | null; parentId: string | null }
 type LecturerNode = {
@@ -13,7 +13,10 @@ type LecturerNode = {
   userProfile: { fullName: string; sDM_DonViId: string | null }
 }
 
-function groupByParent<T>(items: T[], getParentId: (item: T) => string | null): Map<string | null, T[]> {
+function groupByParent<T>(
+  items: T[],
+  getParentId: (item: T) => string | null
+): Map<string | null, T[]> {
   const map = new Map<string | null, T[]>()
   for (const item of items) {
     const key = getParentId(item)
@@ -91,7 +94,7 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = memo(function Lectur
     error: organizationsError,
   } = useFindManyDM_DonVi(
     {
-      where: whereOrganization,
+      where: whereActiveOrganization,
       orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
     },
     { enabled: hasOpened, refetchOnWindowFocus: false, staleTime: 60_000 }

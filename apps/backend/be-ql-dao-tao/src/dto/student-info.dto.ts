@@ -143,6 +143,13 @@ export const StudentInfoCheck = z.object({
   diemTrungBinhNam10: z.number().describe("Điểm trung bình năm hệ 10"),
   diemTrungBinhNam4: z.number().describe("Điểm trung bình năm hệ 4"),
   noTinChiTrongNam: z.number().describe("Số tín chỉ nợ trong năm"),
+  coKetQuaNam: z.boolean().optional().describe("Đã có kết quả tổng kết năm học"),
+  noMonQuaHaiKyLienTiep: z
+    .boolean()
+    .optional()
+    .describe("Nợ một môn học quá 02 học kỳ chính liên tiếp"),
+  soLanLuuBan: z.number().optional().describe("Số lần đã lưu ban (quyết định đã duyệt)"),
+  dangKyHocCaiThien: z.boolean().optional().describe("Có học lại môn đã đạt trong kỳ"),
   diemRenLuyen: z.number().describe("Điểm rèn luyện"),
   soTinChiDangKy: z.number().describe("Số tín chỉ đăng ký trong học kỳ"),
   soTinChiTichLuy: z.number().describe("Số tín chỉ tích lũy"),

@@ -390,11 +390,24 @@ const PutCertificateArchivedModal = () => {
   )
 
   const handleCertificateChange = useCallback(
-    (rowId: string, certificateId: string) => {
-      form.setFieldValue(["student", rowId, "certificateId"], certificateId)
-      setSubjectScores(rowId, [])
+    (row: SelectedStudentRow, certificateId: string) => {
+      form.setFieldValue(["student", row.rowId, "certificateId"], certificateId)
+      const selectedCert = certificate.find((c) => c.id === certificateId)
+      if (selectedCert?.isUsingScore !== false) {
+        setSubjectScores(row.rowId, [])
+        return
+      }
+      // Chứng chỉ Đạt/Không đạt: tự chọn các môn được quy đổi có trong CTĐT của SV
+      const curriculumSubjects = getCurriculumSubjectsForStudent(row.curriculumVersionId)
+      const curriculumIds = new Set(curriculumSubjects.map((s) => s.id))
+      setSubjectScores(
+        row.rowId,
+        getConvertibleSubjects(selectedCert, curriculumSubjects)
+          .filter((s) => curriculumIds.has(s.id))
+          .map((s) => ({ subjectVersionId: s.id, finalScore: 0 }))
+      )
     },
-    [form, setSubjectScores]
+    [form, certificate, getCurriculumSubjectsForStudent, setSubjectScores]
   )
 
   const getSubjectScores = (rowId: string): SubjectScoreItem[] => subjectScoresByRow[rowId] || []
@@ -454,9 +467,13 @@ const PutCertificateArchivedModal = () => {
             studentDataForRow.documentFiles ||
             []
 
-          const subjectScores: SubjectScoreItem[] = (subjectScoresByRow[row.rowId] || []).filter(
-            (s) => s.subjectVersionId
-          )
+          const isUsingScore =
+            certificate.find((c) => c.id === studentDataForRow.certificateId)?.isUsingScore !==
+            false
+          const subjectScores: SubjectScoreItem[] = (subjectScoresByRow[row.rowId] || [])
+            .filter((s) => s.subjectVersionId)
+            // Chứng chỉ Đạt/Không đạt: điểm phiên không dùng, môn được ghi nhận miễn khi phê duyệt
+            .map((s) => (isUsingScore ? s : { ...s, finalScore: 0 }))
 
           const result = await createArchivedCertificate({
             data: {
@@ -643,7 +660,7 @@ const PutCertificateArchivedModal = () => {
                   title: "Chứng chỉ",
                   width: 220,
                   align: "center",
-                  render: (_, record) => (
+                  render: (_, record: SelectedStudentRow) => (
                     <FormItem
                       form={form}
                       name={["student", record.rowId, "certificateId"]}
@@ -656,7 +673,7 @@ const PutCertificateArchivedModal = () => {
                           value: item.id,
                         }))}
                         placeholder="Chọn chứng chỉ"
-                        onChange={(value: string) => handleCertificateChange(record.rowId, value)}
+                        onChange={(value: string) => handleCertificateChange(record, value)}
                       />
                     </FormItem>
                   ),
@@ -739,22 +756,28 @@ const PutCertificateArchivedModal = () => {
                                   setSubjectScores(record.rowId, next)
                                 }}
                               />
-                              <InputNumber
-                                min={0}
-                                max={10}
-                                step={0.1}
-                                variant="underlined"
-                                className="w-[70px]"
-                                value={item.finalScore}
-                                onChange={(value) => {
-                                  const next = [...scores]
-                                  next[idx] = {
-                                    ...next[idx],
-                                    finalScore: value ?? 0,
-                                  }
-                                  setSubjectScores(record.rowId, next)
-                                }}
-                              />
+                              {selectedCertificate?.isUsingScore === false ? (
+                                <span className="w-[70px] text-center text-xs text-green-600">
+                                  Miễn
+                                </span>
+                              ) : (
+                                <InputNumber
+                                  min={0}
+                                  max={10}
+                                  step={0.1}
+                                  variant="underlined"
+                                  className="w-[70px]"
+                                  value={item.finalScore}
+                                  onChange={(value) => {
+                                    const next = [...scores]
+                                    next[idx] = {
+                                      ...next[idx],
+                                      finalScore: value ?? 0,
+                                    }
+                                    setSubjectScores(record.rowId, next)
+                                  }}
+                                />
+                              )}
                               <Button
                                 type="text"
                                 danger

@@ -20,7 +20,7 @@ import {
   useUpdateStudent,
   useFindManySemester,
 } from "@workspace/db/hooks"
-import { whereOrganization } from "@workspace/libs/constants"
+import { whereActiveOrganization } from "@workspace/libs/org-tree"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
 import { BookPlus } from "lucide-react"
 import { useMemo, useState } from "react"
@@ -238,7 +238,7 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
   })
 
   const { data: manageOrgData = [] } = useFindManyDM_DonVi({
-    where: whereOrganization,
+    where: whereActiveOrganization,
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
   const treeData = buildOrgTree(manageOrgData)

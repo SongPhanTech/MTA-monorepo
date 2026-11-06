@@ -1071,6 +1071,37 @@ app.openapi(exportSubjectClassListExcel, async (c) => {
   }
 })
 
+// iCapDonVi: 0 Học viện, 1 Khối, 2 Phòng/Ban/Khoa/Viện, 3+ Bộ môn trở xuống
+const CAP_DON_VI_KHOA = 2
+
+/** Tên cấp Khoa/Viện của đơn vị quản lý môn học (đi lên cây từ Bộ môn). */
+async function resolveFacultyName(org?: {
+  sTen: string | null
+  sParentId: string | null
+  iCapDonVi: number | null
+} | null): Promise<string> {
+  if (!org) return ""
+  if (org.iCapDonVi !== null && org.iCapDonVi <= CAP_DON_VI_KHOA) return org.sTen || ""
+
+  let directParentName = ""
+  let parentId = org.sParentId
+  const visited = new Set<string>()
+  while (parentId && parentId !== "0" && !visited.has(parentId)) {
+    visited.add(parentId)
+    const parent = await prisma.dM_DonVi.findUnique({
+      where: { Id: parentId },
+      select: { sTen: true, sParentId: true, iCapDonVi: true },
+    })
+    if (!parent) break
+    if (!directParentName) directParentName = parent.sTen || ""
+    if (parent.iCapDonVi === CAP_DON_VI_KHOA) return parent.sTen || ""
+    if (parent.iCapDonVi !== null && parent.iCapDonVi < CAP_DON_VI_KHOA) break
+    parentId = parent.sParentId
+  }
+  // Dữ liệu cấp đơn vị không đủ: lấy đơn vị cha trực tiếp của Bộ môn
+  return directParentName || org.sTen || ""
+}
+
 app.openapi(exportSubjectClassScore, async (c) => {
   const { id, type, examId, role, userId } = c.req.valid("query")
 
@@ -1325,7 +1356,7 @@ app.openapi(exportSubjectClassScore, async (c) => {
             ? `, ${subjectClass.extraLecturer.userProfile?.fullname || ""}`
             : ""
         }`,
-    KHOA: subjectClass.subject?.managementOrganization?.sCode || "",
+    KHOA: await resolveFacultyName(subjectClass.subject?.managementOrganization),
     HINH_THUC_THI: examTypeOptions.find((et) => et.value === subjectClass.examType)?.label || "",
     d: formatNgayIn(printedAt.date()),
     m: formatThangIn(printedAt.month() + 1),

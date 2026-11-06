@@ -6,7 +6,9 @@ const TreeSelect = (props: TreeSelectProps) => {
     <AntdTreeSelect
       showSearch
       treeDefaultExpandAll
-      filterTreeNode={(input, treeNode) => fuzzyMatch(input, treeNode.label?.toString() || "")}
+      filterTreeNode={(input, treeNode) =>
+        fuzzyMatch(input, treeNode.searchText?.toString() || treeNode.label?.toString() || "")
+      }
       {...props}
     />
   )
