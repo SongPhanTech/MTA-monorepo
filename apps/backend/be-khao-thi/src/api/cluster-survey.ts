@@ -94,7 +94,7 @@ const createClusterSurvey = createRoute({
               anonymous: z.boolean().default(false),
               surveyTopicId: z.string(),
               targetEnrollStudentOnly: z.boolean().default(false),
-              surveyObjectTypeIds: z.array(z.string()).optional().default([]),
+              surveyObjectTypeIds: z.array(z.string()).min(1),
               subjectClassIds: z.array(z.string()).nonempty(),
               surveyQuestionIds: z.array(z.string()).nonempty(),
               semesterId: z.string(),
