@@ -17,6 +17,80 @@ const calculatePercent = (items: any[]) => {
   }))
 }
 
+function QuestionStatisticsTable({
+  questions,
+  isSpecial,
+}: {
+  questions: any[]
+  isSpecial: boolean
+}) {
+  const specialChoices =
+    questions.find((question) => question.specificChoice?.length)?.specificChoice || []
+  const answerHeaders = isSpecial ? specialChoices : questions[0]?.answers || []
+
+  if (!questions.length || !answerHeaders.length) return null
+
+  return (
+    <table
+      className="mt-4 text-sm border-collapse border border-black text-center"
+      style={{ tableLayout: "fixed", width: "100%" }}
+    >
+      <thead>
+        <tr className="font-bold text-center border border-black">
+          <th className="border border-black text-center" style={{ width: 60 }}>
+            STT
+          </th>
+          <th className="border border-black text-center" style={{ width: 120 }}>
+            Câu hỏi
+          </th>
+          {answerHeaders.map((answer: any, index: number) => (
+            <th
+              className="border border-black text-center"
+              key={answer.id || answer.answer || index}
+            >
+              {answer.description || answer.answer}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {questions.map((question: any, index: number) => {
+          const percentages = calculatePercent(question.answers || [])
+
+          return (
+            <tr key={question.id}>
+              <td className="text-center border border-black">{index + 1}</td>
+              <td className="text-center border border-black">
+                {`Câu ${question.questionNumber || index + 1}`}
+                {isSpecial && (
+                  <span className="special-star" style={{ color: "#FF0000", fontWeight: 700 }}>
+                    {" "}
+                    *
+                  </span>
+                )}
+              </td>
+              {answerHeaders.map((header: any, answerIndex: number) => {
+                const answer =
+                  percentages.find((item: any) => String(item.answer) === String(header.answer)) ||
+                  percentages[answerIndex]
+
+                return (
+                  <td
+                    className="text-center border border-black"
+                    key={header.id || header.answer || answerIndex}
+                  >
+                    {answer ? `${answer.percent}% (${answer.count}/${answer.total})` : "0% (0/0)"}
+                  </td>
+                )
+              })}
+            </tr>
+          )
+        })}
+      </tbody>
+    </table>
+  )
+}
+
 const buildAverageRow = (questions: any[]) => {
   if (!questions?.length) return null
 
@@ -114,6 +188,8 @@ const ModalPrintSurvey = () => {
   if (!input) return null
 
   const dataTable = input.questions || []
+  const normalQuestions = dataTable.filter((question: any) => !question.specificChoice?.length)
+  const specialQuestions = dataTable.filter((question: any) => question.specificChoice?.length)
 
   return (
     <Modal
@@ -134,70 +210,19 @@ const ModalPrintSurvey = () => {
         {/* ===== Theo câu hỏi ===== */}
         <div className="font-bold text-lg text-center mb-4">THỐNG KÊ THEO TỪNG CÂU HỎI</div>
 
-        <table
-          className="mt-4 text-sm border-collapse border border-black text-center"
-          style={{ tableLayout: "fixed", width: "100%" }}
-        >
-          <thead>
-            <tr className="font-bold text-center border border-black">
-              <th className="border border-black text-center" style={{ width: 60 }}>
-                STT
-              </th>
-              <th className="border border-black text-center" style={{ width: 120 }}>
-                Câu hỏi
-              </th>
-              {dataTable[0]?.answers?.map((a: any) => (
-                <th className="border border-black text-center" key={a.id}>
-                  {a.description}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {dataTable.map((q: any, index: number) => {
-              const percent = calculatePercent(q.answers)
-              const isSpecial = q.specificChoice?.length > 0
+        {normalQuestions.length > 0 && (
+          <>
+            <div className="font-bold mt-4">BẢNG 1. CÂU HỎI TRẮC NGHIỆM THƯỜNG</div>
+            <QuestionStatisticsTable questions={normalQuestions} isSpecial={false} />
+          </>
+        )}
 
-              return (
-                <tr key={q.id}>
-                  <td className="text-center border border-black">{index + 1}</td>
-
-                  <td className="text-center border border-black">
-                    {`Câu ${index + 1}`}
-                    {isSpecial && (
-                      <span className="special-star" style={{ color: "#FF0000", fontWeight: 700 }}>
-                        {" "}
-                        *
-                      </span>
-                    )}
-                  </td>
-
-                  {percent.map((p: any, answerIndex: number) => {
-                    const special =
-                      isSpecial &&
-                      (q.specificChoice.find(
-                        (c: any) => String(c.answer) === String(p.answer)
-                      ) ||
-                        q.specificChoice[answerIndex])
-                    const specialLabel =
-                      special?.description?.trim() || special?.answer?.trim() || ""
-
-                    return (
-                      <td key={p.id} className="text-center border border-black">
-                        {specialLabel && (
-                          <div style={{ fontWeight: 700, fontSize: 12, marginBottom: 2 }}>
-                            {specialLabel}
-                          </div>
-                        )}
-                        {p.percent}% ({p.count}/{p.total})
-                      </td>
-                    )
-                  })}
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
+        {specialQuestions.length > 0 && (
+          <>
+            <div className="font-bold mt-6">BẢNG 2. CÂU HỎI TRẮC NGHIỆM ĐẶC BIỆT</div>
+            <QuestionStatisticsTable questions={specialQuestions} isSpecial />
+          </>
+        )}
 
         {/* ===== Chart ===== */}
         <div className="mt-6">

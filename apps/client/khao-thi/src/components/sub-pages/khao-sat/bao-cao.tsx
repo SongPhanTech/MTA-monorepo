@@ -512,8 +512,6 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
       }
     })
   }
-
-
   const handleDirectGraduateWordExport = async () => {
     showSpinner()
     try {
@@ -1127,8 +1125,9 @@ const exportWordReport = async (
                         onClick: () =>
                           onOpen({
                             surveyName: dataLevel?.data?.surveyName,
-                            questions: allQuestions.map((q: any) => ({
+                            questions: allQuestions.map((q: any, index: number) => ({
                               ...q,
+                              questionNumber: index + 1,
                               specificChoice: specificChoiceByQuestionId[q.id] || [],
                             })),
                             summaryInfo: data?.data,

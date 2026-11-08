@@ -21,6 +21,7 @@ import { sqlTransaction } from "@workspace/libs/api/model"
 import { fuzzyMatch } from "@workspace/libs/utils"
 import { ROUTER_PATH } from "@workspace/router"
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
+import { useQueryClient } from "@tanstack/react-query"
 import {
   Alert,
   Button,
@@ -73,6 +74,7 @@ interface Choices {
 
 const PutSurveyModal = () => {
   const [form] = Form.useForm<PutSurveyType>()
+  const queryClient = useQueryClient()
   const { id: semesterIdStore } = useSemesterStore()
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
   const { isOpen, onClose, input } = useDisclosure<{
@@ -163,6 +165,13 @@ const PutSurveyModal = () => {
     where: { trainingObjectTypeId },
   })
 
+  const refreshSurveyQueries = async () => {
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: ["zenstack", "ClusterSurvey"] }),
+      queryClient.invalidateQueries({ queryKey: ["zenstack", "Survey"] }),
+    ])
+  }
+
   async function onOk(output?: PutSurveyType) {
     if (!trainingObjectTypeId) {
       message.error("Vui lòng chọn loại đối tượng đào tạo")
@@ -203,6 +212,7 @@ const PutSurveyModal = () => {
             },
           })
           message.success("Cập nhật thành công")
+          await refreshSurveyQueries()
           onClose()
           return
         }
@@ -226,6 +236,7 @@ const PutSurveyModal = () => {
         })
         if (res?.status === 200) {
           message.success("Tạo thành công")
+          await refreshSurveyQueries()
           onClose()
           return
         }
@@ -476,7 +487,7 @@ const PutSurveyModal = () => {
                 />
               </FormItem>
             </Col>
-            {input?.type !== "multiple" && !(isPublic && anonymous) && (
+            {!(isPublic && anonymous) && (
               <Col span={12}>
                 <FormItem
                   form={form}

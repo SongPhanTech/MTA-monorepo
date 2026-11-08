@@ -184,10 +184,9 @@ export function fillGraduateSurveyReportTemplate(
     spacingAfter: 120,
   })
 
-  ;(data.sectionB.fields || []).forEach((field, fIdx) => {
-    const roman = ["I", "II", "III", "IV", "V", "VI"][fIdx] || `${fIdx + 1}`
+  ;(data.sectionB.fields || []).forEach((field) => {
     middleXml += makeParagraphXml({
-      text: `${roman}. ${field.title}`,
+      text: field.title,
       bold: true,
       italic: true,
       indent: false,
