@@ -24,6 +24,7 @@ import {
   SURVEY_OBJECT_TYPE_INCLUDE,
   SURVEY_OBJECT_TYPE_REPORT_INCLUDE,
   buildSurveyObjectTypeProfileOrClauses,
+  isProfileInSurveyAudience,
   resolveMajorOrgFromSurveyObjectTypes,
 } from "../lib/survey-audience"
 import { getBufferFromUrl } from "../services/template.service"
@@ -1401,10 +1402,10 @@ app.openapi(getSurveysByProfile, async (c) => {
   }
 
   if (audienceMatch.OR?.length) {
-    where.AND = [{ OR: [{ anonymous: false }, audienceMatch] }, enrollmentFilter]
+    where.AND = [audienceMatch, enrollmentFilter]
   } else {
-    where.anonymous = false
-    where.AND = [enrollmentFilter]
+    // Không thuộc bất kỳ đối tượng khảo sát nào
+    return c.json({ data: [], count: 0 }, 200)
   }
 
   const surveys = await prisma.survey.findMany({
@@ -1508,6 +1509,12 @@ app.openapi(getPrivateSurvey, async (c) => {
   })
   if (checkExist) {
     return c.json({ message: "Bạn đã làm khảo sát" }, 400)
+  }
+  if (profileId) {
+    const inAudience = await isProfileInSurveyAudience(prisma, profileId, id)
+    if (!inAudience) {
+      return c.json({ message: "Bạn không thuộc đối tượng tham gia khảo sát này" }, 403)
+    }
   }
   const survey = await prisma.survey.findUnique({
     where: { id, deletedAt: null, active: true },

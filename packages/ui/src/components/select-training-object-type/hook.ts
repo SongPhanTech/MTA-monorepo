@@ -1,8 +1,9 @@
 import type { DefaultError, UseQueryOptions } from "@tanstack/react-query"
 import { Store, useStore } from "@tanstack/react-store"
+import { useSession } from "@workspace/auth/react"
 import { $Enums } from "@workspace/db"
 import type { Prisma } from "@workspace/db/client"
-import { useFindManyTrainingObjectType } from "@workspace/db/hooks"
+import { useFindManyTrainingObjectType, useFindUniqueUserProfile } from "@workspace/db/hooks"
 import { useGetUserPermissionsPermissionAppCodeUserId } from "@workspace/libs/api/system"
 import { isDevEnvironment } from "@workspace/libs/utils"
 import type { ExtraQueryOptions } from "@zenstackhq/tanstack-query/runtime-v5"
@@ -71,6 +72,66 @@ export function useFindManyTrainingObjectTypePermission<
       subsystem?: string
     }
 ) {
+  const { data: session } = useSession()
+  const profileId =
+    session?.sDM_NhanVienId ||
+    (typeof process !== "undefined" ? process.env.NEXT_PUBLIC_MOCK_USER_PROFILE_ID : undefined)
+
+  // Truy vấn quá trình học tập của tài khoản (nếu là học viên/sinh viên)
+  const { data: userProfile } = useFindUniqueUserProfile(
+    {
+      where: { id: profileId! },
+      select: {
+        bLaHocVien: true,
+        bLaSinhVien: true,
+        educationAndTraining: {
+          select: {
+            fixedClass: {
+              select: {
+                trainingCourse: {
+                  select: {
+                    trainingObjectType: {
+                      select: {
+                        id: true,
+                        name: true,
+                        code: true,
+                        active: true,
+                        type: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      enabled: !!profileId,
+    }
+  )
+
+  const studentTrainingObjectTypes = useMemo(() => {
+    if (!userProfile?.educationAndTraining?.length) return []
+    const map = new Map<string, any>()
+    userProfile.educationAndTraining.forEach((et) => {
+      const tot = et.fixedClass?.trainingCourse?.trainingObjectType
+      if (tot?.id && tot.active !== false) {
+        map.set(tot.id, tot)
+      }
+    })
+    return Array.from(map.values())
+  }, [userProfile])
+
+  const isStudent = useMemo(() => {
+    return Boolean(
+      userProfile?.bLaHocVien ||
+      userProfile?.bLaSinhVien ||
+      studentTrainingObjectTypes.length > 0
+    )
+  }, [userProfile, studentTrainingObjectTypes])
+
   const { data: permission } = useGetUserPermissionsPermissionAppCodeUserId(
     "lms",
     window?.contextData?.userId ?? ""
@@ -85,18 +146,26 @@ export function useFindManyTrainingObjectTypePermission<
     {
       where: {
         active: true,
-        ...(isDevEnvironment() || options?.subsystem === "ems"
-          ? {}
-          : {
-              vaiTro: {
-                hasSome: permissions.map((item: any) => item.sRoleId).filter(Boolean),
-              },
-            }),
+        ...(isStudent && studentTrainingObjectTypes.length > 0
+          ? {
+              id: { in: studentTrainingObjectTypes.map((item) => item.id) },
+            }
+          : isDevEnvironment() || options?.subsystem === "ems"
+            ? {}
+            : {
+                vaiTro: {
+                  hasSome: permissions.map((item: any) => item.sRoleId).filter(Boolean),
+                },
+              }),
       },
       orderBy: { name: "asc" },
       ...(args as any),
     },
-    options as any
+    {
+      ...options,
+      enabled: options?.enabled !== false && (!profileId || userProfile !== undefined),
+    } as any
   )
+
   return res
 }

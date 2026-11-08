@@ -694,7 +694,7 @@ const PutSurveyModal = () => {
         semesterId: semesterIdStore,
         isPublic: false,
         anonymous: false,
-        targetEnrollStudentOnly: false,
+        targetEnrollStudentOnly: input?.type === "multiple",
         surveyChoice: choices,
       })
     }

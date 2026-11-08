@@ -23,7 +23,10 @@ export default function DetailSurveyPage() {
   const { showSpinner, hideSpinner } = useSpinner()
   const router = useRouter()
   const { data: session } = useSession()
-  const profileId = session?.sDM_NhanVienId || "b5d1221b-06db-4fa8-8a1c-045996c1d4a2"
+  const profileId =
+    session?.sDM_NhanVienId ||
+    process.env.NEXT_PUBLIC_MOCK_USER_PROFILE_ID ||
+    "01e8a613-31f2-4724-87b5-383918959293"
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
   const { id: semesterId } = useSemesterStore()
