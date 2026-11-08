@@ -16,7 +16,7 @@ import {
   useUpdateClusterSurvey,
   useUpdateSurvey,
 } from "@workspace/db/hooks"
-import { useCreateClusterSurvey } from "@workspace/libs/api/exam"
+import { useCreateClusterSurvey, updateClusterSurveyApi } from "@workspace/libs/api/exam"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { fuzzyMatch } from "@workspace/libs/utils"
 import { ROUTER_PATH } from "@workspace/router"
@@ -183,38 +183,31 @@ const PutSurveyModal = () => {
 
       if (input?.type === "multiple") {
         if (input?.id) {
-          await updateClusterSurvey({
-            where: { id: input.id },
-            data: {
-              name: output.name.trim(),
-              surveyTopicId: output.surveyTopicId,
-              startDate: output.startDate,
-              endDate: output?.endDate || null,
-              isPublic: output.isPublic,
-              anonymous: !output.isPublic ? false : output.anonymous,
-              targetEnrollStudentOnly: output.targetEnrollStudentOnly ?? false,
-              surveyObjectType: {
-                set: (output.surveyObjectTypes || []).map((item) => ({ id: item })),
-              },
-              surveyQuestion: {
-                set: output.surveyQuestionIds.length
-                  ? output.surveyQuestionIds.map((item) => ({ id: item }))
-                  : [],
-              },
-              surveyChoice: {
-                deleteMany: {},
-                create: (output.surveyChoice || []).map((item) => ({
-                  answer: item.answer || "",
-                  description: item.description,
-                  requireExplanation: !!item.requireExplanation,
-                })),
-              },
-            },
+          const res = await updateClusterSurveyApi(input.id, {
+            name: output.name.trim(),
+            surveyTopicId: output.surveyTopicId,
+            startDate: output.startDate.toISOString(),
+            endDate: output?.endDate ? output.endDate.toISOString() : null,
+            isPublic: output.isPublic,
+            anonymous: !output.isPublic ? false : output.anonymous,
+            targetEnrollStudentOnly: output.targetEnrollStudentOnly ?? false,
+            surveyObjectTypeIds: output.surveyObjectTypes || [],
+            surveyQuestionIds: output.surveyQuestionIds || [],
+            surveyChoices: (output.surveyChoice || []).map((item) => ({
+              answer: item.answer || "",
+              description: item.description,
+              requireExplanation: !!item.requireExplanation,
+            })),
           })
-          message.success("Cập nhật thành công")
-          await refreshSurveyQueries()
-          onClose()
-          return
+          if (res?.status === 200 || !res?.status) {
+            message.success("Cập nhật thành công")
+            await refreshSurveyQueries()
+            onClose()
+            return
+          } else {
+            message.error(res?.data?.message || "Cập nhật thất bại")
+            return
+          }
         }
 
         const res = await createMultiple({

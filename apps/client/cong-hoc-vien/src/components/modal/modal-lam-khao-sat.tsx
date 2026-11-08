@@ -75,15 +75,14 @@ const ModalLamKhaoSat = () => {
   const { mutateAsync: createSavePublicSurvey, isPending } = useSavePublicSurvey()
 
   const dataTest = useMemo(() => {
-    const groupedMap = (survey?.surveyQuestion ?? []).reduce<Record<string, GroupedSurveyQuestion>>(
+    const groupedMap = (survey?.surveyQuestion ?? []).reduce<Record<string, any>>(
       (acc: any, item: any, index: number) => {
-        const groupId = item.surveyQuestionGroup?.id
+        const groupId = item.surveyQuestionGroup?.id ?? "__ungrouped__"
 
         if (!acc[groupId]) {
           acc[groupId] = {
-            ...item,
-            id: item.surveyQuestionGroup?.id,
-            name: item.surveyQuestionGroup?.name,
+            id: groupId,
+            name: item.surveyQuestionGroup?.name ?? null,
             question: [],
             isParent: true,
           }
@@ -103,10 +102,14 @@ const ModalLamKhaoSat = () => {
       {}
     )
 
-    const grouped: GroupedSurveyQuestion[] = Object.values(groupedMap).map((i: any, index) => {
-      return { ...i, index: toRoman(index + 1) }
-    })
-    return grouped.flatMap((i) => [i, ...(i.question || [])]) || []
+    const grouped = Object.values(groupedMap).map((i: any, index) => ({
+      ...i,
+      index: toRoman(index + 1),
+    }))
+    return grouped.flatMap((i: any) => [
+      ...(i.name ? [i] : []),
+      ...(i.question || []),
+    ])
   }, [survey?.surveyQuestion])
 
   const fetchData = async (surveyId: string) => {

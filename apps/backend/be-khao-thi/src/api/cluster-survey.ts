@@ -246,6 +246,181 @@ app.openapi(createClusterSurvey, async (c) => {
   return c.json({ message: "Success" })
 })
 
+const updateClusterSurvey = createRoute({
+  operationId: "update-cluster-survey",
+  path: "/cluster-survey/{id}",
+  tags: ["Cụm khảo sát"],
+  summary: "Cập nhật cụm khảo sát",
+  description: "Cập nhật thông tin cụm khảo sát và đồng bộ cho tất cả khảo sát con",
+  method: "put",
+  request: {
+    params: z.object({
+      id: z.string().openapi({ description: "ID của cụm khảo sát" }),
+    }),
+    body: {
+      content: {
+        "application/json": {
+          schema: z
+            .object({
+              name: z.string(),
+              startDate: z.coerce.date(),
+              endDate: z.coerce.date().nullable().optional(),
+              isPublic: z.boolean().default(false),
+              anonymous: z.boolean().default(false),
+              surveyTopicId: z.string(),
+              targetEnrollStudentOnly: z.boolean().default(false),
+              surveyObjectTypeIds: z.array(z.string()).min(1),
+              surveyQuestionIds: z.array(z.string()).nonempty(),
+              surveyChoices: z
+                .array(
+                  z.object({
+                    answer: z.string(),
+                    description: z.string(),
+                    requireExplanation: z.boolean(),
+                  })
+                )
+                .nonempty(),
+            })
+            .openapi("update-cluster-survey-request"),
+        },
+      },
+    },
+  },
+  responses: {
+    ...standardErrorResponses(),
+    200: {
+      description: "Success",
+      content: {
+        "application/json": {
+          schema: SuccessMessageResponseSchema,
+        },
+      },
+    },
+    400: {
+      description: "Invalid request",
+      content: {
+        "application/json": {
+          schema: ErrorMessageResponseSchema,
+        },
+      },
+    },
+    404: {
+      description: "Not found",
+      content: {
+        "application/json": {
+          schema: ErrorMessageResponseSchema,
+        },
+      },
+    },
+  },
+})
+
+app.openapi(updateClusterSurvey, async (c) => {
+  const { id } = c.req.valid("param")
+  const {
+    surveyQuestionIds,
+    surveyChoices,
+    surveyObjectTypeIds,
+    surveyTopicId,
+    ...payload
+  } = c.req.valid("json")
+
+  const cluster = await prisma.clusterSurvey.findUnique({
+    where: { id, deletedAt: null },
+  })
+
+  if (!cluster) {
+    return c.json({ message: "Không tìm thấy cụm khảo sát" }, 404)
+  }
+
+  try {
+    await prisma.$transaction(
+      async (tx) => {
+        // 1. Cập nhật ClusterSurvey và tạo mới các surveyChoice
+        await tx.clusterSurvey.update({
+          where: { id },
+          data: {
+            ...payload,
+            surveyTopic: {
+              connect: { id: surveyTopicId },
+            },
+            surveyQuestion: {
+              set: surveyQuestionIds.map((qid) => ({ id: qid })),
+            },
+            surveyObjectType: {
+              set: surveyObjectTypeIds.map((oid) => ({ id: oid })),
+            },
+            surveyChoice: {
+              deleteMany: {},
+              create: surveyChoices.map((choice) => ({
+                answer: choice.answer || "",
+                description: choice.description,
+                requireExplanation: !!choice.requireExplanation,
+              })),
+            },
+          },
+        })
+
+        const updatedCluster = await tx.clusterSurvey.findUnique({
+          where: { id },
+          include: { surveyChoice: true },
+        })
+        const newChoiceIds = updatedCluster?.surveyChoice.map((c) => c.id) || []
+
+        // 2. Tìm tất cả các khảo sát con thuộc cụm khảo sát này
+        const childSurveys = await tx.survey.findMany({
+          where: { clusterSurveyId: id, deletedAt: null },
+          select: { id: true },
+        })
+        const childSurveyIds = childSurveys.map((s) => s.id)
+
+        // 3. Đồng bộ thông tin scalar và quan hệ sang tất cả các khảo sát con
+        if (childSurveyIds.length > 0) {
+          await tx.survey.updateMany({
+            where: { id: { in: childSurveyIds } },
+            data: {
+              name: payload.name.trim(),
+              startDate: payload.startDate,
+              endDate: payload.endDate ?? null,
+              isPublic: payload.isPublic,
+              anonymous: payload.anonymous,
+              targetEnrollStudentOnly: payload.targetEnrollStudentOnly ?? false,
+              surveyTopicId,
+            },
+          })
+
+          const idListStr = childSurveyIds.map((sid) => `'${sid}'`).join(",")
+          await tx.$executeRawUnsafe(
+            `DELETE FROM "khao-thi"."_SurveyToSurveyQuestion" WHERE "A" IN (${idListStr})`
+          )
+          await tx.$executeRawUnsafe(
+            `DELETE FROM "khao-thi"."_SurveyToSurveyChoice" WHERE "A" IN (${idListStr})`
+          )
+          await tx.$executeRawUnsafe(
+            `DELETE FROM "khao-thi"."_SurveyToSurveyObjectType" WHERE "A" IN (${idListStr})`
+          )
+
+          await bulkLinkSurveyRelations(
+            tx,
+            childSurveyIds,
+            surveyQuestionIds,
+            newChoiceIds,
+            surveyObjectTypeIds
+          )
+        }
+      },
+      { timeout: 180_000, maxWait: 30_000 }
+    )
+  } catch (error) {
+    console.error("[update-cluster-survey] failed", error)
+    const message =
+      error instanceof Error ? error.message : "Không thể cập nhật cụm khảo sát. Vui lòng thử lại."
+    return c.json({ message }, 500)
+  }
+
+  return c.json({ message: "Success" })
+})
+
 const getClusterSurveyStatistics = createRoute({
   operationId: "get-cluster-survey-statistics",
   path: "/{id}/statistics",

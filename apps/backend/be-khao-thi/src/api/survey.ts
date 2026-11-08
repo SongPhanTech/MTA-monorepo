@@ -1411,6 +1411,7 @@ app.openapi(getSurveysByProfile, async (c) => {
   const surveys = await prisma.survey.findMany({
     where,
     include: {
+      clusterSurvey: true,
       lecture: { include: { userProfile: { include: { donVi: true } } } },
       surveyTopic: true,
       subjectClass: true,
@@ -1426,9 +1427,14 @@ app.openapi(getSurveysByProfile, async (c) => {
     orderBy: { createdAt: "desc" },
   })
 
+  const mappedSurveys = surveys.map((s) => ({
+    ...s,
+    name: s.clusterSurvey?.name || s.name,
+  }))
+
   const count = await prisma.survey.count({ where })
 
-  return c.json({ data: surveys, count }, 200)
+  return c.json({ data: mappedSurveys, count }, 200)
 })
 
 const getPrivateSurvey = createRoute({
@@ -1526,6 +1532,17 @@ app.openapi(getPrivateSurvey, async (c) => {
         },
       },
       surveyChoice: true,
+      clusterSurvey: {
+        include: {
+          surveyChoice: true,
+          surveyQuestion: {
+            include: {
+              surveyQuestionGroup: true,
+              specificChoice: true,
+            },
+          },
+        },
+      },
       lecture: {
         select: {
           userProfile: {
@@ -1563,7 +1580,17 @@ app.openapi(getPrivateSurvey, async (c) => {
     return c.json({ message: "Khảo sát đã đóng" }, 400)
   }
 
-  const { lecture, ...data } = survey
+  const name = survey.clusterSurvey?.name || survey.name
+  const surveyChoice =
+    survey.surveyChoice.length > 0
+      ? survey.surveyChoice
+      : survey.clusterSurvey?.surveyChoice || []
+  const surveyQuestion =
+    survey.surveyQuestion.length > 0
+      ? survey.surveyQuestion
+      : survey.clusterSurvey?.surveyQuestion || []
+
+  const { lecture, clusterSurvey: _cs, ...data } = survey
 
   const lectureInfo = lecture
     ? {
@@ -1575,7 +1602,7 @@ app.openapi(getPrivateSurvey, async (c) => {
       }
     : null
 
-  return c.json({ ...data, lectureInfo }, 200)
+  return c.json({ ...data, name, surveyChoice, surveyQuestion, lectureInfo }, 200)
 })
 
 const sinhdetudong = createRoute({

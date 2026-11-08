@@ -204,7 +204,7 @@ function TakeTestPage() {
             <SurveyFormIntro survey={survey} fallback={LECTURER_SURVEY_PRINT_FORM_CONTENT} />
           )}
 
-          {survey?.surveyChoice?.length && (
+          {survey?.surveyChoice && survey.surveyChoice.length > 0 ? (
             <Row gutter={[16, 16]}>
               <Col span={24}>
                 <Table
@@ -383,6 +383,10 @@ function TakeTestPage() {
                 </Flex>
               </Col>
             </Row>
+          ) : (
+            <div className="my-8 text-center text-base text-gray-500">
+              Khảo sát chưa có nội dung câu hỏi hoặc mức đánh giá
+            </div>
           )}
         </Form>
       )}
