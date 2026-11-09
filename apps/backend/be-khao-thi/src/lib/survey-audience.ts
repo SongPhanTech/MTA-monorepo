@@ -1,5 +1,4 @@
 import type { Prisma, PrismaClient } from "@workspace/db"
-import { prisma } from ".."
 
 export const SURVEY_OBJECT_TYPE_INCLUDE = {
   organizations: { select: { Id: true } },
@@ -100,13 +99,13 @@ type SurveyObjectTypeWithRelations = {
   subjectClasses: { id: string }[]
 }
 
-const STUDENT_TYPES = [
+export const STUDENT_TYPES = [
   "MILITARY_STUDENT",
   "CIVILIAN_STUDENT",
   "MILITARY_GRADUATE_STUDENT",
   "CIVILIAN_GRADUATE_STUDENT",
 ]
-const LECTURER_TYPES = ["LECTURER", "STAFF"]
+export const LECTURER_TYPES = ["LECTURER", "STAFF"]
 
 export type SurveyAudienceScope = "student" | "lecturer" | "all"
 
@@ -222,30 +221,36 @@ export function buildSurveyObjectTypeProfileOrClauses(
       : objectType.organizations.map((org) => org.Id)
     const hasOrgIds = organizationIds.length > 0
 
-    clauses.push({
-      ...(hasOrgIds ? { sDM_DonViId: { in: organizationIds } } : {}),
-      ...organizationCodeFilter,
-      lecturer: { isNot: null },
-      ...(q.lecturerCode ? { code: { contains: q.lecturerCode, mode: "insensitive" } } : {}),
-    })
-    const staffWhere: Prisma.StaffWhereInput = {
-      ...(hasOrgIds ? { organizationId: { in: organizationIds } } : {}),
-      ...(q.organizationCode
-        ? {
-            organization: {
-              OR: [
-                { sMa: { contains: q.organizationCode, mode: "insensitive" } },
-                { sTen: { contains: q.organizationCode, mode: "insensitive" } },
-              ],
-            },
-          }
-        : {}),
+    const hasLecturerType = objectType.type.includes("LECTURER")
+    const hasStaffType = objectType.type.includes("STAFF")
+
+    if (hasLecturerType) {
+      clauses.push({
+        ...(hasOrgIds ? { sDM_DonViId: { in: organizationIds } } : {}),
+        ...organizationCodeFilter,
+        lecturer: { isNot: null },
+        ...(q.lecturerCode ? { code: { contains: q.lecturerCode, mode: "insensitive" } } : {}),
+      })
     }
-    clauses.push({
-      staffs:
-        Object.keys(staffWhere).length > 0 ? { is: staffWhere } : { isNot: null },
-      ...(q.staffCode ? { code: { contains: q.staffCode, mode: "insensitive" } } : {}),
-    })
+    if (hasStaffType) {
+      const staffWhere: Prisma.StaffWhereInput = {
+        ...(hasOrgIds ? { organizationId: { in: organizationIds } } : {}),
+        ...(q.organizationCode
+          ? {
+              organization: {
+                OR: [
+                  { sMa: { contains: q.organizationCode, mode: "insensitive" } },
+                  { sTen: { contains: q.organizationCode, mode: "insensitive" } },
+                ],
+              },
+            }
+          : {}),
+      }
+      clauses.push({
+        staffs: Object.keys(staffWhere).length > 0 ? { is: staffWhere } : { isNot: null },
+        ...(q.staffCode ? { code: { contains: q.staffCode, mode: "insensitive" } } : {}),
+      })
+    }
   }
 
   if (scope !== "lecturer") {
@@ -273,6 +278,7 @@ export function buildSurveyObjectTypeProfileOrClauses(
             ? {
                 subjectClassStudent: {
                   some: {
+                    deletedAt: null,
                     subjectClassId: { in: objectType.subjectClasses.map((sc) => sc.id) },
                   },
                 },
@@ -286,40 +292,243 @@ export function buildSurveyObjectTypeProfileOrClauses(
   return clauses
 }
 
+export const USER_PROFILE_AUDIENCE_INCLUDE = {
+  lecturer: true,
+  staffs: true,
+  educationAndTraining: {
+    where: { deletedAt: null },
+    include: {
+      fixedClass: {
+        include: {
+          curriculumVersion: {
+            include: {
+              curriculum: {
+                include: {
+                  trainingMajor: true,
+                },
+              },
+            },
+          },
+        },
+      },
+      subjectClassStudent: {
+        select: { subjectClassId: true },
+        where: { subjectClassId: { not: null }, deletedAt: null },
+      },
+    },
+  },
+} as const
+
+export type UserProfileAudienceData = Prisma.UserProfileGetPayload<{
+  include: typeof USER_PROFILE_AUDIENCE_INCLUDE
+}>
+
+/**
+ * Nguồn duy nhất dựng mệnh đề where của Survey để tìm các khảo sát dành cho một profile.
+ * Dùng chung cho:
+ * 1. Trang danh sách khảo sát của người dùng (`getSurveysByProfile` trong survey.ts)
+ * 2. Kiểm tra quyền truy cập / làm bài (`isProfileInSurveyAudience`)
+ */
+export function buildSurveyAudienceWhereForProfile(profile: UserProfileAudienceData): {
+  audienceMatch: Prisma.SurveyWhereInput
+  enrollmentFilter: Prisma.SurveyWhereInput
+} {
+  const audienceMatch: Prisma.SurveyWhereInput = { OR: [] }
+
+  // 1. Khảo sát chung không gắn lớp học phần và không có cấu hình đối tượng riêng/chùm -> mở cho tất cả người dùng đăng nhập
+  audienceMatch.OR?.push({
+    subjectClassId: null,
+    surveyObjectType: { none: {} },
+    OR: [{ clusterSurveyId: null }, { clusterSurvey: { surveyObjectType: { none: {} } } }],
+  })
+
+  // 2. Khảo sát theo lớp môn học không có cấu hình đối tượng riêng chỉ dành cho
+  // sinh viên đã ghi danh đúng lớp học phần đó.
+  const enrolledSubjectClassIds = [
+    ...new Set(
+      profile.educationAndTraining.flatMap((et) =>
+        et.subjectClassStudent
+          .map((enrollment) => enrollment.subjectClassId)
+          .filter((subjectClassId): subjectClassId is string => Boolean(subjectClassId))
+      )
+    ),
+  ]
+  if (enrolledSubjectClassIds.length > 0) {
+    audienceMatch.OR?.push({
+      subjectClassId: { in: enrolledSubjectClassIds },
+      surveyObjectType: { none: {} },
+      OR: [{ clusterSurveyId: null }, { clusterSurvey: { surveyObjectType: { none: {} } } }],
+    })
+  }
+
+  // 3. Khảo sát theo tiêu chí sinh viên (theo từng bản ghi educationAndTraining)
+  const studentWhereClauses: Prisma.SurveyWhereInput[] = profile.educationAndTraining.map((et) => {
+    const studentCriteria: Prisma.SurveyObjectTypeWhereInput[] = [
+      { type: { hasSome: STUDENT_TYPES } },
+    ]
+
+    if (et.fixedClassId) {
+      studentCriteria.push({
+        OR: [{ fixedClasses: { none: {} } }, { fixedClasses: { some: { id: et.fixedClassId } } }],
+      })
+    } else {
+      studentCriteria.push({ fixedClasses: { none: {} } })
+    }
+
+    if (et.fixedClass?.trainingCourseId) {
+      studentCriteria.push({
+        OR: [
+          { trainingCourses: { none: {} } },
+          { trainingCourses: { some: { id: et.fixedClass.trainingCourseId } } },
+        ],
+      })
+    } else {
+      studentCriteria.push({ trainingCourses: { none: {} } })
+    }
+
+    const majorId = et.fixedClass?.curriculumVersion?.curriculum?.trainingMajorId
+    if (majorId) {
+      studentCriteria.push({
+        OR: [{ trainingMajors: { none: {} } }, { trainingMajors: { some: { id: majorId } } }],
+      })
+    } else {
+      studentCriteria.push({ trainingMajors: { none: {} } })
+    }
+
+    const fieldId = et.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingFieldId
+    if (fieldId) {
+      studentCriteria.push({
+        OR: [{ trainingFields: { none: {} } }, { trainingFields: { some: { id: fieldId } } }],
+      })
+    } else {
+      studentCriteria.push({ trainingFields: { none: {} } })
+    }
+
+    const subjectClassIds = et.subjectClassStudent
+      ?.map((scs) => scs.subjectClassId)
+      .filter(Boolean) as string[]
+    if (subjectClassIds?.length) {
+      studentCriteria.push({
+        OR: [
+          { subjectClasses: { none: {} } },
+          { subjectClasses: { some: { id: { in: subjectClassIds } } } },
+        ],
+      })
+    } else {
+      studentCriteria.push({ subjectClasses: { none: {} } })
+    }
+
+    return {
+      OR: [
+        { surveyObjectType: { some: { AND: studentCriteria } } },
+        {
+          surveyObjectType: { none: {} },
+          clusterSurvey: { surveyObjectType: { some: { AND: studentCriteria } } },
+        },
+      ],
+    }
+  })
+
+  if (studentWhereClauses.length > 0) {
+    audienceMatch.OR?.push(...studentWhereClauses)
+  }
+
+  // 4. Khảo sát theo tiêu chí Giảng viên
+  if (profile.lecturer) {
+    const lecturerCriteria: Prisma.SurveyObjectTypeWhereInput[] = [{ type: { has: "LECTURER" } }]
+    if (profile.sDM_DonViId) {
+      lecturerCriteria.push({
+        OR: [
+          { organizations: { none: {} } },
+          { organizations: { some: { Id: profile.sDM_DonViId } } },
+        ],
+      })
+    } else {
+      lecturerCriteria.push({ organizations: { none: {} } })
+    }
+
+    audienceMatch.OR?.push(
+      { surveyObjectType: { some: { AND: lecturerCriteria } } },
+      {
+        surveyObjectType: { none: {} },
+        clusterSurvey: { surveyObjectType: { some: { AND: lecturerCriteria } } },
+      }
+    )
+  }
+
+  // 5. Khảo sát theo tiêu chí Cán bộ / Nhân viên
+  if (profile.staffs) {
+    const staffCriteria: Prisma.SurveyObjectTypeWhereInput[] = [{ type: { has: "STAFF" } }]
+    if (profile.staffs.organizationId) {
+      staffCriteria.push({
+        OR: [
+          { organizations: { none: {} } },
+          { organizations: { some: { Id: profile.staffs.organizationId } } },
+        ],
+      })
+    } else {
+      staffCriteria.push({ organizations: { none: {} } })
+    }
+
+    audienceMatch.OR?.push(
+      { surveyObjectType: { some: { AND: staffCriteria } } },
+      {
+        surveyObjectType: { none: {} },
+        clusterSurvey: { surveyObjectType: { some: { AND: staffCriteria } } },
+      }
+    )
+  }
+
+  // 6. Điều kiện ghi danh lớp môn học (khi khảo sát chỉ định targetEnrollStudentOnly)
+  const enrollmentFilter: Prisma.SurveyWhereInput = {
+    OR: [
+      { subjectClassId: null },
+      { targetEnrollStudentOnly: false },
+      {
+        subjectClass: {
+          subjectClassStudent: {
+            some: {
+              deletedAt: null,
+              student: {
+                deletedAt: null,
+                userProfile: { id: profile.id },
+              },
+            },
+          },
+        },
+      },
+    ],
+  }
+
+  return { audienceMatch, enrollmentFilter }
+}
+
 export async function isProfileInSurveyAudience(
   prisma: PrismaClient,
   profileId: string,
   surveyId: string
 ): Promise<boolean> {
-  const survey = await prisma.survey.findUnique({
-    where: { id: surveyId },
-    include: {
-      surveyObjectType: {
-        include: SURVEY_OBJECT_TYPE_INCLUDE,
-      },
-    },
+  const profile = await prisma.userProfile.findUnique({
+    where: { id: profileId },
+    include: USER_PROFILE_AUDIENCE_INCLUDE,
   })
 
-  if (!survey) return false
-  if (survey.surveyObjectType.length === 0) return true
-
-  for (const objectType of survey.surveyObjectType) {
-    const orClauses = buildSurveyObjectTypeProfileOrClauses(objectType)
-    if (orClauses.length === 0) continue
-
-    const profile = await prisma.userProfile.findFirst({
-      select: { id: true },
-      where: {
-        id: profileId,
-        deletedAt: null,
-        active: true,
-        OR: orClauses,
-      },
-    })
-    if (profile) return true
+  if (!profile || profile.deletedAt || !profile.active) {
+    return false
   }
 
-  return false
+  const { audienceMatch, enrollmentFilter } = buildSurveyAudienceWhereForProfile(profile)
+
+  const survey = await prisma.survey.findFirst({
+    where: {
+      id: surveyId,
+      deletedAt: null,
+      AND: [audienceMatch, enrollmentFilter],
+    },
+    select: { id: true },
+  })
+
+  return Boolean(survey)
 }
 
 export type ResolvedSurveyUser = {

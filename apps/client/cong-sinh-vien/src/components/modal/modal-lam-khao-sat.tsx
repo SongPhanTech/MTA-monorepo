@@ -9,7 +9,7 @@ import {
   DEFAULT_SURVEY_PRINT_FORM_CONTENT,
   LECTURER_SURVEY_PRINT_FORM_CONTENT,
 } from "@workspace/libs/survey-form-content"
-import { SurveyFormFooter, SurveyFormIntro } from "@workspace/ui"
+import { mapStudentInfo, SurveyFormFooter, SurveyFormIntro } from "@workspace/ui"
 import { useFindUniqueUserProfile } from "@workspace/db/hooks"
 import { useQueryClient } from "@tanstack/react-query"
 import {
@@ -50,6 +50,10 @@ const ModalLamKhaoSat = () => {
 
   const { data: session } = useSession()
   const profileId = session?.sDM_NhanVienId
+  const [form] = Form.useForm()
+  const [survey, setSurvey] = useState<GetSurveyResult>()
+  const [startAt, setStartAt] = useState<Date>(new Date())
+  const [isLoading, setIsLoading] = useState(false)
 
   // Lấy studentId để phiên khảo sát gắn đúng học viên (khác cong-giang-vien: giảng viên không có Student)
   const { data: userProfile } = useFindUniqueUserProfile(
@@ -58,7 +62,30 @@ const ModalLamKhaoSat = () => {
       select: {
         educationAndTraining: {
           orderBy: { createdAt: "desc" },
-          select: { id: true, userProfile: { select: { code: true } } },
+          select: {
+            id: true,
+            userProfile: { select: { code: true } },
+            fixedClass: {
+              include: {
+                trainingCourse: {
+                  include: { trainingObjectType: true },
+                },
+                managementOrganization: true,
+                curriculumVersion: {
+                  include: {
+                    trainingObjectType: true,
+                    curriculum: {
+                      include: {
+                        trainingMajor: {
+                          include: { organization: true },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
       },
     },
@@ -66,11 +93,12 @@ const ModalLamKhaoSat = () => {
   )
   const student = userProfile?.educationAndTraining?.[0]
 
+  const studentInfo = useMemo(() => {
+    if (survey?.studentInfo) return survey.studentInfo
+    return mapStudentInfo(student?.fixedClass)
+  }, [survey?.studentInfo, student])
+
   const queryClient = useQueryClient()
-  const [form] = Form.useForm()
-  const [survey, setSurvey] = useState<GetSurveyResult>()
-  const [startAt, setStartAt] = useState<Date>(new Date())
-  const [isLoading, setIsLoading] = useState(false)
 
   const { mutateAsync: createSavePublicSurvey, isPending } = useSavePublicSurvey()
 
@@ -108,10 +136,7 @@ const ModalLamKhaoSat = () => {
       index: toRoman(index + 1),
     }))
     // Chỉ thêm hàng tiêu đề nhóm nếu nhóm có tên (bỏ qua nhóm ảo "__ungrouped__")
-    return grouped.flatMap((i: any) => [
-      ...(i.name ? [i] : []),
-      ...(i.question || []),
-    ])
+    return grouped.flatMap((i: any) => [...(i.name ? [i] : []), ...(i.question || [])])
   }, [survey?.surveyQuestion])
 
   const fetchData = async (surveyId: string) => {
@@ -200,7 +225,7 @@ const ModalLamKhaoSat = () => {
             </div>
 
             <SurveyFormIntro
-              survey={survey}
+              survey={{ ...survey, studentInfo }}
               fallback={
                 survey?.lectureInfo
                   ? LECTURER_SURVEY_PRINT_FORM_CONTENT
