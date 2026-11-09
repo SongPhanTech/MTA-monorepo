@@ -1,6 +1,7 @@
 import {
   SubjectRequirementType,
   type ScoreConvert,
+  type SubjectClassType,
   type TrainingBlockSubject,
 } from "@workspace/db"
 import { courseScoreConfigFrom, isFailedByCourseConfig } from "@workspace/libs/utils"
@@ -159,7 +160,7 @@ function keepHighestScore(
   map.set(score.subjectVersionId, score)
 }
 
-function sameSubjectCode(left?: string | null, right?: string | null) {
+export function sameSubjectCode(left?: string | null, right?: string | null) {
   const a = left?.trim()
   const b = right?.trim()
   return !!a && !!b && a === b
@@ -185,7 +186,7 @@ function findScoreForCurriculumSubject(
   return matches[0]
 }
 
-type LoadedSubjectScore = {
+export type LoadedSubjectScore = {
   id: string
   studentId: string
   subjectVersionId: string
@@ -200,8 +201,11 @@ type LoadedSubjectScore = {
   suspended: boolean
   examBanned: boolean
   repeated: boolean
+  isImproving: boolean
   examBannedReason: string | null
   suspendedReason: string | null
+  /** loại lớp học phần: RETAKE = học lại, REEXAM = thi lại (dùng cho tiêu chí tự định nghĩa) */
+  subjectClass: { type: SubjectClassType } | null
   subjectVersion: {
     id: string
     name: string
@@ -276,6 +280,7 @@ export async function loadGraduationScoreSources(input: {
         subjectVersion: {
           select: { id: true, name: true, code: true, credit: true, subjectId: true },
         },
+        subjectClass: { select: { type: true } },
       },
       orderBy: { createdAt: "asc" },
     }),
@@ -729,7 +734,9 @@ export const graduationCurriculumSelect = {
       subjects: {
         where: { deletedAt: null, active: true },
         include: {
-          subject: { select: { id: true, name: true, code: true, credit: true, subjectId: true } },
+          subject: {
+            select: { id: true, name: true, code: true, credit: true, subjectId: true, type: true },
+          },
         },
       },
     },

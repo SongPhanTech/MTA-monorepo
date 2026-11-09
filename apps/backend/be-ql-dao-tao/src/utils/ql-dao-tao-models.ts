@@ -24,6 +24,7 @@ export const QL_DAO_TAO_MODEL_NAMES = [
   "ConfigPaymentSession",
   "Council",
   "CouncilMember",
+  "CriteriaDefinition",
   "Curriculum",
   "CurriculumVersion",
   "Decision",

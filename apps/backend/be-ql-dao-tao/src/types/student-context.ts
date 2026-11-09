@@ -5,10 +5,14 @@ export type StudentDataContext = {
   [K in CriteriaField]: K extends `IS_${string}` | `HAS_${string}` ? boolean : number | null
 }
 
-export type StudentCondition = {
-  field: CriteriaField
+/** Phần so sánh của một tiêu chí (không gồm nguồn giá trị) */
+export type ComparableCondition = {
   operator: CriteriaOperator
   value: number
   invert?: boolean | null
   tuple?: string[]
+}
+
+export type StudentCondition = ComparableCondition & {
+  field: CriteriaField
 }

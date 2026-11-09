@@ -9,7 +9,7 @@ import {
   useFindManyGraduationRankDowngradeRule,
   useFindManyRankingCondition,
 } from "@workspace/db/hooks"
-import { Button, Checkbox, Col, Flex, Form, message, Row, Table, Tooltip } from "antd"
+import { Button, Checkbox, Col, Flex, Form, message, Row, Table, Tag, Tooltip } from "antd"
 import dayjs from "dayjs"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import "dayjs/locale/vi"
@@ -52,9 +52,11 @@ const ModalGraduationCriteria = () => {
   const { data: graduationRankDowngrade } = useFindManyGraduationRankDowngradeRule({
     where: { initialRankId: id },
     include: {
-      conditions: true,
+      conditions: { include: { criteria: { select: { name: true, source: true, active: true } } } },
     },
   })
+
+  const { onOpen: openCriteriaCatalog } = useDisclosure({ tag: "ModalCriteriaDefinition" })
 
   const graduationRankDowngradeWithIndex = graduationRankDowngrade?.map((item, index) => ({
     ...item,
@@ -280,9 +282,14 @@ const ModalGraduationCriteria = () => {
           BỘ QUY TẮC HẠ BẬC
         </div>
         <Row gutter={[0, 16]} align="top" justify="space-between" className="w-full">
-          <Col span={12}>{/*  */}</Col>
-          <Col span={4}>
+          <Col span={12}>
+            <span className="text-gray-500">
+              Mỗi bộ: thoả tất cả tiêu chí trong bộ. Thoả một bộ bất kỳ thì bị hạ một bậc.
+            </span>
+          </Col>
+          <Col span={8}>
             <Flex justify="end" gap={4}>
+              <Button onClick={() => openCriteriaCatalog()}>Danh mục tiêu chí</Button>
               <Button type="primary" onClick={() => handleCreateRankDowngradeRule()}>
                 <BookPlus />
                 Thêm mới
@@ -300,12 +307,25 @@ const ModalGraduationCriteria = () => {
           childrenFieldName="conditions"
           columns={[
             {
-              title: "Trường được đánh giá",
-              dataIndex: "field",
+              title: "Tiêu chí được đánh giá",
+              dataIndex: "criteria",
               width: 200,
               align: "center",
               fixed: "left",
-              render: (record) => getCriteriaFieldLabel(record),
+              render: (criteria, record: any) => {
+                if (!criteria) return getCriteriaFieldLabel(record?.field)
+                return (
+                  <span>
+                    {criteria.name}
+                    {criteria.source === "CUSTOM" && <Tag className="ml-1">Tự định nghĩa</Tag>}
+                    {!criteria.active && (
+                      <Tag color="red" className="ml-1">
+                        Ngừng hoạt động
+                      </Tag>
+                    )}
+                  </span>
+                )
+              },
             },
             /* {
                             title: 'Đảo ngược so sánh',

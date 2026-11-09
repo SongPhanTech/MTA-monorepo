@@ -3,14 +3,23 @@ import {
   AcademicRankingBaseType,
   ApplicationStatus,
   ArchivedCertificateStatus,
+  CriteriaSource,
   RankingContext,
+  type CriteriaField,
 } from "@workspace/db"
-import { criteriaFieldLabels, criteriaOperatorLabels } from "@workspace/libs/constants"
+import { criteriaOperatorLabels } from "@workspace/libs/constants"
 import { chunk } from "@workspace/libs/utils"
 import Decimal from "decimal.js"
 import { prisma } from ".."
 import type { StudentDataContext } from "../types/student-context"
-import { evaluateCondition } from "./student-result.service"
+import {
+  buildTrainingBlockExpander,
+  computeCustomCriteria,
+  prepareCustomCriteria,
+  type CriteriaCalcContext,
+  type PreparedCriteria,
+} from "./criteria-calculators"
+import { compareConditionValue, evaluateCondition } from "./student-result.service"
 import {
   computeGraduationSubjectScores,
   graduationCurriculumSelect,
@@ -111,6 +120,9 @@ export async function runGraduationCheck(input: {
       _count: { select: { priorityObject: true } },
       classMonitor: { select: { id: true } },
       studentAcademicDecision: true,
+      // lịch sử cảnh báo học tập / cảnh cáo học đường (tiêu chí tự định nghĩa WARNING_COUNT)
+      academicWarning: { where: { deletedAt: null, active: true }, select: { level: true } },
+      disciplinaryWarning: { where: { deletedAt: null, active: true }, select: { level: true } },
       semesterTrainingScore: {
         where: { deletedAt: null },
         take: 1,
@@ -155,7 +167,26 @@ export async function runGraduationCheck(input: {
                 include: {
                   rankingCondition: true,
                   downgradeRules: {
-                    include: { initialRank: true, conditions: true },
+                    where: { deletedAt: null, active: true },
+                    include: {
+                      initialRank: true,
+                      conditions: {
+                        // tiêu chí đã ngừng hoạt động / xoá trong danh mục cũng bị bỏ qua
+                        where: {
+                          deletedAt: null,
+                          active: true,
+                          criteria: { deletedAt: null, active: true },
+                        },
+                        include: {
+                          criteria: {
+                            include: {
+                              trainingBlocks: { select: { id: true } },
+                              subjects: { select: { id: true } },
+                            },
+                          },
+                        },
+                      },
+                    },
                   },
                 },
                 orderBy: { rankOrder: "asc" },
@@ -167,6 +198,35 @@ export async function runGraduationCheck(input: {
     : []
 
   const classMap = new Map(classes.map((item) => [item.id, item]))
+
+  // Tiêu chí tự định nghĩa dùng trong quy tắc hạ bậc: kiểm tra cấu hình một lần cho cả đợt xét
+  const customCriteriaRows = new Map<string, Parameters<typeof prepareCustomCriteria>[0]>()
+  for (const fixedClass of classes) {
+    for (const rank of fixedClass.trainingCourse.academicRankingConvert) {
+      for (const rule of rank.downgradeRules) {
+        for (const condition of rule.conditions) {
+          if (condition.criteria.source === CriteriaSource.CUSTOM) {
+            customCriteriaRows.set(condition.criteria.id, condition.criteria)
+          }
+        }
+      }
+    }
+  }
+  const usesTrainingBlockScope = [...customCriteriaRows.values()].some(
+    (criteria) => criteria.trainingBlocks.length > 0
+  )
+  const expandTrainingBlocks = buildTrainingBlockExpander(
+    usesTrainingBlockScope
+      ? await prisma.trainingBlock.findMany({
+          where: { deletedAt: null },
+          select: { id: true, parentId: true },
+        })
+      : []
+  )
+  const preparedCriteria = new Map<string, PreparedCriteria>()
+  for (const criteria of customCriteriaRows.values()) {
+    preparedCriteria.set(criteria.id, prepareCustomCriteria(criteria, expandTrainingBlocks))
+  }
   const curriculumIds = [
     ...new Set(
       [
@@ -398,6 +458,54 @@ export async function runGraduationCheck(input: {
       HAS_IMPROVEMENT_REGISTRATION: latestSemesterResult?.isImproving || false,
     }
 
+    // Giá trị của tiêu chí trong danh mục: SYSTEM lấy từ studentDataContext,
+    // CUSTOM tính bằng calculator (chỉ tính khi cần, cache theo tiêu chí)
+    let calcContext: CriteriaCalcContext | null = null
+    const customValues = new Map<string, number | null>()
+    const getCriteriaValue = (criteria: {
+      id: string
+      source: CriteriaSource
+      systemField: CriteriaField | null
+    }): number | boolean | null => {
+      if (criteria.source === CriteriaSource.SYSTEM) {
+        return criteria.systemField ? studentDataContext[criteria.systemField] : null
+      }
+      if (customValues.has(criteria.id)) return customValues.get(criteria.id) ?? null
+      const prepared = preparedCriteria.get(criteria.id)
+      if (!prepared) return null
+      const ctx = (calcContext ??= {
+        curriculumSubjects: curriculumVersion.trainingBlocks.flatMap((block) =>
+          block.subjects.map((item) => ({
+            subjectId: item.subjectId,
+            trainingBlockId: block.trainingBlock.id,
+            useForFinalScore: item.useForFinalScore,
+            graduation: item.graduation,
+            subject: {
+              code: item.subject.code,
+              credit: item.subject.credit,
+              subjectId: item.subject.subjectId,
+              type: item.subject.type,
+            },
+          }))
+        ),
+        finalScores,
+        markDoneScores,
+        rawSubjectScores: scoreSources.rawScoresByStudent.get(application.studentId) ?? [],
+        requiredCredits,
+        academicDecisions: student.studentAcademicDecision,
+        academicWarnings: student.academicWarning,
+        disciplinaryWarnings: student.disciplinaryWarning,
+      })
+      const value = computeCustomCriteria(ctx, prepared)
+      customValues.set(criteria.id, value)
+      return value
+    }
+    const formatCriteriaValue = (value: number | boolean | null) => {
+      if (value == null) return "không có dữ liệu"
+      if (typeof value === "boolean") return value ? "có" : "không"
+      return `${Math.round(value * 100) / 100}`
+    }
+
     if (reasons.length > 0) {
       pushResult({
         applicationId: application.id,
@@ -441,8 +549,13 @@ export async function runGraduationCheck(input: {
 
       if (!eligibleRank) continue
 
-      const downgrade = eligibleRank.downgradeRules.find(({ conditions }) =>
-        conditions.every((rule) => evaluateCondition(studentDataContext, rule))
+      // Bộ rỗng (mọi tiêu chí đã ngừng hoạt động) không được tính là thoả, tránh hạ bậc toàn bộ
+      const downgrade = eligibleRank.downgradeRules.find(
+        ({ conditions }) =>
+          conditions.length > 0 &&
+          conditions.every((condition) =>
+            compareConditionValue(getCriteriaValue(condition.criteria), condition)
+          )
       )
       const rankDowngrade = sortedRankLevels[rankIdx + 1] || null
 
@@ -457,9 +570,10 @@ export async function runGraduationCheck(input: {
             gpa: CUMULATIVE_GPA,
             rank: rankDowngrade || null,
             reason: `Bị hạ bậc: ${downgrade.conditions
-              .map((rule) => {
-                return `${criteriaFieldLabels[rule.field]} ${criteriaOperatorLabels[rule.operator]} ${rule.value}`
-              })
+              .map(
+                (condition) =>
+                  `${condition.criteria.name} ${criteriaOperatorLabels[condition.operator]} ${condition.value} (thực tế: ${formatCriteriaValue(getCriteriaValue(condition.criteria))})`
+              )
               .join("\n")}`,
             trainingMajor: curriculumVersion.curriculum.trainingMajor,
             diplomaType: curriculumVersion.diplomaType,

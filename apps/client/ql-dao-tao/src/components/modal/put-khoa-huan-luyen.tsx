@@ -331,7 +331,7 @@ const PutTrainingCourseModal = () => {
                   create: e.downgradeRules.map((dr) => ({
                     conditions: {
                       create: dr.conditions.map((c) => ({
-                        field: c.field,
+                        criteriaId: c.criteriaId,
                         operator: c.operator,
                         // invert: c.invert,
                         value: c.value,

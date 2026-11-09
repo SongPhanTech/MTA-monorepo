@@ -251,7 +251,11 @@ model GraduationRankDowngradeCondition extends Base {
   downgradeRule         GraduationRankDowngradeRule @relation(fields: [downgradeRuleId], references: [id])
   downgradeRuleId       String
 
-  field                 CriteriaField  // Trường dữ liệu để kiểm tra
+  // Tiêu chí được đánh giá (hệ thống hoặc tự định nghĩa), lấy từ danh mục CriteriaDefinition
+  criteria              CriteriaDefinition          @relation(fields: [criteriaId], references: [id])
+  criteriaId            String
+  /// @deprecated Giữ lại để chuyển dữ liệu, sẽ xoá ở migration sau. Dùng criteriaId.
+  field                 CriteriaField?
   operator              CriteriaOperator // Toán tử so sánh (GTE, LTE...)
   invert                Boolean                     @default(false) // đảo ngược operator
   value                 Float          // Giá trị ngưỡng
@@ -259,6 +263,7 @@ model GraduationRankDowngradeCondition extends Base {
 
   applicationDowngraded ApplicationDowngraded[]
 
+  @@index([criteriaId])
   @@schema("ql-dao-tao")
 }
 
@@ -323,6 +328,36 @@ enum DiplomaVerificationStatus {
   IN_PROGRESS   // Đang xử lý
   APPROVED      // Đã duyệt
   REJECTED      // Từ chối
+
+  @@schema("ql-dao-tao")
+}
+/// Nguồn của tiêu chí đánh giá
+enum CriteriaSource {
+  SYSTEM // Tiêu chí hệ thống: giá trị lấy từ CriteriaField tính sẵn ở backend
+  CUSTOM // Tiêu chí tự định nghĩa: giá trị tính bằng calculator theo calcType + params
+
+  @@schema("ql-dao-tao")
+}
+
+/// Danh mục tiêu chí đánh giá, dùng chung cho các bộ quy tắc (hiện áp dụng cho quy tắc hạ bậc tốt nghiệp).
+/// - SYSTEM: systemField != null, calcType == null (27 dòng tạo sẵn bởi migration)
+/// - CUSTOM: systemField == null, calcType != null (người dùng tạo trên giao diện)
+/// Ràng buộc CHECK "CriteriaDefinition_source_chk" ở DB đảm bảo điều này.
+model CriteriaDefinition extends Base {
+  name                String
+  source              CriteriaSource
+  systemField         CriteriaField?                     @unique
+  /// Mã calculator đăng ký ở backend (be-ql-dao-tao/src/services/criteria-calculators).
+  /// Dùng String thay vì enum để thêm kiểu tính mới không cần sửa DB.
+  calcType            String?
+  /// Tham số của calculator, kiểm tra bằng zod theo calcType
+  params              Json                               @default("{}")
+
+  /// Phạm vi môn (CUSTOM): khối kiến thức (gồm khối con) và/hoặc môn học. Bỏ trống = toàn bộ CTĐT
+  trainingBlocks      TrainingBlock[]
+  subjects            Subject[]
+
+  downgradeConditions GraduationRankDowngradeCondition[]
 
   @@schema("ql-dao-tao")
 }

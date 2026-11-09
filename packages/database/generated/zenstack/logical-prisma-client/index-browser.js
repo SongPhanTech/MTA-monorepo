@@ -4151,6 +4151,7 @@ exports.Prisma.GraduationRankDowngradeConditionScalarFieldEnum = {
   sThietBiTao: 'sThietBiTao',
   sThietBiSua: 'sThietBiSua',
   downgradeRuleId: 'downgradeRuleId',
+  criteriaId: 'criteriaId',
   field: 'field',
   operator: 'operator',
   invert: 'invert',
@@ -4213,6 +4214,28 @@ exports.Prisma.DiplomaVerificationApplicationScalarFieldEnum = {
   classification: 'classification',
   status: 'status',
   studentId: 'studentId'
+};
+
+exports.Prisma.CriteriaDefinitionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  dNgayTao: 'dNgayTao',
+  dNgaySua: 'dNgaySua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  source: 'source',
+  systemField: 'systemField',
+  calcType: 'calcType',
+  params: 'params'
 };
 
 exports.Prisma.TrainingScoreSessionScalarFieldEnum = {
@@ -6771,6 +6794,10 @@ exports.Prisma.NullableJsonNullValueInput = {
   JsonNull: Prisma.JsonNull
 };
 
+exports.Prisma.JsonNullValueInput = {
+  JsonNull: Prisma.JsonNull
+};
+
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -9298,6 +9325,7 @@ exports.Prisma.GraduationRankDowngradeConditionOrderByRelevanceFieldEnum = {
   sThietBiTao: 'sThietBiTao',
   sThietBiSua: 'sThietBiSua',
   downgradeRuleId: 'downgradeRuleId',
+  criteriaId: 'criteriaId',
   tuple: 'tuple'
 };
 
@@ -9335,6 +9363,19 @@ exports.Prisma.DiplomaVerificationApplicationOrderByRelevanceFieldEnum = {
   trainingForm: 'trainingForm',
   classification: 'classification',
   studentId: 'studentId'
+};
+
+exports.Prisma.CriteriaDefinitionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sNguoiTao: 'sNguoiTao',
+  sNguoiSua: 'sNguoiSua',
+  sThietBiTao: 'sThietBiTao',
+  sThietBiSua: 'sThietBiSua',
+  name: 'name',
+  calcType: 'calcType'
 };
 
 exports.Prisma.TrainingScoreSessionOrderByRelevanceFieldEnum = {
@@ -11319,6 +11360,11 @@ exports.DiplomaVerificationStatus = exports.$Enums.DiplomaVerificationStatus = {
   REJECTED: 'REJECTED'
 };
 
+exports.CriteriaSource = exports.$Enums.CriteriaSource = {
+  SYSTEM: 'SYSTEM',
+  CUSTOM: 'CUSTOM'
+};
+
 exports.TrainingScoreStatus = exports.$Enums.TrainingScoreStatus = {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
@@ -11683,6 +11729,7 @@ exports.Prisma.ModelName = {
   GraduationRankDowngradeCondition: 'GraduationRankDowngradeCondition',
   RankingCondition: 'RankingCondition',
   DiplomaVerificationApplication: 'DiplomaVerificationApplication',
+  CriteriaDefinition: 'CriteriaDefinition',
   TrainingScoreSession: 'TrainingScoreSession',
   StudentTrainingScore: 'StudentTrainingScore',
   SemesterTrainingScore: 'SemesterTrainingScore',

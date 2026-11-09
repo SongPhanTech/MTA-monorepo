@@ -9,6 +9,7 @@
         "./hook/*": "./src/hook/*.ts",
         "./bao-luu-diem": "./src/bao-luu-diem.ts",
         "./constants": "./src/constants.ts",
+        "./criteria-calc": "./src/criteria-calc.ts",
         "./parseExcel": "./src/parseExcel.ts",
         "./template-excel": "./src/template-excel.ts",
         "./template-excel-core": "./src/template-excel-core.ts",

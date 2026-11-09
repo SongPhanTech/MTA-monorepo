@@ -50,6 +50,7 @@ const relationSchema = z.object({
     subjectVersion: z.array(z.unknown()).optional(),
     certificateOnSubject: z.array(z.unknown()).optional(),
     awardOnSubject: z.array(z.unknown()).optional(),
+    criteriaDefinitions: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
