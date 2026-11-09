@@ -135,6 +135,17 @@ app.openapi(getPublicSurvey, async (c) => {
         },
       },
       surveyChoice: true,
+      clusterSurvey: {
+        include: {
+          surveyChoice: true,
+          surveyQuestion: {
+            include: {
+              surveyQuestionGroup: true,
+              specificChoice: true,
+            },
+          },
+        },
+      },
       lecture: {
         select: {
           userProfile: {
@@ -172,7 +183,17 @@ app.openapi(getPublicSurvey, async (c) => {
     return c.json({ message: "Khảo sát đã đóng" }, 400)
   }
 
-  const { lecture, ...data } = survey
+  const name = survey.clusterSurvey?.name || survey.name
+  const surveyChoice =
+    survey.surveyChoice.length > 0
+      ? survey.surveyChoice
+      : survey.clusterSurvey?.surveyChoice || []
+  const surveyQuestion =
+    survey.surveyQuestion.length > 0
+      ? survey.surveyQuestion
+      : survey.clusterSurvey?.surveyQuestion || []
+
+  const { lecture, clusterSurvey: _cs, ...data } = survey
 
   const lectureInfo = lecture
     ? {
@@ -184,7 +205,7 @@ app.openapi(getPublicSurvey, async (c) => {
       }
     : null
 
-  return c.json({ ...data, lectureInfo }, 200)
+  return c.json({ ...data, name, surveyChoice, surveyQuestion, lectureInfo }, 200)
 })
 
 const savePublicSurvey = createRoute({
@@ -255,7 +276,14 @@ app.openapi(savePublicSurvey, async (c) => {
     c.req.valid("json")
   const survey = await prisma.survey.findUnique({
     where: { id: surveyId, deletedAt: null, active: true },
-    include: { surveyChoice: true },
+    include: {
+      surveyChoice: true,
+      clusterSurvey: {
+        include: {
+          surveyChoice: true,
+        },
+      },
+    },
   })
   if (!survey) {
     return c.json({ message: "Đợt khảo sát không tồn tại" }, 404)
@@ -295,9 +323,14 @@ app.openapi(savePublicSurvey, async (c) => {
     return c.json({ message: "Khảo sát đã đóng" }, 400)
   }
 
+  const validChoices =
+    survey.surveyChoice.length > 0
+      ? survey.surveyChoice
+      : survey.clusterSurvey?.surveyChoice || []
+
   const responseChoiceIDs = new Set(responses.map((r) => r.surveyChoiceId).filter(Boolean))
   for (const id of responseChoiceIDs) {
-    if (!survey.surveyChoice.find((c) => c.id === id)) {
+    if (!validChoices.find((c) => c.id === id)) {
       return c.json({ message: "Lựa chọn không thoả mãn" }, 404)
     }
   }

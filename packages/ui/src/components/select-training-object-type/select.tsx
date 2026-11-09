@@ -1,4 +1,5 @@
 import { type SelectProps, Tooltip } from "antd"
+import { useEffect } from "react"
 import { Select } from "../commons"
 import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from "./hook"
 
@@ -13,11 +14,15 @@ const SelectTrainingObjectType = ({ subsystem, ...props }: SelectTrainingObjectT
     subsystem,
   })
 
-  // useEffect(() => {
-  //     if (!id && doiTuongDaoTao.length > 0 && doiTuongDaoTao?.[0]?.id) {
-  //         onSelect(doiTuongDaoTao?.[0]?.id)
-  //     }
-  // }, [id, doiTuongDaoTao, onSelect])
+  // Nếu id hiện tại không nằm trong danh sách đối tượng đào tạo được phân quyền
+  useEffect(() => {
+    if (doiTuongDaoTao.length > 0) {
+      const isCurrentIdValid = doiTuongDaoTao.some((e) => e.id === id)
+      if (!id || !isCurrentIdValid) {
+        onSelect(doiTuongDaoTao[0]!.id)
+      }
+    }
+  }, [id, doiTuongDaoTao, onSelect])
 
   return (
     <div className="flex items-center gap-2 font-bold">

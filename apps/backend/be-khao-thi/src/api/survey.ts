@@ -24,6 +24,7 @@ import {
   SURVEY_OBJECT_TYPE_INCLUDE,
   SURVEY_OBJECT_TYPE_REPORT_INCLUDE,
   buildSurveyObjectTypeProfileOrClauses,
+  isProfileInSurveyAudience,
   resolveMajorOrgFromSurveyObjectTypes,
 } from "../lib/survey-audience"
 import { getBufferFromUrl } from "../services/template.service"
@@ -1401,15 +1402,16 @@ app.openapi(getSurveysByProfile, async (c) => {
   }
 
   if (audienceMatch.OR?.length) {
-    where.AND = [{ OR: [{ anonymous: false }, audienceMatch] }, enrollmentFilter]
+    where.AND = [audienceMatch, enrollmentFilter]
   } else {
-    where.anonymous = false
-    where.AND = [enrollmentFilter]
+    // Không thuộc bất kỳ đối tượng khảo sát nào
+    return c.json({ data: [], count: 0 }, 200)
   }
 
   const surveys = await prisma.survey.findMany({
     where,
     include: {
+      clusterSurvey: true,
       lecture: { include: { userProfile: { include: { donVi: true } } } },
       surveyTopic: true,
       subjectClass: true,
@@ -1425,9 +1427,14 @@ app.openapi(getSurveysByProfile, async (c) => {
     orderBy: { createdAt: "desc" },
   })
 
+  const mappedSurveys = surveys.map((s) => ({
+    ...s,
+    name: s.clusterSurvey?.name || s.name,
+  }))
+
   const count = await prisma.survey.count({ where })
 
-  return c.json({ data: surveys, count }, 200)
+  return c.json({ data: mappedSurveys, count }, 200)
 })
 
 const getPrivateSurvey = createRoute({
@@ -1509,6 +1516,12 @@ app.openapi(getPrivateSurvey, async (c) => {
   if (checkExist) {
     return c.json({ message: "Bạn đã làm khảo sát" }, 400)
   }
+  if (profileId) {
+    const inAudience = await isProfileInSurveyAudience(prisma, profileId, id)
+    if (!inAudience) {
+      return c.json({ message: "Bạn không thuộc đối tượng tham gia khảo sát này" }, 403)
+    }
+  }
   const survey = await prisma.survey.findUnique({
     where: { id, deletedAt: null, active: true },
     include: {
@@ -1519,6 +1532,17 @@ app.openapi(getPrivateSurvey, async (c) => {
         },
       },
       surveyChoice: true,
+      clusterSurvey: {
+        include: {
+          surveyChoice: true,
+          surveyQuestion: {
+            include: {
+              surveyQuestionGroup: true,
+              specificChoice: true,
+            },
+          },
+        },
+      },
       lecture: {
         select: {
           userProfile: {
@@ -1556,7 +1580,17 @@ app.openapi(getPrivateSurvey, async (c) => {
     return c.json({ message: "Khảo sát đã đóng" }, 400)
   }
 
-  const { lecture, ...data } = survey
+  const name = survey.clusterSurvey?.name || survey.name
+  const surveyChoice =
+    survey.surveyChoice.length > 0
+      ? survey.surveyChoice
+      : survey.clusterSurvey?.surveyChoice || []
+  const surveyQuestion =
+    survey.surveyQuestion.length > 0
+      ? survey.surveyQuestion
+      : survey.clusterSurvey?.surveyQuestion || []
+
+  const { lecture, clusterSurvey: _cs, ...data } = survey
 
   const lectureInfo = lecture
     ? {
@@ -1568,7 +1602,7 @@ app.openapi(getPrivateSurvey, async (c) => {
       }
     : null
 
-  return c.json({ ...data, lectureInfo }, 200)
+  return c.json({ ...data, name, surveyChoice, surveyQuestion, lectureInfo }, 200)
 })
 
 const sinhdetudong = createRoute({

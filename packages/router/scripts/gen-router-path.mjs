@@ -59,11 +59,13 @@ for (const subsystem of subsystems.sort()) {
     .replaceAll("...", "")
     .toUpperCase()
     .replaceAll("-", "_")
-  routerPath[subsystemKey] = {}
   const pages = await glob(`${subsystem}/src/pages/**/*.tsx`, {
     dotRelative: true,
     posix: true,
   })
+  // Bỏ qua thư mục không có pages (vd: thư mục cũ chỉ còn node_modules / bản build CDN)
+  if (pages.length === 0) continue
+  routerPath[subsystemKey] = {}
   for (const page of pages.sort()) {
     const key = page.replace(`${subsystem}/src/pages`, "")
     // Trang 403 cần route để chuyển hướng nhưng không cần permission
