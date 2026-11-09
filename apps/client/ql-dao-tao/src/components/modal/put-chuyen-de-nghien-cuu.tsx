@@ -150,7 +150,6 @@ const PutResearchTopicModal = () => {
     try {
       showSpinner()
       if (input?.studentResearchTopicId) {
-        const score = values.score ? Number(values.score) : null
         const supervisorVersionId = versionId(values.supervisorId)
         const coSupervisorVersionId = versionId(values.coSupervisorId)
 
@@ -167,14 +166,7 @@ const PutResearchTopicModal = () => {
               : { coSupervisor: { disconnect: true } }),
             reportDate: values.reportDate,
             deadline: values.deadline,
-            studentSubjectScore: {
-              update: {
-                attendanceScore: score,
-                midtermScore: score,
-                examScore: score,
-                finalScore: score,
-              },
-            },
+            description: values.description?.trim() || null,
           },
         })
       }
@@ -193,6 +185,7 @@ const PutResearchTopicModal = () => {
       form.setFieldsValue({
         name: studentResearchTopic?.name ?? "",
         mainContent: studentResearchTopic?.mainContent ?? "",
+        description: studentResearchTopic?.description ?? "",
         supervisorId: studentResearchTopic?.supervisor?.expertId ?? undefined,
         coSupervisorId: studentResearchTopic?.coSupervisor?.expertId ?? undefined,
         reportDate: studentResearchTopic?.reportDate
@@ -289,6 +282,14 @@ const PutResearchTopicModal = () => {
               showSearch
               filterOption={filterExpertOption}
               allowClear
+            />
+          </FormItem>
+        </Col>
+        <Col span={24}>
+          <FormItem form={form} name="description" label="Ghi chú">
+            <TextArea
+              placeholder="Nhập ghi chú (VD: 1, 2, 3... để sắp thứ tự chuyên đề của học viên)"
+              autoSize={{ minRows: 1, maxRows: 4 }}
             />
           </FormItem>
         </Col>

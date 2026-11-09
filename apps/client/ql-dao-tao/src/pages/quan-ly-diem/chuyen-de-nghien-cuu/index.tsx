@@ -34,6 +34,124 @@ import { SquarePen } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
+const topicInclude = {
+  supervisor: {
+    include: {
+      academicDegreeType: true,
+      academicRankType: true,
+      expert: {
+        include: {
+          lecturer: {
+            select: {
+              userProfile: {
+                select: {
+                  fullname: true,
+                  academicRankType: true,
+                  academicDegreeType: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+  coSupervisor: {
+    include: {
+      academicDegreeType: true,
+      academicRankType: true,
+      expert: {
+        include: {
+          lecturer: {
+            select: {
+              userProfile: {
+                select: {
+                  fullname: true,
+                  academicRankType: true,
+                  academicDegreeType: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+  studentSubjectScore: {
+    include: {
+      subjectClass: {
+        include: {
+          trainingObjectType: true,
+          semester: true,
+        },
+      },
+      student: {
+        include: {
+          userProfile: true,
+          fixedClass: {
+            include: {
+              trainingCourse: true,
+            },
+          },
+          curriculumVersion: {
+            select: {
+              curriculum: {
+                select: {
+                  trainingMajor: {
+                    select: {
+                      name: true,
+                      code: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      subjectVersion: {
+        include: {
+          managementOrganization: true,
+          subject: {
+            include: {
+              managementOrganization: true,
+            },
+          },
+        },
+      },
+    },
+  },
+} satisfies Prisma.StudentResearchTopicInclude
+
+/**
+ * Thứ tự hiển thị: Đơn vị quản lý → Ngành → Chuyên ngành → Học viên → Ghi chú (description).
+ * Nhóm theo học viên trước ghi chú để các chuyên đề của cùng 1 học viên nằm liền nhau,
+ * rồi sắp theo ghi chú (VD: "1", "2", "3"...). PostgreSQL ASC mặc định để NULL xuống cuối.
+ */
+const topicOrderBy = [
+  { studentSubjectScore: { subjectVersion: { managementOrganization: { iSTT: "asc" } } } },
+  { studentSubjectScore: { subjectVersion: { managementOrganization: { sTen: "asc" } } } },
+  {
+    studentSubjectScore: {
+      student: {
+        curriculumVersion: { curriculum: { trainingMajor: { trainingField: { name: "asc" } } } },
+      },
+    },
+  },
+  {
+    studentSubjectScore: {
+      student: { curriculumVersion: { curriculum: { trainingMajor: { name: "asc" } } } },
+    },
+  },
+  { studentSubjectScore: { student: { userProfile: { firstName: "asc" } } } },
+  { studentSubjectScore: { student: { userProfile: { lastName: "asc" } } } },
+  { studentSubjectScore: { student: { userProfile: { code: "asc" } } } },
+  { description: "asc" },
+  { studentSubjectScore: { subjectClass: { startDate: "asc" } } },
+] satisfies Prisma.StudentResearchTopicOrderByWithRelationInput[]
+
+type ResearchTopicRow = Prisma.StudentResearchTopicGetPayload<{ include: typeof topicInclude }>
+
 interface ChuyenDeNghienCuuForm {
   trainingCourseId: string
   organizationId: string | string[]
@@ -197,139 +315,8 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
   const { data: studentResearchTopicData = [], refetch: refetchStudentResearchTopic } =
     useFindManyStudentResearchTopic({
       where,
-      include: {
-        supervisor: {
-          include: {
-            academicDegreeType: true,
-            academicRankType: true,
-            expert: {
-              include: {
-                lecturer: {
-                  select: {
-                    userProfile: {
-                      select: {
-                        fullname: true,
-                        academicRankType: true,
-                        academicDegreeType: true,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-        coSupervisor: {
-          include: {
-            academicDegreeType: true,
-            academicRankType: true,
-            expert: {
-              include: {
-                lecturer: {
-                  select: {
-                    userProfile: {
-                      select: {
-                        fullname: true,
-                        academicRankType: true,
-                        academicDegreeType: true,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-        studentSubjectScore: {
-          include: {
-            subjectClass: {
-              include: {
-                trainingObjectType: true,
-                semester: true,
-              },
-            },
-            student: {
-              include: {
-                userProfile: true,
-                fixedClass: {
-                  include: {
-                    trainingCourse: true,
-                  },
-                },
-                curriculumVersion: {
-                  select: {
-                    curriculum: {
-                      select: {
-                        trainingMajor: {
-                          select: {
-                            name: true,
-                            code: true,
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
-              },
-            },
-            subjectVersion: {
-              include: {
-                managementOrganization: true,
-                subject: {
-                  include: {
-                    managementOrganization: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-      orderBy: [
-        {
-          studentSubjectScore: {
-            subjectClass: {
-              semester: {
-                startDate: "asc",
-              },
-            },
-          },
-        },
-        {
-          studentSubjectScore: {
-            subjectClass: {
-              startDate: "asc",
-            },
-          },
-        },
-        {
-          studentSubjectScore: {
-            student: {
-              userProfile: {
-                firstName: "asc",
-              },
-            },
-          },
-        },
-        {
-          studentSubjectScore: {
-            student: {
-              userProfile: {
-                lastName: "asc",
-              },
-            },
-          },
-        },
-        {
-          studentSubjectScore: {
-            student: {
-              userProfile: {
-                code: "asc",
-              },
-            },
-          },
-        },
-      ],
+      include: topicInclude,
+      orderBy: topicOrderBy,
       take: numberOfPages,
       skip: (currentPage - 1) * numberOfPages,
     })
@@ -339,6 +326,22 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
   })
 
   const { mutateAsync: createManyStudentResearchTopic } = useCreateManyStudentResearchTopic()
+
+  /** Lấy toàn bộ chuyên đề theo bộ lọc hiện tại (không phân trang) để xuất báo cáo */
+  const fetchAllResearchTopics = async (): Promise<ResearchTopicRow[] | null> => {
+    const res = await sqlTransaction([
+      {
+        model: "StudentResearchTopic",
+        operation: "findMany",
+        data: { where, include: topicInclude, orderBy: topicOrderBy },
+      },
+    ])
+    if (res.status !== 200) {
+      message.error("Không thể lấy danh sách chuyên đề")
+      return null
+    }
+    return (res.data?.[0] ?? []) as ResearchTopicRow[]
+  }
 
   const handleAssignDate = async () => {
     const reportDate = form.getFieldValue("reportDate")
@@ -688,6 +691,11 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                         if (!semesterId) {
                           return message.warning("Vui lòng chọn kỳ học trước khi xuất phụ lục!")
                         }
+                        const allTopics = await fetchAllResearchTopics()
+                        if (!allTopics) return
+                        const soHocVien = new Set(
+                          allTopics.map((t) => t.studentSubjectScore.studentId)
+                        ).size
                         const khoaVaKy = await sqlTransaction([
                           {
                             model: "TrainingCourse",
@@ -724,8 +732,8 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                               data: {
                                 khoa: khoaVaKyData?.[0]?.name?.firstCase?.(),
                                 hoc_ky: khoaVaKyData?.[1]?.name?.toLowerCase?.(),
-                                so_hv: studentResearchTopicData.length,
-                                so_hv_chu: studentResearchTopicData.length.toVndWord("", false),
+                                so_hv: soHocVien,
+                                so_hv_chu: soHocVien.toVndWord("", false),
                               },
                             },
                           ],
@@ -750,6 +758,8 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                         if (!semesterId) {
                           return message.warning("Vui lòng chọn kỳ học trước khi xuất phụ lục!")
                         }
+                        const allTopics = await fetchAllResearchTopics()
+                        if (!allTopics) return
 
                         let globalIndex = 0
 
@@ -777,20 +787,25 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                         ])
                         const khoaVaKyData = khoaVaKy.data as [{ name: string }, { name: string }]
 
-                        // Count research topics per student
-                        const researchTopicCountByStudent = studentResearchTopicData.reduce(
-                          (acc, e) => {
-                            const studentCode = e.studentSubjectScore.student?.userProfile?.code
-                            if (studentCode) {
-                              acc[studentCode] = (acc[studentCode] || 0) + 1
+                        const countStudents = (rows: { studentId: string }[]) =>
+                          new Set(rows.map((r) => r.studentId)).size
+
+                        // Gộp ô cột B (họ tên) cho các chuyên đề liền nhau của cùng 1 học viên.
+                        // Dòng 1 của mỗi khối là tiêu đề chuyên ngành, dữ liệu bắt đầu từ dòng 2.
+                        const buildStudentMerges = (rows: { studentId: string }[]) => {
+                          const merges: string[] = []
+                          let start = 0
+                          for (let i = 1; i <= rows.length; i++) {
+                            if (i === rows.length || rows[i]?.studentId !== rows[start]?.studentId) {
+                              if (i - start > 1) merges.push(`B${2 + start}:B${2 + i - 1}`)
+                              start = i
                             }
-                            return acc
-                          },
-                          {} as Record<string, number>
-                        )
+                          }
+                          return merges
+                        }
 
                         const payload = Object.values(
-                          studentResearchTopicData.reduce(
+                          allTopics.reduce(
                             (acc, e) => {
                               const ma_cn =
                                 e.studentSubjectScore.student?.curriculumVersion?.curriculum
@@ -808,7 +823,6 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                               }
 
                               globalIndex++
-                              const studentCode = e.studentSubjectScore.student?.userProfile?.code
                               const supervisorName =
                                 (getSupervisorName(
                                   versionToPersonLike(e.supervisor),
@@ -838,7 +852,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                                 macd: e.studentSubjectScore.subjectVersion?.code,
                                 stc: e.studentSubjectScore.subjectVersion?.credit,
                                 ndcd: e.mainContent,
-                                so_cd: studentCode ? researchTopicCountByStudent[studentCode] : 0,
+                                studentId: e.studentSubjectScore.studentId,
                               })
 
                               return acc
@@ -856,7 +870,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                                   macd?: string | null
                                   stc: number | null
                                   ndcd?: string | null
-                                  so_cd: number
+                                  studentId: string
                                 }[]
                               }
                             >
@@ -873,7 +887,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                           },
                           tail: {
                             data: {
-                              so_hv: payload.flatMap((item) => item.students).length,
+                              so_hv: countStudents(payload.flatMap((item) => item.students)),
                               so_cd: payload.flatMap((item) => item.students).length,
                             },
                           },
@@ -883,7 +897,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                           prefix: "mta/luan-van",
                           payload: payload.map((item, idx) => ({
                             data: {
-                              chuyen_nganh: `       ${(idx + 1).toRoman()}. ${item.chuyen_nganh}: ${item.students.length} học viên.`,
+                              chuyen_nganh: `       ${(idx + 1).toRoman()}. ${item.chuyen_nganh}: ${countStudents(item.students)} học viên.`,
                               data: item.students.map((student) => ({
                                 tt: student.tt,
                                 ten: student.ten,
@@ -894,13 +908,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                                 ndcd: student.ndcd,
                               })),
                             },
-                            mergeCells: item.students.map((s, idx, arr) => {
-                              const startRow =
-                                2 +
-                                arr.slice(0, idx).reduce((sum, student) => sum + student.so_cd, 0)
-                              const endRow = startRow + s.so_cd - 1
-                              return `B${startRow}:B${endRow}`
-                            }),
+                            mergeCells: buildStudentMerges(item.students),
                           })),
                         })
                         openXemTaiLieu({
@@ -1411,6 +1419,8 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                         if (!semesterId) {
                           return message.warning("Vui lòng chọn kỳ học trước khi xuất thanh toán!")
                         }
+                        const allTopics = await fetchAllResearchTopics()
+                        if (!allTopics) return
 
                         interface SupervisorPayAmountRecord {
                           role: string
@@ -1484,7 +1494,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                         }
 
                         let totalAmount = 0
-                        const tableRows = studentResearchTopicData.map((e, idx) => {
+                        const tableRows = allTopics.map((e, idx) => {
                           const studentName =
                             e.studentSubjectScore.student?.userProfile?.fullname || ""
                           const studentCourse =
@@ -1728,6 +1738,14 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
               align: "left",
               render: (_, record) => {
                 return record?.mainContent || ""
+              },
+            },
+            {
+              title: "Ghi chú",
+              width: 150,
+              align: "left",
+              render: (_, record) => {
+                return record?.description || ""
               },
             },
             {

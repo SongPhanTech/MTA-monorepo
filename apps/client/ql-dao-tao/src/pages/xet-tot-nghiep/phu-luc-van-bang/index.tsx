@@ -563,6 +563,15 @@ export type StudentGradeSystemForm = {
   signer: string
   imageUrl: string
 }
+// Cùng thứ tự với bảng kết quả của đợt xét (sub-pages/graduationDecision.tsx):
+// lớp quản lý → ĐTBTL cao → thấp → số vào sổ gốc → tên. Backend export dùng cùng thứ tự.
+const approvedGraduateOrderBy = [
+  { fixedClass: { code: "asc" as const } },
+  { graduationDecision: { finalGpa: "desc" as const } },
+  { graduationDecision: { originalDiplomaNumber: "asc" as const } },
+  { userProfile: { firstName: "asc" as const } },
+]
+
 const exportHandlers: Record<string, TExportConfig> = {
   soGoc: {
     api: exportGraduationRegisterMaster,
@@ -725,6 +734,7 @@ export default function StudentGradeSystem() {
   } = useFindManyStudent(
     {
       where: { ...where },
+      orderBy: approvedGraduateOrderBy,
       take: pageSize,
       skip: (page - 1) * pageSize,
       include: {
@@ -828,6 +838,40 @@ export default function StudentGradeSystem() {
             trainingType: true,
             trainingLanguage: true,
             diplomaType: true,
+          },
+        },
+      },
+    },
+    {
+      enabled: viewResult,
+    }
+  )
+
+  // QĐ công nhận tốt nghiệp xuất toàn bộ danh sách (không phân trang), cùng thứ tự với bảng
+  const { data: allDecisionStudents = [] } = useFindManyStudent(
+    {
+      where: { ...where },
+      orderBy: approvedGraduateOrderBy,
+      select: {
+        id: true,
+        userProfile: { select: { fullname: true, dateOfBirth: true } },
+        graduationDecision: {
+          select: {
+            diplomaNumber: true,
+            originalDiplomaNumber: true,
+            trainingMajor: { include: { trainingField: true } },
+          },
+        },
+        fixedClass: {
+          select: {
+            trainingCourse: true,
+            curriculumVersion: {
+              select: {
+                curriculum: {
+                  select: { trainingMajor: { include: { trainingField: true } } },
+                },
+              },
+            },
           },
         },
       },
@@ -1676,7 +1720,7 @@ export default function StudentGradeSystem() {
   }
 
   const handleExportQuyetDinhCongNhan = async () => {
-    if (!studentsWithSemesters?.length) {
+    if (!allDecisionStudents?.length) {
       notification.info({ message: "Không có dữ liệu để xuất!" })
       return
     }
@@ -1836,14 +1880,14 @@ export default function StudentGradeSystem() {
     const canCuHoiDong = (session?.councilMeetingBasis || "").trim()
     const quyChe = [
       ...new Set(
-        (studentsWithSemesters || [])
+        allDecisionStudents
           .map((student) => student.fixedClass?.trainingCourse?.regulation?.trim())
           .filter((value): value is string => Boolean(value))
       ),
     ].join("; ")
     const signerNameTrichSao = signerNameTS
 
-    const items = studentsWithSemesters.map((student) => {
+    const items = allDecisionStudents.map((student) => {
       const course = student.fixedClass?.trainingCourse
       const trainingMajor =
         student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor ||

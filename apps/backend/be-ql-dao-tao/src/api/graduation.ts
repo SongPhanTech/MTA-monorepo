@@ -3,6 +3,7 @@ import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import {
   ApplicationStatus,
   FixedClassType,
+  Prisma,
   StudentStatus,
   SubjectVersionType,
   ThesisType,
@@ -94,6 +95,17 @@ function isApplicationOrientation(
   if (classType === FixedClassType.RESEARCH) return false
   return fallbackIsProject
 }
+
+/**
+ * Thứ tự in/xuất cho các mẫu ở màn Phụ lục văn bằng — trùng với bảng kết quả (Quyết định tốt nghiệp)
+ * của đợt xét (sub-pages/graduationDecision.tsx): lớp → ĐTBTL cao → thấp → số vào sổ gốc → tên.
+ */
+const APPROVED_GRADUATE_ORDER_BY: Prisma.StudentOrderByWithRelationInput[] = [
+  { fixedClass: { code: "asc" } },
+  { graduationDecision: { finalGpa: "desc" } },
+  { graduationDecision: { originalDiplomaNumber: "asc" } },
+  { userProfile: { firstName: "asc" } },
+]
 
 function buildApprovedGraduateStudentWhere(params: {
   trainingObjectTypeId?: string
@@ -1423,6 +1435,7 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
       trainingCourseIds,
       thesisSessionIds,
     }),
+    orderBy: APPROVED_GRADUATE_ORDER_BY,
     include: {
       userProfile: {
         include: {
@@ -1460,9 +1473,16 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
               trainingField: true,
             },
           },
+          // Các môn dùng tính ĐTBTL khi xét → tổng TC tích luỹ (giống màn đợt xét)
+          application: {
+            select: {
+              gpaScore: { select: { subjectVersion: { select: { credit: true } } } },
+            },
+          },
         },
       },
       graduationApplications: true,
+      // Lấy mọi đăng ký (mới → cũ) để chọn bản đã bảo vệ — xem pickThesisRegistration
       thesisRegistrations: {
         where: { deletedAt: null },
         include: {
@@ -1473,9 +1493,11 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
               thesisSession: true,
             },
           },
+          studentSubjectScore: {
+            select: { finalScore: true, manualFinalScore: true },
+          },
         },
         orderBy: { createdAt: "desc" },
-        take: 1,
       },
       subjectClassStudent: {
         where: {
@@ -1493,7 +1515,7 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
             select: { type: true },
           },
           subjectVersion: {
-            select: { credit: true, type: true },
+            select: { credit: true, type: true, name: true },
           },
         },
       },
@@ -1575,14 +1597,35 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
     return totalCredit > 0 ? totalScore / totalCredit : 0
   }
 
-  /** Điểm học phần tốt nghiệp (thi); để trống nếu chỉ bảo vệ luận văn / đề án. */
-  const getGraduationExamScore = (
-    subjectClassStudent: (typeof students)[number]["subjectClassStudent"]
+  /**
+   * Học phần tốt nghiệp môn Công tác đảng, công tác chính trị — nhận theo tên vì danh mục không có
+   * loại riêng (VD: "Công tác đảng, công tác chính trị", "Thi tốt nghiệp CTĐ, CTCT",
+   * "Công tác chính trị trong QĐND Việt Nam").
+   */
+  const isPartyPoliticalSubject = (name?: string | null) => {
+    const n = (name || "").normalize("NFC").toLowerCase()
+    return (
+      n.includes("công tác đảng") ||
+      n.includes("công tác chính trị") ||
+      n.includes("ctđ") ||
+      n.includes("ctct")
+    )
+  }
+
+  /**
+   * Điểm cao nhất trong các học phần loại Tốt nghiệp thỏa `filter`; để trống nếu không có.
+   * - Điểm HP tốt nghiệp: các học phần TN trừ CTĐ, CTCT (để trống nếu chỉ bảo vệ LV / đề án).
+   * - Điểm CTĐ, CTCT: chỉ học phần TN môn CTĐ, CTCT.
+   */
+  const getGraduationSubjectScore = (
+    subjectClassStudent: (typeof students)[number]["subjectClassStudent"],
+    filter: (subjectName?: string | null) => boolean
   ) => {
     if (!subjectClassStudent?.length) return ""
     let best: number | null = null
     for (const record of subjectClassStudent) {
       if (record.subjectVersion?.type !== SubjectVersionType.Graduation) continue
+      if (!filter(record.subjectVersion?.name)) continue
       const score = getDiplomaAppendixScore(record)
       if (score == null) continue
       if (best == null || score > best) best = score
@@ -1590,9 +1633,37 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
     return best != null ? formatScore(best, 2) : ""
   }
 
+  type ThesisReg = (typeof students)[number]["thesisRegistrations"][number]
+  /** Điểm LV/ĐATN: biên bản bảo vệ → điểm học phần nhập tay → điểm học phần (giống phụ lục thạc sĩ). */
+  const getThesisScore = (reg?: ThesisReg) => {
+    const candidates = [
+      reg?.thesisProject?.defenseRecord?.finalScore,
+      reg?.studentSubjectScore?.manualFinalScore,
+      reg?.studentSubjectScore?.finalScore,
+    ]
+    for (const v of candidates) {
+      if (v == null) continue
+      const n = Number(v)
+      if (!Number.isNaN(n)) return n
+    }
+    return null
+  }
+  /**
+   * Chọn đăng ký luận văn dùng cho sổ gốc: ưu tiên bản đã có điểm bảo vệ, rồi bản có điểm học phần,
+   * cuối cùng là bản mới nhất (tránh bị trống khi HV có đăng ký mới hơn chưa bảo vệ).
+   */
+  const pickThesisRegistration = (student: (typeof students)[number]) => {
+    const regs = student.thesisRegistrations || []
+    return (
+      regs.find((r) => r.thesisProject?.defenseRecord?.finalScore != null) ??
+      regs.find((r) => getThesisScore(r) != null) ??
+      regs[0]
+    )
+  }
+
   const buildRow = (student: (typeof students)[number], index: number) => {
     const gD = student.graduationDecision
-    const tR = student.thesisRegistrations?.[0]
+    const tR = pickThesisRegistration(student)
     const user = student.userProfile
     const thesisProject = tR?.thesisProject
     const thesisSession = thesisProject?.thesisSession
@@ -1603,6 +1674,12 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
     const chuyenNganh = major?.name || ""
     const defenseDate = thesisProject?.defenseDate || thesisSession?.startDate
     const calculatedTBC = calcTBC(student.subjectClassStudent)
+    // Tổng số TC tích luỹ lấy từ kết quả đợt xét (đơn xét gắn với quyết định tốt nghiệp),
+    // cùng cách tính với cột "Tổng số TC tích luỹ" ở màn đợt xét
+    const gpaScores = gD?.application?.gpaScore || []
+    const tongSoTinChi = gpaScores.length
+      ? gpaScores.reduce((sum, score) => sum + (score.subjectVersion?.credit || 0), 0)
+      : null
     const tbcFinal = gD?.finalGpa
       ? formatScore(gD.finalGpa, 2)
       : calculatedTBC > 0
@@ -1635,10 +1712,16 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
         student.fixedClass?.managementOrganization?.sTenVietTat ||
         student.fixedClass?.managementOrganization?.sTen ||
         "",
-      diemLVDATN: formatScore(thesisProject?.defenseRecord?.finalScore, 2),
-      diemHocPhanTotNghiep: getGraduationExamScore(student.subjectClassStudent),
+      diemLVDATN: formatScore(getThesisScore(tR), 2),
+      diemHocPhanTotNghiep: getGraduationSubjectScore(
+        student.subjectClassStudent,
+        (name) => !isPartyPoliticalSubject(name)
+      ),
+      diemCTDCTCT: getGraduationSubjectScore(student.subjectClassStudent, isPartyPoliticalSubject),
       diemTBC: tbcFinal || "",
       soDienThoai: user?.phoneNumber || "",
+      tongSoTinChi: tongSoTinChi ?? "",
+      email: user?.email || "",
       nguoiNhanVanBang: "",
       ghiChu: "",
     }
@@ -1652,11 +1735,12 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
       graduationDecisionDate?: Date | null
     }
   ): Promise<Buffer> => {
-    const buf = await getLuanVanTemplateBuffer(prisma, "SoGocCapPhatVanBangCaoHoc_v6.xlsx")
+    // v8: thêm cột Email, Tổng số tín chỉ; SĐT + Email đặt ngay sau "Họ và tên"
+    const buf = await getLuanVanTemplateBuffer(prisma, "SoGocCapPhatVanBangCaoHoc_v8.xlsx")
     const tpl = new XlsxTemplate(buf)
     const rows = sessionStudents.map((s, i) => buildRow(s, i))
     const first = sessionStudents[0]
-    const firstSession = first?.thesisRegistrations?.[0]?.thesisProject?.thesisSession
+    const firstSession = first ? pickThesisRegistration(first)?.thesisProject?.thesisSession : undefined
     const decisionCode =
       sessionMeta?.graduationNumber ||
       firstSession?.graduationNumber ||
@@ -1689,7 +1773,7 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
       studentsBySession.set(session.id, [])
     }
     for (const student of students) {
-      const sessionId = student.thesisRegistrations?.[0]?.thesisProject?.thesisSessionId
+      const sessionId = pickThesisRegistration(student)?.thesisProject?.thesisSessionId
       if (sessionId && studentsBySession.has(sessionId)) {
         studentsBySession.get(sessionId)!.push(student)
       }
@@ -1773,6 +1857,10 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
     })
 
     destSheet.pageSetup = JSON.parse(JSON.stringify(sourceSheet.pageSetup || {}))
+    if (destSheet.pageSetup.printArea) {
+      // Vùng in của template cố định số dòng → mở rộng theo số học viên thực tế
+      destSheet.pageSetup.printArea = `A1:${destSheet.getColumn(destSheet.columnCount).letter}${destSheet.rowCount}`
+    }
   }
 
   if (outputWorkbook.worksheets.length === 0) {
@@ -1855,6 +1943,7 @@ app.openapi(exportPhoiBangCaoHoc, async (c) => {
       trainingCourseIds,
       thesisSessionIds,
     }),
+    orderBy: APPROVED_GRADUATE_ORDER_BY,
     include: {
       userProfile: {
         include: {
@@ -2051,6 +2140,7 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
       trainingCourseIds,
       thesisSessionIds,
     }),
+    orderBy: APPROVED_GRADUATE_ORDER_BY,
     include: {
       userProfile: {
         include: {
@@ -2331,6 +2421,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
         trainingCourseIds,
         thesisSessionIds,
       }),
+      orderBy: APPROVED_GRADUATE_ORDER_BY,
       include: {
         userProfile: {
           include: {
@@ -2854,6 +2945,7 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
       trainingCourseIds,
       thesisSessionIds,
     }),
+    orderBy: APPROVED_GRADUATE_ORDER_BY,
     include: {
       userProfile: {
         include: {
