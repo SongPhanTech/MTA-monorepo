@@ -4835,3 +4835,22 @@ export const useCalcEvidenceTags = <TError = ErrorMessageResponse,
 
       return useMutation(mutationOptions, queryClient);
     }
+
+export const updateClusterSurveyApi = async (
+  id: string,
+  data: any,
+  options?: RequestInit
+): Promise<any> => {
+  return customExamFetch<any>(`/api/cluster-survey/cluster-survey/${id}`, {
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(data),
+  });
+};
+
+export const useUpdateClusterSurveyApi = () => {
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: any }) => updateClusterSurveyApi(id, data),
+  });
+};
