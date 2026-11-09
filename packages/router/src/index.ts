@@ -1307,14 +1307,6 @@ const NAVIGATION: NavigationType = {
       },
     ],
   },
-  DANG_KY_HOC: {
-    label: "Đăng ký học",
-    menus: [],
-  },
-  QL_LICH_CONG_TAC: {
-    label: "Quản lý lịch công tác",
-    menus: [],
-  },
 }
 
 const PUBLIC_ROUTER = [ROUTER_PATH.KHAO_THI.LAM_KHAO_SAT_ID.replace("[id]", "")]
