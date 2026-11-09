@@ -20,12 +20,14 @@ import ThesisPaymentApp from "./api/thesis-payment"
 import MinIOApp from "./api/minio"
 import SqlTransactionApp from "./api/transaction"
 import SystemStatusApp from "./api/system-status"
+import GetPermissionApp from "./api/get-permission"
 import WSO2AmApp from "./api/wso2am"
 import { startPreviewCleanupCron } from "./cron/cleanup-preview"
 import { checkIp } from "./middlewares/check-ip"
 import { createPrismaClient } from "./utils/db-pool"
 import { setupOpenApi } from "./utils/openapi"
 import { releaseSoftDeletedSurveyObjectCode } from "./utils/release-soft-deleted-survey-object-code"
+import { getSystemClientCredentials, getSystemOrigin } from "./utils/system-client"
 
 setupAppTimezone()
 
@@ -87,6 +89,7 @@ app.use("*", checkIp)
 // public route
 setupOpenApi(app)
 app.route("/api/system-status", SystemStatusApp)
+app.route("/api/getPermission", GetPermissionApp)
 app.route("/api/auth", AuthApp)
 app.route("/api/apim-logs", ApimLogsApp)
 app.route("/api/wso2am", WSO2AmApp)
@@ -100,60 +103,26 @@ app.use("/api/check/*", jwtAuth("lms"))
 // setupAuth(app)
 app.all("/api/system/:appcode/*", async (c) => {
   const appCode = c.req.param("appcode").toLowerCase()
-  const pathProxy = c.req.path.replace(`/api/system/${appCode}/`, "")
-  const clientId = (() => {
-    switch (appCode) {
-      case "lms":
-        return process.env.KEYCLOAK_CLIENT_ID_LMS || ""
-      case "conggiangvien":
-        return process.env.KEYCLOAK_CLIENT_ID_CONG_GIANG_VIEN || ""
-      case "ems":
-        return process.env.KEYCLOAK_CLIENT_ID_EMS || ""
-      case "hrm":
-        return process.env.KEYCLOAK_CLIENT_ID_HRM || ""
-      case "portal":
-        return process.env.KEYCLOAK_CLIENT_ID_PORTAL || ""
-      case "dangkyhoc":
-        return process.env.KEYCLOAK_CLIENT_ID_PORTAL || ""
-      case "chatbot":
-        return process.env.KEYCLOAK_CLIENT_ID_CHATBOT || ""
-      case "lct":
-        return process.env.KEYCLOAK_CLIENT_ID_LCT || ""
-      default:
-        return process.env.KEYCLOAK_CLIENT_ID || ""
-    }
-  })()
-  const clientSecret = (() => {
-    switch (appCode) {
-      case "lms":
-        return process.env.KEYCLOAK_CLIENT_SECRET_LMS || ""
-      case "conggiangvien":
-        return process.env.KEYCLOAK_CLIENT_SECRET_CONG_GIANG_VIEN || ""
-      case "ems":
-        return process.env.KEYCLOAK_CLIENT_SECRET_EMS || ""
-      case "hrm":
-        return process.env.KEYCLOAK_CLIENT_SECRET_HRM || ""
-      case "portal":
-        return process.env.KEYCLOAK_CLIENT_SECRET_PORTAL || ""
-      case "dangkyhoc":
-        return process.env.KEYCLOAK_CLIENT_SECRET_PORTAL || ""
-      case "chatbot":
-        return process.env.KEYCLOAK_CLIENT_SECRET_CHATBOT || ""
-      case "lct":
-        return process.env.KEYCLOAK_CLIENT_SECRET_LCT || ""
-      default:
-        return process.env.KEYCLOAK_CLIENT_SECRET || ""
-    }
-  })()
+  const pathProxy = c.req.path.replace(new RegExp(`^/api/system/${appCode}/`, "i"), "")
+  const { clientId, clientSecret } = getSystemClientCredentials(appCode)
+  const systemOrigin = getSystemOrigin()
+  if (!systemOrigin) {
+    console.error("[system-proxy] thiếu SYSTEM_BASE_URL")
+    return c.json({ message: "SYSTEM_BASE_URL chưa cấu hình" }, 500)
+  }
+  if (!clientId || !clientSecret) {
+    console.error("[system-proxy] thiếu client credentials", appCode)
+    return c.json({ message: `Thiếu x-clientid/secret cho app ${appCode}` }, 401)
+  }
 
+  // Upstream luôn qua /api/system/public/ — nginx không có /api/system/{appCode}/
+  const urlProxy = new URL(pathProxy.replace(/^public\//i, ""), `${systemOrigin}/api/system/public/`)
   const headers = {
     ...c.req.header(),
     "x-clientid": clientId,
     "x-clientsecret": clientSecret,
   }
-
-  const urlProxy = new URL(`${pathProxy}`, `${process.env.SYSTEM_BASE_URL}/api/system/`)
-  console.log("get session", appCode, headers)
+  console.log("[system-proxy]", appCode, urlProxy.toString())
 
   const res = await proxy(urlProxy, {
     ...c.req,

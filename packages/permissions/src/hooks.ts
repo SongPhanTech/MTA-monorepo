@@ -11,10 +11,10 @@ import NAVIGATION, {
 } from "@workspace/router"
 import { useMemo } from "react"
 import {
-  type getUserPermissionsPermissionAppCodeUserIdResponse,
-  useGetUserPermissionsAccessLevelAppCodeUserId,
-  useGetUserPermissionsPermissionAppCodeUserId,
-} from "../../libs/src/api/system"
+  type getPermissionResponse,
+  useGetPermission,
+} from "../../libs/src/api/get-permission"
+import { useGetUserPermissionsAccessLevelAppCodeUserId } from "../../libs/src/api/system"
 import { getRuntimeEnv } from "../../libs/src/utils"
 import ability from "./ability"
 
@@ -379,7 +379,7 @@ function getDynamicBreadcrumb(
   return []
 }
 
-const mapPermissionResponse = (data?: getUserPermissionsPermissionAppCodeUserIdResponse) => {
+const mapPermissionResponse = (data?: getPermissionResponse) => {
   if (data?.status !== 200) return []
   return (data.data.Permissions ?? []).map((p) => ({
     name: p.sFormName ?? "",
@@ -395,15 +395,11 @@ const usePermissionsState = (userId?: string) => {
     isFetched,
     isError,
     isSuccess: isQuerySuccess,
-  } = useGetUserPermissionsPermissionAppCodeUserId(
-    getRuntimeEnv("NEXT_PUBLIC_APP_CODE"),
-    resolvedUserId,
-    {
-      query: {
-        enabled: Boolean(resolvedUserId),
-      },
-    }
-  )
+  } = useGetPermission(getRuntimeEnv("NEXT_PUBLIC_APP_CODE"), resolvedUserId, {
+    query: {
+      enabled: Boolean(resolvedUserId),
+    },
+  })
 
   const permissions = useMemo(() => mapPermissionResponse(data), [data])
   const hasUserId = Boolean(resolvedUserId)
@@ -420,7 +416,7 @@ const usePermissionsState = (userId?: string) => {
 }
 
 const usePermissions = () => {
-  const { data } = useGetUserPermissionsPermissionAppCodeUserId(
+  const { data } = useGetPermission(
     getRuntimeEnv("NEXT_PUBLIC_APP_CODE"),
     window?.contextData?.userId ?? ""
   )

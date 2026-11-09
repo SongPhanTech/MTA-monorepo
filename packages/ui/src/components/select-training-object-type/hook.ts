@@ -3,7 +3,7 @@ import { Store, useStore } from "@tanstack/react-store"
 import { $Enums } from "@workspace/db"
 import type { Prisma } from "@workspace/db/client"
 import { useFindManyTrainingObjectType } from "@workspace/db/hooks"
-import { useGetUserPermissionsPermissionAppCodeUserId } from "@workspace/libs/api/system"
+import { useGetPermission } from "@workspace/libs/api/get-permission"
 import { isDevEnvironment } from "@workspace/libs/utils"
 import type { ExtraQueryOptions } from "@zenstackhq/tanstack-query/runtime-v5"
 import { useEffect, useMemo } from "react"
@@ -71,10 +71,7 @@ export function useFindManyTrainingObjectTypePermission<
       subsystem?: string
     }
 ) {
-  const { data: permission } = useGetUserPermissionsPermissionAppCodeUserId(
-    "lms",
-    window?.contextData?.userId ?? ""
-  )
+  const { data: permission } = useGetPermission("lms", window?.contextData?.userId ?? "")
 
   const permissions = useMemo(() => {
     if (permission?.status !== 200) return []

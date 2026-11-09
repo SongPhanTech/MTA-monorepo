@@ -26,8 +26,12 @@ IMG_PREFIX := mta-
 #                          NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT at build time
 # ─────────────────────────────────────────────────────────────────────────────
 SERVER_PROFILE ?= swantech_x52
-# Prefix nginx mount for BE APIs (empty = /api/... ; mta_online = /cong-sinh-vien/api/...)
+# Prefix nginx mount for BE APIs (empty = /api/... ; mta_online nội bộ = /api/lms/model)
 FE_API_PREFIX ?=
+# Model API path (internet: /api/model ; nội bộ: /api/lms/model).
+# System FE không gọi trực tiếp — proxy qua be-model; SYSTEM_BASE_URL chỉ cấu hình ở BE.
+FE_MODEL_API_PATH ?= /api/model
+FE_SYSTEM_API_PATH ?= /api/system
 
 # ── Profile: swan1 ────────────────────────────────────────────────────────────
 ifeq ($(SERVER_PROFILE),swan1)
@@ -62,7 +66,7 @@ else ifeq ($(SERVER_PROFILE),local_mta)
   FE_APP_URL       := http://192.168.0.102
   ONLY_OFFICE_ENDPOINT := http://192.168.0.102:3100
 
-# ── Profile: app2 ─────────────────────────────────────────────────────────────
+# ── Profile: app (nội bộ) ─────────────────────────────────────────────────────
 else ifeq ($(SERVER_PROFILE),app)
   SERVER_HOST      := app
   SERVER_PASSWORD  := 
@@ -70,7 +74,10 @@ else ifeq ($(SERVER_PROFILE),app)
   BE_APP_DIR       := ~/app/be
   FE_APP_DIR       := ~/app/fe
   FE_COMPOSE_FILE  := docker-compose.yml
-  FE_APP_URL       := http://192.168.100.134
+  FE_APP_URL       := http://daihocso.mta.edu.vn
+  # Nội bộ: model=/api/lms/model ; system=http://daihocso.mta.edu.vn/api/system
+  FE_MODEL_API_PATH := /api/lms/model
+  FE_SYSTEM_API_PATH := /api/system
   ONLY_OFFICE_ENDPOINT := http://192.168.100.133:3100
 
 else ifeq ($(SERVER_PROFILE),mta_online)
@@ -81,8 +88,9 @@ else ifeq ($(SERVER_PROFILE),mta_online)
   FE_APP_DIR       := ~/mta-app-sso
   FE_COMPOSE_FILE  := app-docker-compose.yml
   FE_APP_URL       := https://mta.edu.vn
-  # Nginx chỉ proxy BE dưới /cong-sinh-vien/api/* (không có /api/portal trực tiếp)
-  FE_API_PREFIX    := /cong-sinh-vien
+  # Nginx nội bộ: be-model = /api/lms/model ; system vẫn /api/system
+  FE_API_PREFIX    :=
+  FE_MODEL_API_PATH := /api/lms/model
   ONLY_OFFICE_ENDPOINT := 
 
 # Fallback: unknown profile ─────────────────────────────────────────────────
@@ -193,10 +201,10 @@ ifeq ($(SERVER_PROFILE),mta_online)
   FE_CLIENT_ID_cong-hoc-vien      := CongHocVien
   FE_CLIENT_SECRET_cong-hoc-vien  := FpYxCRyJHViZ3gKDv1UrDhEe5OmU7vGH
 else
-  # swantech_x52 / swan1 / local → mta_core_db
-  FE_CLIENT_ID_cong-sinh-vien     := CongSinhVien
-  FE_CLIENT_SECRET_cong-sinh-vien := I3WvcIx3PkvME9bW5Ctqs4W5vwh2VEkI
-  FE_CLIENT_ID_cong-hoc-vien      := dangkyhoc
+  # swantech_x52 / swan1 / local — public-api nhận dang-ky-hoc (không phải CongSinhVien/dangkyhoc)
+  FE_CLIENT_ID_cong-sinh-vien     := dang-ky-hoc
+  FE_CLIENT_SECRET_cong-sinh-vien := FpYxCRyJHViZ3gKDv1UrDhEe5OmU7vGH
+  FE_CLIENT_ID_cong-hoc-vien      := dang-ky-hoc
   FE_CLIENT_SECRET_cong-hoc-vien  := FpYxCRyJHViZ3gKDv1UrDhEe5OmU7vGH
 endif
 
@@ -418,16 +426,16 @@ _build-fe:
 	$(eval APP_URL  := $(FE_APP_URL)$(APP_URL_SUFFIX_$(PACKAGE)))
 	$(eval FE_CLIENT_ID := $(FE_CLIENT_ID_$(PACKAGE)))
 	$(eval FE_CLIENT_SECRET := $(FE_CLIENT_SECRET_$(PACKAGE)))
-	@echo "Building FE package $(PACKAGE) -> $(CDN_NAME) [APP_URL=$(APP_URL)] [API=$(FE_APP_URL)$(FE_API_PREFIX)/api/...] [ONLY_OFFICE=$(ONLY_OFFICE_ENDPOINT)]$(if $(FE_CLIENT_ID), [CLIENT=$(FE_CLIENT_ID)])"
+	@echo "Building FE package $(PACKAGE) -> $(CDN_NAME) [APP_URL=$(APP_URL)] [MODEL=$(FE_APP_URL)$(FE_API_PREFIX)$(FE_MODEL_API_PATH)] [SYSTEM=$(FE_APP_URL)$(FE_API_PREFIX)$(FE_SYSTEM_API_PATH)] [ONLY_OFFICE=$(ONLY_OFFICE_ENDPOINT)]$(if $(FE_CLIENT_ID), [CLIENT=$(FE_CLIENT_ID)])"
 	cd apps/client/$(PACKAGE) && \
 	pnpm i && \
 	NEXT_PUBLIC_APP_URL=$(APP_URL) \
 	NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT=$(ONLY_OFFICE_ENDPOINT) \
 	NEXT_PUBLIC_API_PORTAL_BASE_URL="$(FE_APP_URL)$(FE_API_PREFIX)/api/portal" \
-	NEXT_PUBLIC_API_MODEL_BASE_URL="$(FE_APP_URL)$(FE_API_PREFIX)/api/model" \
+	NEXT_PUBLIC_API_MODEL_BASE_URL="$(FE_APP_URL)$(FE_API_PREFIX)$(FE_MODEL_API_PATH)" \
 	NEXT_PUBLIC_API_EMS_BASE_URL="$(FE_APP_URL)$(FE_API_PREFIX)/api/ems" \
 	NEXT_PUBLIC_API_LMS_BASE_URL="$(FE_APP_URL)$(FE_API_PREFIX)/api/lms" \
-	NEXT_PUBLIC_API_SYSTEM_BASE_URL="$(FE_APP_URL)$(FE_API_PREFIX)/api/system" \
+	NEXT_PUBLIC_API_SYSTEM_BASE_URL="$(FE_APP_URL)$(FE_API_PREFIX)$(FE_SYSTEM_API_PATH)" \
 	$(if $(FE_CLIENT_ID),NEXT_PUBLIC_CLIENT_ID="$(FE_CLIENT_ID)") \
 	$(if $(FE_CLIENT_SECRET),NEXT_PUBLIC_CLIENT_SECRET="$(FE_CLIENT_SECRET)") \
 	pnpm build && \

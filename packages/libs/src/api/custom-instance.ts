@@ -59,37 +59,71 @@ const getBody = <T>(c: Response | Request): Promise<T> => {
   return c.blob() as Promise<T>
 }
 
+/** Nội bộ MTA (daihocso / mta.edu.vn): be-model mount tại /api/lms/model. Internet (swantech): /api/model. */
+const isInternalMtaHost = (hostname: string) =>
+  hostname.includes("mta.edu.vn") ||
+  hostname.includes("mta.edu") ||
+  hostname.includes("daihocso") ||
+  hostname.startsWith("192.168.") ||
+  hostname.startsWith("10.")
+
+const isSwantechHost = (hostname: string) => hostname.includes("swantech.vn")
+
+/**
+ * Chuẩn hoá pathname API theo host hiện tại.
+ * - Internet: /api/model
+ * - Nội bộ:   /api/lms/model
+ * System giữ /api/system. Giữ suffix sau root (vd. /congsinhvien/public).
+ */
+const normalizeApiPathname = (pathname: string, toInternal: boolean): string => {
+  const cleaned = pathname.replace(/\/+$/, "") || "/"
+
+  // Thứ tự: /api/lms/model trước /api/lms và trước /api/model
+  const rules: Array<{ re: RegExp; internetRoot: string; internalRoot: string }> = [
+    { re: /^(\/[^/]+)?\/api\/lms\/model(?=\/|$)/, internetRoot: "/api/model", internalRoot: "/api/lms/model" },
+    { re: /^(\/[^/]+)?\/api\/model(?=\/|$)/, internetRoot: "/api/model", internalRoot: "/api/lms/model" },
+    { re: /^(\/[^/]+)?\/api\/system(?=\/|$)/, internetRoot: "/api/system", internalRoot: "/api/system" },
+    { re: /^(\/[^/]+)?\/api\/portal(?=\/|$)/, internetRoot: "/api/portal", internalRoot: "/api/portal" },
+    { re: /^(\/[^/]+)?\/api\/ems(?=\/|$)/, internetRoot: "/api/ems", internalRoot: "/api/ems" },
+    { re: /^(\/[^/]+)?\/api\/lms(?=\/|$)/, internetRoot: "/api/lms", internalRoot: "/api/lms" },
+  ]
+
+  for (const rule of rules) {
+    const match = cleaned.match(rule.re)
+    if (!match) continue
+    const suffix = cleaned.slice(match[0].length)
+    const root = toInternal ? rule.internalRoot : rule.internetRoot
+    // Nội bộ không giữ mount prefix kiểu /cong-sinh-vien (nginx mount /api/lms/model trực tiếp)
+    if (toInternal) return `${root}${suffix}`
+    const mount = match[1] && match[1] !== "/api" ? match[1] : ""
+    return `${mount}${root}${suffix}`
+  }
+
+  return cleaned
+}
+
 export const getUrl = (baseUrl: string, contextUrl: string): string => {
   let cleanBase = (baseUrl || "").trim().replace(/^["']+|["'/]+$/g, "")
 
-  // Khi chạy trên browser tại domain production (ví dụ mta.edu.vn),
-  // nếu baseUrl bị cấu hình dính cứng sang domain staging bên ngoài (daotao.swantech.vn),
-  // tự động chuẩn hóa về same-origin để tránh lỗi CORS và đảm bảo dữ liệu gọi về đúng server.
+  // Same-origin + map /api/model ↔ /api/lms/model theo môi trường (internet vs nội bộ).
   if (typeof window !== "undefined" && window.location?.hostname) {
     const currentHost = window.location.hostname
-    if (
-      currentHost !== "localhost" &&
-      currentHost !== "127.0.0.1" &&
-      (cleanBase.startsWith("http://") || cleanBase.startsWith("https://"))
-    ) {
+    if (currentHost !== "localhost" && currentHost !== "127.0.0.1") {
+      const toInternal = isInternalMtaHost(currentHost)
       try {
-        const parsed = new URL(cleanBase)
-        if (parsed.hostname !== currentHost && parsed.hostname.includes("swantech.vn")) {
-          // Keep app mount prefix when present (e.g. /cong-sinh-vien/api/system on mta_online)
-          const mountMatch = parsed.pathname.match(/^(\/[^/]+)\/api\//)
-          const mountPrefix = mountMatch?.[1] && mountMatch[1] !== "/api" ? mountMatch[1] : ""
-          const apiPath = parsed.pathname.includes("/api/portal")
-            ? `${mountPrefix}/api/portal`
-            : parsed.pathname.includes("/api/model")
-              ? `${mountPrefix}/api/model`
-              : parsed.pathname.includes("/api/lms")
-                ? `${mountPrefix}/api/lms`
-                : parsed.pathname.includes("/api/ems")
-                  ? `${mountPrefix}/api/ems`
-                  : parsed.pathname.includes("/api/system")
-                    ? `${mountPrefix}/api/system`
-                    : parsed.pathname.replace(/\/+$/, "")
-          cleanBase = `${window.location.origin}${apiPath}`
+        if (cleanBase.startsWith("http://") || cleanBase.startsWith("https://")) {
+          const parsed = new URL(cleanBase)
+          const shouldRewriteHost =
+            parsed.hostname !== currentHost &&
+            (isSwantechHost(parsed.hostname) || isInternalMtaHost(parsed.hostname))
+          if (shouldRewriteHost || parsed.hostname === currentHost) {
+            const apiPath = normalizeApiPathname(parsed.pathname, toInternal)
+            cleanBase = shouldRewriteHost
+              ? `${window.location.origin}${apiPath}`
+              : `${parsed.origin}${apiPath}`
+          }
+        } else if (cleanBase.startsWith("/")) {
+          cleanBase = normalizeApiPathname(cleanBase, toInternal)
         }
       } catch {
         // ignore parse error
@@ -149,23 +183,46 @@ const getClientCredentialHeaders = (): Record<string, string> => {
   }
 }
 
-export const customSystemFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
-  const appCode = getRuntimeEnv("NEXT_PUBLIC_APP_CODE") || process.env.NEXT_PUBLIC_APP_CODE
-  // Prefer explicit SYSTEM_BASE_URL (server) or NEXT_PUBLIC_API_SYSTEM_BASE_URL (browser).
-  // Fallback must NOT go through /api/model/... (that hits be-model → 404 on mta_online).
-  const systemBase =
-    (typeof process !== "undefined" && process.env.SYSTEM_BASE_URL
-      ? `${process.env.SYSTEM_BASE_URL}/api/system/public`
-      : null) ||
-    (getRuntimeEnv("NEXT_PUBLIC_API_SYSTEM_BASE_URL")
-      ? `${getRuntimeEnv("NEXT_PUBLIC_API_SYSTEM_BASE_URL")}/${appCode}/public`
-      : `/api/system/${appCode}/public`)
-  const requestUrl = getUrl(systemBase, url)
+type SystemScope = "public" | "share" | "storage"
 
+/**
+ * System API:
+ * - Browser: luôn proxy qua be-model (MODEL base) → `/system/{appCode}/{scope}/...`
+ *   Chỉ cần cấu hình MODEL path trên FE; SYSTEM_BASE_URL chỉ set ở BE.
+ * - Server (BE): gọi thẳng SYSTEM_BASE_URL/api/system/{appCode}/{scope}/...
+ */
+const resolveSystemRequestUrl = (scope: SystemScope, url: string): string => {
+  const appCode = (
+    getRuntimeEnv("NEXT_PUBLIC_APP_CODE") ||
+    process.env.NEXT_PUBLIC_APP_CODE ||
+    process.env.MTA_APP_CODE ||
+    process.env.PORTAL_APP_CODE ||
+    "lms"
+  ).toLowerCase()
+  const path = url.startsWith("/") ? url : `/${url}`
+  const systemPath = `/system/${appCode}/${scope}${path}`
+
+  // BE / Node: gọi system trực tiếp — chỉ cần SYSTEM_BASE_URL trong .env server
+  if (typeof window === "undefined" && process.env.SYSTEM_BASE_URL) {
+    const origin = process.env.SYSTEM_BASE_URL.replace(/\/$/, "")
+    return `${origin}/api${systemPath}`
+  }
+
+  // Browser: không gọi /api/system trực tiếp — proxy qua be-model (MODEL base)
+  const modelBase =
+    getRuntimeEnv("NEXT_PUBLIC_API_MODEL_BASE_URL") ||
+    process.env.NEXT_PUBLIC_API_MODEL_BASE_URL ||
+    "/api/model"
+  return getUrl(modelBase, systemPath)
+}
+
+export const customSystemFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
+  const requestUrl = resolveSystemRequestUrl("public", url)
+  // Browser → be-model tự gắn x-clientid/secret từ BE .env; vẫn gửi FE credentials khi có (fallback local)
   const response = await fetchInstance(requestUrl, {
     ...options,
     headers: {
-      ...getClientCredentialHeaders(),
+      ...(typeof window === "undefined" ? getClientCredentialHeaders() : {}),
       ...options?.headers,
     },
   })
@@ -175,20 +232,11 @@ export const customSystemFetch = async <T>(url: string, options: RequestInit): P
 }
 
 export const customSystemShareFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
-  const appCode = getRuntimeEnv("NEXT_PUBLIC_APP_CODE") || process.env.NEXT_PUBLIC_APP_CODE
-  const systemBase =
-    (typeof process !== "undefined" && process.env.SYSTEM_BASE_URL
-      ? `${process.env.SYSTEM_BASE_URL}/api/system/share`
-      : null) ||
-    (getRuntimeEnv("NEXT_PUBLIC_API_SYSTEM_BASE_URL")
-      ? `${getRuntimeEnv("NEXT_PUBLIC_API_SYSTEM_BASE_URL")}/${appCode}/share`
-      : `/api/system/${appCode}/share`)
-  const requestUrl = getUrl(systemBase, url)
-
+  const requestUrl = resolveSystemRequestUrl("share", url)
   const response = await fetchInstance(requestUrl, {
     ...options,
     headers: {
-      ...getClientCredentialHeaders(),
+      ...(typeof window === "undefined" ? getClientCredentialHeaders() : {}),
       ...options?.headers,
     },
   })
@@ -198,20 +246,11 @@ export const customSystemShareFetch = async <T>(url: string, options: RequestIni
 }
 
 export const customStorageFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
-  const appCode = getRuntimeEnv("NEXT_PUBLIC_APP_CODE") || process.env.NEXT_PUBLIC_APP_CODE
-  const systemBase =
-    (typeof process !== "undefined" && process.env.SYSTEM_BASE_URL
-      ? `${process.env.SYSTEM_BASE_URL}/api/system/storage`
-      : null) ||
-    (getRuntimeEnv("NEXT_PUBLIC_API_SYSTEM_BASE_URL")
-      ? `${getRuntimeEnv("NEXT_PUBLIC_API_SYSTEM_BASE_URL")}/${appCode}/storage`
-      : `/api/system/${appCode}/storage`)
-  const requestUrl = getUrl(systemBase, url)
-
+  const requestUrl = resolveSystemRequestUrl("storage", url)
   const response = await fetchInstance(requestUrl, {
     ...options,
     headers: {
-      ...getClientCredentialHeaders(),
+      ...(typeof window === "undefined" ? getClientCredentialHeaders() : {}),
       ...options?.headers,
     },
   })

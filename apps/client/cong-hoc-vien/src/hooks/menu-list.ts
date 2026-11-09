@@ -1,7 +1,7 @@
 import { useStoreActions, useStoreState } from "@redux/hook"
 import ability from "@workspace/permissions/ability"
 import { useAbility } from "@workspace/permissions/hooks"
-import { useGetUserPermissionsPermissionAppCodeUserId } from "@workspace/libs/api/system"
+import { useGetPermission } from "@workspace/libs/api/get-permission"
 import { getRuntimeEnv } from "@workspace/libs/utils"
 import NAVIGATION, { type CONG_HOC_VIEN_PERMISSION } from "@workspace/router"
 import { useEffect, useMemo, useState } from "react"
@@ -29,21 +29,21 @@ const useMenuList = () => {
     return () => clearInterval(timer)
   }, [userId])
   const appCode = getRuntimeEnv("NEXT_PUBLIC_APP_CODE")
-  const systemQuery = useGetUserPermissionsPermissionAppCodeUserId(appCode, userId)
+  const permissionQuery = useGetPermission(appCode, userId)
 
   const permissions = useMemo(() => {
-    if (systemQuery.data?.status !== 200) return []
-    return (systemQuery.data.data.Permissions ?? []).map((permission) => ({
+    if (permissionQuery.data?.status !== 200) return []
+    return (permissionQuery.data.data.Permissions ?? []).map((permission) => ({
       name: permission.sFormName ?? "",
       permission: permission.lPermission ?? 0,
     }))
-  }, [systemQuery.data])
+  }, [permissionQuery.data])
 
-  const systemEnabled = Boolean(appCode && userId)
-  const systemSettled = !systemEnabled || systemQuery.isFetched
+  const permissionEnabled = Boolean(appCode && userId)
+  const permissionSettled = !permissionEnabled || permissionQuery.isFetched
 
   useEffect(() => {
-    if (!systemSettled) return
+    if (!permissionSettled) return
     ability.update(
       permissions.map((permission) => ({
         action: String(permission.permission),
@@ -52,7 +52,7 @@ const useMenuList = () => {
     )
     setIsUpdateAbility(true)
     setAbilityVersion((version) => version + 1)
-  }, [permissions, systemSettled, setIsUpdateAbility])
+  }, [permissions, permissionSettled, setIsUpdateAbility])
 
   const menus = useMemo(() => {
     const visibleMenus = NAVIGATION.CONG_HOC_VIEN.menus.filter((menu) => !menu.hidden)

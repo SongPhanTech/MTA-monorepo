@@ -2,7 +2,7 @@ import { useStoreActions, useStoreState } from "@redux/hook"
 import ability from "@workspace/permissions/ability"
 import { useAbility } from "@workspace/permissions/hooks"
 import { useGetDelegatedPermissions } from "@workspace/libs/api/training"
-import { useGetUserPermissionsPermissionAppCodeUserId } from "@workspace/libs/api/system"
+import { useGetPermission } from "@workspace/libs/api/get-permission"
 import { getRuntimeEnv } from "@workspace/libs/utils"
 import { getMenuIdsShownInCatalog } from "@components/layouts/catalog-config-menu"
 import NAVIGATION, { type QL_DAO_TAO_PERMISSION } from "@workspace/router"
@@ -34,19 +34,19 @@ const useMenuList = () => {
   const { can } = useAbility()
   const userId = typeof window === "undefined" ? "" : (window.contextData?.userId ?? "")
   const appCode = getRuntimeEnv("NEXT_PUBLIC_APP_CODE")
-  const systemQuery = useGetUserPermissionsPermissionAppCodeUserId(appCode, userId)
+  const permissionQuery = useGetPermission(appCode, userId)
   const delegatedQuery = useGetDelegatedPermissions(
     { userId },
     { query: { enabled: Boolean(userId) } }
   )
 
   const systemPermissions = useMemo(() => {
-    if (systemQuery.data?.status !== 200) return []
-    return (systemQuery.data.data.Permissions ?? []).map((permission) => ({
+    if (permissionQuery.data?.status !== 200) return []
+    return (permissionQuery.data.data.Permissions ?? []).map((permission) => ({
       name: permission.sFormName ?? "",
       permission: permission.lPermission ?? 0,
     }))
-  }, [systemQuery.data])
+  }, [permissionQuery.data])
 
   const delegatedPermissions = useMemo(() => {
     if (delegatedQuery.data?.status !== 200) return []
@@ -58,12 +58,12 @@ const useMenuList = () => {
     [systemPermissions, delegatedPermissions]
   )
 
-  const systemEnabled = Boolean(appCode && userId)
-  const systemSettled = !systemEnabled || systemQuery.isFetched
+  const permissionEnabled = Boolean(appCode && userId)
+  const permissionSettled = !permissionEnabled || permissionQuery.isFetched
   const delegatedSettled = !userId || delegatedQuery.isFetched
 
   useEffect(() => {
-    if (!systemSettled || !delegatedSettled) return
+    if (!permissionSettled || !delegatedSettled) return
     ability.update(
       permissions.map((permission) => ({
         action: String(permission.permission),
@@ -72,7 +72,7 @@ const useMenuList = () => {
     )
     setIsUpdateAbility(true)
     setAbilityVersion((version) => version + 1)
-  }, [permissions, systemSettled, delegatedSettled, setIsUpdateAbility])
+  }, [permissions, permissionSettled, delegatedSettled, setIsUpdateAbility])
 
   const menus = useMemo(() => {
     const shownInCatalog = getMenuIdsShownInCatalog()
