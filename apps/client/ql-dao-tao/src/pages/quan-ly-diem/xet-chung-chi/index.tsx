@@ -6,7 +6,9 @@ import {
   useFindManyStudent,
   useFindManyTrainingCourse,
   useCreateManyArchivedCertificate,
+  useFindManyTrainingBlockSubject,
 } from "@workspace/db/hooks"
+import { courseScoreConfigFrom, isFailedByCourseConfig } from "@workspace/libs/utils"
 import { queryClient } from "@api/index"
 import { Col, Form, Row, Button, message, Modal, Tooltip } from "antd"
 import { useState, useMemo } from "react"
@@ -15,6 +17,117 @@ import Table from "@components/commons/table"
 import dayjs from "dayjs"
 import { saveAs } from "file-saver"
 import ExcelJS from "exceljs"
+
+const toScoreNumber = (val: any): number | null => {
+  if (val == null) return null
+  const raw = typeof val === "object" && typeof val.toNumber === "function" ? val.toNumber() : val
+  const num = Number(raw)
+  return Number.isNaN(num) ? null : num
+}
+
+const getEffectiveScore = (scoreRecord: any): number | null =>
+  toScoreNumber(scoreRecord?.manualFinalScore) ?? toScoreNumber(scoreRecord?.finalScore)
+
+// Ngưỡng qua môn dự phòng khi khoá chưa cấu hình scoreToPass
+const FALLBACK_SCORE_TO_PASS = 4
+
+type CourseScoreConfig = Parameters<typeof courseScoreConfigFrom>[0]
+
+// Cấu hình môn theo CTĐT của SV. Môn không có trong CTĐT → coi là môn tính TBC (như cũ).
+type SubjectRule = { conditional: boolean; graduation: boolean }
+type CurriculumRuleMap = Map<string, Map<string, SubjectRule>>
+const DEFAULT_SUBJECT_RULE: SubjectRule = { conditional: false, graduation: false }
+
+const getStudentCurriculumVersionId = (record: any): string | undefined =>
+  record.curriculumVersionId ?? record.fixedClass?.curriculumVersionId ?? undefined
+
+const getSubjectRule = (
+  record: any,
+  subjectVersionId: string,
+  ruleMap: CurriculumRuleMap
+): SubjectRule => {
+  const curriculumVersionId = getStudentCurriculumVersionId(record)
+  if (!curriculumVersionId) return DEFAULT_SUBJECT_RULE
+  return ruleMap.get(curriculumVersionId)?.get(subjectVersionId) ?? DEFAULT_SUBJECT_RULE
+}
+
+// Bản ghi rút môn / hoãn thi / lớp đã huỷ không dùng để xét
+const isRecordUsable = (s: any) => !s.withdrew && !s.examPostponed && !s.subjectClass?.cancelled
+
+// Cấm thi / đình chỉ: tính điểm 0, không đạt (giống tổng kết)
+const getRecordScore = (s: any): number | null =>
+  s.examBanned || s.suspended ? 0 : getEffectiveScore(s)
+
+const isRecordPassed = (s: any, rule: SubjectRule, course: CourseScoreConfig): boolean => {
+  const score = getEffectiveScore(s)
+  if (score == null || s.examBanned || s.suspended) return false
+  // Xét theo cấu hình khoá (giống tổng kết): điểm thi / CC / GK dưới ngưỡng → trượt;
+  // điểm HP so với ngưỡng qua môn (thường), qua môn tốt nghiệp hoặc qua môn điều kiện
+  return !isFailedByCourseConfig(
+    courseScoreConfigFrom(
+      { ...course, scoreToPass: course?.scoreToPass ?? FALLBACK_SCORE_TO_PASS },
+      s,
+      {
+        isGraduation: rule.graduation,
+        isConditional: rule.conditional && !rule.graduation,
+      }
+    ),
+    score
+  )
+}
+
+type SubjectResult = { score: number | null; exempted: boolean; passed: boolean }
+
+// Kết quả 1 môn khi xét chứng chỉ.
+// SV có thể có nhiều bản ghi điểm cho cùng 1 môn (học, học lại, thi lại, cải thiện, phiên điểm):
+// ưu tiên lần đạt có điểm cao nhất; không có lần nào đạt thì lấy lần điểm cao nhất.
+// Môn miễn (exempted, không có điểm — VD phiên từ chứng chỉ Đạt/Không đạt) xét Đạt, không vào TBC.
+const getSubjectResult = (
+  record: any,
+  subjectVersionId: string,
+  rule: SubjectRule,
+  course: CourseScoreConfig
+): SubjectResult => {
+  const records = (record.subjectClassStudent ?? []).filter(
+    (s: any) => s.subjectVersionId === subjectVersionId && isRecordUsable(s)
+  )
+
+  let found = false
+  let bestPassed = false
+  let bestScore: number | null = null
+  for (const s of records) {
+    const passed = isRecordPassed(s, rule, course)
+    const score = getRecordScore(s)
+    if (
+      !found ||
+      (passed && !bestPassed) ||
+      (passed === bestPassed && score != null && (bestScore == null || score > bestScore))
+    ) {
+      found = true
+      bestPassed = passed
+      bestScore = score
+    }
+  }
+  if (bestPassed) return { score: bestScore, exempted: false, passed: true }
+
+  const hasExemption = records.some((s: any) => s.exempted && getEffectiveScore(s) == null)
+  if (hasExemption) return { score: null, exempted: true, passed: true }
+  return { score: bestScore, exempted: false, passed: false }
+}
+
+const formatSubjectCell = (result: SubjectResult, empty: string) => {
+  if (result.exempted) return "Miễn"
+  return result.score ?? empty
+}
+
+// Trạng thái chứng chỉ hiện có của SV: APPROVED = đã cấp, PENDING = đang chờ duyệt.
+// REJECTED/CANCEL không tính → được xét lại.
+const getArchivedStatus = (record: any): "APPROVED" | "PENDING" | null => {
+  const list: any[] = record.archivedCertificate ?? []
+  if (list.some((a) => a.status === "APPROVED")) return "APPROVED"
+  if (list.some((a) => a.status === "PENDING")) return "PENDING"
+  return null
+}
 
 export default function AutoCheckCertificate() {
   const [form] = Form.useForm()
@@ -77,14 +190,17 @@ export default function AutoCheckCertificate() {
               in: selectedCertificate?.subjectVersions?.map((sv) => sv.id) || [],
             },
           },
-          include: { subjectVersion: true },
-          orderBy: { finalScore: "desc" },
-          distinct: ["subjectVersionId"],
+          include: {
+            subjectVersion: true,
+            subjectClass: { select: { cancelled: true, type: true } },
+          },
         },
         archivedCertificate: {
           where: {
             certificateId: selectedCertificate?.id,
+            status: { in: ["APPROVED", "PENDING"] },
           },
+          select: { id: true, status: true },
         },
       },
       orderBy: [{ userProfile: { firstName: "asc" } }, { userProfile: { lastName: "asc" } }],
@@ -92,34 +208,112 @@ export default function AutoCheckCertificate() {
     { enabled: !!whereStudent && hasSearched }
   )
 
+  const selectedTrainingCourse = useMemo(
+    () => trainingCourses.find((tc) => tc.id === trainingCourseId),
+    [trainingCourses, trainingCourseId]
+  )
+
+  const certificateSubjectVersionIds = useMemo(
+    () => selectedCertificate?.subjectVersions?.map((sv) => sv.id) ?? [],
+    [selectedCertificate]
+  )
+
+  const curriculumVersionIds = useMemo(
+    () => [
+      ...new Set(
+        students.map(getStudentCurriculumVersionId).filter((id): id is string => !!id)
+      ),
+    ],
+    [students]
+  )
+
+  // Cấu hình môn (tính TBC / môn điều kiện) theo CTĐT của từng SV
+  const { data: curriculumSubjects = [], isFetching: isFetchingCurriculum } =
+    useFindManyTrainingBlockSubject(
+      {
+        where: {
+          active: true,
+          subjectId: { in: certificateSubjectVersionIds },
+          trainingBlockOnCurriculumVersion: {
+            curriculumVersionId: { in: curriculumVersionIds },
+          },
+        },
+        select: {
+          subjectId: true,
+          useForFinalScore: true,
+          graduation: true,
+          trainingBlockOnCurriculumVersion: { select: { curriculumVersionId: true } },
+        },
+      },
+      {
+        enabled:
+          hasSearched &&
+          certificateSubjectVersionIds.length > 0 &&
+          curriculumVersionIds.length > 0,
+      }
+    )
+
+  const curriculumRuleMap = useMemo<CurriculumRuleMap>(() => {
+    const map: CurriculumRuleMap = new Map()
+    for (const item of curriculumSubjects as any[]) {
+      const curriculumVersionId = item.trainingBlockOnCurriculumVersion?.curriculumVersionId
+      if (!curriculumVersionId) continue
+      if (!map.has(curriculumVersionId)) map.set(curriculumVersionId, new Map())
+      const rules = map.get(curriculumVersionId)!
+      const existing = rules.get(item.subjectId)
+      // Môn xuất hiện nhiều khối: chỉ là môn điều kiện khi mọi khối đều không tính điểm
+      rules.set(item.subjectId, {
+        conditional: (existing?.conditional ?? true) && !item.useForFinalScore,
+        graduation: (existing?.graduation ?? false) || item.graduation,
+      })
+    }
+    return map
+  }, [curriculumSubjects])
+
+  const getSubjectResultOf = (record: any, subjectVersionId: string) =>
+    getSubjectResult(
+      record,
+      subjectVersionId,
+      getSubjectRule(record, subjectVersionId, curriculumRuleMap),
+      selectedTrainingCourse
+    )
+
+  // Môn tính TBC (theo CTĐT): phải qua môn theo ngưỡng của khoá và vào TBC theo tín chỉ.
+  // Môn điều kiện (CTĐT không tính điểm, VD QPAN): chỉ cần đạt, không vào TBC.
+  // Môn miễn: Đạt, không vào TBC.
   const getStudentResult = (record: any) => {
     let totalScore = 0
     let totalCredit = 0
     let hasFailedSubject = false
+    const subjectVersions = selectedCertificate?.subjectVersions ?? []
 
-    selectedCertificate?.subjectVersions?.forEach((sv) => {
-      const scoreRecord = record.subjectClassStudent?.find((s: any) => s.subjectVersionId === sv.id)
-      const scoreVal = scoreRecord?.manualFinalScore ?? scoreRecord?.finalScore
-      const score =
-        scoreVal != null
-          ? Number(
-              typeof scoreVal === "object" && typeof scoreVal.toNumber === "function"
-                ? scoreVal.toNumber()
-                : scoreVal
-            )
-          : 0
+    subjectVersions.forEach((sv) => {
+      const rule = getSubjectRule(record, sv.id, curriculumRuleMap)
+      const { score, exempted, passed } = getSubjectResult(
+        record,
+        sv.id,
+        rule,
+        selectedTrainingCourse
+      )
+      if (!passed) hasFailedSubject = true
+      if (exempted || rule.conditional) return
 
-      if (score < 4) hasFailedSubject = true
-      totalScore += score * sv.credit
+      totalScore += (score ?? 0) * sv.credit
       totalCredit += sv.credit
     })
 
-    if (totalCredit === 0) return { tbc: 0, isPassed: false }
+    if (totalCredit === 0) {
+      // Không có môn tính TBC (toàn môn điều kiện / miễn) → đạt hết các môn là Đạt
+      return {
+        tbc: null as number | null,
+        isPassed: subjectVersions.length > 0 && !hasFailedSubject,
+      }
+    }
 
     const tbc = totalScore / totalCredit
     const threshold = selectedCertificate?.scoreThreshold ?? 5
     const isPassed = tbc >= threshold && !hasFailedSubject
-    return { tbc, isPassed }
+    return { tbc: tbc as number | null, isPassed }
   }
 
   const handleSearch = () => {
@@ -139,8 +333,7 @@ export default function AutoCheckCertificate() {
 
     const passedStudentsToApprove = targetStudents.filter((s) => {
       const { isPassed } = getStudentResult(s)
-      const alreadyHas = s.archivedCertificate && s.archivedCertificate.length > 0
-      return isPassed && !alreadyHas
+      return isPassed && !getArchivedStatus(s)
     })
 
     if (passedStudentsToApprove.length === 0) {
@@ -159,7 +352,7 @@ export default function AutoCheckCertificate() {
                 studentId: s.id,
                 certificateId: selectedCertificate!.id,
                 status: "APPROVED",
-                finalScore: tbc,
+                finalScore: tbc ?? 0,
               }
             }),
           })
@@ -238,21 +431,14 @@ export default function AutoCheckCertificate() {
         }
 
         selectedCertificate.subjectVersions?.forEach((sv) => {
-          const scoreRecord = record.subjectClassStudent?.find(
-            (s: any) => s.subjectVersionId === sv.id
-          )
-          const rawScore = scoreRecord?.manualFinalScore ?? scoreRecord?.finalScore
-          const score =
-            rawScore != null
-              ? typeof rawScore === "object" && typeof rawScore.toNumber === "function"
-                ? rawScore.toNumber()
-                : rawScore
-              : null
-          rowData[`sub_${sv.id}`] = score ?? ""
+          rowData[`sub_${sv.id}`] = formatSubjectCell(getSubjectResultOf(record, sv.id), "")
         })
 
-        if (record.archivedCertificate && record.archivedCertificate.length > 0) {
+        const archivedStatus = getArchivedStatus(record)
+        if (archivedStatus === "APPROVED") {
           rowData.result = "Đã cấp"
+        } else if (archivedStatus === "PENDING") {
+          rowData.result = "Chờ duyệt"
         } else {
           rowData.result = isPassed ? "Đạt" : "Không đạt"
         }
@@ -264,7 +450,12 @@ export default function AutoCheckCertificate() {
           name: "Times New Roman",
           bold: true,
           color: {
-            argb: rowData.result === "Đạt" || rowData.result === "Đã cấp" ? "FF008000" : "FFFF0000",
+            argb:
+              rowData.result === "Đạt" || rowData.result === "Đã cấp"
+                ? "FF008000"
+                : rowData.result === "Chờ duyệt"
+                  ? "FFFF8C00"
+                  : "FFFF0000",
           },
         }
       })
@@ -350,18 +541,7 @@ export default function AutoCheckCertificate() {
         align: "center" as const,
         width: 150,
         render: (_: any, record: any) => {
-          const scoreRecord = record.subjectClassStudent?.find(
-            (s: any) => s.subjectVersionId === sv.id
-          )
-
-          const rawScore = scoreRecord?.manualFinalScore ?? scoreRecord?.finalScore
-          const score =
-            rawScore != null
-              ? typeof rawScore === "object" && typeof rawScore.toNumber === "function"
-                ? rawScore.toNumber()
-                : rawScore
-              : null
-          return score ?? "-"
+          return formatSubjectCell(getSubjectResultOf(record, sv.id), "-")
         },
       })) || []
 
@@ -393,8 +573,12 @@ export default function AutoCheckCertificate() {
         align: "center" as const,
         width: 120,
         render: (_: any, record: any) => {
-          if (record.archivedCertificate && record.archivedCertificate.length > 0) {
+          const archivedStatus = getArchivedStatus(record)
+          if (archivedStatus === "APPROVED") {
             return <span className="text-blue-600 font-bold">Đã cấp</span>
+          }
+          if (archivedStatus === "PENDING") {
+            return <span className="text-orange-500 font-bold">Chờ duyệt</span>
           }
 
           const { isPassed } = getStudentResult(record)
@@ -408,7 +592,7 @@ export default function AutoCheckCertificate() {
     ]
 
     return [...baseCols, ...subjectCols, ...resultCols]
-  }, [selectedCertificate])
+  }, [selectedCertificate, curriculumRuleMap, selectedTrainingCourse])
 
   return (
     <div className=" bg-white rounded-md flex flex-col h-full">
@@ -466,14 +650,14 @@ export default function AutoCheckCertificate() {
             <Button
               type="primary"
               onClick={handleApprove}
-              disabled={!hasSearched || students.length === 0}
+              disabled={!hasSearched || students.length === 0 || isFetchingCurriculum}
             >
               Phê duyệt
             </Button>
             <Button
               type="primary"
               onClick={handleExport}
-              disabled={!hasSearched || students.length === 0}
+              disabled={!hasSearched || students.length === 0 || isFetchingCurriculum}
             >
               Xuất Excel
             </Button>
@@ -489,14 +673,13 @@ export default function AutoCheckCertificate() {
             selectedRowKeys,
             onChange: setSelectedRowKeys,
             getCheckboxProps: (record: any) => {
-              const alreadyHas = record.archivedCertificate && record.archivedCertificate.length > 0
               const { isPassed } = getStudentResult(record)
               return {
-                disabled: alreadyHas || !isPassed,
+                disabled: !!getArchivedStatus(record) || !isPassed,
               }
             },
           }}
-          loading={isFetching}
+          loading={isFetching || isFetchingCurriculum}
           pagination={{ defaultPageSize: 20, showSizeChanger: true }}
           bordered
         />

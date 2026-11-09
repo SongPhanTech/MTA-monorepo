@@ -82,7 +82,13 @@ export async function runGraduationCheck(input: {
       },
       outputStandard: {
         where: { deletedAt: null, active: true },
-        include: { certificates: true },
+        include: {
+          certificates: true,
+          outputStandardOnCurriculum: {
+            where: { deletedAt: null, active: true },
+            select: { curriculumVersionId: true, isRequired: true },
+          },
+        },
       },
     },
   })
@@ -251,18 +257,37 @@ export async function runGraduationCheck(input: {
 
     const reasons: string[] = []
 
-    if (session.outputStandard.length > 0) {
-      const lackOfOutputStandard = session.outputStandard.filter((standard) => {
-        if (standard.certificates.length === 0) return false
-        return standard.certificates.every((cert) => {
-          return !student.archivedCertificate.find((archived) => archived.certificateId === cert.id)
-        })
-      })
+    // Đợt xét có thể gắn nhiều chuẩn đầu ra: chỉ xét chuẩn gắn với CTĐT của SV (và bắt buộc).
+    // CTĐT không gắn chuẩn đầu ra nào trong đợt → bỏ qua điều kiện này.
+    const applicableOutputStandards = session.outputStandard.filter((standard) =>
+      standard.outputStandardOnCurriculum.some(
+        (link) => link.curriculumVersionId === curriculumVersion.id && link.isRequired
+      )
+    )
+
+    if (applicableOutputStandards.length > 0) {
+      // Chứng chỉ chỉ còn hiệu lực khi không có ngày hết hạn hoặc hết hạn từ ngày họp hội đồng trở đi
+      const isCertValid = (archived: (typeof student.archivedCertificate)[number]) =>
+        !archived.expiredDate || archived.expiredDate >= session.sessionDate
+
+      const lackOfOutputStandard: string[] = []
+      const expiredOutputStandard: string[] = []
+      for (const standard of applicableOutputStandards) {
+        if (standard.certificates.length === 0) continue
+        const certIds = new Set(standard.certificates.map((cert) => cert.id))
+        const owned = student.archivedCertificate.filter((archived) =>
+          certIds.has(archived.certificateId)
+        )
+        if (owned.some(isCertValid)) continue
+        if (owned.length > 0) expiredOutputStandard.push(standard.name)
+        else lackOfOutputStandard.push(standard.name)
+      }
 
       if (lackOfOutputStandard.length > 0) {
-        reasons.push(
-          `Chưa đạt chuẩn đầu ra: ${lackOfOutputStandard.map((standard) => standard.name).join(", ")}`
-        )
+        reasons.push(`Chưa đạt chuẩn đầu ra: ${lackOfOutputStandard.join(", ")}`)
+      }
+      if (expiredOutputStandard.length > 0) {
+        reasons.push(`Chứng chỉ chuẩn đầu ra đã hết hạn: ${expiredOutputStandard.join(", ")}`)
       }
     }
 
