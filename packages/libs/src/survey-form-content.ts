@@ -1,4 +1,16 @@
-export type SurveyFormFieldBindKey = "lecturerName" | "subjectClass" | "organization" | "semester"
+export type SurveyFormFieldBindKey =
+  | "lecturerName"
+  | "subjectClass"
+  | "organization"
+  | "semester"
+  | "trainingMajor"
+  | "faculty"
+  | "department"
+  | "fixedClass"
+  | "trainingCourse"
+  | "trainingObjectType"
+  | "surveyDate"
+  | "schoolYear"
 
 export type SurveyFormInfoField = {
   label: string
@@ -29,12 +41,12 @@ export const LECTURER_SURVEY_PRINT_FORM_CONTENT: SurveyFormDisplayContent = {
   infoFields: [
     { label: "Tên giảng viên: ", bindKey: "lecturerName" },
     { label: "Tên học phần: ", bindKey: "subjectClass" },
-    { label: "Khoa (Viện): ", bindKey: "organization" },
-    { label: "Bộ môn: ", span: 6 },
-    { label: "Lớp: ", span: 6 },
-    { label: "Ngày lấy ý kiến: " },
+    { label: "Khoa (Viện): ", bindKey: "faculty" },
+    { label: "Bộ môn: ", span: 6, bindKey: "department" },
+    { label: "Lớp: ", span: 6, bindKey: "fixedClass" },
+    { label: "Ngày lấy ý kiến: ", bindKey: "surveyDate" },
     { label: "Học kỳ: ", bindKey: "semester" },
-    { label: "Năm học: " },
+    { label: "Năm học: ", bindKey: "schoolYear" },
   ],
   footerNotes: ["Xin trân trọng cảm ơn Anh/Chị đã dành thời gian phản hồi!"],
 }
@@ -48,11 +60,11 @@ export const DEFAULT_SURVEY_PRINT_FORM_CONTENT: SurveyFormDisplayContent = {
   ],
   infoTitle: "I. THÔNG TIN CHUNG",
   infoFields: [
-    { label: "Chuyên ngành: " },
-    { label: "Khoa (Viện): " },
-    { label: "Lớp: " },
-    { label: "Khoá: " },
-    { label: "Đối tượng đào tạo: ", fullWidth: true, span: 24 },
+    { label: "Chuyên ngành: ", bindKey: "trainingMajor" },
+    { label: "Khoa (Viện): ", bindKey: "faculty" },
+    { label: "Lớp: ", bindKey: "fixedClass" },
+    { label: "Khoá: ", bindKey: "trainingCourse" },
+    { label: "Đối tượng đào tạo: ", fullWidth: true, span: 24, bindKey: "trainingObjectType" },
   ],
   contentTitle: "II. NỘI DUNG ĐÁNH GIÁ",
   footerNotes: [
@@ -65,6 +77,14 @@ const BIND_KEYS: SurveyFormFieldBindKey[] = [
   "subjectClass",
   "organization",
   "semester",
+  "trainingMajor",
+  "faculty",
+  "department",
+  "fixedClass",
+  "trainingCourse",
+  "trainingObjectType",
+  "surveyDate",
+  "schoolYear",
 ]
 
 function isRecord(value: unknown): value is Record<string, unknown> {

@@ -2314,6 +2314,8 @@ model DM_DonVi {
   sTKBUCode             String?
   sTenVietTat           String?
   sParentId             String?                @db.Uuid()
+  parent                DM_DonVi?              @relation("DM_DonViParent", fields: [sParentId], references: [Id])
+  children              DM_DonVi[]             @relation("DM_DonViParent")
   sTruongDonVi          String?                @db.Uuid()
   sChucNangNhiemVu      String?
   sDiaChi               String?

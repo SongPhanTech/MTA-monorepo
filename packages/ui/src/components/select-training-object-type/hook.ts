@@ -12,9 +12,27 @@ import { selectFixedClass } from "../select-fixed-class"
 import { selectTrainingCourse } from "../select-training-course"
 import { selectTrainingMajor } from "../select-training-major"
 
+declare global {
+  interface Window {
+    contextData?: { userId?: string }
+  }
+}
+
 export type TrainingObjectTypeState = {
   selectedTrainingObjectTypeId?: string
 }
+
+const TRAINING_OBJECT_TYPE_SELECT = {
+  id: true,
+  name: true,
+  code: true,
+  active: true,
+  type: true,
+} satisfies Prisma.TrainingObjectTypeSelect
+
+type StudentTrainingObjectType = Prisma.TrainingObjectTypeGetPayload<{
+  select: typeof TRAINING_OBJECT_TYPE_SELECT
+}>
 
 export const trainingObjectTypeStore = new Store<TrainingObjectTypeState>({
   selectedTrainingObjectTypeId: undefined,
@@ -72,32 +90,72 @@ export function useFindManyTrainingObjectTypePermission<
       subsystem?: string
     }
 ) {
-  const { data: session } = useSession()
+  const { data: session, status: sessionStatus } = useSession()
   const profileId =
     session?.sDM_NhanVienId ||
     (typeof process !== "undefined" ? process.env.NEXT_PUBLIC_MOCK_USER_PROFILE_ID : undefined)
 
   // Truy vấn quá trình học tập của tài khoản (nếu là học viên/sinh viên)
-  const { data: userProfile } = useFindUniqueUserProfile(
+  const { data: userProfile, isLoading: isUserProfileLoading } = useFindUniqueUserProfile(
     {
       where: { id: profileId! },
       select: {
         bLaHocVien: true,
         bLaSinhVien: true,
+        bLaCanBoNhanVien: true,
         educationAndTraining: {
+          where: {
+            deletedAt: null,
+          },
           select: {
             fixedClass: {
               select: {
                 trainingCourse: {
                   select: {
                     trainingObjectType: {
+                      select: TRAINING_OBJECT_TYPE_SELECT,
+                    },
+                  },
+                },
+                curriculumVersion: {
+                  select: {
+                    trainingObjectType: {
+                      select: TRAINING_OBJECT_TYPE_SELECT,
+                    },
+                    trainingCourse: {
                       select: {
-                        id: true,
-                        name: true,
-                        code: true,
-                        active: true,
-                        type: true,
+                        trainingObjectType: {
+                          select: TRAINING_OBJECT_TYPE_SELECT,
+                        },
                       },
+                    },
+                  },
+                },
+              },
+            },
+            curriculumVersion: {
+              select: {
+                trainingObjectType: {
+                  select: TRAINING_OBJECT_TYPE_SELECT,
+                },
+                trainingCourse: {
+                  select: {
+                    trainingObjectType: {
+                      select: TRAINING_OBJECT_TYPE_SELECT,
+                    },
+                  },
+                },
+              },
+            },
+            curriculumVersionParallel: {
+              select: {
+                trainingObjectType: {
+                  select: TRAINING_OBJECT_TYPE_SELECT,
+                },
+                trainingCourse: {
+                  select: {
+                    trainingObjectType: {
+                      select: TRAINING_OBJECT_TYPE_SELECT,
                     },
                   },
                 },
@@ -114,55 +172,109 @@ export function useFindManyTrainingObjectTypePermission<
 
   const studentTrainingObjectTypes = useMemo(() => {
     if (!userProfile?.educationAndTraining?.length) return []
-    const map = new Map<string, any>()
+    const map = new Map<string, StudentTrainingObjectType>()
     userProfile.educationAndTraining.forEach((et) => {
-      const tot = et.fixedClass?.trainingCourse?.trainingObjectType
-      if (tot?.id && tot.active !== false) {
-        map.set(tot.id, tot)
+      const candidates = [
+        et.fixedClass?.trainingCourse?.trainingObjectType,
+        et.fixedClass?.curriculumVersion?.trainingObjectType,
+        et.fixedClass?.curriculumVersion?.trainingCourse?.trainingObjectType,
+        et.curriculumVersion?.trainingObjectType,
+        et.curriculumVersion?.trainingCourse?.trainingObjectType,
+        et.curriculumVersionParallel?.trainingObjectType,
+        et.curriculumVersionParallel?.trainingCourse?.trainingObjectType,
+      ]
+      for (const tot of candidates) {
+        if (tot?.id && tot.active !== false) {
+          map.set(tot.id, tot)
+        }
       }
     })
     return Array.from(map.values())
   }, [userProfile])
 
   const isStudent = useMemo(() => {
+    // Cán bộ nhân viên quản lý/quản trị không bị giới hạn đối tượng đào tạo như học viên
+    if (userProfile?.bLaCanBoNhanVien) return false
+
     return Boolean(
-      userProfile?.bLaHocVien ||
-      userProfile?.bLaSinhVien ||
-      studentTrainingObjectTypes.length > 0
+      userProfile?.bLaHocVien || userProfile?.bLaSinhVien || studentTrainingObjectTypes.length > 0
     )
   }, [userProfile, studentTrainingObjectTypes])
 
-  const { data: permission } = useGetPermission("lms", window?.contextData?.userId ?? "")
+  const { data: permission } = useGetPermission(
+    "lms",
+    (typeof window !== "undefined" ? window.contextData?.userId : "") ?? ""
+  )
 
   const permissions = useMemo(() => {
     if (permission?.status !== 200) return []
-    return (permission?.data as any)?.Roles || []
+    return permission.data.Roles ?? []
   }, [permission])
 
-  const res = useFindManyTrainingObjectType(
-    {
-      where: {
-        active: true,
-        ...(isStudent && studentTrainingObjectTypes.length > 0
-          ? {
-              id: { in: studentTrainingObjectTypes.map((item) => item.id) },
-            }
-          : isDevEnvironment() || options?.subsystem === "ems"
-            ? {}
-            : {
-                vaiTro: {
-                  hasSome: permissions.map((item: any) => item.sRoleId).filter(Boolean),
-                },
-              }),
+  const whereCondition = useMemo((): Prisma.TrainingObjectTypeWhereInput => {
+    const baseWhere: Prisma.TrainingObjectTypeWhereInput = {
+      active: true,
+      ...args?.where,
+    }
+
+    if (isStudent) {
+      if (studentTrainingObjectTypes.length > 0) {
+        return {
+          ...baseWhere,
+          id: { in: studentTrainingObjectTypes.map((item) => item.id) },
+        }
+      }
+      if (userProfile?.bLaHocVien && !userProfile?.bLaSinhVien) {
+        return {
+          ...baseWhere,
+          type: $Enums.TrainingObjectTypes.MILITARY,
+        }
+      }
+      if (userProfile?.bLaSinhVien && !userProfile?.bLaHocVien) {
+        return {
+          ...baseWhere,
+          type: $Enums.TrainingObjectTypes.CIVILIAN,
+        }
+      }
+      return {
+        ...baseWhere,
+        id: { in: [] },
+      }
+    }
+
+    if (isDevEnvironment() || options?.subsystem === "ems") {
+      return baseWhere
+    }
+
+    return {
+      ...baseWhere,
+      vaiTro: {
+        hasSome: permissions.map((item) => item.sRoleId).filter((id): id is string => Boolean(id)),
       },
-      orderBy: { name: "asc" },
-      ...(args as any),
-    },
-    {
-      ...options,
-      enabled: options?.enabled !== false && (!profileId || userProfile !== undefined),
-    } as any
-  )
+    }
+  }, [
+    isStudent,
+    studentTrainingObjectTypes,
+    userProfile,
+    permissions,
+    options?.subsystem,
+    args?.where,
+  ])
+
+  const isQueryReady =
+    sessionStatus !== "loading" &&
+    (!profileId || (!isUserProfileLoading && userProfile !== undefined))
+
+  const queryArgs = {
+    ...args,
+    where: whereCondition,
+    orderBy: { name: "asc" },
+  } satisfies Prisma.TrainingObjectTypeFindManyArgs
+
+  const res = useFindManyTrainingObjectType(queryArgs, {
+    ...options,
+    enabled: options?.enabled !== false && isQueryReady,
+  })
 
   return res
 }

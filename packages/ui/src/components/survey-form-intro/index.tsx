@@ -2,8 +2,56 @@ import {
   parseSurveyFormDisplayContent,
   type SurveyFormDisplayContent,
   type SurveyFormFieldBindKey,
+  type SurveyFormInfoField,
 } from "@workspace/libs/survey-form-content"
 import { Col, Row } from "antd"
+import dayjs from "dayjs"
+
+export type SurveyFormStudentInfo = {
+  majorName?: string | null
+  facultyName?: string | null
+  className?: string | null
+  courseName?: string | null
+  trainingObjectTypeName?: string | null
+}
+
+type FixedClassStudentInfoSource = {
+  name?: string | null
+  managementOrganization?: { sTen?: string | null } | null
+  trainingCourse?: {
+    name?: string | null
+    trainingObjectType?: { name?: string | null } | null
+  } | null
+  curriculumVersion?: {
+    trainingObjectType?: { name?: string | null } | null
+    curriculum?: {
+      trainingMajor?: {
+        name?: string | null
+        organization?: { sTen?: string | null } | null
+      } | null
+    } | null
+  } | null
+}
+
+export function mapStudentInfo(
+  fixedClass?: FixedClassStudentInfoSource | null
+): SurveyFormStudentInfo | null {
+  if (!fixedClass) return null
+
+  return {
+    majorName: fixedClass.curriculumVersion?.curriculum?.trainingMajor?.name ?? null,
+    facultyName:
+      fixedClass.curriculumVersion?.curriculum?.trainingMajor?.organization?.sTen ??
+      fixedClass.managementOrganization?.sTen ??
+      null,
+    className: fixedClass.name ?? null,
+    courseName: fixedClass.trainingCourse?.name ?? null,
+    trainingObjectTypeName:
+      fixedClass.curriculumVersion?.trainingObjectType?.name ??
+      fixedClass.trainingCourse?.trainingObjectType?.name ??
+      null,
+  }
+}
 
 export type SurveyFormIntroData = {
   formContent?: unknown
@@ -11,14 +59,22 @@ export type SurveyFormIntroData = {
     firstName?: string | null
     lastName?: string | null
     organization?: string | null
+    faculty?: string | null
+    department?: string | null
   } | null
+  studentInfo?: SurveyFormStudentInfo | null
   subjectClass?: {
     code?: string | null
     name?: string | null
   } | null
   semester?: {
     name?: string | null
+    schoolYear?: {
+      name?: string | null
+    } | null
   } | null
+  surveyDate?: string | null
+  schoolYear?: string | null
 }
 
 type SurveyFormIntroProps = {
@@ -30,20 +86,83 @@ type SurveyFormIntroProps = {
 const joinName = (...parts: (string | null | undefined)[]) =>
   parts.filter((part) => part && part.trim()).join(" ")
 
-function fieldValue(
-  bindKey: SurveyFormFieldBindKey | undefined,
-  survey?: SurveyFormIntroData | null
-) {
-  if (!bindKey || !survey) return ""
+function extractSchoolYear(text?: string | null) {
+  if (!text) return ""
+  const match = text.match(/\d{4}\s*[-–]\s*\d{4}/)
+  return match ? match[0].replace(/\s+/g, " ") : ""
+}
+
+function inferBindKeyFromLabel(label: string): SurveyFormFieldBindKey | undefined {
+  const lower = label.normalize("NFC").toLowerCase()
+  // "Khóa" (course) và "Khoa" (faculty) đều thành "khoa" sau khi bỏ dấu.
+  // Phân biệt chúng trước khi normalize NFD để form cấu hình tùy chỉnh bind đúng dữ liệu.
+  if (/kh(oá|óa)/.test(lower)) return "trainingCourse"
+
+  const clean = lower
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]/g, "")
+
+  if (clean.includes("chuyennganh")) return "trainingMajor"
+  if (clean.includes("bomon")) return "department"
+  if (clean.includes("khoavien") || clean === "khoa" || clean === "vien") return "faculty"
+  if (clean === "lop") return "fixedClass"
+  if (clean.includes("khoahoc")) return "trainingCourse"
+  if (clean.includes("doituongdaotao") || clean.includes("doituong")) return "trainingObjectType"
+  if (clean.includes("namhoc")) return "schoolYear"
+  if (
+    clean.includes("ngaylayykin") ||
+    clean.includes("ngaylayykien") ||
+    clean.includes("ngaykhaosat")
+  )
+    return "surveyDate"
+  if (clean.includes("giangvien")) return "lecturerName"
+  if (clean.includes("hocphan") || clean.includes("monhoc")) return "subjectClass"
+  if (clean.includes("hocky")) return "semester"
+  if (clean.includes("donvi") || clean.includes("tochuc")) return "organization"
+  return undefined
+}
+
+function fieldValue(field: SurveyFormInfoField, survey?: SurveyFormIntroData | null) {
+  if (!survey) return ""
+  const bindKey = field.bindKey || inferBindKeyFromLabel(field.label)
+  if (!bindKey) return ""
+
   switch (bindKey) {
     case "lecturerName":
       return joinName(survey.lectureInfo?.lastName, survey.lectureInfo?.firstName)
     case "subjectClass":
       return joinName(survey.subjectClass?.code, survey.subjectClass?.name)
     case "organization":
-      return survey.lectureInfo?.organization || ""
+      return (
+        survey.lectureInfo?.faculty ||
+        survey.lectureInfo?.organization ||
+        survey.studentInfo?.facultyName ||
+        ""
+      )
+    case "faculty":
+      return survey.lectureInfo?.faculty || survey.studentInfo?.facultyName || ""
+    case "department":
+      return survey.lectureInfo?.department || ""
     case "semester":
       return survey.semester?.name || ""
+    case "schoolYear":
+      return (
+        survey.schoolYear ||
+        survey.semester?.schoolYear?.name ||
+        extractSchoolYear(survey.semester?.name) ||
+        ""
+      )
+    case "surveyDate":
+      return survey.surveyDate || dayjs().format("DD/MM/YYYY")
+    case "trainingMajor":
+      return survey.studentInfo?.majorName || ""
+    case "fixedClass":
+      return survey.studentInfo?.className || ""
+    case "trainingCourse":
+      return survey.studentInfo?.courseName || ""
+    case "trainingObjectType":
+      return survey.studentInfo?.trainingObjectTypeName || ""
     default:
       return ""
   }
@@ -61,7 +180,7 @@ export function SurveyFormIntro({ survey, fallback, className }: SurveyFormIntro
     <Col span={fieldSpan(field)} key={`${field.label}-${index}`}>
       <div className="flex items-end">
         <div className="!w-fit whitespace-nowrap">{field.label}</div>
-        <span>{fieldValue(field.bindKey, survey)}</span>
+        <span>{fieldValue(field, survey)}</span>
       </div>
     </Col>
   ))
