@@ -502,10 +502,9 @@ export function computeGraduationSubjectScores(input: {
   ): ResolvedGraduationScore | null => {
     const [first] = sources
     if (!first) return null
-
-    const conditional = isConditionalSubject(target)
-    const hasExempted = sources.some((item) => item.exempted)
-    if (hasExempted && !conditional) return null
+    // Không hỗ trợ thay thế bằng bản ghi miễn học (thực tế miễn học của môn ngoài CTĐT
+    // không vào subjectScoresMap) — chặn tường minh để không vô tình dùng điểm 0.
+    if (sources.some((item) => item.exempted)) return null
 
     const subjectVersion = {
       id: target.subjectId,
@@ -515,23 +514,6 @@ export function computeGraduationSubjectScores(input: {
       subjectId: target.subject.subjectId ?? first.subjectVersion.subjectId,
     }
     const sourceScoreIds = sources.map((item) => item.id)
-
-    if (hasExempted) {
-      return {
-        id: first.id,
-        subjectVersionId: target.subjectId,
-        attendanceScore: null,
-        midtermScore: null,
-        examScore: null,
-        scoreBase10: new Decimal(0),
-        scoreBase4: new Decimal(0),
-        letter: null,
-        canImprove: false,
-        exempted: true,
-        sourceScoreIds,
-        subjectVersion,
-      }
-    }
 
     const single = sources.length === 1
     const totalCredit = sources.reduce((sum, item) => sum + item.subjectVersion.credit, 0)
@@ -629,19 +611,19 @@ export function computeGraduationSubjectScores(input: {
       const outsideScores = otherSideResult
         .filter((item) => !curriculumVersionIds.has(item.subjectId))
         .map((item) => item.score as ResolvedGraduationScore)
+      // Quy tắc thay điểm bằng môn ngoài CTĐT:
+      // - 1:1 và N:1 (thiếu đúng 1 môn CTĐT): môn đó lấy điểm môn ngoài CTĐT
+      //   (nhiều môn → TB có trọng số theo TC), tính theo TC của môn CTĐT.
+      // - 1:N / N:M (thiếu từ 2 môn CTĐT trở lên): không chia được điểm/tín chỉ một cách
+      //   rõ ràng → chỉ ghi nhận miễn (processedSubjects), không cộng TC, không vào GPA.
       const replacements = new Map<string, ResolvedGraduationScore>()
-      if (outsideScores.length) {
-        let allPassed = true
-        for (const item of missing) {
-          const target = curriculumSubjectById.get(item.subjectId)
-          const replacement = target ? buildReplacementScore(target, outsideScores) : null
-          if (!replacement) {
-            allPassed = false
-            break
-          }
-          replacements.set(item.subjectId, replacement)
-        }
-        if (!allPassed) continue
+      const onlyMissing = missing.length === 1 ? missing[0] : undefined
+      if (outsideScores.length && onlyMissing) {
+        const target = curriculumSubjectById.get(onlyMissing.subjectId)
+        const replacement = target ? buildReplacementScore(target, outsideScores) : null
+        // điểm môn ngoài CTĐT không đạt theo quy tắc của môn CTĐT → không áp dụng nhóm
+        if (!replacement) continue
+        replacements.set(onlyMissing.subjectId, replacement)
       }
 
       hasEquivalencyGroup = true
@@ -1076,7 +1058,7 @@ export async function buildGraduationTranscript(
         type: null,
         score,
         usedForGpa: usedScoreIds.has(score.id),
-        passed: resolved.subjectScoresMap.get(score.subjectVersionId)?.id === score.id,
+        passed: resolved.subjectScoresMap.has(score.subjectVersionId),
       })
     )
 
