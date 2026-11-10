@@ -174,6 +174,7 @@ export * from './GraduationRankDowngradeRule.schema';
 export * from './GraduationRankDowngradeCondition.schema';
 export * from './RankingCondition.schema';
 export * from './DiplomaVerificationApplication.schema';
+export * from './CriteriaDefinition.schema';
 export * from './TrainingScoreSession.schema';
 export * from './StudentTrainingScore.schema';
 export * from './SemesterTrainingScore.schema';

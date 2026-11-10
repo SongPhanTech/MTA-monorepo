@@ -35,6 +35,7 @@ import ModalPrintPhoiBang from "./modal-print-phoi-bang"
 import ModalPrintDecision from "./modal-print-quyet-dinh-hoi-dong"
 import ModalPrintSupervisorGuide from "./modal-print-quyet-dinh-huong-dan"
 import ModalPrintBangDiemDuKhoa from "./modal-print-bang-diem-du-khoa"
+import ModalCriteriaDefinition from "./modal-danh-muc-tieu-chi"
 import ModalGraduationCriteria from "./modal-tieu-chi-xet-tn"
 import ModalTraCuuVanBang from "./modal-tra-cuu-van-bang"
 import ModalVanBang from "./modal-van-bang"
@@ -92,6 +93,7 @@ import PutCurriculumVersion from "./put-phien-ban-danh-muc-ctdt"
 import PutVersionSubjectModal from "./put-phien-ban-mon-hoc"
 import PutRoomModal from "./put-phong"
 import PutRankDowngradeCondition from "./put-quy-tac-ha-bac"
+import PutCriteriaDefinition from "./put-tieu-chi-tu-dinh-nghia"
 import PutDecision from "./put-quyet-dinh-do-an"
 import PutGraduationDecision from "./put-quyet-dinh-tot-nghiep"
 import PutStudentAcademicDecision from "./put-quyet-dinh-xu-ly-hoc-tap"
@@ -200,6 +202,8 @@ export {
   ModalGraduationCriteria,
   PutRankingCondition,
   PutRankDowngradeCondition,
+  ModalCriteriaDefinition,
+  PutCriteriaDefinition,
   PutAcademicWarning,
   PutDiplomaType,
   PutThesisProject,

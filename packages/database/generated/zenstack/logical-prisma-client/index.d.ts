@@ -1789,6 +1789,20 @@ export type RankingCondition = $Result.DefaultSelection<Prisma.$RankingCondition
  */
 export type DiplomaVerificationApplication = $Result.DefaultSelection<Prisma.$DiplomaVerificationApplicationPayload>;
 /**
+ * Model CriteriaDefinition
+ * Danh mục tiêu chí đánh giá, dùng chung cho các bộ quy tắc (hiện áp dụng cho quy tắc hạ bậc tốt nghiệp).
+ * - SYSTEM: systemField != null, calcType == null (27 dòng tạo sẵn bởi migration)
+ * - CUSTOM: systemField == null, calcType != null (người dùng tạo trên giao diện)
+ * Ràng buộc CHECK "CriteriaDefinition_source_chk" ở DB đảm bảo điều này.
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type CriteriaDefinition = $Result.DefaultSelection<Prisma.$CriteriaDefinitionPayload>;
+/**
  * Model TrainingScoreSession
  * @
  * @allow ('all', auth() != null)
@@ -3071,6 +3085,7 @@ export type GraduationSessionStatus = $Enums.GraduationSessionStatus;
 export type ApplicationStatus = $Enums.ApplicationStatus;
 export type RankingContext = $Enums.RankingContext;
 export type DiplomaVerificationStatus = $Enums.DiplomaVerificationStatus;
+export type CriteriaSource = $Enums.CriteriaSource;
 export type TrainingScoreStatus = $Enums.TrainingScoreStatus;
 export type StudentTrainingType = $Enums.StudentTrainingType;
 export type CriteriaField = $Enums.CriteriaField;
@@ -4666,6 +4681,15 @@ export class PrismaClient<ClientOptions extends Prisma.PrismaClientOptions = Pri
      */
     get diplomaVerificationApplication(): Prisma.DiplomaVerificationApplicationDelegate<ExtArgs, ClientOptions>;
     /**
+     * `prisma.criteriaDefinition`: Exposes CRUD operations for the **CriteriaDefinition** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more CriteriaDefinitions
+     * const criteriaDefinitions = await prisma.criteriaDefinition.findMany()
+     * ```
+     */
+    get criteriaDefinition(): Prisma.CriteriaDefinitionDelegate<ExtArgs, ClientOptions>;
+    /**
      * `prisma.trainingScoreSession`: Exposes CRUD operations for the **TrainingScoreSession** model.
      * Example usage:
      * ```ts
@@ -5850,6 +5874,7 @@ export const GraduationSessionStatus: typeof $Enums.GraduationSessionStatus;
 export const ApplicationStatus: typeof $Enums.ApplicationStatus;
 export const RankingContext: typeof $Enums.RankingContext;
 export const DiplomaVerificationStatus: typeof $Enums.DiplomaVerificationStatus;
+export const CriteriaSource: typeof $Enums.CriteriaSource;
 export const TrainingScoreStatus: typeof $Enums.TrainingScoreStatus;
 export const StudentTrainingType: typeof $Enums.StudentTrainingType;
 export const CriteriaField: typeof $Enums.CriteriaField;
@@ -6186,6 +6211,11 @@ export namespace $Enums {
         REJECTED: 'REJECTED'
     };
     export type DiplomaVerificationStatus = (typeof DiplomaVerificationStatus)[keyof typeof DiplomaVerificationStatus];
+    export const CriteriaSource: {
+        SYSTEM: 'SYSTEM',
+        CUSTOM: 'CUSTOM'
+    };
+    export type CriteriaSource = (typeof CriteriaSource)[keyof typeof CriteriaSource];
     export const TrainingScoreStatus: {
         PENDING: 'PENDING',
         APPROVED: 'APPROVED',
@@ -6753,6 +6783,7 @@ export namespace Prisma {
         GraduationRankDowngradeCondition: 'GraduationRankDowngradeCondition',
         RankingCondition: 'RankingCondition',
         DiplomaVerificationApplication: 'DiplomaVerificationApplication',
+        CriteriaDefinition: 'CriteriaDefinition',
         TrainingScoreSession: 'TrainingScoreSession',
         StudentTrainingScore: 'StudentTrainingScore',
         SemesterTrainingScore: 'SemesterTrainingScore',
@@ -10746,6 +10777,7 @@ export namespace Prisma {
         sThietBiTao: 'sThietBiTao',
         sThietBiSua: 'sThietBiSua',
         downgradeRuleId: 'downgradeRuleId',
+        criteriaId: 'criteriaId',
         field: 'field',
         operator: 'operator',
         invert: 'invert',
@@ -10806,6 +10838,27 @@ export namespace Prisma {
         classification: 'classification',
         status: 'status',
         studentId: 'studentId'
+    };
+    export const CriteriaDefinitionScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        createdBy: 'createdBy',
+        sNguoiTao: 'sNguoiTao',
+        sNguoiSua: 'sNguoiSua',
+        dNgayTao: 'dNgayTao',
+        dNgaySua: 'dNgaySua',
+        sThietBiTao: 'sThietBiTao',
+        sThietBiSua: 'sThietBiSua',
+        name: 'name',
+        source: 'source',
+        systemField: 'systemField',
+        calcType: 'calcType',
+        params: 'params'
     };
     export const TrainingScoreSessionScalarFieldEnum: {
         id: 'id',
@@ -13243,6 +13296,9 @@ export namespace Prisma {
         DbNull: typeof DbNull,
         JsonNull: typeof JsonNull
     };
+    export const JsonNullValueInput: {
+        JsonNull: typeof JsonNull
+    };
     export const QueryMode: {
         default: 'default',
         insensitive: 'insensitive'
@@ -15600,6 +15656,7 @@ export namespace Prisma {
         sThietBiTao: 'sThietBiTao',
         sThietBiSua: 'sThietBiSua',
         downgradeRuleId: 'downgradeRuleId',
+        criteriaId: 'criteriaId',
         tuple: 'tuple'
     };
     export const RankingConditionOrderByRelevanceFieldEnum: {
@@ -15635,6 +15692,18 @@ export namespace Prisma {
         trainingForm: 'trainingForm',
         classification: 'classification',
         studentId: 'studentId'
+    };
+    export const CriteriaDefinitionOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        createdBy: 'createdBy',
+        sNguoiTao: 'sNguoiTao',
+        sNguoiSua: 'sNguoiSua',
+        sThietBiTao: 'sThietBiTao',
+        sThietBiSua: 'sThietBiSua',
+        name: 'name',
+        calcType: 'calcType'
     };
     export const TrainingScoreSessionOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -55162,6 +55231,7 @@ export namespace Prisma {
         subjectVersion<T extends Subject$subjectVersionArgs<ExtArgs> = {}>(args?: Subset<T, Subject$subjectVersionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         certificateOnSubject<T extends Subject$certificateOnSubjectArgs<ExtArgs> = {}>(args?: Subset<T, Subject$certificateOnSubjectArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateOnSubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         awardOnSubject<T extends Subject$awardOnSubjectArgs<ExtArgs> = {}>(args?: Subset<T, Subject$awardOnSubjectArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AwardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        criteriaDefinitions<T extends Subject$criteriaDefinitionsArgs<ExtArgs> = {}>(args?: Subset<T, Subject$criteriaDefinitionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CriteriaDefinitionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -75865,6 +75935,7 @@ export namespace Prisma {
         parent<T extends TrainingBlock$parentArgs<ExtArgs> = {}>(args?: Subset<T, TrainingBlock$parentArgs<ExtArgs>>): Prisma__TrainingBlockClient<$Result.GetResult<Prisma.$TrainingBlockPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         children<T extends TrainingBlock$childrenArgs<ExtArgs> = {}>(args?: Subset<T, TrainingBlock$childrenArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         curriculumVersions<T extends TrainingBlock$curriculumVersionsArgs<ExtArgs> = {}>(args?: Subset<T, TrainingBlock$curriculumVersionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingBlockOnCurriculumVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        criteriaDefinitions<T extends TrainingBlock$criteriaDefinitionsArgs<ExtArgs> = {}>(args?: Subset<T, TrainingBlock$criteriaDefinitionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CriteriaDefinitionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -83756,6 +83827,7 @@ export namespace Prisma {
     export interface Prisma__GraduationRankDowngradeConditionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         downgradeRule<T extends GraduationRankDowngradeRuleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GraduationRankDowngradeRuleDefaultArgs<ExtArgs>>): Prisma__GraduationRankDowngradeRuleClient<$Result.GetResult<Prisma.$GraduationRankDowngradeRulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        criteria<T extends CriteriaDefinitionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CriteriaDefinitionDefaultArgs<ExtArgs>>): Prisma__CriteriaDefinitionClient<$Result.GetResult<Prisma.$CriteriaDefinitionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         applicationDowngraded<T extends GraduationRankDowngradeCondition$applicationDowngradedArgs<ExtArgs> = {}>(args?: Subset<T, GraduationRankDowngradeCondition$applicationDowngradedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationDowngradedPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -83798,6 +83870,7 @@ export namespace Prisma {
         readonly sThietBiTao: FieldRef<"GraduationRankDowngradeCondition", 'String'>;
         readonly sThietBiSua: FieldRef<"GraduationRankDowngradeCondition", 'String'>;
         readonly downgradeRuleId: FieldRef<"GraduationRankDowngradeCondition", 'String'>;
+        readonly criteriaId: FieldRef<"GraduationRankDowngradeCondition", 'String'>;
         readonly field: FieldRef<"GraduationRankDowngradeCondition", 'CriteriaField'>;
         readonly operator: FieldRef<"GraduationRankDowngradeCondition", 'CriteriaOperator'>;
         readonly invert: FieldRef<"GraduationRankDowngradeCondition", 'Boolean'>;
@@ -84602,6 +84675,399 @@ export namespace Prisma {
         readonly classification: FieldRef<"DiplomaVerificationApplication", 'String'>;
         readonly status: FieldRef<"DiplomaVerificationApplication", 'DiplomaVerificationStatus'>;
         readonly studentId: FieldRef<"DiplomaVerificationApplication", 'String'>;
+    }
+
+    export interface CriteriaDefinitionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CriteriaDefinition'], meta: { name: 'CriteriaDefinition' } };
+        /**
+         * Fields of the CriteriaDefinition model
+         */
+        readonly fields: CriteriaDefinitionFieldRefs;
+        /**
+         * Find zero or one CriteriaDefinition that matches the filter.
+         * @param {CriteriaDefinitionFindUniqueArgs} args - Arguments to find a CriteriaDefinition
+         * @example
+         * // Get one CriteriaDefinition
+         * const criteriaDefinition = await prisma.criteriaDefinition.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends CriteriaDefinitionFindUniqueArgs>(args: SelectSubset<T, CriteriaDefinitionFindUniqueArgs<ExtArgs>>): Prisma__CriteriaDefinitionClient<$Result.GetResult<Prisma.$CriteriaDefinitionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one CriteriaDefinition that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {CriteriaDefinitionFindUniqueOrThrowArgs} args - Arguments to find a CriteriaDefinition
+         * @example
+         * // Get one CriteriaDefinition
+         * const criteriaDefinition = await prisma.criteriaDefinition.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends CriteriaDefinitionFindUniqueOrThrowArgs>(args: SelectSubset<T, CriteriaDefinitionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CriteriaDefinitionClient<$Result.GetResult<Prisma.$CriteriaDefinitionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first CriteriaDefinition that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CriteriaDefinitionFindFirstArgs} args - Arguments to find a CriteriaDefinition
+         * @example
+         * // Get one CriteriaDefinition
+         * const criteriaDefinition = await prisma.criteriaDefinition.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends CriteriaDefinitionFindFirstArgs>(args?: SelectSubset<T, CriteriaDefinitionFindFirstArgs<ExtArgs>>): Prisma__CriteriaDefinitionClient<$Result.GetResult<Prisma.$CriteriaDefinitionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first CriteriaDefinition that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CriteriaDefinitionFindFirstOrThrowArgs} args - Arguments to find a CriteriaDefinition
+         * @example
+         * // Get one CriteriaDefinition
+         * const criteriaDefinition = await prisma.criteriaDefinition.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends CriteriaDefinitionFindFirstOrThrowArgs>(args?: SelectSubset<T, CriteriaDefinitionFindFirstOrThrowArgs<ExtArgs>>): Prisma__CriteriaDefinitionClient<$Result.GetResult<Prisma.$CriteriaDefinitionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more CriteriaDefinitions that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CriteriaDefinitionFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all CriteriaDefinitions
+         * const criteriaDefinitions = await prisma.criteriaDefinition.findMany()
+         *
+         * // Get first 10 CriteriaDefinitions
+         * const criteriaDefinitions = await prisma.criteriaDefinition.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const criteriaDefinitionWithIdOnly = await prisma.criteriaDefinition.findMany({ select: { id: true } })
+         */
+        findMany<T extends CriteriaDefinitionFindManyArgs>(args?: SelectSubset<T, CriteriaDefinitionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CriteriaDefinitionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a CriteriaDefinition.
+         * @param {CriteriaDefinitionCreateArgs} args - Arguments to create a CriteriaDefinition.
+         * @example
+         * // Create one CriteriaDefinition
+         * const CriteriaDefinition = await prisma.criteriaDefinition.create({
+         *   data: {
+         *     // ... data to create a CriteriaDefinition
+         *   }
+         * })
+         */
+        create<T extends CriteriaDefinitionCreateArgs>(args: SelectSubset<T, CriteriaDefinitionCreateArgs<ExtArgs>>): Prisma__CriteriaDefinitionClient<$Result.GetResult<Prisma.$CriteriaDefinitionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many CriteriaDefinitions.
+         * @param {CriteriaDefinitionCreateManyArgs} args - Arguments to create many CriteriaDefinitions.
+         * @example
+         * // Create many CriteriaDefinitions
+         * const criteriaDefinition = await prisma.criteriaDefinition.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends CriteriaDefinitionCreateManyArgs>(args?: SelectSubset<T, CriteriaDefinitionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many CriteriaDefinitions and returns the data saved in the database.
+         * @param {CriteriaDefinitionCreateManyAndReturnArgs} args - Arguments to create many CriteriaDefinitions.
+         * @example
+         * // Create many CriteriaDefinitions
+         * const criteriaDefinition = await prisma.criteriaDefinition.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many CriteriaDefinitions and only return the `id`
+         * const criteriaDefinitionWithIdOnly = await prisma.criteriaDefinition.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends CriteriaDefinitionCreateManyAndReturnArgs>(args?: SelectSubset<T, CriteriaDefinitionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CriteriaDefinitionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a CriteriaDefinition.
+         * @param {CriteriaDefinitionDeleteArgs} args - Arguments to delete one CriteriaDefinition.
+         * @example
+         * // Delete one CriteriaDefinition
+         * const CriteriaDefinition = await prisma.criteriaDefinition.delete({
+         *   where: {
+         *     // ... filter to delete one CriteriaDefinition
+         *   }
+         * })
+         */
+        delete<T extends CriteriaDefinitionDeleteArgs>(args: SelectSubset<T, CriteriaDefinitionDeleteArgs<ExtArgs>>): Prisma__CriteriaDefinitionClient<$Result.GetResult<Prisma.$CriteriaDefinitionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one CriteriaDefinition.
+         * @param {CriteriaDefinitionUpdateArgs} args - Arguments to update one CriteriaDefinition.
+         * @example
+         * // Update one CriteriaDefinition
+         * const criteriaDefinition = await prisma.criteriaDefinition.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends CriteriaDefinitionUpdateArgs>(args: SelectSubset<T, CriteriaDefinitionUpdateArgs<ExtArgs>>): Prisma__CriteriaDefinitionClient<$Result.GetResult<Prisma.$CriteriaDefinitionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more CriteriaDefinitions.
+         * @param {CriteriaDefinitionDeleteManyArgs} args - Arguments to filter CriteriaDefinitions to delete.
+         * @example
+         * // Delete a few CriteriaDefinitions
+         * const { count } = await prisma.criteriaDefinition.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends CriteriaDefinitionDeleteManyArgs>(args?: SelectSubset<T, CriteriaDefinitionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more CriteriaDefinitions.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CriteriaDefinitionUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many CriteriaDefinitions
+         * const criteriaDefinition = await prisma.criteriaDefinition.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends CriteriaDefinitionUpdateManyArgs>(args: SelectSubset<T, CriteriaDefinitionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more CriteriaDefinitions and returns the data updated in the database.
+         * @param {CriteriaDefinitionUpdateManyAndReturnArgs} args - Arguments to update many CriteriaDefinitions.
+         * @example
+         * // Update many CriteriaDefinitions
+         * const criteriaDefinition = await prisma.criteriaDefinition.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more CriteriaDefinitions and only return the `id`
+         * const criteriaDefinitionWithIdOnly = await prisma.criteriaDefinition.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends CriteriaDefinitionUpdateManyAndReturnArgs>(args: SelectSubset<T, CriteriaDefinitionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CriteriaDefinitionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one CriteriaDefinition.
+         * @param {CriteriaDefinitionUpsertArgs} args - Arguments to update or create a CriteriaDefinition.
+         * @example
+         * // Update or create a CriteriaDefinition
+         * const criteriaDefinition = await prisma.criteriaDefinition.upsert({
+         *   create: {
+         *     // ... data to create a CriteriaDefinition
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the CriteriaDefinition we want to update
+         *   }
+         * })
+         */
+        upsert<T extends CriteriaDefinitionUpsertArgs>(args: SelectSubset<T, CriteriaDefinitionUpsertArgs<ExtArgs>>): Prisma__CriteriaDefinitionClient<$Result.GetResult<Prisma.$CriteriaDefinitionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of CriteriaDefinitions.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CriteriaDefinitionCountArgs} args - Arguments to filter CriteriaDefinitions to count.
+         * @example
+         * // Count the number of CriteriaDefinitions
+         * const count = await prisma.criteriaDefinition.count({
+         *   where: {
+         *     // ... the filter for the CriteriaDefinitions we want to count
+         *   }
+         * })
+         */
+        count<T extends CriteriaDefinitionCountArgs>(args?: Subset<T, CriteriaDefinitionCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], CriteriaDefinitionCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a CriteriaDefinition.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CriteriaDefinitionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends CriteriaDefinitionAggregateArgs>(args: Subset<T, CriteriaDefinitionAggregateArgs>): Prisma.PrismaPromise<GetCriteriaDefinitionAggregateType<T>>;
+        /**
+         * Group by CriteriaDefinition.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CriteriaDefinitionGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends CriteriaDefinitionGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CriteriaDefinitionGroupByArgs['orderBy'] }
+        : { orderBy?: CriteriaDefinitionGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, CriteriaDefinitionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCriteriaDefinitionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for CriteriaDefinition.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__CriteriaDefinitionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        trainingBlocks<T extends CriteriaDefinition$trainingBlocksArgs<ExtArgs> = {}>(args?: Subset<T, CriteriaDefinition$trainingBlocksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        subjects<T extends CriteriaDefinition$subjectsArgs<ExtArgs> = {}>(args?: Subset<T, CriteriaDefinition$subjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        downgradeConditions<T extends CriteriaDefinition$downgradeConditionsArgs<ExtArgs> = {}>(args?: Subset<T, CriteriaDefinition$downgradeConditionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GraduationRankDowngradeConditionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the CriteriaDefinition model
+     */
+    interface CriteriaDefinitionFieldRefs {
+        readonly id: FieldRef<"CriteriaDefinition", 'String'>;
+        readonly code: FieldRef<"CriteriaDefinition", 'String'>;
+        readonly active: FieldRef<"CriteriaDefinition", 'Boolean'>;
+        readonly description: FieldRef<"CriteriaDefinition", 'String'>;
+        readonly deletedAt: FieldRef<"CriteriaDefinition", 'DateTime'>;
+        readonly createdAt: FieldRef<"CriteriaDefinition", 'DateTime'>;
+        readonly updatedAt: FieldRef<"CriteriaDefinition", 'DateTime'>;
+        readonly createdBy: FieldRef<"CriteriaDefinition", 'String'>;
+        readonly sNguoiTao: FieldRef<"CriteriaDefinition", 'String'>;
+        readonly sNguoiSua: FieldRef<"CriteriaDefinition", 'String'>;
+        readonly dNgayTao: FieldRef<"CriteriaDefinition", 'DateTime'>;
+        readonly dNgaySua: FieldRef<"CriteriaDefinition", 'DateTime'>;
+        readonly sThietBiTao: FieldRef<"CriteriaDefinition", 'String'>;
+        readonly sThietBiSua: FieldRef<"CriteriaDefinition", 'String'>;
+        readonly name: FieldRef<"CriteriaDefinition", 'String'>;
+        readonly source: FieldRef<"CriteriaDefinition", 'CriteriaSource'>;
+        readonly systemField: FieldRef<"CriteriaDefinition", 'CriteriaField'>;
+        readonly calcType: FieldRef<"CriteriaDefinition", 'String'>;
+        readonly params: FieldRef<"CriteriaDefinition", 'Json'>;
     }
 
     export interface TrainingScoreSessionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -131145,7 +131611,7 @@ export namespace Prisma {
             omit: GlobalOmitOptions
         }
         meta: {
-            modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "chucVuChinhQuyen" | "chucVuDang" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "conversationFeedback" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingPractice" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "studentInternship" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedCertificateSubjectScore" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "classRegisterAttempt" | "subjectClass" | "subjectClassAttendance" | "subjectClassAttendanceStudent" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "scoreCorrectionTicket" | "scoreCorrectionItem" | "dataSyncHistory" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "studentPersonalEvent" | "student" | "trainingActivity" | "studentSemesterResult" | "studentYearResult" | "notification" | "personalWorkTag" | "individualSchedule" | "lecturer" | "lecturerHistory" | "guestTeachingRateConfig" | "guestTeachingRate" | "guestTeachingPayment" | "lecturerType" | "staffType" | "staffPosition" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "availableTrainingTime" | "certificate" | "certificateOnSubject" | "award" | "officerBonusScore" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "trainingScoreSession" | "studentTrainingScore" | "semesterTrainingScore" | "schoolYearTrainingScore" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expert" | "expertProfileVersion" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "configPaymentSession" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "scoreLinkSheet" | "scoreLinkSubjectVersion" | "scoreLinkStudent" | "evaluationPeriod" | "evaluationStandardSet" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "questionBank" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "examBank" | "examBankQuestion" | "examPaper" | "examFramework" | "examMatrix" | "knowledgeBlock" | "configExam" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "specificChoice" | "surveyChoice" | "surveySession" | "surveyResponse" | "staff" | "staffHistory" | "researchProject" | "studentResearchRegistration" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "tuitionPaymentConfig" | "templateFile" | "accessRoleGrant" | "accessPermissionGrant" | "blockedIp"
+            modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "chucVuChinhQuyen" | "chucVuDang" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "conversationFeedback" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingPractice" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "studentInternship" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedCertificateSubjectScore" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "classRegisterAttempt" | "subjectClass" | "subjectClassAttendance" | "subjectClassAttendanceStudent" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "scoreCorrectionTicket" | "scoreCorrectionItem" | "dataSyncHistory" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "studentPersonalEvent" | "student" | "trainingActivity" | "studentSemesterResult" | "studentYearResult" | "notification" | "personalWorkTag" | "individualSchedule" | "lecturer" | "lecturerHistory" | "guestTeachingRateConfig" | "guestTeachingRate" | "guestTeachingPayment" | "lecturerType" | "staffType" | "staffPosition" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "availableTrainingTime" | "certificate" | "certificateOnSubject" | "award" | "officerBonusScore" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "criteriaDefinition" | "trainingScoreSession" | "studentTrainingScore" | "semesterTrainingScore" | "schoolYearTrainingScore" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expert" | "expertProfileVersion" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "configPaymentSession" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "scoreLinkSheet" | "scoreLinkSubjectVersion" | "scoreLinkStudent" | "evaluationPeriod" | "evaluationStandardSet" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "questionBank" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "examBank" | "examBankQuestion" | "examPaper" | "examFramework" | "examMatrix" | "knowledgeBlock" | "configExam" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "specificChoice" | "surveyChoice" | "surveySession" | "surveyResponse" | "staff" | "staffHistory" | "researchProject" | "studentResearchRegistration" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "tuitionPaymentConfig" | "templateFile" | "accessRoleGrant" | "accessPermissionGrant" | "blockedIp"
             txIsolationLevel: Prisma.TransactionIsolationLevel
         }
         model: {
@@ -143729,6 +144195,80 @@ export namespace Prisma {
                     }
                 }
             }
+            CriteriaDefinition: {
+                payload: Prisma.$CriteriaDefinitionPayload<ExtArgs>
+                fields: Prisma.CriteriaDefinitionFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.CriteriaDefinitionFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriteriaDefinitionPayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.CriteriaDefinitionFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriteriaDefinitionPayload>
+                    }
+                    findFirst: {
+                        args: Prisma.CriteriaDefinitionFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriteriaDefinitionPayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.CriteriaDefinitionFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriteriaDefinitionPayload>
+                    }
+                    findMany: {
+                        args: Prisma.CriteriaDefinitionFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriteriaDefinitionPayload>[]
+                    }
+                    create: {
+                        args: Prisma.CriteriaDefinitionCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriteriaDefinitionPayload>
+                    }
+                    createMany: {
+                        args: Prisma.CriteriaDefinitionCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.CriteriaDefinitionCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriteriaDefinitionPayload>[]
+                    }
+                    delete: {
+                        args: Prisma.CriteriaDefinitionDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriteriaDefinitionPayload>
+                    }
+                    update: {
+                        args: Prisma.CriteriaDefinitionUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriteriaDefinitionPayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.CriteriaDefinitionDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.CriteriaDefinitionUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.CriteriaDefinitionUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriteriaDefinitionPayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.CriteriaDefinitionUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriteriaDefinitionPayload>
+                    }
+                    aggregate: {
+                        args: Prisma.CriteriaDefinitionAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateCriteriaDefinition>
+                    }
+                    groupBy: {
+                        args: Prisma.CriteriaDefinitionGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<CriteriaDefinitionGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.CriteriaDefinitionCountArgs<ExtArgs>
+                        result: $Utils.Optional<CriteriaDefinitionCountAggregateOutputType> | number
+                    }
+                }
+            }
             TrainingScoreSession: {
                 payload: Prisma.$TrainingScoreSessionPayload<ExtArgs>
                 fields: Prisma.TrainingScoreSessionFieldRefs
@@ -152662,6 +153202,7 @@ export namespace Prisma {
         graduationRankDowngradeCondition?: GraduationRankDowngradeConditionOmit
         rankingCondition?: RankingConditionOmit
         diplomaVerificationApplication?: DiplomaVerificationApplicationOmit
+        criteriaDefinition?: CriteriaDefinitionOmit
         trainingScoreSession?: TrainingScoreSessionOmit
         studentTrainingScore?: StudentTrainingScoreOmit
         semesterTrainingScore?: SemesterTrainingScoreOmit
@@ -155153,11 +155694,13 @@ export namespace Prisma {
         subjectVersion: number
         certificateOnSubject: number
         awardOnSubject: number
+        criteriaDefinitions: number
     };
     export type SubjectCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         subjectVersion?: boolean | SubjectCountOutputTypeCountSubjectVersionArgs
         certificateOnSubject?: boolean | SubjectCountOutputTypeCountCertificateOnSubjectArgs
         awardOnSubject?: boolean | SubjectCountOutputTypeCountAwardOnSubjectArgs
+        criteriaDefinitions?: boolean | SubjectCountOutputTypeCountCriteriaDefinitionsArgs
     };
     /**
      * SubjectCountOutputType without action
@@ -155185,6 +155728,12 @@ export namespace Prisma {
      */
     export type SubjectCountOutputTypeCountAwardOnSubjectArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: AwardWhereInput
+    };
+    /**
+     * SubjectCountOutputType without action
+     */
+    export type SubjectCountOutputTypeCountCriteriaDefinitionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: CriteriaDefinitionWhereInput
     };
     /**
      * Count Type SubjectVersionCategoryCountOutputType
@@ -157008,10 +157557,12 @@ export namespace Prisma {
     export type TrainingBlockCountOutputType = {
         children: number
         curriculumVersions: number
+        criteriaDefinitions: number
     };
     export type TrainingBlockCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         children?: boolean | TrainingBlockCountOutputTypeCountChildrenArgs
         curriculumVersions?: boolean | TrainingBlockCountOutputTypeCountCurriculumVersionsArgs
+        criteriaDefinitions?: boolean | TrainingBlockCountOutputTypeCountCriteriaDefinitionsArgs
     };
     /**
      * TrainingBlockCountOutputType without action
@@ -157033,6 +157584,12 @@ export namespace Prisma {
      */
     export type TrainingBlockCountOutputTypeCountCurriculumVersionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: TrainingBlockOnCurriculumVersionWhereInput
+    };
+    /**
+     * TrainingBlockCountOutputType without action
+     */
+    export type TrainingBlockCountOutputTypeCountCriteriaDefinitionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: CriteriaDefinitionWhereInput
     };
     /**
      * Count Type TrainingBlockOnCurriculumVersionCountOutputType
@@ -157497,6 +158054,46 @@ export namespace Prisma {
      */
     export type DiplomaVerificationApplicationCountOutputTypeCountAttachmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: DocumentFileWhereInput
+    };
+    /**
+     * Count Type CriteriaDefinitionCountOutputType
+     */
+    export type CriteriaDefinitionCountOutputType = {
+        trainingBlocks: number
+        subjects: number
+        downgradeConditions: number
+    };
+    export type CriteriaDefinitionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        trainingBlocks?: boolean | CriteriaDefinitionCountOutputTypeCountTrainingBlocksArgs
+        subjects?: boolean | CriteriaDefinitionCountOutputTypeCountSubjectsArgs
+        downgradeConditions?: boolean | CriteriaDefinitionCountOutputTypeCountDowngradeConditionsArgs
+    };
+    /**
+     * CriteriaDefinitionCountOutputType without action
+     */
+    export type CriteriaDefinitionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriteriaDefinitionCountOutputType
+         */
+        select?: CriteriaDefinitionCountOutputTypeSelect<ExtArgs> | null
+    };
+    /**
+     * CriteriaDefinitionCountOutputType without action
+     */
+    export type CriteriaDefinitionCountOutputTypeCountTrainingBlocksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: TrainingBlockWhereInput
+    };
+    /**
+     * CriteriaDefinitionCountOutputType without action
+     */
+    export type CriteriaDefinitionCountOutputTypeCountSubjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: SubjectWhereInput
+    };
+    /**
+     * CriteriaDefinitionCountOutputType without action
+     */
+    export type CriteriaDefinitionCountOutputTypeCountDowngradeConditionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: GraduationRankDowngradeConditionWhereInput
     };
     /**
      * Count Type TrainingScoreSessionCountOutputType
@@ -243433,6 +244030,7 @@ export namespace Prisma {
         subjectVersion?: boolean | Subject$subjectVersionArgs<ExtArgs>
         certificateOnSubject?: boolean | Subject$certificateOnSubjectArgs<ExtArgs>
         awardOnSubject?: boolean | Subject$awardOnSubjectArgs<ExtArgs>
+        criteriaDefinitions?: boolean | Subject$criteriaDefinitionsArgs<ExtArgs>
         _count?: boolean | SubjectCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["subject"]>;
     export type SubjectSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -243503,6 +244101,7 @@ export namespace Prisma {
         subjectVersion?: boolean | Subject$subjectVersionArgs<ExtArgs>
         certificateOnSubject?: boolean | Subject$certificateOnSubjectArgs<ExtArgs>
         awardOnSubject?: boolean | Subject$awardOnSubjectArgs<ExtArgs>
+        criteriaDefinitions?: boolean | Subject$criteriaDefinitionsArgs<ExtArgs>
         _count?: boolean | SubjectCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type SubjectIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -243518,6 +244117,7 @@ export namespace Prisma {
             subjectVersion: Prisma.$SubjectVersionPayload<ExtArgs>[]
             certificateOnSubject: Prisma.$CertificateOnSubjectPayload<ExtArgs>[]
             awardOnSubject: Prisma.$AwardPayload<ExtArgs>[]
+            criteriaDefinitions: Prisma.$CriteriaDefinitionPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -244008,6 +244608,29 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: AwardScalarFieldEnum | AwardScalarFieldEnum[]
+    };
+    /**
+     * Subject.criteriaDefinitions
+     */
+    export type Subject$criteriaDefinitionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriteriaDefinition
+         */
+        select?: CriteriaDefinitionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriteriaDefinition
+         */
+        omit?: CriteriaDefinitionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriteriaDefinitionInclude<ExtArgs> | null
+        where?: CriteriaDefinitionWhereInput
+        orderBy?: CriteriaDefinitionOrderByWithRelationInput | CriteriaDefinitionOrderByWithRelationInput[]
+        cursor?: CriteriaDefinitionWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: CriteriaDefinitionScalarFieldEnum | CriteriaDefinitionScalarFieldEnum[]
     };
     /**
      * Subject without action
@@ -291528,6 +292151,7 @@ export namespace Prisma {
         parent?: boolean | TrainingBlock$parentArgs<ExtArgs>
         children?: boolean | TrainingBlock$childrenArgs<ExtArgs>
         curriculumVersions?: boolean | TrainingBlock$curriculumVersionsArgs<ExtArgs>
+        criteriaDefinitions?: boolean | TrainingBlock$criteriaDefinitionsArgs<ExtArgs>
         _count?: boolean | TrainingBlockCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["trainingBlock"]>;
     export type TrainingBlockSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -291603,6 +292227,7 @@ export namespace Prisma {
         parent?: boolean | TrainingBlock$parentArgs<ExtArgs>
         children?: boolean | TrainingBlock$childrenArgs<ExtArgs>
         curriculumVersions?: boolean | TrainingBlock$curriculumVersionsArgs<ExtArgs>
+        criteriaDefinitions?: boolean | TrainingBlock$criteriaDefinitionsArgs<ExtArgs>
         _count?: boolean | TrainingBlockCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type TrainingBlockIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -291620,6 +292245,7 @@ export namespace Prisma {
             parent: Prisma.$TrainingBlockPayload<ExtArgs> | null
             children: Prisma.$TrainingBlockPayload<ExtArgs>[]
             curriculumVersions: Prisma.$TrainingBlockOnCurriculumVersionPayload<ExtArgs>[]
+            criteriaDefinitions: Prisma.$CriteriaDefinitionPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -292091,6 +292717,29 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: TrainingBlockOnCurriculumVersionScalarFieldEnum | TrainingBlockOnCurriculumVersionScalarFieldEnum[]
+    };
+    /**
+     * TrainingBlock.criteriaDefinitions
+     */
+    export type TrainingBlock$criteriaDefinitionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriteriaDefinition
+         */
+        select?: CriteriaDefinitionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriteriaDefinition
+         */
+        omit?: CriteriaDefinitionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriteriaDefinitionInclude<ExtArgs> | null
+        where?: CriteriaDefinitionWhereInput
+        orderBy?: CriteriaDefinitionOrderByWithRelationInput | CriteriaDefinitionOrderByWithRelationInput[]
+        cursor?: CriteriaDefinitionWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: CriteriaDefinitionScalarFieldEnum | CriteriaDefinitionScalarFieldEnum[]
     };
     /**
      * TrainingBlock without action
@@ -308418,6 +309067,7 @@ export namespace Prisma {
         sThietBiTao: string | null
         sThietBiSua: string | null
         downgradeRuleId: string | null
+        criteriaId: string | null
         field: $Enums.CriteriaField | null
         operator: $Enums.CriteriaOperator | null
         invert: boolean | null
@@ -308439,6 +309089,7 @@ export namespace Prisma {
         sThietBiTao: string | null
         sThietBiSua: string | null
         downgradeRuleId: string | null
+        criteriaId: string | null
         field: $Enums.CriteriaField | null
         operator: $Enums.CriteriaOperator | null
         invert: boolean | null
@@ -308460,6 +309111,7 @@ export namespace Prisma {
         sThietBiTao: number
         sThietBiSua: number
         downgradeRuleId: number
+        criteriaId: number
         field: number
         operator: number
         invert: number
@@ -308489,6 +309141,7 @@ export namespace Prisma {
         sThietBiTao?: true
         sThietBiSua?: true
         downgradeRuleId?: true
+        criteriaId?: true
         field?: true
         operator?: true
         invert?: true
@@ -308510,6 +309163,7 @@ export namespace Prisma {
         sThietBiTao?: true
         sThietBiSua?: true
         downgradeRuleId?: true
+        criteriaId?: true
         field?: true
         operator?: true
         invert?: true
@@ -308531,6 +309185,7 @@ export namespace Prisma {
         sThietBiTao?: true
         sThietBiSua?: true
         downgradeRuleId?: true
+        criteriaId?: true
         field?: true
         operator?: true
         invert?: true
@@ -308634,7 +309289,8 @@ export namespace Prisma {
         sThietBiTao: string | null
         sThietBiSua: string | null
         downgradeRuleId: string
-        field: $Enums.CriteriaField
+        criteriaId: string
+        field: $Enums.CriteriaField | null
         operator: $Enums.CriteriaOperator
         invert: boolean
         value: number
@@ -308673,12 +309329,14 @@ export namespace Prisma {
         sThietBiTao?: boolean
         sThietBiSua?: boolean
         downgradeRuleId?: boolean
+        criteriaId?: boolean
         field?: boolean
         operator?: boolean
         invert?: boolean
         value?: boolean
         tuple?: boolean
         downgradeRule?: boolean | GraduationRankDowngradeRuleDefaultArgs<ExtArgs>
+        criteria?: boolean | CriteriaDefinitionDefaultArgs<ExtArgs>
         applicationDowngraded?: boolean | GraduationRankDowngradeCondition$applicationDowngradedArgs<ExtArgs>
         _count?: boolean | GraduationRankDowngradeConditionCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["graduationRankDowngradeCondition"]>;
@@ -308698,12 +309356,14 @@ export namespace Prisma {
         sThietBiTao?: boolean
         sThietBiSua?: boolean
         downgradeRuleId?: boolean
+        criteriaId?: boolean
         field?: boolean
         operator?: boolean
         invert?: boolean
         value?: boolean
         tuple?: boolean
         downgradeRule?: boolean | GraduationRankDowngradeRuleDefaultArgs<ExtArgs>
+        criteria?: boolean | CriteriaDefinitionDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["graduationRankDowngradeCondition"]>;
     export type GraduationRankDowngradeConditionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -308721,12 +309381,14 @@ export namespace Prisma {
         sThietBiTao?: boolean
         sThietBiSua?: boolean
         downgradeRuleId?: boolean
+        criteriaId?: boolean
         field?: boolean
         operator?: boolean
         invert?: boolean
         value?: boolean
         tuple?: boolean
         downgradeRule?: boolean | GraduationRankDowngradeRuleDefaultArgs<ExtArgs>
+        criteria?: boolean | CriteriaDefinitionDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["graduationRankDowngradeCondition"]>;
     export type GraduationRankDowngradeConditionSelectScalar = {
         id?: boolean
@@ -308744,28 +309406,33 @@ export namespace Prisma {
         sThietBiTao?: boolean
         sThietBiSua?: boolean
         downgradeRuleId?: boolean
+        criteriaId?: boolean
         field?: boolean
         operator?: boolean
         invert?: boolean
         value?: boolean
         tuple?: boolean
     };
-    export type GraduationRankDowngradeConditionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "sNguoiTao" | "sNguoiSua" | "dNgayTao" | "dNgaySua" | "sThietBiTao" | "sThietBiSua" | "downgradeRuleId" | "field" | "operator" | "invert" | "value" | "tuple", ExtArgs["result"]["graduationRankDowngradeCondition"]>;
+    export type GraduationRankDowngradeConditionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "sNguoiTao" | "sNguoiSua" | "dNgayTao" | "dNgaySua" | "sThietBiTao" | "sThietBiSua" | "downgradeRuleId" | "criteriaId" | "field" | "operator" | "invert" | "value" | "tuple", ExtArgs["result"]["graduationRankDowngradeCondition"]>;
     export type GraduationRankDowngradeConditionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         downgradeRule?: boolean | GraduationRankDowngradeRuleDefaultArgs<ExtArgs>
+        criteria?: boolean | CriteriaDefinitionDefaultArgs<ExtArgs>
         applicationDowngraded?: boolean | GraduationRankDowngradeCondition$applicationDowngradedArgs<ExtArgs>
         _count?: boolean | GraduationRankDowngradeConditionCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type GraduationRankDowngradeConditionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         downgradeRule?: boolean | GraduationRankDowngradeRuleDefaultArgs<ExtArgs>
+        criteria?: boolean | CriteriaDefinitionDefaultArgs<ExtArgs>
     };
     export type GraduationRankDowngradeConditionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         downgradeRule?: boolean | GraduationRankDowngradeRuleDefaultArgs<ExtArgs>
+        criteria?: boolean | CriteriaDefinitionDefaultArgs<ExtArgs>
     };
     export type $GraduationRankDowngradeConditionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "GraduationRankDowngradeCondition"
         objects: {
             downgradeRule: Prisma.$GraduationRankDowngradeRulePayload<ExtArgs>
+            criteria: Prisma.$CriteriaDefinitionPayload<ExtArgs>
             applicationDowngraded: Prisma.$ApplicationDowngradedPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
@@ -308784,7 +309451,11 @@ export namespace Prisma {
             sThietBiTao: string | null
             sThietBiSua: string | null
             downgradeRuleId: string
-            field: $Enums.CriteriaField
+            criteriaId: string
+            /**
+             * @deprecated Giữ lại để chuyển dữ liệu, sẽ xoá ở migration sau. Dùng criteriaId.
+             */
+            field: $Enums.CriteriaField | null
             operator: $Enums.CriteriaOperator
             invert: boolean
             value: number
@@ -311081,6 +311752,836 @@ export namespace Prisma {
          * Choose, which related nodes to fetch as well
          */
         include?: DiplomaVerificationApplicationInclude<ExtArgs> | null
+    };
+    /**
+     * Model CriteriaDefinition
+     */
+    export type AggregateCriteriaDefinition = {
+        _count: CriteriaDefinitionCountAggregateOutputType | null
+        _min: CriteriaDefinitionMinAggregateOutputType | null
+        _max: CriteriaDefinitionMaxAggregateOutputType | null
+    };
+    export type CriteriaDefinitionMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        sNguoiTao: string | null
+        sNguoiSua: string | null
+        dNgayTao: Date | null
+        dNgaySua: Date | null
+        sThietBiTao: string | null
+        sThietBiSua: string | null
+        name: string | null
+        source: $Enums.CriteriaSource | null
+        systemField: $Enums.CriteriaField | null
+        calcType: string | null
+    };
+    export type CriteriaDefinitionMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        sNguoiTao: string | null
+        sNguoiSua: string | null
+        dNgayTao: Date | null
+        dNgaySua: Date | null
+        sThietBiTao: string | null
+        sThietBiSua: string | null
+        name: string | null
+        source: $Enums.CriteriaSource | null
+        systemField: $Enums.CriteriaField | null
+        calcType: string | null
+    };
+    export type CriteriaDefinitionCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        createdBy: number
+        sNguoiTao: number
+        sNguoiSua: number
+        dNgayTao: number
+        dNgaySua: number
+        sThietBiTao: number
+        sThietBiSua: number
+        name: number
+        source: number
+        systemField: number
+        calcType: number
+        params: number
+        _all: number
+    };
+    export type CriteriaDefinitionMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        sNguoiTao?: true
+        sNguoiSua?: true
+        dNgayTao?: true
+        dNgaySua?: true
+        sThietBiTao?: true
+        sThietBiSua?: true
+        name?: true
+        source?: true
+        systemField?: true
+        calcType?: true
+    };
+    export type CriteriaDefinitionMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        sNguoiTao?: true
+        sNguoiSua?: true
+        dNgayTao?: true
+        dNgaySua?: true
+        sThietBiTao?: true
+        sThietBiSua?: true
+        name?: true
+        source?: true
+        systemField?: true
+        calcType?: true
+    };
+    export type CriteriaDefinitionCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        sNguoiTao?: true
+        sNguoiSua?: true
+        dNgayTao?: true
+        dNgaySua?: true
+        sThietBiTao?: true
+        sThietBiSua?: true
+        name?: true
+        source?: true
+        systemField?: true
+        calcType?: true
+        params?: true
+        _all?: true
+    };
+    export type CriteriaDefinitionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which CriteriaDefinition to aggregate.
+         */
+        where?: CriteriaDefinitionWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of CriteriaDefinitions to fetch.
+         */
+        orderBy?: CriteriaDefinitionOrderByWithRelationInput | CriteriaDefinitionOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: CriteriaDefinitionWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` CriteriaDefinitions from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` CriteriaDefinitions.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned CriteriaDefinitions
+        **/
+        _count?: true | CriteriaDefinitionCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: CriteriaDefinitionMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: CriteriaDefinitionMaxAggregateInputType
+    };
+    export type GetCriteriaDefinitionAggregateType<T extends CriteriaDefinitionAggregateArgs> = {
+        [P in keyof T & keyof AggregateCriteriaDefinition]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCriteriaDefinition[P]>
+        : GetScalarType<T[P], AggregateCriteriaDefinition[P]>
+    };
+    export type CriteriaDefinitionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: CriteriaDefinitionWhereInput
+        orderBy?: CriteriaDefinitionOrderByWithAggregationInput | CriteriaDefinitionOrderByWithAggregationInput[]
+        by: CriteriaDefinitionScalarFieldEnum[] | CriteriaDefinitionScalarFieldEnum
+        having?: CriteriaDefinitionScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: CriteriaDefinitionCountAggregateInputType | true
+        _min?: CriteriaDefinitionMinAggregateInputType
+        _max?: CriteriaDefinitionMaxAggregateInputType
+    };
+    export type CriteriaDefinitionGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        createdBy: string | null
+        sNguoiTao: string | null
+        sNguoiSua: string | null
+        dNgayTao: Date | null
+        dNgaySua: Date | null
+        sThietBiTao: string | null
+        sThietBiSua: string | null
+        name: string
+        source: $Enums.CriteriaSource
+        systemField: $Enums.CriteriaField | null
+        calcType: string | null
+        params: JsonValue
+        _count: CriteriaDefinitionCountAggregateOutputType | null
+        _min: CriteriaDefinitionMinAggregateOutputType | null
+        _max: CriteriaDefinitionMaxAggregateOutputType | null
+    };
+    type GetCriteriaDefinitionGroupByPayload<T extends CriteriaDefinitionGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<CriteriaDefinitionGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof CriteriaDefinitionGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], CriteriaDefinitionGroupByOutputType[P]>
+                : GetScalarType<T[P], CriteriaDefinitionGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type CriteriaDefinitionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        sNguoiTao?: boolean
+        sNguoiSua?: boolean
+        dNgayTao?: boolean
+        dNgaySua?: boolean
+        sThietBiTao?: boolean
+        sThietBiSua?: boolean
+        name?: boolean
+        source?: boolean
+        systemField?: boolean
+        calcType?: boolean
+        params?: boolean
+        trainingBlocks?: boolean | CriteriaDefinition$trainingBlocksArgs<ExtArgs>
+        subjects?: boolean | CriteriaDefinition$subjectsArgs<ExtArgs>
+        downgradeConditions?: boolean | CriteriaDefinition$downgradeConditionsArgs<ExtArgs>
+        _count?: boolean | CriteriaDefinitionCountOutputTypeDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["criteriaDefinition"]>;
+    export type CriteriaDefinitionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        sNguoiTao?: boolean
+        sNguoiSua?: boolean
+        dNgayTao?: boolean
+        dNgaySua?: boolean
+        sThietBiTao?: boolean
+        sThietBiSua?: boolean
+        name?: boolean
+        source?: boolean
+        systemField?: boolean
+        calcType?: boolean
+        params?: boolean
+    }, ExtArgs["result"]["criteriaDefinition"]>;
+    export type CriteriaDefinitionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        sNguoiTao?: boolean
+        sNguoiSua?: boolean
+        dNgayTao?: boolean
+        dNgaySua?: boolean
+        sThietBiTao?: boolean
+        sThietBiSua?: boolean
+        name?: boolean
+        source?: boolean
+        systemField?: boolean
+        calcType?: boolean
+        params?: boolean
+    }, ExtArgs["result"]["criteriaDefinition"]>;
+    export type CriteriaDefinitionSelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        sNguoiTao?: boolean
+        sNguoiSua?: boolean
+        dNgayTao?: boolean
+        dNgaySua?: boolean
+        sThietBiTao?: boolean
+        sThietBiSua?: boolean
+        name?: boolean
+        source?: boolean
+        systemField?: boolean
+        calcType?: boolean
+        params?: boolean
+    };
+    export type CriteriaDefinitionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "sNguoiTao" | "sNguoiSua" | "dNgayTao" | "dNgaySua" | "sThietBiTao" | "sThietBiSua" | "name" | "source" | "systemField" | "calcType" | "params", ExtArgs["result"]["criteriaDefinition"]>;
+    export type CriteriaDefinitionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        trainingBlocks?: boolean | CriteriaDefinition$trainingBlocksArgs<ExtArgs>
+        subjects?: boolean | CriteriaDefinition$subjectsArgs<ExtArgs>
+        downgradeConditions?: boolean | CriteriaDefinition$downgradeConditionsArgs<ExtArgs>
+        _count?: boolean | CriteriaDefinitionCountOutputTypeDefaultArgs<ExtArgs>
+    };
+    export type CriteriaDefinitionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
+    export type CriteriaDefinitionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
+    export type $CriteriaDefinitionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "CriteriaDefinition"
+        objects: {
+            /**
+             * Phạm vi môn (CUSTOM): khối kiến thức (gồm khối con) và/hoặc môn học. Bỏ trống = toàn bộ CTĐT
+             */
+            trainingBlocks: Prisma.$TrainingBlockPayload<ExtArgs>[]
+            subjects: Prisma.$SubjectPayload<ExtArgs>[]
+            downgradeConditions: Prisma.$GraduationRankDowngradeConditionPayload<ExtArgs>[]
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            createdBy: string | null
+            sNguoiTao: string | null
+            sNguoiSua: string | null
+            dNgayTao: Date | null
+            dNgaySua: Date | null
+            sThietBiTao: string | null
+            sThietBiSua: string | null
+            name: string
+            source: $Enums.CriteriaSource
+            systemField: $Enums.CriteriaField | null
+            /**
+             * Mã calculator đăng ký ở backend (be-ql-dao-tao/src/services/criteria-calculators).
+             * Dùng String thay vì enum để thêm kiểu tính mới không cần sửa DB.
+             */
+            calcType: string | null
+            /**
+             * Tham số của calculator, kiểm tra bằng zod theo calcType
+             */
+            params: Prisma.JsonValue
+        }, ExtArgs["result"]["criteriaDefinition"]>
+        composites: {}
+    };
+    type CriteriaDefinitionGetPayload<S extends boolean | null | undefined | CriteriaDefinitionDefaultArgs> = $Result.GetResult<Prisma.$CriteriaDefinitionPayload, S>;
+    type CriteriaDefinitionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<CriteriaDefinitionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: CriteriaDefinitionCountAggregateInputType | true
+    };
+    /**
+     * CriteriaDefinition findUnique
+     */
+    export type CriteriaDefinitionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriteriaDefinition
+         */
+        select?: CriteriaDefinitionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriteriaDefinition
+         */
+        omit?: CriteriaDefinitionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriteriaDefinitionInclude<ExtArgs> | null
+        /**
+         * Filter, which CriteriaDefinition to fetch.
+         */
+        where: CriteriaDefinitionWhereUniqueInput
+    };
+    /**
+     * CriteriaDefinition findUniqueOrThrow
+     */
+    export type CriteriaDefinitionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriteriaDefinition
+         */
+        select?: CriteriaDefinitionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriteriaDefinition
+         */
+        omit?: CriteriaDefinitionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriteriaDefinitionInclude<ExtArgs> | null
+        /**
+         * Filter, which CriteriaDefinition to fetch.
+         */
+        where: CriteriaDefinitionWhereUniqueInput
+    };
+    /**
+     * CriteriaDefinition findFirst
+     */
+    export type CriteriaDefinitionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriteriaDefinition
+         */
+        select?: CriteriaDefinitionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriteriaDefinition
+         */
+        omit?: CriteriaDefinitionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriteriaDefinitionInclude<ExtArgs> | null
+        /**
+         * Filter, which CriteriaDefinition to fetch.
+         */
+        where?: CriteriaDefinitionWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of CriteriaDefinitions to fetch.
+         */
+        orderBy?: CriteriaDefinitionOrderByWithRelationInput | CriteriaDefinitionOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for CriteriaDefinitions.
+         */
+        cursor?: CriteriaDefinitionWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` CriteriaDefinitions from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` CriteriaDefinitions.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of CriteriaDefinitions.
+         */
+        distinct?: CriteriaDefinitionScalarFieldEnum | CriteriaDefinitionScalarFieldEnum[]
+    };
+    /**
+     * CriteriaDefinition findFirstOrThrow
+     */
+    export type CriteriaDefinitionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriteriaDefinition
+         */
+        select?: CriteriaDefinitionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriteriaDefinition
+         */
+        omit?: CriteriaDefinitionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriteriaDefinitionInclude<ExtArgs> | null
+        /**
+         * Filter, which CriteriaDefinition to fetch.
+         */
+        where?: CriteriaDefinitionWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of CriteriaDefinitions to fetch.
+         */
+        orderBy?: CriteriaDefinitionOrderByWithRelationInput | CriteriaDefinitionOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for CriteriaDefinitions.
+         */
+        cursor?: CriteriaDefinitionWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` CriteriaDefinitions from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` CriteriaDefinitions.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of CriteriaDefinitions.
+         */
+        distinct?: CriteriaDefinitionScalarFieldEnum | CriteriaDefinitionScalarFieldEnum[]
+    };
+    /**
+     * CriteriaDefinition findMany
+     */
+    export type CriteriaDefinitionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriteriaDefinition
+         */
+        select?: CriteriaDefinitionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriteriaDefinition
+         */
+        omit?: CriteriaDefinitionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriteriaDefinitionInclude<ExtArgs> | null
+        /**
+         * Filter, which CriteriaDefinitions to fetch.
+         */
+        where?: CriteriaDefinitionWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of CriteriaDefinitions to fetch.
+         */
+        orderBy?: CriteriaDefinitionOrderByWithRelationInput | CriteriaDefinitionOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing CriteriaDefinitions.
+         */
+        cursor?: CriteriaDefinitionWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` CriteriaDefinitions from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` CriteriaDefinitions.
+         */
+        skip?: number
+        distinct?: CriteriaDefinitionScalarFieldEnum | CriteriaDefinitionScalarFieldEnum[]
+    };
+    /**
+     * CriteriaDefinition create
+     */
+    export type CriteriaDefinitionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriteriaDefinition
+         */
+        select?: CriteriaDefinitionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriteriaDefinition
+         */
+        omit?: CriteriaDefinitionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriteriaDefinitionInclude<ExtArgs> | null
+        /**
+         * The data needed to create a CriteriaDefinition.
+         */
+        data: XOR<CriteriaDefinitionCreateInput, CriteriaDefinitionUncheckedCreateInput>
+    };
+    /**
+     * CriteriaDefinition createMany
+     */
+    export type CriteriaDefinitionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many CriteriaDefinitions.
+         */
+        data: CriteriaDefinitionCreateManyInput | CriteriaDefinitionCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * CriteriaDefinition createManyAndReturn
+     */
+    export type CriteriaDefinitionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriteriaDefinition
+         */
+        select?: CriteriaDefinitionSelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriteriaDefinition
+         */
+        omit?: CriteriaDefinitionOmit<ExtArgs> | null
+        /**
+         * The data used to create many CriteriaDefinitions.
+         */
+        data: CriteriaDefinitionCreateManyInput | CriteriaDefinitionCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * CriteriaDefinition update
+     */
+    export type CriteriaDefinitionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriteriaDefinition
+         */
+        select?: CriteriaDefinitionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriteriaDefinition
+         */
+        omit?: CriteriaDefinitionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriteriaDefinitionInclude<ExtArgs> | null
+        /**
+         * The data needed to update a CriteriaDefinition.
+         */
+        data: XOR<CriteriaDefinitionUpdateInput, CriteriaDefinitionUncheckedUpdateInput>
+        /**
+         * Choose, which CriteriaDefinition to update.
+         */
+        where: CriteriaDefinitionWhereUniqueInput
+    };
+    /**
+     * CriteriaDefinition updateMany
+     */
+    export type CriteriaDefinitionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update CriteriaDefinitions.
+         */
+        data: XOR<CriteriaDefinitionUpdateManyMutationInput, CriteriaDefinitionUncheckedUpdateManyInput>
+        /**
+         * Filter which CriteriaDefinitions to update
+         */
+        where?: CriteriaDefinitionWhereInput
+        /**
+         * Limit how many CriteriaDefinitions to update.
+         */
+        limit?: number
+    };
+    /**
+     * CriteriaDefinition updateManyAndReturn
+     */
+    export type CriteriaDefinitionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriteriaDefinition
+         */
+        select?: CriteriaDefinitionSelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriteriaDefinition
+         */
+        omit?: CriteriaDefinitionOmit<ExtArgs> | null
+        /**
+         * The data used to update CriteriaDefinitions.
+         */
+        data: XOR<CriteriaDefinitionUpdateManyMutationInput, CriteriaDefinitionUncheckedUpdateManyInput>
+        /**
+         * Filter which CriteriaDefinitions to update
+         */
+        where?: CriteriaDefinitionWhereInput
+        /**
+         * Limit how many CriteriaDefinitions to update.
+         */
+        limit?: number
+    };
+    /**
+     * CriteriaDefinition upsert
+     */
+    export type CriteriaDefinitionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriteriaDefinition
+         */
+        select?: CriteriaDefinitionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriteriaDefinition
+         */
+        omit?: CriteriaDefinitionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriteriaDefinitionInclude<ExtArgs> | null
+        /**
+         * The filter to search for the CriteriaDefinition to update in case it exists.
+         */
+        where: CriteriaDefinitionWhereUniqueInput
+        /**
+         * In case the CriteriaDefinition found by the `where` argument doesn't exist, create a new CriteriaDefinition with this data.
+         */
+        create: XOR<CriteriaDefinitionCreateInput, CriteriaDefinitionUncheckedCreateInput>
+        /**
+         * In case the CriteriaDefinition was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<CriteriaDefinitionUpdateInput, CriteriaDefinitionUncheckedUpdateInput>
+    };
+    /**
+     * CriteriaDefinition delete
+     */
+    export type CriteriaDefinitionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriteriaDefinition
+         */
+        select?: CriteriaDefinitionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriteriaDefinition
+         */
+        omit?: CriteriaDefinitionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriteriaDefinitionInclude<ExtArgs> | null
+        /**
+         * Filter which CriteriaDefinition to delete.
+         */
+        where: CriteriaDefinitionWhereUniqueInput
+    };
+    /**
+     * CriteriaDefinition deleteMany
+     */
+    export type CriteriaDefinitionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which CriteriaDefinitions to delete
+         */
+        where?: CriteriaDefinitionWhereInput
+        /**
+         * Limit how many CriteriaDefinitions to delete.
+         */
+        limit?: number
+    };
+    /**
+     * CriteriaDefinition.trainingBlocks
+     */
+    export type CriteriaDefinition$trainingBlocksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the TrainingBlock
+         */
+        select?: TrainingBlockSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the TrainingBlock
+         */
+        omit?: TrainingBlockOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TrainingBlockInclude<ExtArgs> | null
+        where?: TrainingBlockWhereInput
+        orderBy?: TrainingBlockOrderByWithRelationInput | TrainingBlockOrderByWithRelationInput[]
+        cursor?: TrainingBlockWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: TrainingBlockScalarFieldEnum | TrainingBlockScalarFieldEnum[]
+    };
+    /**
+     * CriteriaDefinition.subjects
+     */
+    export type CriteriaDefinition$subjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Subject
+         */
+        select?: SubjectSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Subject
+         */
+        omit?: SubjectOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SubjectInclude<ExtArgs> | null
+        where?: SubjectWhereInput
+        orderBy?: SubjectOrderByWithRelationInput | SubjectOrderByWithRelationInput[]
+        cursor?: SubjectWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: SubjectScalarFieldEnum | SubjectScalarFieldEnum[]
+    };
+    /**
+     * CriteriaDefinition.downgradeConditions
+     */
+    export type CriteriaDefinition$downgradeConditionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the GraduationRankDowngradeCondition
+         */
+        select?: GraduationRankDowngradeConditionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the GraduationRankDowngradeCondition
+         */
+        omit?: GraduationRankDowngradeConditionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: GraduationRankDowngradeConditionInclude<ExtArgs> | null
+        where?: GraduationRankDowngradeConditionWhereInput
+        orderBy?: GraduationRankDowngradeConditionOrderByWithRelationInput | GraduationRankDowngradeConditionOrderByWithRelationInput[]
+        cursor?: GraduationRankDowngradeConditionWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: GraduationRankDowngradeConditionScalarFieldEnum | GraduationRankDowngradeConditionScalarFieldEnum[]
+    };
+    /**
+     * CriteriaDefinition without action
+     */
+    export type CriteriaDefinitionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriteriaDefinition
+         */
+        select?: CriteriaDefinitionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriteriaDefinition
+         */
+        omit?: CriteriaDefinitionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriteriaDefinitionInclude<ExtArgs> | null
     };
     /**
      * Model TrainingScoreSession
@@ -407444,6 +408945,7 @@ export namespace Prisma {
     export type GraduationRankDowngradeConditionScalarFieldEnum = (typeof GraduationRankDowngradeConditionScalarFieldEnum)[keyof typeof GraduationRankDowngradeConditionScalarFieldEnum];
     export type RankingConditionScalarFieldEnum = (typeof RankingConditionScalarFieldEnum)[keyof typeof RankingConditionScalarFieldEnum];
     export type DiplomaVerificationApplicationScalarFieldEnum = (typeof DiplomaVerificationApplicationScalarFieldEnum)[keyof typeof DiplomaVerificationApplicationScalarFieldEnum];
+    export type CriteriaDefinitionScalarFieldEnum = (typeof CriteriaDefinitionScalarFieldEnum)[keyof typeof CriteriaDefinitionScalarFieldEnum];
     export type TrainingScoreSessionScalarFieldEnum = (typeof TrainingScoreSessionScalarFieldEnum)[keyof typeof TrainingScoreSessionScalarFieldEnum];
     export type StudentTrainingScoreScalarFieldEnum = (typeof StudentTrainingScoreScalarFieldEnum)[keyof typeof StudentTrainingScoreScalarFieldEnum];
     export type SemesterTrainingScoreScalarFieldEnum = (typeof SemesterTrainingScoreScalarFieldEnum)[keyof typeof SemesterTrainingScoreScalarFieldEnum];
@@ -407564,6 +409066,7 @@ export namespace Prisma {
     export type BlockedIpScalarFieldEnum = (typeof BlockedIpScalarFieldEnum)[keyof typeof BlockedIpScalarFieldEnum];
     export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder];
     export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput];
+    export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput];
     export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode];
     export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder];
     export type ConfigOrderByRelevanceFieldEnum = (typeof ConfigOrderByRelevanceFieldEnum)[keyof typeof ConfigOrderByRelevanceFieldEnum];
@@ -407737,6 +409240,7 @@ export namespace Prisma {
     export type GraduationRankDowngradeConditionOrderByRelevanceFieldEnum = (typeof GraduationRankDowngradeConditionOrderByRelevanceFieldEnum)[keyof typeof GraduationRankDowngradeConditionOrderByRelevanceFieldEnum];
     export type RankingConditionOrderByRelevanceFieldEnum = (typeof RankingConditionOrderByRelevanceFieldEnum)[keyof typeof RankingConditionOrderByRelevanceFieldEnum];
     export type DiplomaVerificationApplicationOrderByRelevanceFieldEnum = (typeof DiplomaVerificationApplicationOrderByRelevanceFieldEnum)[keyof typeof DiplomaVerificationApplicationOrderByRelevanceFieldEnum];
+    export type CriteriaDefinitionOrderByRelevanceFieldEnum = (typeof CriteriaDefinitionOrderByRelevanceFieldEnum)[keyof typeof CriteriaDefinitionOrderByRelevanceFieldEnum];
     export type TrainingScoreSessionOrderByRelevanceFieldEnum = (typeof TrainingScoreSessionOrderByRelevanceFieldEnum)[keyof typeof TrainingScoreSessionOrderByRelevanceFieldEnum];
     export type StudentTrainingScoreOrderByRelevanceFieldEnum = (typeof StudentTrainingScoreOrderByRelevanceFieldEnum)[keyof typeof StudentTrainingScoreOrderByRelevanceFieldEnum];
     export type SemesterTrainingScoreOrderByRelevanceFieldEnum = (typeof SemesterTrainingScoreOrderByRelevanceFieldEnum)[keyof typeof SemesterTrainingScoreOrderByRelevanceFieldEnum];
@@ -408238,6 +409742,14 @@ export namespace Prisma {
      * Reference to a field of type 'DiplomaVerificationStatus[]'
      */
     export type ListEnumDiplomaVerificationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DiplomaVerificationStatus[]'>;
+    /**
+     * Reference to a field of type 'CriteriaSource'
+     */
+    export type EnumCriteriaSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CriteriaSource'>;
+    /**
+     * Reference to a field of type 'CriteriaSource[]'
+     */
+    export type ListEnumCriteriaSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CriteriaSource[]'>;
     /**
      * Reference to a field of type 'TrainingScoreStatus'
      */
@@ -421727,6 +423239,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionListRelationFilter
         certificateOnSubject?: CertificateOnSubjectListRelationFilter
         awardOnSubject?: AwardListRelationFilter
+        criteriaDefinitions?: CriteriaDefinitionListRelationFilter
     };
     export type SubjectOrderByWithRelationInput = {
         id?: SortOrder
@@ -421751,6 +423264,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionOrderByRelationAggregateInput
         certificateOnSubject?: CertificateOnSubjectOrderByRelationAggregateInput
         awardOnSubject?: AwardOrderByRelationAggregateInput
+        criteriaDefinitions?: CriteriaDefinitionOrderByRelationAggregateInput
         _relevance?: SubjectOrderByRelevanceInput
     };
     export type SubjectWhereUniqueInput = Prisma.AtLeast<{
@@ -421780,6 +423294,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionListRelationFilter
         certificateOnSubject?: CertificateOnSubjectListRelationFilter
         awardOnSubject?: AwardListRelationFilter
+        criteriaDefinitions?: CriteriaDefinitionListRelationFilter
     }, "id" | "code" | "code_name_managementOrganizationId">;
     export type SubjectOrderByWithAggregationInput = {
         id?: SortOrder
@@ -429502,6 +431017,7 @@ export namespace Prisma {
         parent?: XOR<TrainingBlockNullableScalarRelationFilter, TrainingBlockWhereInput> | null
         children?: TrainingBlockListRelationFilter
         curriculumVersions?: TrainingBlockOnCurriculumVersionListRelationFilter
+        criteriaDefinitions?: CriteriaDefinitionListRelationFilter
     };
     export type TrainingBlockOrderByWithRelationInput = {
         id?: SortOrder
@@ -429527,6 +431043,7 @@ export namespace Prisma {
         parent?: TrainingBlockOrderByWithRelationInput
         children?: TrainingBlockOrderByRelationAggregateInput
         curriculumVersions?: TrainingBlockOnCurriculumVersionOrderByRelationAggregateInput
+        criteriaDefinitions?: CriteriaDefinitionOrderByRelationAggregateInput
         _relevance?: TrainingBlockOrderByRelevanceInput
     };
     export type TrainingBlockWhereUniqueInput = Prisma.AtLeast<{
@@ -429557,6 +431074,7 @@ export namespace Prisma {
         parent?: XOR<TrainingBlockNullableScalarRelationFilter, TrainingBlockWhereInput> | null
         children?: TrainingBlockListRelationFilter
         curriculumVersions?: TrainingBlockOnCurriculumVersionListRelationFilter
+        criteriaDefinitions?: CriteriaDefinitionListRelationFilter
     }, "id" | "trainingObjectTypeId_name">;
     export type TrainingBlockOrderByWithAggregationInput = {
         id?: SortOrder
@@ -432234,12 +433752,14 @@ export namespace Prisma {
         sThietBiTao?: StringNullableFilter<"GraduationRankDowngradeCondition"> | string | null
         sThietBiSua?: StringNullableFilter<"GraduationRankDowngradeCondition"> | string | null
         downgradeRuleId?: StringFilter<"GraduationRankDowngradeCondition"> | string
-        field?: EnumCriteriaFieldFilter<"GraduationRankDowngradeCondition"> | $Enums.CriteriaField
+        criteriaId?: StringFilter<"GraduationRankDowngradeCondition"> | string
+        field?: EnumCriteriaFieldNullableFilter<"GraduationRankDowngradeCondition"> | $Enums.CriteriaField | null
         operator?: EnumCriteriaOperatorFilter<"GraduationRankDowngradeCondition"> | $Enums.CriteriaOperator
         invert?: BoolFilter<"GraduationRankDowngradeCondition"> | boolean
         value?: FloatFilter<"GraduationRankDowngradeCondition"> | number
         tuple?: StringNullableListFilter<"GraduationRankDowngradeCondition">
         downgradeRule?: XOR<GraduationRankDowngradeRuleScalarRelationFilter, GraduationRankDowngradeRuleWhereInput>
+        criteria?: XOR<CriteriaDefinitionScalarRelationFilter, CriteriaDefinitionWhereInput>
         applicationDowngraded?: ApplicationDowngradedListRelationFilter
     };
     export type GraduationRankDowngradeConditionOrderByWithRelationInput = {
@@ -432258,12 +433778,14 @@ export namespace Prisma {
         sThietBiTao?: SortOrderInput | SortOrder
         sThietBiSua?: SortOrderInput | SortOrder
         downgradeRuleId?: SortOrder
-        field?: SortOrder
+        criteriaId?: SortOrder
+        field?: SortOrderInput | SortOrder
         operator?: SortOrder
         invert?: SortOrder
         value?: SortOrder
         tuple?: SortOrder
         downgradeRule?: GraduationRankDowngradeRuleOrderByWithRelationInput
+        criteria?: CriteriaDefinitionOrderByWithRelationInput
         applicationDowngraded?: ApplicationDowngradedOrderByRelationAggregateInput
         _relevance?: GraduationRankDowngradeConditionOrderByRelevanceInput
     };
@@ -432286,12 +433808,14 @@ export namespace Prisma {
         sThietBiTao?: StringNullableFilter<"GraduationRankDowngradeCondition"> | string | null
         sThietBiSua?: StringNullableFilter<"GraduationRankDowngradeCondition"> | string | null
         downgradeRuleId?: StringFilter<"GraduationRankDowngradeCondition"> | string
-        field?: EnumCriteriaFieldFilter<"GraduationRankDowngradeCondition"> | $Enums.CriteriaField
+        criteriaId?: StringFilter<"GraduationRankDowngradeCondition"> | string
+        field?: EnumCriteriaFieldNullableFilter<"GraduationRankDowngradeCondition"> | $Enums.CriteriaField | null
         operator?: EnumCriteriaOperatorFilter<"GraduationRankDowngradeCondition"> | $Enums.CriteriaOperator
         invert?: BoolFilter<"GraduationRankDowngradeCondition"> | boolean
         value?: FloatFilter<"GraduationRankDowngradeCondition"> | number
         tuple?: StringNullableListFilter<"GraduationRankDowngradeCondition">
         downgradeRule?: XOR<GraduationRankDowngradeRuleScalarRelationFilter, GraduationRankDowngradeRuleWhereInput>
+        criteria?: XOR<CriteriaDefinitionScalarRelationFilter, CriteriaDefinitionWhereInput>
         applicationDowngraded?: ApplicationDowngradedListRelationFilter
     }, "id" | "code">;
     export type GraduationRankDowngradeConditionOrderByWithAggregationInput = {
@@ -432310,7 +433834,8 @@ export namespace Prisma {
         sThietBiTao?: SortOrderInput | SortOrder
         sThietBiSua?: SortOrderInput | SortOrder
         downgradeRuleId?: SortOrder
-        field?: SortOrder
+        criteriaId?: SortOrder
+        field?: SortOrderInput | SortOrder
         operator?: SortOrder
         invert?: SortOrder
         value?: SortOrder
@@ -432340,7 +433865,8 @@ export namespace Prisma {
         sThietBiTao?: StringNullableWithAggregatesFilter<"GraduationRankDowngradeCondition"> | string | null
         sThietBiSua?: StringNullableWithAggregatesFilter<"GraduationRankDowngradeCondition"> | string | null
         downgradeRuleId?: StringWithAggregatesFilter<"GraduationRankDowngradeCondition"> | string
-        field?: EnumCriteriaFieldWithAggregatesFilter<"GraduationRankDowngradeCondition"> | $Enums.CriteriaField
+        criteriaId?: StringWithAggregatesFilter<"GraduationRankDowngradeCondition"> | string
+        field?: EnumCriteriaFieldNullableWithAggregatesFilter<"GraduationRankDowngradeCondition"> | $Enums.CriteriaField | null
         operator?: EnumCriteriaOperatorWithAggregatesFilter<"GraduationRankDowngradeCondition"> | $Enums.CriteriaOperator
         invert?: BoolWithAggregatesFilter<"GraduationRankDowngradeCondition"> | boolean
         value?: FloatWithAggregatesFilter<"GraduationRankDowngradeCondition"> | number
@@ -432668,6 +434194,133 @@ export namespace Prisma {
         classification?: StringNullableWithAggregatesFilter<"DiplomaVerificationApplication"> | string | null
         status?: EnumDiplomaVerificationStatusWithAggregatesFilter<"DiplomaVerificationApplication"> | $Enums.DiplomaVerificationStatus
         studentId?: StringNullableWithAggregatesFilter<"DiplomaVerificationApplication"> | string | null
+    };
+    export type CriteriaDefinitionWhereInput = {
+        AND?: CriteriaDefinitionWhereInput | CriteriaDefinitionWhereInput[]
+        OR?: CriteriaDefinitionWhereInput[]
+        NOT?: CriteriaDefinitionWhereInput | CriteriaDefinitionWhereInput[]
+        id?: StringFilter<"CriteriaDefinition"> | string
+        code?: StringNullableFilter<"CriteriaDefinition"> | string | null
+        active?: BoolFilter<"CriteriaDefinition"> | boolean
+        description?: StringNullableFilter<"CriteriaDefinition"> | string | null
+        deletedAt?: DateTimeNullableFilter<"CriteriaDefinition"> | Date | string | null
+        createdAt?: DateTimeFilter<"CriteriaDefinition"> | Date | string
+        updatedAt?: DateTimeFilter<"CriteriaDefinition"> | Date | string
+        createdBy?: UuidNullableFilter<"CriteriaDefinition"> | string | null
+        sNguoiTao?: StringNullableFilter<"CriteriaDefinition"> | string | null
+        sNguoiSua?: StringNullableFilter<"CriteriaDefinition"> | string | null
+        dNgayTao?: DateTimeNullableFilter<"CriteriaDefinition"> | Date | string | null
+        dNgaySua?: DateTimeNullableFilter<"CriteriaDefinition"> | Date | string | null
+        sThietBiTao?: StringNullableFilter<"CriteriaDefinition"> | string | null
+        sThietBiSua?: StringNullableFilter<"CriteriaDefinition"> | string | null
+        name?: StringFilter<"CriteriaDefinition"> | string
+        source?: EnumCriteriaSourceFilter<"CriteriaDefinition"> | $Enums.CriteriaSource
+        systemField?: EnumCriteriaFieldNullableFilter<"CriteriaDefinition"> | $Enums.CriteriaField | null
+        calcType?: StringNullableFilter<"CriteriaDefinition"> | string | null
+        params?: JsonFilter<"CriteriaDefinition">
+        trainingBlocks?: TrainingBlockListRelationFilter
+        subjects?: SubjectListRelationFilter
+        downgradeConditions?: GraduationRankDowngradeConditionListRelationFilter
+    };
+    export type CriteriaDefinitionOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        sNguoiTao?: SortOrderInput | SortOrder
+        sNguoiSua?: SortOrderInput | SortOrder
+        dNgayTao?: SortOrderInput | SortOrder
+        dNgaySua?: SortOrderInput | SortOrder
+        sThietBiTao?: SortOrderInput | SortOrder
+        sThietBiSua?: SortOrderInput | SortOrder
+        name?: SortOrder
+        source?: SortOrder
+        systemField?: SortOrderInput | SortOrder
+        calcType?: SortOrderInput | SortOrder
+        params?: SortOrder
+        trainingBlocks?: TrainingBlockOrderByRelationAggregateInput
+        subjects?: SubjectOrderByRelationAggregateInput
+        downgradeConditions?: GraduationRankDowngradeConditionOrderByRelationAggregateInput
+        _relevance?: CriteriaDefinitionOrderByRelevanceInput
+    };
+    export type CriteriaDefinitionWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        systemField?: $Enums.CriteriaField
+        AND?: CriteriaDefinitionWhereInput | CriteriaDefinitionWhereInput[]
+        OR?: CriteriaDefinitionWhereInput[]
+        NOT?: CriteriaDefinitionWhereInput | CriteriaDefinitionWhereInput[]
+        active?: BoolFilter<"CriteriaDefinition"> | boolean
+        description?: StringNullableFilter<"CriteriaDefinition"> | string | null
+        deletedAt?: DateTimeNullableFilter<"CriteriaDefinition"> | Date | string | null
+        createdAt?: DateTimeFilter<"CriteriaDefinition"> | Date | string
+        updatedAt?: DateTimeFilter<"CriteriaDefinition"> | Date | string
+        createdBy?: UuidNullableFilter<"CriteriaDefinition"> | string | null
+        sNguoiTao?: StringNullableFilter<"CriteriaDefinition"> | string | null
+        sNguoiSua?: StringNullableFilter<"CriteriaDefinition"> | string | null
+        dNgayTao?: DateTimeNullableFilter<"CriteriaDefinition"> | Date | string | null
+        dNgaySua?: DateTimeNullableFilter<"CriteriaDefinition"> | Date | string | null
+        sThietBiTao?: StringNullableFilter<"CriteriaDefinition"> | string | null
+        sThietBiSua?: StringNullableFilter<"CriteriaDefinition"> | string | null
+        name?: StringFilter<"CriteriaDefinition"> | string
+        source?: EnumCriteriaSourceFilter<"CriteriaDefinition"> | $Enums.CriteriaSource
+        calcType?: StringNullableFilter<"CriteriaDefinition"> | string | null
+        params?: JsonFilter<"CriteriaDefinition">
+        trainingBlocks?: TrainingBlockListRelationFilter
+        subjects?: SubjectListRelationFilter
+        downgradeConditions?: GraduationRankDowngradeConditionListRelationFilter
+    }, "id" | "code" | "systemField">;
+    export type CriteriaDefinitionOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        sNguoiTao?: SortOrderInput | SortOrder
+        sNguoiSua?: SortOrderInput | SortOrder
+        dNgayTao?: SortOrderInput | SortOrder
+        dNgaySua?: SortOrderInput | SortOrder
+        sThietBiTao?: SortOrderInput | SortOrder
+        sThietBiSua?: SortOrderInput | SortOrder
+        name?: SortOrder
+        source?: SortOrder
+        systemField?: SortOrderInput | SortOrder
+        calcType?: SortOrderInput | SortOrder
+        params?: SortOrder
+        _count?: CriteriaDefinitionCountOrderByAggregateInput
+        _max?: CriteriaDefinitionMaxOrderByAggregateInput
+        _min?: CriteriaDefinitionMinOrderByAggregateInput
+    };
+    export type CriteriaDefinitionScalarWhereWithAggregatesInput = {
+        AND?: CriteriaDefinitionScalarWhereWithAggregatesInput | CriteriaDefinitionScalarWhereWithAggregatesInput[]
+        OR?: CriteriaDefinitionScalarWhereWithAggregatesInput[]
+        NOT?: CriteriaDefinitionScalarWhereWithAggregatesInput | CriteriaDefinitionScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"CriteriaDefinition"> | string
+        code?: StringNullableWithAggregatesFilter<"CriteriaDefinition"> | string | null
+        active?: BoolWithAggregatesFilter<"CriteriaDefinition"> | boolean
+        description?: StringNullableWithAggregatesFilter<"CriteriaDefinition"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"CriteriaDefinition"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"CriteriaDefinition"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"CriteriaDefinition"> | Date | string
+        createdBy?: UuidNullableWithAggregatesFilter<"CriteriaDefinition"> | string | null
+        sNguoiTao?: StringNullableWithAggregatesFilter<"CriteriaDefinition"> | string | null
+        sNguoiSua?: StringNullableWithAggregatesFilter<"CriteriaDefinition"> | string | null
+        dNgayTao?: DateTimeNullableWithAggregatesFilter<"CriteriaDefinition"> | Date | string | null
+        dNgaySua?: DateTimeNullableWithAggregatesFilter<"CriteriaDefinition"> | Date | string | null
+        sThietBiTao?: StringNullableWithAggregatesFilter<"CriteriaDefinition"> | string | null
+        sThietBiSua?: StringNullableWithAggregatesFilter<"CriteriaDefinition"> | string | null
+        name?: StringWithAggregatesFilter<"CriteriaDefinition"> | string
+        source?: EnumCriteriaSourceWithAggregatesFilter<"CriteriaDefinition"> | $Enums.CriteriaSource
+        systemField?: EnumCriteriaFieldNullableWithAggregatesFilter<"CriteriaDefinition"> | $Enums.CriteriaField | null
+        calcType?: StringNullableWithAggregatesFilter<"CriteriaDefinition"> | string | null
+        params?: JsonWithAggregatesFilter<"CriteriaDefinition">
     };
     export type TrainingScoreSessionWhereInput = {
         AND?: TrainingScoreSessionWhereInput | TrainingScoreSessionWhereInput[]
@@ -463153,6 +464806,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionCreateNestedManyWithoutSubjectInput
         certificateOnSubject?: CertificateOnSubjectCreateNestedManyWithoutSubjectInput
         awardOnSubject?: AwardCreateNestedManyWithoutSubjectsInput
+        criteriaDefinitions?: CriteriaDefinitionCreateNestedManyWithoutSubjectsInput
     };
     export type SubjectUncheckedCreateInput = {
         id?: string
@@ -463176,6 +464830,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutSubjectInput
         certificateOnSubject?: CertificateOnSubjectUncheckedCreateNestedManyWithoutSubjectInput
         awardOnSubject?: AwardUncheckedCreateNestedManyWithoutSubjectsInput
+        criteriaDefinitions?: CriteriaDefinitionUncheckedCreateNestedManyWithoutSubjectsInput
     };
     export type SubjectUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -463199,6 +464854,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUpdateManyWithoutSubjectNestedInput
         certificateOnSubject?: CertificateOnSubjectUpdateManyWithoutSubjectNestedInput
         awardOnSubject?: AwardUpdateManyWithoutSubjectsNestedInput
+        criteriaDefinitions?: CriteriaDefinitionUpdateManyWithoutSubjectsNestedInput
     };
     export type SubjectUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -463222,6 +464878,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutSubjectNestedInput
         certificateOnSubject?: CertificateOnSubjectUncheckedUpdateManyWithoutSubjectNestedInput
         awardOnSubject?: AwardUncheckedUpdateManyWithoutSubjectsNestedInput
+        criteriaDefinitions?: CriteriaDefinitionUncheckedUpdateManyWithoutSubjectsNestedInput
     };
     export type SubjectCreateManyInput = {
         id?: string
@@ -472472,6 +474129,7 @@ export namespace Prisma {
         parent?: TrainingBlockCreateNestedOneWithoutChildrenInput
         children?: TrainingBlockCreateNestedManyWithoutParentInput
         curriculumVersions?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutTrainingBlockInput
+        criteriaDefinitions?: CriteriaDefinitionCreateNestedManyWithoutTrainingBlocksInput
     };
     export type TrainingBlockUncheckedCreateInput = {
         id?: string
@@ -472495,6 +474153,7 @@ export namespace Prisma {
         parentId?: string | null
         children?: TrainingBlockUncheckedCreateNestedManyWithoutParentInput
         curriculumVersions?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutTrainingBlockInput
+        criteriaDefinitions?: CriteriaDefinitionUncheckedCreateNestedManyWithoutTrainingBlocksInput
     };
     export type TrainingBlockUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -472518,6 +474177,7 @@ export namespace Prisma {
         parent?: TrainingBlockUpdateOneWithoutChildrenNestedInput
         children?: TrainingBlockUpdateManyWithoutParentNestedInput
         curriculumVersions?: TrainingBlockOnCurriculumVersionUpdateManyWithoutTrainingBlockNestedInput
+        criteriaDefinitions?: CriteriaDefinitionUpdateManyWithoutTrainingBlocksNestedInput
     };
     export type TrainingBlockUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -472541,6 +474201,7 @@ export namespace Prisma {
         parentId?: NullableStringFieldUpdateOperationsInput | string | null
         children?: TrainingBlockUncheckedUpdateManyWithoutParentNestedInput
         curriculumVersions?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutTrainingBlockNestedInput
+        criteriaDefinitions?: CriteriaDefinitionUncheckedUpdateManyWithoutTrainingBlocksNestedInput
     };
     export type TrainingBlockCreateManyInput = {
         id?: string
@@ -475724,12 +477385,13 @@ export namespace Prisma {
         dNgaySua?: Date | string | null
         sThietBiTao?: string | null
         sThietBiSua?: string | null
-        field: $Enums.CriteriaField
+        field?: $Enums.CriteriaField | null
         operator: $Enums.CriteriaOperator
         invert?: boolean
         value: number
         tuple?: GraduationRankDowngradeConditionCreatetupleInput | string[]
         downgradeRule: GraduationRankDowngradeRuleCreateNestedOneWithoutConditionsInput
+        criteria: CriteriaDefinitionCreateNestedOneWithoutDowngradeConditionsInput
         applicationDowngraded?: ApplicationDowngradedCreateNestedManyWithoutConditionsInput
     };
     export type GraduationRankDowngradeConditionUncheckedCreateInput = {
@@ -475748,7 +477410,8 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         downgradeRuleId: string
-        field: $Enums.CriteriaField
+        criteriaId: string
+        field?: $Enums.CriteriaField | null
         operator: $Enums.CriteriaOperator
         invert?: boolean
         value: number
@@ -475770,12 +477433,13 @@ export namespace Prisma {
         dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
-        field?: EnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField
+        field?: NullableEnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField | null
         operator?: EnumCriteriaOperatorFieldUpdateOperationsInput | $Enums.CriteriaOperator
         invert?: BoolFieldUpdateOperationsInput | boolean
         value?: FloatFieldUpdateOperationsInput | number
         tuple?: GraduationRankDowngradeConditionUpdatetupleInput | string[]
         downgradeRule?: GraduationRankDowngradeRuleUpdateOneRequiredWithoutConditionsNestedInput
+        criteria?: CriteriaDefinitionUpdateOneRequiredWithoutDowngradeConditionsNestedInput
         applicationDowngraded?: ApplicationDowngradedUpdateManyWithoutConditionsNestedInput
     };
     export type GraduationRankDowngradeConditionUncheckedUpdateInput = {
@@ -475794,7 +477458,8 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         downgradeRuleId?: StringFieldUpdateOperationsInput | string
-        field?: EnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField
+        criteriaId?: StringFieldUpdateOperationsInput | string
+        field?: NullableEnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField | null
         operator?: EnumCriteriaOperatorFieldUpdateOperationsInput | $Enums.CriteriaOperator
         invert?: BoolFieldUpdateOperationsInput | boolean
         value?: FloatFieldUpdateOperationsInput | number
@@ -475817,7 +477482,8 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         downgradeRuleId: string
-        field: $Enums.CriteriaField
+        criteriaId: string
+        field?: $Enums.CriteriaField | null
         operator: $Enums.CriteriaOperator
         invert?: boolean
         value: number
@@ -475838,7 +477504,7 @@ export namespace Prisma {
         dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
-        field?: EnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField
+        field?: NullableEnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField | null
         operator?: EnumCriteriaOperatorFieldUpdateOperationsInput | $Enums.CriteriaOperator
         invert?: BoolFieldUpdateOperationsInput | boolean
         value?: FloatFieldUpdateOperationsInput | number
@@ -475860,7 +477526,8 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         downgradeRuleId?: StringFieldUpdateOperationsInput | string
-        field?: EnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField
+        criteriaId?: StringFieldUpdateOperationsInput | string
+        field?: NullableEnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField | null
         operator?: EnumCriteriaOperatorFieldUpdateOperationsInput | $Enums.CriteriaOperator
         invert?: BoolFieldUpdateOperationsInput | boolean
         value?: FloatFieldUpdateOperationsInput | number
@@ -476264,6 +477931,165 @@ export namespace Prisma {
         classification?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDiplomaVerificationStatusFieldUpdateOperationsInput | $Enums.DiplomaVerificationStatus
         studentId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type CriteriaDefinitionCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        name: string
+        source: $Enums.CriteriaSource
+        systemField?: $Enums.CriteriaField | null
+        calcType?: string | null
+        params?: JsonNullValueInput | InputJsonValue
+        trainingBlocks?: TrainingBlockCreateNestedManyWithoutCriteriaDefinitionsInput
+        subjects?: SubjectCreateNestedManyWithoutCriteriaDefinitionsInput
+        downgradeConditions?: GraduationRankDowngradeConditionCreateNestedManyWithoutCriteriaInput
+    };
+    export type CriteriaDefinitionUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        name: string
+        source: $Enums.CriteriaSource
+        systemField?: $Enums.CriteriaField | null
+        calcType?: string | null
+        params?: JsonNullValueInput | InputJsonValue
+        trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutCriteriaDefinitionsInput
+        subjects?: SubjectUncheckedCreateNestedManyWithoutCriteriaDefinitionsInput
+        downgradeConditions?: GraduationRankDowngradeConditionUncheckedCreateNestedManyWithoutCriteriaInput
+    };
+    export type CriteriaDefinitionUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        source?: EnumCriteriaSourceFieldUpdateOperationsInput | $Enums.CriteriaSource
+        systemField?: NullableEnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField | null
+        calcType?: NullableStringFieldUpdateOperationsInput | string | null
+        params?: JsonNullValueInput | InputJsonValue
+        trainingBlocks?: TrainingBlockUpdateManyWithoutCriteriaDefinitionsNestedInput
+        subjects?: SubjectUpdateManyWithoutCriteriaDefinitionsNestedInput
+        downgradeConditions?: GraduationRankDowngradeConditionUpdateManyWithoutCriteriaNestedInput
+    };
+    export type CriteriaDefinitionUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        source?: EnumCriteriaSourceFieldUpdateOperationsInput | $Enums.CriteriaSource
+        systemField?: NullableEnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField | null
+        calcType?: NullableStringFieldUpdateOperationsInput | string | null
+        params?: JsonNullValueInput | InputJsonValue
+        trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutCriteriaDefinitionsNestedInput
+        subjects?: SubjectUncheckedUpdateManyWithoutCriteriaDefinitionsNestedInput
+        downgradeConditions?: GraduationRankDowngradeConditionUncheckedUpdateManyWithoutCriteriaNestedInput
+    };
+    export type CriteriaDefinitionCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        name: string
+        source: $Enums.CriteriaSource
+        systemField?: $Enums.CriteriaField | null
+        calcType?: string | null
+        params?: JsonNullValueInput | InputJsonValue
+    };
+    export type CriteriaDefinitionUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        source?: EnumCriteriaSourceFieldUpdateOperationsInput | $Enums.CriteriaSource
+        systemField?: NullableEnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField | null
+        calcType?: NullableStringFieldUpdateOperationsInput | string | null
+        params?: JsonNullValueInput | InputJsonValue
+    };
+    export type CriteriaDefinitionUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        source?: EnumCriteriaSourceFieldUpdateOperationsInput | $Enums.CriteriaSource
+        systemField?: NullableEnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField | null
+        calcType?: NullableStringFieldUpdateOperationsInput | string | null
+        params?: JsonNullValueInput | InputJsonValue
     };
     export type TrainingScoreSessionCreateInput = {
         id?: string
@@ -502922,10 +504748,18 @@ export namespace Prisma {
         some?: AwardWhereInput
         none?: AwardWhereInput
     };
+    export type CriteriaDefinitionListRelationFilter = {
+        every?: CriteriaDefinitionWhereInput
+        some?: CriteriaDefinitionWhereInput
+        none?: CriteriaDefinitionWhereInput
+    };
     export type CertificateOnSubjectOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
     export type AwardOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type CriteriaDefinitionOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
     export type SubjectOrderByRelevanceInput = {
@@ -509859,11 +511693,11 @@ export namespace Prisma {
         sThietBiSua?: SortOrder
         initialRankId?: SortOrder
     };
-    export type EnumCriteriaFieldFilter<$PrismaModel = never> = {
-        equals?: $Enums.CriteriaField | EnumCriteriaFieldFieldRefInput<$PrismaModel>
-        in?: $Enums.CriteriaField[] | ListEnumCriteriaFieldFieldRefInput<$PrismaModel>
-        notIn?: $Enums.CriteriaField[] | ListEnumCriteriaFieldFieldRefInput<$PrismaModel>
-        not?: NestedEnumCriteriaFieldFilter<$PrismaModel> | $Enums.CriteriaField
+    export type EnumCriteriaFieldNullableFilter<$PrismaModel = never> = {
+        equals?: $Enums.CriteriaField | EnumCriteriaFieldFieldRefInput<$PrismaModel> | null
+        in?: $Enums.CriteriaField[] | ListEnumCriteriaFieldFieldRefInput<$PrismaModel> | null
+        notIn?: $Enums.CriteriaField[] | ListEnumCriteriaFieldFieldRefInput<$PrismaModel> | null
+        not?: NestedEnumCriteriaFieldNullableFilter<$PrismaModel> | $Enums.CriteriaField | null
     };
     export type EnumCriteriaOperatorFilter<$PrismaModel = never> = {
         equals?: $Enums.CriteriaOperator | EnumCriteriaOperatorFieldRefInput<$PrismaModel>
@@ -509874,6 +511708,10 @@ export namespace Prisma {
     export type GraduationRankDowngradeRuleScalarRelationFilter = {
         is?: GraduationRankDowngradeRuleWhereInput
         isNot?: GraduationRankDowngradeRuleWhereInput
+    };
+    export type CriteriaDefinitionScalarRelationFilter = {
+        is?: CriteriaDefinitionWhereInput
+        isNot?: CriteriaDefinitionWhereInput
     };
     export type GraduationRankDowngradeConditionOrderByRelevanceInput = {
         fields: GraduationRankDowngradeConditionOrderByRelevanceFieldEnum | GraduationRankDowngradeConditionOrderByRelevanceFieldEnum[]
@@ -509896,6 +511734,7 @@ export namespace Prisma {
         sThietBiTao?: SortOrder
         sThietBiSua?: SortOrder
         downgradeRuleId?: SortOrder
+        criteriaId?: SortOrder
         field?: SortOrder
         operator?: SortOrder
         invert?: SortOrder
@@ -509921,6 +511760,7 @@ export namespace Prisma {
         sThietBiTao?: SortOrder
         sThietBiSua?: SortOrder
         downgradeRuleId?: SortOrder
+        criteriaId?: SortOrder
         field?: SortOrder
         operator?: SortOrder
         invert?: SortOrder
@@ -509942,6 +511782,7 @@ export namespace Prisma {
         sThietBiTao?: SortOrder
         sThietBiSua?: SortOrder
         downgradeRuleId?: SortOrder
+        criteriaId?: SortOrder
         field?: SortOrder
         operator?: SortOrder
         invert?: SortOrder
@@ -509950,14 +511791,14 @@ export namespace Prisma {
     export type GraduationRankDowngradeConditionSumOrderByAggregateInput = {
         value?: SortOrder
     };
-    export type EnumCriteriaFieldWithAggregatesFilter<$PrismaModel = never> = {
-        equals?: $Enums.CriteriaField | EnumCriteriaFieldFieldRefInput<$PrismaModel>
-        in?: $Enums.CriteriaField[] | ListEnumCriteriaFieldFieldRefInput<$PrismaModel>
-        notIn?: $Enums.CriteriaField[] | ListEnumCriteriaFieldFieldRefInput<$PrismaModel>
-        not?: NestedEnumCriteriaFieldWithAggregatesFilter<$PrismaModel> | $Enums.CriteriaField
-        _count?: NestedIntFilter<$PrismaModel>
-        _min?: NestedEnumCriteriaFieldFilter<$PrismaModel>
-        _max?: NestedEnumCriteriaFieldFilter<$PrismaModel>
+    export type EnumCriteriaFieldNullableWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: $Enums.CriteriaField | EnumCriteriaFieldFieldRefInput<$PrismaModel> | null
+        in?: $Enums.CriteriaField[] | ListEnumCriteriaFieldFieldRefInput<$PrismaModel> | null
+        notIn?: $Enums.CriteriaField[] | ListEnumCriteriaFieldFieldRefInput<$PrismaModel> | null
+        not?: NestedEnumCriteriaFieldNullableWithAggregatesFilter<$PrismaModel> | $Enums.CriteriaField | null
+        _count?: NestedIntNullableFilter<$PrismaModel>
+        _min?: NestedEnumCriteriaFieldNullableFilter<$PrismaModel>
+        _max?: NestedEnumCriteriaFieldNullableFilter<$PrismaModel>
     };
     export type EnumCriteriaOperatorWithAggregatesFilter<$PrismaModel = never> = {
         equals?: $Enums.CriteriaOperator | EnumCriteriaOperatorFieldRefInput<$PrismaModel>
@@ -509967,6 +511808,12 @@ export namespace Prisma {
         _count?: NestedIntFilter<$PrismaModel>
         _min?: NestedEnumCriteriaOperatorFilter<$PrismaModel>
         _max?: NestedEnumCriteriaOperatorFilter<$PrismaModel>
+    };
+    export type EnumCriteriaFieldFilter<$PrismaModel = never> = {
+        equals?: $Enums.CriteriaField | EnumCriteriaFieldFieldRefInput<$PrismaModel>
+        in?: $Enums.CriteriaField[] | ListEnumCriteriaFieldFieldRefInput<$PrismaModel>
+        notIn?: $Enums.CriteriaField[] | ListEnumCriteriaFieldFieldRefInput<$PrismaModel>
+        not?: NestedEnumCriteriaFieldFilter<$PrismaModel> | $Enums.CriteriaField
     };
     export type RankingConditionOrderByRelevanceInput = {
         fields: RankingConditionOrderByRelevanceFieldEnum | RankingConditionOrderByRelevanceFieldEnum[]
@@ -510042,6 +511889,15 @@ export namespace Prisma {
     };
     export type RankingConditionSumOrderByAggregateInput = {
         value?: SortOrder
+    };
+    export type EnumCriteriaFieldWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: $Enums.CriteriaField | EnumCriteriaFieldFieldRefInput<$PrismaModel>
+        in?: $Enums.CriteriaField[] | ListEnumCriteriaFieldFieldRefInput<$PrismaModel>
+        notIn?: $Enums.CriteriaField[] | ListEnumCriteriaFieldFieldRefInput<$PrismaModel>
+        not?: NestedEnumCriteriaFieldWithAggregatesFilter<$PrismaModel> | $Enums.CriteriaField
+        _count?: NestedIntFilter<$PrismaModel>
+        _min?: NestedEnumCriteriaFieldFilter<$PrismaModel>
+        _max?: NestedEnumCriteriaFieldFilter<$PrismaModel>
     };
     export type EnumDiplomaVerificationStatusFilter<$PrismaModel = never> = {
         equals?: $Enums.DiplomaVerificationStatus | EnumDiplomaVerificationStatusFieldRefInput<$PrismaModel>
@@ -510169,6 +512025,132 @@ export namespace Prisma {
         _count?: NestedIntFilter<$PrismaModel>
         _min?: NestedEnumDiplomaVerificationStatusFilter<$PrismaModel>
         _max?: NestedEnumDiplomaVerificationStatusFilter<$PrismaModel>
+    };
+    export type EnumCriteriaSourceFilter<$PrismaModel = never> = {
+        equals?: $Enums.CriteriaSource | EnumCriteriaSourceFieldRefInput<$PrismaModel>
+        in?: $Enums.CriteriaSource[] | ListEnumCriteriaSourceFieldRefInput<$PrismaModel>
+        notIn?: $Enums.CriteriaSource[] | ListEnumCriteriaSourceFieldRefInput<$PrismaModel>
+        not?: NestedEnumCriteriaSourceFilter<$PrismaModel> | $Enums.CriteriaSource
+    };
+    export type JsonFilter<$PrismaModel = never> = | PatchUndefined<
+        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonFilterBase<$PrismaModel>>
+    >
+        | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>;
+    export type JsonFilterBase<$PrismaModel = never> = {
+        equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+        path?: string[]
+        mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+        string_contains?: string | StringFieldRefInput<$PrismaModel>
+        string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+        string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+        array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+        array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+        array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+        lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+        lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+        gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+        gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+        not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    };
+    export type CriteriaDefinitionOrderByRelevanceInput = {
+        fields: CriteriaDefinitionOrderByRelevanceFieldEnum | CriteriaDefinitionOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type CriteriaDefinitionCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        sNguoiTao?: SortOrder
+        sNguoiSua?: SortOrder
+        dNgayTao?: SortOrder
+        dNgaySua?: SortOrder
+        sThietBiTao?: SortOrder
+        sThietBiSua?: SortOrder
+        name?: SortOrder
+        source?: SortOrder
+        systemField?: SortOrder
+        calcType?: SortOrder
+        params?: SortOrder
+    };
+    export type CriteriaDefinitionMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        sNguoiTao?: SortOrder
+        sNguoiSua?: SortOrder
+        dNgayTao?: SortOrder
+        dNgaySua?: SortOrder
+        sThietBiTao?: SortOrder
+        sThietBiSua?: SortOrder
+        name?: SortOrder
+        source?: SortOrder
+        systemField?: SortOrder
+        calcType?: SortOrder
+    };
+    export type CriteriaDefinitionMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        sNguoiTao?: SortOrder
+        sNguoiSua?: SortOrder
+        dNgayTao?: SortOrder
+        dNgaySua?: SortOrder
+        sThietBiTao?: SortOrder
+        sThietBiSua?: SortOrder
+        name?: SortOrder
+        source?: SortOrder
+        systemField?: SortOrder
+        calcType?: SortOrder
+    };
+    export type EnumCriteriaSourceWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: $Enums.CriteriaSource | EnumCriteriaSourceFieldRefInput<$PrismaModel>
+        in?: $Enums.CriteriaSource[] | ListEnumCriteriaSourceFieldRefInput<$PrismaModel>
+        notIn?: $Enums.CriteriaSource[] | ListEnumCriteriaSourceFieldRefInput<$PrismaModel>
+        not?: NestedEnumCriteriaSourceWithAggregatesFilter<$PrismaModel> | $Enums.CriteriaSource
+        _count?: NestedIntFilter<$PrismaModel>
+        _min?: NestedEnumCriteriaSourceFilter<$PrismaModel>
+        _max?: NestedEnumCriteriaSourceFilter<$PrismaModel>
+    };
+    export type JsonWithAggregatesFilter<$PrismaModel = never> = | PatchUndefined<
+        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
+    >
+        | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>;
+    export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
+        equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+        path?: string[]
+        mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+        string_contains?: string | StringFieldRefInput<$PrismaModel>
+        string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+        string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+        array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+        array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+        array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+        lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+        lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+        gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+        gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+        not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+        _count?: NestedIntFilter<$PrismaModel>
+        _min?: NestedJsonFilter<$PrismaModel>
+        _max?: NestedJsonFilter<$PrismaModel>
     };
     export type TrainingScoreSessionOrderByRelevanceInput = {
         fields: TrainingScoreSessionOrderByRelevanceFieldEnum | TrainingScoreSessionOrderByRelevanceFieldEnum[]
@@ -529714,6 +531696,11 @@ export namespace Prisma {
         connectOrCreate?: AwardCreateOrConnectWithoutSubjectsInput | AwardCreateOrConnectWithoutSubjectsInput[]
         connect?: AwardWhereUniqueInput | AwardWhereUniqueInput[]
     };
+    export type CriteriaDefinitionCreateNestedManyWithoutSubjectsInput = {
+        create?: XOR<CriteriaDefinitionCreateWithoutSubjectsInput, CriteriaDefinitionUncheckedCreateWithoutSubjectsInput> | CriteriaDefinitionCreateWithoutSubjectsInput[] | CriteriaDefinitionUncheckedCreateWithoutSubjectsInput[]
+        connectOrCreate?: CriteriaDefinitionCreateOrConnectWithoutSubjectsInput | CriteriaDefinitionCreateOrConnectWithoutSubjectsInput[]
+        connect?: CriteriaDefinitionWhereUniqueInput | CriteriaDefinitionWhereUniqueInput[]
+    };
     export type SubjectVersionUncheckedCreateNestedManyWithoutSubjectInput = {
         create?: XOR<SubjectVersionCreateWithoutSubjectInput, SubjectVersionUncheckedCreateWithoutSubjectInput> | SubjectVersionCreateWithoutSubjectInput[] | SubjectVersionUncheckedCreateWithoutSubjectInput[]
         connectOrCreate?: SubjectVersionCreateOrConnectWithoutSubjectInput | SubjectVersionCreateOrConnectWithoutSubjectInput[]
@@ -529730,6 +531717,11 @@ export namespace Prisma {
         create?: XOR<AwardCreateWithoutSubjectsInput, AwardUncheckedCreateWithoutSubjectsInput> | AwardCreateWithoutSubjectsInput[] | AwardUncheckedCreateWithoutSubjectsInput[]
         connectOrCreate?: AwardCreateOrConnectWithoutSubjectsInput | AwardCreateOrConnectWithoutSubjectsInput[]
         connect?: AwardWhereUniqueInput | AwardWhereUniqueInput[]
+    };
+    export type CriteriaDefinitionUncheckedCreateNestedManyWithoutSubjectsInput = {
+        create?: XOR<CriteriaDefinitionCreateWithoutSubjectsInput, CriteriaDefinitionUncheckedCreateWithoutSubjectsInput> | CriteriaDefinitionCreateWithoutSubjectsInput[] | CriteriaDefinitionUncheckedCreateWithoutSubjectsInput[]
+        connectOrCreate?: CriteriaDefinitionCreateOrConnectWithoutSubjectsInput | CriteriaDefinitionCreateOrConnectWithoutSubjectsInput[]
+        connect?: CriteriaDefinitionWhereUniqueInput | CriteriaDefinitionWhereUniqueInput[]
     };
     export type DM_DonViUpdateOneWithoutSubjectsNestedInput = {
         create?: XOR<DM_DonViCreateWithoutSubjectsInput, DM_DonViUncheckedCreateWithoutSubjectsInput>
@@ -529778,6 +531770,18 @@ export namespace Prisma {
         updateMany?: AwardUpdateManyWithWhereWithoutSubjectsInput | AwardUpdateManyWithWhereWithoutSubjectsInput[]
         deleteMany?: AwardScalarWhereInput | AwardScalarWhereInput[]
     };
+    export type CriteriaDefinitionUpdateManyWithoutSubjectsNestedInput = {
+        create?: XOR<CriteriaDefinitionCreateWithoutSubjectsInput, CriteriaDefinitionUncheckedCreateWithoutSubjectsInput> | CriteriaDefinitionCreateWithoutSubjectsInput[] | CriteriaDefinitionUncheckedCreateWithoutSubjectsInput[]
+        connectOrCreate?: CriteriaDefinitionCreateOrConnectWithoutSubjectsInput | CriteriaDefinitionCreateOrConnectWithoutSubjectsInput[]
+        upsert?: CriteriaDefinitionUpsertWithWhereUniqueWithoutSubjectsInput | CriteriaDefinitionUpsertWithWhereUniqueWithoutSubjectsInput[]
+        set?: CriteriaDefinitionWhereUniqueInput | CriteriaDefinitionWhereUniqueInput[]
+        disconnect?: CriteriaDefinitionWhereUniqueInput | CriteriaDefinitionWhereUniqueInput[]
+        delete?: CriteriaDefinitionWhereUniqueInput | CriteriaDefinitionWhereUniqueInput[]
+        connect?: CriteriaDefinitionWhereUniqueInput | CriteriaDefinitionWhereUniqueInput[]
+        update?: CriteriaDefinitionUpdateWithWhereUniqueWithoutSubjectsInput | CriteriaDefinitionUpdateWithWhereUniqueWithoutSubjectsInput[]
+        updateMany?: CriteriaDefinitionUpdateManyWithWhereWithoutSubjectsInput | CriteriaDefinitionUpdateManyWithWhereWithoutSubjectsInput[]
+        deleteMany?: CriteriaDefinitionScalarWhereInput | CriteriaDefinitionScalarWhereInput[]
+    };
     export type SubjectVersionUncheckedUpdateManyWithoutSubjectNestedInput = {
         create?: XOR<SubjectVersionCreateWithoutSubjectInput, SubjectVersionUncheckedCreateWithoutSubjectInput> | SubjectVersionCreateWithoutSubjectInput[] | SubjectVersionUncheckedCreateWithoutSubjectInput[]
         connectOrCreate?: SubjectVersionCreateOrConnectWithoutSubjectInput | SubjectVersionCreateOrConnectWithoutSubjectInput[]
@@ -529815,6 +531819,18 @@ export namespace Prisma {
         update?: AwardUpdateWithWhereUniqueWithoutSubjectsInput | AwardUpdateWithWhereUniqueWithoutSubjectsInput[]
         updateMany?: AwardUpdateManyWithWhereWithoutSubjectsInput | AwardUpdateManyWithWhereWithoutSubjectsInput[]
         deleteMany?: AwardScalarWhereInput | AwardScalarWhereInput[]
+    };
+    export type CriteriaDefinitionUncheckedUpdateManyWithoutSubjectsNestedInput = {
+        create?: XOR<CriteriaDefinitionCreateWithoutSubjectsInput, CriteriaDefinitionUncheckedCreateWithoutSubjectsInput> | CriteriaDefinitionCreateWithoutSubjectsInput[] | CriteriaDefinitionUncheckedCreateWithoutSubjectsInput[]
+        connectOrCreate?: CriteriaDefinitionCreateOrConnectWithoutSubjectsInput | CriteriaDefinitionCreateOrConnectWithoutSubjectsInput[]
+        upsert?: CriteriaDefinitionUpsertWithWhereUniqueWithoutSubjectsInput | CriteriaDefinitionUpsertWithWhereUniqueWithoutSubjectsInput[]
+        set?: CriteriaDefinitionWhereUniqueInput | CriteriaDefinitionWhereUniqueInput[]
+        disconnect?: CriteriaDefinitionWhereUniqueInput | CriteriaDefinitionWhereUniqueInput[]
+        delete?: CriteriaDefinitionWhereUniqueInput | CriteriaDefinitionWhereUniqueInput[]
+        connect?: CriteriaDefinitionWhereUniqueInput | CriteriaDefinitionWhereUniqueInput[]
+        update?: CriteriaDefinitionUpdateWithWhereUniqueWithoutSubjectsInput | CriteriaDefinitionUpdateWithWhereUniqueWithoutSubjectsInput[]
+        updateMany?: CriteriaDefinitionUpdateManyWithWhereWithoutSubjectsInput | CriteriaDefinitionUpdateManyWithWhereWithoutSubjectsInput[]
+        deleteMany?: CriteriaDefinitionScalarWhereInput | CriteriaDefinitionScalarWhereInput[]
     };
     export type SubjectVersionCreateNestedManyWithoutSubjectVersionCategoryInput = {
         create?: XOR<SubjectVersionCreateWithoutSubjectVersionCategoryInput, SubjectVersionUncheckedCreateWithoutSubjectVersionCategoryInput> | SubjectVersionCreateWithoutSubjectVersionCategoryInput[] | SubjectVersionUncheckedCreateWithoutSubjectVersionCategoryInput[]
@@ -537374,6 +539390,11 @@ export namespace Prisma {
         createMany?: TrainingBlockOnCurriculumVersionCreateManyTrainingBlockInputEnvelope
         connect?: TrainingBlockOnCurriculumVersionWhereUniqueInput | TrainingBlockOnCurriculumVersionWhereUniqueInput[]
     };
+    export type CriteriaDefinitionCreateNestedManyWithoutTrainingBlocksInput = {
+        create?: XOR<CriteriaDefinitionCreateWithoutTrainingBlocksInput, CriteriaDefinitionUncheckedCreateWithoutTrainingBlocksInput> | CriteriaDefinitionCreateWithoutTrainingBlocksInput[] | CriteriaDefinitionUncheckedCreateWithoutTrainingBlocksInput[]
+        connectOrCreate?: CriteriaDefinitionCreateOrConnectWithoutTrainingBlocksInput | CriteriaDefinitionCreateOrConnectWithoutTrainingBlocksInput[]
+        connect?: CriteriaDefinitionWhereUniqueInput | CriteriaDefinitionWhereUniqueInput[]
+    };
     export type TrainingBlockUncheckedCreateNestedManyWithoutParentInput = {
         create?: XOR<TrainingBlockCreateWithoutParentInput, TrainingBlockUncheckedCreateWithoutParentInput> | TrainingBlockCreateWithoutParentInput[] | TrainingBlockUncheckedCreateWithoutParentInput[]
         connectOrCreate?: TrainingBlockCreateOrConnectWithoutParentInput | TrainingBlockCreateOrConnectWithoutParentInput[]
@@ -537385,6 +539406,11 @@ export namespace Prisma {
         connectOrCreate?: TrainingBlockOnCurriculumVersionCreateOrConnectWithoutTrainingBlockInput | TrainingBlockOnCurriculumVersionCreateOrConnectWithoutTrainingBlockInput[]
         createMany?: TrainingBlockOnCurriculumVersionCreateManyTrainingBlockInputEnvelope
         connect?: TrainingBlockOnCurriculumVersionWhereUniqueInput | TrainingBlockOnCurriculumVersionWhereUniqueInput[]
+    };
+    export type CriteriaDefinitionUncheckedCreateNestedManyWithoutTrainingBlocksInput = {
+        create?: XOR<CriteriaDefinitionCreateWithoutTrainingBlocksInput, CriteriaDefinitionUncheckedCreateWithoutTrainingBlocksInput> | CriteriaDefinitionCreateWithoutTrainingBlocksInput[] | CriteriaDefinitionUncheckedCreateWithoutTrainingBlocksInput[]
+        connectOrCreate?: CriteriaDefinitionCreateOrConnectWithoutTrainingBlocksInput | CriteriaDefinitionCreateOrConnectWithoutTrainingBlocksInput[]
+        connect?: CriteriaDefinitionWhereUniqueInput | CriteriaDefinitionWhereUniqueInput[]
     };
     export type TrainingObjectTypeUpdateOneRequiredWithoutTrainingBlocksNestedInput = {
         create?: XOR<TrainingObjectTypeCreateWithoutTrainingBlocksInput, TrainingObjectTypeUncheckedCreateWithoutTrainingBlocksInput>
@@ -537428,6 +539454,18 @@ export namespace Prisma {
         updateMany?: TrainingBlockOnCurriculumVersionUpdateManyWithWhereWithoutTrainingBlockInput | TrainingBlockOnCurriculumVersionUpdateManyWithWhereWithoutTrainingBlockInput[]
         deleteMany?: TrainingBlockOnCurriculumVersionScalarWhereInput | TrainingBlockOnCurriculumVersionScalarWhereInput[]
     };
+    export type CriteriaDefinitionUpdateManyWithoutTrainingBlocksNestedInput = {
+        create?: XOR<CriteriaDefinitionCreateWithoutTrainingBlocksInput, CriteriaDefinitionUncheckedCreateWithoutTrainingBlocksInput> | CriteriaDefinitionCreateWithoutTrainingBlocksInput[] | CriteriaDefinitionUncheckedCreateWithoutTrainingBlocksInput[]
+        connectOrCreate?: CriteriaDefinitionCreateOrConnectWithoutTrainingBlocksInput | CriteriaDefinitionCreateOrConnectWithoutTrainingBlocksInput[]
+        upsert?: CriteriaDefinitionUpsertWithWhereUniqueWithoutTrainingBlocksInput | CriteriaDefinitionUpsertWithWhereUniqueWithoutTrainingBlocksInput[]
+        set?: CriteriaDefinitionWhereUniqueInput | CriteriaDefinitionWhereUniqueInput[]
+        disconnect?: CriteriaDefinitionWhereUniqueInput | CriteriaDefinitionWhereUniqueInput[]
+        delete?: CriteriaDefinitionWhereUniqueInput | CriteriaDefinitionWhereUniqueInput[]
+        connect?: CriteriaDefinitionWhereUniqueInput | CriteriaDefinitionWhereUniqueInput[]
+        update?: CriteriaDefinitionUpdateWithWhereUniqueWithoutTrainingBlocksInput | CriteriaDefinitionUpdateWithWhereUniqueWithoutTrainingBlocksInput[]
+        updateMany?: CriteriaDefinitionUpdateManyWithWhereWithoutTrainingBlocksInput | CriteriaDefinitionUpdateManyWithWhereWithoutTrainingBlocksInput[]
+        deleteMany?: CriteriaDefinitionScalarWhereInput | CriteriaDefinitionScalarWhereInput[]
+    };
     export type TrainingBlockUncheckedUpdateManyWithoutParentNestedInput = {
         create?: XOR<TrainingBlockCreateWithoutParentInput, TrainingBlockUncheckedCreateWithoutParentInput> | TrainingBlockCreateWithoutParentInput[] | TrainingBlockUncheckedCreateWithoutParentInput[]
         connectOrCreate?: TrainingBlockCreateOrConnectWithoutParentInput | TrainingBlockCreateOrConnectWithoutParentInput[]
@@ -537453,6 +539491,18 @@ export namespace Prisma {
         update?: TrainingBlockOnCurriculumVersionUpdateWithWhereUniqueWithoutTrainingBlockInput | TrainingBlockOnCurriculumVersionUpdateWithWhereUniqueWithoutTrainingBlockInput[]
         updateMany?: TrainingBlockOnCurriculumVersionUpdateManyWithWhereWithoutTrainingBlockInput | TrainingBlockOnCurriculumVersionUpdateManyWithWhereWithoutTrainingBlockInput[]
         deleteMany?: TrainingBlockOnCurriculumVersionScalarWhereInput | TrainingBlockOnCurriculumVersionScalarWhereInput[]
+    };
+    export type CriteriaDefinitionUncheckedUpdateManyWithoutTrainingBlocksNestedInput = {
+        create?: XOR<CriteriaDefinitionCreateWithoutTrainingBlocksInput, CriteriaDefinitionUncheckedCreateWithoutTrainingBlocksInput> | CriteriaDefinitionCreateWithoutTrainingBlocksInput[] | CriteriaDefinitionUncheckedCreateWithoutTrainingBlocksInput[]
+        connectOrCreate?: CriteriaDefinitionCreateOrConnectWithoutTrainingBlocksInput | CriteriaDefinitionCreateOrConnectWithoutTrainingBlocksInput[]
+        upsert?: CriteriaDefinitionUpsertWithWhereUniqueWithoutTrainingBlocksInput | CriteriaDefinitionUpsertWithWhereUniqueWithoutTrainingBlocksInput[]
+        set?: CriteriaDefinitionWhereUniqueInput | CriteriaDefinitionWhereUniqueInput[]
+        disconnect?: CriteriaDefinitionWhereUniqueInput | CriteriaDefinitionWhereUniqueInput[]
+        delete?: CriteriaDefinitionWhereUniqueInput | CriteriaDefinitionWhereUniqueInput[]
+        connect?: CriteriaDefinitionWhereUniqueInput | CriteriaDefinitionWhereUniqueInput[]
+        update?: CriteriaDefinitionUpdateWithWhereUniqueWithoutTrainingBlocksInput | CriteriaDefinitionUpdateWithWhereUniqueWithoutTrainingBlocksInput[]
+        updateMany?: CriteriaDefinitionUpdateManyWithWhereWithoutTrainingBlocksInput | CriteriaDefinitionUpdateManyWithWhereWithoutTrainingBlocksInput[]
+        deleteMany?: CriteriaDefinitionScalarWhereInput | CriteriaDefinitionScalarWhereInput[]
     };
     export type TrainingBlockCreateNestedOneWithoutCurriculumVersionsInput = {
         create?: XOR<TrainingBlockCreateWithoutCurriculumVersionsInput, TrainingBlockUncheckedCreateWithoutCurriculumVersionsInput>
@@ -538943,6 +540993,11 @@ export namespace Prisma {
         connectOrCreate?: GraduationRankDowngradeRuleCreateOrConnectWithoutConditionsInput
         connect?: GraduationRankDowngradeRuleWhereUniqueInput
     };
+    export type CriteriaDefinitionCreateNestedOneWithoutDowngradeConditionsInput = {
+        create?: XOR<CriteriaDefinitionCreateWithoutDowngradeConditionsInput, CriteriaDefinitionUncheckedCreateWithoutDowngradeConditionsInput>
+        connectOrCreate?: CriteriaDefinitionCreateOrConnectWithoutDowngradeConditionsInput
+        connect?: CriteriaDefinitionWhereUniqueInput
+    };
     export type ApplicationDowngradedCreateNestedManyWithoutConditionsInput = {
         create?: XOR<ApplicationDowngradedCreateWithoutConditionsInput, ApplicationDowngradedUncheckedCreateWithoutConditionsInput> | ApplicationDowngradedCreateWithoutConditionsInput[] | ApplicationDowngradedUncheckedCreateWithoutConditionsInput[]
         connectOrCreate?: ApplicationDowngradedCreateOrConnectWithoutConditionsInput | ApplicationDowngradedCreateOrConnectWithoutConditionsInput[]
@@ -538953,8 +541008,8 @@ export namespace Prisma {
         connectOrCreate?: ApplicationDowngradedCreateOrConnectWithoutConditionsInput | ApplicationDowngradedCreateOrConnectWithoutConditionsInput[]
         connect?: ApplicationDowngradedWhereUniqueInput | ApplicationDowngradedWhereUniqueInput[]
     };
-    export type EnumCriteriaFieldFieldUpdateOperationsInput = {
-        set?: $Enums.CriteriaField
+    export type NullableEnumCriteriaFieldFieldUpdateOperationsInput = {
+        set?: $Enums.CriteriaField | null
     };
     export type EnumCriteriaOperatorFieldUpdateOperationsInput = {
         set?: $Enums.CriteriaOperator
@@ -538969,6 +541024,13 @@ export namespace Prisma {
         upsert?: GraduationRankDowngradeRuleUpsertWithoutConditionsInput
         connect?: GraduationRankDowngradeRuleWhereUniqueInput
         update?: XOR<XOR<GraduationRankDowngradeRuleUpdateToOneWithWhereWithoutConditionsInput, GraduationRankDowngradeRuleUpdateWithoutConditionsInput>, GraduationRankDowngradeRuleUncheckedUpdateWithoutConditionsInput>
+    };
+    export type CriteriaDefinitionUpdateOneRequiredWithoutDowngradeConditionsNestedInput = {
+        create?: XOR<CriteriaDefinitionCreateWithoutDowngradeConditionsInput, CriteriaDefinitionUncheckedCreateWithoutDowngradeConditionsInput>
+        connectOrCreate?: CriteriaDefinitionCreateOrConnectWithoutDowngradeConditionsInput
+        upsert?: CriteriaDefinitionUpsertWithoutDowngradeConditionsInput
+        connect?: CriteriaDefinitionWhereUniqueInput
+        update?: XOR<XOR<CriteriaDefinitionUpdateToOneWithWhereWithoutDowngradeConditionsInput, CriteriaDefinitionUpdateWithoutDowngradeConditionsInput>, CriteriaDefinitionUncheckedUpdateWithoutDowngradeConditionsInput>
     };
     export type ApplicationDowngradedUpdateManyWithoutConditionsNestedInput = {
         create?: XOR<ApplicationDowngradedCreateWithoutConditionsInput, ApplicationDowngradedUncheckedCreateWithoutConditionsInput> | ApplicationDowngradedCreateWithoutConditionsInput[] | ApplicationDowngradedUncheckedCreateWithoutConditionsInput[]
@@ -539013,6 +541075,9 @@ export namespace Prisma {
         connectOrCreate?: ApplicationCheckResultCreateOrConnectWithoutRankingConditionInput | ApplicationCheckResultCreateOrConnectWithoutRankingConditionInput[]
         createMany?: ApplicationCheckResultCreateManyRankingConditionInputEnvelope
         connect?: ApplicationCheckResultWhereUniqueInput | ApplicationCheckResultWhereUniqueInput[]
+    };
+    export type EnumCriteriaFieldFieldUpdateOperationsInput = {
+        set?: $Enums.CriteriaField
     };
     export type RankingConditionUpdatetupleInput = {
         set?: string[]
@@ -539161,6 +541226,115 @@ export namespace Prisma {
         delete?: DocumentFileWhereInput | boolean
         connect?: DocumentFileWhereUniqueInput
         update?: XOR<XOR<DocumentFileUpdateToOneWithWhereWithoutDiplomaVerificationBackInput, DocumentFileUpdateWithoutDiplomaVerificationBackInput>, DocumentFileUncheckedUpdateWithoutDiplomaVerificationBackInput>
+    };
+    export type TrainingBlockCreateNestedManyWithoutCriteriaDefinitionsInput = {
+        create?: XOR<TrainingBlockCreateWithoutCriteriaDefinitionsInput, TrainingBlockUncheckedCreateWithoutCriteriaDefinitionsInput> | TrainingBlockCreateWithoutCriteriaDefinitionsInput[] | TrainingBlockUncheckedCreateWithoutCriteriaDefinitionsInput[]
+        connectOrCreate?: TrainingBlockCreateOrConnectWithoutCriteriaDefinitionsInput | TrainingBlockCreateOrConnectWithoutCriteriaDefinitionsInput[]
+        connect?: TrainingBlockWhereUniqueInput | TrainingBlockWhereUniqueInput[]
+    };
+    export type SubjectCreateNestedManyWithoutCriteriaDefinitionsInput = {
+        create?: XOR<SubjectCreateWithoutCriteriaDefinitionsInput, SubjectUncheckedCreateWithoutCriteriaDefinitionsInput> | SubjectCreateWithoutCriteriaDefinitionsInput[] | SubjectUncheckedCreateWithoutCriteriaDefinitionsInput[]
+        connectOrCreate?: SubjectCreateOrConnectWithoutCriteriaDefinitionsInput | SubjectCreateOrConnectWithoutCriteriaDefinitionsInput[]
+        connect?: SubjectWhereUniqueInput | SubjectWhereUniqueInput[]
+    };
+    export type GraduationRankDowngradeConditionCreateNestedManyWithoutCriteriaInput = {
+        create?: XOR<GraduationRankDowngradeConditionCreateWithoutCriteriaInput, GraduationRankDowngradeConditionUncheckedCreateWithoutCriteriaInput> | GraduationRankDowngradeConditionCreateWithoutCriteriaInput[] | GraduationRankDowngradeConditionUncheckedCreateWithoutCriteriaInput[]
+        connectOrCreate?: GraduationRankDowngradeConditionCreateOrConnectWithoutCriteriaInput | GraduationRankDowngradeConditionCreateOrConnectWithoutCriteriaInput[]
+        createMany?: GraduationRankDowngradeConditionCreateManyCriteriaInputEnvelope
+        connect?: GraduationRankDowngradeConditionWhereUniqueInput | GraduationRankDowngradeConditionWhereUniqueInput[]
+    };
+    export type TrainingBlockUncheckedCreateNestedManyWithoutCriteriaDefinitionsInput = {
+        create?: XOR<TrainingBlockCreateWithoutCriteriaDefinitionsInput, TrainingBlockUncheckedCreateWithoutCriteriaDefinitionsInput> | TrainingBlockCreateWithoutCriteriaDefinitionsInput[] | TrainingBlockUncheckedCreateWithoutCriteriaDefinitionsInput[]
+        connectOrCreate?: TrainingBlockCreateOrConnectWithoutCriteriaDefinitionsInput | TrainingBlockCreateOrConnectWithoutCriteriaDefinitionsInput[]
+        connect?: TrainingBlockWhereUniqueInput | TrainingBlockWhereUniqueInput[]
+    };
+    export type SubjectUncheckedCreateNestedManyWithoutCriteriaDefinitionsInput = {
+        create?: XOR<SubjectCreateWithoutCriteriaDefinitionsInput, SubjectUncheckedCreateWithoutCriteriaDefinitionsInput> | SubjectCreateWithoutCriteriaDefinitionsInput[] | SubjectUncheckedCreateWithoutCriteriaDefinitionsInput[]
+        connectOrCreate?: SubjectCreateOrConnectWithoutCriteriaDefinitionsInput | SubjectCreateOrConnectWithoutCriteriaDefinitionsInput[]
+        connect?: SubjectWhereUniqueInput | SubjectWhereUniqueInput[]
+    };
+    export type GraduationRankDowngradeConditionUncheckedCreateNestedManyWithoutCriteriaInput = {
+        create?: XOR<GraduationRankDowngradeConditionCreateWithoutCriteriaInput, GraduationRankDowngradeConditionUncheckedCreateWithoutCriteriaInput> | GraduationRankDowngradeConditionCreateWithoutCriteriaInput[] | GraduationRankDowngradeConditionUncheckedCreateWithoutCriteriaInput[]
+        connectOrCreate?: GraduationRankDowngradeConditionCreateOrConnectWithoutCriteriaInput | GraduationRankDowngradeConditionCreateOrConnectWithoutCriteriaInput[]
+        createMany?: GraduationRankDowngradeConditionCreateManyCriteriaInputEnvelope
+        connect?: GraduationRankDowngradeConditionWhereUniqueInput | GraduationRankDowngradeConditionWhereUniqueInput[]
+    };
+    export type EnumCriteriaSourceFieldUpdateOperationsInput = {
+        set?: $Enums.CriteriaSource
+    };
+    export type TrainingBlockUpdateManyWithoutCriteriaDefinitionsNestedInput = {
+        create?: XOR<TrainingBlockCreateWithoutCriteriaDefinitionsInput, TrainingBlockUncheckedCreateWithoutCriteriaDefinitionsInput> | TrainingBlockCreateWithoutCriteriaDefinitionsInput[] | TrainingBlockUncheckedCreateWithoutCriteriaDefinitionsInput[]
+        connectOrCreate?: TrainingBlockCreateOrConnectWithoutCriteriaDefinitionsInput | TrainingBlockCreateOrConnectWithoutCriteriaDefinitionsInput[]
+        upsert?: TrainingBlockUpsertWithWhereUniqueWithoutCriteriaDefinitionsInput | TrainingBlockUpsertWithWhereUniqueWithoutCriteriaDefinitionsInput[]
+        set?: TrainingBlockWhereUniqueInput | TrainingBlockWhereUniqueInput[]
+        disconnect?: TrainingBlockWhereUniqueInput | TrainingBlockWhereUniqueInput[]
+        delete?: TrainingBlockWhereUniqueInput | TrainingBlockWhereUniqueInput[]
+        connect?: TrainingBlockWhereUniqueInput | TrainingBlockWhereUniqueInput[]
+        update?: TrainingBlockUpdateWithWhereUniqueWithoutCriteriaDefinitionsInput | TrainingBlockUpdateWithWhereUniqueWithoutCriteriaDefinitionsInput[]
+        updateMany?: TrainingBlockUpdateManyWithWhereWithoutCriteriaDefinitionsInput | TrainingBlockUpdateManyWithWhereWithoutCriteriaDefinitionsInput[]
+        deleteMany?: TrainingBlockScalarWhereInput | TrainingBlockScalarWhereInput[]
+    };
+    export type SubjectUpdateManyWithoutCriteriaDefinitionsNestedInput = {
+        create?: XOR<SubjectCreateWithoutCriteriaDefinitionsInput, SubjectUncheckedCreateWithoutCriteriaDefinitionsInput> | SubjectCreateWithoutCriteriaDefinitionsInput[] | SubjectUncheckedCreateWithoutCriteriaDefinitionsInput[]
+        connectOrCreate?: SubjectCreateOrConnectWithoutCriteriaDefinitionsInput | SubjectCreateOrConnectWithoutCriteriaDefinitionsInput[]
+        upsert?: SubjectUpsertWithWhereUniqueWithoutCriteriaDefinitionsInput | SubjectUpsertWithWhereUniqueWithoutCriteriaDefinitionsInput[]
+        set?: SubjectWhereUniqueInput | SubjectWhereUniqueInput[]
+        disconnect?: SubjectWhereUniqueInput | SubjectWhereUniqueInput[]
+        delete?: SubjectWhereUniqueInput | SubjectWhereUniqueInput[]
+        connect?: SubjectWhereUniqueInput | SubjectWhereUniqueInput[]
+        update?: SubjectUpdateWithWhereUniqueWithoutCriteriaDefinitionsInput | SubjectUpdateWithWhereUniqueWithoutCriteriaDefinitionsInput[]
+        updateMany?: SubjectUpdateManyWithWhereWithoutCriteriaDefinitionsInput | SubjectUpdateManyWithWhereWithoutCriteriaDefinitionsInput[]
+        deleteMany?: SubjectScalarWhereInput | SubjectScalarWhereInput[]
+    };
+    export type GraduationRankDowngradeConditionUpdateManyWithoutCriteriaNestedInput = {
+        create?: XOR<GraduationRankDowngradeConditionCreateWithoutCriteriaInput, GraduationRankDowngradeConditionUncheckedCreateWithoutCriteriaInput> | GraduationRankDowngradeConditionCreateWithoutCriteriaInput[] | GraduationRankDowngradeConditionUncheckedCreateWithoutCriteriaInput[]
+        connectOrCreate?: GraduationRankDowngradeConditionCreateOrConnectWithoutCriteriaInput | GraduationRankDowngradeConditionCreateOrConnectWithoutCriteriaInput[]
+        upsert?: GraduationRankDowngradeConditionUpsertWithWhereUniqueWithoutCriteriaInput | GraduationRankDowngradeConditionUpsertWithWhereUniqueWithoutCriteriaInput[]
+        createMany?: GraduationRankDowngradeConditionCreateManyCriteriaInputEnvelope
+        set?: GraduationRankDowngradeConditionWhereUniqueInput | GraduationRankDowngradeConditionWhereUniqueInput[]
+        disconnect?: GraduationRankDowngradeConditionWhereUniqueInput | GraduationRankDowngradeConditionWhereUniqueInput[]
+        delete?: GraduationRankDowngradeConditionWhereUniqueInput | GraduationRankDowngradeConditionWhereUniqueInput[]
+        connect?: GraduationRankDowngradeConditionWhereUniqueInput | GraduationRankDowngradeConditionWhereUniqueInput[]
+        update?: GraduationRankDowngradeConditionUpdateWithWhereUniqueWithoutCriteriaInput | GraduationRankDowngradeConditionUpdateWithWhereUniqueWithoutCriteriaInput[]
+        updateMany?: GraduationRankDowngradeConditionUpdateManyWithWhereWithoutCriteriaInput | GraduationRankDowngradeConditionUpdateManyWithWhereWithoutCriteriaInput[]
+        deleteMany?: GraduationRankDowngradeConditionScalarWhereInput | GraduationRankDowngradeConditionScalarWhereInput[]
+    };
+    export type TrainingBlockUncheckedUpdateManyWithoutCriteriaDefinitionsNestedInput = {
+        create?: XOR<TrainingBlockCreateWithoutCriteriaDefinitionsInput, TrainingBlockUncheckedCreateWithoutCriteriaDefinitionsInput> | TrainingBlockCreateWithoutCriteriaDefinitionsInput[] | TrainingBlockUncheckedCreateWithoutCriteriaDefinitionsInput[]
+        connectOrCreate?: TrainingBlockCreateOrConnectWithoutCriteriaDefinitionsInput | TrainingBlockCreateOrConnectWithoutCriteriaDefinitionsInput[]
+        upsert?: TrainingBlockUpsertWithWhereUniqueWithoutCriteriaDefinitionsInput | TrainingBlockUpsertWithWhereUniqueWithoutCriteriaDefinitionsInput[]
+        set?: TrainingBlockWhereUniqueInput | TrainingBlockWhereUniqueInput[]
+        disconnect?: TrainingBlockWhereUniqueInput | TrainingBlockWhereUniqueInput[]
+        delete?: TrainingBlockWhereUniqueInput | TrainingBlockWhereUniqueInput[]
+        connect?: TrainingBlockWhereUniqueInput | TrainingBlockWhereUniqueInput[]
+        update?: TrainingBlockUpdateWithWhereUniqueWithoutCriteriaDefinitionsInput | TrainingBlockUpdateWithWhereUniqueWithoutCriteriaDefinitionsInput[]
+        updateMany?: TrainingBlockUpdateManyWithWhereWithoutCriteriaDefinitionsInput | TrainingBlockUpdateManyWithWhereWithoutCriteriaDefinitionsInput[]
+        deleteMany?: TrainingBlockScalarWhereInput | TrainingBlockScalarWhereInput[]
+    };
+    export type SubjectUncheckedUpdateManyWithoutCriteriaDefinitionsNestedInput = {
+        create?: XOR<SubjectCreateWithoutCriteriaDefinitionsInput, SubjectUncheckedCreateWithoutCriteriaDefinitionsInput> | SubjectCreateWithoutCriteriaDefinitionsInput[] | SubjectUncheckedCreateWithoutCriteriaDefinitionsInput[]
+        connectOrCreate?: SubjectCreateOrConnectWithoutCriteriaDefinitionsInput | SubjectCreateOrConnectWithoutCriteriaDefinitionsInput[]
+        upsert?: SubjectUpsertWithWhereUniqueWithoutCriteriaDefinitionsInput | SubjectUpsertWithWhereUniqueWithoutCriteriaDefinitionsInput[]
+        set?: SubjectWhereUniqueInput | SubjectWhereUniqueInput[]
+        disconnect?: SubjectWhereUniqueInput | SubjectWhereUniqueInput[]
+        delete?: SubjectWhereUniqueInput | SubjectWhereUniqueInput[]
+        connect?: SubjectWhereUniqueInput | SubjectWhereUniqueInput[]
+        update?: SubjectUpdateWithWhereUniqueWithoutCriteriaDefinitionsInput | SubjectUpdateWithWhereUniqueWithoutCriteriaDefinitionsInput[]
+        updateMany?: SubjectUpdateManyWithWhereWithoutCriteriaDefinitionsInput | SubjectUpdateManyWithWhereWithoutCriteriaDefinitionsInput[]
+        deleteMany?: SubjectScalarWhereInput | SubjectScalarWhereInput[]
+    };
+    export type GraduationRankDowngradeConditionUncheckedUpdateManyWithoutCriteriaNestedInput = {
+        create?: XOR<GraduationRankDowngradeConditionCreateWithoutCriteriaInput, GraduationRankDowngradeConditionUncheckedCreateWithoutCriteriaInput> | GraduationRankDowngradeConditionCreateWithoutCriteriaInput[] | GraduationRankDowngradeConditionUncheckedCreateWithoutCriteriaInput[]
+        connectOrCreate?: GraduationRankDowngradeConditionCreateOrConnectWithoutCriteriaInput | GraduationRankDowngradeConditionCreateOrConnectWithoutCriteriaInput[]
+        upsert?: GraduationRankDowngradeConditionUpsertWithWhereUniqueWithoutCriteriaInput | GraduationRankDowngradeConditionUpsertWithWhereUniqueWithoutCriteriaInput[]
+        createMany?: GraduationRankDowngradeConditionCreateManyCriteriaInputEnvelope
+        set?: GraduationRankDowngradeConditionWhereUniqueInput | GraduationRankDowngradeConditionWhereUniqueInput[]
+        disconnect?: GraduationRankDowngradeConditionWhereUniqueInput | GraduationRankDowngradeConditionWhereUniqueInput[]
+        delete?: GraduationRankDowngradeConditionWhereUniqueInput | GraduationRankDowngradeConditionWhereUniqueInput[]
+        connect?: GraduationRankDowngradeConditionWhereUniqueInput | GraduationRankDowngradeConditionWhereUniqueInput[]
+        update?: GraduationRankDowngradeConditionUpdateWithWhereUniqueWithoutCriteriaInput | GraduationRankDowngradeConditionUpdateWithWhereUniqueWithoutCriteriaInput[]
+        updateMany?: GraduationRankDowngradeConditionUpdateManyWithWhereWithoutCriteriaInput | GraduationRankDowngradeConditionUpdateManyWithWhereWithoutCriteriaInput[]
+        deleteMany?: GraduationRankDowngradeConditionScalarWhereInput | GraduationRankDowngradeConditionScalarWhereInput[]
     };
     export type SemesterCreateNestedOneWithoutTrainingScoreSessionInput = {
         create?: XOR<SemesterCreateWithoutTrainingScoreSessionInput, SemesterUncheckedCreateWithoutTrainingScoreSessionInput>
@@ -548164,11 +550338,11 @@ export namespace Prisma {
         _min?: NestedEnumRankingContextFilter<$PrismaModel>
         _max?: NestedEnumRankingContextFilter<$PrismaModel>
     };
-    export type NestedEnumCriteriaFieldFilter<$PrismaModel = never> = {
-        equals?: $Enums.CriteriaField | EnumCriteriaFieldFieldRefInput<$PrismaModel>
-        in?: $Enums.CriteriaField[] | ListEnumCriteriaFieldFieldRefInput<$PrismaModel>
-        notIn?: $Enums.CriteriaField[] | ListEnumCriteriaFieldFieldRefInput<$PrismaModel>
-        not?: NestedEnumCriteriaFieldFilter<$PrismaModel> | $Enums.CriteriaField
+    export type NestedEnumCriteriaFieldNullableFilter<$PrismaModel = never> = {
+        equals?: $Enums.CriteriaField | EnumCriteriaFieldFieldRefInput<$PrismaModel> | null
+        in?: $Enums.CriteriaField[] | ListEnumCriteriaFieldFieldRefInput<$PrismaModel> | null
+        notIn?: $Enums.CriteriaField[] | ListEnumCriteriaFieldFieldRefInput<$PrismaModel> | null
+        not?: NestedEnumCriteriaFieldNullableFilter<$PrismaModel> | $Enums.CriteriaField | null
     };
     export type NestedEnumCriteriaOperatorFilter<$PrismaModel = never> = {
         equals?: $Enums.CriteriaOperator | EnumCriteriaOperatorFieldRefInput<$PrismaModel>
@@ -548176,14 +550350,14 @@ export namespace Prisma {
         notIn?: $Enums.CriteriaOperator[] | ListEnumCriteriaOperatorFieldRefInput<$PrismaModel>
         not?: NestedEnumCriteriaOperatorFilter<$PrismaModel> | $Enums.CriteriaOperator
     };
-    export type NestedEnumCriteriaFieldWithAggregatesFilter<$PrismaModel = never> = {
-        equals?: $Enums.CriteriaField | EnumCriteriaFieldFieldRefInput<$PrismaModel>
-        in?: $Enums.CriteriaField[] | ListEnumCriteriaFieldFieldRefInput<$PrismaModel>
-        notIn?: $Enums.CriteriaField[] | ListEnumCriteriaFieldFieldRefInput<$PrismaModel>
-        not?: NestedEnumCriteriaFieldWithAggregatesFilter<$PrismaModel> | $Enums.CriteriaField
-        _count?: NestedIntFilter<$PrismaModel>
-        _min?: NestedEnumCriteriaFieldFilter<$PrismaModel>
-        _max?: NestedEnumCriteriaFieldFilter<$PrismaModel>
+    export type NestedEnumCriteriaFieldNullableWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: $Enums.CriteriaField | EnumCriteriaFieldFieldRefInput<$PrismaModel> | null
+        in?: $Enums.CriteriaField[] | ListEnumCriteriaFieldFieldRefInput<$PrismaModel> | null
+        notIn?: $Enums.CriteriaField[] | ListEnumCriteriaFieldFieldRefInput<$PrismaModel> | null
+        not?: NestedEnumCriteriaFieldNullableWithAggregatesFilter<$PrismaModel> | $Enums.CriteriaField | null
+        _count?: NestedIntNullableFilter<$PrismaModel>
+        _min?: NestedEnumCriteriaFieldNullableFilter<$PrismaModel>
+        _max?: NestedEnumCriteriaFieldNullableFilter<$PrismaModel>
     };
     export type NestedEnumCriteriaOperatorWithAggregatesFilter<$PrismaModel = never> = {
         equals?: $Enums.CriteriaOperator | EnumCriteriaOperatorFieldRefInput<$PrismaModel>
@@ -548193,6 +550367,21 @@ export namespace Prisma {
         _count?: NestedIntFilter<$PrismaModel>
         _min?: NestedEnumCriteriaOperatorFilter<$PrismaModel>
         _max?: NestedEnumCriteriaOperatorFilter<$PrismaModel>
+    };
+    export type NestedEnumCriteriaFieldFilter<$PrismaModel = never> = {
+        equals?: $Enums.CriteriaField | EnumCriteriaFieldFieldRefInput<$PrismaModel>
+        in?: $Enums.CriteriaField[] | ListEnumCriteriaFieldFieldRefInput<$PrismaModel>
+        notIn?: $Enums.CriteriaField[] | ListEnumCriteriaFieldFieldRefInput<$PrismaModel>
+        not?: NestedEnumCriteriaFieldFilter<$PrismaModel> | $Enums.CriteriaField
+    };
+    export type NestedEnumCriteriaFieldWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: $Enums.CriteriaField | EnumCriteriaFieldFieldRefInput<$PrismaModel>
+        in?: $Enums.CriteriaField[] | ListEnumCriteriaFieldFieldRefInput<$PrismaModel>
+        notIn?: $Enums.CriteriaField[] | ListEnumCriteriaFieldFieldRefInput<$PrismaModel>
+        not?: NestedEnumCriteriaFieldWithAggregatesFilter<$PrismaModel> | $Enums.CriteriaField
+        _count?: NestedIntFilter<$PrismaModel>
+        _min?: NestedEnumCriteriaFieldFilter<$PrismaModel>
+        _max?: NestedEnumCriteriaFieldFilter<$PrismaModel>
     };
     export type NestedEnumDiplomaVerificationStatusFilter<$PrismaModel = never> = {
         equals?: $Enums.DiplomaVerificationStatus | EnumDiplomaVerificationStatusFieldRefInput<$PrismaModel>
@@ -548208,6 +550397,42 @@ export namespace Prisma {
         _count?: NestedIntFilter<$PrismaModel>
         _min?: NestedEnumDiplomaVerificationStatusFilter<$PrismaModel>
         _max?: NestedEnumDiplomaVerificationStatusFilter<$PrismaModel>
+    };
+    export type NestedEnumCriteriaSourceFilter<$PrismaModel = never> = {
+        equals?: $Enums.CriteriaSource | EnumCriteriaSourceFieldRefInput<$PrismaModel>
+        in?: $Enums.CriteriaSource[] | ListEnumCriteriaSourceFieldRefInput<$PrismaModel>
+        notIn?: $Enums.CriteriaSource[] | ListEnumCriteriaSourceFieldRefInput<$PrismaModel>
+        not?: NestedEnumCriteriaSourceFilter<$PrismaModel> | $Enums.CriteriaSource
+    };
+    export type NestedEnumCriteriaSourceWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: $Enums.CriteriaSource | EnumCriteriaSourceFieldRefInput<$PrismaModel>
+        in?: $Enums.CriteriaSource[] | ListEnumCriteriaSourceFieldRefInput<$PrismaModel>
+        notIn?: $Enums.CriteriaSource[] | ListEnumCriteriaSourceFieldRefInput<$PrismaModel>
+        not?: NestedEnumCriteriaSourceWithAggregatesFilter<$PrismaModel> | $Enums.CriteriaSource
+        _count?: NestedIntFilter<$PrismaModel>
+        _min?: NestedEnumCriteriaSourceFilter<$PrismaModel>
+        _max?: NestedEnumCriteriaSourceFilter<$PrismaModel>
+    };
+    export type NestedJsonFilter<$PrismaModel = never> = | PatchUndefined<
+        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonFilterBase<$PrismaModel>>
+    >
+        | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>;
+    export type NestedJsonFilterBase<$PrismaModel = never> = {
+        equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+        path?: string[]
+        mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+        string_contains?: string | StringFieldRefInput<$PrismaModel>
+        string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+        string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+        array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+        array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+        array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+        lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+        lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+        gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+        gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+        not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
     };
     export type NestedEnumTrainingScoreStatusFilter<$PrismaModel = never> = {
         equals?: $Enums.TrainingScoreStatus | EnumTrainingScoreStatusFieldRefInput<$PrismaModel>
@@ -591163,6 +593388,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionCreateNestedManyWithoutSubjectInput
         certificateOnSubject?: CertificateOnSubjectCreateNestedManyWithoutSubjectInput
         awardOnSubject?: AwardCreateNestedManyWithoutSubjectsInput
+        criteriaDefinitions?: CriteriaDefinitionCreateNestedManyWithoutSubjectsInput
     };
     export type SubjectUncheckedCreateWithoutManagementOrganizationInput = {
         id?: string
@@ -591185,6 +593411,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutSubjectInput
         certificateOnSubject?: CertificateOnSubjectUncheckedCreateNestedManyWithoutSubjectInput
         awardOnSubject?: AwardUncheckedCreateNestedManyWithoutSubjectsInput
+        criteriaDefinitions?: CriteriaDefinitionUncheckedCreateNestedManyWithoutSubjectsInput
     };
     export type SubjectCreateOrConnectWithoutManagementOrganizationInput = {
         where: SubjectWhereUniqueInput
@@ -622440,6 +624667,56 @@ export namespace Prisma {
         where: AwardWhereUniqueInput
         create: XOR<AwardCreateWithoutSubjectsInput, AwardUncheckedCreateWithoutSubjectsInput>
     };
+    export type CriteriaDefinitionCreateWithoutSubjectsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        name: string
+        source: $Enums.CriteriaSource
+        systemField?: $Enums.CriteriaField | null
+        calcType?: string | null
+        params?: JsonNullValueInput | InputJsonValue
+        trainingBlocks?: TrainingBlockCreateNestedManyWithoutCriteriaDefinitionsInput
+        downgradeConditions?: GraduationRankDowngradeConditionCreateNestedManyWithoutCriteriaInput
+    };
+    export type CriteriaDefinitionUncheckedCreateWithoutSubjectsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        name: string
+        source: $Enums.CriteriaSource
+        systemField?: $Enums.CriteriaField | null
+        calcType?: string | null
+        params?: JsonNullValueInput | InputJsonValue
+        trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutCriteriaDefinitionsInput
+        downgradeConditions?: GraduationRankDowngradeConditionUncheckedCreateNestedManyWithoutCriteriaInput
+    };
+    export type CriteriaDefinitionCreateOrConnectWithoutSubjectsInput = {
+        where: CriteriaDefinitionWhereUniqueInput
+        create: XOR<CriteriaDefinitionCreateWithoutSubjectsInput, CriteriaDefinitionUncheckedCreateWithoutSubjectsInput>
+    };
     export type DM_DonViUpsertWithoutSubjectsInput = {
         update: XOR<DM_DonViUpdateWithoutSubjectsInput, DM_DonViUncheckedUpdateWithoutSubjectsInput>
         create: XOR<DM_DonViCreateWithoutSubjectsInput, DM_DonViUncheckedCreateWithoutSubjectsInput>
@@ -622615,6 +624892,43 @@ export namespace Prisma {
         name?: StringFilter<"Award"> | string
         englishName?: StringNullableFilter<"Award"> | string | null
         bonusScore?: FloatFilter<"Award"> | number
+    };
+    export type CriteriaDefinitionUpsertWithWhereUniqueWithoutSubjectsInput = {
+        where: CriteriaDefinitionWhereUniqueInput
+        update: XOR<CriteriaDefinitionUpdateWithoutSubjectsInput, CriteriaDefinitionUncheckedUpdateWithoutSubjectsInput>
+        create: XOR<CriteriaDefinitionCreateWithoutSubjectsInput, CriteriaDefinitionUncheckedCreateWithoutSubjectsInput>
+    };
+    export type CriteriaDefinitionUpdateWithWhereUniqueWithoutSubjectsInput = {
+        where: CriteriaDefinitionWhereUniqueInput
+        data: XOR<CriteriaDefinitionUpdateWithoutSubjectsInput, CriteriaDefinitionUncheckedUpdateWithoutSubjectsInput>
+    };
+    export type CriteriaDefinitionUpdateManyWithWhereWithoutSubjectsInput = {
+        where: CriteriaDefinitionScalarWhereInput
+        data: XOR<CriteriaDefinitionUpdateManyMutationInput, CriteriaDefinitionUncheckedUpdateManyWithoutSubjectsInput>
+    };
+    export type CriteriaDefinitionScalarWhereInput = {
+        AND?: CriteriaDefinitionScalarWhereInput | CriteriaDefinitionScalarWhereInput[]
+        OR?: CriteriaDefinitionScalarWhereInput[]
+        NOT?: CriteriaDefinitionScalarWhereInput | CriteriaDefinitionScalarWhereInput[]
+        id?: StringFilter<"CriteriaDefinition"> | string
+        code?: StringNullableFilter<"CriteriaDefinition"> | string | null
+        active?: BoolFilter<"CriteriaDefinition"> | boolean
+        description?: StringNullableFilter<"CriteriaDefinition"> | string | null
+        deletedAt?: DateTimeNullableFilter<"CriteriaDefinition"> | Date | string | null
+        createdAt?: DateTimeFilter<"CriteriaDefinition"> | Date | string
+        updatedAt?: DateTimeFilter<"CriteriaDefinition"> | Date | string
+        createdBy?: UuidNullableFilter<"CriteriaDefinition"> | string | null
+        sNguoiTao?: StringNullableFilter<"CriteriaDefinition"> | string | null
+        sNguoiSua?: StringNullableFilter<"CriteriaDefinition"> | string | null
+        dNgayTao?: DateTimeNullableFilter<"CriteriaDefinition"> | Date | string | null
+        dNgaySua?: DateTimeNullableFilter<"CriteriaDefinition"> | Date | string | null
+        sThietBiTao?: StringNullableFilter<"CriteriaDefinition"> | string | null
+        sThietBiSua?: StringNullableFilter<"CriteriaDefinition"> | string | null
+        name?: StringFilter<"CriteriaDefinition"> | string
+        source?: EnumCriteriaSourceFilter<"CriteriaDefinition"> | $Enums.CriteriaSource
+        systemField?: EnumCriteriaFieldNullableFilter<"CriteriaDefinition"> | $Enums.CriteriaField | null
+        calcType?: StringNullableFilter<"CriteriaDefinition"> | string | null
+        params?: JsonFilter<"CriteriaDefinition">
     };
     export type SubjectVersionCreateWithoutSubjectVersionCategoryInput = {
         id?: string
@@ -622868,6 +625182,7 @@ export namespace Prisma {
         managementOrganization?: DM_DonViCreateNestedOneWithoutSubjectsInput
         certificateOnSubject?: CertificateOnSubjectCreateNestedManyWithoutSubjectInput
         awardOnSubject?: AwardCreateNestedManyWithoutSubjectsInput
+        criteriaDefinitions?: CriteriaDefinitionCreateNestedManyWithoutSubjectsInput
     };
     export type SubjectUncheckedCreateWithoutSubjectVersionInput = {
         id?: string
@@ -622890,6 +625205,7 @@ export namespace Prisma {
         information?: string | null
         certificateOnSubject?: CertificateOnSubjectUncheckedCreateNestedManyWithoutSubjectInput
         awardOnSubject?: AwardUncheckedCreateNestedManyWithoutSubjectsInput
+        criteriaDefinitions?: CriteriaDefinitionUncheckedCreateNestedManyWithoutSubjectsInput
     };
     export type SubjectCreateOrConnectWithoutSubjectVersionInput = {
         where: SubjectWhereUniqueInput
@@ -624498,6 +626814,7 @@ export namespace Prisma {
         managementOrganization?: DM_DonViUpdateOneWithoutSubjectsNestedInput
         certificateOnSubject?: CertificateOnSubjectUpdateManyWithoutSubjectNestedInput
         awardOnSubject?: AwardUpdateManyWithoutSubjectsNestedInput
+        criteriaDefinitions?: CriteriaDefinitionUpdateManyWithoutSubjectsNestedInput
     };
     export type SubjectUncheckedUpdateWithoutSubjectVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -624520,6 +626837,7 @@ export namespace Prisma {
         information?: NullableStringFieldUpdateOperationsInput | string | null
         certificateOnSubject?: CertificateOnSubjectUncheckedUpdateManyWithoutSubjectNestedInput
         awardOnSubject?: AwardUncheckedUpdateManyWithoutSubjectsNestedInput
+        criteriaDefinitions?: CriteriaDefinitionUncheckedUpdateManyWithoutSubjectsNestedInput
     };
     export type TrainingObjectTypeUpsertWithoutSubjectVersionInput = {
         update: XOR<TrainingObjectTypeUpdateWithoutSubjectVersionInput, TrainingObjectTypeUncheckedUpdateWithoutSubjectVersionInput>
@@ -654027,6 +656345,7 @@ export namespace Prisma {
         parent?: TrainingBlockCreateNestedOneWithoutChildrenInput
         children?: TrainingBlockCreateNestedManyWithoutParentInput
         curriculumVersions?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutTrainingBlockInput
+        criteriaDefinitions?: CriteriaDefinitionCreateNestedManyWithoutTrainingBlocksInput
     };
     export type TrainingBlockUncheckedCreateWithoutTrainingObjectTypeInput = {
         id?: string
@@ -654049,6 +656368,7 @@ export namespace Prisma {
         parentId?: string | null
         children?: TrainingBlockUncheckedCreateNestedManyWithoutParentInput
         curriculumVersions?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutTrainingBlockInput
+        criteriaDefinitions?: CriteriaDefinitionUncheckedCreateNestedManyWithoutTrainingBlocksInput
     };
     export type TrainingBlockCreateOrConnectWithoutTrainingObjectTypeInput = {
         where: TrainingBlockWhereUniqueInput
@@ -659589,6 +661909,7 @@ export namespace Prisma {
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingBlocksInput
         parent?: TrainingBlockCreateNestedOneWithoutChildrenInput
         curriculumVersions?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutTrainingBlockInput
+        criteriaDefinitions?: CriteriaDefinitionCreateNestedManyWithoutTrainingBlocksInput
     };
     export type TrainingBlockUncheckedCreateWithoutChildrenInput = {
         id?: string
@@ -659611,6 +661932,7 @@ export namespace Prisma {
         priority?: number
         parentId?: string | null
         curriculumVersions?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutTrainingBlockInput
+        criteriaDefinitions?: CriteriaDefinitionUncheckedCreateNestedManyWithoutTrainingBlocksInput
     };
     export type TrainingBlockCreateOrConnectWithoutChildrenInput = {
         where: TrainingBlockWhereUniqueInput
@@ -659637,6 +661959,7 @@ export namespace Prisma {
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingBlocksInput
         children?: TrainingBlockCreateNestedManyWithoutParentInput
         curriculumVersions?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutTrainingBlockInput
+        criteriaDefinitions?: CriteriaDefinitionCreateNestedManyWithoutTrainingBlocksInput
     };
     export type TrainingBlockUncheckedCreateWithoutParentInput = {
         id?: string
@@ -659659,6 +661982,7 @@ export namespace Prisma {
         priority?: number
         children?: TrainingBlockUncheckedCreateNestedManyWithoutParentInput
         curriculumVersions?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutTrainingBlockInput
+        criteriaDefinitions?: CriteriaDefinitionUncheckedCreateNestedManyWithoutTrainingBlocksInput
     };
     export type TrainingBlockCreateOrConnectWithoutParentInput = {
         where: TrainingBlockWhereUniqueInput
@@ -659715,6 +662039,56 @@ export namespace Prisma {
     export type TrainingBlockOnCurriculumVersionCreateManyTrainingBlockInputEnvelope = {
         data: TrainingBlockOnCurriculumVersionCreateManyTrainingBlockInput | TrainingBlockOnCurriculumVersionCreateManyTrainingBlockInput[]
         skipDuplicates?: boolean
+    };
+    export type CriteriaDefinitionCreateWithoutTrainingBlocksInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        name: string
+        source: $Enums.CriteriaSource
+        systemField?: $Enums.CriteriaField | null
+        calcType?: string | null
+        params?: JsonNullValueInput | InputJsonValue
+        subjects?: SubjectCreateNestedManyWithoutCriteriaDefinitionsInput
+        downgradeConditions?: GraduationRankDowngradeConditionCreateNestedManyWithoutCriteriaInput
+    };
+    export type CriteriaDefinitionUncheckedCreateWithoutTrainingBlocksInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        name: string
+        source: $Enums.CriteriaSource
+        systemField?: $Enums.CriteriaField | null
+        calcType?: string | null
+        params?: JsonNullValueInput | InputJsonValue
+        subjects?: SubjectUncheckedCreateNestedManyWithoutCriteriaDefinitionsInput
+        downgradeConditions?: GraduationRankDowngradeConditionUncheckedCreateNestedManyWithoutCriteriaInput
+    };
+    export type CriteriaDefinitionCreateOrConnectWithoutTrainingBlocksInput = {
+        where: CriteriaDefinitionWhereUniqueInput
+        create: XOR<CriteriaDefinitionCreateWithoutTrainingBlocksInput, CriteriaDefinitionUncheckedCreateWithoutTrainingBlocksInput>
     };
     export type TrainingObjectTypeUpsertWithoutTrainingBlocksInput = {
         update: XOR<TrainingObjectTypeUpdateWithoutTrainingBlocksInput, TrainingObjectTypeUncheckedUpdateWithoutTrainingBlocksInput>
@@ -659831,6 +662205,7 @@ export namespace Prisma {
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingBlocksNestedInput
         parent?: TrainingBlockUpdateOneWithoutChildrenNestedInput
         curriculumVersions?: TrainingBlockOnCurriculumVersionUpdateManyWithoutTrainingBlockNestedInput
+        criteriaDefinitions?: CriteriaDefinitionUpdateManyWithoutTrainingBlocksNestedInput
     };
     export type TrainingBlockUncheckedUpdateWithoutChildrenInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -659853,6 +662228,7 @@ export namespace Prisma {
         priority?: IntFieldUpdateOperationsInput | number
         parentId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersions?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutTrainingBlockNestedInput
+        criteriaDefinitions?: CriteriaDefinitionUncheckedUpdateManyWithoutTrainingBlocksNestedInput
     };
     export type TrainingBlockUpsertWithWhereUniqueWithoutParentInput = {
         where: TrainingBlockWhereUniqueInput
@@ -659880,6 +662256,19 @@ export namespace Prisma {
         where: TrainingBlockOnCurriculumVersionScalarWhereInput
         data: XOR<TrainingBlockOnCurriculumVersionUpdateManyMutationInput, TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutTrainingBlockInput>
     };
+    export type CriteriaDefinitionUpsertWithWhereUniqueWithoutTrainingBlocksInput = {
+        where: CriteriaDefinitionWhereUniqueInput
+        update: XOR<CriteriaDefinitionUpdateWithoutTrainingBlocksInput, CriteriaDefinitionUncheckedUpdateWithoutTrainingBlocksInput>
+        create: XOR<CriteriaDefinitionCreateWithoutTrainingBlocksInput, CriteriaDefinitionUncheckedCreateWithoutTrainingBlocksInput>
+    };
+    export type CriteriaDefinitionUpdateWithWhereUniqueWithoutTrainingBlocksInput = {
+        where: CriteriaDefinitionWhereUniqueInput
+        data: XOR<CriteriaDefinitionUpdateWithoutTrainingBlocksInput, CriteriaDefinitionUncheckedUpdateWithoutTrainingBlocksInput>
+    };
+    export type CriteriaDefinitionUpdateManyWithWhereWithoutTrainingBlocksInput = {
+        where: CriteriaDefinitionScalarWhereInput
+        data: XOR<CriteriaDefinitionUpdateManyMutationInput, CriteriaDefinitionUncheckedUpdateManyWithoutTrainingBlocksInput>
+    };
     export type TrainingBlockCreateWithoutCurriculumVersionsInput = {
         id?: string
         active?: boolean
@@ -659901,6 +662290,7 @@ export namespace Prisma {
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingBlocksInput
         parent?: TrainingBlockCreateNestedOneWithoutChildrenInput
         children?: TrainingBlockCreateNestedManyWithoutParentInput
+        criteriaDefinitions?: CriteriaDefinitionCreateNestedManyWithoutTrainingBlocksInput
     };
     export type TrainingBlockUncheckedCreateWithoutCurriculumVersionsInput = {
         id?: string
@@ -659923,6 +662313,7 @@ export namespace Prisma {
         priority?: number
         parentId?: string | null
         children?: TrainingBlockUncheckedCreateNestedManyWithoutParentInput
+        criteriaDefinitions?: CriteriaDefinitionUncheckedCreateNestedManyWithoutTrainingBlocksInput
     };
     export type TrainingBlockCreateOrConnectWithoutCurriculumVersionsInput = {
         where: TrainingBlockWhereUniqueInput
@@ -660114,6 +662505,7 @@ export namespace Prisma {
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingBlocksNestedInput
         parent?: TrainingBlockUpdateOneWithoutChildrenNestedInput
         children?: TrainingBlockUpdateManyWithoutParentNestedInput
+        criteriaDefinitions?: CriteriaDefinitionUpdateManyWithoutTrainingBlocksNestedInput
     };
     export type TrainingBlockUncheckedUpdateWithoutCurriculumVersionsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -660136,6 +662528,7 @@ export namespace Prisma {
         priority?: IntFieldUpdateOperationsInput | number
         parentId?: NullableStringFieldUpdateOperationsInput | string | null
         children?: TrainingBlockUncheckedUpdateManyWithoutParentNestedInput
+        criteriaDefinitions?: CriteriaDefinitionUncheckedUpdateManyWithoutTrainingBlocksNestedInput
     };
     export type CurriculumVersionUpsertWithoutTrainingBlocksInput = {
         update: XOR<CurriculumVersionUpdateWithoutTrainingBlocksInput, CurriculumVersionUncheckedUpdateWithoutTrainingBlocksInput>
@@ -661153,6 +663546,7 @@ export namespace Prisma {
         managementOrganization?: DM_DonViCreateNestedOneWithoutSubjectsInput
         subjectVersion?: SubjectVersionCreateNestedManyWithoutSubjectInput
         awardOnSubject?: AwardCreateNestedManyWithoutSubjectsInput
+        criteriaDefinitions?: CriteriaDefinitionCreateNestedManyWithoutSubjectsInput
     };
     export type SubjectUncheckedCreateWithoutCertificateOnSubjectInput = {
         id?: string
@@ -661175,6 +663569,7 @@ export namespace Prisma {
         information?: string | null
         subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutSubjectInput
         awardOnSubject?: AwardUncheckedCreateNestedManyWithoutSubjectsInput
+        criteriaDefinitions?: CriteriaDefinitionUncheckedCreateNestedManyWithoutSubjectsInput
     };
     export type SubjectCreateOrConnectWithoutCertificateOnSubjectInput = {
         where: SubjectWhereUniqueInput
@@ -661265,6 +663660,7 @@ export namespace Prisma {
         managementOrganization?: DM_DonViUpdateOneWithoutSubjectsNestedInput
         subjectVersion?: SubjectVersionUpdateManyWithoutSubjectNestedInput
         awardOnSubject?: AwardUpdateManyWithoutSubjectsNestedInput
+        criteriaDefinitions?: CriteriaDefinitionUpdateManyWithoutSubjectsNestedInput
     };
     export type SubjectUncheckedUpdateWithoutCertificateOnSubjectInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -661287,6 +663683,7 @@ export namespace Prisma {
         information?: NullableStringFieldUpdateOperationsInput | string | null
         subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutSubjectNestedInput
         awardOnSubject?: AwardUncheckedUpdateManyWithoutSubjectsNestedInput
+        criteriaDefinitions?: CriteriaDefinitionUncheckedUpdateManyWithoutSubjectsNestedInput
     };
     export type SubjectCreateWithoutAwardOnSubjectInput = {
         id?: string
@@ -661309,6 +663706,7 @@ export namespace Prisma {
         managementOrganization?: DM_DonViCreateNestedOneWithoutSubjectsInput
         subjectVersion?: SubjectVersionCreateNestedManyWithoutSubjectInput
         certificateOnSubject?: CertificateOnSubjectCreateNestedManyWithoutSubjectInput
+        criteriaDefinitions?: CriteriaDefinitionCreateNestedManyWithoutSubjectsInput
     };
     export type SubjectUncheckedCreateWithoutAwardOnSubjectInput = {
         id?: string
@@ -661331,6 +663729,7 @@ export namespace Prisma {
         information?: string | null
         subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutSubjectInput
         certificateOnSubject?: CertificateOnSubjectUncheckedCreateNestedManyWithoutSubjectInput
+        criteriaDefinitions?: CriteriaDefinitionUncheckedCreateNestedManyWithoutSubjectsInput
     };
     export type SubjectCreateOrConnectWithoutAwardOnSubjectInput = {
         where: SubjectWhereUniqueInput
@@ -664771,12 +667170,13 @@ export namespace Prisma {
         dNgaySua?: Date | string | null
         sThietBiTao?: string | null
         sThietBiSua?: string | null
-        field: $Enums.CriteriaField
+        field?: $Enums.CriteriaField | null
         operator: $Enums.CriteriaOperator
         invert?: boolean
         value: number
         tuple?: GraduationRankDowngradeConditionCreatetupleInput | string[]
         downgradeRule: GraduationRankDowngradeRuleCreateNestedOneWithoutConditionsInput
+        criteria: CriteriaDefinitionCreateNestedOneWithoutDowngradeConditionsInput
     };
     export type GraduationRankDowngradeConditionUncheckedCreateWithoutApplicationDowngradedInput = {
         id?: string
@@ -664794,7 +667194,8 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         downgradeRuleId: string
-        field: $Enums.CriteriaField
+        criteriaId: string
+        field?: $Enums.CriteriaField | null
         operator: $Enums.CriteriaOperator
         invert?: boolean
         value: number
@@ -665018,7 +667419,8 @@ export namespace Prisma {
         sThietBiTao?: StringNullableFilter<"GraduationRankDowngradeCondition"> | string | null
         sThietBiSua?: StringNullableFilter<"GraduationRankDowngradeCondition"> | string | null
         downgradeRuleId?: StringFilter<"GraduationRankDowngradeCondition"> | string
-        field?: EnumCriteriaFieldFilter<"GraduationRankDowngradeCondition"> | $Enums.CriteriaField
+        criteriaId?: StringFilter<"GraduationRankDowngradeCondition"> | string
+        field?: EnumCriteriaFieldNullableFilter<"GraduationRankDowngradeCondition"> | $Enums.CriteriaField | null
         operator?: EnumCriteriaOperatorFilter<"GraduationRankDowngradeCondition"> | $Enums.CriteriaOperator
         invert?: BoolFilter<"GraduationRankDowngradeCondition"> | boolean
         value?: FloatFilter<"GraduationRankDowngradeCondition"> | number
@@ -667686,11 +670088,12 @@ export namespace Prisma {
         dNgaySua?: Date | string | null
         sThietBiTao?: string | null
         sThietBiSua?: string | null
-        field: $Enums.CriteriaField
+        field?: $Enums.CriteriaField | null
         operator: $Enums.CriteriaOperator
         invert?: boolean
         value: number
         tuple?: GraduationRankDowngradeConditionCreatetupleInput | string[]
+        criteria: CriteriaDefinitionCreateNestedOneWithoutDowngradeConditionsInput
         applicationDowngraded?: ApplicationDowngradedCreateNestedManyWithoutConditionsInput
     };
     export type GraduationRankDowngradeConditionUncheckedCreateWithoutDowngradeRuleInput = {
@@ -667708,7 +670111,8 @@ export namespace Prisma {
         dNgaySua?: Date | string | null
         sThietBiTao?: string | null
         sThietBiSua?: string | null
-        field: $Enums.CriteriaField
+        criteriaId: string
+        field?: $Enums.CriteriaField | null
         operator: $Enums.CriteriaOperator
         invert?: boolean
         value: number
@@ -667849,6 +670253,56 @@ export namespace Prisma {
         where: GraduationRankDowngradeRuleWhereUniqueInput
         create: XOR<GraduationRankDowngradeRuleCreateWithoutConditionsInput, GraduationRankDowngradeRuleUncheckedCreateWithoutConditionsInput>
     };
+    export type CriteriaDefinitionCreateWithoutDowngradeConditionsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        name: string
+        source: $Enums.CriteriaSource
+        systemField?: $Enums.CriteriaField | null
+        calcType?: string | null
+        params?: JsonNullValueInput | InputJsonValue
+        trainingBlocks?: TrainingBlockCreateNestedManyWithoutCriteriaDefinitionsInput
+        subjects?: SubjectCreateNestedManyWithoutCriteriaDefinitionsInput
+    };
+    export type CriteriaDefinitionUncheckedCreateWithoutDowngradeConditionsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        name: string
+        source: $Enums.CriteriaSource
+        systemField?: $Enums.CriteriaField | null
+        calcType?: string | null
+        params?: JsonNullValueInput | InputJsonValue
+        trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutCriteriaDefinitionsInput
+        subjects?: SubjectUncheckedCreateNestedManyWithoutCriteriaDefinitionsInput
+    };
+    export type CriteriaDefinitionCreateOrConnectWithoutDowngradeConditionsInput = {
+        where: CriteriaDefinitionWhereUniqueInput
+        create: XOR<CriteriaDefinitionCreateWithoutDowngradeConditionsInput, CriteriaDefinitionUncheckedCreateWithoutDowngradeConditionsInput>
+    };
     export type ApplicationDowngradedCreateWithoutConditionsInput = {
         id?: string
         code?: string | null
@@ -667931,6 +670385,61 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         initialRankId?: StringFieldUpdateOperationsInput | string
+    };
+    export type CriteriaDefinitionUpsertWithoutDowngradeConditionsInput = {
+        update: XOR<CriteriaDefinitionUpdateWithoutDowngradeConditionsInput, CriteriaDefinitionUncheckedUpdateWithoutDowngradeConditionsInput>
+        create: XOR<CriteriaDefinitionCreateWithoutDowngradeConditionsInput, CriteriaDefinitionUncheckedCreateWithoutDowngradeConditionsInput>
+        where?: CriteriaDefinitionWhereInput
+    };
+    export type CriteriaDefinitionUpdateToOneWithWhereWithoutDowngradeConditionsInput = {
+        where?: CriteriaDefinitionWhereInput
+        data: XOR<CriteriaDefinitionUpdateWithoutDowngradeConditionsInput, CriteriaDefinitionUncheckedUpdateWithoutDowngradeConditionsInput>
+    };
+    export type CriteriaDefinitionUpdateWithoutDowngradeConditionsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        source?: EnumCriteriaSourceFieldUpdateOperationsInput | $Enums.CriteriaSource
+        systemField?: NullableEnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField | null
+        calcType?: NullableStringFieldUpdateOperationsInput | string | null
+        params?: JsonNullValueInput | InputJsonValue
+        trainingBlocks?: TrainingBlockUpdateManyWithoutCriteriaDefinitionsNestedInput
+        subjects?: SubjectUpdateManyWithoutCriteriaDefinitionsNestedInput
+    };
+    export type CriteriaDefinitionUncheckedUpdateWithoutDowngradeConditionsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        source?: EnumCriteriaSourceFieldUpdateOperationsInput | $Enums.CriteriaSource
+        systemField?: NullableEnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField | null
+        calcType?: NullableStringFieldUpdateOperationsInput | string | null
+        params?: JsonNullValueInput | InputJsonValue
+        trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutCriteriaDefinitionsNestedInput
+        subjects?: SubjectUncheckedUpdateManyWithoutCriteriaDefinitionsNestedInput
     };
     export type ApplicationDowngradedUpsertWithWhereUniqueWithoutConditionsInput = {
         where: ApplicationDowngradedWhereUniqueInput
@@ -668974,6 +671483,199 @@ export namespace Prisma {
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
         trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
+    };
+    export type TrainingBlockCreateWithoutCriteriaDefinitionsInput = {
+        id?: string
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        code?: string | null
+        name: string
+        isNationalDefense?: boolean
+        priority?: number
+        trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingBlocksInput
+        parent?: TrainingBlockCreateNestedOneWithoutChildrenInput
+        children?: TrainingBlockCreateNestedManyWithoutParentInput
+        curriculumVersions?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutTrainingBlockInput
+    };
+    export type TrainingBlockUncheckedCreateWithoutCriteriaDefinitionsInput = {
+        id?: string
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        code?: string | null
+        name: string
+        trainingObjectTypeId: string
+        isNationalDefense?: boolean
+        priority?: number
+        parentId?: string | null
+        children?: TrainingBlockUncheckedCreateNestedManyWithoutParentInput
+        curriculumVersions?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutTrainingBlockInput
+    };
+    export type TrainingBlockCreateOrConnectWithoutCriteriaDefinitionsInput = {
+        where: TrainingBlockWhereUniqueInput
+        create: XOR<TrainingBlockCreateWithoutCriteriaDefinitionsInput, TrainingBlockUncheckedCreateWithoutCriteriaDefinitionsInput>
+    };
+    export type SubjectCreateWithoutCriteriaDefinitionsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        name: string
+        englishName?: string | null
+        information?: string | null
+        managementOrganization?: DM_DonViCreateNestedOneWithoutSubjectsInput
+        subjectVersion?: SubjectVersionCreateNestedManyWithoutSubjectInput
+        certificateOnSubject?: CertificateOnSubjectCreateNestedManyWithoutSubjectInput
+        awardOnSubject?: AwardCreateNestedManyWithoutSubjectsInput
+    };
+    export type SubjectUncheckedCreateWithoutCriteriaDefinitionsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        name: string
+        englishName?: string | null
+        managementOrganizationId?: string | null
+        information?: string | null
+        subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutSubjectInput
+        certificateOnSubject?: CertificateOnSubjectUncheckedCreateNestedManyWithoutSubjectInput
+        awardOnSubject?: AwardUncheckedCreateNestedManyWithoutSubjectsInput
+    };
+    export type SubjectCreateOrConnectWithoutCriteriaDefinitionsInput = {
+        where: SubjectWhereUniqueInput
+        create: XOR<SubjectCreateWithoutCriteriaDefinitionsInput, SubjectUncheckedCreateWithoutCriteriaDefinitionsInput>
+    };
+    export type GraduationRankDowngradeConditionCreateWithoutCriteriaInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        field?: $Enums.CriteriaField | null
+        operator: $Enums.CriteriaOperator
+        invert?: boolean
+        value: number
+        tuple?: GraduationRankDowngradeConditionCreatetupleInput | string[]
+        downgradeRule: GraduationRankDowngradeRuleCreateNestedOneWithoutConditionsInput
+        applicationDowngraded?: ApplicationDowngradedCreateNestedManyWithoutConditionsInput
+    };
+    export type GraduationRankDowngradeConditionUncheckedCreateWithoutCriteriaInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        downgradeRuleId: string
+        field?: $Enums.CriteriaField | null
+        operator: $Enums.CriteriaOperator
+        invert?: boolean
+        value: number
+        tuple?: GraduationRankDowngradeConditionCreatetupleInput | string[]
+        applicationDowngraded?: ApplicationDowngradedUncheckedCreateNestedManyWithoutConditionsInput
+    };
+    export type GraduationRankDowngradeConditionCreateOrConnectWithoutCriteriaInput = {
+        where: GraduationRankDowngradeConditionWhereUniqueInput
+        create: XOR<GraduationRankDowngradeConditionCreateWithoutCriteriaInput, GraduationRankDowngradeConditionUncheckedCreateWithoutCriteriaInput>
+    };
+    export type GraduationRankDowngradeConditionCreateManyCriteriaInputEnvelope = {
+        data: GraduationRankDowngradeConditionCreateManyCriteriaInput | GraduationRankDowngradeConditionCreateManyCriteriaInput[]
+        skipDuplicates?: boolean
+    };
+    export type TrainingBlockUpsertWithWhereUniqueWithoutCriteriaDefinitionsInput = {
+        where: TrainingBlockWhereUniqueInput
+        update: XOR<TrainingBlockUpdateWithoutCriteriaDefinitionsInput, TrainingBlockUncheckedUpdateWithoutCriteriaDefinitionsInput>
+        create: XOR<TrainingBlockCreateWithoutCriteriaDefinitionsInput, TrainingBlockUncheckedCreateWithoutCriteriaDefinitionsInput>
+    };
+    export type TrainingBlockUpdateWithWhereUniqueWithoutCriteriaDefinitionsInput = {
+        where: TrainingBlockWhereUniqueInput
+        data: XOR<TrainingBlockUpdateWithoutCriteriaDefinitionsInput, TrainingBlockUncheckedUpdateWithoutCriteriaDefinitionsInput>
+    };
+    export type TrainingBlockUpdateManyWithWhereWithoutCriteriaDefinitionsInput = {
+        where: TrainingBlockScalarWhereInput
+        data: XOR<TrainingBlockUpdateManyMutationInput, TrainingBlockUncheckedUpdateManyWithoutCriteriaDefinitionsInput>
+    };
+    export type SubjectUpsertWithWhereUniqueWithoutCriteriaDefinitionsInput = {
+        where: SubjectWhereUniqueInput
+        update: XOR<SubjectUpdateWithoutCriteriaDefinitionsInput, SubjectUncheckedUpdateWithoutCriteriaDefinitionsInput>
+        create: XOR<SubjectCreateWithoutCriteriaDefinitionsInput, SubjectUncheckedCreateWithoutCriteriaDefinitionsInput>
+    };
+    export type SubjectUpdateWithWhereUniqueWithoutCriteriaDefinitionsInput = {
+        where: SubjectWhereUniqueInput
+        data: XOR<SubjectUpdateWithoutCriteriaDefinitionsInput, SubjectUncheckedUpdateWithoutCriteriaDefinitionsInput>
+    };
+    export type SubjectUpdateManyWithWhereWithoutCriteriaDefinitionsInput = {
+        where: SubjectScalarWhereInput
+        data: XOR<SubjectUpdateManyMutationInput, SubjectUncheckedUpdateManyWithoutCriteriaDefinitionsInput>
+    };
+    export type GraduationRankDowngradeConditionUpsertWithWhereUniqueWithoutCriteriaInput = {
+        where: GraduationRankDowngradeConditionWhereUniqueInput
+        update: XOR<GraduationRankDowngradeConditionUpdateWithoutCriteriaInput, GraduationRankDowngradeConditionUncheckedUpdateWithoutCriteriaInput>
+        create: XOR<GraduationRankDowngradeConditionCreateWithoutCriteriaInput, GraduationRankDowngradeConditionUncheckedCreateWithoutCriteriaInput>
+    };
+    export type GraduationRankDowngradeConditionUpdateWithWhereUniqueWithoutCriteriaInput = {
+        where: GraduationRankDowngradeConditionWhereUniqueInput
+        data: XOR<GraduationRankDowngradeConditionUpdateWithoutCriteriaInput, GraduationRankDowngradeConditionUncheckedUpdateWithoutCriteriaInput>
+    };
+    export type GraduationRankDowngradeConditionUpdateManyWithWhereWithoutCriteriaInput = {
+        where: GraduationRankDowngradeConditionScalarWhereInput
+        data: XOR<GraduationRankDowngradeConditionUpdateManyMutationInput, GraduationRankDowngradeConditionUncheckedUpdateManyWithoutCriteriaInput>
     };
     export type SemesterCreateWithoutTrainingScoreSessionInput = {
         id?: string
@@ -730348,6 +733050,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUpdateManyWithoutSubjectNestedInput
         certificateOnSubject?: CertificateOnSubjectUpdateManyWithoutSubjectNestedInput
         awardOnSubject?: AwardUpdateManyWithoutSubjectsNestedInput
+        criteriaDefinitions?: CriteriaDefinitionUpdateManyWithoutSubjectsNestedInput
     };
     export type SubjectUncheckedUpdateWithoutManagementOrganizationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -730370,6 +733073,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutSubjectNestedInput
         certificateOnSubject?: CertificateOnSubjectUncheckedUpdateManyWithoutSubjectNestedInput
         awardOnSubject?: AwardUncheckedUpdateManyWithoutSubjectsNestedInput
+        criteriaDefinitions?: CriteriaDefinitionUncheckedUpdateManyWithoutSubjectsNestedInput
     };
     export type SubjectUncheckedUpdateManyWithoutManagementOrganizationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -755564,6 +758268,73 @@ export namespace Prisma {
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         bonusScore?: FloatFieldUpdateOperationsInput | number
     };
+    export type CriteriaDefinitionUpdateWithoutSubjectsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        source?: EnumCriteriaSourceFieldUpdateOperationsInput | $Enums.CriteriaSource
+        systemField?: NullableEnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField | null
+        calcType?: NullableStringFieldUpdateOperationsInput | string | null
+        params?: JsonNullValueInput | InputJsonValue
+        trainingBlocks?: TrainingBlockUpdateManyWithoutCriteriaDefinitionsNestedInput
+        downgradeConditions?: GraduationRankDowngradeConditionUpdateManyWithoutCriteriaNestedInput
+    };
+    export type CriteriaDefinitionUncheckedUpdateWithoutSubjectsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        source?: EnumCriteriaSourceFieldUpdateOperationsInput | $Enums.CriteriaSource
+        systemField?: NullableEnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField | null
+        calcType?: NullableStringFieldUpdateOperationsInput | string | null
+        params?: JsonNullValueInput | InputJsonValue
+        trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutCriteriaDefinitionsNestedInput
+        downgradeConditions?: GraduationRankDowngradeConditionUncheckedUpdateManyWithoutCriteriaNestedInput
+    };
+    export type CriteriaDefinitionUncheckedUpdateManyWithoutSubjectsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        source?: EnumCriteriaSourceFieldUpdateOperationsInput | $Enums.CriteriaSource
+        systemField?: NullableEnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField | null
+        calcType?: NullableStringFieldUpdateOperationsInput | string | null
+        params?: JsonNullValueInput | InputJsonValue
+    };
     export type SubjectVersionCreateManySubjectVersionCategoryInput = {
         id?: string
         active?: boolean
@@ -771727,6 +774498,7 @@ export namespace Prisma {
         parent?: TrainingBlockUpdateOneWithoutChildrenNestedInput
         children?: TrainingBlockUpdateManyWithoutParentNestedInput
         curriculumVersions?: TrainingBlockOnCurriculumVersionUpdateManyWithoutTrainingBlockNestedInput
+        criteriaDefinitions?: CriteriaDefinitionUpdateManyWithoutTrainingBlocksNestedInput
     };
     export type TrainingBlockUncheckedUpdateWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -771749,6 +774521,7 @@ export namespace Prisma {
         parentId?: NullableStringFieldUpdateOperationsInput | string | null
         children?: TrainingBlockUncheckedUpdateManyWithoutParentNestedInput
         curriculumVersions?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutTrainingBlockNestedInput
+        criteriaDefinitions?: CriteriaDefinitionUncheckedUpdateManyWithoutTrainingBlocksNestedInput
     };
     export type TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -776048,6 +778821,7 @@ export namespace Prisma {
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingBlocksNestedInput
         children?: TrainingBlockUpdateManyWithoutParentNestedInput
         curriculumVersions?: TrainingBlockOnCurriculumVersionUpdateManyWithoutTrainingBlockNestedInput
+        criteriaDefinitions?: CriteriaDefinitionUpdateManyWithoutTrainingBlocksNestedInput
     };
     export type TrainingBlockUncheckedUpdateWithoutParentInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -776070,6 +778844,7 @@ export namespace Prisma {
         priority?: IntFieldUpdateOperationsInput | number
         children?: TrainingBlockUncheckedUpdateManyWithoutParentNestedInput
         curriculumVersions?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutTrainingBlockNestedInput
+        criteriaDefinitions?: CriteriaDefinitionUncheckedUpdateManyWithoutTrainingBlocksNestedInput
     };
     export type TrainingBlockUncheckedUpdateManyWithoutParentInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -776149,6 +778924,73 @@ export namespace Prisma {
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         priority?: IntFieldUpdateOperationsInput | number
         electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
+    };
+    export type CriteriaDefinitionUpdateWithoutTrainingBlocksInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        source?: EnumCriteriaSourceFieldUpdateOperationsInput | $Enums.CriteriaSource
+        systemField?: NullableEnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField | null
+        calcType?: NullableStringFieldUpdateOperationsInput | string | null
+        params?: JsonNullValueInput | InputJsonValue
+        subjects?: SubjectUpdateManyWithoutCriteriaDefinitionsNestedInput
+        downgradeConditions?: GraduationRankDowngradeConditionUpdateManyWithoutCriteriaNestedInput
+    };
+    export type CriteriaDefinitionUncheckedUpdateWithoutTrainingBlocksInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        source?: EnumCriteriaSourceFieldUpdateOperationsInput | $Enums.CriteriaSource
+        systemField?: NullableEnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField | null
+        calcType?: NullableStringFieldUpdateOperationsInput | string | null
+        params?: JsonNullValueInput | InputJsonValue
+        subjects?: SubjectUncheckedUpdateManyWithoutCriteriaDefinitionsNestedInput
+        downgradeConditions?: GraduationRankDowngradeConditionUncheckedUpdateManyWithoutCriteriaNestedInput
+    };
+    export type CriteriaDefinitionUncheckedUpdateManyWithoutTrainingBlocksInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        source?: EnumCriteriaSourceFieldUpdateOperationsInput | $Enums.CriteriaSource
+        systemField?: NullableEnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField | null
+        calcType?: NullableStringFieldUpdateOperationsInput | string | null
+        params?: JsonNullValueInput | InputJsonValue
     };
     export type TrainingBlockSubjectCreateManyTrainingBlockOnCurriculumVersionInput = {
         id?: string
@@ -776821,6 +779663,7 @@ export namespace Prisma {
         managementOrganization?: DM_DonViUpdateOneWithoutSubjectsNestedInput
         subjectVersion?: SubjectVersionUpdateManyWithoutSubjectNestedInput
         certificateOnSubject?: CertificateOnSubjectUpdateManyWithoutSubjectNestedInput
+        criteriaDefinitions?: CriteriaDefinitionUpdateManyWithoutSubjectsNestedInput
     };
     export type SubjectUncheckedUpdateWithoutAwardOnSubjectInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -776843,6 +779686,7 @@ export namespace Prisma {
         information?: NullableStringFieldUpdateOperationsInput | string | null
         subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutSubjectNestedInput
         certificateOnSubject?: CertificateOnSubjectUncheckedUpdateManyWithoutSubjectNestedInput
+        criteriaDefinitions?: CriteriaDefinitionUncheckedUpdateManyWithoutSubjectsNestedInput
     };
     export type SubjectUncheckedUpdateManyWithoutAwardOnSubjectInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -778282,12 +781126,13 @@ export namespace Prisma {
         dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
-        field?: EnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField
+        field?: NullableEnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField | null
         operator?: EnumCriteriaOperatorFieldUpdateOperationsInput | $Enums.CriteriaOperator
         invert?: BoolFieldUpdateOperationsInput | boolean
         value?: FloatFieldUpdateOperationsInput | number
         tuple?: GraduationRankDowngradeConditionUpdatetupleInput | string[]
         downgradeRule?: GraduationRankDowngradeRuleUpdateOneRequiredWithoutConditionsNestedInput
+        criteria?: CriteriaDefinitionUpdateOneRequiredWithoutDowngradeConditionsNestedInput
     };
     export type GraduationRankDowngradeConditionUncheckedUpdateWithoutApplicationDowngradedInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -778305,7 +781150,8 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         downgradeRuleId?: StringFieldUpdateOperationsInput | string
-        field?: EnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField
+        criteriaId?: StringFieldUpdateOperationsInput | string
+        field?: NullableEnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField | null
         operator?: EnumCriteriaOperatorFieldUpdateOperationsInput | $Enums.CriteriaOperator
         invert?: BoolFieldUpdateOperationsInput | boolean
         value?: FloatFieldUpdateOperationsInput | number
@@ -778327,7 +781173,8 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         downgradeRuleId?: StringFieldUpdateOperationsInput | string
-        field?: EnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField
+        criteriaId?: StringFieldUpdateOperationsInput | string
+        field?: NullableEnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField | null
         operator?: EnumCriteriaOperatorFieldUpdateOperationsInput | $Enums.CriteriaOperator
         invert?: BoolFieldUpdateOperationsInput | boolean
         value?: FloatFieldUpdateOperationsInput | number
@@ -779268,7 +782115,8 @@ export namespace Prisma {
         dNgaySua?: Date | string | null
         sThietBiTao?: string | null
         sThietBiSua?: string | null
-        field: $Enums.CriteriaField
+        criteriaId: string
+        field?: $Enums.CriteriaField | null
         operator: $Enums.CriteriaOperator
         invert?: boolean
         value: number
@@ -779289,11 +782137,12 @@ export namespace Prisma {
         dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
-        field?: EnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField
+        field?: NullableEnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField | null
         operator?: EnumCriteriaOperatorFieldUpdateOperationsInput | $Enums.CriteriaOperator
         invert?: BoolFieldUpdateOperationsInput | boolean
         value?: FloatFieldUpdateOperationsInput | number
         tuple?: GraduationRankDowngradeConditionUpdatetupleInput | string[]
+        criteria?: CriteriaDefinitionUpdateOneRequiredWithoutDowngradeConditionsNestedInput
         applicationDowngraded?: ApplicationDowngradedUpdateManyWithoutConditionsNestedInput
     };
     export type GraduationRankDowngradeConditionUncheckedUpdateWithoutDowngradeRuleInput = {
@@ -779311,7 +782160,8 @@ export namespace Prisma {
         dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
-        field?: EnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField
+        criteriaId?: StringFieldUpdateOperationsInput | string
+        field?: NullableEnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField | null
         operator?: EnumCriteriaOperatorFieldUpdateOperationsInput | $Enums.CriteriaOperator
         invert?: BoolFieldUpdateOperationsInput | boolean
         value?: FloatFieldUpdateOperationsInput | number
@@ -779333,7 +782183,8 @@ export namespace Prisma {
         dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
-        field?: EnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField
+        criteriaId?: StringFieldUpdateOperationsInput | string
+        field?: NullableEnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField | null
         operator?: EnumCriteriaOperatorFieldUpdateOperationsInput | $Enums.CriteriaOperator
         invert?: BoolFieldUpdateOperationsInput | boolean
         value?: FloatFieldUpdateOperationsInput | number
@@ -779640,6 +782491,229 @@ export namespace Prisma {
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type GraduationRankDowngradeConditionCreateManyCriteriaInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        downgradeRuleId: string
+        field?: $Enums.CriteriaField | null
+        operator: $Enums.CriteriaOperator
+        invert?: boolean
+        value: number
+        tuple?: GraduationRankDowngradeConditionCreatetupleInput | string[]
+    };
+    export type TrainingBlockUpdateWithoutCriteriaDefinitionsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        isNationalDefense?: BoolFieldUpdateOperationsInput | boolean
+        priority?: IntFieldUpdateOperationsInput | number
+        trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingBlocksNestedInput
+        parent?: TrainingBlockUpdateOneWithoutChildrenNestedInput
+        children?: TrainingBlockUpdateManyWithoutParentNestedInput
+        curriculumVersions?: TrainingBlockOnCurriculumVersionUpdateManyWithoutTrainingBlockNestedInput
+    };
+    export type TrainingBlockUncheckedUpdateWithoutCriteriaDefinitionsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        isNationalDefense?: BoolFieldUpdateOperationsInput | boolean
+        priority?: IntFieldUpdateOperationsInput | number
+        parentId?: NullableStringFieldUpdateOperationsInput | string | null
+        children?: TrainingBlockUncheckedUpdateManyWithoutParentNestedInput
+        curriculumVersions?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutTrainingBlockNestedInput
+    };
+    export type TrainingBlockUncheckedUpdateManyWithoutCriteriaDefinitionsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        isNationalDefense?: BoolFieldUpdateOperationsInput | boolean
+        priority?: IntFieldUpdateOperationsInput | number
+        parentId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type SubjectUpdateWithoutCriteriaDefinitionsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        information?: NullableStringFieldUpdateOperationsInput | string | null
+        managementOrganization?: DM_DonViUpdateOneWithoutSubjectsNestedInput
+        subjectVersion?: SubjectVersionUpdateManyWithoutSubjectNestedInput
+        certificateOnSubject?: CertificateOnSubjectUpdateManyWithoutSubjectNestedInput
+        awardOnSubject?: AwardUpdateManyWithoutSubjectsNestedInput
+    };
+    export type SubjectUncheckedUpdateWithoutCriteriaDefinitionsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+        information?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutSubjectNestedInput
+        certificateOnSubject?: CertificateOnSubjectUncheckedUpdateManyWithoutSubjectNestedInput
+        awardOnSubject?: AwardUncheckedUpdateManyWithoutSubjectsNestedInput
+    };
+    export type SubjectUncheckedUpdateManyWithoutCriteriaDefinitionsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+        information?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type GraduationRankDowngradeConditionUpdateWithoutCriteriaInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        field?: NullableEnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField | null
+        operator?: EnumCriteriaOperatorFieldUpdateOperationsInput | $Enums.CriteriaOperator
+        invert?: BoolFieldUpdateOperationsInput | boolean
+        value?: FloatFieldUpdateOperationsInput | number
+        tuple?: GraduationRankDowngradeConditionUpdatetupleInput | string[]
+        downgradeRule?: GraduationRankDowngradeRuleUpdateOneRequiredWithoutConditionsNestedInput
+        applicationDowngraded?: ApplicationDowngradedUpdateManyWithoutConditionsNestedInput
+    };
+    export type GraduationRankDowngradeConditionUncheckedUpdateWithoutCriteriaInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        downgradeRuleId?: StringFieldUpdateOperationsInput | string
+        field?: NullableEnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField | null
+        operator?: EnumCriteriaOperatorFieldUpdateOperationsInput | $Enums.CriteriaOperator
+        invert?: BoolFieldUpdateOperationsInput | boolean
+        value?: FloatFieldUpdateOperationsInput | number
+        tuple?: GraduationRankDowngradeConditionUpdatetupleInput | string[]
+        applicationDowngraded?: ApplicationDowngradedUncheckedUpdateManyWithoutConditionsNestedInput
+    };
+    export type GraduationRankDowngradeConditionUncheckedUpdateManyWithoutCriteriaInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        downgradeRuleId?: StringFieldUpdateOperationsInput | string
+        field?: NullableEnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField | null
+        operator?: EnumCriteriaOperatorFieldUpdateOperationsInput | $Enums.CriteriaOperator
+        invert?: BoolFieldUpdateOperationsInput | boolean
+        value?: FloatFieldUpdateOperationsInput | number
+        tuple?: GraduationRankDowngradeConditionUpdatetupleInput | string[]
     };
     export type StudentTrainingScoreCreateManyTrainingScoreSessionInput = {
         id?: string

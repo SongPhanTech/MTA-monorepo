@@ -163,7 +163,7 @@ export default function StudentGraduationApplication() {
           downgraded: {
             include: {
               from: true,
-              conditions: true,
+              conditions: { include: { criteria: { select: { name: true } } } },
             },
           },
           student: {
@@ -942,9 +942,14 @@ export default function StudentGraduationApplication() {
                                   Hạ bậc ($
                                   {record.downgraded.from.classification}
                                   ):{" "}
-                                  {record.downgraded.conditions?.map((condition: any) =>
-                                    getCriteriaFieldLabel(condition.field)
-                                  ) || [].filter(Boolean).join(", ")}
+                                  {(record.downgraded.conditions ?? [])
+                                    .map(
+                                      (condition: any) =>
+                                        condition.criteria?.name ??
+                                        getCriteriaFieldLabel(condition.field)
+                                    )
+                                    .filter(Boolean)
+                                    .join(", ")}
                                 </span>
                               )
                             }

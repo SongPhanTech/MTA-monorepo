@@ -50,6 +50,7 @@ const relationSchema = z.object({
     parent: z.record(z.string(), z.unknown()).optional(),
     children: z.array(z.unknown()).optional(),
     curriculumVersions: z.array(z.unknown()).optional(),
+    criteriaDefinitions: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

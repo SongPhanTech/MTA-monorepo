@@ -11,6 +11,7 @@ import {
   academicRankingStudying,
 } from "./seed/academic-ranking-convert"
 import { seedAcademicWarningRule } from "./seed/academic-warning-rule"
+import { seedSystemCriteriaDefinitions, systemCriteriaId } from "./seed/criteria-definition"
 import { seedScholarshipCriteria } from "./seed/scholarship"
 import { seedSchoolYear } from "./seed/schoolYear"
 import { scoreConversions } from "./seed/score-convert"
@@ -300,13 +301,15 @@ async function main() {
     select: { id: true },
   })
 
+  await seedSystemCriteriaDefinitions(prisma)
+
   for (const rank of ranks) {
     await prisma.graduationRankDowngradeRule.create({
       data: {
         initialRankId: rank.id,
         conditions: {
           create: {
-            field: "CONDUCT_SCORE",
+            criteriaId: systemCriteriaId("CONDUCT_SCORE"),
             operator: "LT",
             value: 8,
           },

@@ -405,6 +405,14 @@ enum DiplomaVerificationStatus {
   @@schema("ql-dao-tao")
 }
 
+/// Nguồn của tiêu chí đánh giá
+enum CriteriaSource {
+  SYSTEM
+  CUSTOM
+
+  @@schema("ql-dao-tao")
+}
+
 enum TrainingScoreStatus {
   PENDING
   APPROVED
@@ -3688,6 +3696,7 @@ model Subject {
   subjectVersion           SubjectVersion[]       @relation(name: "SubjectVersion")
   certificateOnSubject     CertificateOnSubject[]
   awardOnSubject           Award[]
+  criteriaDefinitions      CriteriaDefinition[]
 
   @@unique([code, name, managementOrganizationId])
   @@schema("ql-dao-tao")
@@ -5481,6 +5490,7 @@ model TrainingBlock {
   parentId             String?
   children             TrainingBlock[]                    @relation("ParentChild")
   curriculumVersions   TrainingBlockOnCurriculumVersion[]
+  criteriaDefinitions  CriteriaDefinition[]
 
   @@unique([trainingObjectTypeId, name])
   @@schema("ql-dao-tao")
@@ -6082,13 +6092,17 @@ model GraduationRankDowngradeCondition {
   sThietBiSua           String?
   downgradeRule         GraduationRankDowngradeRule @relation(fields: [downgradeRuleId], references: [id])
   downgradeRuleId       String
-  field                 CriteriaField
+  criteria              CriteriaDefinition          @relation(fields: [criteriaId], references: [id])
+  criteriaId            String
+  /// @deprecated Giữ lại để chuyển dữ liệu, sẽ xoá ở migration sau. Dùng criteriaId.
+  field                 CriteriaField?
   operator              CriteriaOperator
   invert                Boolean                     @default(false)
   value                 Float
   tuple                 String[]                    @default([])
   applicationDowngraded ApplicationDowngraded[]
 
+  @@index([criteriaId])
   @@schema("ql-dao-tao")
 }
 
@@ -6162,6 +6176,41 @@ model DiplomaVerificationApplication {
   /// Liên kết học viên (nếu cần)
   studentId               String?
   student                 Student?                  @relation(fields: [studentId], references: [id])
+
+  @@schema("ql-dao-tao")
+}
+
+/// Danh mục tiêu chí đánh giá, dùng chung cho các bộ quy tắc (hiện áp dụng cho quy tắc hạ bậc tốt nghiệp).
+/// - SYSTEM: systemField != null, calcType == null (27 dòng tạo sẵn bởi migration)
+/// - CUSTOM: systemField == null, calcType != null (người dùng tạo trên giao diện)
+/// Ràng buộc CHECK "CriteriaDefinition_source_chk" ở DB đảm bảo điều này.
+model CriteriaDefinition {
+  id                  String                             @id() @default(cuid())
+  code                String?                            @unique()
+  active              Boolean                            @default(true)
+  description         String?                            @db.Text()
+  deletedAt           DateTime?
+  createdAt           DateTime                           @default(now())
+  updatedAt           DateTime                           @default(now()) @updatedAt()
+  createdBy           String?                            @db.Uuid()
+  sNguoiTao           String?
+  sNguoiSua           String?
+  dNgayTao            DateTime?                          @db.Timestamp(6)
+  dNgaySua            DateTime?                          @db.Timestamp(6)
+  sThietBiTao         String?
+  sThietBiSua         String?
+  name                String
+  source              CriteriaSource
+  systemField         CriteriaField?                     @unique()
+  /// Mã calculator đăng ký ở backend (be-ql-dao-tao/src/services/criteria-calculators).
+  /// Dùng String thay vì enum để thêm kiểu tính mới không cần sửa DB.
+  calcType            String?
+  /// Tham số của calculator, kiểm tra bằng zod theo calcType
+  params              Json                               @default("{}")
+  /// Phạm vi môn (CUSTOM): khối kiến thức (gồm khối con) và/hoặc môn học. Bỏ trống = toàn bộ CTĐT
+  trainingBlocks      TrainingBlock[]
+  subjects            Subject[]
+  downgradeConditions GraduationRankDowngradeCondition[]
 
   @@schema("ql-dao-tao")
 }

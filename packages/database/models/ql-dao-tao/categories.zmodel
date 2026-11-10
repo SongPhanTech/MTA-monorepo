@@ -229,6 +229,7 @@ model TrainingBlock extends BaseNoCode {
   children             TrainingBlock[]                    @relation("ParentChild")
 
   curriculumVersions   TrainingBlockOnCurriculumVersion[]
+  criteriaDefinitions  CriteriaDefinition[]
 
   @@unique([trainingObjectTypeId, name])
   @@schema("ql-dao-tao")

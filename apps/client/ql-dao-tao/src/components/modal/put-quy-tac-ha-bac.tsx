@@ -4,6 +4,7 @@ import useSpinner from "@hooks/spinner"
 import type { GraduationRankDowngradeCondition } from "@workspace/db/client"
 import {
   useCreateGraduationRankDowngradeCondition,
+  useFindManyCriteriaDefinition,
   useFindUniqueGraduationRankDowngradeCondition,
   useUpdateGraduationRankDowngradeCondition,
 } from "@workspace/db/hooks"
@@ -14,7 +15,6 @@ import { useDisclosure } from "react-hook-disclosure-modal"
 import "dayjs/locale/vi"
 import "./index.css"
 import Select from "@components/commons/select"
-import { useCriteriaFieldOptions } from "@hooks/criteriaField"
 import { useCriteriaOperatorOptions } from "@hooks/criteriaOperator"
 export type PutRankDowngradeCondition = GraduationRankDowngradeCondition
 dayjs.locale("vi")
@@ -26,7 +26,6 @@ type GraduationRankDowngradeConditionInput = {
 
 const PutRankDowngradeCondition = () => {
   const [form] = Form.useForm<PutRankDowngradeCondition>()
-  const { options: criteriaFieldOptions } = useCriteriaFieldOptions()
   const { options: criteriaOperatorOptions } = useCriteriaOperatorOptions()
 
   const { isOpen, onClose, input } = useDisclosure<GraduationRankDowngradeConditionInput>({
@@ -49,7 +48,7 @@ const PutRankDowngradeCondition = () => {
       }
       const data = {
         code: output?.code,
-        field: output?.field,
+        criteriaId: output?.criteriaId,
         // invert: output?.invert,
         operator: output?.operator,
         value: output?.value,
@@ -89,6 +88,35 @@ const PutRankDowngradeCondition = () => {
     { enabled: !!input?.downgradeConditionId }
   )
 
+  // Danh mục tiêu chí: đang hoạt động, hoặc tiêu chí đang gắn với điều kiện đang sửa
+  const { data: criteriaList = [] } = useFindManyCriteriaDefinition(
+    {
+      where: {
+        OR: [
+          { active: true },
+          ...(initialValue?.criteriaId ? [{ id: initialValue.criteriaId }] : []),
+        ],
+      },
+      select: { id: true, name: true, source: true },
+      orderBy: [{ source: "asc" }, { name: "asc" }],
+    },
+    { enabled: isOpen }
+  )
+  const criteriaOptions = [
+    {
+      label: "Tiêu chí tự định nghĩa",
+      options: criteriaList
+        .filter((item) => item.source === "CUSTOM")
+        .map((item) => ({ value: item.id, label: item.name })),
+    },
+    {
+      label: "Tiêu chí hệ thống",
+      options: criteriaList
+        .filter((item) => item.source === "SYSTEM")
+        .map((item) => ({ value: item.id, label: item.name })),
+    },
+  ].filter((group) => group.options.length > 0)
+
   useEffect(() => {
     if (initialValue) {
       form.setFieldsValue({
@@ -113,12 +141,8 @@ const PutRankDowngradeCondition = () => {
       title={input?.downgradeConditionId ? "Sửa tiêu chí bộ quy tắc " : "Thêm tiêu chí bộ quy tắc"}
     >
       <Col span={12}>
-        <FormItem form={form} label="Trường được đánh giá" name="field" required>
-          <Select
-            placeholder="Chọn trường được đánh giá"
-            options={criteriaFieldOptions}
-            allowClear
-          />
+        <FormItem form={form} label="Tiêu chí được đánh giá" name="criteriaId" required>
+          <Select placeholder="Chọn tiêu chí" options={criteriaOptions} allowClear />
         </FormItem>
       </Col>
       {/* <Col span={12}>
@@ -144,7 +168,7 @@ const PutRankDowngradeCondition = () => {
             type="number"
             placeholder="Nhập giá trị ngưỡng"
             className="w-full"
-            step={1}
+            step={0.1}
           />
         </FormItem>
       </Col>

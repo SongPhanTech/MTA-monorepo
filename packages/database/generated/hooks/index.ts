@@ -174,6 +174,7 @@ export * from './graduation-rank-downgrade-rule';
 export * from './graduation-rank-downgrade-condition';
 export * from './ranking-condition';
 export * from './diploma-verification-application';
+export * from './criteria-definition';
 export * from './training-score-session';
 export * from './student-training-score';
 export * from './semester-training-score';

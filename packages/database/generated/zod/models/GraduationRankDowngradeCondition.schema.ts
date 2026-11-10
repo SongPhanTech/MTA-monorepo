@@ -22,7 +22,7 @@ const baseSchema = z.object({
     dNgaySua: z.coerce.date().nullish(),
     sThietBiTao: z.string().nullish(),
     sThietBiSua: z.string().nullish(),
-    field: CriteriaFieldSchema,
+    field: CriteriaFieldSchema.nullish(),
     operator: CriteriaOperatorSchema,
     invert: z.boolean().default(false),
     value: z.number(),
@@ -44,7 +44,7 @@ const baseSchemaWithoutDefaults = z.object({
     dNgaySua: z.coerce.date().nullish(),
     sThietBiTao: z.string().nullish(),
     sThietBiSua: z.string().nullish(),
-    field: CriteriaFieldSchema,
+    field: CriteriaFieldSchema.nullish(),
     operator: CriteriaOperatorSchema,
     invert: z.boolean(),
     value: z.number(),
@@ -53,11 +53,13 @@ const baseSchemaWithoutDefaults = z.object({
 ).strict();
 const relationSchema = z.object({
     downgradeRule: z.record(z.string(), z.unknown()),
+    criteria: z.record(z.string(), z.unknown()),
     applicationDowngraded: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     downgradeRuleId: z.string(),
+    criteriaId: z.string(),
 }
 );
 
@@ -99,7 +101,7 @@ export const GraduationRankDowngradeConditionPrismaUpdateSchema = z.object({
     dNgaySua: z.coerce.date().nullish(),
     sThietBiTao: z.string().nullish(),
     sThietBiSua: z.string().nullish(),
-    field: CriteriaFieldSchema,
+    field: CriteriaFieldSchema.nullish(),
     operator: CriteriaOperatorSchema,
     invert: z.boolean(),
     value: z.union([z.number(), z.record(z.string(), z.unknown())]),
