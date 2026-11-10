@@ -12368,6 +12368,13 @@ const metadata: ModelMeta = {
                     isArray: true,
                     backLink: 'subjects',
                     isRelationOwner: true,
+                }, criteriaDefinitions: {
+                    name: "criteriaDefinitions",
+                    type: "CriteriaDefinition",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subjects',
+                    isRelationOwner: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -19665,6 +19672,13 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingBlock',
+                }, criteriaDefinitions: {
+                    name: "criteriaDefinitions",
+                    type: "CriteriaDefinition",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingBlocks',
+                    isRelationOwner: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -22064,9 +22078,22 @@ const metadata: ModelMeta = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'downgradeRule',
+                }, criteria: {
+                    name: "criteria",
+                    type: "CriteriaDefinition",
+                    isDataModel: true,
+                    backLink: 'downgradeConditions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "criteriaId" },
+                }, criteriaId: {
+                    name: "criteriaId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'criteria',
                 }, field: {
                     name: "field",
                     type: "CriteriaField",
+                    isOptional: true,
                 }, operator: {
                     name: "operator",
                     type: "CriteriaOperator",
@@ -22366,6 +22393,119 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                },
+            },
+        },
+        criteriaDefinition: {
+            name: 'CriteriaDefinition', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$CriteriaDefinition$createdBy,
+                }, sNguoiTao: {
+                    name: "sNguoiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sNguoiSua: {
+                    name: "sNguoiSua",
+                    type: "String",
+                    isOptional: true,
+                }, dNgayTao: {
+                    name: "dNgayTao",
+                    type: "DateTime",
+                    isOptional: true,
+                }, dNgaySua: {
+                    name: "dNgaySua",
+                    type: "DateTime",
+                    isOptional: true,
+                }, sThietBiTao: {
+                    name: "sThietBiTao",
+                    type: "String",
+                    isOptional: true,
+                }, sThietBiSua: {
+                    name: "sThietBiSua",
+                    type: "String",
+                    isOptional: true,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, source: {
+                    name: "source",
+                    type: "CriteriaSource",
+                }, systemField: {
+                    name: "systemField",
+                    type: "CriteriaField",
+                    isOptional: true,
+                }, calcType: {
+                    name: "calcType",
+                    type: "String",
+                    isOptional: true,
+                }, params: {
+                    name: "params",
+                    type: "Json",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "{}" }] }],
+                }, trainingBlocks: {
+                    name: "trainingBlocks",
+                    type: "TrainingBlock",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'criteriaDefinitions',
+                    isRelationOwner: true,
+                }, subjects: {
+                    name: "subjects",
+                    type: "Subject",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'criteriaDefinitions',
+                    isRelationOwner: true,
+                }, downgradeConditions: {
+                    name: "downgradeConditions",
+                    type: "GraduationRankDowngradeCondition",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'criteria',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, systemField: {
+                    name: "systemField",
+                    fields: ["systemField"]
                 },
             },
         },
@@ -36253,6 +36393,10 @@ function $default$RankingCondition$createdBy(user: any): unknown {
 }
 
 function $default$DiplomaVerificationApplication$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$CriteriaDefinition$createdBy(user: any): unknown {
     return user?.id;
 }
 

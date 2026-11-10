@@ -44,6 +44,7 @@ import { GraduationSessionStatus } from "../prisma-client";
 import { ApplicationStatus } from "../prisma-client";
 import { RankingContext } from "../prisma-client";
 import { DiplomaVerificationStatus } from "../prisma-client";
+import { CriteriaSource } from "../prisma-client";
 import { TrainingScoreStatus } from "../prisma-client";
 import { StudentTrainingType } from "../prisma-client";
 import { CriteriaField } from "../prisma-client";
@@ -3479,6 +3480,26 @@ const policy: PolicyDef = {
             },
 
         },
+        criteriaDefinition: {
+            modelLevel: {
+                read: { guard: CriteriaDefinition_read, },
+                create: { guard: CriteriaDefinition_create, inputChecker: CriteriaDefinition_create_input, },
+                update: { guard: CriteriaDefinition_update, },
+                postUpdate: { guard: CriteriaDefinition_postUpdate, },
+                delete: { guard: CriteriaDefinition_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
         trainingScoreSession: {
             modelLevel: {
                 read: { guard: TrainingScoreSession_read, },
@@ -6011,6 +6032,7 @@ const policy: PolicyDef = {
         graduationRankDowngradeCondition: { hasValidation: false },
         rankingCondition: { hasValidation: false },
         diplomaVerificationApplication: { hasValidation: false },
+        criteriaDefinition: { hasValidation: false },
         trainingScoreSession: { hasValidation: false },
         studentTrainingScore: { hasValidation: false },
         semesterTrainingScore: { hasValidation: false },
@@ -17161,6 +17183,71 @@ function DiplomaVerificationApplication_delete(context: QueryContext, db: CrudCo
 }
 
 function $check_DiplomaVerificationApplication_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function CriteriaDefinition_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_CriteriaDefinition_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function CriteriaDefinition_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_CriteriaDefinition_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function CriteriaDefinition_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function CriteriaDefinition_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_CriteriaDefinition_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function CriteriaDefinition_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_CriteriaDefinition_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function CriteriaDefinition_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_CriteriaDefinition_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

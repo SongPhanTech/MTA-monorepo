@@ -40,7 +40,11 @@ import {
   type StudentRepeatGrade,
   StudentScholarshipResult,
 } from "../dto/student-info.dto"
-import type { StudentCondition, StudentDataContext } from "../types/student-context"
+import type {
+  ComparableCondition,
+  StudentCondition,
+  StudentDataContext,
+} from "../types/student-context"
 
 const checkScorePassed = ({
   subjectId,
@@ -2384,8 +2388,17 @@ export function evaluateCondition(
   studentData: StudentDataContext,
   condition: StudentCondition
 ): boolean {
-  const actualValue = studentData[condition.field]
+  return compareConditionValue(studentData[condition.field], condition)
+}
 
+/**
+ * So sánh giá trị thực tế của SV với ngưỡng của một tiêu chí.
+ * Dùng chung cho tiêu chí hệ thống (StudentDataContext) và tiêu chí tự định nghĩa (calculator).
+ */
+export function compareConditionValue(
+  actualValue: number | boolean | null | undefined,
+  condition: ComparableCondition
+): boolean {
   // Nếu không có dữ liệu cho tiêu chí này, coi như không thoả mãn
   if (actualValue === null || actualValue === undefined) {
     return false

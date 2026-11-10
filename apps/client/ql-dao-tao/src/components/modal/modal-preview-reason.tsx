@@ -29,7 +29,7 @@ const ModalPreviewReason = () => {
         downgraded: {
           include: {
             from: true,
-            conditions: true,
+            conditions: { include: { criteria: { select: { name: true } } } },
           },
         },
       },
@@ -81,7 +81,7 @@ const ModalPreviewReason = () => {
           </Typography.Text>
           <Typography.Text className="text-orange-600 text-sm ml-1">
             {data.downgraded.conditions
-              ?.map((c: any) => c.field)
+              ?.map((c: any) => c.criteria?.name ?? c.field)
               .filter(Boolean)
               .join(", ")}
           </Typography.Text>

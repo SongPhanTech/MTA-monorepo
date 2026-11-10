@@ -2218,6 +2218,19 @@ const policy = {
                 update: {},
             },
         },
+        criteriaDefinition: {
+            modelLevel: {
+                read: { guard: CriteriaDefinition_read, },
+                create: { guard: CriteriaDefinition_create, inputChecker: CriteriaDefinition_create_input, },
+                update: { guard: CriteriaDefinition_update, },
+                postUpdate: { guard: CriteriaDefinition_postUpdate, },
+                delete: { guard: CriteriaDefinition_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         trainingScoreSession: {
             modelLevel: {
                 read: { guard: TrainingScoreSession_read, },
@@ -3924,6 +3937,7 @@ const policy = {
         graduationRankDowngradeCondition: { hasValidation: false },
         rankingCondition: { hasValidation: false },
         diplomaVerificationApplication: { hasValidation: false },
+        criteriaDefinition: { hasValidation: false },
         trainingScoreSession: { hasValidation: false },
         studentTrainingScore: { hasValidation: false },
         semesterTrainingScore: { hasValidation: false },
@@ -17259,6 +17273,84 @@ function DiplomaVerificationApplication_delete(context, db) {
     return { OR: [] };
 }
 function $check_DiplomaVerificationApplication_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function CriteriaDefinition_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_CriteriaDefinition_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function CriteriaDefinition_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_CriteriaDefinition_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function CriteriaDefinition_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function CriteriaDefinition_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_CriteriaDefinition_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function CriteriaDefinition_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_CriteriaDefinition_postUpdate(input, context) {
+    return true;
+}
+function CriteriaDefinition_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_CriteriaDefinition_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {

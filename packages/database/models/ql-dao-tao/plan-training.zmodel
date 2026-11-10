@@ -730,6 +730,7 @@ model Subject extends Base {
   subjectVersion           SubjectVersion[]       @relation(name: "SubjectVersion")
   certificateOnSubject     CertificateOnSubject[]
   awardOnSubject           Award[]
+  criteriaDefinitions      CriteriaDefinition[]
 
   @@unique([code,name,managementOrganizationId])
 
