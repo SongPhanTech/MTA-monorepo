@@ -25,14 +25,14 @@ export default function DetailSurveyPage() {
   const { data: session } = useSession()
   const profileId =
     session?.sDM_NhanVienId ||
-    process.env.NEXT_PUBLIC_MOCK_USER_PROFILE_ID ||
-    "01e8a613-31f2-4724-87b5-383918959293"
+    (process.env.NODE_ENV !== "production" ? process.env.NEXT_PUBLIC_MOCK_USER_PROFILE_ID : "") ||
+    ""
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
   const { id: semesterId } = useSemesterStore()
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
   const [surveyType, setSurveyType] = useState<SurveyListTab>("SINGLE")
-  const [tabResolved, setTabResolved] = useState(false)
+  const [tabResolved, setTabResolved] = useState(() => Boolean(router.isReady))
   const [filters, setFilters] = useState<FilterProps>({
     code: "",
     name: "",
@@ -120,7 +120,7 @@ export default function DetailSurveyPage() {
     type: surveyType,
   }
 
-  const { data } = useGetSurveysOfProfile(
+  const { data, isLoading } = useGetSurveysOfProfile(
     profileId as string,
     {
       page: currentPage,
@@ -181,6 +181,7 @@ export default function DetailSurveyPage() {
           className="mb-0"
         />
         <Table
+          loading={isLoading}
           className="h-[calc(100vh-200px)]"
           filters={filters}
           setFilters={(value) => {

@@ -106,6 +106,19 @@ export interface GetSurveyResult {
   /** @nullable */
   lectureInfo: GetSurveyResultLectureInfo;
   /** @nullable */
+  studentInfo?: {
+    /** @nullable */
+    majorName?: string | null;
+    /** @nullable */
+    facultyName?: string | null;
+    /** @nullable */
+    className?: string | null;
+    /** @nullable */
+    courseName?: string | null;
+    /** @nullable */
+    trainingObjectTypeName?: string | null;
+  } | null;
+  /** @nullable */
   subjectClass: GetSurveyResultSubjectClass;
   /** @nullable */
   semester: GetSurveyResultSemester;

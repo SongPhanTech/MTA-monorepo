@@ -10,7 +10,7 @@ import { getPrivateSurvey, useSavePublicSurvey } from "@workspace/libs/api/exam"
 import type { GetSurveyResult } from "@workspace/libs/api/schemas/getSurveyResult"
 import { Button, Col, Flex, Form, Input, message, Radio, Row } from "antd"
 import { LECTURER_SURVEY_PRINT_FORM_CONTENT } from "@workspace/libs/survey-form-content"
-import { SurveyFormFooter, SurveyFormIntro } from "@workspace/ui"
+import { mapStudentInfo, SurveyFormFooter, SurveyFormIntro } from "@workspace/ui"
 
 import { useRouter } from "next/router"
 import { useEffect, useMemo, useState } from "react"
@@ -40,11 +40,15 @@ function TakeTestPage() {
   const [startAt, setStartAt] = useState<Date>(new Date())
   const id = router.query.id as string
   const { data: session } = useSession()
-  const profileId = session?.sDM_NhanVienId || ""
+  const profileId =
+    session?.sDM_NhanVienId ||
+    (process.env.NODE_ENV !== "production" ? process.env.NEXT_PUBLIC_MOCK_USER_PROFILE_ID : "") ||
+    ""
   const [form] = Form.useForm<PutSurveySession>()
   const [survey, setSurvey] = useState<SurveyType>()
   const [isLoading, setIsLoading] = useState(true)
   const [isDone, setIsDone] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string>("")
 
   // const { data } =  useGetPublicSurvey(id)
   const { mutateAsync: createSavePublicSurvey } = useSavePublicSurvey()
@@ -55,11 +59,36 @@ function TakeTestPage() {
     },
     include: {
       userProfile: { select: { code: true } },
+      fixedClass: {
+        include: {
+          trainingCourse: {
+            include: { trainingObjectType: true },
+          },
+          managementOrganization: true,
+          curriculumVersion: {
+            include: {
+              trainingObjectType: true,
+              curriculum: {
+                include: {
+                  trainingMajor: {
+                    include: { organization: true },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
     },
     orderBy: {
       createdAt: "desc",
     },
   })
+
+  const studentInfo = useMemo(() => {
+    if (survey?.studentInfo) return survey.studentInfo
+    return mapStudentInfo(student?.fixedClass)
+  }, [survey?.studentInfo, student])
 
   // const [expandedRowKeys, setExpandedRowKeys] = useState<React.Key[]>([])
 
@@ -168,9 +197,7 @@ function TakeTestPage() {
   }
 
   const fetchData = async () => {
-    const response = await getPrivateSurvey(id, {
-      profileId,
-    })
+    const response = await getPrivateSurvey(id)
     if (response?.status === 200) {
       if (response?.data?.isPublic) {
         return
@@ -178,7 +205,9 @@ function TakeTestPage() {
       setSurvey(response?.data)
       setStartAt(new Date())
     } else {
-      message.error(response?.data?.message)
+      const msg = response?.data?.message || "Không thể tải khảo sát"
+      setErrorMessage(msg)
+      message.error(msg)
     }
     setIsLoading(false)
   }
@@ -207,12 +236,32 @@ function TakeTestPage() {
       </Button>
       <Confetti width={window?.innerWidth || 1000} height={window?.innerHeight || 1000} />
     </div>
+  ) : !survey ? (
+    <div className="text-center flex flex-col items-center justify-center min-h-[calc(100vh-64px-24px)]">
+      <div className="text-lg text-red-500 mb-4">
+        {errorMessage || "Không tìm thấy khảo sát hoặc bạn không thuộc đối tượng tham gia"}
+      </div>
+      <Button
+        type="primary"
+        onClick={() => {
+          router.push("/thiet-lap-khao-sat/danh-sach-khao-sat")
+        }}
+        size="large"
+      >
+        Quay lại danh sách
+      </Button>
+    </div>
   ) : (
     <Form form={form} className="px-6 max-w-[1100px] w-full mx-auto">
       <div className="text-xl font-bold mb-4 text-center uppercase color-black">{survey?.name}</div>
-      {survey?.lectureInfo && (
-        <SurveyFormIntro survey={survey} fallback={LECTURER_SURVEY_PRINT_FORM_CONTENT} />
-      )}
+      <SurveyFormIntro
+        survey={{ ...survey, studentInfo }}
+        fallback={
+          survey?.lectureInfo
+            ? LECTURER_SURVEY_PRINT_FORM_CONTENT
+            : DEFAULT_SURVEY_PRINT_FORM_CONTENT
+        }
+      />
 
       {survey?.surveyChoice && survey.surveyChoice.length > 0 ? (
         <Row gutter={[16, 16]}>

@@ -575,10 +575,32 @@ const PutSurveyModal = () => {
                 />
               </Col>
             )}
-            <Col span={12}>
+            <Col span={24}>
               <Row gutter={16}>
-                <Col span={8}>
-                  <FormItem form={form} name={"isPublic"} label="Có công khai không?" required>
+                <Col xs={24} sm={12} md={input?.type === "multiple" ? 7 : isPublic ? 6 : 8}>
+                  <FormItem
+                    form={form}
+                    name={"isPublic"}
+                    label="Có công khai không?"
+                    tooltip={{
+                      title: (
+                        <div className="space-y-1 text-xs">
+                          <div>
+                            <strong>Có (Công khai):</strong> Khảo sát mở công khai, bất kỳ ai có
+                            liên kết đều có thể truy cập khảo sát mà không bắt buộc đăng nhập tài
+                            khoản.
+                          </div>
+                          <div>
+                            <strong>Không (Không công khai):</strong> Khảo sát nội bộ, người dùng
+                            đăng nhập hệ thống và thuộc danh sách đối tượng mới có thể truy cập và
+                            thực hiện tại mục &quot;Khảo sát của tôi&quot; (khuyến nghị cho khảo sát
+                            giảng viên).
+                          </div>
+                        </div>
+                      ),
+                    }}
+                    required
+                  >
                     <Radio.Group buttonStyle="solid">
                       <Radio value={true}>Có</Radio>
                       <Radio value={false}>Không</Radio>
@@ -586,7 +608,7 @@ const PutSurveyModal = () => {
                   </FormItem>
                 </Col>
                 {isPublic === true && (
-                  <Col span={8}>
+                  <Col xs={24} sm={12} md={6}>
                     <FormItem form={form} name={"anonymous"} label="Có ẩn danh không?" required>
                       <Radio.Group buttonStyle="solid">
                         <Radio value={true}>Có</Radio>
@@ -596,12 +618,27 @@ const PutSurveyModal = () => {
                   </Col>
                 )}
                 {input?.type === "multiple" && (
-                  <Col span={12}>
+                  <Col xs={24} sm={12} md={11}>
                     <FormItem
                       form={form}
                       name="targetEnrollStudentOnly"
                       valuePropName="checked"
                       label="Giới hạn học viên làm khảo sát"
+                      tooltip={{
+                        title: (
+                          <div className="space-y-1 text-xs">
+                            <div>
+                              <strong>Tích chọn:</strong> Chỉ cho phép học viên có tên trong danh
+                              sách đăng ký của lớp học phần được khảo sát tham gia thực hiện.
+                            </div>
+                            <div>
+                              <strong>Không tích chọn:</strong> Mọi học viên thuộc đối tượng khảo
+                              sát được thiết lập cấu hình đều có thể tham gia thực hiện theo quy
+                              định chung của đợt khảo sát.
+                            </div>
+                          </div>
+                        ),
+                      }}
                     >
                       <Checkbox />
                     </FormItem>

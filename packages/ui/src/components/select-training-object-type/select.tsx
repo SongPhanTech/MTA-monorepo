@@ -10,7 +10,7 @@ type SelectTrainingObjectTypeProps = SelectProps & {
 const SelectTrainingObjectType = ({ subsystem, ...props }: SelectTrainingObjectTypeProps) => {
   const { id, onSelect } = useTrainingObjectTypeStore()
 
-  const { data: doiTuongDaoTao = [] } = useFindManyTrainingObjectTypePermission(undefined, {
+  const { data: doiTuongDaoTao = [], isLoading } = useFindManyTrainingObjectTypePermission(undefined, {
     subsystem,
   })
 
@@ -30,6 +30,7 @@ const SelectTrainingObjectType = ({ subsystem, ...props }: SelectTrainingObjectT
         <p>Đối tượng đào tạo</p>
       </Tooltip>
       <Select
+        loading={isLoading || props.loading}
         dropdownStyle={{ maxHeight: 300, overflow: "auto", minWidth: 480 }}
         popupMatchSelectWidth={false}
         placeholder="Chọn đối tượng đào tạo"
