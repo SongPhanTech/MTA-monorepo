@@ -536,7 +536,10 @@ export type ResolvedSurveyUser = {
   studentId?: string
 }
 
-export async function resolveSurveyUserByCode(code: string): Promise<ResolvedSurveyUser | null> {
+export async function resolveSurveyUserByCode(
+  prisma: PrismaClient,
+  code: string
+): Promise<ResolvedSurveyUser | null> {
   const student = await prisma.student.findFirst({
     where: { userProfile: { code }, deletedAt: null },
     select: { id: true, userProfileId: true },

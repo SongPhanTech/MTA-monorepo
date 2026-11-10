@@ -294,7 +294,7 @@ app.openapi(savePublicSurvey, async (c) => {
         return c.json({ message: "Vui lòng nhập mã" }, 400)
       }
 
-      const resolvedUser = await resolveSurveyUserByCode(studentCode)
+      const resolvedUser = await resolveSurveyUserByCode(prisma, studentCode)
       if (!resolvedUser) {
         return c.json({ message: "Mã không tồn tại" }, 404)
       }
@@ -410,7 +410,7 @@ app.openapi(validateUserSurvey, async (c) => {
     return c.json({ message: "Vui lòng nhập mã" }, 400)
   }
 
-  const resolvedUser = await resolveSurveyUserByCode(studentCode)
+  const resolvedUser = await resolveSurveyUserByCode(prisma, studentCode)
   if (!resolvedUser) {
     return c.json({ message: "Mã không tồn tại" }, 404)
   }
