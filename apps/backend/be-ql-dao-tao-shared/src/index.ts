@@ -18,6 +18,7 @@ import SpecializedApp from "./api/specialized"
 import SchedulesApp from "./api/student-schedule"
 import StudentScoreApp from "./api/student-score"
 import SubjectApp from "./api/subject"
+import V1App from "./api/v1"
 import { setupOpenApi } from "./utils/openapi"
 
 setupAppTimezone()
@@ -59,6 +60,9 @@ app.use(
 app.use(contextStorage())
 
 setupOpenApi(app)
+
+// Partner integration REST API (JWT + nonce + audit + signature)
+app.route("/v1", V1App)
 
 app.route("/", SubjectApp)
 app.route("/", ClassFixedApp)

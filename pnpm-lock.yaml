@@ -241,7 +241,7 @@ catalogs:
       specifier: ^9.1.7
       version: 9.1.7
     jose:
-      specifier: ^6.0.11
+      specifier: ^6.1.2
       version: 6.1.2
     jwt-decode:
       specifier: ^4.0.0
@@ -827,6 +827,9 @@ importers:
       hono:
         specifier: 'catalog:'
         version: 4.10.6
+      jose:
+        specifier: 'catalog:'
+        version: 6.1.2
       lodash:
         specifier: 'catalog:'
         version: 4.17.21

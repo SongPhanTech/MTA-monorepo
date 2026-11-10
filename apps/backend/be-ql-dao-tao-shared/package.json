@@ -20,6 +20,7 @@
     "dayjs": "catalog:",
     "decimal.js": "catalog:",
     "hono": "catalog:",
+    "jose": "catalog:",
     "lodash": "catalog:",
     "zod": "catalog:"
   },

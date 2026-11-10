@@ -31,6 +31,7 @@ catalog:
   "@prisma/client": 6.10.1
   "@scalar/hono-api-reference": ^0.5.175
   "@t3-oss/env-nextjs": 0.12.0
+  "@tanstack/react-hotkeys": 0.8.0
   "@tanstack/react-query": 5.90.5
   "@tanstack/react-store": ^0.8.0
   "@tiptap/extension-color": 3.10.5
@@ -92,7 +93,7 @@ catalog:
   glob: ^11.0.0
   hono: ^4.10.6
   husky: ^9.1.7
-  jose: ^6.0.11
+  jose: ^6.1.2
   jwt-decode: ^4.0.0
   katex: ^0.16.25
   lint-staged: ^16.2.6
@@ -105,6 +106,7 @@ catalog:
   next-auth: 5.0.0-beta.25
   next-remove-imports: ^1.0.12
   orval: ^7.17.0
+  oxfmt: ^0.42.0
   oxlint: ^1.24.0
   patch-package: ^8.0.1
   path-browserify: ^1.0.1
@@ -112,7 +114,6 @@ catalog:
   pizzip: 3.2.0
   postcss: ^8.4.49
   pptx-automizer: ^0.8.0
-  oxfmt: ^0.42.0
   prisma: 6.10.1
   prisma-dbml-generator: ^0.12.0
   prom-client: ^15.1.3
@@ -149,7 +150,6 @@ catalog:
   xlsx-template: 1.4.4
   zenstack: ^2.20.1
   zod: ^3.25.76
-  "@tanstack/react-hotkeys": 0.8.0
 
 ignoredBuiltDependencies:
   - core-js
