@@ -58,9 +58,12 @@ const ModalGraduationCriteria = () => {
 
   const { onOpen: openCriteriaCatalog } = useDisclosure({ tag: "ModalCriteriaDefinition" })
 
+  // Khớp với isDowngradeRuleUsable ở backend: bộ có tiêu chí đã ngừng / đã xoá bị bỏ qua cả bộ
   const graduationRankDowngradeWithIndex = graduationRankDowngrade?.map((item, index) => ({
     ...item,
     name: `Bộ ${index + 1}`,
+    skipped:
+      item.conditions.length === 0 || item.conditions.some((condition) => !condition.criteria?.active),
   }))
 
   const { onOpen: openRankingCondition } = useDisclosure<{
@@ -300,7 +303,18 @@ const ModalGraduationCriteria = () => {
         <TableCollapse
           rowKey="key"
           id="graduation-criteria"
-          headerTitleKey="name"
+          headerTitleKey={(record) => (
+            <span>
+              {record.name}
+              {record.skipped && (
+                <Tag color="orange" className="ml-2">
+                  {record.conditions.length === 0
+                    ? "Bộ này đang bị bỏ qua: chưa có tiêu chí"
+                    : "Bộ này đang bị bỏ qua: có tiêu chí ngừng hoạt động"}
+                </Tag>
+              )}
+            </span>
+          )}
           defaultExpandAll
           data={graduationRankDowngradeWithIndex}
           scroll={{ y: 500 }}

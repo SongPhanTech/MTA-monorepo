@@ -10,6 +10,7 @@ import {
   criteriaCalcTypeOptions,
   subjectAggregateMetricLabels,
   subjectAttemptTypeLabels,
+  validateCriteriaParams,
   warningSourceLabels,
 } from "@workspace/libs/criteria-calc"
 import {
@@ -209,15 +210,24 @@ const PutCriteriaDefinition = () => {
   }, [initialValue, id, isOpen, form])
 
   async function onFinish(values: CriteriaForm) {
-    const params = cleanParams(values.params)
     const isSubjectAggregate = values.calcType === CRITERIA_CALC_TYPES.SUBJECT_AGGREGATE
-    if (isSubjectAggregate && (params.scoreOperator == null) !== (params.scoreThreshold == null)) {
-      message.error("Điều kiện điểm phải có cả toán tử và ngưỡng")
-      return
-    }
     // Phạm vi môn chỉ áp dụng cho kiểu tính theo môn học
     const trainingBlockIds = isSubjectAggregate ? (values.trainingBlockIds ?? []) : []
     const subjectIds = isSubjectAggregate ? (values.subjectIds ?? []) : []
+    const params = cleanParams({
+      ...values.params,
+      // Lưu phạm vi tường minh: khối/môn trong phạm vi bị xoá sau này thì backend báo lỗi cấu hình,
+      // thay vì tiêu chí âm thầm mở rộng ra toàn bộ CTĐT
+      ...(isSubjectAggregate && {
+        scope: trainingBlockIds.length || subjectIds.length ? "LIMITED" : "ALL",
+      }),
+    })
+    // Cùng schema với backend lúc xét: cấu hình sai bị chặn ngay khi lưu, không làm dừng đợt xét
+    const validated = validateCriteriaParams(values.calcType, params)
+    if (!validated.success) {
+      message.error(validated.message)
+      return
+    }
     const data = {
       code: values.code?.trim() || null,
       name: values.name.trim(),

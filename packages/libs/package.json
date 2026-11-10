@@ -49,6 +49,7 @@
         "react": "catalog:",
         "read-vietnamese-number": "^2.3.0",
         "xlsx": "catalog:",
-        "xlsx-template": "catalog:"
+        "xlsx-template": "catalog:",
+        "zod": "catalog:"
     }
 }

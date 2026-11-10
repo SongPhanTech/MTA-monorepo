@@ -1,7 +1,8 @@
 /**
  * Calculator cho tiêu chí tự định nghĩa (CriteriaDefinition.source = CUSTOM).
- * Mỗi calcType = 1 calculator: schema zod kiểm tra params + hàm tính giá trị cho 1 sinh viên.
- * Thêm kiểu tính mới: khai báo calcType/params trong @workspace/libs/criteria-calc rồi thêm calculator ở đây.
+ * Mỗi calcType = 1 calculator: hàm tính giá trị cho 1 sinh viên.
+ * Schema zod của params nằm ở @workspace/libs/criteria-calc (dùng chung với FE).
+ * Thêm kiểu tính mới: khai báo calcType + schema params trong @workspace/libs/criteria-calc rồi thêm calculator ở đây.
  * Calculator là hàm thuần (không query DB); dữ liệu được nạp sẵn trong CriteriaCalcContext.
  */
 import {
@@ -12,6 +13,7 @@ import {
 } from "@workspace/db"
 import {
   CRITERIA_CALC_TYPES,
+  validateCriteriaParams,
   type AcademicDecisionCountParams,
   type CriteriaCalcParams,
   type CriteriaCalcType,
@@ -19,7 +21,6 @@ import {
   type SubjectAttemptType,
   type WarningCountParams,
 } from "@workspace/libs/criteria-calc"
-import { z } from "zod"
 import {
   sameSubjectCode,
   type LoadedSubjectScore,
@@ -71,33 +72,10 @@ export type PreparedCriteria = {
 }
 
 type Calculator<P> = {
-  schema: z.ZodType<P, z.ZodTypeDef, unknown>
   compute: (ctx: CriteriaCalcContext, criteria: PreparedCriteria, params: P) => number | null
 }
 
 // ---------- SUBJECT_AGGREGATE ----------
-
-const subjectAggregateSchema = z
-  .object({
-    metric: z.enum([
-      "COUNT_SUBJECTS",
-      "SUM_CREDITS",
-      "PERCENT_CREDITS_OF_CURRICULUM",
-      "MIN_SCORE",
-      "MAX_SCORE",
-      "AVG_SCORE",
-    ]),
-    graduationOnly: z.boolean().optional(),
-    subjectVersionTypes: z.array(z.nativeEnum(SubjectVersionType)).optional(),
-    includeConditionalSubjects: z.boolean().optional(),
-    attemptTypes: z.array(z.enum(["RETAKE", "REEXAM", "IMPROVE"])).optional(),
-    scoreOperator: z.enum(["GT", "GTE", "LT", "LTE", "EQ"]).optional(),
-    scoreThreshold: z.number().optional(),
-    scoreBase: z.enum(["Base10", "Base4"]).optional(),
-  })
-  .refine((p) => (p.scoreOperator == null) === (p.scoreThreshold == null), {
-    message: "Điều kiện điểm phải có cả toán tử và ngưỡng",
-  })
 
 function isAttemptOfType(score: LoadedSubjectScore, types: SubjectAttemptType[]) {
   return types.some((type) => {
@@ -107,8 +85,13 @@ function isAttemptOfType(score: LoadedSubjectScore, types: SubjectAttemptType[])
   })
 }
 
-function isInScope(subject: CriteriaCalcCurriculumSubject, criteria: PreparedCriteria) {
-  if (criteria.trainingBlockIds.size === 0 && criteria.subjectIds.size === 0) return true
+function isInScope(
+  subject: CriteriaCalcCurriculumSubject,
+  criteria: PreparedCriteria,
+  params: SubjectAggregateParams
+) {
+  // Phạm vi lưu tường minh; LIMITED mà không còn khối/môn nào đã bị chặn ở prepareCustomCriteria
+  if (params.scope === "ALL") return true
   return (
     criteria.trainingBlockIds.has(subject.trainingBlockId) ||
     criteria.subjectIds.has(subject.subject.subjectId)
@@ -127,7 +110,7 @@ function computeSubjectAggregate(
   // Mỗi môn chỉ tính 1 lần (tín chỉ không nhân theo số lần học, môn có thể nằm ở nhiều khối)
   const subjects = new Map<string, CriteriaCalcCurriculumSubject>()
   for (const subject of ctx.curriculumSubjects) {
-    if (!isInScope(subject, criteria)) continue
+    if (!isInScope(subject, criteria, params)) continue
     if (params.graduationOnly && !subject.graduation) continue
     if (versionTypes.length && !versionTypes.includes(subject.subject.type)) continue
     if (!params.includeConditionalSubjects && !subject.useForFinalScore) continue
@@ -187,14 +170,10 @@ function computeSubjectAggregate(
       return scored.reduce((sum, item) => sum + item.score * item.credit, 0) / credits
     }
   }
+  return null
 }
 
 // ---------- ACADEMIC_DECISION_COUNT ----------
-
-const academicDecisionCountSchema = z.object({
-  actionTypes: z.array(z.nativeEnum(AcademicActionType)).optional(),
-  statuses: z.array(z.nativeEnum(DecisionStatus)).optional(),
-})
 
 function computeAcademicDecisionCount(
   ctx: CriteriaCalcContext,
@@ -214,11 +193,6 @@ function computeAcademicDecisionCount(
 }
 
 // ---------- WARNING_COUNT ----------
-
-const warningCountSchema = z.object({
-  sources: z.array(z.enum(["ACADEMIC", "DISCIPLINARY"])).optional(),
-  minLevel: z.number().int().min(0).optional(),
-})
 
 function computeWarningCount(
   ctx: CriteriaCalcContext,
@@ -242,27 +216,16 @@ function computeWarningCount(
 export const criteriaCalculators: {
   [K in CriteriaCalcType]: Calculator<CriteriaCalcParams[K]>
 } = {
-  [CRITERIA_CALC_TYPES.SUBJECT_AGGREGATE]: {
-    schema: subjectAggregateSchema,
-    compute: computeSubjectAggregate,
-  },
-  [CRITERIA_CALC_TYPES.ACADEMIC_DECISION_COUNT]: {
-    schema: academicDecisionCountSchema,
-    compute: computeAcademicDecisionCount,
-  },
-  [CRITERIA_CALC_TYPES.WARNING_COUNT]: {
-    schema: warningCountSchema,
-    compute: computeWarningCount,
-  },
-}
-
-function isCalcType(value: string | null): value is CriteriaCalcType {
-  return !!value && Object.prototype.hasOwnProperty.call(criteriaCalculators, value)
+  [CRITERIA_CALC_TYPES.SUBJECT_AGGREGATE]: { compute: computeSubjectAggregate },
+  [CRITERIA_CALC_TYPES.ACADEMIC_DECISION_COUNT]: { compute: computeAcademicDecisionCount },
+  [CRITERIA_CALC_TYPES.WARNING_COUNT]: { compute: computeWarningCount },
 }
 
 /**
- * Kiểm tra cấu hình tiêu chí CUSTOM. Lỗi cấu hình → throw (dừng cả đợt xét),
+ * Kiểm tra cấu hình tiêu chí CUSTOM (đang hoạt động). Lỗi cấu hình → throw (dừng cả đợt xét),
  * tránh trường hợp tiêu chí cấu hình sai bị coi là "không thoả" một cách âm thầm.
+ * FE đã kiểm tra cùng schema trước khi lưu, nên lỗi ở đây chủ yếu do dữ liệu thay đổi sau đó
+ * (VD: khối/môn trong phạm vi bị xoá).
  */
 export function prepareCustomCriteria(
   criteria: {
@@ -275,25 +238,29 @@ export function prepareCustomCriteria(
   },
   expandTrainingBlocks: (ids: string[]) => Set<string>
 ): PreparedCriteria {
-  if (!isCalcType(criteria.calcType)) {
-    throw new Error(
-      `Tiêu chí "${criteria.name}" có kiểu tính không được hỗ trợ: ${criteria.calcType ?? "(trống)"}`
-    )
+  const validated = validateCriteriaParams(criteria.calcType, criteria.params)
+  if (!validated.success) {
+    throw new Error(`Tiêu chí "${criteria.name}" cấu hình không hợp lệ: ${validated.message}`)
   }
-  const calculator = criteriaCalculators[criteria.calcType] as Calculator<unknown>
-  const parsed = calculator.schema.safeParse(criteria.params ?? {})
-  if (!parsed.success) {
-    const detail = parsed.error.issues.map((issue) => issue.message).join("; ")
-    throw new Error(`Tiêu chí "${criteria.name}" cấu hình tham số không hợp lệ: ${detail}`)
-  }
-  return {
+  const prepared: PreparedCriteria = {
     id: criteria.id,
     name: criteria.name,
-    calcType: criteria.calcType,
-    params: parsed.data as CriteriaCalcParams[CriteriaCalcType],
+    calcType: validated.calcType,
+    params: validated.params,
     trainingBlockIds: expandTrainingBlocks(criteria.trainingBlocks.map((item) => item.id)),
     subjectIds: new Set(criteria.subjects.map((item) => item.id)),
   }
+  if (
+    prepared.calcType === CRITERIA_CALC_TYPES.SUBJECT_AGGREGATE &&
+    (prepared.params as SubjectAggregateParams).scope === "LIMITED" &&
+    prepared.trainingBlockIds.size === 0 &&
+    prepared.subjectIds.size === 0
+  ) {
+    throw new Error(
+      `Tiêu chí "${criteria.name}" giới hạn phạm vi nhưng không còn khối kiến thức / môn học nào (có thể đã bị xoá). Vui lòng cấu hình lại phạm vi.`
+    )
+  }
+  return prepared
 }
 
 export function computeCustomCriteria(ctx: CriteriaCalcContext, criteria: PreparedCriteria) {
