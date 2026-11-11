@@ -1,7 +1,6 @@
 import TableCollapse from "@components/commons/tableCollapse"
 import type { FilterProps } from "@components/commons/typeFilter"
 import ExportStudentInSurvey from "@components/modal/export-list-student-in-survey"
-import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import useSpinner from "@hooks/spinner"
 import type { LectuerType } from "@pages/thiet-lap-khao-sat/khao-sat-cum"
 import { useSession } from "@workspace/auth/react"
@@ -27,8 +26,6 @@ function DanhSachHocVien({
   selectedId: string
 }) {
   const { can, canSome } = useAbility()
-  const [currentPage, setCurrentPage] = useState(1)
-  const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
   const { data: session } = useSession()
   const profileId = session?.sDM_NhanVienId || ""
   const [filters, setFilters] = useState<FilterProps>({
@@ -122,6 +119,8 @@ function DanhSachHocVien({
         },
         subjectClassStudent: {
           where: {
+            deletedAt: null,
+            withdrew: false,
             student: {
               ...(filters.name ||
               filters.code ||
@@ -241,8 +240,6 @@ function DanhSachHocVien({
       orderBy: {
         name: "asc",
       },
-      take: numberOfPages,
-      skip: (currentPage - 1) * numberOfPages,
     },
     {
       enabled: lecturer?.survey && lecturer?.survey?.length > 0,
@@ -250,9 +247,14 @@ function DanhSachHocVien({
   )
 
   const checkStatus = (record: any) => {
+    const surveyIds = new Set(
+      (lecturer?.survey || [])
+        .filter((survey) => survey.subjectClassId === record?.subjectClassId)
+        .map((survey) => survey.id)
+    )
     if (record?.student?.userProfile?.surveySession?.length > 0) {
       const result = record?.student?.userProfile?.surveySession?.find(
-        (item: any) => item?.survey?.subjectClassId === record?.subjectClassId
+        (item: any) => item?.isCompleted && surveyIds.has(item?.surveyId)
       )
       if (result) {
         return result
@@ -267,18 +269,48 @@ function DanhSachHocVien({
     tag: "ReviewSurveyModal",
   })
 
-  let totalStudents = 0
-  let doneStudents = 0
+  const isFiltering = Boolean(
+    filters.name ||
+    filters.code ||
+    filters.idCardNumber ||
+    filters.phoneNumber ||
+    filters.dateOfBirth?.length === 2 ||
+    (filters.statusSurvey && filters.statusSurvey.length === 1) ||
+    filters.fixedClassIds?.length ||
+    filters.trainingCourseIds?.length
+  )
 
-  data?.forEach((subjectClass: any) => {
-    const students = subjectClass?.subjectClassStudent || []
-    totalStudents += students.length
-    students.forEach((studentRecord: any) => {
-      if (checkStatus(studentRecord)) {
-        doneStudents++
-      }
+  const displayData = useMemo(() => {
+    if (!data) return []
+    if (!isFiltering) return data
+    return data.filter((item: any) => (item.subjectClassStudent || []).length > 0)
+  }, [data, isFiltering])
+
+  const { totalClasses, totalSurveys, doneSurveys, uniqueStudentsCount } = useMemo(() => {
+    const list = displayData || []
+    let total = 0
+    let done = 0
+    const studentSet = new Set<string>()
+
+    list.forEach((subjectClass: any) => {
+      const students = subjectClass?.subjectClassStudent || []
+      total += students.length
+      students.forEach((studentRecord: any) => {
+        const studentId = studentRecord?.student?.id || studentRecord?.student?.userProfile?.id
+        if (studentId) studentSet.add(studentId)
+        if (checkStatus(studentRecord)) {
+          done++
+        }
+      })
     })
-  })
+
+    return {
+      totalClasses: list.length,
+      totalSurveys: total,
+      doneSurveys: done,
+      uniqueStudentsCount: studentSet.size,
+    }
+  }, [displayData, lecturer])
 
   return (
     <div>
@@ -306,10 +338,33 @@ function DanhSachHocVien({
                 childrenFieldName="subjectClassStudent"
                 rowKey={"id"}
                 filters={filters}
-                headerTitleKey={({ code, name }) => `${[code, name].filter(Boolean).join(" - ")}`}
+                headerTitleKey={(record: any) => {
+                  const classLabel = [record?.code, record?.name].filter(Boolean).join(" - ")
+                  const studentsCount = record?.subjectClassStudent?.length || 0
+                  const doneCount =
+                    record?.subjectClassStudent?.filter((s: any) => checkStatus(s))?.length || 0
+
+                  return (
+                    <div className="flex flex-wrap items-center justify-between w-full py-1 pr-6 gap-x-4 gap-y-1">
+                      <span className="font-semibold text-gray-900 text-sm">{classLabel}</span>
+                      <div className="text-xs text-gray-600">
+                        Đã làm:{" "}
+                        <strong
+                          className={
+                            doneCount === studentsCount && studentsCount > 0
+                              ? "text-green-600 font-bold"
+                              : "text-blue-600 font-bold"
+                          }
+                        >
+                          {doneCount}/{studentsCount}
+                        </strong>{" "}
+                        lượt
+                      </div>
+                    </div>
+                  )
+                }}
                 setFilters={(value) => {
                   setFilters(value)
-                  setCurrentPage(1)
                 }}
                 scroll={{ y: "calc(100vh - 225px)", x: "max-content" }}
                 className="w-full"
@@ -461,15 +516,24 @@ function DanhSachHocVien({
                     },
                   },
                 ]}
-                data={data || []}
+                data={displayData || []}
                 pagination={false}
               />
-              <div className="mt-2 px-3 py-1 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <span style={{ color: "#666" }}>Tổng đã làm:</span>{" "}
-                  <strong style={{ color: "#009a5c", fontSize: 16, fontWeight: "bold" }}>
-                    {doneStudents}/{totalStudents}
-                  </strong>
+              <div className="mt-3 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-md flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-sm">
+                <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+                  <span>
+                    Tổng số lớp môn học: <strong>{totalClasses}</strong>
+                  </span>
+                  <span>
+                    Tổng số học viên: <strong>{uniqueStudentsCount}</strong>
+                  </span>
+                  <span>
+                    Tổng lượt khảo sát:{" "}
+                    <strong className="text-emerald-600 text-base font-bold">
+                      {doneSurveys} / {totalSurveys}
+                    </strong>{" "}
+                    ({totalSurveys > 0 ? ((doneSurveys / totalSurveys) * 100).toFixed(1) : 0}%)
+                  </span>
                 </div>
               </div>
             </Col>

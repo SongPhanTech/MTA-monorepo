@@ -3,12 +3,12 @@ import TableCollapse from "@components/commons/tableCollapse"
 import type { FilterProps } from "@components/commons/typeFilter"
 import type { PutSurveyType } from "@components/modal/put-modal-survey"
 import { useExamTypeOptions } from "@hooks/examType"
-import type { SubjectClass } from "@workspace/db"
+import type { Prisma, SubjectClass } from "@workspace/db"
 import { useFindManySubjectVersion } from "@workspace/db/hooks"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
 import { Form } from "antd"
 import type React from "react"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 
 // interface MyTreeNode {
 //     title: string
@@ -50,9 +50,15 @@ import { useEffect, useRef, useState } from "react"
 function SelectLecturer({
   surveyTopicId,
   semesterId,
+  trainingCourseIds = [],
+  directSubjectClassIds = [],
+  surveyObjectTypeIds = [],
 }: {
   surveyTopicId?: string
   semesterId?: string
+  trainingCourseIds?: string[]
+  directSubjectClassIds?: string[]
+  surveyObjectTypeIds?: string[]
 }) {
   const [filters, setFilters] = useState<FilterProps>({
     name: "",
@@ -69,46 +75,163 @@ function SelectLecturer({
   const { options, getExamTypeLabel } = useExamTypeOptions()
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
   const [filteredData, setFilteredData] = useState<any>([])
-  // const { data: lecturerData = [] } = useFindManyLecturer(
-  //     {
-  //         where: {
-  //             mainSubjectClasses: {
-  //                 some: {
-  //                     ...(!!semesterId && { semesterId }),
-  //                     ...(!!trainingObjectTypeId && { trainingObjectTypeId }),
-  //                     active: true,
-  //                     deletedAt: null,
-  //                     cancelled: false,
-  //                     status: 'OFFICIAL',
-  //                 },
-  //             },
-  //         },
-  //         orderBy: {
-  //             userProfile: {
-  //                 firstName: 'asc',
-  //             },
-  //         },
-  //         include: {
-  //             userProfile: {
-  //                 include: {
-  //                     academicDegreeType: true,
-  //                     academicRankType: true,
-  //                     level: true,
-  //                     rank: true,
-  //                 },
-  //             },
-  //             mainSubjectClasses: {
-  //                 include: {
-  //                     semester: true,
-  //                 },
-  //             },
-  //             organization: true,
-  //         },
-  //     },
-  //     {
-  //         enabled: !!semesterId || !!trainingObjectTypeId,
-  //     }
-  // )
+
+  const courseCondition = useMemo(() => {
+    const conditions: any[] = []
+    if (trainingCourseIds && trainingCourseIds.length > 0) {
+      conditions.push({
+        OR: [
+          // Một số lớp HP được gắn trực tiếp với lớp quản lý.
+          {
+            fixedClasses: {
+              some: { trainingCourseId: { in: trainingCourseIds } },
+            },
+          },
+          // Một số dữ liệu cũ chỉ thể hiện khóa qua đăng ký học. Phải lấy cả
+          // hai nguồn để không bỏ sót lớp có HV của khóa được khảo sát.
+          {
+            subjectClassStudent: {
+              some: {
+                deletedAt: null,
+                withdrew: false,
+                student: { fixedClass: { trainingCourseId: { in: trainingCourseIds } } },
+              },
+            },
+          },
+        ],
+      })
+    }
+    if (directSubjectClassIds && directSubjectClassIds.length > 0) {
+      conditions.push({
+        id: { in: directSubjectClassIds },
+      })
+    }
+    if (conditions.length === 0) return {}
+    if (conditions.length === 1) return conditions[0]
+    return { OR: conditions }
+  }, [trainingCourseIds, directSubjectClassIds])
+
+  const subjectClassWhere = useMemo((): Prisma.SubjectClassWhereInput => {
+    const andConditions: Prisma.SubjectClassWhereInput[] = []
+
+    if (filters.subjectClassName && filters.subjectClassName !== "") {
+      andConditions.push({
+        OR: [
+          {
+            code: {
+              contains: filters.subjectClassName,
+              mode: "insensitive" as const,
+            },
+          },
+          {
+            name: {
+              contains: filters.subjectClassName,
+              mode: "insensitive" as const,
+            },
+          },
+        ],
+      })
+    }
+
+    if (Object.keys(courseCondition).length > 0) {
+      andConditions.push(courseCondition)
+    }
+
+    const lecturerConditions: Prisma.LecturerWhereInput[] = []
+    if (filters.name && filters.name !== "") {
+      lecturerConditions.push({
+        userProfile: {
+          OR: [
+            {
+              fullname: {
+                contains: filters.name,
+                mode: "insensitive" as const,
+              },
+            },
+            {
+              lastName: {
+                contains: filters.name,
+                mode: "insensitive" as const,
+              },
+            },
+            {
+              firstName: {
+                contains: filters.name,
+                mode: "insensitive" as const,
+              },
+            },
+          ],
+        },
+      })
+    }
+
+    if (filters.code && filters.code !== "") {
+      lecturerConditions.push({
+        OR: [
+          {
+            lectureID: {
+              contains: filters.code,
+              mode: "insensitive" as const,
+            },
+          },
+          {
+            userProfile: {
+              code: {
+                contains: filters.code,
+                mode: "insensitive" as const,
+              },
+            },
+          },
+        ],
+      })
+    }
+
+    if (filters.organizationName && filters.organizationName !== "") {
+      lecturerConditions.push({
+        userProfile: {
+          donVi: {
+            sMa: {
+              contains: filters.organizationName,
+              mode: "insensitive" as const,
+            },
+          },
+        },
+      })
+    }
+
+    const baseWhere: Prisma.SubjectClassWhereInput = {
+      ...(filters.examType
+        ? {
+            examType: {
+              in: filters.examType,
+            },
+          }
+        : {}),
+      ...(!!semesterId && { semesterId }),
+      ...(!!trainingObjectTypeId && { trainingObjectTypeId }),
+      active: true,
+      deletedAt: null,
+      cancelled: false,
+      status: "OFFICIAL" as const,
+      type: {
+        in: ["NORMAL", "RETAKE"] as const,
+      },
+      // Chỉ hiển thị Giảng viên 1 (giảng viên chính) được phân công giảng dạy cho khóa đã chọn
+      lecturerId: { not: null },
+    }
+
+    if (lecturerConditions.length > 0) {
+      baseWhere.mainLecturer = {
+        AND: lecturerConditions,
+      }
+    }
+
+    if (andConditions.length > 0) {
+      baseWhere.AND = andConditions
+    }
+
+    return baseWhere
+  }, [filters, semesterId, trainingObjectTypeId, courseCondition])
 
   const {
     data: subjectData = [],
@@ -118,96 +241,7 @@ function SelectLecturer({
     {
       where: {
         subjectClass: {
-          some: {
-            ...(filters.subjectClassName && filters.subjectClassName !== ""
-              ? {
-                  OR: [
-                    {
-                      code: {
-                        contains: filters.subjectClassName,
-                        mode: "insensitive" as const,
-                      },
-                    },
-                    {
-                      name: {
-                        contains: filters.subjectClassName,
-                        mode: "insensitive" as const,
-                      },
-                    },
-                  ],
-                }
-              : {}),
-            ...(filters.examType
-              ? {
-                  examType: {
-                    in: filters.examType,
-                  },
-                }
-              : {}),
-            ...(!!semesterId && { semesterId }),
-            ...(!!trainingObjectTypeId && { trainingObjectTypeId }),
-            active: true,
-            deletedAt: null,
-            cancelled: false,
-            status: "OFFICIAL",
-            type: {
-              in: ["NORMAL", "RETAKE"],
-            },
-            ...(filters.name && filters.name !== ""
-              ? {
-                  mainLecturer: {
-                    userProfile: {
-                      OR: [
-                        {
-                          fullname: {
-                            contains: filters.name,
-                            mode: "insensitive" as const,
-                          },
-                        },
-                        {
-                          lastName: {
-                            contains: filters.name,
-                            mode: "insensitive" as const,
-                          },
-                        },
-                        {
-                          firstName: {
-                            contains: filters.name,
-                            mode: "insensitive" as const,
-                          },
-                        },
-                      ],
-                    },
-                  },
-                }
-              : {}),
-            ...(filters.code && filters.code !== ""
-              ? {
-                  mainLecturer: {
-                    userProfile: {
-                      code: {
-                        contains: filters.code,
-                        mode: "insensitive" as const,
-                      },
-                    },
-                  },
-                }
-              : {}),
-            ...(filters.organizationName && filters.organizationName !== ""
-              ? {
-                  mainLecturer: {
-                    userProfile: {
-                      donVi: {
-                        sMa: {
-                          contains: filters.organizationName,
-                          mode: "insensitive" as const,
-                        },
-                      },
-                    },
-                  },
-                }
-              : {}),
-          },
+          some: subjectClassWhere,
         },
       },
       orderBy: {
@@ -215,96 +249,7 @@ function SelectLecturer({
       },
       include: {
         subjectClass: {
-          where: {
-            ...(filters.subjectClassName && filters.subjectClassName !== ""
-              ? {
-                  OR: [
-                    {
-                      code: {
-                        contains: filters.subjectClassName,
-                        mode: "insensitive" as const,
-                      },
-                    },
-                    {
-                      name: {
-                        contains: filters.subjectClassName,
-                        mode: "insensitive" as const,
-                      },
-                    },
-                  ],
-                }
-              : {}),
-            ...(filters.examType
-              ? {
-                  examType: {
-                    in: filters.examType,
-                  },
-                }
-              : {}),
-            ...(!!semesterId && { semesterId }),
-            ...(!!trainingObjectTypeId && { trainingObjectTypeId }),
-            active: true,
-            deletedAt: null,
-            cancelled: false,
-            status: "OFFICIAL",
-            type: {
-              in: ["NORMAL", "RETAKE"],
-            },
-            ...(filters.name && filters.name !== ""
-              ? {
-                  mainLecturer: {
-                    userProfile: {
-                      OR: [
-                        {
-                          fullname: {
-                            contains: filters.name,
-                            mode: "insensitive" as const,
-                          },
-                        },
-                        {
-                          lastName: {
-                            contains: filters.name,
-                            mode: "insensitive" as const,
-                          },
-                        },
-                        {
-                          firstName: {
-                            contains: filters.name,
-                            mode: "insensitive" as const,
-                          },
-                        },
-                      ],
-                    },
-                  },
-                }
-              : {}),
-            ...(filters.code && filters.code !== ""
-              ? {
-                  mainLecturer: {
-                    userProfile: {
-                      code: {
-                        contains: filters.code,
-                        mode: "insensitive" as const,
-                      },
-                    },
-                  },
-                }
-              : {}),
-            ...(filters.organizationName && filters.organizationName !== ""
-              ? {
-                  mainLecturer: {
-                    userProfile: {
-                      donVi: {
-                        sMa: {
-                          contains: filters.organizationName,
-                          mode: "insensitive" as const,
-                        },
-                      },
-                    },
-                  },
-                }
-              : {}),
-          },
+          where: subjectClassWhere,
           include: {
             mainLecturer: {
               include: {
@@ -359,37 +304,41 @@ function SelectLecturer({
     selectedRowKeys,
     checkStrictly: false,
     onSelect: (record: any, selected: boolean) => {
+      let arr: React.Key[] = []
       if (selected) {
-        let arr: any = []
         if (record?.subjectClass?.length > 0) {
           const list = record?.subjectClass.map((i: SubjectClass) => i.id)
-          arr = [...selectedRowKeys, ...list]
-        } else {
-          arr = arr.push(record?.id)
+          arr = Array.from(new Set([...selectedRowKeys, ...list]))
+        } else if (record?.id) {
+          arr = Array.from(new Set([...selectedRowKeys, record.id]))
         }
-
-        setSelectedRowKeys(arr)
-        form.setFieldsValue({
-          subjectClassIds: arr as string[],
-        })
       } else {
-        let arr: React.Key[] = []
         if (record?.subjectClass?.length > 0) {
           const list = record?.subjectClass.map((i: SubjectClass) => i.id)
           arr = selectedRowKeys.filter((i: React.Key) => !list.includes(i))
-        } else {
-          arr = selectedRowKeys.filter((i: React.Key) => i !== record?.id)
+        } else if (record?.id) {
+          arr = selectedRowKeys.filter((i: React.Key) => i !== record.id)
         }
-        setSelectedRowKeys(arr)
-        form.setFieldsValue({
-          subjectClassIds: arr as string[],
-        })
       }
+
+      setSelectedRowKeys(arr)
+      form.setFieldsValue({
+        subjectClassIds: arr as string[],
+      })
     },
     preserveSelectedRowKeys: true,
-    onChange: (selectedRowKeys: any, selectedRows: any, info: any) => {
-      if (info.type === "all") {
-      }
+    onChange: (newSelectedRowKeys: React.Key[]) => {
+      const allClassIdSet = new Set<string>()
+      subjectData.forEach((e) => {
+        e?.subjectClass?.forEach((i) => {
+          if (i?.id) allClassIdSet.add(i.id)
+        })
+      })
+      const validClassKeys = newSelectedRowKeys.filter((k) => allClassIdSet.has(k as string))
+      setSelectedRowKeys(validClassKeys)
+      form.setFieldsValue({
+        subjectClassIds: validClassKeys as string[],
+      })
     },
     // onChange: (newSelectedRowKeys: React.Key[]) => {
 
@@ -402,11 +351,19 @@ function SelectLecturer({
     //     disabled: !record.mainLecturer,
     // }),
   }
+  const courseKey = useMemo(() => {
+    return [
+      ...(trainingCourseIds || []).slice().sort(),
+      ...(directSubjectClassIds || []).slice().sort(),
+      ...(surveyObjectTypeIds || []).slice().sort(),
+    ].join(",")
+  }, [trainingCourseIds, directSubjectClassIds, surveyObjectTypeIds])
+
   const ranRef = useRef(false)
   // biome-ignore lint/correctness/useExhaustiveDependencies: <>
   useEffect(() => {
     ranRef.current = false
-  }, [semesterId])
+  }, [semesterId, courseKey])
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <>
   useEffect(() => {
@@ -415,26 +372,52 @@ function SelectLecturer({
 
     ranRef.current = true
     if (subjectData.length) {
-      const list: string[] = []
+      const allClassIds: string[] = []
       subjectData.forEach((e) => {
-        e?.subjectClass.forEach((i) => {
-          list.push(i?.id)
+        e?.subjectClass?.forEach((i) => {
+          if (i?.id) allClassIds.push(i.id)
         })
       })
-      setSelectedRowKeys(list)
-      setFilteredData(list)
+
+      const currentFormIds = form.getFieldValue("subjectClassIds") || []
+      const validExistingIds = currentFormIds.filter((id: string) => allClassIds.includes(id))
+
+      const targetIds = validExistingIds.length > 0 ? validExistingIds : allClassIds
+
+      setSelectedRowKeys(targetIds)
+      setFilteredData(targetIds)
       form.setFieldsValue({
-        subjectClassIds: list,
+        subjectClassIds: targetIds,
       })
       setIsFirst(false)
+    } else {
+      setSelectedRowKeys([])
+      setFilteredData([])
+      form.setFieldsValue({
+        subjectClassIds: [],
+      })
     }
-  }, [subjectData])
+  }, [subjectData, isSuccess, form])
 
   return (
     <div className="w-full px-3 mt-3">
       <div className="mb-4 text-[14px] font-[500]">Chọn giảng viên</div>
       <div>
-        <FormItem form={form} name="subjectClassIds" className="max-h-[500px] overflow-y-scroll">
+        <FormItem
+          form={form}
+          name="subjectClassIds"
+          rules={[
+            {
+              validator: async (_, value) => {
+                if (!value || value.length === 0) {
+                  return Promise.reject("Vui lòng chọn ít nhất một giảng viên / lớp môn học")
+                }
+                return Promise.resolve()
+              },
+            },
+          ]}
+          className="max-h-[500px] overflow-y-scroll"
+        >
           <TableCollapse
             filters={filters}
             setFilters={(value) => {
@@ -460,7 +443,14 @@ function SelectLecturer({
                 dataIndex: "code",
                 type: "input",
                 width: 150,
-                render: (__, record: any) => <span>{record?.mainLecturer?.code}</span>,
+                render: (__, record: any) => (
+                  <span>
+                    {record?.mainLecturer?.userProfile?.code ||
+                      record?.mainLecturer?.code ||
+                      record?.mainLecturer?.lectureID ||
+                      ""}
+                  </span>
+                ),
               },
               {
                 title: "ĐVQL",

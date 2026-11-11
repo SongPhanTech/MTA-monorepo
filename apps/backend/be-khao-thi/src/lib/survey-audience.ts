@@ -387,22 +387,7 @@ export function buildSurveyAudienceWhereForProfile(profile: UserProfileAudienceD
     }
 
     const majorId = et.fixedClass?.curriculumVersion?.curriculum?.trainingMajorId
-    if (majorId) {
-      studentCriteria.push({
-        OR: [{ trainingMajors: { none: {} } }, { trainingMajors: { some: { id: majorId } } }],
-      })
-    } else {
-      studentCriteria.push({ trainingMajors: { none: {} } })
-    }
-
     const fieldId = et.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingFieldId
-    if (fieldId) {
-      studentCriteria.push({
-        OR: [{ trainingFields: { none: {} } }, { trainingFields: { some: { id: fieldId } } }],
-      })
-    } else {
-      studentCriteria.push({ trainingFields: { none: {} } })
-    }
 
     const subjectClassIds = et.subjectClassStudent
       ?.map((scs) => scs.subjectClassId)
@@ -417,6 +402,65 @@ export function buildSurveyAudienceWhereForProfile(profile: UserProfileAudienceD
     } else {
       studentCriteria.push({ subjectClasses: { none: {} } })
     }
+
+    // Tiêu chí ngành/lĩnh vực: đồng bộ với buildStudentMajorFieldFixedClassFilter
+    // - Đã chọn lớp QL -> bỏ qua tiêu chí ngành/lĩnh vực
+    // - Không cấu hình ngành/lĩnh vực -> nhận tất cả
+    // - Có cấu hình ngành/lĩnh vực:
+    //   + HV có ngành/lĩnh vực -> khớp theo ngành/lĩnh vực
+    //   + HV chưa gắn ngành trong CTĐT -> vẫn nhận nếu có phạm vi khóa/lớp HP
+    const majorFieldMatchOr: Prisma.SurveyObjectTypeWhereInput[] = []
+
+    if (et.fixedClassId) {
+      majorFieldMatchOr.push({
+        fixedClasses: { some: { id: et.fixedClassId } },
+      })
+    }
+
+    majorFieldMatchOr.push({
+      trainingMajors: { none: {} },
+      trainingFields: { none: {} },
+    })
+
+    if (majorId || fieldId) {
+      const matchConditions: Prisma.SurveyObjectTypeWhereInput[] = []
+      if (majorId) {
+        matchConditions.push({
+          OR: [{ trainingMajors: { none: {} } }, { trainingMajors: { some: { id: majorId } } }],
+        })
+      } else {
+        matchConditions.push({ trainingMajors: { none: {} } })
+      }
+
+      if (fieldId) {
+        matchConditions.push({
+          OR: [{ trainingFields: { none: {} } }, { trainingFields: { some: { id: fieldId } } }],
+        })
+      } else {
+        matchConditions.push({ trainingFields: { none: {} } })
+      }
+
+      majorFieldMatchOr.push({ AND: matchConditions })
+    }
+
+    if (!majorId) {
+      const otherScopeConditions: Prisma.SurveyObjectTypeWhereInput[] = []
+      if (et.fixedClass?.trainingCourseId) {
+        otherScopeConditions.push({
+          trainingCourses: { some: { id: et.fixedClass.trainingCourseId } },
+        })
+      }
+      if (subjectClassIds?.length) {
+        otherScopeConditions.push({
+          subjectClasses: { some: { id: { in: subjectClassIds } } },
+        })
+      }
+      if (otherScopeConditions.length > 0) {
+        majorFieldMatchOr.push({ OR: otherScopeConditions })
+      }
+    }
+
+    studentCriteria.push({ OR: majorFieldMatchOr })
 
     return {
       OR: [

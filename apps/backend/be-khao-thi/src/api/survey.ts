@@ -1445,9 +1445,7 @@ app.openapi(getPrivateSurvey, async (c) => {
                   sTen: true,
                   iCapDonVi: true,
                   iLoaiDonVi: true,
-                  parent: {
-                    select: { sTen: true },
-                  },
+                  parent: { select: { sTen: true } },
                 },
               },
             },
@@ -1486,19 +1484,15 @@ app.openapi(getPrivateSurvey, async (c) => {
 
   let faculty: string | null = null
   let department: string | null = null
-
-  if (lecture?.userProfile?.donVi) {
+  if (lecture?.userProfile.donVi) {
     const donVi = lecture.userProfile.donVi
-    const donViName = donVi.sTen || ""
     const isDepartment =
       donVi.iLoaiDonVi === DON_VI_LOAI_BO_MON || donVi.iCapDonVi === DON_VI_CAP_BO_MON
-
     if (isDepartment) {
-      department = donViName
+      department = donVi.sTen || null
       faculty = donVi.parent?.sTen || null
     } else {
-      faculty = donViName
-      department = null
+      faculty = donVi.sTen || null
     }
   }
 
