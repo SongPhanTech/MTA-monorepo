@@ -334,9 +334,26 @@ function waitNextPaint() {
   })
 }
 
+/** FNV-1a 32-bit: băm ngắn, ổn định, để key phản ánh toàn bộ URL. */
+function hashString(value: string) {
+  let hash = 0x811c9dc5
+  for (let i = 0; i < value.length; i++) {
+    hash ^= value.charCodeAt(i)
+    hash = Math.imul(hash, 0x01000193)
+  }
+  return (hash >>> 0).toString(36)
+}
+
+/**
+ * OnlyOffice cache tài liệu theo key (tối đa 128 ký tự). Không được cắt cụt URL:
+ * query cache-bust `t=` nằm cuối URL, cắt ở 120 ký tự khiến mọi lần in cùng lớp
+ * dùng chung một key → OnlyOffice trả bản/lỗi đã cache. Giữ prefix dễ đọc + hash toàn bộ.
+ */
 function toOnlyOfficeKey(value: string) {
-  const sanitized = value.replace(/[^0-9a-zA-Z_-]/g, "").slice(0, 120)
-  return sanitized || createId()
+  const sanitized = value.replace(/[^0-9a-zA-Z_-]/g, "")
+  if (!sanitized) return createId()
+  if (sanitized.length <= 120) return sanitized
+  return `${sanitized.slice(0, 100)}-${hashString(value)}`
 }
 
 const OnlyOfficeViewer = ({

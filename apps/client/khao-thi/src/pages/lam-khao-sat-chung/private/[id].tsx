@@ -9,7 +9,10 @@ import { useSuspenseFindFirstStudent } from "@workspace/db/hooks"
 import { getPrivateSurvey, useSavePublicSurvey } from "@workspace/libs/api/exam"
 import type { GetSurveyResult } from "@workspace/libs/api/schemas/getSurveyResult"
 import { Button, Col, Flex, Form, Input, message, Radio, Row } from "antd"
-import { LECTURER_SURVEY_PRINT_FORM_CONTENT } from "@workspace/libs/survey-form-content"
+import {
+  DEFAULT_SURVEY_PRINT_FORM_CONTENT,
+  LECTURER_SURVEY_PRINT_FORM_CONTENT,
+} from "@workspace/libs/survey-form-content"
 import { mapStudentInfo, SurveyFormFooter, SurveyFormIntro } from "@workspace/ui"
 
 import { useRouter } from "next/router"

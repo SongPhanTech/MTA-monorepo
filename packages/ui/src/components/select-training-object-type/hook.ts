@@ -14,7 +14,11 @@ import { selectTrainingMajor } from "../select-training-major"
 
 declare global {
   interface Window {
-    contextData?: { userId?: string }
+    contextData?: {
+      userId: string
+      userName: string
+      organizationId: string
+    }
   }
 }
 
@@ -266,7 +270,7 @@ export function useFindManyTrainingObjectTypePermission<
     (!profileId || (!isUserProfileLoading && userProfile !== undefined))
 
   const queryArgs = {
-    ...args,
+    ...(args as Prisma.TrainingObjectTypeFindManyArgs | undefined),
     where: whereCondition,
     orderBy: { name: "asc" },
   } satisfies Prisma.TrainingObjectTypeFindManyArgs
