@@ -123,11 +123,7 @@ const topicInclude = {
   },
 } satisfies Prisma.StudentResearchTopicInclude
 
-/**
- * Thứ tự hiển thị: Đơn vị quản lý → Ngành → Chuyên ngành → Học viên → Ghi chú (description).
- * Nhóm theo học viên trước ghi chú để các chuyên đề của cùng 1 học viên nằm liền nhau,
- * rồi sắp theo ghi chú (VD: "1", "2", "3"...). PostgreSQL ASC mặc định để NULL xuống cuối.
- */
+
 const topicOrderBy = [
   { studentSubjectScore: { subjectVersion: { managementOrganization: { iSTT: "asc" } } } },
   { studentSubjectScore: { subjectVersion: { managementOrganization: { sTen: "asc" } } } },
@@ -146,7 +142,7 @@ const topicOrderBy = [
   { studentSubjectScore: { student: { userProfile: { firstName: "asc" } } } },
   { studentSubjectScore: { student: { userProfile: { lastName: "asc" } } } },
   { studentSubjectScore: { student: { userProfile: { code: "asc" } } } },
-  { description: "asc" },
+  { studentSubjectScore: { subjectVersion: { description: "asc" } } },
   { studentSubjectScore: { subjectClass: { startDate: "asc" } } },
 ] satisfies Prisma.StudentResearchTopicOrderByWithRelationInput[]
 

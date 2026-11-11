@@ -101,9 +101,12 @@ app.route("/api/thesis-payment", ThesisPaymentApp)
 // TODO!: remove `/check`
 app.use("/api/check/*", jwtAuth("lms"))
 // setupAuth(app)
-app.all("/api/system/:appcode/*", async (c) => {
-  const appCode = c.req.param("appcode").toLowerCase()
-  const pathProxy = c.req.path.replace(new RegExp(`^/api/system/${appCode}/`, "i"), "")
+// Hỗ trợ cả 2 kiểu mount nginx của be-model:
+// - `/api/model/` → `be-model/api/`  : FE gọi `{MODEL_BASE}/system/...` → be-model nhận `/api/system/...`
+// - `/api/model/` → `be-model/`      : (vd. daotao.swantech.vn) be-model nhận `/system/...`
+const systemProxyHandler = async (c: Context) => {
+  const appCode = c.req.param("appcode")!.toLowerCase()
+  const pathProxy = c.req.path.replace(new RegExp(`^(/api)?/system/${appCode}/`, "i"), "")
   const { clientId, clientSecret } = getSystemClientCredentials(appCode)
   const systemOrigin = getSystemOrigin()
   if (!systemOrigin) {
@@ -115,8 +118,9 @@ app.all("/api/system/:appcode/*", async (c) => {
     return c.json({ message: `Thiếu x-clientid/secret cho app ${appCode}` }, 401)
   }
 
-  // Upstream luôn qua /api/system/public/ — nginx không có /api/system/{appCode}/
-  const urlProxy = new URL(pathProxy.replace(/^public\//i, ""), `${systemOrigin}/api/system/public/`)
+  // Upstream: /api/system/{scope}/... (public | share | storage) — nginx không có /api/system/{appCode}/
+  // Giữ nguyên query string (c.req.path không chứa query)
+  const urlProxy = new URL(`${pathProxy}${new URL(c.req.url).search}`, `${systemOrigin}/api/system/`)
   const headers = {
     ...c.req.header(),
     "x-clientid": clientId,
@@ -129,7 +133,9 @@ app.all("/api/system/:appcode/*", async (c) => {
     headers,
   })
   return res
-})
+}
+app.all("/api/system/:appcode/*", systemProxyHandler)
+app.all("/system/:appcode/*", systemProxyHandler)
 
 app.route("/api/minio", MinIOApp)
 app.route("/api/sql", SqlTransactionApp)
