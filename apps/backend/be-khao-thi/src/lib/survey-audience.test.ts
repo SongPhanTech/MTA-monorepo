@@ -76,4 +76,52 @@ describe("buildSurveyAudienceWhereForProfile", () => {
 
     expect(serialized).not.toContain('"type":{"hasSome":["MILITARY_STUDENT"')
   })
+
+  test("học viên có lớp QL cho phép khớp khảo sát qua lớp QL mà không bị chặn bởi ngành", () => {
+    const profile = createProfile([])
+    profile.educationAndTraining = [
+      {
+        fixedClassId: "fc-1",
+        fixedClass: {
+          trainingCourseId: "tc-1",
+          curriculumVersion: {
+            curriculum: {
+              trainingMajorId: null,
+              trainingMajor: null,
+            },
+          },
+        },
+        subjectClassStudent: [],
+      } as any,
+    ]
+
+    const { audienceMatch } = buildSurveyAudienceWhereForProfile(profile)
+    const serialized = JSON.stringify(audienceMatch)
+
+    expect(serialized).toContain('"fixedClasses":{"some":{"id":"fc-1"}}')
+  })
+
+  test("học viên chưa gắn ngành nhưng có khóa đào tạo vẫn được nhận qua nhánh khóa", () => {
+    const profile = createProfile([])
+    profile.educationAndTraining = [
+      {
+        fixedClassId: "fc-2",
+        fixedClass: {
+          trainingCourseId: "tc-99",
+          curriculumVersion: {
+            curriculum: {
+              trainingMajorId: null,
+              trainingMajor: null,
+            },
+          },
+        },
+        subjectClassStudent: [],
+      } as any,
+    ]
+
+    const { audienceMatch } = buildSurveyAudienceWhereForProfile(profile)
+    const serialized = JSON.stringify(audienceMatch)
+
+    expect(serialized).toContain('"trainingCourses":{"some":{"id":"tc-99"}}')
+  })
 })

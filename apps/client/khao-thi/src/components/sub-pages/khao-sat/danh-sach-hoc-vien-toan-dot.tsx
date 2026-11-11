@@ -1,16 +1,16 @@
 import TableCollapse from "@components/commons/tableCollapse"
 import type { FilterProps } from "@components/commons/typeFilter"
 import ExportStudentToanDot from "@components/modal/export-list-student-toan-dot"
-import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import useSpinner from "@hooks/spinner"
 import {
   useFindManyFixedClass,
-  useFindManySubjectClass,
   useFindManyTrainingCourse,
   useFindUniqueClusterSurvey,
 } from "@workspace/db/hooks"
+import { customExamFetch } from "@workspace/libs/api/custom-instance"
 import { useAbility } from "@workspace/permissions/hooks"
 import { KHAO_THI_PERMISSION } from "@workspace/router"
+import { useQuery } from "@tanstack/react-query"
 import { Col, Flex, Row, Skeleton, Tag, Tooltip } from "antd"
 import dayjs from "dayjs"
 import { Eye } from "lucide-react"
@@ -19,8 +19,6 @@ import { useDisclosure } from "react-hook-disclosure-modal"
 
 function DanhSachHocVienToanDot({ selectedId }: { selectedId: string }) {
   const { can } = useAbility()
-  const [currentPage, setCurrentPage] = useState(1)
-  const [numberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
   const [filters, setFilters] = useState<FilterProps>({
     name: "",
     code: "",
@@ -57,151 +55,35 @@ function DanhSachHocVienToanDot({ selectedId }: { selectedId: string }) {
     }
   }, [selectedId])
 
-  const { data, isLoading } = useFindManySubjectClass(
-    {
-      where,
-      include: {
-        mainLecturer: {
-          include: {
-            userProfile: true,
-          },
-        },
-        subjectClassStudent: {
-          where: {
-            student: {
-              ...(filters.name ||
-              filters.code ||
-              filters.idCardNumber ||
-              filters.phoneNumber ||
-              filters.dateOfBirth?.length === 2 ||
-              (filters.statusSurvey && filters.statusSurvey.length === 1)
-                ? {
-                    userProfile: {
-                      ...(filters.name
-                        ? {
-                            fullname: {
-                              contains: filters.name,
-                              mode: "insensitive" as const,
-                            },
-                          }
-                        : {}),
-                      ...(filters.code
-                        ? {
-                            code: {
-                              contains: filters.code,
-                              mode: "insensitive" as const,
-                            },
-                          }
-                        : {}),
-                      ...(filters.idCardNumber
-                        ? {
-                            idCardNumber: {
-                              contains: filters.idCardNumber,
-                              mode: "insensitive" as const,
-                            },
-                          }
-                        : {}),
-                      ...(filters.phoneNumber
-                        ? {
-                            phoneNumber: {
-                              contains: filters.phoneNumber,
-                              mode: "insensitive" as const,
-                            },
-                          }
-                        : {}),
-                      ...(filters.dateOfBirth?.length === 2
-                        ? {
-                            dateOfBirth: {
-                              gte: dayjs(filters.dateOfBirth?.[0], "DD/MM/YYYY").toDate(),
-                              lte: dayjs(filters.dateOfBirth?.[1], "DD/MM/YYYY").toDate(),
-                            },
-                          }
-                        : {}),
-                      ...(filters.statusSurvey && filters.statusSurvey.length === 1
-                        ? {
-                            surveySession:
-                              filters.statusSurvey[0] === true
-                                ? {
-                                    some: {
-                                      survey: {
-                                        clusterSurveyId: selectedId,
-                                      },
-                                    },
-                                  }
-                                : {
-                                    none: {
-                                      survey: {
-                                        clusterSurveyId: selectedId,
-                                      },
-                                    },
-                                  },
-                          }
-                        : {}),
-                    },
-                  }
-                : {}),
-              ...(filters.fixedClassIds && {
-                fixedClassId: {
-                  in: filters.fixedClassIds,
-                },
-              }),
-              ...(filters.trainingCourseIds && {
-                fixedClass: {
-                  trainingCourseId: {
-                    in: filters.trainingCourseIds,
-                  },
-                },
-              }),
-            },
-          },
-          include: {
-            student: {
-              include: {
-                userProfile: {
-                  include: {
-                    surveySession: {
-                      where: {
-                        survey: {
-                          clusterSurveyId: selectedId,
-                        },
-                      },
-                      include: {
-                        survey: true,
-                      },
-                    },
-                  },
-                },
-                fixedClass: {
-                  include: {
-                    trainingCourse: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-      orderBy: {
-        name: "asc",
-      },
-      take: numberOfPages,
-      skip: (currentPage - 1) * numberOfPages,
+  const { data: obligationResult, isLoading } = useQuery({
+    queryKey: ["cluster-survey-participant-obligations", selectedId],
+    queryFn: async () => {
+      const response = await customExamFetch<any>(
+        `/api/cluster-survey/${selectedId}/participant-obligations`,
+        { method: "GET" }
+      )
+      return response?.data || response
     },
-    {
-      enabled: !!selectedId,
-    }
+    enabled: !!selectedId,
+  })
+
+  // Giữ đúng dữ liệu mà TableCollapse đang dùng, nhưng nguồn đã là từng cặp
+  // surveyId + studentId từ backend thay vì tự suy luận bằng subjectClassId.
+  const data = useMemo(
+    () =>
+      (obligationResult?.data || []).map((item: any) => ({
+        ...item,
+        subjectClassStudent: item.obligations.map((obligation: any) => ({
+          ...obligation,
+          subjectClassId: item.subjectClassId,
+          student: obligation.student,
+        })),
+      })),
+    [obligationResult]
   )
 
   const checkStatus = (record: any) => {
-    if (record?.student?.userProfile?.surveySession?.length > 0) {
-      const result = record?.student?.userProfile?.surveySession?.find(
-        (item: any) => item?.survey?.subjectClassId === record?.subjectClassId
-      )
-      if (result) {
-        return result
-      }
-    }
-    return null
+    return record?.completed ? { surveyId: record.surveyId, id: record.surveySessionId } : null
   }
 
   useSpinner()
@@ -210,18 +92,77 @@ function DanhSachHocVienToanDot({ selectedId }: { selectedId: string }) {
     tag: "ReviewSurveyModal",
   })
 
-  let totalStudents = 0
-  let doneStudents = 0
+  const isFiltering = Boolean(
+    filters.name ||
+    filters.code ||
+    filters.idCardNumber ||
+    filters.phoneNumber ||
+    filters.dateOfBirth?.length === 2 ||
+    (filters.statusSurvey && filters.statusSurvey.length === 1) ||
+    filters.fixedClassIds?.length ||
+    filters.trainingCourseIds?.length
+  )
 
-  data?.forEach((subjectClass: any) => {
-    const students = subjectClass?.subjectClassStudent || []
-    totalStudents += students.length
-    students.forEach((studentRecord: any) => {
-      if (checkStatus(studentRecord)) {
-        doneStudents++
-      }
+  const displayData = useMemo(() => {
+    if (!data) return []
+    if (!isFiltering) return data
+
+    const contains = (value: unknown, filter?: string) =>
+      !filter ||
+      String(value || "")
+        .toLowerCase()
+        .includes(filter.toLowerCase())
+    return data
+      .map((item: any) => ({
+        ...item,
+        subjectClassStudent: (item.subjectClassStudent || []).filter((record: any) => {
+          const profile = record.student?.userProfile || {}
+          const fixedClass = record.student?.fixedClass
+          const dateOfBirth = profile.dateOfBirth ? dayjs(profile.dateOfBirth) : null
+          return (
+            contains(profile.fullname, filters.name) &&
+            contains(profile.code, filters.code) &&
+            contains(profile.idCardNumber, filters.idCardNumber) &&
+            contains(profile.phoneNumber, filters.phoneNumber) &&
+            (!filters.fixedClassIds?.length || filters.fixedClassIds.includes(fixedClass?.id)) &&
+            (!filters.trainingCourseIds?.length ||
+              filters.trainingCourseIds.includes(fixedClass?.trainingCourseId)) &&
+            (!filters.statusSurvey?.length || record.completed === filters.statusSurvey[0]) &&
+            (!filters.dateOfBirth?.length ||
+              (dateOfBirth &&
+                !dateOfBirth.isBefore(dayjs(filters.dateOfBirth[0], "DD/MM/YYYY"), "day") &&
+                !dateOfBirth.isAfter(dayjs(filters.dateOfBirth[1], "DD/MM/YYYY"), "day")))
+          )
+        }),
+      }))
+      .filter((item: any) => item.subjectClassStudent.length > 0)
+  }, [data, filters, isFiltering])
+
+  const { totalClasses, totalSurveys, doneSurveys, uniqueStudentsCount } = useMemo(() => {
+    const list = displayData || []
+    let total = 0
+    let done = 0
+    const studentSet = new Set<string>()
+
+    list.forEach((subjectClass: any) => {
+      const students = subjectClass?.subjectClassStudent || []
+      total += students.length
+      students.forEach((studentRecord: any) => {
+        const studentId = studentRecord?.student?.id || studentRecord?.student?.userProfile?.id
+        if (studentId) studentSet.add(studentId)
+        if (checkStatus(studentRecord)) {
+          done++
+        }
+      })
     })
-  })
+
+    return {
+      totalClasses: list.length,
+      totalSurveys: total,
+      doneSurveys: done,
+      uniqueStudentsCount: studentSet.size,
+    }
+  }, [displayData])
 
   return (
     <div>
@@ -240,6 +181,7 @@ function DanhSachHocVienToanDot({ selectedId }: { selectedId: string }) {
                   query={where}
                   selectedId={selectedId}
                   clusterName={clusterSurvey?.name}
+                  data={displayData}
                 />
               </Flex>
             </Col>
@@ -248,10 +190,49 @@ function DanhSachHocVienToanDot({ selectedId }: { selectedId: string }) {
                 childrenFieldName="subjectClassStudent"
                 rowKey={"id"}
                 filters={filters}
-                headerTitleKey={({ code, name }) => `${[code, name].filter(Boolean).join(" - ")}`}
+                headerTitleKey={(record: any) => {
+                  const gvName = record?.mainLecturer?.userProfile?.fullname || "Chưa phân công GV"
+                  const gvCode =
+                    record?.mainLecturer?.userProfile?.code || record?.mainLecturer?.code || ""
+                  const gvDonVi = record?.mainLecturer?.userProfile?.donVi?.sMa || ""
+                  const gvLabel = [
+                    gvName,
+                    gvCode ? `(${gvCode})` : "",
+                    gvDonVi ? `[${gvDonVi}]` : "",
+                  ]
+                    .filter(Boolean)
+                    .join(" ")
+                  const classLabel = [record?.code, record?.name].filter(Boolean).join(" - ")
+                  const studentsCount = record?.subjectClassStudent?.length || 0
+                  const doneCount =
+                    record?.subjectClassStudent?.filter((s: any) => checkStatus(s))?.length || 0
+
+                  return (
+                    <div className="flex flex-wrap items-center justify-between w-full py-1 pr-6 gap-x-4 gap-y-1">
+                      <div className="flex items-center gap-3">
+                        <span className="font-semibold text-gray-900 text-sm">{classLabel}</span>
+                        <Tag color="blue" className="m-0 font-normal">
+                          GV chính: <strong>{gvLabel}</strong>
+                        </Tag>
+                      </div>
+                      <div className="text-xs text-gray-600">
+                        Đã làm:{" "}
+                        <strong
+                          className={
+                            doneCount === studentsCount && studentsCount > 0
+                              ? "text-green-600 font-bold"
+                              : "text-blue-600 font-bold"
+                          }
+                        >
+                          {doneCount}/{studentsCount}
+                        </strong>{" "}
+                        lượt
+                      </div>
+                    </div>
+                  )
+                }}
                 setFilters={(value) => {
                   setFilters(value)
-                  setCurrentPage(1)
                 }}
                 scroll={{ y: "calc(100vh - 225px)", x: "max-content" }}
                 className="w-full"
@@ -390,15 +371,24 @@ function DanhSachHocVienToanDot({ selectedId }: { selectedId: string }) {
                     },
                   },
                 ]}
-                data={data || []}
+                data={displayData || []}
                 pagination={false}
               />
-              <div className="mt-2 px-3 py-1 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <span style={{ color: "#666" }}>Tổng đã làm:</span>{" "}
-                  <strong style={{ color: "#009a5c", fontSize: 16, fontWeight: "bold" }}>
-                    {doneStudents}/{totalStudents}
-                  </strong>
+              <div className="mt-3 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-md flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-sm">
+                <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+                  <span>
+                    Tổng số lớp môn học: <strong>{totalClasses}</strong>
+                  </span>
+                  <span>
+                    Tổng số học viên: <strong>{uniqueStudentsCount}</strong>
+                  </span>
+                  <span>
+                    Tổng lượt khảo sát:{" "}
+                    <strong className="text-emerald-600 text-base font-bold">
+                      {doneSurveys} / {totalSurveys}
+                    </strong>{" "}
+                    ({totalSurveys > 0 ? ((doneSurveys / totalSurveys) * 100).toFixed(1) : 0}%)
+                  </span>
                 </div>
               </div>
             </Col>

@@ -2,7 +2,6 @@ import { formatDateInSlash } from "@workspace/libs/timezone"
 import { DownloadOutlined } from "@ant-design/icons"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { Button, Flex } from "antd"
-import dayjs from "dayjs"
 import ExcelJS from "exceljs"
 import { saveAs } from "file-saver"
 
@@ -10,12 +9,18 @@ const ExportStudentToanDot = ({
   query,
   selectedId,
   clusterName,
+  data: obligationData,
 }: {
   query: any
   selectedId: string
   clusterName?: string
+  /** Dữ liệu từ API nghĩa vụ khảo sát; dùng để xuất cùng số liệu trên màn hình. */
+  data?: any[]
 }) => {
   const checkStatus = (record: any) => {
+    if (typeof record?.completed === "boolean") {
+      return record.completed ? { surveyId: record.surveyId } : null
+    }
     if (record?.student?.userProfile?.surveySession?.length > 0) {
       const result = record?.student?.userProfile?.surveySession?.find(
         (item: any) => item?.survey?.subjectClassId === record?.subjectClassId
@@ -132,10 +137,10 @@ const ExportStudentToanDot = ({
         },
       },
     ]
-    const res = await sqlTransaction(listSqlTransaction)
+    const res = obligationData ? null : await sqlTransaction(listSqlTransaction)
+    const data: any[] = obligationData || (res?.status === 200 ? res?.data?.[0] : [])
 
-    if (res?.status === 200 && res?.data?.length > 0) {
-      const data: any = res?.data[0]
+    if (data.length > 0) {
       const workbook = new ExcelJS.Workbook()
 
       data.forEach(async (item: any, sheetIndex: number) => {
