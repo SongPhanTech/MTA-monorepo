@@ -26,6 +26,10 @@ import {
   SurveyStatsSchema,
 } from "../services/survey.service"
 import { getRuntimeEnv } from "@workspace/libs"
+import {
+  buildSurveyObjectTypeProfileOrClauses,
+  SURVEY_OBJECT_TYPE_INCLUDE,
+} from "../lib/survey-audience"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -317,13 +321,8 @@ const updateClusterSurvey = createRoute({
 
 app.openapi(updateClusterSurvey, async (c) => {
   const { id } = c.req.valid("param")
-  const {
-    surveyQuestionIds,
-    surveyChoices,
-    surveyObjectTypeIds,
-    surveyTopicId,
-    ...payload
-  } = c.req.valid("json")
+  const { surveyQuestionIds, surveyChoices, surveyObjectTypeIds, surveyTopicId, ...payload } =
+    c.req.valid("json")
 
   const cluster = await prisma.clusterSurvey.findUnique({
     where: { id, deletedAt: null },
@@ -1221,6 +1220,200 @@ app.openapi(getClusterSurveyStatisticsForHocVien, async (c) => {
   }
 
   return c.json(data, 200)
+})
+
+/**
+ * Danh sách lượt khảo sát của cả đợt.
+ *
+ * Một dòng con là đúng một nghĩa vụ khảo sát: `surveyId + studentId`.  Không
+ * dùng SubjectClass làm khóa hoàn thành, vì một lớp có thể có nhiều khảo sát
+ * ở các đợt khác nhau (hoặc dữ liệu lịch sử bị trùng lớp).
+ */
+const getClusterSurveyParticipantObligations = createRoute({
+  operationId: "get-cluster-survey-participant-obligations",
+  path: "/{id}/participant-obligations",
+  method: "get",
+  tags: ["Cụm khảo sát"],
+  summary: "Danh sách lượt khảo sát phải thực hiện của toàn đợt",
+  request: { params: z.object({ id: z.string() }) },
+  responses: {
+    ...standardErrorResponses(),
+    200: {
+      description: "Success",
+      content: {
+        "application/json": {
+          schema: z.object({
+            data: z.array(z.any()),
+            summary: z.object({
+              totalClasses: z.number(),
+              totalStudents: z.number(),
+              totalRequired: z.number(),
+              totalCompleted: z.number(),
+            }),
+          }),
+        },
+      },
+    },
+  },
+})
+
+app.openapi(getClusterSurveyParticipantObligations, async (c) => {
+  const { id } = c.req.valid("param")
+
+  const cluster = await prisma.clusterSurvey.findFirst({
+    where: { id, deletedAt: null },
+    include: {
+      surveyObjectType: { include: SURVEY_OBJECT_TYPE_INCLUDE },
+      surveys: {
+        where: { deletedAt: null, active: true, subjectClassId: { not: null } },
+        orderBy: { subjectClass: { code: "asc" } },
+        include: {
+          subjectClass: {
+            include: {
+              mainLecturer: {
+                select: {
+                  id: true,
+                  code: true,
+                  userProfile: {
+                    select: { fullname: true, code: true, donVi: { select: { sMa: true } } },
+                  },
+                },
+              },
+              subjectClassStudent: {
+                where: { deletedAt: null, withdrew: false },
+                include: {
+                  student: {
+                    include: {
+                      fixedClass: { include: { trainingCourse: true } },
+                      userProfile: {
+                        select: {
+                          id: true,
+                          code: true,
+                          fullname: true,
+                          dateOfBirth: true,
+                          idCardNumber: true,
+                          phoneNumber: true,
+                          surveySession: {
+                            where: { survey: { clusterSurveyId: id, deletedAt: null } },
+                            select: {
+                              surveyId: true,
+                              isCompleted: true,
+                              completedAt: true,
+                              id: true,
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+
+  if (!cluster) return c.json({ message: "Không tìm thấy cụm khảo sát" }, 404)
+
+  // Áp cùng phạm vi đối tượng đã cấu hình cho đợt.  Điều này ngăn một học viên
+  // ghi danh chéo lớp nhưng không thuộc khóa/đối tượng khảo sát bị tính nhầm.
+  // Nếu đợt không cấu hình đối tượng riêng, toàn bộ học viên ghi danh lớp môn học đều có nghĩa vụ.
+  const hasConfiguredAudience = cluster.surveyObjectType.length > 0
+  const eligibleProfileIds = new Set<string>()
+
+  if (hasConfiguredAudience) {
+    const candidateProfileIds = Array.from(
+      new Set(
+        cluster.surveys.flatMap(
+          (survey) =>
+            survey.subjectClass?.subjectClassStudent.flatMap((scs) =>
+              scs.student?.userProfile?.id ? [scs.student.userProfile.id] : []
+            ) ?? []
+        )
+      )
+    )
+
+    if (candidateProfileIds.length > 0) {
+      const allClauses: Prisma.UserProfileWhereInput[] = []
+      for (const objectType of cluster.surveyObjectType) {
+        const clauses = buildSurveyObjectTypeProfileOrClauses(objectType, { isStudent: "student" })
+        if (clauses.length > 0) {
+          allClauses.push(...clauses)
+        }
+      }
+
+      if (allClauses.length > 0) {
+        const profiles = await prisma.userProfile.findMany({
+          where: {
+            id: { in: candidateProfileIds },
+            deletedAt: null,
+            active: true,
+            OR: allClauses,
+          },
+          select: { id: true },
+        })
+        profiles.forEach((profile) => eligibleProfileIds.add(profile.id))
+      }
+    }
+  }
+
+  const classes = cluster.surveys.flatMap((survey) => {
+    const subjectClass = survey.subjectClass
+    if (!subjectClass) return []
+
+    const obligations = subjectClass.subjectClassStudent.flatMap((registration) => {
+      const student = registration.student
+      const profile = student?.userProfile
+      if (!student || !profile) return []
+      if (hasConfiguredAudience && !eligibleProfileIds.has(profile.id)) return []
+      const { surveySession, ...publicProfile } = profile
+      const session = surveySession.find((item) => item.surveyId === survey.id)
+      return [
+        {
+          id: `${survey.id}:${student.id}`,
+          surveyId: survey.id,
+          subjectClassId: subjectClass.id,
+          studentId: student.id,
+          completed: Boolean(session?.isCompleted),
+          surveySessionId: session?.id ?? null,
+          completedAt: session?.completedAt ?? null,
+          student: {
+            id: student.id,
+            userProfile: publicProfile,
+            fixedClass: student.fixedClass,
+          },
+        },
+      ]
+    })
+
+    return [
+      {
+        id: survey.id,
+        surveyId: survey.id,
+        subjectClassId: subjectClass.id,
+        code: subjectClass.code,
+        name: subjectClass.name,
+        mainLecturer: subjectClass.mainLecturer,
+        obligations,
+      },
+    ]
+  })
+
+  const allObligations = classes.flatMap((item) => item.obligations)
+  return c.json(
+    {
+      data: classes,
+      summary: {
+        totalClasses: classes.length,
+        totalStudents: new Set(allObligations.map((item) => item.studentId)).size,
+        totalRequired: allObligations.length,
+        totalCompleted: allObligations.filter((item) => item.completed).length,
+      },
+    },
+    200
+  )
 })
 
 const getClusterSurveyInfo = createRoute({

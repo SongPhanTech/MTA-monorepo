@@ -43,6 +43,8 @@ import { useDisclosure } from "react-hook-disclosure-modal"
 
 const { Step } = Steps
 
+const EMPTY_IDS: string[] = []
+
 export type PutSurveyType = Survey & {
   surveyObjectTypes: string[]
   semesterId: string
@@ -163,6 +165,20 @@ const PutSurveyModal = () => {
   })
   const { data: surveyObjectTypesData = [] } = useFindManySurveyObjectType({
     where: { trainingObjectTypeId },
+    include: {
+      trainingCourses: true,
+      fixedClasses: {
+        select: {
+          id: true,
+          trainingCourseId: true,
+        },
+      },
+      subjectClasses: {
+        select: {
+          id: true,
+        },
+      },
+    },
   })
 
   const refreshSurveyQueries = async () => {
@@ -450,6 +466,35 @@ const PutSurveyModal = () => {
   const surveyTopicId = Form.useWatch("surveyTopicId", form)
   const isPublic = Form.useWatch("isPublic", form)
   const anonymous = Form.useWatch("anonymous", form)
+  const selectedSurveyObjectTypeIds: string[] =
+    Form.useWatch("surveyObjectTypes", form) ?? EMPTY_IDS
+
+  const { trainingCourseIds, directSubjectClassIds } = useMemo(() => {
+    if (!selectedSurveyObjectTypeIds || selectedSurveyObjectTypeIds.length === 0) {
+      return { trainingCourseIds: [], directSubjectClassIds: [] }
+    }
+
+    const selectedTypes = surveyObjectTypesData.filter((item: any) =>
+      selectedSurveyObjectTypeIds.includes(item.id)
+    )
+
+    const courseIdSet = new Set<string>()
+    const classIdSet = new Set<string>()
+
+    for (const sot of selectedTypes) {
+      sot.trainingCourses?.forEach((tc: any) => tc.id && courseIdSet.add(tc.id))
+      sot.fixedClasses?.forEach(
+        (fc: any) => fc.trainingCourseId && courseIdSet.add(fc.trainingCourseId)
+      )
+      sot.subjectClasses?.forEach((sc: any) => sc.id && classIdSet.add(sc.id))
+    }
+
+    return {
+      trainingCourseIds: Array.from(courseIdSet),
+      directSubjectClassIds: Array.from(classIdSet),
+    }
+  }, [selectedSurveyObjectTypeIds, surveyObjectTypesData])
+
   // biome-ignore lint/correctness/useExhaustiveDependencies: <>
   const steps: StepItem[] = useMemo(() => {
     return [
@@ -653,7 +698,16 @@ const PutSurveyModal = () => {
         ? [
             {
               title: "Đối tượng được khảo sát",
-              content: <SelectLecturer surveyTopicId={surveyTopicId} semesterId={semesterId} />,
+              fields: ["subjectClassIds"],
+              content: (
+                <SelectLecturer
+                  surveyTopicId={surveyTopicId}
+                  semesterId={semesterId}
+                  trainingCourseIds={trainingCourseIds}
+                  directSubjectClassIds={directSubjectClassIds}
+                  surveyObjectTypeIds={selectedSurveyObjectTypeIds}
+                />
+              ),
             },
           ]
         : []),
@@ -679,6 +733,9 @@ const PutSurveyModal = () => {
     anonymous,
     choices,
     form,
+    trainingCourseIds,
+    directSubjectClassIds,
+    selectedSurveyObjectTypeIds,
   ])
   // biome-ignore lint/correctness/useExhaustiveDependencies: <>
   useEffect(() => {

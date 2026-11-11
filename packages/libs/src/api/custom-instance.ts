@@ -18,7 +18,12 @@ const getTokenHeaders = (): Record<string, string> => {
 }
 
 export const fetchInstance = async (url: string, options?: RequestInit): Promise<Response> => {
-  const accessToken = BROWSER ? localStorage.getItem("ACCESS_TOKEN") : ""
+  // Older clients store the token as `access_token`, while some apps use
+  // `ACCESS_TOKEN`. Support both so authenticated API calls do not silently
+  // omit the Authorization header.
+  const accessToken = BROWSER
+    ? localStorage.getItem("ACCESS_TOKEN") || localStorage.getItem("access_token")
+    : ""
   const tokenHeaders = getTokenHeaders()
 
   const payload: RequestInit = {

@@ -12,12 +12,6 @@ import { selectFixedClass } from "../select-fixed-class"
 import { selectTrainingCourse } from "../select-training-course"
 import { selectTrainingMajor } from "../select-training-major"
 
-declare global {
-  interface Window {
-    contextData?: { userId?: string }
-  }
-}
-
 export type TrainingObjectTypeState = {
   selectedTrainingObjectTypeId?: string
 }
@@ -161,6 +155,20 @@ export function useFindManyTrainingObjectTypePermission<
                 },
               },
             },
+            subjectClassStudent: {
+              where: {
+                deletedAt: null,
+              },
+              select: {
+                subjectClass: {
+                  select: {
+                    trainingObjectType: {
+                      select: TRAINING_OBJECT_TYPE_SELECT,
+                    },
+                  },
+                },
+              },
+            },
           },
         },
       },
@@ -182,6 +190,7 @@ export function useFindManyTrainingObjectTypePermission<
         et.curriculumVersion?.trainingCourse?.trainingObjectType,
         et.curriculumVersionParallel?.trainingObjectType,
         et.curriculumVersionParallel?.trainingCourse?.trainingObjectType,
+        ...(et.subjectClassStudent?.map((sc) => sc.subjectClass?.trainingObjectType) || []),
       ]
       for (const tot of candidates) {
         if (tot?.id && tot.active !== false) {
@@ -266,9 +275,9 @@ export function useFindManyTrainingObjectTypePermission<
     (!profileId || (!isUserProfileLoading && userProfile !== undefined))
 
   const queryArgs = {
-    ...args,
+    ...(args as Prisma.TrainingObjectTypeFindManyArgs | undefined),
     where: whereCondition,
-    orderBy: { name: "asc" },
+    orderBy: args?.orderBy ?? { name: "asc" },
   } satisfies Prisma.TrainingObjectTypeFindManyArgs
 
   const res = useFindManyTrainingObjectType(queryArgs, {
