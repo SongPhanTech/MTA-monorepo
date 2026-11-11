@@ -65,6 +65,8 @@ export type ResolvedGraduationScore = {
   canImprove: boolean
   /** miễn học theo chứng chỉ Đạt/Không đạt, không có điểm */
   exempted?: boolean
+  /** điểm thay thế theo môn tương đương: id các bản ghi điểm gốc (môn ngoài CTĐT) */
+  sourceScoreIds?: string[]
   subjectVersion: {
     id: string
     name: string
@@ -222,7 +224,7 @@ type LoadedIssueScore = {
   examBannedReason: string | null
   suspended: boolean
   suspendedReason: string | null
-  subjectVersion: { id: string; name: string; credit: number }
+  subjectVersion: { id: string; name: string; code: string | null; credit: number }
 }
 
 type LoadedEquivalencyGroup = {
@@ -294,7 +296,7 @@ export async function loadGraduationScoreSources(input: {
           { OR: [{ examBanned: true }, { suspended: true }] },
         ],
       },
-      include: { subjectVersion: { select: { id: true, name: true, credit: true } } },
+      include: { subjectVersion: { select: { id: true, name: true, code: true, credit: true } } },
     }),
     curriculumSubjectIds.length
       ? prisma.equivalencyGroup.findMany({
@@ -309,6 +311,7 @@ export async function loadGraduationScoreSources(input: {
           },
           include: {
             subjects: {
+              where: { deletedAt: null },
               include: { subject: { select: { id: true, name: true, code: true, credit: true } } },
             },
           },
@@ -439,8 +442,30 @@ export function computeGraduationSubjectScores(input: {
       : `Chưa đạt môn bắt buộc (${subject.subject.name})`
   }
 
+  const curriculumVersionIds = new Set(curriculumSubjects.map((item) => item.subjectId))
+  const curriculumSubjectById = new Map(curriculumSubjects.map((item) => [item.subjectId, item]))
+  // mã môn (đã trim) → môn CTĐT đầu tiên có mã đó (giống find + sameSubjectCode)
+  const curriculumSubjectByCode = new Map<string, GraduationCurriculumSubjectInput>()
+  for (const item of curriculumSubjects) {
+    const code = item.subject.code?.trim()
+    if (code && !curriculumSubjectByCode.has(code)) curriculumSubjectByCode.set(code, item)
+  }
+  const findCurriculumSubjectByCode = (code?: string | null) => {
+    const key = code?.trim()
+    return key ? curriculumSubjectByCode.get(key) : undefined
+  }
+  // môn → các nhóm tương đương chứa môn đó (giữ thứ tự gốc)
+  const groupsBySubjectId = new Map<string, LoadedEquivalencyGroup[]>()
+  for (const group of equivalencyGroups) {
+    for (const subjectId of new Set(group.subjects.map((item) => item.subjectId))) {
+      const list = groupsBySubjectId.get(subjectId)
+      if (list) list.push(group)
+      else groupsBySubjectId.set(subjectId, [group])
+    }
+  }
+
   const assignScore = (subjectId: string, score: ResolvedGraduationScore) => {
-    const subjectInCurriculum = curriculumSubjects.find((item) => item.subjectId === subjectId)
+    const subjectInCurriculum = curriculumSubjectById.get(subjectId)
     if (subjectInCurriculum && !subjectInCurriculum.useForFinalScore) {
       markDoneScores.set(subjectId, score)
       finalScores.delete(subjectId)
@@ -450,35 +475,79 @@ export function computeGraduationSubjectScores(input: {
     markDoneScores.delete(subjectId)
   }
 
-  const curriculumVersionIds = new Set(curriculumSubjects.map((item) => item.subjectId))
+  const useScore = (subjectId: string, score: ResolvedGraduationScore) => {
+    usedScoreIds.add(score.id)
+    assignScore(subjectId, score)
+  }
 
-  const applyEquivalencyFillMissing = (
-    curriculumSideResult: Array<{ subjectId: string; score?: ResolvedGraduationScore }>,
-    otherSideResult: Array<{
-      subjectId: string
-      score: ResolvedGraduationScore
-      subject: { name: string; code: string | null }
-    }>
-  ) => {
-    const replacementNote = `Đạt bằng môn tương đương: ${otherSideResult
-      .map((item) => `${item.subject.code ? `${item.subject.code} - ` : ""}${item.subject.name}`)
-      .join(", ")}`
-    const otherSideUsed = new Set<string>()
+  const getGroupSubjectScore = (subjectId: string) => {
+    const curriculumSubject = curriculumSubjectById.get(subjectId)
+    if (curriculumSubject) {
+      return (
+        finalScores.get(subjectId) ||
+        markDoneScores.get(subjectId) ||
+        findScoreForCurriculumSubject(curriculumSubject, subjectScoresMap, usedScoreIds)
+      )
+    }
+    const score = subjectScoresMap.get(subjectId)
+    if (!score || usedScoreIds.has(score.id)) return undefined
+    // điểm trùng mã với môn CTĐT thuộc về môn đó, không dùng để thay thế môn khác
+    if (findCurriculumSubjectByCode(score.subjectVersion.code)) return undefined
+    return score
+  }
 
-    for (const result of curriculumSideResult) {
-      if (result.score) {
-        assignScore(result.subjectId, result.score)
-        continue
-      }
-      processedSubjects.add(result.subjectId)
-      equivalencyNotes.set(result.subjectId, replacementNote)
+  const buildReplacementScore = (
+    target: GraduationCurriculumSubjectInput,
+    sources: ResolvedGraduationScore[]
+  ): ResolvedGraduationScore | null => {
+    const [first] = sources
+    if (!first) return null
+    // Không hỗ trợ thay thế bằng bản ghi miễn học (thực tế miễn học của môn ngoài CTĐT
+    // không vào subjectScoresMap) — chặn tường minh để không vô tình dùng điểm 0.
+    if (sources.some((item) => item.exempted)) return null
+
+    const subjectVersion = {
+      id: target.subjectId,
+      name: target.subject.name,
+      code: target.subject.code ?? null,
+      credit: target.subject.credit,
+      subjectId: target.subject.subjectId ?? first.subjectVersion.subjectId,
+    }
+    const sourceScoreIds = sources.map((item) => item.id)
+
+    const single = sources.length === 1
+    const totalCredit = sources.reduce((sum, item) => sum + item.subjectVersion.credit, 0)
+    const weightOf = (item: ResolvedGraduationScore) =>
+      totalCredit > 0 ? item.subjectVersion.credit : 1
+    const totalWeight = sources.reduce((sum, item) => sum + weightOf(item), 0)
+    const scoreBase10 = single
+      ? first.scoreBase10
+      : sources
+          .reduce((sum, item) => sum.add(item.scoreBase10.mul(weightOf(item))), new Decimal(0))
+          .div(totalWeight)
+          .toDecimalPlaces(2, Decimal.ROUND_HALF_UP)
+
+    const scoreConvert = scoreConverts.find(
+      (item) =>
+        new Decimal(item.base10Min).lte(scoreBase10) && new Decimal(item.base10Max).gte(scoreBase10)
+    )
+    const record = single ? first : { attendanceScore: null, midtermScore: null, examScore: null }
+    if (!isPassedByCourseRules(target, scoreBase10, record, trainingCourse, scoreConvert)) {
+      return null
     }
 
-    for (const result of otherSideResult) {
-      if (!curriculumVersionIds.has(result.subjectId)) continue
-      if (otherSideUsed.has(result.score.id)) continue
-      otherSideUsed.add(result.score.id)
-      assignScore(result.subjectId, result.score)
+    return {
+      id: first.id,
+      subjectVersionId: target.subjectId,
+      attendanceScore: record.attendanceScore,
+      midtermScore: record.midtermScore,
+      examScore: record.examScore,
+      scoreBase10,
+      scoreBase4: new Decimal(scoreConvert?.base4 || 0),
+      letter: scoreConvert?.letter ?? null,
+      canImprove: scoreConvert?.improvementRegister || false,
+      sourceScoreIds,
+      subjectVersion,
     }
   }
 
@@ -501,9 +570,9 @@ export function computeGraduationSubjectScores(input: {
       continue
     }
 
-    const equivGroups = equivalencyGroups
-      .filter(({ subjects }) => subjects.some(({ subjectId }) => subjectId === subject.subjectId))
-      .filter(({ id }) => !processedEquivalencyGroups.has(id))
+    const equivGroups = (groupsBySubjectId.get(subject.subjectId) ?? []).filter(
+      ({ id }) => !processedEquivalencyGroups.has(id)
+    )
 
     if (!subjectScore && !equivGroups.length) {
       if (subject.type === SubjectRequirementType.Mandatory) {
@@ -514,52 +583,77 @@ export function computeGraduationSubjectScores(input: {
 
     let hasEquivalencyGroup = false
     for (const equivGroup of equivGroups) {
-      processedEquivalencyGroups.add(equivGroup.id)
-
       const equivalencyGroupSubject = equivGroup.subjects.find(
         ({ subjectId }) => subject.subjectId === subjectId
       )
       if (!equivalencyGroupSubject) continue
 
       const side = equivalencyGroupSubject.side
-      const curriculumSide = equivGroup.subjects.filter((item) => item.side === side)
+      const curriculumSide = equivGroup.subjects.filter(
+        (item) => item.side === side && curriculumVersionIds.has(item.subjectId)
+      )
       const otherSide = equivGroup.subjects.filter((item) => item.side !== side)
+      if (!otherSide.length) continue
 
-      const curriculumSideResult = curriculumSide.map((item) => {
-        const curriculumSubject = curriculumSubjects.find(
-          (subject) => subject.subjectId === item.subjectId
-        )
-        return {
-          ...item,
-          score: curriculumSubject
-            ? findScoreForCurriculumSubject(curriculumSubject, subjectScoresMap, usedScoreIds)
-            : subjectScoresMap.get(item.subjectId),
-        }
-      })
-      const otherSideResult = otherSide
-        .map((item) => {
-          const curriculumSubject = curriculumSubjects.find(
-            (subject) => subject.subjectId === item.subjectId
-          )
-          return {
-            ...item,
-            score: curriculumSubject
-              ? findScoreForCurriculumSubject(curriculumSubject, subjectScoresMap, usedScoreIds)
-              : subjectScoresMap.get(item.subjectId),
-          }
-        })
-        .filter(
-          (item): item is typeof item & { score: ResolvedGraduationScore } => item.score != null
-        )
+      const otherSideResult = otherSide.map((item) => ({
+        ...item,
+        score: getGroupSubjectScore(item.subjectId),
+      }))
+      if (otherSideResult.some((item) => !item.score)) continue
 
-      if (otherSide.some((item) => !curriculumVersionIds.has(item.subjectId))) continue
-      if (otherSideResult.length < otherSide.length) continue
+      const curriculumSideResult = curriculumSide.map((item) => ({
+        ...item,
+        score: getGroupSubjectScore(item.subjectId),
+      }))
+      const missing = curriculumSideResult.filter((item) => !item.score)
+      if (!missing.length) continue
 
-      if (curriculumSideResult.some((item) => !item.score)) {
-        hasEquivalencyGroup = true
-        applyEquivalencyFillMissing(curriculumSideResult, otherSideResult)
-        break
+      const outsideScores = otherSideResult
+        .filter((item) => !curriculumVersionIds.has(item.subjectId))
+        .map((item) => item.score as ResolvedGraduationScore)
+      // Quy tắc thay điểm bằng môn ngoài CTĐT:
+      // - 1:1 và N:1 (thiếu đúng 1 môn CTĐT): môn đó lấy điểm môn ngoài CTĐT
+      //   (nhiều môn → TB có trọng số theo TC), tính theo TC của môn CTĐT.
+      // - 1:N / N:M (thiếu từ 2 môn CTĐT trở lên): không chia được điểm/tín chỉ một cách
+      //   rõ ràng → chỉ ghi nhận miễn (processedSubjects), không cộng TC, không vào GPA.
+      const replacements = new Map<string, ResolvedGraduationScore>()
+      const onlyMissing = missing.length === 1 ? missing[0] : undefined
+      if (outsideScores.length && onlyMissing) {
+        const target = curriculumSubjectById.get(onlyMissing.subjectId)
+        const replacement = target ? buildReplacementScore(target, outsideScores) : null
+        // điểm môn ngoài CTĐT không đạt theo quy tắc của môn CTĐT → không áp dụng nhóm
+        if (!replacement) continue
+        replacements.set(onlyMissing.subjectId, replacement)
       }
+
+      hasEquivalencyGroup = true
+      processedEquivalencyGroups.add(equivGroup.id)
+
+      const replacementNote = `Đạt bằng môn tương đương: ${otherSideResult
+        .map((item) => `${item.subject.code ? `${item.subject.code} - ` : ""}${item.subject.name}`)
+        .join(", ")}`
+
+      for (const item of curriculumSideResult) {
+        if (item.score) {
+          useScore(item.subjectId, item.score)
+          continue
+        }
+        equivalencyNotes.set(item.subjectId, replacementNote)
+        const replacement = replacements.get(item.subjectId)
+        if (replacement) {
+          equivalencyScores.set(item.subjectId, replacement)
+          assignScore(item.subjectId, replacement)
+        } else {
+          processedSubjects.add(item.subjectId)
+        }
+      }
+
+      for (const item of otherSideResult) {
+        const score = item.score as ResolvedGraduationScore
+        if (curriculumVersionIds.has(item.subjectId)) useScore(item.subjectId, score)
+        else usedScoreIds.add(score.id)
+      }
+      break
     }
 
     if (!hasEquivalencyGroup && subject.type === SubjectRequirementType.Mandatory) {
@@ -615,7 +709,7 @@ export function computeGraduationSubjectScores(input: {
       courseGradeLowest = score.scoreBase10.toNumber()
     }
 
-    const subjectInCurriculum = curriculumSubjects.find((item) => item.subjectId === subjectId)
+    const subjectInCurriculum = curriculumSubjectById.get(subjectId)
     if (subjectInCurriculum?.graduation && score.scoreBase10.lt(graduationCourseGradeLowest)) {
       graduationCourseGradeLowest = score.scoreBase10.toNumber()
     }
@@ -643,8 +737,18 @@ export function computeGraduationSubjectScores(input: {
     string,
     { name: string; examBannedReasons: string[]; suspendedReasons: string[] }
   >()
+  // môn CTĐT đã đạt / đạt bằng môn tương đương / đã được miễn bởi nhóm tương đương
+  const isCurriculumSubjectResolved = (subjectId: string) =>
+    finalScores.has(subjectId) || markDoneScores.has(subjectId) || processedSubjects.has(subjectId)
+
   for (const score of issueScores) {
     if (subjectScoresMap.has(score.subjectVersionId)) continue
+    const issueCurriculumSubject =
+      curriculumSubjectById.get(score.subjectVersionId) ||
+      findCurriculumSubjectByCode(score.subjectVersion.code)
+    if (issueCurriculumSubject && isCurriculumSubjectResolved(issueCurriculumSubject.subjectId)) {
+      continue
+    }
     const current = issueBySubject.get(score.subjectVersionId) ?? {
       name: score.subjectVersion.name,
       examBannedReasons: [],
@@ -657,7 +761,7 @@ export function computeGraduationSubjectScores(input: {
       current.suspendedReasons.push(score.suspendedReason)
     }
     issueBySubject.set(score.subjectVersionId, current)
-    if (!curriculumSubjects.some((item) => item.subjectId === score.subjectVersionId)) {
+    if (!curriculumVersionIds.has(score.subjectVersionId)) {
       debtSubjectIds.add(score.subjectVersionId)
     }
   }
@@ -674,7 +778,7 @@ export function computeGraduationSubjectScores(input: {
 
   let totalDebtCredit = 0
   for (const subjectId of debtSubjectIds) {
-    const curriculumSubject = curriculumSubjects.find((item) => item.subjectId === subjectId)
+    const curriculumSubject = curriculumSubjectById.get(subjectId)
     const score = subjectScoresMap.get(subjectId)
     totalDebtCredit += curriculumSubject?.subject.credit || score?.subjectVersion.credit || 0
   }
@@ -796,6 +900,8 @@ function toTranscriptSubject(input: {
   type: SubjectRequirementType | null
   score?: ResolvedGraduationScore | null
   usedForGpa: boolean
+  /** đã đạt (kể cả đạt bằng môn tương đương / được miễn bởi nhóm tương đương) */
+  passed: boolean
   equivalentNote?: string | null
 }): GraduationTranscriptSubject {
   return {
@@ -811,7 +917,7 @@ function toTranscriptSubject(input: {
     finalScore: input.score && !input.score.exempted ? input.score.scoreBase10.toNumber() : null,
     scoreBase4: input.score && !input.score.exempted ? input.score.scoreBase4.toNumber() : null,
     letter: input.score?.letter ?? null,
-    passed: !!input.score,
+    passed: input.passed,
     exempted: !!input.score?.exempted,
     usedForGpa: input.usedForGpa,
     equivalentNote: input.equivalentNote ?? null,
@@ -874,8 +980,15 @@ export async function buildGraduationTranscript(
   })
 
   const usedScoreIds = new Set(
-    [...resolved.finalScores.values(), ...resolved.markDoneScores.values()].map((item) => item.id)
+    [...resolved.finalScores.values(), ...resolved.markDoneScores.values()].flatMap((item) => [
+      item.id,
+      ...(item.sourceScoreIds ?? []),
+    ])
   )
+  const isResolved = (subjectId: string) =>
+    resolved.finalScores.has(subjectId) ||
+    resolved.markDoneScores.has(subjectId) ||
+    resolved.processedSubjects.has(subjectId)
 
   const curriculumBlocks: GraduationTranscriptBlock[] = curriculumVersion.trainingBlocks.map(
     (block) => ({
@@ -886,6 +999,7 @@ export async function buildGraduationTranscript(
         .filter((subject) => subject.useForFinalScore !== false)
         .map((subject) => {
           const score =
+            resolved.equivalencyScores.get(subject.subjectId) ||
             resolved.curriculumDisplayScores.get(subject.subjectId) ||
             resolved.finalScores.get(subject.subjectId) ||
             resolved.subjectScoresMap.get(subject.subjectId)
@@ -898,6 +1012,7 @@ export async function buildGraduationTranscript(
             type: subject.type,
             score,
             usedForGpa: resolved.finalScores.has(subject.subjectId),
+            passed: isResolved(subject.subjectId),
             equivalentNote: resolved.equivalencyNotes.get(subject.subjectId) ?? null,
           })
         }),
@@ -909,6 +1024,7 @@ export async function buildGraduationTranscript(
     .map((subject) => {
       const doneScore = resolved.markDoneScores.get(subject.subjectId)
       const score =
+        resolved.equivalencyScores.get(subject.subjectId) ||
         (doneScore?.exempted ? doneScore : undefined) ||
         resolved.curriculumDisplayScores.get(subject.subjectId) ||
         doneScore ||
@@ -922,14 +1038,16 @@ export async function buildGraduationTranscript(
         type: subject.type,
         score,
         usedForGpa: false,
+        passed: isResolved(subject.subjectId),
         equivalentNote: resolved.equivalencyNotes.get(subject.subjectId) ?? null,
       })
     })
 
   const curriculumSubjectIds = new Set(curriculumSubjects.map((subject) => subject.subjectId))
-  const extraCurriculumSubjects = [...resolved.displayScoresMap.values()].filter(
-    (score) => !curriculumSubjectIds.has(score.subjectVersionId) && !usedScoreIds.has(score.id)
-  )
+  const extraCurriculumSubjects = [...resolved.displayScoresMap.values()]
+    .filter(
+      (score) => !curriculumSubjectIds.has(score.subjectVersionId) && !usedScoreIds.has(score.id)
+    )
     .map((score) =>
       toTranscriptSubject({
         id: score.id,
@@ -940,6 +1058,7 @@ export async function buildGraduationTranscript(
         type: null,
         score,
         usedForGpa: usedScoreIds.has(score.id),
+        passed: resolved.subjectScoresMap.has(score.subjectVersionId),
       })
     )
 
@@ -959,7 +1078,7 @@ export async function buildGraduationTranscript(
   return {
     data: {
       studentId: student.id,
-      fullname: student.userProfile.fullname,
+      fullname: student.userProfile.fullname ?? "",
       studentCode: student.userProfile.code,
       curriculumVersionName: curriculumVersion.name,
       gpaBase10,

@@ -25,6 +25,7 @@ import {
   graduationCurriculumSelect,
   loadGraduationScoreSources,
   sumRequiredCredits,
+  type ResolvedGraduationScore,
 } from "./graduation-scores"
 
 /**
@@ -309,9 +310,7 @@ export async function runGraduationCheck(input: {
     }
 
     const curriculumVersion =
-      (student.curriculumVersionId
-        ? curriculumMap.get(student.curriculumVersionId)
-        : undefined) ||
+      (student.curriculumVersionId ? curriculumMap.get(student.curriculumVersionId) : undefined) ||
       (fixedClass.curriculumVersionId
         ? curriculumMap.get(fixedClass.curriculumVersionId)
         : undefined)
@@ -399,8 +398,14 @@ export async function runGraduationCheck(input: {
 
     reasons.push(...issueReasons, ...subjectReasons)
 
-    const gpaScoreIds = Array.from(finalScores.values()).map((score) => score.id)
-    const supplementaryScoreIds = Array.from(markDoneScores.values()).map((score) => score.id)
+    // điểm thay thế theo môn tương đương: liên kết mọi bản ghi điểm gốc, bỏ trùng
+    const toScoreIds = (scores: Iterable<ResolvedGraduationScore>) => [
+      ...new Set(
+        Array.from(scores).flatMap((score) => [score.id, ...(score.sourceScoreIds ?? [])])
+      ),
+    ]
+    const gpaScoreIds = toScoreIds(finalScores.values())
+    const supplementaryScoreIds = toScoreIds(markDoneScores.values())
 
     const requiredCredits = sumRequiredCredits(curriculumSubjects, electiveCreditsRequired)
     if (requiredCredits > 0 && totalPassCredit < requiredCredits) {
