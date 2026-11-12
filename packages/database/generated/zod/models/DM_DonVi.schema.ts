@@ -24,7 +24,6 @@ const baseSchema = z.object({
     sCode: z.string().nullish(),
     sTKBUCode: z.string().nullish(),
     sTenVietTat: z.string().nullish(),
-    sParentId: z.string().uuid().nullish(),
     sTruongDonVi: z.string().uuid().nullish(),
     sChucNangNhiemVu: z.string().nullish(),
     sDiaChi: z.string().nullish(),
@@ -52,7 +51,6 @@ const baseSchemaWithoutDefaults = z.object({
     sCode: z.string().nullish(),
     sTKBUCode: z.string().nullish(),
     sTenVietTat: z.string().nullish(),
-    sParentId: z.string().uuid().nullish(),
     sTruongDonVi: z.string().uuid().nullish(),
     sChucNangNhiemVu: z.string().nullish(),
     sDiaChi: z.string().nullish(),
@@ -62,6 +60,8 @@ const baseSchemaWithoutDefaults = z.object({
 }
 ).strict();
 const relationSchema = z.object({
+    parent: z.record(z.string(), z.unknown()).optional(),
+    children: z.array(z.unknown()).optional(),
     lecturerHistory: z.array(z.unknown()).optional(),
     staffs: z.array(z.unknown()).optional(),
     staffHistory: z.array(z.unknown()).optional(),
@@ -80,6 +80,10 @@ const relationSchema = z.object({
     guestTeachingPayments: z.array(z.unknown()).optional(),
 }
 );
+const fkSchema = z.object({
+    sParentId: z.string().uuid().nullish(),
+}
+);
 
 /**
  * `DM_DonVi` schema excluding foreign keys and relations.
@@ -90,7 +94,7 @@ export const DM_DonViScalarSchema = baseSchema;
 /**
  * `DM_DonVi` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const DM_DonViSchema = DM_DonViScalarSchema.merge(relationSchema.partial());
+export const DM_DonViSchema = DM_DonViScalarSchema.merge(fkSchema).merge(relationSchema.partial());
 
 
 /**
@@ -123,7 +127,6 @@ export const DM_DonViPrismaUpdateSchema = z.object({
     sCode: z.string().nullish(),
     sTKBUCode: z.string().nullish(),
     sTenVietTat: z.string().nullish(),
-    sParentId: z.string().uuid().nullish(),
     sTruongDonVi: z.string().uuid().nullish(),
     sChucNangNhiemVu: z.string().nullish(),
     sDiaChi: z.string().nullish(),
@@ -144,9 +147,7 @@ export const DM_DonViCreateScalarSchema = baseSchemaWithoutDefaults.partial({
 /**
  * `DM_DonVi` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const DM_DonViCreateSchema = baseSchemaWithoutDefaults.partial({
-    Id: true, iSTT: true, bActive: true, bDeleted: true, bSystem: true, iDictionaryKey: true
-});
+export const DM_DonViCreateSchema = DM_DonViCreateScalarSchema.merge(fkSchema);
 
 
 /**
@@ -158,5 +159,5 @@ export const DM_DonViUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 /**
  * `DM_DonVi` schema for update operations including scalar fields, foreign key fields, and validations.
  */
-export const DM_DonViUpdateSchema = DM_DonViUpdateScalarSchema;
+export const DM_DonViUpdateSchema = DM_DonViUpdateScalarSchema.merge(fkSchema.partial());
 

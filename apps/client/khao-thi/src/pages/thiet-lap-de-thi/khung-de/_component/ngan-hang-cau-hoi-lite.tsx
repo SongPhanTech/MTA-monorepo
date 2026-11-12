@@ -29,6 +29,34 @@ const matchesConfigExam = (
   (config.type == null || q.type === config.type) &&
   q.point === config.point
 
+/**
+ * Mô phỏng thứ tự bốc câu của backend khi sinh đề (be-khao-thi: compareConfigExamByType):
+ * dòng có loại câu hỏi cụ thể được phân bổ trước, dòng "Tất cả" sau, và mỗi câu chỉ
+ * được dùng cho 1 dòng. Trả về số câu còn thiếu của từng dòng cấu hình (theo id).
+ * Nhờ vậy các dòng có tập câu giao nhau (vd. "Tất cả" + Trắc nghiệm cùng điểm)
+ * không bị đếm trùng 1 câu cho nhiều dòng.
+ */
+const allocateConfigExams = (
+  qs: { id: string; difficult: string | null; type: string | null; point: number }[],
+  configs: ConfigExam[]
+) => {
+  const usedIds = new Set<string>()
+  const missingById = new Map<string, number>()
+
+  const sorted = configs
+    .filter((c) => c.quantity > 0)
+    .sort((a, b) => Number(a.type == null) - Number(b.type == null))
+
+  for (const config of sorted) {
+    const available = qs.filter((q) => !usedIds.has(q.id) && matchesConfigExam(q, config))
+    const taken = available.slice(0, config.quantity)
+    taken.forEach((q) => usedIds.add(q.id))
+    missingById.set(config.id, config.quantity - taken.length)
+  }
+
+  return missingById
+}
+
 const formatMissingQuestionTypes = (labels: string[]) =>
   labels.length === QUESTION_TYPE_OPTIONS.length ? "Tất cả" : labels.join(", ")
 
@@ -130,21 +158,29 @@ export default function QuestionBankLite({
           current: number
           required: number
           missing: number
-          point: number
+          details: string[]
         }
       > = {}
 
-      LEVEL_COLORS.forEach((l) => {
-        const config = kb.configExams?.find((c) => c.difficult === l.key)
-        const required = config?.quantity ?? 0
-        const current = config ? qs.filter((q) => matchesConfigExam(q, config)).length : 0
+      const missingById = allocateConfigExams(qs, kb.configExams ?? [])
 
-        stats[l.key] = {
-          current,
-          required,
-          missing: Math.max(required - current, 0),
-          point: config?.point ?? 0,
-        }
+      LEVEL_COLORS.forEach((l) => {
+        const configs = (kb.configExams ?? []).filter(
+          (c) => c.difficult === l.key && c.quantity > 0
+        )
+        const required = configs.reduce((sum, c) => sum + c.quantity, 0)
+        // Câu hiện có: câu khớp ít nhất 1 dòng cấu hình của mức này
+        const current = qs.filter((q) => configs.some((c) => matchesConfigExam(q, c))).length
+        // Số thiếu theo phân bổ giống backend (không đếm 1 câu cho nhiều dòng)
+        const missing = configs.reduce((sum, c) => sum + (missingById.get(c.id) ?? 0), 0)
+        const details = configs.map((c) => {
+          const typeLabel = c.type
+            ? (QUESTION_TYPE_LABELS[c.type as keyof typeof QUESTION_TYPE_LABELS] ?? c.type)
+            : "Tất cả"
+          return `${c.quantity} câu ${typeLabel}, ${c.point} điểm/câu`
+        })
+
+        stats[l.key] = { current, required, missing, details }
       })
 
       return {
@@ -174,12 +210,12 @@ export default function QuestionBankLite({
     for (const kb of knowledgeBlocks) {
       const qs = allQuestionsForStats.filter((q) => q.knowledgeBlockId === kb.id)
       const items: (typeof groups)[number]["items"] = []
+      const missingById = allocateConfigExams(qs, kb.configExams ?? [])
 
       for (const config of kb.configExams ?? []) {
         if (!config.quantity) continue
 
-        const current = qs.filter((q) => matchesConfigExam(q, config)).length
-        const missing = config.quantity - current
+        const missing = missingById.get(config.id) ?? 0
         if (missing <= 0) continue
 
         const levelLabel =
@@ -198,7 +234,7 @@ export default function QuestionBankLite({
             ).map(({ label }) => label)
 
         items.push({
-          key: `${kb.id}-${config.difficult}-${config.type ?? "all"}-${config.point}`,
+          key: config.id,
           levelLabel,
           typeLabel,
           point: config.point,
@@ -317,13 +353,18 @@ export default function QuestionBankLite({
                   current: number
                   required: number
                   missing: number
-                  point: number
+                  details: string[]
                 }) => (
                   <Tooltip
                     title={
-                      v.required > 0
-                        ? `Cần ${v.required} câu đúng mức độ và ${v.point} điểm/câu`
-                        : undefined
+                      v.required > 0 ? (
+                        <div>
+                          <div>Cần:</div>
+                          {v.details.map((d) => (
+                            <div key={d}>- {d}</div>
+                          ))}
+                        </div>
+                      ) : undefined
                     }
                   >
                     <div className="flex items-center justify-center gap-1">

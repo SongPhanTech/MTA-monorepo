@@ -138,7 +138,8 @@ const ExportStudentToanDot = ({
       },
     ]
     const res = obligationData ? null : await sqlTransaction(listSqlTransaction)
-    const data: any[] = obligationData || (res?.status === 200 ? res?.data?.[0] : [])
+    const subjectClasses = res?.status === 200 ? res.data?.[0] : undefined
+    const data: any[] = obligationData ?? (Array.isArray(subjectClasses) ? subjectClasses : [])
 
     if (data.length > 0) {
       const workbook = new ExcelJS.Workbook()

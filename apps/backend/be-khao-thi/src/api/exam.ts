@@ -10,6 +10,7 @@ import { getRandomQuestionIDs } from "@workspace/db/sql"
 import { questionTypeLabels } from "@workspace/libs/constants"
 import { prisma } from ".."
 import { models } from "@workspace/db/zod"
+import { compareConfigExamByType } from "../utils/config-exam"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -391,12 +392,15 @@ app.openapi(sinhdethuCong, async (c) => {
   }
 
   let questions: any = []
+  // Một mức độ có thể có nhiều dòng cấu hình → tránh bốc trùng câu trong cùng 1 đề
+  const pickedIds = new Set<string>()
 
   for (const knowledgeBlock of matrixData) {
     if (knowledgeBlock.configExams.length) {
-      for (const configExam of knowledgeBlock.configExams) {
+      for (const configExam of [...knowledgeBlock.configExams].sort(compareConfigExamByType)) {
         const listRamdom = knowledgeBlock.questions.filter(
           (i: any) =>
+            !pickedIds.has(i.id) &&
             i?.difficult === configExam.difficult &&
             (configExam.type == null || i?.type === configExam.type) &&
             i?.point === configExam.point
@@ -407,6 +411,7 @@ app.openapi(sinhdethuCong, async (c) => {
         }
 
         const selected = getRandomItems(listRamdom, configExam.quantity)
+        selected.forEach((q: any) => pickedIds.add(q.id))
         questions = [...questions, ...selected]
       }
     }

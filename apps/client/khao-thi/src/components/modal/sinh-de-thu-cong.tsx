@@ -483,7 +483,7 @@ const SinhDeThuCongModal = () => {
         questions: initialItems.map((i) => i?.value),
         subjectVersionId: input?.subjectVersionId,
         subjectClassId: data?.subjectClassId || null,
-        isGroup: data?.isGroup || true,
+        isGroup: data?.isGroup ?? true,
         isNote: data?.isNote || false,
       })
     }

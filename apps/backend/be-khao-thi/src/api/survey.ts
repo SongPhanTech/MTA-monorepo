@@ -41,6 +41,7 @@ import {
 // import { Hono } from "hono"
 import { HTTPException } from "hono/http-exception"
 import { jwtAuth } from "@workspace/auth/hono"
+import { compareConfigExamByType } from "../utils/config-exam"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -1753,12 +1754,15 @@ app.openapi(sinhdetudong, async (c) => {
 
     for (let t = 0; t < body?.quantity; t++) {
       let questions: any = []
+      // Một mức độ có thể có nhiều dòng cấu hình → tránh bốc trùng câu trong cùng 1 đề
+      const pickedInExam = new Set<string>()
 
       for (const knowledgeBlock of matrixData) {
         if (knowledgeBlock.configExams.length) {
-          for (const configExam of knowledgeBlock.configExams) {
+          for (const configExam of [...knowledgeBlock.configExams].sort(compareConfigExamByType)) {
             const pool = knowledgeBlock.questions.filter(
               (i: any) =>
+                !pickedInExam.has(i.id) &&
                 i?.difficult === configExam.difficult &&
                 (configExam.type == null || i?.type === configExam.type) &&
                 i?.point === configExam.point
@@ -1787,6 +1791,7 @@ app.openapi(sinhdetudong, async (c) => {
             }
 
             selected.forEach((q: any) => {
+              pickedInExam.add(q.id)
               usedQuestionIds.add(q.id)
               q.subQuestions?.forEach((sub: any) => usedQuestionIds.add(sub.id))
             })
