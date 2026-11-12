@@ -210,7 +210,7 @@ const ExportStudentToanDot = ({
             headerRowValue.values = [
               index + 1,
               i?.student?.userProfile?.code || "",
-              `${i?.student?.userProfile?.lastName || ""} ${i?.student?.userProfile?.firstName || ""}`,
+              i?.student?.userProfile?.fullname || "",
               i?.student?.userProfile?.dateOfBirth
                 ? formatDateInSlash(i?.student?.userProfile?.dateOfBirth)
                 : "",

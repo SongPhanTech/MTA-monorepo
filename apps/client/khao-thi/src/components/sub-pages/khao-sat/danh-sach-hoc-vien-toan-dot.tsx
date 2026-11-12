@@ -249,7 +249,7 @@ function DanhSachHocVienToanDot({ selectedId }: { selectedId: string }) {
                     dataIndex: "name",
                     type: "input",
                     render: (_, record) => {
-                      return `${record?.student?.userProfile?.lastName || ""} ${record?.student?.userProfile?.firstName || ""}`
+                      return record?.student?.userProfile?.fullname || ""
                     },
                   },
                   {
@@ -359,7 +359,7 @@ function DanhSachHocVienToanDot({ selectedId }: { selectedId: string }) {
                                     onOpen({
                                       userId: record?.student?.userProfile?.id || "",
                                       surveyId: result?.surveyId || "",
-                                      userName: `${record?.student?.userProfile?.lastName || ""} ${record?.student?.userProfile?.firstName || ""}`,
+                                      userName: record?.student?.userProfile?.fullname || "",
                                     })
                                   }
                                 }}
