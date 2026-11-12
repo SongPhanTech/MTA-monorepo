@@ -3,18 +3,14 @@ import type { FilterProps } from "@components/commons/typeFilter"
 import ExportStudentInSurvey from "@components/modal/export-list-student-in-survey"
 import useSpinner from "@hooks/spinner"
 import type { LectuerType } from "@pages/thiet-lap-khao-sat/khao-sat-cum"
-import { useSession } from "@workspace/auth/react"
-import {
-  useFindManyFixedClass,
-  useFindManySubjectClass,
-  useFindManyTrainingCourse,
-} from "@workspace/db/hooks"
+import { useFindManyFixedClass, useFindManyTrainingCourse } from "@workspace/db/hooks"
+import { customExamFetch } from "@workspace/libs/api/custom-instance"
 import { useAbility } from "@workspace/permissions/hooks"
 import { KHAO_THI_PERMISSION } from "@workspace/router"
-import { Col, Flex, Row, Skeleton, Tag, Tooltip } from "antd"
+import { useQuery } from "@tanstack/react-query"
+import { Alert, Col, Flex, Row, Skeleton, Tag, Tooltip } from "antd"
 import dayjs from "dayjs"
 import { Eye } from "lucide-react"
-import { useRouter } from "next/router"
 import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
@@ -25,9 +21,7 @@ function DanhSachHocVien({
   lecturer: LectuerType | null
   selectedId: string
 }) {
-  const { can, canSome } = useAbility()
-  const { data: session } = useSession()
-  const profileId = session?.sDM_NhanVienId || ""
+  const { can } = useAbility()
   const [filters, setFilters] = useState<FilterProps>({
     name: "",
     code: "",
@@ -39,231 +33,49 @@ function DanhSachHocVien({
     organization: undefined,
     dateOfBirth: undefined,
   })
-  const router = useRouter()
   const { data: fixedClasses = [] } = useFindManyFixedClass({
     orderBy: { name: "asc" },
   })
-  const { data: trainingCourses = [], isLoading: trainingCoursesLoading } =
-    useFindManyTrainingCourse({
-      orderBy: {
-        semesterStart: {
-          startDate: "desc",
-        },
-      },
-    })
-
-  const where = useMemo(() => {
-    return {
-      id: {
-        in: lecturer?.survey?.map((item) => item.subjectClassId) as string[],
-      },
-
-      // ...(filters.statusSurvey &&
-      //     filters.statusSurvey?.length === 1 &&
-      //     filters.statusSurvey[0] === false && {
-      //         surveySession: {
-      //             none: {
-      //                 surveyId: survey?.id,
-      //             },
-      //         },
-      //     }),
-
-      // ...(filters.name && {
-      //     subjectClassStudent: {
-      //         some: {
-      //             student: {
-      //                 userProfile: {
-      //                     fullname: {
-      //                                 contains: filters.name,
-      //                                 mode: 'insensitive' as const,
-      //                             }
-      //                 },
-      //             },
-      //         },
-      //     },
-      // }),
-      // ...(filters.code && {
-      //     subjectClassStudent: {
-      //         some: {
-      //             student: {
-      //                 code: {
-      //                     contains: filters.code,
-      //                     mode: 'insensitive' as const,
-      //                 },
-      //             },
-      //         },
-      //     },
-      // }),
-      // ...(filters.idCardNumber && {
-      //     idCardNumber: {
-      //         contains: filters.idCardNumber,
-      //         mode: 'insensitive' as const,
-      //     },
-      // }),
-      // ...(filters.phoneNumber && {
-      //     phoneNumber: {
-      //         contains: filters.phoneNumber,
-      //         mode: 'insensitive' as const,
-      //     },
-      // }),
-    }
-  }, [lecturer, filters])
-  const { data, isLoading } = useFindManySubjectClass(
-    {
-      where,
-      include: {
-        mainLecturer: {
-          include: {
-            userProfile: true,
-          },
-        },
-        subjectClassStudent: {
-          where: {
-            deletedAt: null,
-            withdrew: false,
-            student: {
-              ...(filters.name ||
-              filters.code ||
-              filters.idCardNumber ||
-              filters.phoneNumber ||
-              filters.dateOfBirth?.length === 2 ||
-              (filters.statusSurvey && filters.statusSurvey.length === 1)
-                ? {
-                    userProfile: {
-                      ...(filters.name
-                        ? {
-                            fullname: {
-                              contains: filters.name,
-                              mode: "insensitive" as const,
-                            },
-                          }
-                        : {}),
-                      ...(filters.code
-                        ? {
-                            code: {
-                              contains: filters.code,
-                              mode: "insensitive" as const,
-                            },
-                          }
-                        : {}),
-                      ...(filters.idCardNumber
-                        ? {
-                            idCardNumber: {
-                              contains: filters.idCardNumber,
-                              mode: "insensitive" as const,
-                            },
-                          }
-                        : {}),
-                      ...(filters.phoneNumber
-                        ? {
-                            phoneNumber: {
-                              contains: filters.phoneNumber,
-                              mode: "insensitive" as const,
-                            },
-                          }
-                        : {}),
-                      ...(filters.dateOfBirth?.length === 2
-                        ? {
-                            dateOfBirth: {
-                              gte: dayjs(filters.dateOfBirth?.[0], "DD/MM/YYYY").toDate(),
-                              lte: dayjs(filters.dateOfBirth?.[1], "DD/MM/YYYY").toDate(),
-                            },
-                          }
-                        : {}),
-                      ...(filters.statusSurvey && filters.statusSurvey.length === 1
-                        ? {
-                            surveySession:
-                              filters.statusSurvey[0] === true
-                                ? {
-                                    some: {
-                                      survey: {
-                                        lectureId: lecturer?.id,
-                                        clusterSurveyId: selectedId,
-                                      },
-                                    },
-                                  }
-                                : {
-                                    none: {
-                                      survey: {
-                                        lectureId: lecturer?.id,
-                                        clusterSurveyId: selectedId,
-                                      },
-                                    },
-                                  },
-                          }
-                        : {}),
-                    },
-                  }
-                : {}),
-              ...(filters.fixedClassIds && {
-                fixedClassId: {
-                  in: filters.fixedClassIds,
-                },
-              }),
-              ...(filters.trainingCourseIds && {
-                fixedClass: {
-                  trainingCourseId: {
-                    in: filters.trainingCourseIds,
-                  },
-                },
-              }),
-            },
-          },
-          include: {
-            student: {
-              include: {
-                userProfile: {
-                  include: {
-                    surveySession: {
-                      where: {
-                        survey: {
-                          lectureId: lecturer?.id,
-                          clusterSurveyId: selectedId,
-                        },
-                      },
-                      include: {
-                        survey: true,
-                      },
-                    },
-                  },
-                },
-                fixedClass: {
-                  include: {
-                    trainingCourse: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-      orderBy: {
-        name: "asc",
+  const { data: trainingCourses = [] } = useFindManyTrainingCourse({
+    orderBy: {
+      semesterStart: {
+        startDate: "desc",
       },
     },
-    {
-      enabled: lecturer?.survey && lecturer?.survey?.length > 0,
-    }
+  })
+
+  // Dùng chung API với tab "toàn đợt" để số liệu hai tab luôn thống nhất:
+  // chỉ tính HV thuộc đối tượng khảo sát, đang học, mỗi lượt = surveyId + studentId.
+  const lecturerId = lecturer?.id
+  const { data: obligationResult, isLoading, isError, error } = useQuery({
+    queryKey: ["cluster-survey-participant-obligations", selectedId, lecturerId],
+    queryFn: async () => {
+      const response = await customExamFetch<any>(
+        `/api/cluster-survey/${selectedId}/participant-obligations?lecturerId=${encodeURIComponent(lecturerId || "")}`,
+        { method: "GET" }
+      )
+      if (response?.status !== 200) {
+        throw new Error(response?.data?.message || "Không tải được danh sách người làm khảo sát")
+      }
+      return response.data
+    },
+    enabled: !!selectedId && !!lecturerId,
+  })
+
+  const data = useMemo(
+    () =>
+      (obligationResult?.data || []).map((item: any) => ({
+        ...item,
+        subjectClassStudent: item.obligations,
+      })),
+    [obligationResult]
   )
 
   const checkStatus = (record: any) => {
-    const surveyIds = new Set(
-      (lecturer?.survey || [])
-        .filter((survey) => survey.subjectClassId === record?.subjectClassId)
-        .map((survey) => survey.id)
-    )
-    if (record?.student?.userProfile?.surveySession?.length > 0) {
-      const result = record?.student?.userProfile?.surveySession?.find(
-        (item: any) => item?.isCompleted && surveyIds.has(item?.surveyId)
-      )
-      if (result) {
-        return result
-      }
-    }
-    return null
+    return record?.completed ? { surveyId: record.surveyId, id: record.surveySessionId } : null
   }
 
-  const { showSpinner, hideSpinner } = useSpinner()
+  useSpinner()
 
   const { onOpen } = useDisclosure<{ userId: string; surveyId: string; userName?: string }>({
     tag: "ReviewSurveyModal",
@@ -283,8 +95,37 @@ function DanhSachHocVien({
   const displayData = useMemo(() => {
     if (!data) return []
     if (!isFiltering) return data
-    return data.filter((item: any) => (item.subjectClassStudent || []).length > 0)
-  }, [data, isFiltering])
+
+    const contains = (value: unknown, filter?: string) =>
+      !filter ||
+      String(value || "")
+        .toLowerCase()
+        .includes(filter.toLowerCase())
+    return data
+      .map((item: any) => ({
+        ...item,
+        subjectClassStudent: (item.subjectClassStudent || []).filter((record: any) => {
+          const profile = record.student?.userProfile || {}
+          const fixedClass = record.student?.fixedClass
+          const dateOfBirth = profile.dateOfBirth ? dayjs(profile.dateOfBirth) : null
+          return (
+            contains(profile.fullname, filters.name) &&
+            contains(profile.code, filters.code) &&
+            contains(profile.idCardNumber, filters.idCardNumber) &&
+            contains(profile.phoneNumber, filters.phoneNumber) &&
+            (!filters.fixedClassIds?.length || filters.fixedClassIds.includes(fixedClass?.id)) &&
+            (!filters.trainingCourseIds?.length ||
+              filters.trainingCourseIds.includes(fixedClass?.trainingCourseId)) &&
+            (!filters.statusSurvey?.length || record.completed === filters.statusSurvey[0]) &&
+            (!filters.dateOfBirth?.length ||
+              (dateOfBirth &&
+                !dateOfBirth.isBefore(dayjs(filters.dateOfBirth[0], "DD/MM/YYYY"), "day") &&
+                !dateOfBirth.isAfter(dayjs(filters.dateOfBirth[1], "DD/MM/YYYY"), "day")))
+          )
+        }),
+      }))
+      .filter((item: any) => item.subjectClassStudent.length > 0)
+  }, [data, filters, isFiltering])
 
   const { totalClasses, totalSurveys, doneSurveys, uniqueStudentsCount } = useMemo(() => {
     const list = displayData || []
@@ -327,12 +168,17 @@ function DanhSachHocVien({
                 </div>
 
                 <ExportStudentInSurvey
-                  query={where}
+                  data={displayData}
                   lecturer={lecturer || null}
                   selectedId={selectedId}
                 />
               </Flex>
             </Col>
+            {isError && (
+              <Col span={24}>
+                <Alert type="error" showIcon message={(error as Error)?.message} />
+              </Col>
+            )}
             <Col span={24}>
               <TableCollapse
                 childrenFieldName="subjectClassStudent"

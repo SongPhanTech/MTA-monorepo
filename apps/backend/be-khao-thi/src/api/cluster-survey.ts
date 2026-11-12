@@ -1235,7 +1235,13 @@ const getClusterSurveyParticipantObligations = createRoute({
   method: "get",
   tags: ["Cụm khảo sát"],
   summary: "Danh sách lượt khảo sát phải thực hiện của toàn đợt",
-  request: { params: z.object({ id: z.string() }) },
+  request: {
+    params: z.object({ id: z.string() }),
+    query: z.object({
+      /** Chỉ lấy lượt khảo sát của một giảng viên (tab "theo giảng viên"). */
+      lecturerId: z.string().optional(),
+    }),
+  },
   responses: {
     ...standardErrorResponses(),
     200: {
@@ -1259,13 +1265,19 @@ const getClusterSurveyParticipantObligations = createRoute({
 
 app.openapi(getClusterSurveyParticipantObligations, async (c) => {
   const { id } = c.req.valid("param")
+  const { lecturerId } = c.req.valid("query")
 
   const cluster = await prisma.clusterSurvey.findFirst({
     where: { id, deletedAt: null },
     include: {
       surveyObjectType: { include: SURVEY_OBJECT_TYPE_INCLUDE },
       surveys: {
-        where: { deletedAt: null, active: true, subjectClassId: { not: null } },
+        where: {
+          deletedAt: null,
+          active: true,
+          subjectClassId: { not: null },
+          ...(lecturerId ? { lectureId: lecturerId } : {}),
+        },
         orderBy: { subjectClass: { code: "asc" } },
         include: {
           subjectClass: {
@@ -1273,23 +1285,39 @@ app.openapi(getClusterSurveyParticipantObligations, async (c) => {
               mainLecturer: {
                 select: {
                   id: true,
-                  code: true,
                   userProfile: {
                     select: { fullname: true, code: true, donVi: { select: { sMa: true } } },
                   },
                 },
               },
+              // Chỉ tính HV đang học, đồng bộ với cột "Số SV đã ĐK" bên phân hệ Đào tạo.
               subjectClassStudent: {
-                where: { deletedAt: null, withdrew: false },
+                where: {
+                  deletedAt: null,
+                  withdrew: false,
+                  student: { deletedAt: null, active: true, status: "ENROLLED" },
+                },
                 include: {
                   student: {
                     include: {
                       fixedClass: { include: { trainingCourse: true } },
+                      // Phiên khảo sát có thể chỉ gắn studentId (không có profileId).
+                      surveySessions: {
+                        where: { survey: { clusterSurveyId: id, deletedAt: null } },
+                        select: {
+                          surveyId: true,
+                          isCompleted: true,
+                          completedAt: true,
+                          id: true,
+                        },
+                      },
                       userProfile: {
                         select: {
                           id: true,
                           code: true,
                           fullname: true,
+                          firstName: true,
+                          lastName: true,
                           dateOfBirth: true,
                           idCardNumber: true,
                           phoneNumber: true,
@@ -1369,7 +1397,10 @@ app.openapi(getClusterSurveyParticipantObligations, async (c) => {
       if (!student || !profile) return []
       if (hasConfiguredAudience && !eligibleProfileIds.has(profile.id)) return []
       const { surveySession, ...publicProfile } = profile
-      const session = surveySession.find((item) => item.surveyId === survey.id)
+      const sessions = [...student.surveySessions, ...surveySession].filter(
+        (item) => item.surveyId === survey.id
+      )
+      const session = sessions.find((item) => item.isCompleted) ?? sessions[0]
       return [
         {
           id: `${survey.id}:${student.id}`,

@@ -79,26 +79,15 @@ function SelectLecturer({
   const courseCondition = useMemo(() => {
     const conditions: any[] = []
     if (trainingCourseIds && trainingCourseIds.length > 0) {
+      // Đồng bộ với phân hệ Đào tạo (Thời khoá biểu / Đăng ký học cho lớp QL):
+      // lớp môn học của khóa là lớp được ghép với lớp quản lý thuộc khóa đó.
+      // Không lấy lớp của khóa khác chỉ vì có vài HV học ghép, tránh hiển thị
+      // giảng viên chỉ dạy khóa khác.
       conditions.push({
-        OR: [
-          // Một số lớp HP được gắn trực tiếp với lớp quản lý.
-          {
-            fixedClasses: {
-              some: { trainingCourseId: { in: trainingCourseIds } },
-            },
-          },
-          // Một số dữ liệu cũ chỉ thể hiện khóa qua đăng ký học. Phải lấy cả
-          // hai nguồn để không bỏ sót lớp có HV của khóa được khảo sát.
-          {
-            subjectClassStudent: {
-              some: {
-                deletedAt: null,
-                withdrew: false,
-                student: { fixedClass: { trainingCourseId: { in: trainingCourseIds } } },
-              },
-            },
-          },
-        ],
+        type: "NORMAL",
+        fixedClasses: {
+          some: { trainingCourseId: { in: trainingCourseIds } },
+        },
       })
     }
     if (directSubjectClassIds && directSubjectClassIds.length > 0) {

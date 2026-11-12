@@ -1,31 +1,19 @@
 import { formatDateInSlash } from "@workspace/libs/timezone"
 import { DownloadOutlined } from "@ant-design/icons"
-import { sqlTransaction } from "@workspace/libs/api/model"
 import { Button, Flex } from "antd"
-import dayjs from "dayjs"
 import ExcelJS from "exceljs"
 import { saveAs } from "file-saver"
 
 const ExportStudentInSurvey = ({
-  query,
+  data,
   lecturer,
-  selectedId,
 }: {
-  query: any
+  /** Dữ liệu từ API lượt khảo sát (đã lọc đối tượng); xuất đúng số liệu trên màn hình. */
+  data: any[]
   lecturer: any
-  selectedId: string
+  selectedId?: string
 }) => {
-  const checkStatus = (record: any) => {
-    if (record?.student?.userProfile?.surveySession?.length > 0) {
-      const result = record?.student?.userProfile?.surveySession?.find(
-        (item: any) => item?.survey?.subjectClassId === record?.subjectClassId
-      )
-      if (result) {
-        return result
-      }
-    }
-    return null
-  }
+  const checkStatus = (record: any) => (record?.completed ? record : null)
   const exportTemplate = async () => {
     // Thiết lập style
     const golbalFontStyle = {
@@ -95,57 +83,7 @@ const ExportStudentInSurvey = ({
       }
       sheet.pageSetup.printArea = `A1:H${lastRow}`
     }
-    const listSqlTransaction: any = [
-      {
-        model: "SubjectClass",
-        operation: "findMany",
-        data: {
-          where: { ...query },
-          include: {
-            mainLecturer: {
-              include: {
-                userProfile: true,
-              },
-            },
-            subjectClassStudent: {
-              include: {
-                student: {
-                  include: {
-                    userProfile: {
-                      include: {
-                        surveySession: {
-                          where: {
-                            survey: {
-                              lectureId: lecturer?.id,
-                              clusterSurveyId: selectedId,
-                            },
-                          },
-                          include: {
-                            survey: true,
-                          },
-                        },
-                      },
-                    },
-                    fixedClass: {
-                      include: {
-                        trainingCourse: true,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-          orderBy: {
-            name: "asc",
-          },
-        },
-      },
-    ]
-    const res = await sqlTransaction(listSqlTransaction)
-
-    if (res?.status === 200 && res?.data?.length > 0) {
-      const data: any = res?.data[0]
+    if (data?.length > 0) {
       const workbook = new ExcelJS.Workbook()
 
       data.forEach((item: any) => {

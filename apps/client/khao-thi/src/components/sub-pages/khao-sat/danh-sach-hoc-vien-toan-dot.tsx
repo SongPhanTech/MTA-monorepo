@@ -11,7 +11,7 @@ import { customExamFetch } from "@workspace/libs/api/custom-instance"
 import { useAbility } from "@workspace/permissions/hooks"
 import { KHAO_THI_PERMISSION } from "@workspace/router"
 import { useQuery } from "@tanstack/react-query"
-import { Col, Flex, Row, Skeleton, Tag, Tooltip } from "antd"
+import { Alert, Col, Flex, Row, Skeleton, Tag, Tooltip } from "antd"
 import dayjs from "dayjs"
 import { Eye } from "lucide-react"
 import { useMemo, useState } from "react"
@@ -55,14 +55,19 @@ function DanhSachHocVienToanDot({ selectedId }: { selectedId: string }) {
     }
   }, [selectedId])
 
-  const { data: obligationResult, isLoading } = useQuery({
+  const { data: obligationResult, isLoading, isError, error } = useQuery({
     queryKey: ["cluster-survey-participant-obligations", selectedId],
     queryFn: async () => {
       const response = await customExamFetch<any>(
         `/api/cluster-survey/${selectedId}/participant-obligations`,
         { method: "GET" }
       )
-      return response?.data || response
+      // customExamFetch không throw khi lỗi HTTP: phải tự kiểm tra để không hiển thị
+      // nhầm "Không có dữ liệu" khi API lỗi.
+      if (response?.status !== 200) {
+        throw new Error(response?.data?.message || "Không tải được danh sách người làm khảo sát")
+      }
+      return response.data
     },
     enabled: !!selectedId,
   })
@@ -185,6 +190,11 @@ function DanhSachHocVienToanDot({ selectedId }: { selectedId: string }) {
                 />
               </Flex>
             </Col>
+            {isError && (
+              <Col span={24}>
+                <Alert type="error" showIcon message={(error as Error)?.message} />
+              </Col>
+            )}
             <Col span={24}>
               <TableCollapse
                 childrenFieldName="subjectClassStudent"
@@ -192,8 +202,7 @@ function DanhSachHocVienToanDot({ selectedId }: { selectedId: string }) {
                 filters={filters}
                 headerTitleKey={(record: any) => {
                   const gvName = record?.mainLecturer?.userProfile?.fullname || "Chưa phân công GV"
-                  const gvCode =
-                    record?.mainLecturer?.userProfile?.code || record?.mainLecturer?.code || ""
+                  const gvCode = record?.mainLecturer?.userProfile?.code || ""
                   const gvDonVi = record?.mainLecturer?.userProfile?.donVi?.sMa || ""
                   const gvLabel = [
                     gvName,
