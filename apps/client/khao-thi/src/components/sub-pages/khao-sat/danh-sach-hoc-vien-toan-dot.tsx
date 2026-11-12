@@ -193,7 +193,7 @@ function DanhSachHocVienToanDot({ selectedId }: { selectedId: string }) {
                 headerTitleKey={(record: any) => {
                   const gvName = record?.mainLecturer?.userProfile?.fullname || "Chưa phân công GV"
                   const gvCode =
-                    record?.mainLecturer?.userProfile?.code || record?.mainLecturer?.code || ""
+                    record?.mainLecturer?.userProfile?.code || ""
                   const gvDonVi = record?.mainLecturer?.userProfile?.donVi?.sMa || ""
                   const gvLabel = [
                     gvName,

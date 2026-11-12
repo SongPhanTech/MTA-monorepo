@@ -446,7 +446,6 @@ function SelectLecturer({
                 render: (__, record: any) => (
                   <span>
                     {record?.mainLecturer?.userProfile?.code ||
-                      record?.mainLecturer?.code ||
                       record?.mainLecturer?.lectureID ||
                       ""}
                   </span>

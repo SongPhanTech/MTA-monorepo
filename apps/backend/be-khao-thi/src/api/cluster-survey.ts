@@ -1273,7 +1273,6 @@ app.openapi(getClusterSurveyParticipantObligations, async (c) => {
               mainLecturer: {
                 select: {
                   id: true,
-                  code: true,
                   userProfile: {
                     select: { fullname: true, code: true, donVi: { select: { sMa: true } } },
                   },
