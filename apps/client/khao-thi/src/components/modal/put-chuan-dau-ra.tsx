@@ -1,3 +1,4 @@
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons"
 import { queryClient } from "@api/index"
 import FormItem from "@components/commons/form-item"
 import PutFormModal from "@components/commons/put-modal"
@@ -10,16 +11,47 @@ import {
   useFindUniqueKnowledgeBlock,
 } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
-import { Col, Form, Input, InputNumber, message, Row } from "antd"
+import { Button, Col, Form, Input, InputNumber, message, Row } from "antd"
 import { useEffect } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
-export interface KnowledgeBlockFormData extends Record<string, unknown> {
+type LevelRow = {
+  type?: ConfigExam["type"]
+  quantity?: number | null
+  point?: number | null
+}
+
+type LevelKey = (typeof LEVEL_COLUMNS)[number]["key"]
+
+export type KnowledgeBlockFormData = {
   name: string
   code: string
-  biet?: ConfigExam
-  hieu?: ConfigExam
-  vanDung?: ConfigExam
-  VanDungCao?: ConfigExam
+} & Partial<Record<LevelKey, LevelRow[]>>
+
+const EMPTY_ROW: LevelRow = { quantity: 0, point: 1 }
+
+// Trong cùng 1 mức độ, các dòng cùng điểm không được trùng loại câu hỏi,
+// và dòng "Tất cả" (type rỗng) không được đi chung với dòng khác cùng điểm
+// (vì tập câu hỏi sẽ giao nhau → có thể bốc trùng câu khi sinh đề).
+const validateLevelRows = async (rows?: LevelRow[]) => {
+  const activeRows = (rows ?? []).filter((r) => r?.quantity)
+  const byPoint = new Map<number, LevelRow[]>()
+  for (const row of activeRows) {
+    const point = row.point ?? 0
+    byPoint.set(point, [...(byPoint.get(point) ?? []), row])
+  }
+
+  for (const [point, group] of byPoint) {
+    if (group.length < 2) continue
+    if (group.some((r) => !r.type)) {
+      throw new Error(
+        `Mức ${point} điểm/câu đã có dòng "Tất cả" nên không thể thêm loại câu hỏi khác cùng điểm`
+      )
+    }
+    const types = group.map((r) => r.type)
+    if (new Set(types).size !== types.length) {
+      throw new Error(`Có loại câu hỏi bị trùng ở mức ${point} điểm/câu`)
+    }
+  }
 }
 
 const PutChuongMucModal = () => {
@@ -59,35 +91,32 @@ const PutChuongMucModal = () => {
         code: knowledgeBlockData.code,
       }
 
-      knowledgeBlockData.configExams?.forEach((config: ConfigExam) => {
-        const levelColumn = LEVEL_COLUMNS.find((col) => col.difficult === config.difficult)
-        if (levelColumn) {
-          formData[levelColumn.key] = {
+      for (const level of LEVEL_COLUMNS) {
+        const rows = (knowledgeBlockData.configExams ?? [])
+          .filter((config: ConfigExam) => config.difficult === level.difficult)
+          .map((config: ConfigExam) => ({
             type: config.type,
             quantity: config.quantity,
             point: config.point,
-          }
-        }
-      })
+          }))
+        formData[level.key] = rows.length ? rows : [{ ...EMPTY_ROW }]
+      }
 
       form.setFieldsValue(formData)
     }
   }, [knowledgeBlockData, input?.id, form])
 
   const onOk = async (values: KnowledgeBlockFormData) => {
-    const configExams = LEVEL_COLUMNS.reduce<any[]>((acc, level) => {
-      const levelData = values[level.key] as ConfigExam
-      if (!levelData?.quantity) return acc
-
-      acc.push({
-        difficult: level.difficult,
-        type: levelData.type,
-        quantity: levelData.quantity,
-        point: levelData.point ?? 0,
-      })
-
-      return acc
-    }, [])
+    const configExams = LEVEL_COLUMNS.flatMap((level) =>
+      (values[level.key] ?? [])
+        .filter((row) => row?.quantity)
+        .map((row) => ({
+          difficult: level.difficult,
+          type: row.type ?? null,
+          quantity: row.quantity as number,
+          point: row.point ?? 0,
+        }))
+    )
 
     try {
       if (!values) return
@@ -213,111 +242,83 @@ const PutChuongMucModal = () => {
         </FormItem>
       </Col>
 
-      <Col span={24}>
-        <Row gutter={12} align="middle" className="mb-1">
-          <Col xs={24} sm={6}>
-            &nbsp;
-          </Col>
-          <Col xs={24} sm={18}>
-            <Row gutter={12}>
-              {LEVEL_COLUMNS.map((col) => (
-                <Col xs={12} sm={6} key={col.key}>
-                  <div className="text-center font-medium text-sm py-1">{col.label}</div>
-                </Col>
-              ))}
-            </Row>
-          </Col>
-        </Row>
-      </Col>
+      {LEVEL_COLUMNS.map((level) => (
+        <Col span={24} key={level.key}>
+          <div className="font-medium text-sm mb-1">{level.label}</div>
+          <Form.List
+            name={level.key}
+            initialValue={[{ ...EMPTY_ROW }]}
+            rules={[{ validator: (_, rows) => validateLevelRows(rows) }]}
+          >
+            {(fields, { add, remove }, { errors }) => (
+              <div className="mb-3">
+                {fields.length > 0 && (
+                  <Row gutter={8} className="text-xs text-gray-500 mb-1">
+                    <Col span={10}>Loại câu hỏi</Col>
+                    <Col span={6}>Số lượng câu hỏi</Col>
+                    <Col span={6}>Điểm/câu</Col>
+                  </Row>
+                )}
+                {fields.map(({ key, name }) => {
+                  const quantity = watchedValues?.[level.key]?.[name]?.quantity
+                  const isDisabled = !quantity
 
-      <Col span={24}>
-        <Row gutter={12} align="middle">
-          <Col xs={24} sm={6}>
-            Số lượng câu hỏi
-          </Col>
-          <Col xs={24} sm={18}>
-            <Row gutter={12}>
-              {LEVEL_COLUMNS.map((col) => (
-                <Col xs={12} sm={6} key={col.key}>
-                  <Form.Item
-                    name={[col.key, "quantity"]}
-                    style={{ marginBottom: 8 }}
-                    initialValue={0}
-                  >
-                    <InputNumber
-                      min={0}
-                      className="w-full"
-                      onChange={(value) => {
-                        if (!value || value === 0) {
-                          form.setFieldValue([col.key, "type"], undefined)
-                          form.setFieldValue([col.key, "point"], undefined)
-                        }
-                      }}
-                    />
-                  </Form.Item>
-                </Col>
-              ))}
-            </Row>
-          </Col>
-        </Row>
-      </Col>
-
-      <Col span={24}>
-        <Row gutter={12} align="middle">
-          <Col xs={24} sm={6}>
-            Loại câu hỏi
-          </Col>
-          <Col xs={24} sm={18}>
-            <Row gutter={12}>
-              {LEVEL_COLUMNS.map((col) => {
-                const quantity = (watchedValues?.[col.key] as ConfigExam)?.quantity
-                const isDisabled = !quantity || quantity === 0
-
-                return (
-                  <Col xs={12} sm={6} key={col.key}>
-                    <Form.Item name={[col.key, "type"]} style={{ marginBottom: 8 }}>
-                      <Select
-                        className="w-full"
-                        placeholder="Tất cả"
-                        options={QUESTION_TYPE_OPTIONS}
-                        disabled={isDisabled}
-                      />
-                    </Form.Item>
-                  </Col>
-                )
-              })}
-            </Row>
-          </Col>
-        </Row>
-      </Col>
-
-      <Col span={24}>
-        <Row gutter={12} align="middle">
-          <Col xs={24} sm={6}>
-            Điểm
-          </Col>
-          <Col xs={24} sm={18}>
-            <Row gutter={12}>
-              {LEVEL_COLUMNS.map((col) => {
-                const quantity = (watchedValues?.[col.key] as ConfigExam)?.quantity
-                const isDisabled = !quantity || quantity === 0
-
-                return (
-                  <Col xs={12} sm={6} key={col.key}>
-                    <Form.Item
-                      name={[col.key, "point"]}
-                      style={{ marginBottom: 8 }}
-                      initialValue={1}
-                    >
-                      <InputNumber min={0} className="w-full" disabled={isDisabled} />
-                    </Form.Item>
-                  </Col>
-                )
-              })}
-            </Row>
-          </Col>
-        </Row>
-      </Col>
+                  return (
+                    <Row gutter={8} key={key} align="middle">
+                      <Col span={10}>
+                        <Form.Item name={[name, "type"]} style={{ marginBottom: 8 }}>
+                          <Select
+                            className="w-full"
+                            placeholder="Tất cả"
+                            options={QUESTION_TYPE_OPTIONS}
+                            disabled={isDisabled}
+                          />
+                        </Form.Item>
+                      </Col>
+                      <Col span={6}>
+                        <Form.Item name={[name, "quantity"]} style={{ marginBottom: 8 }}>
+                          <InputNumber
+                            min={0}
+                            className="w-full"
+                            onChange={(value) => {
+                              if (!value) {
+                                form.setFieldValue([level.key, name, "type"], undefined)
+                              }
+                            }}
+                          />
+                        </Form.Item>
+                      </Col>
+                      <Col span={6}>
+                        <Form.Item name={[name, "point"]} style={{ marginBottom: 8 }}>
+                          <InputNumber min={0} className="w-full" disabled={isDisabled} />
+                        </Form.Item>
+                      </Col>
+                      <Col span={2}>
+                        <Button
+                          type="text"
+                          danger
+                          icon={<MinusCircleOutlined />}
+                          onClick={() => remove(name)}
+                          style={{ marginBottom: 8 }}
+                        />
+                      </Col>
+                    </Row>
+                  )
+                })}
+                <Form.ErrorList errors={errors} />
+                <Button
+                  type="dashed"
+                  size="small"
+                  icon={<PlusOutlined />}
+                  onClick={() => add({ ...EMPTY_ROW })}
+                >
+                  Thêm loại câu hỏi
+                </Button>
+              </div>
+            )}
+          </Form.List>
+        </Col>
+      ))}
     </PutFormModal>
   )
 }

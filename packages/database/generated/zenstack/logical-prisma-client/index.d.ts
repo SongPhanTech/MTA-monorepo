@@ -38214,6 +38214,8 @@ export namespace Prisma {
      */
     export interface Prisma__DM_DonViClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
+        parent<T extends DM_DonVi$parentArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonVi$parentArgs<ExtArgs>>): Prisma__DM_DonViClient<$Result.GetResult<Prisma.$DM_DonViPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        children<T extends DM_DonVi$childrenArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonVi$childrenArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DM_DonViPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         lecturerHistory<T extends DM_DonVi$lecturerHistoryArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonVi$lecturerHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LecturerHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         staffs<T extends DM_DonVi$staffsArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonVi$staffsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StaffPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         staffHistory<T extends DM_DonVi$staffHistoryArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonVi$staffHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StaffHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
@@ -154299,6 +154301,7 @@ export namespace Prisma {
      * Count Type DM_DonViCountOutputType
      */
     export type DM_DonViCountOutputType = {
+        children: number
         lecturerHistory: number
         staffs: number
         staffHistory: number
@@ -154317,6 +154320,7 @@ export namespace Prisma {
         guestTeachingPayments: number
     };
     export type DM_DonViCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        children?: boolean | DM_DonViCountOutputTypeCountChildrenArgs
         lecturerHistory?: boolean | DM_DonViCountOutputTypeCountLecturerHistoryArgs
         staffs?: boolean | DM_DonViCountOutputTypeCountStaffsArgs
         staffHistory?: boolean | DM_DonViCountOutputTypeCountStaffHistoryArgs
@@ -154342,6 +154346,12 @@ export namespace Prisma {
          * Select specific fields to fetch from the DM_DonViCountOutputType
          */
         select?: DM_DonViCountOutputTypeSelect<ExtArgs> | null
+    };
+    /**
+     * DM_DonViCountOutputType without action
+     */
+    export type DM_DonViCountOutputTypeCountChildrenArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: DM_DonViWhereInput
     };
     /**
      * DM_DonViCountOutputType without action
@@ -205844,6 +205854,8 @@ export namespace Prisma {
         iNhomDonVi?: boolean
         iCapDonVi?: boolean
         iLoaiDonVi?: boolean
+        parent?: boolean | DM_DonVi$parentArgs<ExtArgs>
+        children?: boolean | DM_DonVi$childrenArgs<ExtArgs>
         lecturerHistory?: boolean | DM_DonVi$lecturerHistoryArgs<ExtArgs>
         staffs?: boolean | DM_DonVi$staffsArgs<ExtArgs>
         staffHistory?: boolean | DM_DonVi$staffHistoryArgs<ExtArgs>
@@ -205888,6 +205900,7 @@ export namespace Prisma {
         iNhomDonVi?: boolean
         iCapDonVi?: boolean
         iLoaiDonVi?: boolean
+        parent?: boolean | DM_DonVi$parentArgs<ExtArgs>
     }, ExtArgs["result"]["dM_DonVi"]>;
     export type DM_DonViSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         Id?: boolean
@@ -205915,6 +205928,7 @@ export namespace Prisma {
         iNhomDonVi?: boolean
         iCapDonVi?: boolean
         iLoaiDonVi?: boolean
+        parent?: boolean | DM_DonVi$parentArgs<ExtArgs>
     }, ExtArgs["result"]["dM_DonVi"]>;
     export type DM_DonViSelectScalar = {
         Id?: boolean
@@ -205945,6 +205959,8 @@ export namespace Prisma {
     };
     export type DM_DonViOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"Id" | "sMa" | "sTen" | "sGhiChu" | "iSTT" | "bActive" | "bDeleted" | "bSystem" | "iDictionaryKey" | "dNgayTao" | "dNgaySua" | "sNguoiTao" | "sNguoiSua" | "sThietBiTao" | "sThietBiSua" | "sCode" | "sTKBUCode" | "sTenVietTat" | "sParentId" | "sTruongDonVi" | "sChucNangNhiemVu" | "sDiaChi" | "iNhomDonVi" | "iCapDonVi" | "iLoaiDonVi", ExtArgs["result"]["dM_DonVi"]>;
     export type DM_DonViInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        parent?: boolean | DM_DonVi$parentArgs<ExtArgs>
+        children?: boolean | DM_DonVi$childrenArgs<ExtArgs>
         lecturerHistory?: boolean | DM_DonVi$lecturerHistoryArgs<ExtArgs>
         staffs?: boolean | DM_DonVi$staffsArgs<ExtArgs>
         staffHistory?: boolean | DM_DonVi$staffHistoryArgs<ExtArgs>
@@ -205963,11 +205979,17 @@ export namespace Prisma {
         guestTeachingPayments?: boolean | DM_DonVi$guestTeachingPaymentsArgs<ExtArgs>
         _count?: boolean | DM_DonViCountOutputTypeDefaultArgs<ExtArgs>
     };
-    export type DM_DonViIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
-    export type DM_DonViIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
+    export type DM_DonViIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        parent?: boolean | DM_DonVi$parentArgs<ExtArgs>
+    };
+    export type DM_DonViIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        parent?: boolean | DM_DonVi$parentArgs<ExtArgs>
+    };
     export type $DM_DonViPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "DM_DonVi"
         objects: {
+            parent: Prisma.$DM_DonViPayload<ExtArgs> | null
+            children: Prisma.$DM_DonViPayload<ExtArgs>[]
             lecturerHistory: Prisma.$LecturerHistoryPayload<ExtArgs>[]
             staffs: Prisma.$StaffPayload<ExtArgs>[]
             staffHistory: Prisma.$StaffHistoryPayload<ExtArgs>[]
@@ -206268,6 +206290,10 @@ export namespace Prisma {
          */
         data: DM_DonViCreateManyInput | DM_DonViCreateManyInput[]
         skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DM_DonViIncludeCreateManyAndReturn<ExtArgs> | null
     };
     /**
      * DM_DonVi update
@@ -206335,6 +206361,10 @@ export namespace Prisma {
          * Limit how many DM_DonVis to update.
          */
         limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DM_DonViIncludeUpdateManyAndReturn<ExtArgs> | null
     };
     /**
      * DM_DonVi upsert
@@ -206398,6 +206428,47 @@ export namespace Prisma {
          * Limit how many DM_DonVis to delete.
          */
         limit?: number
+    };
+    /**
+     * DM_DonVi.parent
+     */
+    export type DM_DonVi$parentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DM_DonVi
+         */
+        select?: DM_DonViSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DM_DonVi
+         */
+        omit?: DM_DonViOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DM_DonViInclude<ExtArgs> | null
+        where?: DM_DonViWhereInput
+    };
+    /**
+     * DM_DonVi.children
+     */
+    export type DM_DonVi$childrenArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DM_DonVi
+         */
+        select?: DM_DonViSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DM_DonVi
+         */
+        omit?: DM_DonViOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DM_DonViInclude<ExtArgs> | null
+        where?: DM_DonViWhereInput
+        orderBy?: DM_DonViOrderByWithRelationInput | DM_DonViOrderByWithRelationInput[]
+        cursor?: DM_DonViWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: DM_DonViScalarFieldEnum | DM_DonViScalarFieldEnum[]
     };
     /**
      * DM_DonVi.lecturerHistory
@@ -417255,6 +417326,8 @@ export namespace Prisma {
         iNhomDonVi?: IntNullableFilter<"DM_DonVi"> | number | null
         iCapDonVi?: IntNullableFilter<"DM_DonVi"> | number | null
         iLoaiDonVi?: IntNullableFilter<"DM_DonVi"> | number | null
+        parent?: XOR<DM_DonViNullableScalarRelationFilter, DM_DonViWhereInput> | null
+        children?: DM_DonViListRelationFilter
         lecturerHistory?: LecturerHistoryListRelationFilter
         staffs?: StaffListRelationFilter
         staffHistory?: StaffHistoryListRelationFilter
@@ -417298,6 +417371,8 @@ export namespace Prisma {
         iNhomDonVi?: SortOrderInput | SortOrder
         iCapDonVi?: SortOrderInput | SortOrder
         iLoaiDonVi?: SortOrderInput | SortOrder
+        parent?: DM_DonViOrderByWithRelationInput
+        children?: DM_DonViOrderByRelationAggregateInput
         lecturerHistory?: LecturerHistoryOrderByRelationAggregateInput
         staffs?: StaffOrderByRelationAggregateInput
         staffHistory?: StaffHistoryOrderByRelationAggregateInput
@@ -417345,6 +417420,8 @@ export namespace Prisma {
         iNhomDonVi?: IntNullableFilter<"DM_DonVi"> | number | null
         iCapDonVi?: IntNullableFilter<"DM_DonVi"> | number | null
         iLoaiDonVi?: IntNullableFilter<"DM_DonVi"> | number | null
+        parent?: XOR<DM_DonViNullableScalarRelationFilter, DM_DonViWhereInput> | null
+        children?: DM_DonViListRelationFilter
         lecturerHistory?: LecturerHistoryListRelationFilter
         staffs?: StaffListRelationFilter
         staffHistory?: StaffHistoryListRelationFilter
@@ -457654,13 +457731,14 @@ export namespace Prisma {
         sCode?: string | null
         sTKBUCode?: string | null
         sTenVietTat?: string | null
-        sParentId?: string | null
         sTruongDonVi?: string | null
         sChucNangNhiemVu?: string | null
         sDiaChi?: string | null
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        parent?: DM_DonViCreateNestedOneWithoutChildrenInput
+        children?: DM_DonViCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
@@ -457704,6 +457782,7 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        children?: DM_DonViUncheckedCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -457740,13 +457819,14 @@ export namespace Prisma {
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTKBUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
-        sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
         sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
         sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        parent?: DM_DonViUpdateOneWithoutChildrenNestedInput
+        children?: DM_DonViUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
@@ -457790,6 +457870,7 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        children?: DM_DonViUncheckedUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -457853,7 +457934,6 @@ export namespace Prisma {
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTKBUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
-        sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
         sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
         sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -500502,6 +500582,11 @@ export namespace Prisma {
         iSTT?: SortOrder
         iDictionaryKey?: SortOrder
     };
+    export type DM_DonViListRelationFilter = {
+        every?: DM_DonViWhereInput
+        some?: DM_DonViWhereInput
+        none?: DM_DonViWhereInput
+    };
     export type StaffListRelationFilter = {
         every?: StaffWhereInput
         some?: StaffWhereInput
@@ -500556,6 +500641,9 @@ export namespace Prisma {
         every?: GuestTeachingPaymentWhereInput
         some?: GuestTeachingPaymentWhereInput
         none?: GuestTeachingPaymentWhereInput
+    };
+    export type DM_DonViOrderByRelationAggregateInput = {
+        _count?: SortOrder
     };
     export type StaffOrderByRelationAggregateInput = {
         _count?: SortOrder
@@ -517861,14 +517949,6 @@ export namespace Prisma {
         hasSome?: $Enums.SurveyObject[] | ListEnumSurveyObjectFieldRefInput<$PrismaModel>
         isEmpty?: boolean
     };
-    export type DM_DonViListRelationFilter = {
-        every?: DM_DonViWhereInput
-        some?: DM_DonViWhereInput
-        none?: DM_DonViWhereInput
-    };
-    export type DM_DonViOrderByRelationAggregateInput = {
-        _count?: SortOrder
-    };
     export type SurveyObjectTypeOrderByRelevanceInput = {
         fields: SurveyObjectTypeOrderByRelevanceFieldEnum | SurveyObjectTypeOrderByRelevanceFieldEnum[]
         sort: SortOrder
@@ -526205,6 +526285,17 @@ export namespace Prisma {
         updateMany?: TiengDanTocUpdateManyWithWhereWithoutDanTocInput | TiengDanTocUpdateManyWithWhereWithoutDanTocInput[]
         deleteMany?: TiengDanTocScalarWhereInput | TiengDanTocScalarWhereInput[]
     };
+    export type DM_DonViCreateNestedOneWithoutChildrenInput = {
+        create?: XOR<DM_DonViCreateWithoutChildrenInput, DM_DonViUncheckedCreateWithoutChildrenInput>
+        connectOrCreate?: DM_DonViCreateOrConnectWithoutChildrenInput
+        connect?: DM_DonViWhereUniqueInput
+    };
+    export type DM_DonViCreateNestedManyWithoutParentInput = {
+        create?: XOR<DM_DonViCreateWithoutParentInput, DM_DonViUncheckedCreateWithoutParentInput> | DM_DonViCreateWithoutParentInput[] | DM_DonViUncheckedCreateWithoutParentInput[]
+        connectOrCreate?: DM_DonViCreateOrConnectWithoutParentInput | DM_DonViCreateOrConnectWithoutParentInput[]
+        createMany?: DM_DonViCreateManyParentInputEnvelope
+        connect?: DM_DonViWhereUniqueInput | DM_DonViWhereUniqueInput[]
+    };
     export type LecturerHistoryCreateNestedManyWithoutOrganizationInput = {
         create?: XOR<LecturerHistoryCreateWithoutOrganizationInput, LecturerHistoryUncheckedCreateWithoutOrganizationInput> | LecturerHistoryCreateWithoutOrganizationInput[] | LecturerHistoryUncheckedCreateWithoutOrganizationInput[]
         connectOrCreate?: LecturerHistoryCreateOrConnectWithoutOrganizationInput | LecturerHistoryCreateOrConnectWithoutOrganizationInput[]
@@ -526300,6 +526391,12 @@ export namespace Prisma {
         createMany?: GuestTeachingPaymentCreateManyHiringOrgInputEnvelope
         connect?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
     };
+    export type DM_DonViUncheckedCreateNestedManyWithoutParentInput = {
+        create?: XOR<DM_DonViCreateWithoutParentInput, DM_DonViUncheckedCreateWithoutParentInput> | DM_DonViCreateWithoutParentInput[] | DM_DonViUncheckedCreateWithoutParentInput[]
+        connectOrCreate?: DM_DonViCreateOrConnectWithoutParentInput | DM_DonViCreateOrConnectWithoutParentInput[]
+        createMany?: DM_DonViCreateManyParentInputEnvelope
+        connect?: DM_DonViWhereUniqueInput | DM_DonViWhereUniqueInput[]
+    };
     export type LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput = {
         create?: XOR<LecturerHistoryCreateWithoutOrganizationInput, LecturerHistoryUncheckedCreateWithoutOrganizationInput> | LecturerHistoryCreateWithoutOrganizationInput[] | LecturerHistoryUncheckedCreateWithoutOrganizationInput[]
         connectOrCreate?: LecturerHistoryCreateOrConnectWithoutOrganizationInput | LecturerHistoryCreateOrConnectWithoutOrganizationInput[]
@@ -526394,6 +526491,28 @@ export namespace Prisma {
         connectOrCreate?: GuestTeachingPaymentCreateOrConnectWithoutHiringOrgInput | GuestTeachingPaymentCreateOrConnectWithoutHiringOrgInput[]
         createMany?: GuestTeachingPaymentCreateManyHiringOrgInputEnvelope
         connect?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
+    };
+    export type DM_DonViUpdateOneWithoutChildrenNestedInput = {
+        create?: XOR<DM_DonViCreateWithoutChildrenInput, DM_DonViUncheckedCreateWithoutChildrenInput>
+        connectOrCreate?: DM_DonViCreateOrConnectWithoutChildrenInput
+        upsert?: DM_DonViUpsertWithoutChildrenInput
+        disconnect?: DM_DonViWhereInput | boolean
+        delete?: DM_DonViWhereInput | boolean
+        connect?: DM_DonViWhereUniqueInput
+        update?: XOR<XOR<DM_DonViUpdateToOneWithWhereWithoutChildrenInput, DM_DonViUpdateWithoutChildrenInput>, DM_DonViUncheckedUpdateWithoutChildrenInput>
+    };
+    export type DM_DonViUpdateManyWithoutParentNestedInput = {
+        create?: XOR<DM_DonViCreateWithoutParentInput, DM_DonViUncheckedCreateWithoutParentInput> | DM_DonViCreateWithoutParentInput[] | DM_DonViUncheckedCreateWithoutParentInput[]
+        connectOrCreate?: DM_DonViCreateOrConnectWithoutParentInput | DM_DonViCreateOrConnectWithoutParentInput[]
+        upsert?: DM_DonViUpsertWithWhereUniqueWithoutParentInput | DM_DonViUpsertWithWhereUniqueWithoutParentInput[]
+        createMany?: DM_DonViCreateManyParentInputEnvelope
+        set?: DM_DonViWhereUniqueInput | DM_DonViWhereUniqueInput[]
+        disconnect?: DM_DonViWhereUniqueInput | DM_DonViWhereUniqueInput[]
+        delete?: DM_DonViWhereUniqueInput | DM_DonViWhereUniqueInput[]
+        connect?: DM_DonViWhereUniqueInput | DM_DonViWhereUniqueInput[]
+        update?: DM_DonViUpdateWithWhereUniqueWithoutParentInput | DM_DonViUpdateWithWhereUniqueWithoutParentInput[]
+        updateMany?: DM_DonViUpdateManyWithWhereWithoutParentInput | DM_DonViUpdateManyWithWhereWithoutParentInput[]
+        deleteMany?: DM_DonViScalarWhereInput | DM_DonViScalarWhereInput[]
     };
     export type LecturerHistoryUpdateManyWithoutOrganizationNestedInput = {
         create?: XOR<LecturerHistoryCreateWithoutOrganizationInput, LecturerHistoryUncheckedCreateWithoutOrganizationInput> | LecturerHistoryCreateWithoutOrganizationInput[] | LecturerHistoryUncheckedCreateWithoutOrganizationInput[]
@@ -526601,6 +526720,19 @@ export namespace Prisma {
         update?: GuestTeachingPaymentUpdateWithWhereUniqueWithoutHiringOrgInput | GuestTeachingPaymentUpdateWithWhereUniqueWithoutHiringOrgInput[]
         updateMany?: GuestTeachingPaymentUpdateManyWithWhereWithoutHiringOrgInput | GuestTeachingPaymentUpdateManyWithWhereWithoutHiringOrgInput[]
         deleteMany?: GuestTeachingPaymentScalarWhereInput | GuestTeachingPaymentScalarWhereInput[]
+    };
+    export type DM_DonViUncheckedUpdateManyWithoutParentNestedInput = {
+        create?: XOR<DM_DonViCreateWithoutParentInput, DM_DonViUncheckedCreateWithoutParentInput> | DM_DonViCreateWithoutParentInput[] | DM_DonViUncheckedCreateWithoutParentInput[]
+        connectOrCreate?: DM_DonViCreateOrConnectWithoutParentInput | DM_DonViCreateOrConnectWithoutParentInput[]
+        upsert?: DM_DonViUpsertWithWhereUniqueWithoutParentInput | DM_DonViUpsertWithWhereUniqueWithoutParentInput[]
+        createMany?: DM_DonViCreateManyParentInputEnvelope
+        set?: DM_DonViWhereUniqueInput | DM_DonViWhereUniqueInput[]
+        disconnect?: DM_DonViWhereUniqueInput | DM_DonViWhereUniqueInput[]
+        delete?: DM_DonViWhereUniqueInput | DM_DonViWhereUniqueInput[]
+        connect?: DM_DonViWhereUniqueInput | DM_DonViWhereUniqueInput[]
+        update?: DM_DonViUpdateWithWhereUniqueWithoutParentInput | DM_DonViUpdateWithWhereUniqueWithoutParentInput[]
+        updateMany?: DM_DonViUpdateManyWithWhereWithoutParentInput | DM_DonViUpdateManyWithWhereWithoutParentInput[]
+        deleteMany?: DM_DonViScalarWhereInput | DM_DonViScalarWhereInput[]
     };
     export type LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput = {
         create?: XOR<LecturerHistoryCreateWithoutOrganizationInput, LecturerHistoryUncheckedCreateWithoutOrganizationInput> | LecturerHistoryCreateWithoutOrganizationInput[] | LecturerHistoryUncheckedCreateWithoutOrganizationInput[]
@@ -551673,13 +551805,14 @@ export namespace Prisma {
         sCode?: string | null
         sTKBUCode?: string | null
         sTenVietTat?: string | null
-        sParentId?: string | null
         sTruongDonVi?: string | null
         sChucNangNhiemVu?: string | null
         sDiaChi?: string | null
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        parent?: DM_DonViCreateNestedOneWithoutChildrenInput
+        children?: DM_DonViCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
@@ -551722,6 +551855,7 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        children?: DM_DonViUncheckedCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -556415,13 +556549,14 @@ export namespace Prisma {
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTKBUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
-        sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
         sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
         sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        parent?: DM_DonViUpdateOneWithoutChildrenNestedInput
+        children?: DM_DonViUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
@@ -556464,6 +556599,7 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        children?: DM_DonViUncheckedUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -592581,6 +592717,190 @@ export namespace Prisma {
         where: TiengDanTocScalarWhereInput
         data: XOR<TiengDanTocUpdateManyMutationInput, TiengDanTocUncheckedUpdateManyWithoutDanTocInput>
     };
+    export type DM_DonViCreateWithoutChildrenInput = {
+        Id?: string
+        sMa?: string | null
+        sTen?: string | null
+        sGhiChu?: string | null
+        iSTT?: number | null
+        bActive?: boolean | null
+        bDeleted?: boolean | null
+        bSystem?: boolean | null
+        iDictionaryKey?: number | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        sCode?: string | null
+        sTKBUCode?: string | null
+        sTenVietTat?: string | null
+        sTruongDonVi?: string | null
+        sChucNangNhiemVu?: string | null
+        sDiaChi?: string | null
+        iNhomDonVi?: number | null
+        iCapDonVi?: number | null
+        iLoaiDonVi?: number | null
+        parent?: DM_DonViCreateNestedOneWithoutChildrenInput
+        lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
+        staffs?: StaffCreateNestedManyWithoutOrganizationInput
+        staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileCreateNestedManyWithoutDonViInput
+        curriculum?: CurriculumCreateNestedManyWithoutManagementOrganizationInput
+        fixedClass?: FixedClassCreateNestedManyWithoutManagementOrganizationInput
+        subjectVersions?: SubjectVersionCreateNestedManyWithoutManagementOrganizationInput
+        subjects?: SubjectCreateNestedManyWithoutManagementOrganizationInput
+        trainingFields?: TrainingFieldCreateNestedManyWithoutOrganizationInput
+        trainingMajors?: TrainingMajorCreateNestedManyWithoutOrganizationInput
+        secondTrainingMajors?: TrainingMajorCreateNestedManyWithoutSecondOrganizationInput
+        thirdTrainingMajors?: TrainingMajorCreateNestedManyWithoutThirdOrganizationInput
+        researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
+        thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
+        surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
+        guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutHiringOrgInput
+    };
+    export type DM_DonViUncheckedCreateWithoutChildrenInput = {
+        Id?: string
+        sMa?: string | null
+        sTen?: string | null
+        sGhiChu?: string | null
+        iSTT?: number | null
+        bActive?: boolean | null
+        bDeleted?: boolean | null
+        bSystem?: boolean | null
+        iDictionaryKey?: number | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        sCode?: string | null
+        sTKBUCode?: string | null
+        sTenVietTat?: string | null
+        sParentId?: string | null
+        sTruongDonVi?: string | null
+        sChucNangNhiemVu?: string | null
+        sDiaChi?: string | null
+        iNhomDonVi?: number | null
+        iCapDonVi?: number | null
+        iLoaiDonVi?: number | null
+        lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+        staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
+        staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileUncheckedCreateNestedManyWithoutDonViInput
+        curriculum?: CurriculumUncheckedCreateNestedManyWithoutManagementOrganizationInput
+        fixedClass?: FixedClassUncheckedCreateNestedManyWithoutManagementOrganizationInput
+        subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutManagementOrganizationInput
+        subjects?: SubjectUncheckedCreateNestedManyWithoutManagementOrganizationInput
+        trainingFields?: TrainingFieldUncheckedCreateNestedManyWithoutOrganizationInput
+        trainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutOrganizationInput
+        secondTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutSecondOrganizationInput
+        thirdTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutThirdOrganizationInput
+        researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
+        thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
+        surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
+        guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutHiringOrgInput
+    };
+    export type DM_DonViCreateOrConnectWithoutChildrenInput = {
+        where: DM_DonViWhereUniqueInput
+        create: XOR<DM_DonViCreateWithoutChildrenInput, DM_DonViUncheckedCreateWithoutChildrenInput>
+    };
+    export type DM_DonViCreateWithoutParentInput = {
+        Id?: string
+        sMa?: string | null
+        sTen?: string | null
+        sGhiChu?: string | null
+        iSTT?: number | null
+        bActive?: boolean | null
+        bDeleted?: boolean | null
+        bSystem?: boolean | null
+        iDictionaryKey?: number | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        sCode?: string | null
+        sTKBUCode?: string | null
+        sTenVietTat?: string | null
+        sTruongDonVi?: string | null
+        sChucNangNhiemVu?: string | null
+        sDiaChi?: string | null
+        iNhomDonVi?: number | null
+        iCapDonVi?: number | null
+        iLoaiDonVi?: number | null
+        children?: DM_DonViCreateNestedManyWithoutParentInput
+        lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
+        staffs?: StaffCreateNestedManyWithoutOrganizationInput
+        staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileCreateNestedManyWithoutDonViInput
+        curriculum?: CurriculumCreateNestedManyWithoutManagementOrganizationInput
+        fixedClass?: FixedClassCreateNestedManyWithoutManagementOrganizationInput
+        subjectVersions?: SubjectVersionCreateNestedManyWithoutManagementOrganizationInput
+        subjects?: SubjectCreateNestedManyWithoutManagementOrganizationInput
+        trainingFields?: TrainingFieldCreateNestedManyWithoutOrganizationInput
+        trainingMajors?: TrainingMajorCreateNestedManyWithoutOrganizationInput
+        secondTrainingMajors?: TrainingMajorCreateNestedManyWithoutSecondOrganizationInput
+        thirdTrainingMajors?: TrainingMajorCreateNestedManyWithoutThirdOrganizationInput
+        researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
+        thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
+        surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
+        guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutHiringOrgInput
+    };
+    export type DM_DonViUncheckedCreateWithoutParentInput = {
+        Id?: string
+        sMa?: string | null
+        sTen?: string | null
+        sGhiChu?: string | null
+        iSTT?: number | null
+        bActive?: boolean | null
+        bDeleted?: boolean | null
+        bSystem?: boolean | null
+        iDictionaryKey?: number | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        sCode?: string | null
+        sTKBUCode?: string | null
+        sTenVietTat?: string | null
+        sTruongDonVi?: string | null
+        sChucNangNhiemVu?: string | null
+        sDiaChi?: string | null
+        iNhomDonVi?: number | null
+        iCapDonVi?: number | null
+        iLoaiDonVi?: number | null
+        children?: DM_DonViUncheckedCreateNestedManyWithoutParentInput
+        lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+        staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
+        staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileUncheckedCreateNestedManyWithoutDonViInput
+        curriculum?: CurriculumUncheckedCreateNestedManyWithoutManagementOrganizationInput
+        fixedClass?: FixedClassUncheckedCreateNestedManyWithoutManagementOrganizationInput
+        subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutManagementOrganizationInput
+        subjects?: SubjectUncheckedCreateNestedManyWithoutManagementOrganizationInput
+        trainingFields?: TrainingFieldUncheckedCreateNestedManyWithoutOrganizationInput
+        trainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutOrganizationInput
+        secondTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutSecondOrganizationInput
+        thirdTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutThirdOrganizationInput
+        researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
+        thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
+        surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
+        guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutHiringOrgInput
+    };
+    export type DM_DonViCreateOrConnectWithoutParentInput = {
+        where: DM_DonViWhereUniqueInput
+        create: XOR<DM_DonViCreateWithoutParentInput, DM_DonViUncheckedCreateWithoutParentInput>
+    };
+    export type DM_DonViCreateManyParentInputEnvelope = {
+        data: DM_DonViCreateManyParentInput | DM_DonViCreateManyParentInput[]
+        skipDuplicates?: boolean
+    };
     export type LecturerHistoryCreateWithoutOrganizationInput = {
         id?: string
         code?: string | null
@@ -594030,6 +594350,144 @@ export namespace Prisma {
     export type GuestTeachingPaymentCreateManyHiringOrgInputEnvelope = {
         data: GuestTeachingPaymentCreateManyHiringOrgInput | GuestTeachingPaymentCreateManyHiringOrgInput[]
         skipDuplicates?: boolean
+    };
+    export type DM_DonViUpsertWithoutChildrenInput = {
+        update: XOR<DM_DonViUpdateWithoutChildrenInput, DM_DonViUncheckedUpdateWithoutChildrenInput>
+        create: XOR<DM_DonViCreateWithoutChildrenInput, DM_DonViUncheckedCreateWithoutChildrenInput>
+        where?: DM_DonViWhereInput
+    };
+    export type DM_DonViUpdateToOneWithWhereWithoutChildrenInput = {
+        where?: DM_DonViWhereInput
+        data: XOR<DM_DonViUpdateWithoutChildrenInput, DM_DonViUncheckedUpdateWithoutChildrenInput>
+    };
+    export type DM_DonViUpdateWithoutChildrenInput = {
+        Id?: StringFieldUpdateOperationsInput | string
+        sMa?: NullableStringFieldUpdateOperationsInput | string | null
+        sTen?: NullableStringFieldUpdateOperationsInput | string | null
+        sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+        iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+        bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKBUCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
+        sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
+        sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
+        sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
+        iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        parent?: DM_DonViUpdateOneWithoutChildrenNestedInput
+        lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
+        staffs?: StaffUpdateManyWithoutOrganizationNestedInput
+        staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUpdateManyWithoutDonViNestedInput
+        curriculum?: CurriculumUpdateManyWithoutManagementOrganizationNestedInput
+        fixedClass?: FixedClassUpdateManyWithoutManagementOrganizationNestedInput
+        subjectVersions?: SubjectVersionUpdateManyWithoutManagementOrganizationNestedInput
+        subjects?: SubjectUpdateManyWithoutManagementOrganizationNestedInput
+        trainingFields?: TrainingFieldUpdateManyWithoutOrganizationNestedInput
+        trainingMajors?: TrainingMajorUpdateManyWithoutOrganizationNestedInput
+        secondTrainingMajors?: TrainingMajorUpdateManyWithoutSecondOrganizationNestedInput
+        thirdTrainingMajors?: TrainingMajorUpdateManyWithoutThirdOrganizationNestedInput
+        researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
+        thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
+        surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
+        guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutHiringOrgNestedInput
+    };
+    export type DM_DonViUncheckedUpdateWithoutChildrenInput = {
+        Id?: StringFieldUpdateOperationsInput | string
+        sMa?: NullableStringFieldUpdateOperationsInput | string | null
+        sTen?: NullableStringFieldUpdateOperationsInput | string | null
+        sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+        iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+        bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKBUCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
+        sParentId?: NullableStringFieldUpdateOperationsInput | string | null
+        sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
+        sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
+        sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
+        iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+        staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
+        staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUncheckedUpdateManyWithoutDonViNestedInput
+        curriculum?: CurriculumUncheckedUpdateManyWithoutManagementOrganizationNestedInput
+        fixedClass?: FixedClassUncheckedUpdateManyWithoutManagementOrganizationNestedInput
+        subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutManagementOrganizationNestedInput
+        subjects?: SubjectUncheckedUpdateManyWithoutManagementOrganizationNestedInput
+        trainingFields?: TrainingFieldUncheckedUpdateManyWithoutOrganizationNestedInput
+        trainingMajors?: TrainingMajorUncheckedUpdateManyWithoutOrganizationNestedInput
+        secondTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutSecondOrganizationNestedInput
+        thirdTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutThirdOrganizationNestedInput
+        researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
+        thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
+        surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
+        guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutHiringOrgNestedInput
+    };
+    export type DM_DonViUpsertWithWhereUniqueWithoutParentInput = {
+        where: DM_DonViWhereUniqueInput
+        update: XOR<DM_DonViUpdateWithoutParentInput, DM_DonViUncheckedUpdateWithoutParentInput>
+        create: XOR<DM_DonViCreateWithoutParentInput, DM_DonViUncheckedCreateWithoutParentInput>
+    };
+    export type DM_DonViUpdateWithWhereUniqueWithoutParentInput = {
+        where: DM_DonViWhereUniqueInput
+        data: XOR<DM_DonViUpdateWithoutParentInput, DM_DonViUncheckedUpdateWithoutParentInput>
+    };
+    export type DM_DonViUpdateManyWithWhereWithoutParentInput = {
+        where: DM_DonViScalarWhereInput
+        data: XOR<DM_DonViUpdateManyMutationInput, DM_DonViUncheckedUpdateManyWithoutParentInput>
+    };
+    export type DM_DonViScalarWhereInput = {
+        AND?: DM_DonViScalarWhereInput | DM_DonViScalarWhereInput[]
+        OR?: DM_DonViScalarWhereInput[]
+        NOT?: DM_DonViScalarWhereInput | DM_DonViScalarWhereInput[]
+        Id?: UuidFilter<"DM_DonVi"> | string
+        sMa?: StringNullableFilter<"DM_DonVi"> | string | null
+        sTen?: StringNullableFilter<"DM_DonVi"> | string | null
+        sGhiChu?: StringNullableFilter<"DM_DonVi"> | string | null
+        iSTT?: IntNullableFilter<"DM_DonVi"> | number | null
+        bActive?: BoolNullableFilter<"DM_DonVi"> | boolean | null
+        bDeleted?: BoolNullableFilter<"DM_DonVi"> | boolean | null
+        bSystem?: BoolNullableFilter<"DM_DonVi"> | boolean | null
+        iDictionaryKey?: IntNullableFilter<"DM_DonVi"> | number | null
+        dNgayTao?: DateTimeNullableFilter<"DM_DonVi"> | Date | string | null
+        dNgaySua?: DateTimeNullableFilter<"DM_DonVi"> | Date | string | null
+        sNguoiTao?: StringNullableFilter<"DM_DonVi"> | string | null
+        sNguoiSua?: StringNullableFilter<"DM_DonVi"> | string | null
+        sThietBiTao?: StringNullableFilter<"DM_DonVi"> | string | null
+        sThietBiSua?: StringNullableFilter<"DM_DonVi"> | string | null
+        sCode?: StringNullableFilter<"DM_DonVi"> | string | null
+        sTKBUCode?: StringNullableFilter<"DM_DonVi"> | string | null
+        sTenVietTat?: StringNullableFilter<"DM_DonVi"> | string | null
+        sParentId?: UuidNullableFilter<"DM_DonVi"> | string | null
+        sTruongDonVi?: UuidNullableFilter<"DM_DonVi"> | string | null
+        sChucNangNhiemVu?: StringNullableFilter<"DM_DonVi"> | string | null
+        sDiaChi?: StringNullableFilter<"DM_DonVi"> | string | null
+        iNhomDonVi?: IntNullableFilter<"DM_DonVi"> | number | null
+        iCapDonVi?: IntNullableFilter<"DM_DonVi"> | number | null
+        iLoaiDonVi?: IntNullableFilter<"DM_DonVi"> | number | null
     };
     export type LecturerHistoryUpsertWithWhereUniqueWithoutOrganizationInput = {
         where: LecturerHistoryWhereUniqueInput
@@ -619657,13 +620115,14 @@ export namespace Prisma {
         sCode?: string | null
         sTKBUCode?: string | null
         sTenVietTat?: string | null
-        sParentId?: string | null
         sTruongDonVi?: string | null
         sChucNangNhiemVu?: string | null
         sDiaChi?: string | null
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        parent?: DM_DonViCreateNestedOneWithoutChildrenInput
+        children?: DM_DonViCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
@@ -619706,6 +620165,7 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        children?: DM_DonViUncheckedCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -621375,13 +621835,14 @@ export namespace Prisma {
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTKBUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
-        sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
         sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
         sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        parent?: DM_DonViUpdateOneWithoutChildrenNestedInput
+        children?: DM_DonViUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
@@ -621424,6 +621885,7 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        children?: DM_DonViUncheckedUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -621826,13 +622288,14 @@ export namespace Prisma {
         sCode?: string | null
         sTKBUCode?: string | null
         sTenVietTat?: string | null
-        sParentId?: string | null
         sTruongDonVi?: string | null
         sChucNangNhiemVu?: string | null
         sDiaChi?: string | null
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        parent?: DM_DonViCreateNestedOneWithoutChildrenInput
+        children?: DM_DonViCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
@@ -621875,6 +622338,7 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        children?: DM_DonViUncheckedCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -622329,13 +622793,14 @@ export namespace Prisma {
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTKBUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
-        sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
         sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
         sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        parent?: DM_DonViUpdateOneWithoutChildrenNestedInput
+        children?: DM_DonViUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
@@ -622378,6 +622843,7 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        children?: DM_DonViUncheckedUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -624380,13 +624846,14 @@ export namespace Prisma {
         sCode?: string | null
         sTKBUCode?: string | null
         sTenVietTat?: string | null
-        sParentId?: string | null
         sTruongDonVi?: string | null
         sChucNangNhiemVu?: string | null
         sDiaChi?: string | null
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        parent?: DM_DonViCreateNestedOneWithoutChildrenInput
+        children?: DM_DonViCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
@@ -624429,6 +624896,7 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        children?: DM_DonViUncheckedCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -624745,13 +625213,14 @@ export namespace Prisma {
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTKBUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
-        sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
         sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
         sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        parent?: DM_DonViUpdateOneWithoutChildrenNestedInput
+        children?: DM_DonViUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
@@ -624794,6 +625263,7 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        children?: DM_DonViUncheckedUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -625092,13 +625562,14 @@ export namespace Prisma {
         sCode?: string | null
         sTKBUCode?: string | null
         sTenVietTat?: string | null
-        sParentId?: string | null
         sTruongDonVi?: string | null
         sChucNangNhiemVu?: string | null
         sDiaChi?: string | null
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        parent?: DM_DonViCreateNestedOneWithoutChildrenInput
+        children?: DM_DonViCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
@@ -625141,6 +625612,7 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        children?: DM_DonViUncheckedCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -626719,13 +627191,14 @@ export namespace Prisma {
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTKBUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
-        sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
         sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
         sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        parent?: DM_DonViUpdateOneWithoutChildrenNestedInput
+        children?: DM_DonViUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
@@ -626768,6 +627241,7 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        children?: DM_DonViUncheckedUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -653270,13 +653744,14 @@ export namespace Prisma {
         sCode?: string | null
         sTKBUCode?: string | null
         sTenVietTat?: string | null
-        sParentId?: string | null
         sTruongDonVi?: string | null
         sChucNangNhiemVu?: string | null
         sDiaChi?: string | null
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        parent?: DM_DonViCreateNestedOneWithoutChildrenInput
+        children?: DM_DonViCreateNestedManyWithoutParentInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
         userProfiles?: UserProfileCreateNestedManyWithoutDonViInput
@@ -653319,6 +653794,7 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        children?: DM_DonViUncheckedCreateNestedManyWithoutParentInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         userProfiles?: UserProfileUncheckedCreateNestedManyWithoutDonViInput
@@ -653778,13 +654254,14 @@ export namespace Prisma {
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTKBUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
-        sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
         sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
         sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        parent?: DM_DonViUpdateOneWithoutChildrenNestedInput
+        children?: DM_DonViUpdateManyWithoutParentNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
         userProfiles?: UserProfileUpdateManyWithoutDonViNestedInput
@@ -653827,6 +654304,7 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        children?: DM_DonViUncheckedUpdateManyWithoutParentNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         userProfiles?: UserProfileUncheckedUpdateManyWithoutDonViNestedInput
@@ -654526,13 +655004,14 @@ export namespace Prisma {
         sCode?: string | null
         sTKBUCode?: string | null
         sTenVietTat?: string | null
-        sParentId?: string | null
         sTruongDonVi?: string | null
         sChucNangNhiemVu?: string | null
         sDiaChi?: string | null
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        parent?: DM_DonViCreateNestedOneWithoutChildrenInput
+        children?: DM_DonViCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
@@ -654575,6 +655054,7 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        children?: DM_DonViUncheckedCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -654807,13 +655287,14 @@ export namespace Prisma {
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTKBUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
-        sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
         sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
         sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        parent?: DM_DonViUpdateOneWithoutChildrenNestedInput
+        children?: DM_DonViUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
@@ -654856,6 +655337,7 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        children?: DM_DonViUncheckedUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -659335,13 +659817,14 @@ export namespace Prisma {
         sCode?: string | null
         sTKBUCode?: string | null
         sTenVietTat?: string | null
-        sParentId?: string | null
         sTruongDonVi?: string | null
         sChucNangNhiemVu?: string | null
         sDiaChi?: string | null
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        parent?: DM_DonViCreateNestedOneWithoutChildrenInput
+        children?: DM_DonViCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
@@ -659384,6 +659867,7 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        children?: DM_DonViUncheckedCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -659932,13 +660416,14 @@ export namespace Prisma {
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTKBUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
-        sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
         sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
         sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        parent?: DM_DonViUpdateOneWithoutChildrenNestedInput
+        children?: DM_DonViUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
@@ -659981,6 +660466,7 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        children?: DM_DonViUncheckedUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -660376,13 +660862,14 @@ export namespace Prisma {
         sCode?: string | null
         sTKBUCode?: string | null
         sTenVietTat?: string | null
-        sParentId?: string | null
         sTruongDonVi?: string | null
         sChucNangNhiemVu?: string | null
         sDiaChi?: string | null
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        parent?: DM_DonViCreateNestedOneWithoutChildrenInput
+        children?: DM_DonViCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
@@ -660425,6 +660912,7 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        children?: DM_DonViUncheckedCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -660464,13 +660952,14 @@ export namespace Prisma {
         sCode?: string | null
         sTKBUCode?: string | null
         sTenVietTat?: string | null
-        sParentId?: string | null
         sTruongDonVi?: string | null
         sChucNangNhiemVu?: string | null
         sDiaChi?: string | null
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        parent?: DM_DonViCreateNestedOneWithoutChildrenInput
+        children?: DM_DonViCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
@@ -660513,6 +661002,7 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        children?: DM_DonViUncheckedCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -660552,13 +661042,14 @@ export namespace Prisma {
         sCode?: string | null
         sTKBUCode?: string | null
         sTenVietTat?: string | null
-        sParentId?: string | null
         sTruongDonVi?: string | null
         sChucNangNhiemVu?: string | null
         sDiaChi?: string | null
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        parent?: DM_DonViCreateNestedOneWithoutChildrenInput
+        children?: DM_DonViCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
@@ -660601,6 +661092,7 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        children?: DM_DonViUncheckedCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -661081,13 +661573,14 @@ export namespace Prisma {
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTKBUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
-        sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
         sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
         sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        parent?: DM_DonViUpdateOneWithoutChildrenNestedInput
+        children?: DM_DonViUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
@@ -661130,6 +661623,7 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        children?: DM_DonViUncheckedUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -661174,13 +661668,14 @@ export namespace Prisma {
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTKBUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
-        sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
         sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
         sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        parent?: DM_DonViUpdateOneWithoutChildrenNestedInput
+        children?: DM_DonViUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
@@ -661223,6 +661718,7 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        children?: DM_DonViUncheckedUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -661267,13 +661763,14 @@ export namespace Prisma {
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTKBUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
-        sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
         sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
         sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        parent?: DM_DonViUpdateOneWithoutChildrenNestedInput
+        children?: DM_DonViUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
@@ -661316,6 +661813,7 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        children?: DM_DonViUncheckedUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -680932,13 +681430,14 @@ export namespace Prisma {
         sCode?: string | null
         sTKBUCode?: string | null
         sTenVietTat?: string | null
-        sParentId?: string | null
         sTruongDonVi?: string | null
         sChucNangNhiemVu?: string | null
         sDiaChi?: string | null
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        parent?: DM_DonViCreateNestedOneWithoutChildrenInput
+        children?: DM_DonViCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
@@ -680981,6 +681480,7 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        children?: DM_DonViUncheckedCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -682243,13 +682743,14 @@ export namespace Prisma {
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTKBUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
-        sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
         sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
         sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        parent?: DM_DonViUpdateOneWithoutChildrenNestedInput
+        children?: DM_DonViUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
@@ -682292,6 +682793,7 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        children?: DM_DonViUncheckedUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -702391,13 +702893,14 @@ export namespace Prisma {
         sCode?: string | null
         sTKBUCode?: string | null
         sTenVietTat?: string | null
-        sParentId?: string | null
         sTruongDonVi?: string | null
         sChucNangNhiemVu?: string | null
         sDiaChi?: string | null
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        parent?: DM_DonViCreateNestedOneWithoutChildrenInput
+        children?: DM_DonViCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
@@ -702440,6 +702943,7 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        children?: DM_DonViUncheckedCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -703149,36 +703653,6 @@ export namespace Prisma {
     export type DM_DonViUpdateManyWithWhereWithoutSurveyObjectTypesInput = {
         where: DM_DonViScalarWhereInput
         data: XOR<DM_DonViUpdateManyMutationInput, DM_DonViUncheckedUpdateManyWithoutSurveyObjectTypesInput>
-    };
-    export type DM_DonViScalarWhereInput = {
-        AND?: DM_DonViScalarWhereInput | DM_DonViScalarWhereInput[]
-        OR?: DM_DonViScalarWhereInput[]
-        NOT?: DM_DonViScalarWhereInput | DM_DonViScalarWhereInput[]
-        Id?: UuidFilter<"DM_DonVi"> | string
-        sMa?: StringNullableFilter<"DM_DonVi"> | string | null
-        sTen?: StringNullableFilter<"DM_DonVi"> | string | null
-        sGhiChu?: StringNullableFilter<"DM_DonVi"> | string | null
-        iSTT?: IntNullableFilter<"DM_DonVi"> | number | null
-        bActive?: BoolNullableFilter<"DM_DonVi"> | boolean | null
-        bDeleted?: BoolNullableFilter<"DM_DonVi"> | boolean | null
-        bSystem?: BoolNullableFilter<"DM_DonVi"> | boolean | null
-        iDictionaryKey?: IntNullableFilter<"DM_DonVi"> | number | null
-        dNgayTao?: DateTimeNullableFilter<"DM_DonVi"> | Date | string | null
-        dNgaySua?: DateTimeNullableFilter<"DM_DonVi"> | Date | string | null
-        sNguoiTao?: StringNullableFilter<"DM_DonVi"> | string | null
-        sNguoiSua?: StringNullableFilter<"DM_DonVi"> | string | null
-        sThietBiTao?: StringNullableFilter<"DM_DonVi"> | string | null
-        sThietBiSua?: StringNullableFilter<"DM_DonVi"> | string | null
-        sCode?: StringNullableFilter<"DM_DonVi"> | string | null
-        sTKBUCode?: StringNullableFilter<"DM_DonVi"> | string | null
-        sTenVietTat?: StringNullableFilter<"DM_DonVi"> | string | null
-        sParentId?: UuidNullableFilter<"DM_DonVi"> | string | null
-        sTruongDonVi?: UuidNullableFilter<"DM_DonVi"> | string | null
-        sChucNangNhiemVu?: StringNullableFilter<"DM_DonVi"> | string | null
-        sDiaChi?: StringNullableFilter<"DM_DonVi"> | string | null
-        iNhomDonVi?: IntNullableFilter<"DM_DonVi"> | number | null
-        iCapDonVi?: IntNullableFilter<"DM_DonVi"> | number | null
-        iLoaiDonVi?: IntNullableFilter<"DM_DonVi"> | number | null
     };
     export type TrainingFieldUpsertWithWhereUniqueWithoutSurveyObjectTypesInput = {
         where: TrainingFieldWhereUniqueInput
@@ -708406,13 +708880,14 @@ export namespace Prisma {
         sCode?: string | null
         sTKBUCode?: string | null
         sTenVietTat?: string | null
-        sParentId?: string | null
         sTruongDonVi?: string | null
         sChucNangNhiemVu?: string | null
         sDiaChi?: string | null
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        parent?: DM_DonViCreateNestedOneWithoutChildrenInput
+        children?: DM_DonViCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
         userProfiles?: UserProfileCreateNestedManyWithoutDonViInput
@@ -708455,6 +708930,7 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        children?: DM_DonViUncheckedCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         userProfiles?: UserProfileUncheckedCreateNestedManyWithoutDonViInput
@@ -709030,13 +709506,14 @@ export namespace Prisma {
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTKBUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
-        sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
         sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
         sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        parent?: DM_DonViUpdateOneWithoutChildrenNestedInput
+        children?: DM_DonViUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
         userProfiles?: UserProfileUpdateManyWithoutDonViNestedInput
@@ -709079,6 +709556,7 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        children?: DM_DonViUncheckedUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         userProfiles?: UserProfileUncheckedUpdateManyWithoutDonViNestedInput
@@ -709581,13 +710059,14 @@ export namespace Prisma {
         sCode?: string | null
         sTKBUCode?: string | null
         sTenVietTat?: string | null
-        sParentId?: string | null
         sTruongDonVi?: string | null
         sChucNangNhiemVu?: string | null
         sDiaChi?: string | null
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        parent?: DM_DonViCreateNestedOneWithoutChildrenInput
+        children?: DM_DonViCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         userProfiles?: UserProfileCreateNestedManyWithoutDonViInput
@@ -709630,6 +710109,7 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        children?: DM_DonViUncheckedCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         userProfiles?: UserProfileUncheckedCreateNestedManyWithoutDonViInput
@@ -710127,13 +710607,14 @@ export namespace Prisma {
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTKBUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
-        sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
         sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
         sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        parent?: DM_DonViUpdateOneWithoutChildrenNestedInput
+        children?: DM_DonViUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         userProfiles?: UserProfileUpdateManyWithoutDonViNestedInput
@@ -710176,6 +710657,7 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        children?: DM_DonViUncheckedUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         userProfiles?: UserProfileUncheckedUpdateManyWithoutDonViNestedInput
@@ -710393,13 +710875,14 @@ export namespace Prisma {
         sCode?: string | null
         sTKBUCode?: string | null
         sTenVietTat?: string | null
-        sParentId?: string | null
         sTruongDonVi?: string | null
         sChucNangNhiemVu?: string | null
         sDiaChi?: string | null
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        parent?: DM_DonViCreateNestedOneWithoutChildrenInput
+        children?: DM_DonViCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
@@ -710442,6 +710925,7 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
+        children?: DM_DonViUncheckedCreateNestedManyWithoutParentInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -710643,13 +711127,14 @@ export namespace Prisma {
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTKBUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
-        sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
         sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
         sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        parent?: DM_DonViUpdateOneWithoutChildrenNestedInput
+        children?: DM_DonViUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
@@ -710692,6 +711177,7 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        children?: DM_DonViUncheckedUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -731477,6 +731963,32 @@ export namespace Prisma {
         viet?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
     };
+    export type DM_DonViCreateManyParentInput = {
+        Id?: string
+        sMa?: string | null
+        sTen?: string | null
+        sGhiChu?: string | null
+        iSTT?: number | null
+        bActive?: boolean | null
+        bDeleted?: boolean | null
+        bSystem?: boolean | null
+        iDictionaryKey?: number | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        sCode?: string | null
+        sTKBUCode?: string | null
+        sTenVietTat?: string | null
+        sTruongDonVi?: string | null
+        sChucNangNhiemVu?: string | null
+        sDiaChi?: string | null
+        iNhomDonVi?: number | null
+        iCapDonVi?: number | null
+        iLoaiDonVi?: number | null
+    };
     export type LecturerHistoryCreateManyOrganizationInput = {
         id?: string
         code?: string | null
@@ -732006,6 +732518,118 @@ export namespace Prisma {
         paymentDate?: Date | string | null
         transactionCode?: string | null
         decisionRef?: string | null
+    };
+    export type DM_DonViUpdateWithoutParentInput = {
+        Id?: StringFieldUpdateOperationsInput | string
+        sMa?: NullableStringFieldUpdateOperationsInput | string | null
+        sTen?: NullableStringFieldUpdateOperationsInput | string | null
+        sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+        iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+        bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKBUCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
+        sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
+        sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
+        sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
+        iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        children?: DM_DonViUpdateManyWithoutParentNestedInput
+        lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
+        staffs?: StaffUpdateManyWithoutOrganizationNestedInput
+        staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUpdateManyWithoutDonViNestedInput
+        curriculum?: CurriculumUpdateManyWithoutManagementOrganizationNestedInput
+        fixedClass?: FixedClassUpdateManyWithoutManagementOrganizationNestedInput
+        subjectVersions?: SubjectVersionUpdateManyWithoutManagementOrganizationNestedInput
+        subjects?: SubjectUpdateManyWithoutManagementOrganizationNestedInput
+        trainingFields?: TrainingFieldUpdateManyWithoutOrganizationNestedInput
+        trainingMajors?: TrainingMajorUpdateManyWithoutOrganizationNestedInput
+        secondTrainingMajors?: TrainingMajorUpdateManyWithoutSecondOrganizationNestedInput
+        thirdTrainingMajors?: TrainingMajorUpdateManyWithoutThirdOrganizationNestedInput
+        researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
+        thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
+        surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
+        guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutHiringOrgNestedInput
+    };
+    export type DM_DonViUncheckedUpdateWithoutParentInput = {
+        Id?: StringFieldUpdateOperationsInput | string
+        sMa?: NullableStringFieldUpdateOperationsInput | string | null
+        sTen?: NullableStringFieldUpdateOperationsInput | string | null
+        sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+        iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+        bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKBUCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
+        sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
+        sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
+        sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
+        iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        children?: DM_DonViUncheckedUpdateManyWithoutParentNestedInput
+        lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+        staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
+        staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUncheckedUpdateManyWithoutDonViNestedInput
+        curriculum?: CurriculumUncheckedUpdateManyWithoutManagementOrganizationNestedInput
+        fixedClass?: FixedClassUncheckedUpdateManyWithoutManagementOrganizationNestedInput
+        subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutManagementOrganizationNestedInput
+        subjects?: SubjectUncheckedUpdateManyWithoutManagementOrganizationNestedInput
+        trainingFields?: TrainingFieldUncheckedUpdateManyWithoutOrganizationNestedInput
+        trainingMajors?: TrainingMajorUncheckedUpdateManyWithoutOrganizationNestedInput
+        secondTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutSecondOrganizationNestedInput
+        thirdTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutThirdOrganizationNestedInput
+        researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
+        thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
+        surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
+        guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutHiringOrgNestedInput
+    };
+    export type DM_DonViUncheckedUpdateManyWithoutParentInput = {
+        Id?: StringFieldUpdateOperationsInput | string
+        sMa?: NullableStringFieldUpdateOperationsInput | string | null
+        sTen?: NullableStringFieldUpdateOperationsInput | string | null
+        sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+        iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+        bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKBUCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
+        sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
+        sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
+        sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
+        iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
     };
     export type LecturerHistoryUpdateWithoutOrganizationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -792226,13 +792850,14 @@ export namespace Prisma {
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTKBUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
-        sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
         sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
         sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        parent?: DM_DonViUpdateOneWithoutChildrenNestedInput
+        children?: DM_DonViUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
@@ -792275,6 +792900,7 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        children?: DM_DonViUncheckedUpdateManyWithoutParentNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput

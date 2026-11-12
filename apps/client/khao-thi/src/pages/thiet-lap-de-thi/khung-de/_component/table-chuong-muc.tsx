@@ -64,17 +64,8 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
     }
   }
 
-  const getConfigByDifficult = (
-    configExams: ConfigExam[],
-    difficult: string
-  ): { quantity: number; type?: string | null; point: number } => {
-    const config = configExams?.find((c) => c.difficult === difficult)
-    return {
-      quantity: config?.quantity || 0,
-      type: config?.type,
-      point: config?.point || 0,
-    }
-  }
+  const getConfigsByDifficult = (configExams: ConfigExam[], difficult: string) =>
+    (configExams ?? []).filter((c) => c.difficult === difficult && c.quantity > 0)
 
   const getTotals = (configExams: ConfigExam[]): { quantity: number } => {
     return (
@@ -176,33 +167,39 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
     )
   }
 
-  const renderCell = (quantity: number, type?: string | null, point?: number) => (
-    <div className="flex flex-col items-center gap-0.5">
-      {quantity > 0 ? (
-        <>
-          <Tooltip title="Số câu hỏi (điểm/câu)">
-            <div className="text-sm font-medium">
-              {quantity} ({point ?? 0})
+  const renderCell = (configs: ConfigExam[]) => {
+    if (!configs.length) return <div className="text-sm font-medium">0</div>
+
+    return (
+      <div className="flex flex-col items-center gap-1.5">
+        {configs.map((config) => (
+          <div key={config.id} className="flex flex-col items-center gap-0.5">
+            <Tooltip title="Số câu hỏi (điểm/câu)">
+              <div className="text-sm font-medium">
+                {config.quantity} ({config.point ?? 0})
+              </div>
+            </Tooltip>
+            <div className="text-xs text-gray-500 leading-tight">
+              {config.type
+                ? (QUESTION_TYPE_LABELS[config.type as keyof typeof QUESTION_TYPE_LABELS] ??
+                  config.type)
+                : "Tất cả"}
             </div>
-          </Tooltip>
-          <div className="text-xs text-gray-500 leading-tight">
-            {type
-              ? (QUESTION_TYPE_LABELS[type as keyof typeof QUESTION_TYPE_LABELS] ?? type)
-              : "Tất cả"}
           </div>
-        </>
-      ) : (
-        <div className="text-sm font-medium">0</div>
-      )}
-    </div>
-  )
+        ))}
+      </div>
+    )
+  }
 
   const calculateTotalByDifficulty = (difficult: string) => {
     return knowledgeBlocks.reduce(
       (acc, kb) => {
-        const config = kb.configExams?.find((c) => c.difficult === difficult)
+        const quantity = getConfigsByDifficult(kb.configExams, difficult).reduce(
+          (sum, c) => sum + (c.quantity || 0),
+          0
+        )
         return {
-          quantity: acc.quantity + (config?.quantity || 0),
+          quantity: acc.quantity + quantity,
         }
       },
       { quantity: 0 }
@@ -236,37 +233,25 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
             title: "Biết",
             width: 80,
             align: "center",
-            render: (_, record) => {
-              const { quantity, type, point } = getConfigByDifficult(record.configExams, "D1")
-              return renderCell(quantity, type, point)
-            },
+            render: (_, record) => renderCell(getConfigsByDifficult(record.configExams, "D1")),
           },
           {
             title: "Hiểu",
             width: 80,
             align: "center",
-            render: (_, record) => {
-              const { quantity, type, point } = getConfigByDifficult(record.configExams, "D2")
-              return renderCell(quantity, type, point)
-            },
+            render: (_, record) => renderCell(getConfigsByDifficult(record.configExams, "D2")),
           },
           {
             title: "Vận dụng",
             width: 100,
             align: "center",
-            render: (_, record) => {
-              const { quantity, type, point } = getConfigByDifficult(record.configExams, "D3")
-              return renderCell(quantity, type, point)
-            },
+            render: (_, record) => renderCell(getConfigsByDifficult(record.configExams, "D3")),
           },
           {
             title: "Vận dụng cao",
             width: 120,
             align: "center",
-            render: (_, record) => {
-              const { quantity, type, point } = getConfigByDifficult(record.configExams, "D4")
-              return renderCell(quantity, type, point)
-            },
+            render: (_, record) => renderCell(getConfigsByDifficult(record.configExams, "D4")),
           },
           {
             title: "Tổng câu hỏi",

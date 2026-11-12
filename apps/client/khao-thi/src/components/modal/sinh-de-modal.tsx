@@ -134,7 +134,7 @@ const SinhDeModal = () => {
         examType: values.examType as AutomaticTopicGenerationBodyExamType,
         isLock: values.isLock,
         isNote: values.isNote || false,
-        isGroup: values.isGroup || true,
+        isGroup: !!values.isGroup,
         quantity: values.quantity,
         examFrameworkId: values.examFrameworkId,
         examMatrixId: values.examMatrixId,
