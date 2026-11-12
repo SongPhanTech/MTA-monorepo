@@ -631,7 +631,7 @@ const NhapDiemThiGiangDayPage = () => {
       return
     }
     const baseUrl =
-      getRuntimeEnv("NEXT_PUBLIC_API_LMS_BASE_URL") || "https://api.daotao.mta.swantech.vn"
+      getRuntimeEnv("NEXT_PUBLIC_API_LMS_BASE_URL") || `${window.location.origin}/api/lms`
     const exportUrl = getExportSubjectClassScoreUrl({
       id: lopId,
       ...(opts.type ? { type: opts.type } : {}),

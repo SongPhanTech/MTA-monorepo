@@ -6869,6 +6869,22 @@ const metadata: ModelMeta = {
                     name: "sParentId",
                     type: "String",
                     isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'parent',
+                }, parent: {
+                    name: "parent",
+                    type: "DM_DonVi",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'children',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "sParentId" },
+                }, children: {
+                    name: "children",
+                    type: "DM_DonVi",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'parent',
                 }, sTruongDonVi: {
                     name: "sTruongDonVi",
                     type: "String",

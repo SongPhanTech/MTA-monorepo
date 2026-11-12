@@ -194,9 +194,21 @@ type SystemScope = "public" | "share" | "storage"
  * System API:
  * - Browser: luôn proxy qua be-model (MODEL base) → `/system/{appCode}/{scope}/...`
  *   Chỉ cần cấu hình MODEL path trên FE; SYSTEM_BASE_URL chỉ set ở BE.
- * - Server (BE): gọi thẳng SYSTEM_BASE_URL/api/system/{appCode}/{scope}/...
+ * - Server (BE): gọi thẳng SYSTEM_BASE_URL/api/system/{scope}/...
+ *   Chỉ khi đặt SYSTEM_API_APP_CODE mới chèn appCode: /api/system/{SYSTEM_API_APP_CODE}/{scope}/...
+ *   (biến riêng, không dùng chung PORTAL_APP_CODE / MTA_APP_CODE vì nginx nội bộ chỉ có /api/system/{scope}/)
  */
 const resolveSystemRequestUrl = (scope: SystemScope, url: string): string => {
+  const path = url.startsWith("/") ? url : `/${url}`
+
+  // BE / Node: gọi system trực tiếp — chỉ cần SYSTEM_BASE_URL trong .env server
+  if (typeof window === "undefined" && process.env.SYSTEM_BASE_URL) {
+    const origin = process.env.SYSTEM_BASE_URL.replace(/\/$/, "")
+    const serverAppCode = process.env.SYSTEM_API_APP_CODE?.trim().toLowerCase()
+    const appSegment = serverAppCode ? `/${serverAppCode}` : ""
+    return `${origin}/api/system${appSegment}/${scope}${path}`
+  }
+
   const appCode = (
     getRuntimeEnv("NEXT_PUBLIC_APP_CODE") ||
     process.env.NEXT_PUBLIC_APP_CODE ||
@@ -204,14 +216,7 @@ const resolveSystemRequestUrl = (scope: SystemScope, url: string): string => {
     process.env.PORTAL_APP_CODE ||
     "lms"
   ).toLowerCase()
-  const path = url.startsWith("/") ? url : `/${url}`
   const systemPath = `/system/${appCode}/${scope}${path}`
-
-  // BE / Node: gọi system trực tiếp — chỉ cần SYSTEM_BASE_URL trong .env server
-  if (typeof window === "undefined" && process.env.SYSTEM_BASE_URL) {
-    const origin = process.env.SYSTEM_BASE_URL.replace(/\/$/, "")
-    return `${origin}/api${systemPath}`
-  }
 
   // Browser: không gọi /api/system trực tiếp — proxy qua be-model (MODEL base)
   const modelBase =

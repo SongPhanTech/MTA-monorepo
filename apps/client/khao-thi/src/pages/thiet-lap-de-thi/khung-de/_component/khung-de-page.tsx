@@ -21,7 +21,7 @@ import { useTrainingObjectTypeStore } from "@workspace/ui"
 
 type ExamFrameworkType = Prisma.ExamFrameworkGetPayload<{
   include: {
-    subjectVersion: true
+    subjectVersion: { include: { managementOrganization: true } }
     examMatrixs: {
       include: {
         knowledgeBlocks: true
@@ -36,6 +36,23 @@ type ExamFrameworkType = Prisma.ExamFrameworkGetPayload<{
   }
 }>
 
+type SortField = "name" | "subjectVersion"
+type SortState = { field: SortField; order: "ascend" | "descend" } | null
+
+const DEFAULT_ORDER_BY: Prisma.ExamFrameworkOrderByWithRelationInput[] = [
+  { name: "asc" },
+  { subjectVersion: { name: "asc" } },
+  { id: "asc" },
+]
+
+const buildOrderBy = (sort: SortState): Prisma.ExamFrameworkOrderByWithRelationInput[] => {
+  if (!sort) return DEFAULT_ORDER_BY
+  const direction = sort.order === "ascend" ? "asc" : "desc"
+  return sort.field === "name"
+    ? [{ name: direction }, { subjectVersion: { name: "asc" } }, { id: "asc" }]
+    : [{ subjectVersion: { name: direction } }, { name: "asc" }, { id: "asc" }]
+}
+
 interface KhungDeListProps {
   defaultSubjectVersionId?: string
 }
@@ -49,6 +66,7 @@ export default function KhungDeList({ defaultSubjectVersionId }: KhungDeListProp
     name: "",
     subjectVersionIdString: "",
   })
+  const [sort, setSort] = useState<SortState>(null)
   const semesterId = useStore(store, (s) => s.semesterId)
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
@@ -87,7 +105,7 @@ export default function KhungDeList({ defaultSubjectVersionId }: KhungDeListProp
   const { data: examFrameworkList = [] } = useFindManyExamFramework({
     where: queryWhere,
     include: {
-      subjectVersion: true,
+      subjectVersion: { include: { managementOrganization: true } },
       examMatrixs: {
         include: { knowledgeBlocks: true },
       },
@@ -100,7 +118,7 @@ export default function KhungDeList({ defaultSubjectVersionId }: KhungDeListProp
     },
     take: numberOfPages, //phân trang
     skip: (currentPage - 1) * numberOfPages, //phân trang
-    orderBy: { createdAt: "desc" },
+    orderBy: buildOrderBy(sort),
   })
 
   const { data: totalExamFramework } = useCountExamFramework({
@@ -171,6 +189,13 @@ export default function KhungDeList({ defaultSubjectVersionId }: KhungDeListProp
           data={filteredList}
           filters={filters}
           setFilters={setFilters}
+          onChange={(_, __, sorter, extra) => {
+            if (extra.action !== "sort") return
+            const s = Array.isArray(sorter) ? sorter[0] : sorter
+            const field = s?.columnKey as SortField | undefined
+            setSort(field && s?.order ? { field, order: s.order } : null)
+            setCurrentPage(1)
+          }}
           pagination={{
             current: currentPage,
             pageSize: numberOfPages,
@@ -278,8 +303,11 @@ export default function KhungDeList({ defaultSubjectVersionId }: KhungDeListProp
             {
               title: "Tên khung đề",
               dataIndex: "name",
+              key: "name",
               width: "300px",
               type: "input",
+              sorter: true,
+              sortOrder: sort?.field === "name" ? sort.order : null,
               render: (name) => (
                 <span className="text-left">
                   {examFrameworkList.length > 50 ? `${name.slice(0, 50)}...` : name}
@@ -302,9 +330,18 @@ export default function KhungDeList({ defaultSubjectVersionId }: KhungDeListProp
             {
               title: "Môn học",
               dataIndex: "subjectVersion",
+              key: "subjectVersion",
               type: "input",
               width: "250px",
+              sorter: true,
+              sortOrder: sort?.field === "subjectVersion" ? sort.order : null,
               render: (_, record) => record?.subjectVersion?.name || "",
+            },
+            {
+              title: "Đơn vị quản lý",
+              width: "200px",
+              render: (_, record) =>
+                record?.subjectVersion?.managementOrganization?.sTen || "",
             },
             {
               title: "Tài liệu đính kèm",

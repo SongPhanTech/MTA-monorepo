@@ -261,11 +261,19 @@ export type QuestionExamInput = Omit<QuestionPreviewInput, "subQuestions"> & {
   }>
 }
 
+// Khoảng trắng / xuống dòng thừa (<br>, &nbsp;) mà editor hay để ở đầu/cuối nội dung —
+// nếu giữ lại sẽ tạo dòng trống giữa câu hỏi và đáp án khi in/xem trước.
+const EDGE_BLANK = String.raw`(?:\s|&nbsp;|&#160;| |<br[^>]*>)+`
+const LEADING_BLANK_RE = new RegExp(`^${EDGE_BLANK}`, "i")
+const TRAILING_BLANK_RE = new RegExp(`${EDGE_BLANK}$`, "i")
+
 const stripParagraphTags = (html: string) =>
   html
-    .replace(/<p[^>]*>/g, "")
-    .replace(/<\/p>/g, " ")
-    .trim()
+    .replace(/<p[^>]*>(?:\s|&nbsp;|&#160;| |<br[^>]*>)*<\/p>/gi, "") // đoạn rỗng
+    .replace(/<p[^>]*>/gi, "")
+    .replace(/<\/p>/gi, " ")
+    .replace(LEADING_BLANK_RE, "")
+    .replace(TRAILING_BLANK_RE, "")
 
 function renderOptionsBlock(
   multipleChoiceOptions?: QuestionExamInput["multipleChoiceOptions"],

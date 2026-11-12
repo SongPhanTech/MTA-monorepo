@@ -8197,6 +8197,20 @@
             "type": "string",
             "nullable": true
           },
+          "parent": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DM_DonVi"
+              }
+            ],
+            "nullable": true
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DM_DonVi"
+            }
+          },
           "sTruongDonVi": {
             "type": "string",
             "nullable": true

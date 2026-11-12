@@ -27,7 +27,7 @@ export const useMoDanhSachThi = () => {
     }
 
     const baseUrl =
-      getRuntimeEnv("NEXT_PUBLIC_API_LMS_BASE_URL") || "https://api.daotao.mta.swantech.vn"
+      getRuntimeEnv("NEXT_PUBLIC_API_LMS_BASE_URL") || `${window.location.origin}/api/lms`
     const exportPath = getExportSubjectClassScoreUrl({
       id: subjectClassId,
       examId: examId || undefined,
