@@ -15,6 +15,7 @@ import AuthApp from "./api/auth"
 import ExcelImportExportApp from "./api/excel-import-export"
 import ExcelTemplateApp from "./api/excel-template"
 import DocxTemplateApp from "./api/docx-template"
+import DwhApp from "./api/dwh"
 import ThesisApp from "./api/thesis"
 import ThesisPaymentApp from "./api/thesis-payment"
 import MinIOApp from "./api/minio"
@@ -24,6 +25,9 @@ import GetPermissionApp from "./api/get-permission"
 import WSO2AmApp from "./api/wso2am"
 import { startPreviewCleanupCron } from "./cron/cleanup-preview"
 import { checkIp } from "./middlewares/check-ip"
+import { dwhConfig } from "./dwh/config"
+import { dwhAuth } from "./middlewares/dwh-auth"
+import { createConcurrencyGate } from "./middlewares/dwh-concurrency"
 import { createPrismaClient } from "./utils/db-pool"
 import { setupOpenApi } from "./utils/openapi"
 import { releaseSoftDeletedSurveyObjectCode } from "./utils/release-soft-deleted-survey-object-code"
@@ -139,6 +143,20 @@ app.all("/system/:appcode/*", systemProxyHandler)
 
 app.route("/api/minio", MinIOApp)
 app.route("/api/sql", SqlTransactionApp)
+
+// Tích hợp trục MTA-SSO: trục lấy dữ liệu các bảng schema ql-dao-tao.
+// Webhook tự kiểm khoá trong handler; /events qua dwhAuth + cổng giới hạn số request đọc DB cùng lúc.
+app.use(
+  "/api/dwh/events/*",
+  dwhAuth,
+  createConcurrencyGate({
+    name: "dwh",
+    maxConcurrent: dwhConfig.maxConcurrentRequests,
+    maxQueued: dwhConfig.maxQueuedRequests,
+    maxWaitMs: dwhConfig.queueTimeoutMs,
+  })
+)
+app.route("/api/dwh", DwhApp)
 
 const mockProfileId = process.env.MOCK_USER_PROFILE_ID?.trim()
 const nv = mockProfileId

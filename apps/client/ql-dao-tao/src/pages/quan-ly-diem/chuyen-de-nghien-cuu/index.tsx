@@ -735,7 +735,8 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                           ],
                         })
                         openXemTaiLieu({
-                          uri: res.data.path,
+                          // Cache-bust OnlyOffice document.key (lấy từ URL) vì file preview bị ghi đè cùng path
+                          uri: `${res.data.path}?t=${Date.now()}`,
                           name: "QD_GiaoChuyenDe.xlsx",
                           mimeType: "xlsx",
                         })
@@ -757,7 +758,8 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                         const allTopics = await fetchAllResearchTopics()
                         if (!allTopics) return
 
-                        let globalIndex = 0
+                        // STT đánh theo học viên: mỗi học viên 1 số dù có nhiều chuyên đề
+                        const studentIndexMap = new Map<string, number>()
 
                         const khoaVaKy = await sqlTransaction([
                           {
@@ -786,14 +788,17 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                         const countStudents = (rows: { studentId: string }[]) =>
                           new Set(rows.map((r) => r.studentId)).size
 
-                        // Gộp ô cột B (họ tên) cho các chuyên đề liền nhau của cùng 1 học viên.
+                        // Gộp ô cột A (TT) và B (họ tên) cho các chuyên đề liền nhau của cùng 1 học viên.
                         // Dòng 1 của mỗi khối là tiêu đề chuyên ngành, dữ liệu bắt đầu từ dòng 2.
                         const buildStudentMerges = (rows: { studentId: string }[]) => {
                           const merges: string[] = []
                           let start = 0
                           for (let i = 1; i <= rows.length; i++) {
                             if (i === rows.length || rows[i]?.studentId !== rows[start]?.studentId) {
-                              if (i - start > 1) merges.push(`B${2 + start}:B${2 + i - 1}`)
+                              if (i - start > 1) {
+                                merges.push(`A${2 + start}:A${2 + i - 1}`)
+                                merges.push(`B${2 + start}:B${2 + i - 1}`)
+                              }
                               start = i
                             }
                           }
@@ -818,7 +823,10 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                                 }
                               }
 
-                              globalIndex++
+                              const studentId = e.studentSubjectScore.studentId
+                              if (!studentIndexMap.has(studentId)) {
+                                studentIndexMap.set(studentId, studentIndexMap.size + 1)
+                              }
                               const supervisorName =
                                 (getSupervisorName(
                                   versionToPersonLike(e.supervisor),
@@ -832,7 +840,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                                   true
                                 ) as string) || ""
                               acc[ma_cn].students.push({
-                                tt: globalIndex,
+                                tt: studentIndexMap.get(studentId) as number,
                                 ten: `${e.studentSubjectScore.student?.userProfile?.fullname}\n${
                                   e.studentSubjectScore.student?.userProfile?.dateOfBirth
                                     ? formatDateInSlash(
@@ -846,9 +854,13 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                                     : supervisorName || coSupervisorName || "",
                                 ten_cd: e.name,
                                 macd: e.studentSubjectScore.subjectVersion?.code,
+                                mo_ta:
+                                  e.studentSubjectScore.subjectVersion?.description ||
+                                  e.studentSubjectScore.subjectVersion?.subject?.description ||
+                                  "",
                                 stc: e.studentSubjectScore.subjectVersion?.credit,
                                 ndcd: e.mainContent,
-                                studentId: e.studentSubjectScore.studentId,
+                                studentId,
                               })
 
                               return acc
@@ -864,6 +876,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                                   cbhd: string
                                   ten_cd?: string | null
                                   macd?: string | null
+                                  mo_ta: string
                                   stc: number | null
                                   ndcd?: string | null
                                   studentId: string
@@ -900,6 +913,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                                 cbhd: student.cbhd,
                                 ten_cd: student.ten_cd,
                                 macd: student.macd,
+                                mo_ta: student.mo_ta,
                                 stc: student.stc,
                                 ndcd: student.ndcd,
                               })),
@@ -908,7 +922,8 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                           })),
                         })
                         openXemTaiLieu({
-                          uri: res.data.path,
+                          // Cache-bust OnlyOffice document.key (lấy từ URL) vì file preview bị ghi đè cùng path
+                          uri: `${res.data.path}?t=${Date.now()}`,
                           name: "Phu-luc-QD-Chuyen-De-Nghien-Cuu.xlsx",
                           mimeType: "xlsx",
                         })
@@ -1187,7 +1202,8 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                           ],
                         })
                         openXemTaiLieu({
-                          uri: res.data.path,
+                          // Cache-bust OnlyOffice document.key (lấy từ URL) vì file preview bị ghi đè cùng path
+                          uri: `${res.data.path}?t=${Date.now()}`,
                           name: "TK_TaiGiangDayCuaGiangVien.xlsx",
                           mimeType: "xlsx",
                         })
@@ -1394,7 +1410,8 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                           ],
                         })
                         openXemTaiLieu({
-                          uri: res.data.path,
+                          // Cache-bust OnlyOffice document.key (lấy từ URL) vì file preview bị ghi đè cùng path
+                          uri: `${res.data.path}?t=${Date.now()}`,
                           name: "TK_SoLuongChuyenDeHocVien.xlsx",
                           mimeType: "xlsx",
                         })
@@ -1583,7 +1600,8 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                         })
 
                         openXemTaiLieu({
-                          uri: res.data.path,
+                          // Cache-bust OnlyOffice document.key (lấy từ URL) vì file preview bị ghi đè cùng path
+                          uri: `${res.data.path}?t=${Date.now()}`,
                           name: "ThanhToanKinhPhiHuongDanChuyenDe.xlsx",
                           mimeType: "xlsx",
                         })
@@ -1681,6 +1699,18 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
               },
             },
             {
+              title: "Ngày sinh",
+              width: 80,
+              align: "center",
+              render: (_, record) => {
+                return record?.studentSubjectScore?.student?.userProfile?.dateOfBirth
+                  ? dayjs(record?.studentSubjectScore?.student?.userProfile?.dateOfBirth).format(
+                      "DD/MM/YYYY"
+                    )
+                  : ""
+              },
+            },
+            {
               title: "Mã lớp môn học",
               width: 150,
               align: "center",
@@ -1693,15 +1723,21 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
               },
             },
             {
-              title: "Ngày sinh",
-              width: 80,
-              align: "center",
+              title: "Tên môn học",
+              width: 200,
+              align: "left",
               render: (_, record) => {
-                return record?.studentSubjectScore?.student?.userProfile?.dateOfBirth
-                  ? dayjs(record?.studentSubjectScore?.student?.userProfile?.dateOfBirth).format(
-                      "DD/MM/YYYY"
-                    )
-                  : ""
+                const sv = record?.studentSubjectScore?.subjectVersion
+                return sv?.name || sv?.subject?.name || ""
+              },
+            },
+            {
+              title: "Mô tả",
+              width: 100,
+              align: "left",
+              render: (_, record) => {
+                const sv = record?.studentSubjectScore?.subjectVersion
+                return sv?.description || sv?.subject?.description || ""
               },
             },
             {
@@ -1737,14 +1773,6 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
               },
             },
             {
-              title: "Ghi chú",
-              width: 150,
-              align: "left",
-              render: (_, record) => {
-                return record?.description || ""
-              },
-            },
-            {
               title: <Tooltip title="Giảng viên hướng dẫn 1">GVHD1</Tooltip>,
               width: 150,
               align: "left",
@@ -1772,11 +1800,18 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
               title: "Điểm",
               width: 80,
               align: "center",
-              fixed: "right",
               render: (_, record) => {
                 return record?.studentSubjectScore?.finalScore
                   ? Number(record?.studentSubjectScore?.finalScore).toFixedSmart(2)
                   : ""
+              },
+            },
+            {
+              title: "Ghi chú",
+              width: 150,
+              align: "left",
+              render: (_, record) => {
+                return record?.description || ""
               },
             },
           ]}
